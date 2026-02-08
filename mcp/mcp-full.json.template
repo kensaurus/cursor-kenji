@@ -1,0 +1,127 @@
+{
+  "mcpServers": {
+
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+    },
+
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    },
+
+    "firecrawl": {
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "YOUR_FIRECRAWL_API_KEY"
+      }
+    },
+
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "YOUR_GITHUB_PAT"
+      }
+    },
+
+    "supabase": {
+      "command": "npx",
+      "args": ["-y", "@supabase/mcp-server-supabase@latest", "--project-ref", "YOUR_SUPABASE_PROJECT_REF"],
+      "env": {
+        "SUPABASE_ACCESS_TOKEN": "YOUR_SUPABASE_ACCESS_TOKEN"
+      }
+    },
+
+    "chrome-devtools-mcp": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest", "--browser-url=http://127.0.0.1:9222"]
+    },
+
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    },
+
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres"],
+      "env": {
+        "POSTGRES_CONNECTION_STRING": "postgresql://user:pass@host:5432/dbname"
+      }
+    },
+
+    "github-official": {
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm",
+        "-e", "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "ghcr.io/github/github-mcp-server"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "YOUR_GITHUB_PAT"
+      }
+    },
+
+    "aws-lambda": {
+      "command": "uvx",
+      "args": ["awslabs.lambda-mcp-server@latest"],
+      "env": {
+        "AWS_PROFILE": "default",
+        "AWS_REGION": "ap-northeast-1",
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      }
+    },
+
+    "aws-s3": {
+      "command": "uvx",
+      "args": ["awslabs.s3-mcp-server@latest"],
+      "env": {
+        "AWS_PROFILE": "default",
+        "AWS_REGION": "ap-northeast-1",
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      }
+    },
+
+    "aws-cloudwatch": {
+      "command": "uvx",
+      "args": ["awslabs.cloudwatch-logs-mcp-server@latest"],
+      "env": {
+        "AWS_PROFILE": "default",
+        "AWS_REGION": "ap-northeast-1",
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      }
+    },
+
+    "redis": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-redis"],
+      "env": {
+        "REDIS_URL": "redis://localhost:6379"
+      }
+    },
+
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-slack"],
+      "env": {
+        "SLACK_BOT_TOKEN": "YOUR_SLACK_BOT_TOKEN"
+      }
+    },
+
+    "notion": {
+      "command": "npx",
+      "args": ["-y", "@notionhq/notion-mcp-server"],
+      "env": {
+        "NOTION_API_KEY": "YOUR_NOTION_API_KEY"
+      }
+    },
+
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
+    }
+  }
+}

@@ -1,48 +1,168 @@
 # MCP Server Configuration
 
-Model Context Protocol (MCP) servers extend Cursor's AI capabilities with external tools.
+Model Context Protocol (MCP) servers extend Cursor's AI with external tools and services.
 
-## Setup
+## Templates
 
-1. Copy the template to your Cursor config:
+| File | Description |
+|------|-------------|
+| `mcp.json.template` | **Essential 5** — Core servers for most projects |
+| `mcp-full.json.template` | **Full suite (16 servers)** — Everything including AWS, GitHub, Slack, Notion |
+
+Copy your preferred template:
 
 ```bash
-cp mcp.json.template ~/.cursor/mcp.json
+# Essential (recommended to start)
+cp mcp/mcp.json.template ~/.cursor/mcp.json
+
+# Full suite (pick what you need)
+cp mcp/mcp-full.json.template ~/.cursor/mcp.json
 ```
 
-2. Edit `~/.cursor/mcp.json` and replace placeholder values with your actual API keys.
+Then edit `~/.cursor/mcp.json` and replace `YOUR_*` placeholders with real credentials.
 
-3. Restart Cursor to activate MCP servers.
+---
 
-## Servers
+## Server Reference
 
-### Sequential Thinking
-**Purpose:** Step-by-step reasoning for complex tasks.
-**API Key Required:** No
-**Package:** `@modelcontextprotocol/server-sequential-thinking`
+### Tier 1: Essential (Always On)
 
-Use before any complex implementation to plan steps, identify dependencies, and order operations.
+| Server | API Key? | What it Does |
+|--------|----------|-------------|
+| **Sequential Thinking** | No | Step-by-step reasoning for complex tasks |
+| **Context7** | No | Live, up-to-date library documentation |
+| **Firecrawl** | Yes | Web scraping for research ([firecrawl.dev](https://firecrawl.dev)) |
+| **Supabase** | Yes | Direct DB access, auth, storage, migrations |
+| **Chrome DevTools** | No* | Browser testing, console checks, screenshots |
 
-### Context7
-**Purpose:** Fetch live, up-to-date library documentation.
-**API Key Required:** No
-**Package:** `@upstash/context7-mcp`
+*Requires Chrome with `--remote-debugging-port=9222`
 
-Use before writing code with any external library. Training data may be outdated — Context7 fetches current API references.
+### Tier 2: Development Power-Ups
 
-### Firecrawl
-**Purpose:** Web scraping for research and documentation.
-**API Key Required:** Yes — get one at [firecrawl.dev](https://firecrawl.dev)
-**Package:** `firecrawl-mcp`
+| Server | API Key? | What it Does |
+|--------|----------|-------------|
+| **GitHub** | Yes (PAT) | Repos, issues, PRs, code search, reviews |
+| **GitHub Official** | Yes (PAT) | Official Go-based server (Docker, more features) |
+| **Playwright** | No | Browser automation, E2E testing, screenshots |
+| **Postgres** | Yes (conn) | Direct PostgreSQL queries, schema inspection |
+| **Memory** | No | Persistent memory across sessions |
 
-Use when researching new patterns, checking latest best practices, or gathering implementation examples.
+### Tier 3: Cloud & Infrastructure
+
+| Server | API Key? | What it Does |
+|--------|----------|-------------|
+| **AWS Lambda** | Yes (profile) | Lambda functions, deployments, logs |
+| **AWS S3** | Yes (profile) | Bucket management, file operations |
+| **AWS CloudWatch** | Yes (profile) | Log queries, metrics, alarms |
+| **Redis** | Yes (URL) | Key-value store operations |
+
+### Tier 4: Productivity
+
+| Server | API Key? | What it Does |
+|--------|----------|-------------|
+| **Slack** | Yes (bot) | Read/send messages, manage channels |
+| **Notion** | Yes | Search/manage pages, databases |
+
+---
+
+## Setup Guides
+
+### GitHub MCP Server
+
+The most useful addition after the essentials. Two options:
+
+**Option A: npm-based (simpler)**
+```json
+{
+  "github": {
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-github"],
+    "env": {
+      "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_your_token_here"
+    }
+  }
+}
+```
+
+**Option B: Official Docker-based (more features)**
+```json
+{
+  "github-official": {
+    "command": "docker",
+    "args": ["run", "-i", "--rm", "-e", "GITHUB_PERSONAL_ACCESS_TOKEN", "ghcr.io/github/github-mcp-server"],
+    "env": {
+      "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_your_token_here"
+    }
+  }
+}
+```
+
+**Get a token:** [github.com/settings/tokens](https://github.com/settings/tokens) → Fine-grained → Permissions: Repository (Contents, Issues, PRs, Admin), User (Read-only)
+
+**What you can do:**
+- "Search for all open issues labeled `bug` in my repo"
+- "Create a PR from current branch with a summary"
+- "What changed in the last 5 commits?"
+- "Review PR #42 for security issues"
+
+---
+
+### AWS MCP Servers
+
+Requires AWS CLI configured with credentials (`aws configure`).
+
+```bash
+# Install Python-based AWS MCP servers
+pip install uvx  # or use pipx
+```
+
+```json
+{
+  "aws-lambda": {
+    "command": "uvx",
+    "args": ["awslabs.lambda-mcp-server@latest"],
+    "env": {
+      "AWS_PROFILE": "default",
+      "AWS_REGION": "ap-northeast-1"
+    }
+  }
+}
+```
+
+**What you can do:**
+- "List all Lambda functions in my account"
+- "Check CloudWatch logs for errors in the last hour"
+- "Upload this file to my S3 bucket"
+- "What's the invocation count for my API function?"
+
+---
+
+### Playwright MCP Server
+
+Zero config — just add and go:
+
+```json
+{
+  "playwright": {
+    "command": "npx",
+    "args": ["-y", "@playwright/mcp@latest"]
+  }
+}
+```
+
+**What you can do:**
+- "Open localhost:3000 and take a screenshot"
+- "Fill in the login form and submit"
+- "Check if the dashboard loads correctly"
+- "Run accessibility checks on the signup page"
+
+No need to launch Chrome separately (unlike Chrome DevTools MCP).
+
+---
 
 ### Chrome DevTools MCP
-**Purpose:** Browser automation, testing, and debugging.
-**API Key Required:** No (requires Chrome with remote debugging)
-**Package:** `chrome-devtools-mcp`
 
-**Prerequisites:** Launch Chrome with remote debugging:
+Requires Chrome running with remote debugging:
 
 ```bash
 # Linux
@@ -55,49 +175,66 @@ google-chrome --remote-debugging-port=9222
 "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222
 ```
 
-Use after any UI implementation to check console errors, test interactions, and take screenshots.
+Or use the shell alias:
+```bash
+source ~/cursor-kenji/shell-aliases/cursor-helpers.sh
+cursor-dev  # Opens Chrome + Cursor together
+```
 
-### Supabase MCP
-**Purpose:** Direct database access, auth management, storage operations.
-**API Key Required:** Yes — Supabase access token and project ref
-**Package:** `@supabase/mcp-server-supabase`
+---
 
-**Setup:**
-1. Get your project ref from your Supabase dashboard URL
-2. Generate an access token at [supabase.com/dashboard/account/tokens](https://supabase.com/dashboard/account/tokens)
+### Memory MCP Server
 
-Use for querying data, checking schema, verifying RLS policies, and debugging data issues.
-
-## Workflow Integration
-
-These MCP servers integrate with the skills in this repo:
-
-| Workflow Step | MCP Server | Skill |
-|---------------|------------|-------|
-| Plan implementation | Sequential Thinking | `creative-workflow` |
-| Fetch library docs | Context7 | All coding skills |
-| Research patterns | Firecrawl | `research` command |
-| Check database | Supabase | `database-optimization` |
-| Test in browser | Chrome DevTools | `webapp-testing` |
-| Verify UI | Chrome DevTools | `uiux-enhancement` |
-| Debug data | Supabase | `error-handling` |
-
-## Adding More MCP Servers
-
-To add a new MCP server, add an entry to your `~/.cursor/mcp.json`:
+Persistent memory that survives across sessions:
 
 ```json
 {
-  "mcpServers": {
-    "my-new-server": {
-      "command": "npx",
-      "args": ["-y", "my-mcp-package@latest"],
-      "env": {
-        "API_KEY": "your-key-here"
-      }
-    }
+  "memory": {
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-memory"]
   }
 }
 ```
 
-See the `mcp-builder` skill for how to create custom MCP servers.
+**What you can do:**
+- AI remembers architecture decisions from past conversations
+- Stores user preferences and project context
+- Recalls past debugging sessions and solutions
+
+---
+
+## Recommended Configurations
+
+### Solo Developer (Web App)
+```
+sequential-thinking + context7 + firecrawl + supabase + chrome-devtools + github + playwright
+```
+
+### Team / Full-Stack
+```
+All of above + postgres + memory + slack
+```
+
+### AWS Cloud Development
+```
+sequential-thinking + context7 + aws-lambda + aws-s3 + aws-cloudwatch + github
+```
+
+### Content / Product
+```
+sequential-thinking + context7 + github + notion + slack + memory
+```
+
+---
+
+## Troubleshooting
+
+| Issue | Fix |
+|-------|-----|
+| Server not starting | Check `npx` is available: `which npx` |
+| "Bad credentials" | Regenerate token, check permissions |
+| Chrome DevTools fails | Ensure Chrome running with `--remote-debugging-port=9222` |
+| AWS servers fail | Run `aws sts get-caller-identity` to verify credentials |
+| Slow startup | Remove servers you don't use (each spawns a process) |
+
+**Performance tip:** Only enable servers you actively use. Each server is a background process. The essential 5 is a good baseline; add others as needed.
