@@ -60,6 +60,20 @@ for skill_dir in "$SCRIPT_DIR"/skills-cursor/*/; do
 done
 ok "Installed $CURSOR_SKILL_COUNT cursor-specific skills to $SKILLS_CURSOR_DIR"
 
+# ---- Install agents ----
+AGENTS_DIR="$CURSOR_DIR/agents"
+if [ -d "$SCRIPT_DIR/agents" ]; then
+    mkdir -p "$AGENTS_DIR"
+    AGENT_COUNT=0
+    for agent_file in "$SCRIPT_DIR"/agents/*.md; do
+        [ -f "$agent_file" ] || continue
+        agent_name=$(basename "$agent_file")
+        cp "$agent_file" "$AGENTS_DIR/$agent_name"
+        AGENT_COUNT=$((AGENT_COUNT + 1))
+    done
+    ok "Installed $AGENT_COUNT subagents to $AGENTS_DIR"
+fi
+
 # ---- Install MCP config ----
 if [ ! -f "$MCP_CONFIG" ]; then
     if [ -f "$SCRIPT_DIR/mcp/mcp.json.template" ]; then
@@ -79,10 +93,12 @@ log "======================================"
 log ""
 log "  Skills:         $SKILL_COUNT installed"
 log "  Cursor Skills:  $CURSOR_SKILL_COUNT installed"
+log "  Subagents:      ${AGENT_COUNT:-0} installed"
 log "  Location:       $SKILLS_DIR"
 log ""
 log "  Next steps:"
 log "  1. Restart Cursor to pick up new skills"
 log "  2. Edit ~/.cursor/mcp.json with your API keys"
 log "  3. Try: /commit, /test, /research in Cursor"
+log "  4. Source shell helpers: source ~/cursor-kenji/shell-aliases/cursor-helpers.sh"
 log ""

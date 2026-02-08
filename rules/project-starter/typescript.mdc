@@ -1,0 +1,36 @@
+---
+description: TypeScript conventions and type safety rules
+globs: "**/*.ts,**/*.tsx"
+alwaysApply: false
+---
+
+# TypeScript Conventions
+
+## Strict Mode
+- No `any` — use `unknown` + type guards or Zod validation
+- No type assertions (`as`) without prior validation
+- Exhaustive switch statements with `never` check
+- Strict null checks — handle `null` and `undefined` explicitly
+
+## Type Patterns
+- Derive types from Zod schemas: `type User = z.infer<typeof UserSchema>`
+- Use discriminated unions for state: `{ status: 'loading' } | { status: 'success', data: T }`
+- Prefer `interface` for object shapes, `type` for unions and intersections
+- Export types near their usage (in feature's `types.ts`)
+
+## Validation
+- All external data (API responses, form inputs, URL params) validated with Zod
+- Server Actions: validate with `schema.safeParse()`, return `ActionResult<T>`
+- API routes: validate body/params with Zod before processing
+
+## Action Result Pattern
+```tsx
+type ActionResult<T> =
+  | { success: true; data: T }
+  | { success: false; error: string; fieldErrors?: Record<string, string[]> }
+```
+
+## Imports
+- Use `@/` path aliases (configured in tsconfig.json)
+- Never use relative imports beyond one level (`../` is ok, `../../..` is not)
+- Group imports: external libs → internal modules → types → styles

@@ -53,8 +53,26 @@ cursor_kenji/
 │   ├── research.md
 │   ├── test.md
 │   └── uiux.md
+├── agents/                  # 5 Subagents (.cursor/agents/)
+│   ├── code-reviewer.md
+│   ├── debugger.md
+│   ├── db-migrator.md
+│   ├── deploy-checker.md
+│   └── perf-monitor.md
 ├── rules/                   # Cursor Rules
-│   └── senior-engineer.md
+│   ├── senior-engineer.md
+│   └── project-starter/     # 6 Project Rule Templates
+│       ├── supabase.mdc
+│       ├── components.mdc
+│       ├── typescript.mdc
+│       ├── tailwind.mdc
+│       ├── git.mdc
+│       └── data-fetching.mdc
+├── notepads/                # Reusable Context Templates
+│   ├── architecture.md
+│   └── design-tokens.md
+├── shell-aliases/           # Terminal Helpers
+│   └── cursor-helpers.sh
 ├── mcp/                     # MCP Server Configurations
 │   ├── mcp.json.template
 │   └── README.md
@@ -191,6 +209,75 @@ The `mcp/` folder contains a template for configuring MCP servers used by these 
 | **Supabase** | Direct database access and management |
 
 See [`mcp/README.md`](mcp/README.md) for setup instructions.
+
+---
+
+## Subagents
+
+Autonomous AI agents that Cursor auto-delegates to based on context:
+
+| Agent | Triggers | What it Does |
+|-------|----------|-------------|
+| **code-reviewer** | After code changes, "review", "check my code" | Reviews for quality, security, types, anti-patterns |
+| **debugger** | On errors, exceptions, failed tests | Root cause analysis, isolate, fix, verify |
+| **db-migrator** | "migration", "schema change", "new table" | Generates migration SQL, RLS policies, indexes, types |
+| **deploy-checker** | "deploy", "push to main", "ship it" | Build, types, lint, tests, security, deps, git checks |
+| **perf-monitor** | "slow", "optimize", after new features | Bundle impact, render perf, data fetching, assets |
+
+### Install Subagents
+
+Subagents install globally to `~/.cursor/agents/` via `install.sh`, or copy to `.cursor/agents/` in a specific project.
+
+---
+
+## Project Rules Starter Pack
+
+Drop these into any project's `.cursor/rules/` directory:
+
+| Rule | What it Enforces |
+|------|------------------|
+| `supabase.mdc` | Typed clients, RLS mandatory, migration naming, Edge Function patterns |
+| `components.mdc` | Reuse `@/components/ui`, Server Components default, 300-line limit, a11y |
+| `typescript.mdc` | No `any`, Zod validation, ActionResult pattern, `@/` imports |
+| `tailwind.mdc` | Design tokens only, `cn()`, mobile-first, motion preferences |
+| `git.mdc` | Branch naming, conventional commits, atomic commits, no secrets |
+| `data-fetching.mdc` | TanStack Query patterns, Server Component prefetch, query key factories |
+
+```bash
+# Copy to any project
+cp -r ~/cursor-kenji/rules/project-starter/*.mdc your-project/.cursor/rules/
+```
+
+---
+
+## Notepads & Shell Helpers
+
+### Notepads (Reusable Context)
+
+Copy to your project and reference with `@filename` in Cursor conversations:
+
+- **architecture.md** — System architecture template (stack, directory structure, patterns)
+- **design-tokens.md** — Color palette, typography, spacing, shadows, breakpoints
+
+### Shell Aliases
+
+```bash
+# Add to ~/.bashrc or ~/.zshrc
+source ~/cursor-kenji/shell-aliases/cursor-helpers.sh
+```
+
+**Available commands:**
+
+| Command | What it Does |
+|---------|-------------|
+| `newskill <name>` | Create a new skill with template |
+| `lsskills` | List all installed skills with descriptions |
+| `cursor-sync` | Pull latest from repo + reinstall |
+| `cursor-dev` | Open Cursor with Chrome DevTools ready |
+| `newrule <name>` | Create a project rule with template |
+| `newagent <name>` | Create a subagent with template |
+| `gc <type> <msg>` | Conventional commit shortcut |
+| `gp` | Push to current branch |
 
 ---
 

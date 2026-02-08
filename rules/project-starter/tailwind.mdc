@@ -1,0 +1,46 @@
+---
+description: Tailwind CSS and styling conventions
+globs: "**/*.tsx,**/*.css"
+alwaysApply: false
+---
+
+# Tailwind & Styling Conventions
+
+## Design Tokens
+- Use CSS variables from `globals.css` (e.g., `hsl(var(--primary))`)
+- Use semantic color names: `bg-primary`, `text-muted-foreground`, `border-input`
+- Never hardcode hex/rgb values — always use tokens
+- Spacing follows 4px/8px grid system
+
+## Class Composition
+```tsx
+// Use cn() for conditional classes
+className={cn(
+  "base-classes",
+  variant === "active" && "active-classes",
+  className // always spread incoming className last
+)}
+```
+
+## Responsive
+- Mobile-first: base styles are mobile, `sm:` `md:` `lg:` for larger
+- Breakpoints: `sm:640px` `md:768px` `lg:1024px` `xl:1280px`
+- Touch targets: minimum 44px height for interactive elements on mobile
+
+## Dark Mode
+- Use `dark:` variant for dark mode overrides
+- Or use CSS variables that automatically switch (preferred)
+- Test all UI in both light and dark modes
+
+## Animation
+- Use Tailwind animation utilities when possible
+- For complex animations, use Framer Motion
+- Respect `prefers-reduced-motion`: `motion-safe:` / `motion-reduce:`
+- Keep transitions under 300ms for interactions
+- Only animate `transform` and `opacity` (GPU-accelerated)
+
+## Anti-patterns
+- No inline styles (`style={{}}`) — use Tailwind classes
+- No `!important` — fix specificity instead
+- No arbitrary values unless truly one-off (prefer design tokens)
+- No duplicating existing component styles — extend the component

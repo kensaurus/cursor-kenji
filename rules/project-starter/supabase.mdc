@@ -1,0 +1,37 @@
+---
+description: Supabase patterns and conventions for this project
+globs: "**/*.ts,**/*.tsx"
+alwaysApply: false
+---
+
+# Supabase Conventions
+
+## Client Usage
+- Use typed Supabase client from `@/lib/supabase`
+- Always use `.select()` with specific columns (never `SELECT *`)
+- Use `.single()` when expecting one row
+- Handle errors: `const { data, error } = await supabase.from(...)`
+
+## RLS
+- Every table MUST have RLS enabled
+- Test policies after creation with Supabase MCP
+- Use `auth.uid()` for user-scoped access
+- Use `EXISTS` subqueries for role-based access (avoid function calls in policies)
+
+## Migrations
+- File naming: `YYYYMMDD_description.sql`
+- Always include `created_at TIMESTAMPTZ DEFAULT now()`
+- Always include `updated_at` with moddatetime trigger
+- Always add indexes on foreign keys
+- After migration: regenerate types with `supabase gen types typescript`
+
+## Edge Functions
+- Verify JWT or API key in every function
+- Handle CORS preflight OPTIONS requests
+- Return proper status codes (401, 403, 400, 500)
+- Use `Deno.env.get()` for secrets
+
+## Data Fetching
+- Server Components: use Supabase server client directly
+- Client Components: use TanStack Query with Supabase client
+- Real-time: subscribe at component level, cleanup on unmount

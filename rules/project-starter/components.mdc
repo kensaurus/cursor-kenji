@@ -1,0 +1,52 @@
+---
+description: Component patterns and UI conventions
+globs: "**/*.tsx"
+alwaysApply: false
+---
+
+# Component Conventions
+
+## Reuse First
+- ALWAYS check `@/components/ui/` before creating any UI element
+- Import existing primitives: Button, Card, Input, Dialog, etc.
+- Use `cn()` from `@/lib/utils` for className composition
+- Use CVA (class-variance-authority) for component variants
+
+## Component Structure
+```tsx
+// 1. Imports
+import { cn } from '@/lib/utils'
+
+// 2. Types (or import from types.ts if >5 lines)
+interface Props { ... }
+
+// 3. Component (named export, not default)
+export function ComponentName({ prop1, prop2, className }: Props) {
+  // hooks first
+  // derived state
+  // handlers
+  // render
+}
+```
+
+## Rules
+- Server Components by default — only add `'use client'` at leaf components
+- Max 300 lines per component — extract sub-components if larger
+- Props destructured in function signature
+- No inline styles — use Tailwind classes
+- No business logic in components — extract to hooks or utils
+- All interactive elements need hover, focus, active, and disabled states
+- All async UI needs loading, error, and empty states
+
+## Naming
+- Components: `PascalCase.tsx`
+- Hooks: `useCamelCase.ts`
+- Utils: `camelCase.ts`
+- Types: `types.ts` or `camelCase.types.ts`
+
+## Accessibility
+- Semantic HTML elements (`<button>`, `<nav>`, `<main>`)
+- All inputs have associated `<label>` or `aria-label`
+- All images have descriptive `alt` text
+- Focus indicators visible on keyboard navigation
+- `aria-live` for dynamic content updates

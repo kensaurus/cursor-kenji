@@ -1,0 +1,71 @@
+---
+description: Data fetching patterns with TanStack Query, Server Components, and Supabase
+globs: "**/*.ts,**/*.tsx"
+alwaysApply: false
+---
+
+# Data Fetching Conventions
+
+## Decision Matrix
+
+| Context | Pattern |
+|---------|---------|
+| Server Component (initial load) | Direct Supabase/Prisma query |
+| Client Component (read) | TanStack Query `useQuery` |
+| Client Component (mutation) | TanStack Query `useMutation` or Server Action |
+| Form submission | Server Action with `useActionState` |
+| Real-time updates | Supabase Realtime subscription |
+| URL-driven state | nuqs `useQueryStates` |
+
+## TanStack Query Patterns
+
+```tsx
+// Query with proper key factory
+const queryKeys = {
+  all: ['features'] as const,
+  lists: () => [...queryKeys.all, 'list'] as const,
+  list: (filters: Filters) => [...queryKeys.lists(), filters] as const,
+  details: () => [...queryKeys.all, 'detail'] as const,
+  detail: (id: string) => [...queryKeys.details(), id] as const,
+}
+
+// Hook
+export function useFeatures(filters: Filters) {
+  return useQuery({
+    queryKey: queryKeys.list(filters),
+    queryFn: () => fetchFeatures(filters),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  })
+}
+```
+
+## Server Component Prefetching
+
+```tsx
+// Prefetch in Server Component, hydrate in Client
+import { HydrationBoundary, dehydrate } from '@tanstack/react-query'
+
+export default async function Page() {
+  const queryClient = new QueryClient()
+  await queryClient.prefetchQuery({
+    queryKey: ['features'],
+    queryFn: fetchFeatures,
+  })
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <FeatureList />
+    </HydrationBoundary>
+  )
+}
+```
+
+## Error Handling
+- Always handle `error` state from `useQuery`
+- Show `<ErrorState>` component with retry button
+- Mutations: use `onSuccess` for cache invalidation, `onError` for toast
+
+## Caching
+- Set `staleTime` based on data freshness needs
+- Use `queryClient.invalidateQueries` after mutations
+- Use `revalidatePath` / `revalidateTag` in Server Actions

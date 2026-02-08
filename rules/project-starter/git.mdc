@@ -1,0 +1,39 @@
+---
+description: Git workflow and commit conventions
+globs:
+alwaysApply: false
+---
+
+# Git Conventions
+
+## Branch Naming
+```
+feature/description    — New functionality
+fix/description        — Bug fixes
+chore/description      — Maintenance, deps, config
+refactor/description   — Code restructuring
+docs/description       — Documentation only
+```
+
+## Commit Messages
+Conventional commit format:
+```
+<type>(<scope>): <description>
+
+[optional body with details]
+```
+
+Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `ci`
+
+Examples:
+- `feat(auth): add Google OAuth login`
+- `fix(cart): prevent duplicate items on rapid clicks`
+- `refactor(hooks): extract useDebounce from search component`
+
+## Rules
+- Atomic commits — one logical change per commit
+- Never commit secrets, `.env` files, or API keys
+- Never commit `node_modules/`, `.next/`, build artifacts
+- Run `npm run build` before pushing to main
+- Squash fixup commits before merging PRs
+- Delete feature branches after merge
