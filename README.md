@@ -71,14 +71,14 @@ cursor_kenji/
 ### One-Command Install
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/YOUR_USERNAME/cursor_kenji/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.sh | bash
 ```
 
 Or clone and install manually:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/cursor_kenji.git
-cd cursor_kenji
+git clone https://github.com/kensaurus/cursor-kenji.git
+cd cursor-kenji
 chmod +x install.sh
 ./install.sh
 ```
@@ -211,7 +211,7 @@ These skills are built around core principles:
 ## Keeping Up to Date
 
 ```bash
-cd ~/cursor_kenji
+cd ~/cursor-kenji
 git pull origin main
 ./install.sh
 ```
@@ -220,7 +220,7 @@ Or set up auto-sync:
 
 ```bash
 # Add to crontab for daily sync
-0 9 * * * cd ~/cursor_kenji && git pull origin main && ./install.sh --quiet
+0 9 * * * cd ~/cursor-kenji && git pull origin main && ./install.sh --quiet
 ```
 
 ---
@@ -275,4 +275,4 @@ MIT License. Use freely, modify freely, share freely.
 
 ---
 
-*Built by Kenji. Enhanced continuously.*
+*Built by [@kensaurus](https://github.com/kensaurus). Enhanced continuously.*
