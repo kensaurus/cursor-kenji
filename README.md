@@ -11,9 +11,9 @@
 
 <p align="center">
   <a href="#quick-start"><img src="https://img.shields.io/badge/-Quick_Start-10b981?style=flat-square" alt="Quick Start" /></a>
-  <a href="#skills-overview"><img src="https://img.shields.io/badge/-27_Skills-6366f1?style=flat-square" alt="27 Skills" /></a>
+  <a href="#skills-overview"><img src="https://img.shields.io/badge/-33_Skills-6366f1?style=flat-square" alt="33 Skills" /></a>
   <a href="#subagents"><img src="https://img.shields.io/badge/-5_Subagents-f59e0b?style=flat-square" alt="5 Subagents" /></a>
-  <a href="#commands-overview"><img src="https://img.shields.io/badge/-7_Commands-ef4444?style=flat-square" alt="7 Commands" /></a>
+  <a href="#commands-overview"><img src="https://img.shields.io/badge/-13_Commands-ef4444?style=flat-square" alt="13 Commands" /></a>
   <a href="#mcp-configuration"><img src="https://img.shields.io/badge/-16_MCP_Servers-3b82f6?style=flat-square" alt="16 MCP Servers" /></a>
   <a href="#project-rules-starter-pack"><img src="https://img.shields.io/badge/-6_Rules-8b5cf6?style=flat-square" alt="6 Rules" /></a>
 </p>
@@ -33,6 +33,26 @@
 
 ---
 
+## What's New in 2026
+
+> Based on [Cursor's official agent best practices](https://cursor.com/blog/agent-best-practices) and the latest Cursor features (Jan–Feb 2026).
+
+| Addition | Type | Why It Matters |
+|:---------|:-----|:---------------|
+| `hooks-builder` | Skill | Cursor Hooks — auto-format on edit, block dangerous commands, scan for secrets, create agent loop automation |
+| `tdd` | Skill | TDD is Cursor's #1 recommended agent pattern — tests give agents a clear, verifiable goal |
+| `spec-writing` | Skill | Writing good specs is the highest-leverage 2026 AI skill — vague prompts produce vague code |
+| `parallel-agents` | Skill | Worktrees + cloud agents + multi-model comparison — delegate and compare in parallel |
+| `code-review` | Skill | Agent Review + BugBot + manual checklist for thorough pre-merge review |
+| `/plan` | Command | Plan Mode (`Shift+Tab`) — Cursor's #1 recommendation: plan before coding |
+| `/pr` | Command | Checks pass → commit → push → open PR with description, one workflow |
+| `/review` | Command | Full code review pass before merging |
+| `/debug` | Command | Debug Mode — hypothesis-driven, instruments code, pinpoints root cause |
+| `/fix-issue` | Command | GitHub issue → find code → implement fix → open PR end-to-end |
+| `/update-deps` | Command | Audit and safely update dependencies one at a time |
+
+---
+
 ## What's Inside
 
 <table>
@@ -43,10 +63,10 @@
 
 | | Count | Description |
 |-|-------|-------------|
-| **Skills** | 27 | AI agent capabilities |
-| **Cursor Skills** | 5 | IDE-specific tools |
-| **Commands** | 7 | Slash commands |
-| **Subagents** | 5 | Autonomous AI agents |
+|| **Skills** | 33 | AI agent capabilities |
+|| **Cursor Skills** | 5 | IDE-specific tools |
+|| **Commands** | 13 | Slash commands |
+|| **Subagents** | 5 | Autonomous AI agents |
 
 </td>
 <td width="50%">
@@ -55,10 +75,10 @@
 
 | | Count | Description |
 |-|-------|-------------|
-| **MCP Servers** | 16 | External tool integrations |
-| **Project Rules** | 6 | Per-project AI guidance |
-| **Notepads** | 2 | Reusable context templates |
-| **Shell Aliases** | 8 | Terminal productivity |
+|| **MCP Servers** | 16 | External tool integrations |
+|| **Project Rules** | 6 | Per-project AI guidance |
+|| **Notepads** | 2 | Reusable context templates |
+|| **Shell Aliases** | 8 | Terminal productivity |
 
 </td>
 </tr>
@@ -69,9 +89,9 @@
 
 ```
 cursor-kenji/
-├── skills/                  # 27 Agent Skills
+├── skills/                  # 33 Agent Skills
 ├── skills-cursor/           # 5 Cursor-specific Skills
-├── commands/                # 7 Slash Commands
+├── commands/                # 13 Slash Commands
 ├── agents/                  # 5 Subagents
 ├── rules/
 │   ├── senior-engineer.md   # Global AI rules
@@ -106,7 +126,7 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 
 **What happens:**
 1. Backs up existing `~/.cursor/skills/`
-2. Installs 27 skills + 5 cursor skills + 5 subagents
+2. Installs 33 skills + 5 cursor skills + 5 subagents
 3. Sets up MCP config template
 4. Ready in seconds
 
@@ -135,6 +155,7 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 |:------|:-------------|
 | `data-visualization` | Recharts, D3.js, sparklines, real-time charts |
 | `algorithmic-art` | Generative art, flow fields, L-systems, circle packing |
+| `canvas-design` | Museum-quality visual design in `.png` and `.pdf` formats |
 
 ### Backend & Database
 
@@ -151,10 +172,21 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 | `api-design` | REST conventions, error schemas, pagination, versioning |
 | `error-handling` | Error boundaries, Server Action errors, toast patterns |
 | `code-antipatterns` | Detect and fix React, TypeScript, state anti-patterns |
+| `code-review` | Thorough PR reviews — correctness, security, perf, a11y checklist |
 | `codebase-coherency` | Naming, imports, organization consistency audit |
 | `refactoring` | Safe, incremental code transformations |
 | `performance-audit` | Core Web Vitals, bundle analysis, runtime profiling |
 | `security-audit` | OWASP Top 10, auth flows, RLS, secrets management |
+| `accessibility-audit` | WCAG 2.1 AA compliance, screen reader, keyboard, ARIA |
+
+### Engineering Practices ✨ New in 2026
+
+| Skill | What it Does |
+|:------|:-------------|
+| `tdd` | Test-driven development with AI — Red/Green/Refactor, Vitest patterns, agent-compatible TDD workflow |
+| `spec-writing` | Write effective specs and briefs so agents produce correct implementations first time |
+| `parallel-agents` | Run agents in parallel via git worktrees, cloud agents, and multi-model comparison |
+| `hooks-builder` | Build Cursor Agent Hooks — auto-formatters, security gates, secret scanners, loop automation |
 
 ### Process & Documentation
 
@@ -162,7 +194,6 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 |:------|:-------------|
 | `git-workflow` | Branching, conventional commits, PRs, releases |
 | `doc-coauthoring` | Structured co-authoring for specs, PRDs, RFCs |
-| `canvas-design` | Museum-quality visual design philosophy |
 | `creative-workflow` | End-to-end feature development workflow |
 
 ### Meta & Tooling
@@ -190,15 +221,28 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 
 ## Commands Overview
 
+### Coding Workflow
+
 | Command | When | What it Does |
 |:--------|:-----|:-------------|
+| `/plan` | Before coding | Plan Mode — research codebase, clarify requirements, produce an approved plan before writing code |
 | `/commit` | After coding | Fix build errors, lint, type check, commit & push |
-| `/test` | Before commit | Run full test suite, verify quality, check coverage |
-| `/readme` | End of session | Sync all READMEs with session changes |
-| `/refactor` | Long files | Split into clean, modular architecture |
-| `/research` | Before coding | Scrape latest docs, patterns, solutions |
-| `/mcp` | Dev workflow | MCP-powered development reference |
-| `/uiux` | UI review | Enforce design system, fix rogue implementations |
+| `/pr` | Ready to ship | Checks pass → commit → push → open PR with title and description |
+| `/fix-issue [#]` | Bug reports | Fetch GitHub issue → find relevant code → implement fix → open PR |
+| `/debug` | Tricky bugs | Hypothesis-driven debugging with runtime instrumentation, not guessing |
+| `/review` | Before merge | Agent review pass + manual checklist: correctness, security, performance, accessibility |
+| `/test` | Before commit | Run full test suite, verify quality, check coverage targets |
+| `/update-deps` | Maintenance | Audit and safely update dependencies one at a time with changelog review |
+
+### Research & Documentation
+
+| Command | When | What it Does |
+|:--------|:-----|:-------------|
+| `/research` | Before coding | Scrape latest docs, patterns, and solutions via Firecrawl |
+| `/readme` | End of session | Sync all READMEs to reflect session changes |
+| `/refactor` | Long files | Split into clean, modular architecture without losing any code |
+| `/mcp` | Dev workflow | MCP-powered development reference and tool guide |
+| `/uiux` | UI review | Enforce design system, fix rogue styling, standardize interactions |
 
 ---
 
