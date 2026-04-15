@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="#-quick-start"><img src="https://img.shields.io/badge/-Quick_Start-10b981?style=flat-square" alt="Quick Start" /></a>
-  <a href="#-skills-33"><img src="https://img.shields.io/badge/-33_Skills-6366f1?style=flat-square" alt="33 Skills" /></a>
+  <a href="#-skills-51"><img src="https://img.shields.io/badge/-51_Skills-6366f1?style=flat-square" alt="51 Skills" /></a>
   <a href="#-subagents-5"><img src="https://img.shields.io/badge/-5_Subagents-f59e0b?style=flat-square" alt="5 Subagents" /></a>
   <a href="#-commands-13"><img src="https://img.shields.io/badge/-13_Commands-ef4444?style=flat-square" alt="13 Commands" /></a>
   <a href="#-mcp-servers-16"><img src="https://img.shields.io/badge/-16_MCP_Servers-3b82f6?style=flat-square" alt="16 MCP Servers" /></a>
@@ -39,8 +39,8 @@
 graph TB
   subgraph TOOLKIT["cursor-kenji Toolkit"]
     direction TB
-    SK["Skills (33)"]
-    CS["Cursor Skills (5)"]
+    SK["Skills (51)"]
+    CS["Cursor Skills (10)"]
     CMD["Commands (13)"]
     SA["Subagents (5)"]
     MCP["MCP Servers (16)"]
@@ -89,6 +89,8 @@ graph TB
 | `spec-writing` | Skill | Writing good specs is the highest-leverage 2026 AI skill — vague prompts produce vague code |
 | `parallel-agents` | Skill | Worktrees + cloud agents + multi-model comparison — delegate and compare in parallel |
 | `code-review` | Skill | Agent Review + BugBot + manual checklist for thorough pre-merge review |
+| 18 new skills | Skill | Audits, debugging, deploy verification, file handling, PRD generation, QA testing, and more |
+| 5 new cursor-skills | Cursor | babysit, create-hook, shell, statusline, update-cli-config |
 | `/plan` | Command | Plan Mode (`Shift+Tab`) — Cursor's #1 recommendation: plan before coding |
 | `/pr` | Command | Checks pass -> commit -> push -> open PR with description, one workflow |
 | `/review` | Command | Full code review pass before merging |
@@ -102,12 +104,12 @@ graph TB
 
 ```mermaid
 pie title Toolkit Composition
-    "Skills (33)" : 33
+    "Skills (51)" : 51
     "Commands (13)" : 13
     "MCP Servers (16)" : 16
     "Project Rules (6)" : 6
     "Subagents (5)" : 5
-    "Cursor Skills (5)" : 5
+    "Cursor Skills (10)" : 10
     "Notepads (2)" : 2
     "Shell Aliases (8)" : 8
 ```
@@ -120,8 +122,8 @@ pie title Toolkit Composition
 
 | | Count | Description |
 |-|-------|-------------|
-|| **Skills** | 33 | AI agent capabilities |
-|| **Cursor Skills** | 5 | IDE-specific tools |
+|| **Skills** | 51 | AI agent capabilities |
+|| **Cursor Skills** | 10 | IDE-specific tools |
 || **Commands** | 13 | Slash commands |
 || **Subagents** | 5 | Autonomous AI agents |
 
@@ -146,11 +148,16 @@ pie title Toolkit Composition
 
 ```
 cursor-kenji/
-├── skills/                  # 33 Agent Skills (each has SKILL.md)
+├── skills/                  # 51 Agent Skills (each has SKILL.md)
 │   ├── accessibility-audit/
 │   ├── algorithmic-art/
 │   ├── api-design/
+│   ├── audit-db-schema/       # NEW — DB schema audit
+│   ├── audit-fe-api/          # NEW — Frontend API audit
+│   ├── audit-langfuse-llm/    # NEW — Langfuse LLM audit
+│   ├── audit-uiux-design-system/ # NEW — UI/UX design system audit
 │   ├── backend-patterns/
+│   ├── browser-anti-stall/    # NEW — Browser automation protocol
 │   ├── canvas-design/
 │   ├── code-antipatterns/
 │   ├── code-review/
@@ -159,9 +166,19 @@ cursor-kenji/
 │   ├── creative-workflow/
 │   ├── data-visualization/
 │   ├── database-optimization/
+│   ├── debug-error/           # NEW — Systematic debugging
+│   ├── debug-fe-be-integration/ # NEW — FE/BE integration debug
+│   ├── debug-sentry-monitor/  # NEW — Sentry monitoring
+│   ├── deploy-verify/         # NEW — Post-deploy verification
+│   ├── design-prd/            # NEW — PRD generation
 │   ├── design-system/
 │   ├── doc-coauthoring/
+│   ├── docs-writer/           # NEW — Documentation writer
 │   ├── error-handling/
+│   ├── file-docx/             # NEW — Word document handling
+│   ├── file-pdf/              # NEW — PDF processing
+│   ├── file-pptx/             # NEW — PowerPoint handling
+│   ├── file-xlsx/             # NEW — Spreadsheet handling
 │   ├── frontend-design/
 │   ├── git-workflow/
 │   ├── hooks-builder/
@@ -171,6 +188,8 @@ cursor-kenji/
 │   ├── motion-design/
 │   ├── parallel-agents/
 │   ├── performance-audit/
+│   ├── pr-workflow/           # NEW — PR lifecycle management
+│   ├── qa-testing/            # NEW — Comprehensive QA testing
 │   ├── realtime-features/
 │   ├── refactoring/
 │   ├── security-audit/
@@ -179,12 +198,18 @@ cursor-kenji/
 │   ├── tdd/
 │   ├── theme-factory/
 │   ├── uiux-enhancement/
+│   ├── unit-testing/          # NEW — Unit test writing
 │   └── webapp-testing/
-├── skills-cursor/           # 5 Cursor-specific Skills
+├── skills-cursor/           # 10 Cursor-specific Skills
+│   ├── babysit/               # NEW — PR babysitting
+│   ├── create-hook/           # NEW — Cursor hook creation
 │   ├── create-rule/
 │   ├── create-skill/
 │   ├── create-subagent/
 │   ├── migrate-to-skills/
+│   ├── shell/                 # NEW — Direct shell execution
+│   ├── statusline/            # NEW — CLI status line config
+│   ├── update-cli-config/     # NEW — CLI configuration
 │   └── update-cursor-settings/
 ├── commands/                # 13 Slash Commands
 │   ├── commit.md
@@ -258,7 +283,7 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 ```mermaid
 flowchart LR
   A["./install.sh"] --> B["Backup existing\n~/.cursor/skills/"]
-  B --> C["Install 33 skills\n+ 5 cursor skills"]
+  B --> C["Install 51 skills\n+ 10 cursor skills"]
   C --> D["Install 5\nsubagents"]
   D --> E["Copy MCP\nconfig template"]
   E --> F["Ready!"]
@@ -279,13 +304,13 @@ flowchart LR
 
 ---
 
-## Skills (33)
+## Skills (51)
 
 ### Skill Categories at a Glance
 
 ```mermaid
 mindmap
-  root((33 Skills))
+  root((51 Skills))
     Design & Frontend
       frontend-design
       design-system
@@ -313,15 +338,36 @@ mindmap
       performance-audit
       security-audit
       accessibility-audit
+    Audits & Monitoring
+      audit-db-schema
+      audit-fe-api
+      audit-langfuse-llm
+      audit-uiux-design-system
+      debug-sentry-monitor
+      deploy-verify
+    Debugging
+      debug-error
+      debug-fe-be-integration
     Engineering Practices
       tdd
       spec-writing
       parallel-agents
       hooks-builder
+      unit-testing
+      qa-testing
+      pr-workflow
+      browser-anti-stall
     Process & Docs
       git-workflow
       doc-coauthoring
+      docs-writer
+      design-prd
       creative-workflow
+    File Handling
+      file-docx
+      file-pdf
+      file-pptx
+      file-xlsx
     Meta & Tooling
       skill-creator
       mcp-builder
@@ -392,6 +438,59 @@ mindmap
 | `doc-coauthoring` | Structured co-authoring for specs, PRDs, RFCs |
 | `creative-workflow` | End-to-end feature development workflow |
 
+### Audits & Monitoring <sup>New</sup>
+
+> *Deep, MCP-powered audits across the full stack*
+
+| Skill | What it Does |
+|:------|:-------------|
+| `audit-db-schema` | Database schema audit — naming, types, constraints, indexes, RLS, migrations, security |
+| `audit-fe-api` | Frontend API calls vs backend — contract alignment, caching, error handling |
+| `audit-langfuse-llm` | PDCA audit for LLM features — traces, prompts, costs, evals, grounding via Langfuse |
+| `audit-uiux-design-system` | UI/UX coherency vs design system — tokens, components, WCAG, Nielsen heuristics |
+| `debug-sentry-monitor` | Sentry issue triage, root cause analysis, noise filtering, architecture audit |
+| `deploy-verify` | Post-deploy smoke test — Sentry + Supabase + Langfuse + Playwright, ship-or-rollback verdict |
+
+### Debugging <sup>New</sup>
+
+> *Systematic root cause analysis, not guessing*
+
+| Skill | What it Does |
+|:------|:-------------|
+| `debug-error` | Systematic debugging workflow — reproduce, isolate, research, fix, verify, prevent |
+| `debug-fe-be-integration` | FE/BE integration debug — backend logs, API mismatches, both-side fixes |
+
+### Testing & QA <sup>New</sup>
+
+> *From unit tests to full E2E QA*
+
+| Skill | What it Does |
+|:------|:-------------|
+| `unit-testing` | Auto-detect framework, research patterns, Sentry coverage gaps, write tests |
+| `qa-testing` | Comprehensive QA via browser MCP — CRUD lifecycle, data pipeline, UX quality audit |
+| `pr-workflow` | PR lifecycle — validation, monitoring, bot feedback, merge criteria |
+| `browser-anti-stall` | Anti-stall protocol for browser automation — timeouts, retries, evidence gathering |
+
+### Product & Documentation <sup>New</sup>
+
+> *From PRD to production docs*
+
+| Skill | What it Does |
+|:------|:-------------|
+| `design-prd` | Generate PRDs via structured conversation — competitive research, technical feasibility |
+| `docs-writer` | Write READMEs, API docs, architecture docs, code comments |
+
+### File Handling <sup>New</sup>
+
+> *Create and manipulate Office documents and PDFs*
+
+| Skill | What it Does |
+|:------|:-------------|
+| `file-docx` | Word documents — create, edit, tracked changes, comments, text extraction |
+| `file-pdf` | PDF processing — extract text/tables, create, merge/split, forms, OCR |
+| `file-pptx` | PowerPoint — create from HTML, edit slides, extract content, visual validation |
+| `file-xlsx` | Spreadsheets — formulas, formatting, data analysis, financial model standards |
+
 ### Meta & Tooling
 
 | Skill | What it Does |
@@ -401,14 +500,19 @@ mindmap
 | `webapp-testing` | Playwright browser automation and E2E testing |
 
 <details>
-<summary><strong>Cursor-Specific Skills (5)</strong></summary>
+<summary><strong>Cursor-Specific Skills (10)</strong></summary>
 
 | Skill | What it Does |
 |:------|:-------------|
+| `babysit` | Keep a PR merge-ready — triage comments, resolve conflicts, fix CI in a loop |
+| `create-hook` | Create Cursor hooks — scripts/prompts for before/after agent events |
 | `create-rule` | Create `.cursor/rules/` for persistent AI guidance |
 | `create-skill` | Create new Agent Skills in `~/.cursor/skills/` |
 | `create-subagent` | Create custom subagents in `.cursor/agents/` |
 | `migrate-to-skills` | Convert rules/commands to Skills format |
+| `shell` | Direct shell execution — run `/shell` commands without interpretation |
+| `statusline` | Configure CLI status line — model, context usage, git info |
+| `update-cli-config` | Modify CLI settings — permissions, sandbox, vim mode, display |
 | `update-cursor-settings` | Modify Cursor/VSCode settings.json |
 
 </details>

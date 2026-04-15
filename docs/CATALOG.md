@@ -171,6 +171,108 @@ Complete reference for all skills, commands, and their trigger phrases.
 
 ---
 
+### Audits & Monitoring
+
+#### `audit-db-schema`
+**Triggers:** "schema review", "database audit", "naming conventions", "RLS audit", "migration check", "index audit", "constraint check"
+**What it does:** Audit database schema for consistency, robustness, and industry standards. Auto-detects database type (Supabase/Postgres/MySQL), ORM (Prisma/Drizzle/Sequelize), and migration tool. Uses Supabase MCP for live schema inspection, Firecrawl for current best practices, Context7 for ORM docs. Covers naming, types, constraints, indexes, RLS, relationships, migrations, security.
+**Related:** `database-optimization`, `security-audit`
+
+#### `audit-fe-api`
+**Triggers:** "API audit", "frontend API", "API mismatch", "request optimization", "API contract", "network requests"
+**What it does:** Audit frontend API calls against backend implementation. Auto-detects API client, state management, and backend framework. Uses Sentry MCP for production API errors, Firecrawl for best practices. Validates endpoints exist, parameters match, types align, caching configured, error handling present.
+**Related:** `debug-fe-be-integration`, `api-design`
+
+#### `audit-langfuse-llm`
+**Triggers:** "audit LLM", "check Langfuse", "audit prompts", "check AI quality", "LLM PDCA", "audit AI costs", "check traces", "audit eval scores", "check hallucination"
+**What it does:** PDCA quality audit for LLM/AI features via Langfuse CLI, Sentry, Supabase, Playwright, and Firecrawl. Audits traces, prompts, costs, evals. Performs live verification and grounding/hallucination checks. Includes prompt improvement cycle with measurable before/after comparison.
+**Related:** `deploy-verify`, `debug-sentry-monitor`
+
+#### `audit-uiux-design-system`
+**Triggers:** "design system audit", "UI consistency", "token compliance", "design drift", "component audit", "visual coherency", "Nielsen heuristics"
+**What it does:** Audit UI/UX coherency against design system. Auto-detects CSS framework, component library, icon library. Checks token compliance (colors, typography, spacing, radii, shadows), component modularity, live visual verification via browser MCP, WCAG AA accessibility, Nielsen's 10 heuristics.
+**Related:** `design-system`, `accessibility-audit`, `uiux-enhancement`
+
+#### `debug-sentry-monitor`
+**Triggers:** "check Sentry", "fix Sentry", "triage errors", "production errors", "monitoring", "error tracking", "run sentry check"
+**What it does:** Monitor, triage, fix, and enhance Sentry error monitoring. Auto-detects org, project, framework, config. Fetches issues via Sentry MCP, triages (noise/bug/perf/regression), root cause analysis with Seer AI, fixes code, updates noise filters, audits monitoring architecture. Resolves only after verified fixes.
+**Related:** `debug-error`, `deploy-verify`
+
+#### `deploy-verify`
+**Triggers:** "verify deploy", "post-deploy check", "smoke test production", "ship or rollback", "deploy health check", "post-release check"
+**What it does:** Post-deploy smoke test combining Sentry + Supabase + Langfuse + Playwright + Firecrawl. Checks for new errors, verifies migration health, confirms trace pipeline, runs browser smoke test on critical paths. Produces binary SHIP/ROLLBACK/MONITOR verdict with evidence.
+**Related:** `debug-sentry-monitor`, `audit-langfuse-llm`
+
+### Debugging
+
+#### `debug-error`
+**Triggers:** "debug", "error", "bug", "broken", "not working", "exception", "crash", "investigate"
+**What it does:** Systematic debugging: reproduce → isolate → research → identify root cause → fix → verify → prevent. Integrates Sentry MCP for production context, Firecrawl for fix patterns, Context7 for library docs. Anti-pattern checklist prevents band-aid fixes.
+**Related:** `debug-fe-be-integration`, `debug-sentry-monitor`
+
+#### `debug-fe-be-integration`
+**Triggers:** "API error", "4xx error", "5xx error", "validation error", "integration issue", "backend error", "FE-BE mismatch"
+**What it does:** Debug frontend-backend integration by analyzing backend logs, production errors (Sentry), and source code. Auto-detects FE/BE frameworks, API style, validation library. Maps errors to source code, verifies data state via Supabase MCP, generates both FE and BE fixes.
+**Related:** `audit-fe-api`, `debug-error`
+
+### Testing & QA
+
+#### `unit-testing`
+**Triggers:** "write tests", "test coverage", "unit test", "test this", "add tests", "testing", "Jest", "Vitest", "pytest"
+**What it does:** Write effective unit tests. Auto-detects framework (Vitest/Jest/pytest/Go/etc.), researches current patterns via Firecrawl, fetches testing library docs via Context7. Uses Sentry MCP to identify production errors lacking test coverage. Covers pure functions, async, mocking, React components, hooks, API routes.
+**Related:** `tdd`, `qa-testing`
+
+#### `qa-testing`
+**Triggers:** "QA the app", "test the app", "find bugs", "test before release", "run QA", "test CRUD", "test data pipeline", "check for dead buttons", "pre-release testing"
+**What it does:** Comprehensive QA via browser MCP tools. Auto-discovers pages, features, data entities, auth patterns from codebase. Generates user stories dynamically, performs real CRUD with data pipeline verification (FE → API → DB → FE), audits UX quality, tests edge cases. Structured pass/fail report with production readiness score.
+**Related:** `unit-testing`, `webapp-testing`, `browser-anti-stall`
+
+#### `pr-workflow`
+**Triggers:** "create PR", "pull request", "merge PR", "PR review", "PR checks", "merge criteria"
+**What it does:** PR lifecycle from creation to merge. Runs validations, security scans, creates PR with template. Monitors checks (polls status), addresses bot feedback, ensures all threads resolved. Two-gate merge criteria: clean state + zero unresolved threads.
+**Related:** `git-workflow`, `code-review`
+
+#### `browser-anti-stall`
+**Triggers:** (protocol — used by other skills before browser automation)
+**What it does:** Prevent browser automation freezing. Rules: navigation guard with snapshot verification, max 3-second waits, incremental wait pattern, max 4 attempts per goal, evidence before retry, timeout budgets, SPA-specific rules, fresh refs after state changes, lock/unlock discipline.
+**Related:** `qa-testing`, `webapp-testing`, `deploy-verify`
+
+### Product & Documentation
+
+#### `design-prd`
+**Triggers:** "PRD", "product requirements", "write a spec", "new feature spec", "feature requirements", "scope a feature"
+**What it does:** Generate Product Requirements Documents via structured conversation. Auto-detects tech stack, existing features, data model. Uses Firecrawl for competitive research, Context7 for framework feasibility, Supabase MCP for data model verification. Produces actionable PRDs with technical feasibility sections.
+**Related:** `doc-coauthoring`, `spec-writing`
+
+#### `docs-writer`
+**Triggers:** "write documentation", "README", "API docs", "document this", "create docs", "architecture docs"
+**What it does:** Write clear documentation. Templates for READMEs, API docs, code comments, architecture docs. Includes Mermaid diagram patterns. Enforces concise writing, structured information, and usage examples.
+**Related:** `doc-coauthoring`, `design-prd`
+
+### File Handling
+
+#### `file-docx`
+**Triggers:** "Word document", "docx", "create document", "edit document", "tracked changes", "redline"
+**What it does:** Create, edit, and analyze .docx files. Supports tracked changes (redlining), comments, formatting preservation, text extraction via pandoc, raw XML access. Uses docx-js for creation and OOXML library for editing.
+**Related:** `file-pdf`, `file-pptx`
+
+#### `file-pdf`
+**Triggers:** "PDF", "extract text", "merge PDF", "split PDF", "PDF form", "create PDF"
+**What it does:** PDF processing with pypdf, pdfplumber, and reportlab. Extract text and tables, create new PDFs, merge/split documents, handle forms, OCR scanned PDFs, add watermarks, password protection.
+**Related:** `file-docx`, `file-xlsx`
+
+#### `file-pptx`
+**Triggers:** "presentation", "PowerPoint", "slides", "pptx", "create slides", "deck"
+**What it does:** Create, edit, and analyze presentations. HTML-to-PPTX workflow with design principles, color palettes, layout tips. Edit existing via OOXML. Thumbnail grid generation for visual validation. Supports charts and tables.
+**Related:** `file-docx`, `canvas-design`
+
+#### `file-xlsx`
+**Triggers:** "spreadsheet", "Excel", "xlsx", "formulas", "financial model", "data analysis"
+**What it does:** Spreadsheet creation, editing, analysis. Zero formula errors mandate. Financial model standards (color coding, number formatting). Uses openpyxl for formulas/formatting, pandas for data analysis. LibreOffice for formula recalculation.
+**Related:** `file-pdf`, `data-visualization`
+
+---
+
 ## Skill Composition Patterns
 
 ### Full Creative Build
@@ -187,3 +289,15 @@ Complete reference for all skills, commands, and their trigger phrases.
 
 ### Code Quality Review
 `codebase-coherency` → `code-antipatterns` → `refactoring` → `security-audit`
+
+### Full Stack Audit
+`audit-db-schema` + `audit-fe-api` → `debug-fe-be-integration` → `debug-sentry-monitor`
+
+### Deploy Pipeline
+`unit-testing` → `qa-testing` → `pr-workflow` → `deploy-verify`
+
+### LLM Quality Cycle
+`audit-langfuse-llm` → `debug-sentry-monitor` → `deploy-verify`
+
+### Document Generation
+`design-prd` → `docs-writer` + `file-docx` + `file-pdf`
