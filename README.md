@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="#-quick-start"><img src="https://img.shields.io/badge/-Quick_Start-10b981?style=flat-square" alt="Quick Start" /></a>
-  <a href="#-skills-51"><img src="https://img.shields.io/badge/-51_Skills-6366f1?style=flat-square" alt="51 Skills" /></a>
+  <a href="#-skills-52"><img src="https://img.shields.io/badge/-52_Skills-6366f1?style=flat-square" alt="52 Skills" /></a>
   <a href="#-subagents-5"><img src="https://img.shields.io/badge/-5_Subagents-f59e0b?style=flat-square" alt="5 Subagents" /></a>
   <a href="#-commands-13"><img src="https://img.shields.io/badge/-13_Commands-ef4444?style=flat-square" alt="13 Commands" /></a>
   <a href="#-mcp-servers-16"><img src="https://img.shields.io/badge/-16_MCP_Servers-3b82f6?style=flat-square" alt="16 MCP Servers" /></a>
@@ -39,8 +39,8 @@
 graph TB
   subgraph TOOLKIT["cursor-kenji Toolkit"]
     direction TB
-    SK["Skills (51)"]
-    CS["Cursor Skills (10)"]
+    SK["Skills (52)"]
+    CS["Cursor Skills (11)"]
     CMD["Commands (13)"]
     SA["Subagents (5)"]
     MCP["MCP Servers (16)"]
@@ -88,9 +88,9 @@ graph TB
 | `tdd` | Skill | TDD is Cursor's #1 recommended agent pattern — tests give agents a clear, verifiable goal |
 | `spec-writing` | Skill | Writing good specs is the highest-leverage 2026 AI skill — vague prompts produce vague code |
 | `parallel-agents` | Skill | Worktrees + cloud agents + multi-model comparison — delegate and compare in parallel |
-| `code-review` | Skill | Agent Review + BugBot + manual checklist for thorough pre-merge review |
-| 18 new skills | Skill | Audits, debugging, deploy verification, file handling, PRD generation, QA testing, and more |
-| 5 new cursor-skills | Cursor | babysit, create-hook, shell, statusline, update-cli-config |
+| `audit-code-review` | Skill | Agent Review + BugBot + manual checklist for thorough pre-merge review |
+| 20 new skills | Skill | Audits, debugging, deploy verification, file handling, PRD generation, QA testing, housekeeping, and more |
+| 6 new cursor-skills | Cursor | babysit, canvas, create-hook, shell, statusline, update-cli-config |
 | `/plan` | Command | Plan Mode (`Shift+Tab`) — Cursor's #1 recommendation: plan before coding |
 | `/pr` | Command | Checks pass -> commit -> push -> open PR with description, one workflow |
 | `/review` | Command | Full code review pass before merging |
@@ -104,12 +104,12 @@ graph TB
 
 ```mermaid
 pie title Toolkit Composition
-    "Skills (51)" : 51
+    "Skills (52)" : 52
     "Commands (13)" : 13
     "MCP Servers (16)" : 16
     "Project Rules (6)" : 6
     "Subagents (5)" : 5
-    "Cursor Skills (10)" : 10
+    "Cursor Skills (11)" : 11
     "Notepads (2)" : 2
     "Shell Aliases (8)" : 8
 ```
@@ -122,8 +122,8 @@ pie title Toolkit Composition
 
 | | Count | Description |
 |-|-------|-------------|
-|| **Skills** | 51 | AI agent capabilities |
-|| **Cursor Skills** | 10 | IDE-specific tools |
+|| **Skills** | 52 | AI agent capabilities |
+|| **Cursor Skills** | 11 | IDE-specific tools |
 || **Commands** | 13 | Slash commands |
 || **Subagents** | 5 | Autonomous AI agents |
 
@@ -148,68 +148,70 @@ pie title Toolkit Composition
 
 ```
 cursor-kenji/
-├── skills/                  # 51 Agent Skills (each has SKILL.md)
-│   ├── accessibility-audit/
+├── skills/                  # 52 Agent Skills (each has SKILL.md)
 │   ├── algorithmic-art/
-│   ├── api-design/
-│   ├── audit-db-schema/       # NEW — DB schema audit
-│   ├── audit-fe-api/          # NEW — Frontend API audit
-│   ├── audit-langfuse-llm/    # NEW — Langfuse LLM audit
-│   ├── audit-uiux-design-system/ # NEW — UI/UX design system audit
+│   ├── audit-accessibility/   # renamed from accessibility-audit
+│   ├── audit-code-review/     # renamed from code-review
+│   ├── audit-db-schema/       # NEW
+│   ├── audit-fe-api/          # NEW
+│   ├── audit-langfuse-llm/    # NEW
+│   ├── audit-performance/     # renamed from performance-audit
+│   ├── audit-security/        # renamed from security-audit
+│   ├── audit-uiux-design-system/ # NEW
 │   ├── backend-patterns/
-│   ├── browser-anti-stall/    # NEW — Browser automation protocol
 │   ├── canvas-design/
 │   ├── code-antipatterns/
-│   ├── code-review/
 │   ├── codebase-coherency/
 │   ├── creative-effects/
 │   ├── creative-workflow/
 │   ├── data-visualization/
 │   ├── database-optimization/
-│   ├── debug-error/           # NEW — Systematic debugging
-│   ├── debug-fe-be-integration/ # NEW — FE/BE integration debug
-│   ├── debug-sentry-monitor/  # NEW — Sentry monitoring
-│   ├── deploy-verify/         # NEW — Post-deploy verification
-│   ├── design-prd/            # NEW — PRD generation
+│   ├── debug-error/           # NEW
+│   ├── debug-fe-be-integration/ # NEW
+│   ├── debug-sentry-monitor/  # NEW
+│   ├── deploy-verify/         # NEW
+│   ├── design-api/            # renamed from api-design
+│   ├── design-frontend/       # renamed from frontend-design
+│   ├── design-prd/            # NEW
 │   ├── design-system/
-│   ├── doc-coauthoring/
-│   ├── docs-writer/           # NEW — Documentation writer
+│   ├── docs-coauthor/         # renamed from doc-coauthoring
+│   ├── docs-writer/           # NEW
 │   ├── error-handling/
-│   ├── file-docx/             # NEW — Word document handling
-│   ├── file-pdf/              # NEW — PDF processing
-│   ├── file-pptx/             # NEW — PowerPoint handling
-│   ├── file-xlsx/             # NEW — Spreadsheet handling
-│   ├── frontend-design/
-│   ├── git-workflow/
+│   ├── file-docx/             # NEW
+│   ├── file-pdf/              # NEW
+│   ├── file-pptx/             # NEW
+│   ├── file-xlsx/             # NEW
 │   ├── hooks-builder/
 │   ├── interactive-ux/
-│   ├── mcp-builder/
+│   ├── meta-mcp-builder/      # renamed from mcp-builder
+│   ├── meta-skill-creator/    # renamed from skill-creator
 │   ├── mobile-first/
 │   ├── motion-design/
 │   ├── parallel-agents/
-│   ├── performance-audit/
-│   ├── pr-workflow/           # NEW — PR lifecycle management
-│   ├── qa-testing/            # NEW — Comprehensive QA testing
+│   ├── protocol-browser-anti-stall/ # NEW
 │   ├── realtime-features/
-│   ├── refactoring/
-│   ├── security-audit/
-│   ├── skill-creator/
 │   ├── spec-writing/
 │   ├── tdd/
+│   ├── test-qa/               # NEW
+│   ├── test-unit/             # NEW
 │   ├── theme-factory/
 │   ├── uiux-enhancement/
-│   ├── unit-testing/          # NEW — Unit test writing
-│   └── webapp-testing/
-├── skills-cursor/           # 10 Cursor-specific Skills
-│   ├── babysit/               # NEW — PR babysitting
-│   ├── create-hook/           # NEW — Cursor hook creation
+│   ├── webapp-testing/
+│   ├── workflow-git-commit/   # renamed from git-workflow
+│   ├── workflow-housekeep/    # NEW
+│   ├── workflow-pr/           # NEW
+│   └── workflow-refactor/     # renamed from refactoring
+├── skills-cursor/           # 11 Cursor-specific Skills
+│   ├── babysit/               # NEW
+│   ├── canvas/                # NEW — Canvas SDK + rendering
+│   ├── create-hook/           # NEW
 │   ├── create-rule/
 │   ├── create-skill/
 │   ├── create-subagent/
 │   ├── migrate-to-skills/
-│   ├── shell/                 # NEW — Direct shell execution
-│   ├── statusline/            # NEW — CLI status line config
-│   ├── update-cli-config/     # NEW — CLI configuration
+│   ├── shell/                 # NEW
+│   ├── statusline/            # NEW
+│   ├── update-cli-config/     # NEW
 │   └── update-cursor-settings/
 ├── commands/                # 13 Slash Commands
 │   ├── commit.md
@@ -283,7 +285,7 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 ```mermaid
 flowchart LR
   A["./install.sh"] --> B["Backup existing\n~/.cursor/skills/"]
-  B --> C["Install 51 skills\n+ 10 cursor skills"]
+  B --> C["Install 52 skills\n+ 11 cursor skills"]
   C --> D["Install 5\nsubagents"]
   D --> E["Copy MCP\nconfig template"]
   E --> F["Ready!"]
@@ -304,15 +306,15 @@ flowchart LR
 
 ---
 
-## Skills (51)
+## Skills (52)
 
 ### Skill Categories at a Glance
 
 ```mermaid
 mindmap
-  root((51 Skills))
+  root((52 Skills))
     Design & Frontend
-      frontend-design
+      design-frontend
       design-system
       motion-design
       creative-effects
@@ -329,15 +331,15 @@ mindmap
       database-optimization
       realtime-features
     Architecture & Quality
-      api-design
+      design-api
       error-handling
       code-antipatterns
-      code-review
+      audit-code-review
       codebase-coherency
-      refactoring
-      performance-audit
-      security-audit
-      accessibility-audit
+      workflow-refactor
+      audit-performance
+      audit-security
+      audit-accessibility
     Audits & Monitoring
       audit-db-schema
       audit-fe-api
@@ -353,24 +355,25 @@ mindmap
       spec-writing
       parallel-agents
       hooks-builder
-      unit-testing
-      qa-testing
-      pr-workflow
-      browser-anti-stall
+      test-unit
+      test-qa
+      workflow-pr
+      protocol-browser-anti-stall
     Process & Docs
-      git-workflow
-      doc-coauthoring
+      workflow-git-commit
+      docs-coauthor
       docs-writer
       design-prd
       creative-workflow
+      workflow-housekeep
     File Handling
       file-docx
       file-pdf
       file-pptx
       file-xlsx
     Meta & Tooling
-      skill-creator
-      mcp-builder
+      meta-skill-creator
+      meta-mcp-builder
       webapp-testing
 ```
 
@@ -382,7 +385,7 @@ mindmap
 
 | Skill | What it Does |
 |:------|:-------------|
-| `frontend-design` | Production-grade UI avoiding generic AI aesthetics |
+| `design-frontend` | Production-grade UI avoiding generic AI aesthetics |
 | `design-system` | Component libraries, tokens, variants, CVA patterns |
 | `motion-design` | Framer Motion, CSS animations, GSAP micro-interactions |
 | `creative-effects` | WebGL, Three.js, shaders, particles, Canvas 2D |
@@ -411,15 +414,15 @@ mindmap
 
 | Skill | What it Does |
 |:------|:-------------|
-| `api-design` | REST conventions, error schemas, pagination, versioning |
+| `design-api` | REST conventions, error schemas, pagination, versioning |
 | `error-handling` | Error boundaries, Server Action errors, toast patterns |
 | `code-antipatterns` | Detect and fix React, TypeScript, state anti-patterns |
-| `code-review` | Thorough PR reviews — correctness, security, perf, a11y checklist |
+| `audit-code-review` | Thorough PR reviews — correctness, security, perf, a11y checklist |
 | `codebase-coherency` | Naming, imports, organization consistency audit |
-| `refactoring` | Safe, incremental code transformations |
-| `performance-audit` | Core Web Vitals, bundle analysis, runtime profiling |
-| `security-audit` | OWASP Top 10, auth flows, RLS, secrets management |
-| `accessibility-audit` | WCAG 2.1 AA compliance, screen reader, keyboard, ARIA |
+| `workflow-refactor` | Safe, incremental code transformations |
+| `audit-performance` | Core Web Vitals, bundle analysis, runtime profiling |
+| `audit-security` | OWASP Top 10, auth flows, RLS, secrets management |
+| `audit-accessibility` | WCAG 2.1 AA compliance, screen reader, keyboard, ARIA |
 
 ### Engineering Practices <sup>New in 2026</sup>
 
@@ -434,8 +437,8 @@ mindmap
 
 | Skill | What it Does |
 |:------|:-------------|
-| `git-workflow` | Branching, conventional commits, PRs, releases |
-| `doc-coauthoring` | Structured co-authoring for specs, PRDs, RFCs |
+| `workflow-git-commit` | Branching, conventional commits, PRs, releases |
+| `docs-coauthor` | Structured co-authoring for specs, PRDs, RFCs |
 | `creative-workflow` | End-to-end feature development workflow |
 
 ### Audits & Monitoring <sup>New</sup>
@@ -466,10 +469,10 @@ mindmap
 
 | Skill | What it Does |
 |:------|:-------------|
-| `unit-testing` | Auto-detect framework, research patterns, Sentry coverage gaps, write tests |
-| `qa-testing` | Comprehensive QA via browser MCP — CRUD lifecycle, data pipeline, UX quality audit |
-| `pr-workflow` | PR lifecycle — validation, monitoring, bot feedback, merge criteria |
-| `browser-anti-stall` | Anti-stall protocol for browser automation — timeouts, retries, evidence gathering |
+| `test-unit` | Auto-detect framework, research patterns, Sentry coverage gaps, write tests |
+| `test-qa` | Comprehensive QA via browser MCP — CRUD lifecycle, data pipeline, UX quality audit |
+| `workflow-pr` | PR lifecycle — validation, monitoring, bot feedback, merge criteria |
+| `protocol-browser-anti-stall` | Anti-stall protocol for browser automation — timeouts, retries, evidence gathering |
 
 ### Product & Documentation <sup>New</sup>
 
@@ -479,6 +482,7 @@ mindmap
 |:------|:-------------|
 | `design-prd` | Generate PRDs via structured conversation — competitive research, technical feasibility |
 | `docs-writer` | Write READMEs, API docs, architecture docs, code comments |
+| `workflow-housekeep` | Full-cycle repo maintenance — README sync, dead file cleanup, dependency updates, config audit |
 
 ### File Handling <sup>New</sup>
 
@@ -495,16 +499,17 @@ mindmap
 
 | Skill | What it Does |
 |:------|:-------------|
-| `skill-creator` | Guide for creating new Agent Skills |
-| `mcp-builder` | Build MCP servers for LLM tool integration |
+| `meta-skill-creator` | Guide for creating new Agent Skills |
+| `meta-mcp-builder` | Build MCP servers for LLM tool integration |
 | `webapp-testing` | Playwright browser automation and E2E testing |
 
 <details>
-<summary><strong>Cursor-Specific Skills (10)</strong></summary>
+<summary><strong>Cursor-Specific Skills (11)</strong></summary>
 
 | Skill | What it Does |
 |:------|:-------------|
 | `babysit` | Keep a PR merge-ready — triage comments, resolve conflicts, fix CI in a loop |
+| `canvas` | Live React canvas beside chat — rich data visualizations, audit reports, interactive tools |
 | `create-hook` | Create Cursor hooks — scripts/prompts for before/after agent events |
 | `create-rule` | Create `.cursor/rules/` for persistent AI guidance |
 | `create-skill` | Create new Agent Skills in `~/.cursor/skills/` |
