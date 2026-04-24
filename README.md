@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="#-quick-start"><img src="https://img.shields.io/badge/-Quick_Start-10b981?style=flat-square" alt="Quick Start" /></a>
-  <a href="#-skills-52"><img src="https://img.shields.io/badge/-52_Skills-6366f1?style=flat-square" alt="52 Skills" /></a>
+  <a href="#-skills-53"><img src="https://img.shields.io/badge/-53_Skills-6366f1?style=flat-square" alt="53 Skills" /></a>
   <a href="#-subagents-5"><img src="https://img.shields.io/badge/-5_Subagents-f59e0b?style=flat-square" alt="5 Subagents" /></a>
   <a href="#-commands-13"><img src="https://img.shields.io/badge/-13_Commands-ef4444?style=flat-square" alt="13 Commands" /></a>
   <a href="#-mcp-servers-16"><img src="https://img.shields.io/badge/-16_MCP_Servers-3b82f6?style=flat-square" alt="16 MCP Servers" /></a>
@@ -39,7 +39,7 @@
 graph TB
   subgraph TOOLKIT["cursor-kenji Toolkit"]
     direction TB
-    SK["Skills (52)"]
+    SK["Skills (53)"]
     CS["Cursor Skills (11)"]
     CMD["Commands (13)"]
     SA["Subagents (5)"]
@@ -306,13 +306,13 @@ flowchart LR
 
 ---
 
-## Skills (52)
+## Skills (53)
 
 ### Skill Categories at a Glance
 
 ```mermaid
 mindmap
-  root((52 Skills))
+  root((53 Skills))
     Design & Frontend
       design-frontend
       design-system
@@ -355,6 +355,7 @@ mindmap
       spec-writing
       parallel-agents
       hooks-builder
+      karpathy-guidelines
       test-unit
       test-qa
       workflow-pr
@@ -432,6 +433,7 @@ mindmap
 | `spec-writing` | Write effective specs and briefs so agents produce correct implementations first time |
 | `parallel-agents` | Run agents in parallel via git worktrees, cloud agents, and multi-model comparison |
 | `hooks-builder` | Build Cursor Agent Hooks — auto-formatters, security gates, secret scanners, loop automation |
+| `karpathy-guidelines` | Behavioral guardrails (Think before coding, Simplicity first, Surgical changes, Goal-driven execution) — distilled from Karpathy's LLM coding pitfalls |
 
 ### Process & Documentation
 
