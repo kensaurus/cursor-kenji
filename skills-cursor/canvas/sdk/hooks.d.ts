@@ -1,46 +1,51 @@
 import type { CanvasPalette, CanvasTokens } from "./canvas-tokens.js";
 import { type CanvasAction } from "./internal/canvas-action-dispatch.js";
-export interface CanvasHostTheme {
+/**
+ * Host theme for the current canvas. Semantic color groups (`text`, `bg`,
+ * `fill`, `stroke`, `accent`, `diff`) live at the top level for ergonomic
+ * inline-style access; `tokens` is also present as a self-reference for
+ * callers that prefer a namespaced form.
+ */
+export interface CanvasHostTheme extends CanvasTokens {
     readonly kind: string;
     readonly tokens: CanvasTokens;
     readonly palette: CanvasPalette;
 }
 /**
- * Returns `{ kind, tokens, palette }` for the host IDE's current theme.
- * Falls back to dark-mode when no host state is available.
+ * Returns the current host theme. Falls back to dark mode when no host
+ * state is available.
  *
- * **You must destructure `tokens`** — color groups (`text`, `bg`, `fill`,
- * `stroke`, `accent`, `diff`) live under `tokens`, not on the top-level
- * return value.
+ * Semantic color groups are available directly on the returned object —
+ * `accent`, `text`, `bg`, `fill`, `stroke`, `diff` — as well as `kind`
+ * (`"dark"` | `"light"` | …) and `palette` (the flat color palette).
  *
- * @returns `CanvasHostTheme` — an object with:
- * - `kind`    — theme identifier string (e.g. `"dark"`, `"light"`)
- * - `tokens`  — nested semantic color groups for inline styles
- * - `palette` — flat palette (same colors, alternative key names)
+ * Call `useHostTheme()` inside each component that needs theme access —
+ * the returned object is scoped to that component, not shared across
+ * function boundaries.
  *
- * **Stable token paths for `style={{ ... }}` usage:**
- * - `tokens.text.primary / secondary / tertiary / quaternary` — text hierarchy
- * - `tokens.bg.editor / chrome / elevated` — surface backgrounds
- * - `tokens.fill.primary / secondary / tertiary / quaternary` — tinted fills
- * - `tokens.stroke.primary / secondary / tertiary` — borders and dividers
- * - `tokens.accent.primary / control` — accent blue and button background
- * - `tokens.text.link` — link color
- * - `tokens.text.onAccent` — text on accent-colored surfaces
+ * Stable paths for `style={{ ... }}` usage:
+ * - `text.primary / secondary / tertiary / quaternary` — text hierarchy
+ * - `bg.editor / chrome / elevated` — surface backgrounds
+ * - `fill.primary / secondary / tertiary / quaternary` — tinted fills
+ * - `stroke.primary / secondary / tertiary` — borders and dividers
+ * - `accent.primary / control` — accent blue and button background
+ * - `text.link` — link color
+ * - `text.onAccent` — text on accent-colored surfaces
  *
- * **Prefer built-in components** (`Card`, `Button`, `Text`, etc.) over raw token
- * usage. Use tokens directly only when no component covers your use case.
- * When you do use tokens, stick to **flat solid colors** — no gradients, no
- * box-shadows, no decorative effects. The canvas design language is minimal.
+ * Prefer built-in components (`Card`, `Button`, `Text`, etc.) over raw
+ * token usage. Reach for tokens only when no component covers the case,
+ * and stick to flat solid colors — no gradients, no box-shadows.
  *
  * @example
  * ```tsx
- * const { tokens: t } = useHostTheme();
- *
- * <div style={{ background: t.fill.tertiary, color: t.text.secondary, padding: 8 }}>
- *   Custom surface
- * </div>
- *
- * <div style={{ color: t.accent.primary }}>Accent text</div>
+ * function Overview() {
+ *   const theme = useHostTheme();
+ *   return (
+ *     <div style={{ background: theme.fill.tertiary, color: theme.text.secondary, padding: 8 }}>
+ *       <span style={{ color: theme.accent.primary }}>Accent text</span>
+ *     </div>
+ *   );
+ * }
  * ```
  */
 export declare function useHostTheme(): CanvasHostTheme;

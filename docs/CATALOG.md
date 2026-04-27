@@ -6,6 +6,23 @@ Complete reference for all skills, commands, and their trigger phrases.
 
 ## Skills
 
+### Enhance
+
+#### `enhance-page-ui`
+**Triggers:** "make this page nicer", "more polished", "more beautiful", "more editorial", "more premium", "less crowded", "less AI-generated", "better laid out", "better balanced", "typography", "visual hierarchy", "progressive disclosure", "empty/dead space", "scroll fades", "microinteractions", "motion", "hover states", "cards", "grids", "density", "cosmetic UI polish"
+**What it does:** Composition before decoration — fix hierarchy, grouping, alignment, and rhythm before adding gradients, motion, blur, masks, or shadows. Subtract clutter, group related, pin metadata, soften scroll cuts, animate purposefully. Generic across web stacks.
+**Related:** `enhance-page-ux`, `audit-uiux-design-system`, `design-frontend`
+
+#### `enhance-page-ux`
+**Triggers:** "enhance this page", "make /xxx better", "this page feels AI-generated", "fix UX of /xxx", "improve information density", "icons all look the same", "buttons wrap to 2 lines", "empty columns", "I can't tell which is which"
+**What it does:** Replaces generic / "stacked" UI with semantic data wired to real backend state. Inventories primitives FIRST, maps every pain to an NN/g heuristic, fixes at the helper / token level (not row-by-row), verified live at 1440/1024/800 viewports via browser MCP. Generic — works on any webapp regardless of stack.
+**Related:** `enhance-page-ui`, `audit-ux`, `audit-uiux-design-system`
+
+#### `enhance-readme`
+**Triggers:** "enhance README", "make README prettier", "add screenshots to README", "showcase the app in README", "design the README", "add hero image", "spice up README", "make README more fun", "add animated demo to README", "record a tour GIF", "make a README GIF"
+**What it does:** Theme-aware hero + tour grid + optional autoplay GIF via Playwright MCP. Captures live screenshots at 1600x1000 in dark and light mode, pairs them with `<picture>` for auto theme-swap, and inlines them into the README with GitHub-supported HTML. Companion scripts at `~/.cursor/skills/enhance-readme/scripts/`.
+**Related:** `webapp-testing`, `protocol-browser-anti-stall`
+
 ### Design & Frontend
 
 #### `design-frontend`
@@ -161,11 +178,17 @@ Complete reference for all skills, commands, and their trigger phrases.
 
 | Command | File | Quick Reference |
 |---------|------|-----------------|
-| `/commit` | `commit.md` | Fix build, lint, type errors → commit → push |
+| `/plan` | `plan.md` | Plan Mode — research codebase, clarify, produce approved plan before coding |
+| `/commit` | `commit.md` | Lint → Sentry pre-check → build verify → auto-detect scope → conventional commit → push |
+| `/pr` | `pr.md` | Checks pass → commit → push → open PR with title and description |
+| `/fix-issue` | `fix-issue.md` | Fetch GitHub issue → find code → implement fix → open PR |
+| `/debug` | `debug.md` | Debug Mode — hypothesis-driven, instruments code, pinpoints root cause |
+| `/review` | `review.md` | Agent review pass + manual checklist (correctness, security, perf, a11y) |
 | `/test` | `test.md` | Type check → lint → unit → integration → E2E → coverage |
-| `/readme` | `readme.md` | Scan changes → update READMEs → sync docs |
+| `/update-deps` | `update-deps.md` | Audit and safely update dependencies one at a time with changelog review |
+| `/research` | `research.md` | Three-phase Firecrawl deep research → gap analysis → implementation plan |
+| `/readme` | `readme.md` | Scan changes → detect convention → update READMEs → verify links |
 | `/refactor` | `refactor.md` | Analyze → split → barrel files → verify behavior |
-| `/research` | `research.md` | Define scope → scrape sources → validate → synthesize |
 | `/mcp` | `mcp.md` | MCP-powered dev workflow reference |
 | `/uiux` | `uiux.md` | Discover system → detect rogue → fix → validate |
 
@@ -187,6 +210,11 @@ Complete reference for all skills, commands, and their trigger phrases.
 **Triggers:** "audit LLM", "check Langfuse", "audit prompts", "check AI quality", "LLM PDCA", "audit AI costs", "check traces", "audit eval scores", "check hallucination"
 **What it does:** PDCA quality audit for LLM/AI features via Langfuse CLI, Sentry, Supabase, Playwright, and Firecrawl. Audits traces, prompts, costs, evals. Performs live verification and grounding/hallucination checks. Includes prompt improvement cycle with measurable before/after comparison.
 **Related:** `deploy-verify`, `debug-sentry-monitor`
+
+#### `audit-ux`
+**Triggers:** "UX audit", "usability review", "heuristic evaluation", "content audit", "interaction design review", "user flow analysis", "UX quality", "evaluate usability", "audit microcopy", "check UX heuristics", "assess cognitive load"
+**What it does:** Research-driven UX audit grounded in Nielsen Norman Group's 10 heuristics, Laws of UX (Fitts's, Hick's, Miller's, Jakob's), Intuit Content Design principles, and Google HEART metrics. Browser MCP for live walkthrough, Firecrawl for fresh research, Sequential Thinking for complex flow analysis. Generic — works with any webapp regardless of tech stack. For visual design system compliance only, use `audit-uiux-design-system`.
+**Related:** `audit-uiux-design-system`, `audit-accessibility`, `enhance-page-ux`
 
 #### `audit-uiux-design-system`
 **Triggers:** "design system audit", "UI consistency", "token compliance", "design drift", "component audit", "visual coherency", "Nielsen heuristics"
@@ -311,3 +339,21 @@ Complete reference for all skills, commands, and their trigger phrases.
 
 ### Repo Maintenance
 `workflow-housekeep` → `docs-writer` + `workflow-refactor` + `audit-code-review`
+
+### UX Polish (NEW)
+`audit-ux` → `enhance-page-ux` → `enhance-page-ui` → `/commit`
+
+### README Showcase (NEW)
+`enhance-readme` → `/readme` → `/commit`
+
+### Stack-Aware UI Quality (NEW)
+`audit-uiux-design-system` (visual tokens) + `audit-ux` (heuristics) → `enhance-page-ux` (data + primitives) → `enhance-page-ui` (composition + motion)
+
+---
+
+## Cursor-Specific Skills
+
+### `split-to-prs`
+**Triggers:** "split this PR", "split this branch", "split this chat", "make smaller PRs", "break this up into PRs", "stack PRs"
+**What it does:** Turn one pile of work into several small reviewable PRs. Compares current work to default branch, proposes a slice plan with Mermaid when needed, asks for approval before doing anything destructive. Saves a recoverable snapshot via `git stash create` + `update-ref refs/backup/...` before moving work around. Stages only named files or hunks — never `git add .`.
+**Related:** `babysit`, `workflow-pr`

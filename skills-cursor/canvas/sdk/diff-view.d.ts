@@ -96,7 +96,7 @@ export type DiffViewProps = {
 /**
  * Unified diff body renderer with monospaced type, colored line
  * backgrounds, line-number gutter, accent strip, and optional Shiki
- * syntax highlighting. Matches `@anysphere/ui` `DefaultDiff` visuals.
+ * syntax highlighting.
  *
  * `DiffView` does not provide any surrounding chrome — place it inside
  * a `Card` + `CardBody` (with `padding: 0`) when you want the standard

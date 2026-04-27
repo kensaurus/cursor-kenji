@@ -5,6 +5,17 @@
  * Distilled from the portal-website Highcharts analytics charting layer.
  */
 import type { CSSProperties, JSX } from "react";
+/**
+ * Semantic tone for a chart series or slice. Mirrors the tone vocabulary
+ * used by `Stat`, `Pill`, `Table`, and other SDK primitives so colors
+ * match across a canvas — e.g. a `Stat tone="success"` and a
+ * `ChartSeries tone="success"` render in the same green.
+ *
+ * Omit `tone` to let the chart auto-assign a distinct color from the
+ * chart palette; supply `tone` only when the value carries semantic
+ * meaning that should match other tonal elements on the page.
+ */
+export type ChartTone = "success" | "danger" | "warning" | "info" | "neutral";
 /** A single labeled value, used by `PieChart`. */
 export type ChartDataPoint = {
     label: string;
@@ -14,12 +25,12 @@ export type ChartDataPoint = {
 /**
  * A named data series for `BarChart` and `LineChart`.
  * The `data` array aligns by index with the parent component's `categories`.
- * If `color` is omitted, one is assigned from `chartColorSequence`.
+ * If `tone` is omitted, a color is auto-assigned from the chart palette.
  */
 export type ChartSeries = {
     name: string;
     data: number[];
-    color?: string;
+    tone?: ChartTone;
 };
 export type BarChartProps = {
     /** Category labels along the independent axis. */
@@ -48,7 +59,7 @@ export type LineChartProps = {
 };
 export type PieChartProps = {
     data: Array<ChartDataPoint & {
-        color?: string;
+        tone?: ChartTone;
     }>;
     size?: number;
     donut?: boolean;
@@ -63,11 +74,14 @@ export type PieChartProps = {
  * multiple series the default is grouped (side-by-side) — set `stacked` for
  * stacked columns or `normalized` for 100%-stacked share-mode.
  *
- * Colors are assigned automatically from `chartColorSequence`. With a **single
- * series**, each bar gets a different color by category (so a chart of 5
- * categories shows 5 colors out of the box). With **multiple series**, each
- * series gets its own color. Override with the `color` field on any series.
- * A legend appears when there are 2+ series.
+ * Colors are auto-assigned from the chart palette. With a **single series**,
+ * each bar gets a different color by category (so a chart of 5 categories
+ * shows 5 colors out of the box). With **multiple series**, each series gets
+ * its own color. A legend appears when there are 2+ series.
+ *
+ * For semantic coloring, pass `tone` on a series — it maps to the same
+ * palette entries used by `Stat`, `Pill`, and `Table` so your chart matches
+ * tonal elements elsewhere on the page.
  *
  * @example
  * ```tsx
@@ -88,15 +102,15 @@ export type PieChartProps = {
  *   stacked
  * />
  *
- * // 100% stacked share mode
+ * // Semantic tones — "accepted" renders in the same green as
+ * // <Stat tone="success"> elsewhere on the page.
  * <BarChart
  *   categories={["Mon", "Tue", "Wed"]}
  *   series={[
- *     { name: "AI", data: [70, 80, 60] },
- *     { name: "Other", data: [30, 20, 40] },
+ *     { name: "Accepted", data: [70, 80, 60], tone: "success" },
+ *     { name: "Rejected", data: [30, 20, 40], tone: "danger" },
  *   ]}
- *   normalized
- *   valueSuffix="%"
+ *   stacked
  * />
  * ```
  */
@@ -111,6 +125,10 @@ export declare function BarChart({ categories, series, height, stacked, horizont
  *
  * This is **not** a time-series component — it does not parse dates.
  * Pass pre-formatted date strings as `categories` if plotting over time.
+ *
+ * Colors are auto-assigned from the chart palette. For semantic coloring,
+ * pass `tone` on a series — it maps to the same palette entries used by
+ * `Stat`, `Pill`, and `Table`.
  *
  * @example
  * ```tsx
@@ -129,6 +147,16 @@ export declare function BarChart({ categories, series, height, stacked, horizont
  *   ]}
  *   fill
  * />
+ *
+ * // Semantic tones — "errors" renders in the same red as a
+ * // <Pill tone="danger"> elsewhere on the page.
+ * <LineChart
+ *   categories={["00:00", "06:00", "12:00", "18:00"]}
+ *   series={[
+ *     { name: "p95 latency", data: [80, 95, 110, 90], tone: "info" },
+ *     { name: "errors", data: [2, 4, 9, 3], tone: "danger" },
+ *   ]}
+ * />
  * ```
  */
 export declare function LineChart({ categories, series, height, fill, valueSuffix, style }: LineChartProps): JSX.Element;
@@ -137,8 +165,9 @@ export declare function LineChart({ categories, series, height, fill, valueSuffi
  * portal-website Highcharts analytics charts.
  *
  * Unlike `BarChart` and `LineChart`, `PieChart` takes a flat `data` array of
- * `{ label, value }` points — each slice is its own category. Colors cycle
- * through `chartColorSequence` unless an explicit `color` is provided per point.
+ * `{ label, value }` points — each slice is its own category. Colors are
+ * auto-assigned from the chart palette; pass `tone` on a point to give a
+ * slice a semantic color that matches other tonal elements on the page.
  *
  * Hovering a slice expands it outward and dims the others; hovering a legend
  * item does the same. A tooltip with value and percentage appears below the
@@ -157,11 +186,11 @@ export declare function LineChart({ categories, series, height, fill, valueSuffi
  *   ]}
  * />
  *
- * // Donut with explicit colors
+ * // Donut with semantic tones
  * <PieChart
  *   data={[
- *     { label: "AI", value: 70, color: "#1F8A65E8" },
- *     { label: "Other", value: 30, color: "#8888A8E0" },
+ *     { label: "Passing", value: 70, tone: "success" },
+ *     { label: "Failing", value: 30, tone: "danger" },
  *   ]}
  *   donut
  * />

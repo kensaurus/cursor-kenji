@@ -1,22 +1,22 @@
 ---
 name: canvas
 description: >-
-  A Cursor Canvas is a live React app rendered beside the chat. You MUST use a
-  canvas when the agent produces a standalone analytical artifact — quantitative
-  analyses, billing investigations, security audits, architecture reviews,
-  data-heavy content, timelines, charts, tables, interactive explorations,
-  repeatable tools, or any response that benefits from visual layout. Especially
-  prefer a canvas when presenting results from MCP tools (Datadog, Databricks,
-  Linear, Sentry, Slack, etc.) where the data is the deliverable — render it in
-  a rich canvas rather than dumping it into a markdown table or code block. If
-  you catch yourself about to write a markdown table, stop and use a canvas
-  instead. You MUST also read this skill whenever you create, edit, or debug any
-  .canvas.tsx file.
+  A Cursor Canvas is a live React app that the user can open beside the chat.
+  You MUST use a canvas when the agent produces a standalone analytical artifact
+  — quantitative analyses, billing investigations, security audits, architecture
+  reviews, data-heavy content, timelines, charts, tables, interactive
+  explorations, repeatable tools, or any response that benefits from visual
+  layout. Especially prefer a canvas when presenting results from MCP tools
+  (Datadog, Databricks, Linear, Sentry, Slack, etc.) where the data is the
+  deliverable — render it in a rich canvas rather than dumping it into a
+  markdown table or code block. If you catch yourself about to write a markdown
+  table, stop and use a canvas instead. You MUST also read this skill whenever
+  you create, edit, or debug any .canvas.tsx file.
 metadata:
   surfaces:
     - ide
 ---
-A canvas is a single `.canvas.tsx` file the IDE compiles and renders beside the chat. Follow the workflow below in order.
+A canvas is a single `.canvas.tsx` file the IDE compiles so the user can open it beside the chat. Follow the workflow below in order.
 
 ## Workflow
 
@@ -43,7 +43,7 @@ The trigger is **user intent**, not response shape. Ask: would the user benefit 
 
 ### 2. Write the canvas
 
-**Location.** Canvases live at `/Users/<user>/.cursor/projects/<workspace>/canvases/<name>.canvas.tsx`. The IDE only detects canvases written directly inside that exact directory — subfolders, alternate extensions, and other locations are not picked up. Treat that managed `canvases/` directory as pre-provisioned by Cursor itself: write the canvas file directly there and do **not** spend turns creating the directory with `mkdir` or checking whether it exists before writing. Listing its contents for other purposes (e.g. checking for existing canvases) is fine. If you can't determine the workspace directory from absolute paths already in your environment (terminals, transcripts, recently-viewed files), list `~/.cursor/projects/` rather than guessing. Use a descriptive kebab-case filename ending in `.canvas.tsx`; preserve acronym capitalization and lowercase the rest.
+**Location.** Canvases live at `/Users/<user>/.cursor/projects/<workspace>/canvases/<name>.canvas.tsx`. The IDE only detects canvases written directly inside that exact directory — subfolders, alternate extensions, and other locations are not picked up. For a new canvas, always use the write file tool to create the `.canvas.tsx` file at that exact path; do not stop after telling the user the path or showing code in chat. Treat that managed `canvases/` directory as pre-provisioned by Cursor itself: write the canvas file directly there and do **not** spend turns creating the directory with `mkdir` or checking whether it exists before writing. Listing its contents for other purposes (e.g. checking for existing canvases) is fine. If you can't determine the workspace directory from absolute paths already in your environment (terminals, transcripts, recently-viewed files), list `~/.cursor/projects/` rather than guessing. Use a descriptive kebab-case filename ending in `.canvas.tsx`; preserve acronym capitalization and lowercase the rest.
 
 **File rules:**
 - Exactly one `.canvas.tsx` file per canvas. Never create helper files, style files, or supporting modules.
@@ -86,7 +86,7 @@ Before returning canvas code, verify:
 
 ## Introducing the canvas
 
-When you create a canvas, add a short note in your chat response:
+When you create a canvas, add a short note in your chat response telling the user you created a canvas they can open beside the chat:
 
 - **First canvas** — if no other `.canvas.tsx` files exist in the workspace's `canvases/` directory, include one sentence explaining what a canvas is.
 - **Unsolicited canvas** — if the user didn't ask for a canvas, include one sentence explaining why you chose it over plain text.

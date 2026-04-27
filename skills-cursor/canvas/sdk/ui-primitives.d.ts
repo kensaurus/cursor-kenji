@@ -298,9 +298,7 @@ export type LinkProps = {
  * ```
  */
 export declare function Link({ children, href, style }: LinkProps): JSX.Element;
-/** Matches `@anysphere/ui` `Card` size tokens (`data-size`). */
 export type CardSize = "base" | "lg";
-/** Matches `@anysphere/ui` `Card` variants (`data-variant`). */
 export type CardVariant = "default" | "borderless";
 /**
  * Inline chevron SVG used by disclosure-style controls (collapsible cards,
@@ -440,9 +438,8 @@ export type ButtonProps = {
     onClick?: () => void;
 };
 /**
- * Action button (24px height, sized to its label). Matches `@anysphere/ui`
- * `Button` at `size="md"`. **Never stretch to full width** — buttons are
- * always inline and hug their text.
+ * Action button (24px height, sized to its label). **Never stretch to full
+ * width** — buttons are always inline and hug their text.
  *
  * @example
  * ```tsx
@@ -525,4 +522,28 @@ export type StatProps = {
  * ```
  */
 export declare function Stat({ value, label, tone, style }: StatProps): JSX.Element;
+export type CalloutTone = "info" | "success" | "warning" | "danger" | "neutral";
+export type CalloutProps = {
+    /** Body content. Plain strings, `<Text>`, `<Code>`, `<Link>`, or short lists. */
+    children?: ReactNode;
+    /** Semantic tone. Recolors the border, background tint, and title text. */
+    tone?: CalloutTone;
+    /** Optional bold title line, shown above the body in the tone color. */
+    title?: ReactNode;
+    /** Optional leading icon (emoji, inline SVG, or short text glyph). */
+    icon?: ReactNode;
+    style?: CSSProperties;
+};
+/**
+ * Tinted, bordered notice block for warnings, tips, or short status messages
+ * inline within a section.
+ *
+ * @example
+ * ```tsx
+ * <Callout tone="warning" title="Heads up">
+ *   Rolling deploy is in progress. Metrics may be noisy for 10 minutes.
+ * </Callout>
+ * ```
+ */
+export declare function Callout({ children, tone, title, icon, style }: CalloutProps): JSX.Element;
 //# sourceMappingURL=ui-primitives.d.ts.map

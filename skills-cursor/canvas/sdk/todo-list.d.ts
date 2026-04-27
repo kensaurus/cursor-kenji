@@ -7,16 +7,14 @@ export interface TodoItem {
 }
 export type TodoListProps = {
     todos: readonly TodoItem[];
-    /** @deprecated In-progress items always use the arrow icon (matches `@anysphere/ui`). */
-    spinningTodoIds?: ReadonlySet<string>;
     dimmedTodoIds?: ReadonlySet<string>;
     /** Called when a todo row is clicked (entire row is a button). */
     onTodoClick?: (todo: TodoItem) => void;
     style?: CSSProperties;
 };
 /**
- * Task list with status icons and wrapping text. Matches `@anysphere/ui` `TodoList`.
- * Each row is a **clickable** button; use `onTodoClick` to handle selection or navigation.
+ * Task list with status icons and wrapping text. Each row is a **clickable**
+ * button; use `onTodoClick` to handle selection or navigation.
  *
  * @example
  * ```tsx
@@ -29,16 +27,14 @@ export type TodoListProps = {
 export declare function TodoList({ todos, dimmedTodoIds, onTodoClick, style }: TodoListProps): JSX.Element | null;
 export type TodoListCardProps = {
     todos: readonly TodoItem[];
-    /** @deprecated In-progress items always use the arrow icon (matches `@anysphere/ui`). */
-    spinningTodoIds?: ReadonlySet<string>;
     dimmedTodoIds?: ReadonlySet<string>;
     defaultExpanded?: boolean;
     onTodoClick?: (todo: TodoItem) => void;
     style?: CSSProperties;
 };
 /**
- * Bordered, collapsible todo list with summary header (N of M Done). Matches
- * `@anysphere/ui` `TodoListCard`. Compose with `onTodoClick` for row actions.
+ * Bordered, collapsible todo list with summary header (N of M Done). Compose
+ * with `onTodoClick` for row actions.
  *
  * @example
  * ```tsx

@@ -11,16 +11,15 @@
  * - Run the pre-delivery self-check before returning code.
  */
 /** Charts. */
-export type { BarChartProps, ChartDataPoint, ChartSeries, LineChartProps, PieChartProps, } from "./chart-primitives.js";
+export type { BarChartProps, ChartDataPoint, ChartSeries, ChartTone, LineChartProps, PieChartProps, } from "./chart-primitives.js";
 export { BarChart, LineChart, PieChart } from "./chart-primitives.js";
 /** DAG layout. */
 export type { DAGLayoutEdge, DAGLayoutNode, DAGLayoutOptions, DAGLayoutRank, DAGLayoutResult, } from "./dag-layout.js";
 export { computeDAGLayout } from "./dag-layout.js";
 /**
  * Diff rendering. Compose with the generic `Card` family for file-level
- * chrome — there is no dedicated `DiffCard`. Use `DiffView` inside a
- * `CardBody` (with `padding: 0`) and put `DiffStats` in the enclosing
- * `CardHeader`'s `trailing` slot.
+ * chrome: use `DiffView` inside a `CardBody` (with `padding: 0`) and put
+ * `DiffStats` in the enclosing `CardHeader`'s `trailing` slot.
  */
 export type { DiffLineData, DiffLineType, DiffStatsProps, DiffViewProps, } from "./diff-view.js";
 export { DiffStats, DiffView } from "./diff-view.js";
@@ -36,13 +35,13 @@ export { canvasPaletteDark, canvasPaletteLight, canvasTokens, canvasTokensLight,
 export type { TodoItem, TodoListCardProps, TodoListProps, TodoStatus, } from "./todo-list.js";
 export { TodoList, TodoListCard } from "./todo-list.js";
 /** Component props types. */
-export type { ButtonProps, CardBodyProps, CardHeaderProps, CardProps, CardSize, CardVariant, CodeProps, DividerProps, GridProps, H1Props, H2Props, H3Props, LinkProps, PillProps, PillSize, PillTone, RowProps, StackProps, StatProps, StatTone, TableColumnAlign, TableProps, TableRowTone, TextProps, TextWeight, } from "./ui-primitives.js";
+export type { ButtonProps, CalloutProps, CalloutTone, CardBodyProps, CardHeaderProps, CardProps, CardSize, CardVariant, CodeProps, DividerProps, GridProps, H1Props, H2Props, H3Props, LinkProps, PillProps, PillSize, PillTone, RowProps, StackProps, StatProps, StatTone, TableColumnAlign, TableProps, TableRowTone, TextProps, TextWeight, } from "./ui-primitives.js";
 /** Layout. */
 /** Typography. */
 /** Surfaces. */
 /** Actions. */
 /** Feedback. */
-export { Button, Card, CardBody, CardHeader, Code, Divider, Grid, H1, H2, H3, Link, 
+export { Button, Callout, Card, CardBody, CardHeader, Code, Divider, Grid, H1, H2, H3, Link, 
 /** Shallow-merge two style objects. Useful for combining tokens with overrides. */
 mergeStyle, Pill, Row, Spacer, Stack, Stat, Table, Text, } from "./ui-primitives.js";
 //# sourceMappingURL=index.d.ts.map

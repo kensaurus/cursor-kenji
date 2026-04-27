@@ -20,8 +20,8 @@ export type TextInputProps = {
     style?: CSSProperties;
 };
 /**
- * Single-line text input (28px height). Matches the `@anysphere/ui` `Input`
- * at `size="md"`. Use for names, titles, search queries, and short text fields.
+ * Single-line text input (28px height). Use for names, titles, search
+ * queries, and short text fields.
  *
  * `onChange` receives the **string value**, not a DOM event — this pairs
  * directly with `useCanvasState` setters.
@@ -45,8 +45,7 @@ export type TextAreaProps = {
     style?: CSSProperties;
 };
 /**
- * Multi-line text input that auto-resizes to fit its content. Matches the
- * `@anysphere/ui` `InputGroup.Textarea` visual style at `size="md"`.
+ * Multi-line text input that auto-resizes to fit its content.
  * Use for notes, descriptions, comments, and multi-line text fields.
  *
  * The textarea grows as the user types. Set `rows` for the minimum visible
@@ -71,8 +70,7 @@ export type CheckboxProps = {
     style?: CSSProperties;
 };
 /**
- * Checkbox with optional label. Matches `@anysphere/ui` `Checkbox` at
- * `size="default"` with the `primary` variant (accent blue when checked).
+ * Checkbox with optional label (accent blue when checked).
  *
  * Pass `label` to render a clickable text label beside the checkbox. Without a
  * label, provide `title` or wrap in your own `<label>` for accessibility.
@@ -101,8 +99,8 @@ export type ToggleProps = {
     style?: CSSProperties;
 };
 /**
- * Boolean toggle switch. Matches `@anysphere/ui` `Toggle` visual style.
- * Uses the accent color for the "on" state and a neutral fill for "off".
+ * Boolean toggle switch. Uses the accent color for the "on" state and a
+ * neutral fill for "off".
  *
  * @example
  * ```tsx
@@ -133,8 +131,7 @@ export type SelectProps = {
     style?: CSSProperties;
 };
 /**
- * Dropdown select (native `<select>` with themed styling). Matches the
- * `@anysphere/ui` `Select` default-variant trigger appearance.
+ * Dropdown select (native `<select>` with themed styling).
  *
  * Uses a native `<select>` under the hood for reliable keyboard, screen-reader,
  * and mobile support. The dropdown list uses OS-native styling.
@@ -178,8 +175,7 @@ export type IconButtonProps = {
  *
  * Always provide `title` for accessibility (screen-reader label + tooltip).
  *
- * This is a simplified distillation of `@anysphere/ui` `IconButton` at
- * `size="md"` / `"sm"`. Canvas has no icon font, so pass icon content directly.
+ * Canvas has no icon font, so pass icon content directly.
  *
  * @example
  * ```tsx

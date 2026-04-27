@@ -1,73 +1,141 @@
+# fix-issue
+
 # Fix GitHub Issue
 
-## Purpose
-Fetch an issue, understand it fully, implement a fix, and open a pull request — in one workflow.
+> Fetch a GitHub issue, understand it, find the relevant code, implement the fix, verify, and open a PR.
 
-## Usage
-```
-/fix-issue 123
-```
+---
 
-## Process
+## Step 1: Fetch Issue Details
 
-### 1. Fetch Issue Details
 ```bash
 gh issue view <number> --json title,body,labels,assignees,comments
 ```
 
-Read the full issue including comments — often the comments contain reproduction steps, context, or constraints the original body missed.
+Extract:
+- What the issue is about
+- Steps to reproduce (if bug)
+- Expected behavior
+- Any labels (bug, feature, enhancement)
 
-### 2. Understand the Scope
-- What is the expected vs actual behavior?
-- Is this a bug, enhancement, or regression?
-- Are there linked PRs or related issues?
-- What is the acceptance criteria?
+---
 
-### 3. Find Relevant Code
-Search the codebase using the issue's described behavior, error messages, or affected feature name. Let the agent find files via grep and semantic search — don't manually tag unless you know the exact file.
+## Step 2: Find Relevant Code
 
-### 4. Reproduce (if bug)
-- Write a failing test or identify the failing scenario
-- Confirm you can reproduce before fixing
-- Note the root cause explicitly
+Use the issue title and description to search the codebase:
 
-### 5. Implement the Fix
-- Match existing patterns exactly
-- Minimal change — fix only what the issue describes
-- Add a test covering the fixed case
-- Don't refactor unrelated code in the same PR
-
-### 6. Verify
-```bash
-npx tsc --noEmit
-npm run lint
-npm run test
+```
+SemanticSearch(query: "<issue description summarized as a question>", target_directories: [])
 ```
 
-Check the specific scenario from the issue is resolved.
+Also try targeted searches:
 
-### 7. Open Pull Request
-```bash
-git add .
-git commit -m "fix: <short description> (#<issue-number>)"
-git push origin HEAD
-gh pr create \
-  --title "fix: <short description> (#<issue-number>)" \
-  --body "Closes #<issue-number>
-
-## What changed
-- <bullet>
-
-## How to test
-- <step>"
+```
+Grep(pattern: "<key symbol or error message from the issue>")
 ```
 
-Return the PR URL.
+Read all relevant files fully before making changes.
+
+---
+
+## Step 3: Implement the Fix
+
+- Follow existing patterns in the codebase
+- Keep changes minimal and focused on the issue
+- If the fix touches UI, ensure design system tokens are used
+- If the fix touches text, ensure i18n `t()` keys are used
+
+---
+
+## Step 4: Verify
+
+### 4a. Lint
+
+```
+ReadLints(paths: [<list of changed files>])
+```
+
+Fix any lint errors introduced.
+
+### 4b. Build
+
+```bash
+npm run build
+```
+
+### 4c. Test
+
+```bash
+npm run test:unit
+```
+
+If a relevant test file exists, run it specifically:
+
+```bash
+npx vitest run <path/to/related.test.ts>
+```
+
+### 4d. Sentry Check (if available)
+
+Search for related Sentry issues in the changed module:
+
+```json
+CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+  "organizationSlug": "<ORG_SLUG>",
+  "projectSlug": "<PROJECT_SLUG>",
+  "query": "is:unresolved <module_keyword>"
+})
+```
+
+---
+
+## Step 5: Commit
+
+```bash
+git add <changed files>
+git commit -m "$(cat <<'EOF'
+fix(<scope>): <short description>
+
+<body explaining why, not what>
+
+Fixes #<number>
+EOF
+)"
+```
+
+---
+
+## Step 6: Push and Open PR
+
+```bash
+git push -u origin HEAD
+gh pr create --title "fix(<scope>): <short description>" --body "$(cat <<'EOF'
+## Summary
+Fixes #<number>
+
+<1-3 bullet points explaining the change>
+
+## Test plan
+- [ ] Build passes
+- [ ] Lint passes
+- [ ] Unit tests pass
+- [ ] Manual verification of the fix
+EOF
+)"
+```
+
+Return the PR URL when done.
+
+---
 
 ## Checklist
-- [ ] Issue fully read including comments
-- [ ] Root cause identified (not just symptom fixed)
-- [ ] Test added for the fixed case
-- [ ] All checks pass
-- [ ] PR references the issue number
-- [ ] No unrelated changes included
+
+- [ ] Issue details read and understood
+- [ ] Relevant code found and read fully
+- [ ] Fix implemented following existing patterns
+- [ ] `ReadLints` passes on changed files
+- [ ] `npm run build` passes
+- [ ] `npm run test:unit` passes
+- [ ] Sentry checked for related issues (if available)
+- [ ] Committed with `Fixes #<number>` footer
+- [ ] PR opened with summary and test plan

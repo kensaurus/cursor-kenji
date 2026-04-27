@@ -28,7 +28,7 @@ export declare const canvasTypography: {
         readonly fontWeight: 400;
     };
 };
-/** Spacing scale (px), aligned with `@anysphere/ui` `tokens.spacing`. */
+/** Spacing scale (px). */
 export declare const canvasSpacing: {
     readonly "0.5": 2;
     readonly "1": 4;
@@ -47,7 +47,7 @@ export declare const canvasSpacing: {
     readonly "10": 40;
 };
 export type CanvasSpacing = typeof canvasSpacing;
-/** Border radius (px), aligned with `@anysphere/ui` `tokens.radius`. */
+/** Border radius (px). */
 export declare const canvasRadius: {
     readonly none: 0;
     readonly xs: 2;
