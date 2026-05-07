@@ -753,6 +753,21 @@ flowchart LR
 | `/mcp` | Dev workflow | MCP-powered development reference and tool guide |
 | `/uiux` | UI review | Enforce design system, fix rogue styling, standardize interactions |
 
+### Bundles
+
+> *Drop-in command + rule bundles for specific project shapes*
+
+| Bundle | Path | What it ships |
+|:-------|:-----|:--------------|
+| `native-rn-monorepo` | `commands/native-rn-monorepo/`<br/>`rules/native-rn-monorepo/` | 9 commands (`/android-*`, `/ios-ci-*`, `/rn-*`) + 5 rules for an RN + Web monorepo where the dev is on Linux/Windows and iOS verification is CI-only |
+
+```bash
+# Install the native-rn-monorepo bundle into a project
+mkdir -p <project>/.cursor/{commands,rules}
+cp ~/cursor-kenji/commands/native-rn-monorepo/*.md  <project>/.cursor/commands/
+cp ~/cursor-kenji/rules/native-rn-monorepo/*.mdc    <project>/.cursor/rules/
+```
+
 ---
 
 ## Subagents (5)

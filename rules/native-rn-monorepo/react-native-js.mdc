@@ -1,0 +1,78 @@
+---
+description: React Native JS/TS shared layer conventions
+globs: src/**/*.{ts,tsx}, App.tsx, App.ts, index.js, index.ts, metro.config.js, babel.config.js
+alwaysApply: false
+---
+
+# React Native (JS/TS layer)
+
+Shared code that runs on both Android and iOS. Does NOT include
+native module code (that lives in `android/` or `ios/`).
+
+> Adjust `src/` to your repo's actual path (e.g.
+> `apps/mobile/src/`).
+
+## Stack assumptions (verify against `package.json` before assuming)
+
+- React Native — version per `package.json`
+- TypeScript strict
+- Navigation: React Navigation
+- State: <FILL IN — Zustand / Redux Toolkit / Jotai / React Query /
+  Context>
+- Networking: <FILL IN — fetch / axios / ky>
+- Styling: <FILL IN — StyleSheet.create / styled-components /
+  NativeWind>
+
+If unsure, grep the codebase before introducing a new pattern.
+
+## Conventions
+
+- Components in `src/components/`, screens in `src/screens/`,
+  hooks in `src/hooks/`, utils in `src/utils/`.
+- One component per file. Named export. File name matches the
+  component name (PascalCase.tsx).
+- Hooks prefix `use`; custom hook files start with lowercase `use`.
+- Platform-specific code:
+  - Small divergence: `Platform.OS === 'ios'` / `'android'` checks
+    at the top of a function
+  - Large divergence: `*.ios.tsx` / `*.android.tsx` files with
+    shared interface
+- Persistence: `@react-native-async-storage/async-storage`. Never
+  `localStorage`.
+- Environment vars: via `react-native-config` or `react-native-dotenv`
+  (whichever the repo uses). Never hardcoded.
+- Imports: absolute imports if `tsconfig.json` paths is set up;
+  otherwise relative within a feature module.
+
+## Hard exclusions
+
+- Never import from `react-native-web` in this layer.
+- Never use browser globals (`window`, `document`,
+  `navigator.geolocation` directly — use the RN APIs).
+- Never bypass the bridge with raw native calls; if you need native
+  behavior, add a typed native module under `android/` and `ios/`.
+
+## Verification
+
+```
+npx tsc --noEmit
+npm run lint  # if a lint script exists
+```
+
+For runtime sanity:
+
+```
+npx react-native start --reset-cache
+```
+
+## What NOT to do
+
+- Do not commit `.env*` files unless they are the example/template
+  (`.env.example`).
+- Do not pin RN to a non-stable version (`0.x.0-rc.x`) without
+  explicit instruction.
+- Do not add new dependencies without checking they support both
+  iOS and Android and the current RN version.
+- Do not run codegen scripts (`pod install`, `gradle sync`)
+  silently — flag them as side effects. Note: `pod install` is
+  CI-only here.

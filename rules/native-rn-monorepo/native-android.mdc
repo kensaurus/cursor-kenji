@@ -1,0 +1,70 @@
+---
+description: Native Android (Kotlin/Java/Gradle) conventions
+globs: android/**, **/*.kt, **/*.kts, **/*.gradle, **/AndroidManifest.xml
+alwaysApply: false
+---
+
+# Native Android
+
+Stack: Kotlin first, Java only when required by RN bridge or
+legacy code.
+Build: Gradle (Kotlin DSL where present).
+Min SDK / target SDK / compile SDK: read `android/build.gradle` —
+do NOT change without explicit instruction.
+
+> Adjust `android/` to your repo's actual path (e.g.
+> `apps/mobile/android/`).
+
+## Conventions
+
+- Package matches what's already declared in `AndroidManifest.xml`
+  and `build.gradle` `namespace`.
+- Native modules for RN go under
+  `android/app/src/main/java/<package>/modules/`.
+- Each native module = one `*Module.kt` (extends
+  `ReactContextBaseJavaModule`) + one `*Package.kt`.
+- Register packages in `MainApplication.kt` (or via the new RN
+  auto-linking if applicable).
+- Async: Coroutines + Flow. Never `AsyncTask`, never raw `Thread`,
+  never RxJava unless the project already uses it.
+- Logging: `android.util.Log` with tag = class name. Wrap verbose
+  logs in `BuildConfig.DEBUG` checks.
+- Strings: `android/app/src/main/res/values/strings.xml`. No
+  hardcoded user-facing text.
+- Permissions: declare in `AndroidManifest.xml` AND request at
+  runtime for dangerous permissions (camera, mic, location, storage
+  on older API levels, notifications on API 33+).
+- Compose (if used): follow `MaterialTheme` tokens, no raw
+  `Color()` literals in screen code.
+
+## Build verification (REQUIRED after any change)
+
+Run `/android-build` or directly:
+
+```
+cd android && ./gradlew :app:assembleDebug --console=plain
+```
+
+Parse the output. If `BUILD FAILED`, fix the first error and
+re-run. Do not declare done without `BUILD SUCCESSFUL`.
+
+If you hit `OutOfMemoryError` or metaspace errors, add to
+`android/gradle.properties`:
+
+```
+org.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=512m
+org.gradle.daemon=true
+org.gradle.parallel=true
+org.gradle.caching=true
+```
+
+## What NOT to do
+
+- Do not add a new native module if the JS-side library can do it.
+- Do not edit `MainActivity.kt` ReactRootView wiring without
+  explicit instruction.
+- Do not bump `compileSdk`, `targetSdk`, AGP, or Gradle wrapper
+  versions casually — these cascade.
+- Do not commit `local.properties`, `*.keystore`, or
+  `google-services.json` if it's gitignored.
+- Do not edit auto-generated files under `android/app/build/`.

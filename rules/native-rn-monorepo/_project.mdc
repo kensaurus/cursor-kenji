@@ -1,0 +1,69 @@
+---
+description: Project-wide conventions and developer environment context (RN monorepo, no-Mac dev)
+alwaysApply: true
+---
+
+# Project conventions
+
+## Targets
+
+- `android/` — native Android (Kotlin/Java/Gradle)
+- `ios/` — native iOS (Swift/Obj-C/Xcode)
+- `src/` — shared React Native JS/TS
+- `web/` — web build (separate target)
+
+> Adjust these paths if your monorepo uses a different layout
+> (e.g. `apps/mobile/{android,ios,src}/` or `packages/web/`).
+
+## Developer environment (CRITICAL)
+
+The developer is on **Linux/Windows, NOT macOS**. This means:
+
+- **iOS cannot be built or tested locally.** Do NOT suggest
+  `xcodebuild`, `pod install`, `xcrun simctl`, Xcode, or any other
+  macOS-only tool for the developer to run locally.
+- iOS verification happens entirely on **GitHub Actions CI** with
+  macOS runners.
+- iOS distribution happens via **TestFlight** — the developer
+  installs builds on a real iPhone from TestFlight after CI uploads
+  them.
+- Android local dev uses ADB + Android emulator + Metro for hot
+  reload.
+- For iOS-affecting changes, the loop is: edit → verify TS / lint /
+  Android compile locally → push → CI builds iOS → TestFlight →
+  install on device.
+
+When the developer reports an iOS issue, the diagnostic path is:
+1. Check shared JS for the issue first (90%+ of "iOS bugs" are
+   actually JS/RN issues that also reproduce on Android).
+2. If it's iOS-specific (native bridge, `Podfile`, iOS-only code),
+   edit the file and trigger CI — do not ask the developer to "run
+   pod install" or "open Xcode."
+3. Use `/ios-ci-logs` to diagnose CI failures.
+
+## Hard rules
+
+- Identify the target before editing. The path tells you which.
+- Do NOT mix patterns across targets:
+  - No JSX/React in `android/` or `ios/`
+  - No native bridge code in `src/`
+  - No `react-native` imports in `web/` (unless `react-native-web`
+    is configured)
+  - No browser APIs (`window`, `document`, `localStorage`) in `src/`
+- Never declare a task complete without running the verification
+  command for the affected target.
+- For iOS-affecting changes: declare "ready to ship to CI" — never
+  claim "iOS verified" since you cannot.
+- TypeScript strict; do not introduce `any` without an inline
+  justification comment.
+- Never disable a lint rule inline without an explanatory comment.
+- Never commit secrets, signing keys, `local.properties`, `.env`,
+  or `*.keystore`.
+
+## When unsure
+
+If the request is ambiguous about which target it touches, ask
+before editing. A single feature may need parallel changes in
+`src/` (JS) and `android/` + `ios/` (native bridge) — call this out
+explicitly. For iOS native changes, also note that verification
+will require a CI run and explain the wait time.
