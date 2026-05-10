@@ -31,10 +31,19 @@ refetch loops, and silent error swallows.
 
 ## Critical Rules
 
-> **Test as a real signed-in user, think as an engineer.**
+> **Test as a real signed-in user AND as a brand-new guest.**
 > Walk the app the way a paying customer would — sign in, browse every tab,
-> add a real entry, edit it, delete it. While walking, watch logcat,
-> Sentry, and the DB at the same time.
+> add a real entry, edit it, delete it — AND the way a new user would —
+> open the app fresh, hit the guest path, drive a CRUD round-trip without
+> any account. Both paths exercise different code (sync replica vs cloud
+> direct vs local-only adapter) and both regress independently. While
+> walking, watch logcat, Sentry, and the DB at the same time.
+
+> **Always verify the build under test is the latest source.**
+> A "nothing changed" report is almost always a stale build: Metro served
+> a cached bundle, the dev launcher cached a JS-bundle URL, or the
+> emulator is running a previously-installed APK while the new one sits
+> in `android/app/build/outputs/`. Phase 1.5 is non-negotiable.
 
 > **Every mutation gets verified at three layers.**
 > A create/edit/delete is not "tested" until: (1) the app shows success,
@@ -173,6 +182,128 @@ adb logcat -d Capacitor:V SystemWebChromeClient:V '*:S' | tail -50
 
 ---
 
+## Phase 1.5: Build-freshness verification (mandatory)
+
+> If you skip this phase you WILL waste a debugging session on a stale
+> build. The user's report of "nothing changed" is almost never the patch
+> failing — it is the device running yesterday's bytecode.
+
+The fundamental risk: **three separate caches** can each serve stale code
+to the device. They must each be invalidated explicitly, in order, before
+trusting any walkthrough finding.
+
+### 1.5a. Source freshness — does the file on disk reflect the patch?
+
+```bash
+# Confirm the change you "just made" is actually saved
+git diff --stat HEAD -- <changed_file>
+# Or grep for a unique string from the patch
+grep -n "<unique_string_from_patch>" <changed_file>
+```
+
+If the file shows no change, the editor lost the buffer or the StrReplace
+silently no-op'd. Re-apply the patch before going further.
+
+### 1.5b. Bundler freshness — is Metro/Vite serving the new source?
+
+For Metro:
+```bash
+# Hit the bundle URL the device uses; the body should contain the unique
+# string from the patch. Use the device's bundle URL, NOT just /status.
+curl -s "http://localhost:8081/index.bundle?platform=android&dev=true" \
+  | grep -c "<unique_string_from_patch>"
+# Expect: ≥1
+```
+
+If the count is 0, Metro served a cached bundle. Restart Metro with a
+hard cache wipe:
+
+```bash
+# Kill the Metro process holding port 8081
+lsof -i :8081 -t | xargs -r kill -9    # macOS / Linux
+# Windows / Git-Bash:
+netstat -ano | grep :8081 | awk '{print $5}' | sort -u | xargs -r -I{} taskkill //F //PID {}
+
+# Restart with cache wipe (Expo example; adapt for bare RN / Capacitor)
+( cd apps/<mobile-app> && npx expo start --clear --port 8081 ) &
+```
+
+Wait for Metro to print `Bundling complete` then re-curl the bundle to
+confirm the unique string is now present.
+
+### 1.5c. Device freshness — is the device running the new bundle?
+
+The dev launcher caches the bundle URL between sessions. Even with fresh
+Metro, the device may still hold the old JS in memory. Force a reload:
+
+```bash
+# Method 1: Metro reload endpoint (best — works without device interaction)
+curl -s -X POST http://localhost:8081/reload && echo "reload triggered"
+
+# Method 2: Send the React Native dev-menu R+R shortcut
+adb shell input keyevent 46   # send 'R' once
+sleep 0.1
+adb shell input keyevent 46   # send 'R' twice → reload
+
+# Method 3: Force-stop the app and re-launch via deep link
+adb shell am force-stop <app.id>
+adb shell am start -W -a android.intent.action.VIEW \
+  -d "exp+<scheme>://expo-development-client/?url=http%3A%2F%2Flocalhost%3A8081"
+
+# Method 4 (nuclear): Wipe app data, including persisted query cache
+adb shell pm clear <app.id>
+# Then relaunch — note this also signs the user out
+```
+
+After reload, wait `~10s` and `screencap`. The unique change you patched
+should be visible.
+
+### 1.5d. Native-code freshness — for changes that touch `android/`
+
+If the patch modified anything under `android/`, `ios/`, or any native
+module (`react-native-*` with autolinked native code), Metro reload is
+**not enough**. The Hermes bytecode and the APK both need rebuilding:
+
+```bash
+# Bare RN
+( cd android && ./gradlew installDebug )
+adb shell am force-stop <app.id>
+adb shell am start -n <app.id>/.MainActivity
+
+# Expo dev client
+npx expo run:android --variant debug --no-install   # build only
+adb install -r android/app/build/outputs/apk/debug/app-debug.apk
+adb shell am force-stop <app.id>
+adb shell monkey -p <app.id> 1
+```
+
+### 1.5e. Verify-by-evidence
+
+The build is "fresh" only when ALL of the following are true:
+- ✅ Source file on disk contains the patched string (`git diff` shows it)
+- ✅ Bundle served by Metro contains the patched string (curl + grep ≥1)
+- ✅ A unique on-screen marker from the patch is visible in `screencap`
+- ✅ Logcat shows the new bundle hash in the `Running application` line
+
+If any of those fails, do not start Phase 2 — the walk will report stale
+behaviour and waste cycles.
+
+### 1.5f. Stale-build smell tests
+
+Run these whenever the user says "nothing changed" or a fix appears not
+to have landed:
+
+| Smell | Likely cause | Fix |
+|---|---|---|
+| Same screen pixels after patch | Metro served cached bundle | 1.5b restart with `--clear` |
+| Patch visible in some sessions only | Two Metro instances on different ports | `lsof -i :8081 -i :19000 -i :19001`, kill all, restart one |
+| Hot reload silently broken | File-watcher hit OS handle limit | Restart Metro; on Linux `sysctl fs.inotify.max_user_watches=524288` |
+| New Sentry capture has old source-map line numbers | Sentry source-maps not re-uploaded for the dev build | Acceptable for dev; flag for release builds |
+| Native module change doesn't take effect | APK still old | 1.5d full Gradle build |
+| `pm clear` didn't fix it either | Wrong `app.id` (release vs debug variant) | `adb shell pm list packages \| grep <project>` |
+
+---
+
 ## Phase 2: Tap-driven walk of every tab
 
 ### 2a. Coord math (don't skip this — most failed taps come from getting it wrong)
@@ -218,6 +349,145 @@ For each tab in the bottom navigation:
 Tab-level screens hide bugs that only show on item detail. For each tab
 that lists items, tap the first real (non-test) row and verify the detail
 screen renders without "Couldn't load that entry" or skeleton lock.
+
+---
+
+## Phase 2.5: Auth area — walk both guest AND signed-in paths
+
+> A native budgeting / productivity / journaling app typically supports a
+> **guest path** (local-only, no auth) and a **signed-in path** (cloud
+> sync). They share UI but route through completely different adapters
+> (`localAdapter` vs `cloudAdapter`/PowerSync), so a fix that lands one
+> path commonly regresses the other. **Both must be walked every session.**
+
+### 2.5a. Inventory the auth surface
+
+Find the auth entry point and its branches:
+
+```bash
+# Expo Router
+ls apps/<mobile-app>/app/auth/    # index.tsx, callback.tsx, etc.
+# React Navigation
+grep -rn "AuthStack\|SignInScreen\|<Stack.Screen.*name=.\"auth" apps/<mobile-app>/src/
+```
+
+List every auth entry point: magic-link email, OAuth (Apple/Google/etc.),
+passkey, biometric unlock, **and** the guest-mode entry. Note the
+SignedOut → SignedIn transition (`session.refresh()` in Zustand,
+`onAuthStateChange` in Supabase, etc.).
+
+### 2.5b. Cold-start: signed-out auth screen
+
+```bash
+adb shell pm clear <app.id>     # nuclear: wipes session + cache
+adb shell am start -n <app.id>/.MainActivity   # or deep-link launcher
+sleep 12
+adb exec-out screencap -p > auth-cold.png
+```
+
+The first screen MUST be the auth landing surface (NOT a stuck splash,
+NOT a half-rendered tab bar). Verify visually:
+- All advertised auth methods are present (no missing OAuth button)
+- "Continue as guest" / equivalent is reachable
+- No console warnings about missing OAuth client IDs
+
+### 2.5c. Walk A — guest path
+
+1. Tap "Continue as guest" (`uiautomator dump` for exact bounds, then
+   `input tap`).
+2. Wait for the home/today tab to paint, `screencap`.
+3. Walk every tab as in Phase 2 — confirm guest data flows through the
+   local adapter (no Supabase calls in logcat: `adb logcat -d | grep -i
+   "supabase\|fetch.*supabase\|GoTrue"` should be empty post-launch).
+4. CRUD round-trip (Phase 3) with **`QA-GUEST-`** prefix.
+5. Verify the row exists in the on-device store (SQLite / MMKV /
+   AsyncStorage), NOT in cloud:
+   ```text
+   execute_sql(query: "select count(*) from <main_table>
+                       where notes ilike 'QA-GUEST-%'")
+   ```
+   Expect: `0`. (Guest writes must not hit cloud.)
+6. Confirm no Sentry events were captured for this guest session that
+   reference cloud APIs — if so, a cloud call leaked into the guest path.
+
+### 2.5d. Walk B — signed-in path (via magic link or test creds)
+
+1. From the guest session, find the "Sign in" / "Sync your data" entry
+   (often Settings → Sign in, or auth screen → Sign in tab).
+2. **Magic-link path:**
+   - Enter the test email.
+   - Use Supabase MCP to retrieve the link from auth.users:
+     ```text
+     execute_sql(query: "select id, email, last_sign_in_at,
+                                confirmation_sent_at
+                         from auth.users
+                         where email = '<test@…>'
+                         order by created_at desc limit 1")
+     ```
+   - For local development, magic-link emails are usually intercepted by
+     Supabase Inbucket / Mailpit at `http://localhost:54324` — fetch the
+     latest message's HTML and extract the `?token_hash=…&type=magiclink`
+     URL. Open it via `adb`:
+     ```bash
+     adb shell am start -W -a android.intent.action.VIEW \
+       -d "<deep-link-from-email>"
+     ```
+   - Watch logcat for `[supabase] auth state change → SIGNED_IN`.
+3. **OAuth path (when the test account supports it):**
+   - Tap the provider button.
+   - Browser intent opens; the in-emulator browser will redirect back via
+     the app's deep-link scheme.
+   - If the redirect doesn't fire (common on emulators without Play
+     Services), record this as a known-failure-on-emulator and use
+     magic-link instead.
+4. After SIGNED_IN, verify the signed-in path:
+   - `screencap` shows the post-auth home with **server-truth data**
+     (not the empty-state guest UI).
+   - Logcat shows TanStack queries firing against the cloud adapter.
+   - Run Phase 4 (sync-empty-state checklist) — this is where the
+     PowerSync-disabled bug lives and you must confirm cloud-direct
+     fallback engages.
+5. CRUD round-trip with **`QA-CLOUD-`** prefix → SQL must show `1` row.
+
+### 2.5e. Walk C — guest-to-cloud migration (if supported)
+
+If the app supports promoting a guest workspace into a cloud workspace
+(common in finance / journal / note apps), test it explicitly:
+
+1. Start fresh: `pm clear`, enter guest, create 3 `QA-GUEST-` rows.
+2. Sign in (Walk B).
+3. Confirm the migration prompt appears ("Bring in your local data?").
+4. Tap "Bring it all in".
+5. SQL-verify the rows now exist in cloud:
+   ```text
+   execute_sql(query: "select count(*) from <main_table>
+                       where workspace_id = '<new_cloud_ws>'
+                         and notes ilike 'QA-GUEST-%'")
+   ```
+6. Confirm the on-device guest workspace is either deleted or marked
+   migrated (and never re-imports on the next launch).
+
+### 2.5f. Walk D — sign-out and re-sign-in
+
+1. From the signed-in state, Settings → Sign out.
+2. Confirm the app returns to the auth screen and **all signed-in caches
+   are cleared** (no flash of stale data on the next sign-in).
+3. Sign back in. Cold-fetch should re-hydrate from cloud, not from a
+   stale persisted blob. Watch logcat for any
+   `TypeError: x.<method> is not a function` — that means the persister
+   served a corrupted post-sign-out cache (Phase 5).
+
+### 2.5g. Auth-area-specific failure modes to look for
+
+| Symptom | Likely cause | Where to look |
+|---|---|---|
+| Magic-link button tap → nothing | `EXPO_PUBLIC_SUPABASE_URL` missing | `apps/*/.env.local`, `app.config.*` extras |
+| OAuth redirect lands on dev launcher, not the app | scheme not registered in `AndroidManifest.xml` | `intent-filter` for `<scheme>://` |
+| Biometric gate shown but cancel bricks the app | no escape hatch in BiometricGate | grep `LocalAuthentication` / `BiometricPrompt` for `dismissed` state |
+| Signed-in user sees guest UI on first launch | Zustand session restore racing the first render | session bootstrap should set `loading=true` until first `getSession()` resolves |
+| Signed-in user sees "No accounts" | sync layer disabled — Phase 4 | Phase 4 cloud-direct fallback |
+| Sign-out leaves user on the home tab | navigation reset missing in the auth listener | grep `onAuthStateChange` → look for `router.replace('/auth')` |
+| Persisted cache survives sign-out and corrupts the next user | persister not bound to the user id, no clear on SIGNED_OUT | wipe persister in the auth listener |
 
 ---
 
@@ -466,6 +736,7 @@ Then leave the app on the home tab so the next session starts clean.
 
 | Symptom on screen | Real cause | First fix |
 |---|---|---|
+| "Nothing changed after my patch" | Stale Metro bundle, stale APK, or stale dev-launcher cache | Run **Phase 1.5** — re-curl bundle, `--clear` Metro, `pm clear` if needed |
 | White screen after dev-launcher tap | Metro died OR JS threw before mount | `curl localhost:8081/status` → restart bundler / read logcat for the throw |
 | "Error loading app · unexpected end of stream" | `adb reverse` lost / Metro restarted on a new port | `adb reverse tcp:8081 tcp:8081`, relaunch via deep-link |
 | Blank where data should be (signed-in, populated user) | Sync replica empty; screen reads only from local SQLite | Add `isSyncEnabled()` runtime check + cloud-direct fallback |
@@ -474,20 +745,30 @@ Then leave the app on the home tab so the next session starts clean.
 | `Property 'X' doesn't exist` ErrorBoundary | Renamed a hook return value, missed downstream callers | Grep the old name across the file before declaring the rename done |
 | `column "Y" does not exist` in logcat / Sentry | Mobile shipped a migration that hasn't reached cloud | `list_tables` to confirm, `apply_migration` to ship the missing column |
 | Tap does nothing | Wrong real-coord math from downscaled screenshot | `uiautomator dump` → read `bounds="[x1,y1][x2,y2]"` |
+| Guest works but signed-in shows empty UI | Sync replica path not reached; cloud-direct fallback missing | Phase 2.5d + Phase 4 |
+| Signed-in works but guest crashes / cloud-leaks | Adapter path imports `supabase` at module load instead of behind `if (cloud)` | Lazy-import cloud adapter; gate calls on `ctx.kind === 'cloud'` |
+| Sign-out leaves stale data on next sign-in | Persister cache scoped to app, not to user id | Clear persister in `onAuthStateChange('SIGNED_OUT')` |
 
 ---
 
 ## Important rules
 
 1. **Read the codebase first** — Phase 0 is mandatory. Never test blindly.
-2. **Use `am start -W -n <pkg>/.MainActivity`** — `monkey -p` is unreliable
+2. **Verify the build is fresh — Phase 1.5 is mandatory.** Confirm the
+   patch is on disk, in the bundle, and on the device before walking.
+   Skipping this phase is the #1 source of false "nothing changed"
+   reports.
+3. **Walk both auth paths every session — Phase 2.5 is mandatory.** Guest
+   and signed-in route through different adapters; a fix on one regresses
+   the other. Always exercise both, plus the migration path between them.
+4. **Use `am start -W -n <pkg>/.MainActivity`** — `monkey -p` is unreliable
    and silently no-ops on dev clients.
-3. **Always pair UI screencap with logcat** — a screen can lie, a
+5. **Always pair UI screencap with logcat** — a screen can lie, a
    stack-trace cannot.
-4. **Verify mutations against the DB**, not just the UI cache.
-5. **Bump the persister buster** whenever you change what gets persisted,
+6. **Verify mutations against the DB**, not just the UI cache.
+7. **Bump the persister buster** whenever you change what gets persisted,
    so existing devices wipe corrupted blobs on first cold boot.
-6. **Resolve Sentry only what you actually fixed.** Auto-reopens are
+8. **Resolve Sentry only what you actually fixed.** Auto-reopens are
    louder than over-eager closures.
-7. **Clean up server state at the end** — leave the workspace exactly as
+9. **Clean up server state at the end** — leave the workspace exactly as
    you found it, minus the bugs you patched.
