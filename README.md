@@ -12,7 +12,7 @@
 <p align="center">
   <a href="#quick-start"><img src="https://img.shields.io/badge/-Quick_Start-10b981?style=flat-square" alt="Quick Start" /></a>
   <a href="#how-to-use-this-toolkit"><img src="https://img.shields.io/badge/-How_to_Use-22c55e?style=flat-square" alt="How to Use" /></a>
-  <a href="#skills-57"><img src="https://img.shields.io/badge/-57_Skills-6366f1?style=flat-square" alt="57 Skills" /></a>
+  <a href="#skills-58"><img src="https://img.shields.io/badge/-58_Skills-6366f1?style=flat-square" alt="58 Skills" /></a>
   <a href="#subagents-5"><img src="https://img.shields.io/badge/-5_Subagents-f59e0b?style=flat-square" alt="5 Subagents" /></a>
   <a href="#commands-13"><img src="https://img.shields.io/badge/-13_Commands-ef4444?style=flat-square" alt="13 Commands" /></a>
   <a href="#mcp-servers-16"><img src="https://img.shields.io/badge/-16_MCP_Servers-3b82f6?style=flat-square" alt="16 MCP Servers" /></a>
@@ -40,7 +40,7 @@
 graph TB
   subgraph TOOLKIT["cursor-kenji Toolkit"]
     direction TB
-    SK["Skills (57)"]
+    SK["Skills (58)"]
     CS["Cursor Skills (12)"]
     CMD["Commands (13)"]
     SA["Subagents (5)"]
@@ -121,7 +121,7 @@ graph TB
 
 ```mermaid
 pie title Toolkit Composition
-    "Skills (57)" : 57
+    "Skills (58)" : 58
     "Commands (13)" : 13
     "MCP Servers (16)" : 16
     "Project Rules (6)" : 6
@@ -214,6 +214,7 @@ cursor-kenji/
 │   ├── realtime-features/
 │   ├── spec-writing/
 │   ├── tdd/
+│   ├── test-emulator/
 │   ├── test-qa/
 │   ├── test-unit/
 │   ├── theme-factory/
@@ -468,13 +469,13 @@ All four are **generic** — they work in any web stack (Next.js, Remix, SvelteK
 
 ---
 
-## Skills (57)
+## Skills (58)
 
 ### Skill Categories at a Glance
 
 ```mermaid
 mindmap
-  root((57 Skills))
+  root((58 Skills))
     Enhance
       enhance-page-ui
       enhance-page-ux
@@ -525,6 +526,7 @@ mindmap
       karpathy-guidelines
       test-unit
       test-qa
+      test-emulator
       workflow-pr
       protocol-browser-anti-stall
     Process & Docs
@@ -651,6 +653,7 @@ mindmap
 |:------|:-------------|
 | `test-unit` | Auto-detect framework, research patterns, Sentry coverage gaps, write tests |
 | `test-qa` | Comprehensive QA via browser MCP — CRUD lifecycle, data pipeline, UX quality audit |
+| `test-emulator` | Native build QA on Android emulator — Metro/adb walk + Supabase + Sentry MCPs, three-layer CRUD verification, fixes for white-screen / cache-rehydration / sync-empty-state failure modes |
 | `workflow-pr` | PR lifecycle — validation, monitoring, bot feedback, merge criteria |
 | `protocol-browser-anti-stall` | Anti-stall protocol for browser automation — timeouts, retries, evidence gathering |
 
