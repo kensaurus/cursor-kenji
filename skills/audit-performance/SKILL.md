@@ -1,5 +1,5 @@
 ---
-name: performance-audit
+name: audit-performance
 description: Comprehensive web performance audit for Core Web Vitals and optimization. Use when analyzing page load times, bundle sizes, render performance, or when user mentions "slow", "performance", "LCP", "INP", "CLS", "bundle size", "loading time", "optimize", "Web Vitals", or "lighthouse score".
 ---
 

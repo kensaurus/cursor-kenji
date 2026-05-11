@@ -1,5 +1,5 @@
 ---
-name: security-audit
+name: audit-security
 description: Web application security audit covering OWASP Top 10, authentication, and data protection. Use when reviewing vulnerabilities, auth flows, API security, or when user mentions "security", "vulnerability", "XSS", "CSRF", "SQL injection", "auth", "RLS", "secrets", or "security headers".
 ---
 

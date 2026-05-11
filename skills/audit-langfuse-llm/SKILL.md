@@ -1,16 +1,6 @@
 ---
 name: audit-langfuse-llm
-description: >
-  PDCA quality audit for LLM/AI features via Langfuse CLI, Sentry MCP, Supabase MCP,
-  Playwright browser MCP, and Firecrawl. Auto-detects Langfuse integration, researches
-  current LLM observability best practices, audits traces/prompts/costs/evals via
-  langfuse-cli, performs live verification by triggering AI features and confirming trace
-  pipeline integrity, checks grounding/hallucination, and produces a structured report.
-  Works with any project — not hardcoded to any specific app.
-  Use when asked to: "audit LLM", "check Langfuse", "audit prompts", "check AI quality",
-  "run LLM PDCA", "audit AI costs", "check traces", "audit eval scores",
-  "verify AI pipeline", "check hallucination", "audit LLM observability",
-  or "run Langfuse audit".
+description: PDCA quality audit for LLM/AI features via Langfuse CLI plus Sentry, Supabase, Playwright, and Firecrawl MCPs. Auto-detects Langfuse integration, audits traces/prompts/costs/evals, performs live verification by triggering AI features and confirming trace pipeline integrity, checks grounding and hallucination. Use for "audit LLM", "check Langfuse", "audit prompts", "check AI quality", "run LLM PDCA", "audit AI costs", "check traces", "verify AI pipeline", "check hallucination", "audit LLM observability".
 ---
 
 # Langfuse LLM Quality Audit

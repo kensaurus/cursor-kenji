@@ -1,10 +1,6 @@
 ---
 name: update-cli-config
-description: >-
-  View and modify Cursor CLI configuration settings in
-  ~/.cursor/cli-config.json. Use when the user wants to change CLI settings,
-  configure permissions, switch approval mode, enable vim mode, toggle display
-  options, configure sandbox, or manage any CLI preferences.
+description: View and modify Cursor CLI configuration in ~/.cursor/cli-config.json. Use to change CLI settings, configure permissions, switch approval mode, enable vim mode, toggle display options, configure sandbox, or manage any CLI preferences.
 metadata:
   surfaces:
     - cli

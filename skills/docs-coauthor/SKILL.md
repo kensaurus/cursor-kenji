@@ -1,5 +1,5 @@
 ---
-name: doc-coauthoring
+name: docs-coauthor
 description: Guide users through structured workflow for co-authoring documentation. Use when user wants to write docs, proposals, technical specs, decision docs, PRDs, RFCs, ADRs, READMEs, or mentions "write a doc", "draft proposal", "help me document", "create spec", or "design document".
 ---
 

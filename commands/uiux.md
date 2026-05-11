@@ -1,48 +1,12 @@
-# UI/UX Sync & Alignment
+# /uiux
 
-## Purpose
-Enforce existing design system, fix rogue implementations, standardize interactions across the app.
+> Discover existing system → detect rogue implementations → fix → validate.
 
-## Process
+This command is a thin entry point. Four skills cover the UI/UX surface — pick the right one for the goal:
 
-### 1. Discover Existing System
-- Scan for design tokens, theme config, CSS variables
-- Identify reusable components and variants
-- Note established animation/transition patterns
-- Map interaction standards already in use
+- **`audit-uiux-design-system`** at `~/.cursor/skills/audit-uiux-design-system/SKILL.md` — token compliance, component modularity, design drift.
+- **`audit-ux`** at `~/.cursor/skills/audit-ux/SKILL.md` — NN/g heuristics, microcopy, content patterns, user flows.
+- **`enhance-page-ui`** at `~/.cursor/skills/enhance-page-ui/SKILL.md` — cosmetic polish, hierarchy, spacing, vague-but-visceral feedback.
+- **`enhance-page-ux`** at `~/.cursor/skills/enhance-page-ux/SKILL.md` — replace generic AI-templated UI with semantic data.
 
-### 2. Detect Rogue Implementations
-
-**Styling:**
-- Hardcoded values instead of tokens
-- Inline styles bypassing system
-- Duplicate components
-- Inconsistent spacing
-
-**Interactions:**
-- Inconsistent hover/focus/active states
-- Mismatched animation durations/easing
-- Missing transitions where others exist
-- Unresponsive touch targets
-
-### 3. Fix & Align
-
-- Replace hardcoded values → existing tokens
-- Replace one-offs → existing components/variants
-- Match animations to established patterns
-- Add missing interaction states (hover, focus, active, loading)
-- Ensure mobile touch targets match rest of app
-
-### 4. Validate
-
-- All UI uses existing design system
-- Interactions feel consistent
-- Animations match established timing
-- Mobile behavior consistent
-- No rogue overrides remain
-
-## Output
-- Rogue patterns found & fixed
-- Inconsistencies aligned to existing system
-- Missing interactions added
-- Gaps flagged for review
+Use `/uiux` to explicitly trigger UI/UX work. Otherwise, describe the symptom ("page feels AI-generated", "design drift", "tokens are inconsistent") and the right skill auto-fires.

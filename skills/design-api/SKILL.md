@@ -1,5 +1,5 @@
 ---
-name: api-design
+name: design-api
 description: Design and review REST/GraphQL APIs with best practices. Use when creating endpoints, reviewing API architecture, designing data contracts, route handlers, Server Actions, webhooks, or when user mentions "API", "endpoint", "REST", "GraphQL", "route handler", "request/response", or "HTTP methods".
 ---
 

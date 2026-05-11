@@ -1,8 +1,6 @@
 ---
 name: babysit
-description: >-
-  Keep a PR merge-ready by triaging comments, resolving clear conflicts, and
-  fixing CI in a loop.
+description: Keep a PR merge-ready by triaging comments, resolving clear conflicts, and fixing CI in a loop.
 ---
 # Babysit PR
 Your job is to get this PR to a merge-ready state.

@@ -1,5 +1,5 @@
 ---
-name: mcp-builder
+name: meta-mcp-builder
 description: Create high-quality MCP (Model Context Protocol) servers for LLM tool integration. Use when building MCP servers, integrating external APIs for AI agents, or when user mentions "MCP", "Model Context Protocol", "AI tools", "LLM integration", "agent tools", or "build MCP server".
 ---
 

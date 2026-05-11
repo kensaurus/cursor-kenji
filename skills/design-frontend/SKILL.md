@@ -1,5 +1,5 @@
 ---
-name: frontend-design
+name: design-frontend
 description: Create distinctive, production-grade frontend interfaces avoiding generic AI aesthetics. Use when building web components, landing pages, dashboards, React components, or when user mentions "make it look good", "beautify", "style this", "redesign", "modern UI", "professional look", or "improve the design".
 ---
 

@@ -1,18 +1,6 @@
 ---
 name: audit-ux
-description: >
-  Audit user experience quality using research-backed frameworks: Nielsen Norman Group's
-  10 usability heuristics, Intuit Content Design System for microcopy/UX writing, Google's
-  HEART metrics, and Laws of UX (Fitts's, Hick's, Miller's, Jakob's Law, cognitive load).
-  Evaluates information architecture, user flows, error recovery, onboarding, content clarity,
-  interaction patterns, and cognitive load. Uses browser MCP for live walkthrough, Firecrawl
-  for current NN/g and UX research, and Sequential Thinking for complex flow analysis.
-  Generic — works with any webapp regardless of tech stack. Use when evaluating usability,
-  reviewing user flows, auditing microcopy, checking UX heuristics, assessing cognitive load,
-  reviewing onboarding, or when the user mentions UX audit, usability review, heuristic
-  evaluation, content audit, interaction design review, user flow analysis, or UX quality.
-  This skill focuses on EXPERIENCE — for visual design system compliance (tokens, components,
-  dark mode), use the audit-ui-design-system skill instead.
+description: Audit user experience using NN/g's 10 heuristics, Laws of UX (Fitts's, Hick's, Miller's, Jakob's, cognitive load), HEART metrics, and Intuit Content Design System. Evaluates information architecture, user flows, error recovery, onboarding, content clarity, interaction patterns. Browser MCP for live walkthrough, Firecrawl for current research. Use for "UX audit", "usability review", "heuristic evaluation", "content audit", "interaction design review", "user flow analysis". Generic across webapps. For visual design system compliance (tokens, components, dark mode) use audit-uiux-design-system instead.
 ---
 
 # UX Audit Skill

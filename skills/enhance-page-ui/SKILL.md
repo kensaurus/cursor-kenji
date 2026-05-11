@@ -1,27 +1,6 @@
 ---
 name: enhance-page-ui
-description: >
-  Artistic, research-grounded UI enhancement skill for making an existing page feel
-  intentional, spacious, and human-crafted. Use when the user asks to make a page
-  nicer, more polished, more beautiful, more editorial, more premium, more artsy,
-  less crowded, less AI-generated, better laid out, better balanced, or when they
-  mention typography, visual hierarchy, progressive disclosure, empty/dead space,
-  fades, scroll indicators, microinteractions, motion, hover states, cards, grids,
-  density, or cosmetic UI polish — and especially when feedback is vague but
-  visceral ("clunky", "heavy", "incoherent", "atrocious", "wasted space",
-  "highlight is weirdly big", "feels AI-generated", "monochromatic",
-  "everything stacked left", "this week pills are weird"). The skill catches
-  "difficult to spot" failures: active-state mass mismatch, chrome tautology,
-  card-on-card layering, brand-color competition, perceived-vs-layout weight
-  drift, full-cell wash where a micro-indicator belongs, wrapper-collapsed
-  tiles (Tooltip / inline-flex parents shrinking grid children to content
-  width), conditional slots reserving space for absent content, the same
-  datum repeated 3× in one viewport fold, monochromatic surfaces caused by
-  domain-colour-tier mismatch (consumer/learning apps using B2B tints), and
-  left-anchored stacked cards lacking horizontal balance. General across web
-  repos. Focuses on content choreography, hierarchy, spacing, motion, and visual
-  psychology; for task-flow usability/data correctness use enhance-page-ux first
-  or alongside it.
+description: Polish an existing page to feel intentional, spacious, and human-crafted. Catches difficult-to-spot cosmetic failures — active-state mass mismatch, card-on-card layering, brand-color competition, monochromatic surfaces, wrapper-collapsed tiles, full-cell washes where a micro-indicator belongs. Use for vague-but-visceral feedback ("clunky", "atrocious", "wasted space", "feels AI-generated", "everything stacked left") or explicit asks for "more polished", "more editorial", "less crowded", "better balanced", typography/hierarchy/spacing/motion/density work. For task-flow usability and data correctness, use enhance-page-ux first or alongside.
 ---
 
 # Enhance Page UI

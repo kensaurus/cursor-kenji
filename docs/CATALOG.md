@@ -176,21 +176,30 @@ Complete reference for all skills, commands, and their trigger phrases.
 
 ## Commands
 
+Commands fall into two groups: **standalone** (full playbook lives in the command file) and **pointer** (thin slash entry that redirects to one or more skills, where the full procedure lives). Skills auto-fire on natural language; commands fire only when you type `/`.
+
+### Standalone
+
 | Command | File | Quick Reference |
 |---------|------|-----------------|
 | `/plan` | `plan.md` | Plan Mode — research codebase, clarify, produce approved plan before coding |
-| `/commit` | `commit.md` | Lint → Sentry pre-check → build verify → auto-detect scope → conventional commit → push |
-| `/pr` | `pr.md` | Checks pass → commit → push → open PR with title and description |
-| `/fix-issue` | `fix-issue.md` | Fetch GitHub issue → find code → implement fix → open PR |
-| `/debug` | `debug.md` | Debug Mode — hypothesis-driven, instruments code, pinpoints root cause |
-| `/review` | `review.md` | Agent review pass + manual checklist (correctness, security, perf, a11y) |
-| `/test` | `test.md` | Type check → lint → unit → integration → E2E → coverage |
-| `/update-deps` | `update-deps.md` | Audit and safely update dependencies one at a time with changelog review |
 | `/research` | `research.md` | Three-phase Firecrawl deep research → gap analysis → implementation plan |
-| `/readme` | `readme.md` | Scan changes → detect convention → update READMEs → verify links |
-| `/refactor` | `refactor.md` | Analyze → split → barrel files → verify behavior |
+| `/fix-issue` | `fix-issue.md` | Fetch GitHub issue → find code → implement fix → open PR |
 | `/mcp` | `mcp.md` | MCP-powered dev workflow reference |
-| `/uiux` | `uiux.md` | Discover system → detect rogue → fix → validate |
+
+### Pointer (delegate to skill)
+
+| Command | File | Points to | Notes |
+|---------|------|-----------|-------|
+| `/commit` | `commit.md` | `workflow-git-commit` | Pre-commit pipeline: lint, Sentry, build, scope, conventional commit, push |
+| `/debug` | `debug.md` | `debug-error` | Hypothesis-driven debugging with runtime evidence |
+| `/pr` | `pr.md` | `workflow-pr` | Pre-flight → commit → push → open PR |
+| `/readme` | `readme.md` | `enhance-readme`, `docs-writer` | Visual showcase + content sync |
+| `/refactor` | `refactor.md` | `workflow-refactor` | Analyze → split → extract → verify behavior |
+| `/review` | `review.md` | `audit-code-review` | Agent review + manual checklist |
+| `/test` | `test.md` | `test-unit`, `test-qa`, `test-emulator` | Type check → unit → integration → E2E |
+| `/uiux` | `uiux.md` | `audit-uiux-design-system`, `audit-ux`, `enhance-page-ui`, `enhance-page-ux` | Audit + enhance UI/UX |
+| `/update-deps` | `update-deps.md` | `workflow-housekeep` (Phase 3) | Audit and update dependencies safely |
 
 ---
 

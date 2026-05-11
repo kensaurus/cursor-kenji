@@ -1,14 +1,6 @@
 ---
 name: debug-sentry-monitor
-description: >
-  Monitor, triage, fix, and proactively enhance Sentry error monitoring for any project.
-  Use when asked to: check Sentry, fix Sentry errors, triage Sentry issues,
-  run post-deploy monitoring, review production errors, clean up Sentry noise,
-  audit Sentry setup, improve monitoring coverage, enhance error tracking,
-  or "run sentry check". Works with any GitHub repo — auto-detects org, project,
-  framework, and config. Fetches issues via Sentry MCP, triages them,
-  performs root cause analysis, fixes code bugs, updates noise filters,
-  audits the monitoring architecture, and resolves issues only after verified fixes.
+description: Monitor, triage, fix, and proactively enhance Sentry error monitoring. Auto-detects org, project, framework, and config from any GitHub repo. Fetches issues via Sentry MCP, performs root-cause analysis, fixes code bugs, updates noise filters, audits monitoring architecture, and resolves issues only after verified fixes. Use for "check Sentry", "fix Sentry errors", "triage Sentry issues", "post-deploy monitoring", "review production errors", "clean up Sentry noise", "audit Sentry setup".
 ---
 
 # Sentry Monitor

@@ -1,5 +1,5 @@
 ---
-name: accessibility-audit
+name: audit-accessibility
 description: Comprehensive web accessibility audit for WCAG compliance. Use when checking accessibility, fixing a11y issues, screen reader compatibility, keyboard navigation, color contrast problems, ARIA attributes, focus management, or when user mentions "accessible", "WCAG", "ADA", "a11y", "screen reader", or "disability".
 ---
 

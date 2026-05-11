@@ -1,5 +1,5 @@
 ---
-name: git-workflow
+name: workflow-git-commit
 description: Git branching, commits, and release workflows. Use when setting up branching strategies, writing commit messages, managing releases, merge conflicts, or when user mentions "git", "commit message", "branch", "PR", "pull request", "merge", "rebase", "release", or "changelog".
 ---
 

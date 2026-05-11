@@ -1,5 +1,5 @@
 ---
-name: code-review
+name: audit-code-review
 description: Thorough code review for correctness, security, performance, and patterns. Use when reviewing a PR, auditing a feature, checking someone's code, or when user mentions "review this code", "check my PR", "find issues", "code audit", "what's wrong with", "is this safe", or "review before merge".
 ---
 

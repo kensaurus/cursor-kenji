@@ -1,5 +1,5 @@
 ---
-name: skill-creator
+name: meta-skill-creator
 description: Guide for creating effective AI agent skills. Use when user wants to create, update, or improve a skill, or asks about SKILL.md format, skill structure, skill best practices, or how to extend AI capabilities with specialized knowledge.
 ---
 

@@ -1,17 +1,6 @@
 ---
 name: canvas
-description: >-
-  A Cursor Canvas is a live React app that the user can open beside the chat.
-  You MUST use a canvas when the agent produces a standalone analytical artifact
-  — quantitative analyses, billing investigations, security audits, architecture
-  reviews, data-heavy content, timelines, charts, tables, interactive
-  explorations, repeatable tools, or any response that benefits from visual
-  layout. Especially prefer a canvas when presenting results from MCP tools
-  (Datadog, Databricks, Linear, Sentry, Slack, etc.) where the data is the
-  deliverable — render it in a rich canvas rather than dumping it into a
-  markdown table or code block. If you catch yourself about to write a markdown
-  table, stop and use a canvas instead. You MUST also read this skill whenever
-  you create, edit, or debug any .canvas.tsx file.
+description: A Cursor Canvas is a live React app the user opens beside the chat. MUST use a canvas for standalone analytical artifacts — quantitative analyses, billing investigations, security audits, architecture reviews, data-heavy content, timelines, charts, tables, interactive explorations, repeatable tools, or any response that benefits from visual layout. Prefer canvas for MCP tool results (Datadog, Databricks, Linear, Sentry, Slack) over markdown tables or code blocks. MUST also read this skill when creating, editing, or debugging any .canvas.tsx file.
 metadata:
   surfaces:
     - ide

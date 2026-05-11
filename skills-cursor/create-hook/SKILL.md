@@ -1,8 +1,6 @@
 ---
 name: create-hook
-description: >-
-  Create Cursor hooks. Use when you want to create a hook, write hooks.json, add
-  hook scripts, or automate behavior around agent events.
+description: Create Cursor hooks. Use to create a hook, write hooks.json, add hook scripts, or automate behavior around agent events.
 ---
 # Creating Cursor Hooks
 

@@ -1,5 +1,5 @@
 ---
-name: refactoring
+name: workflow-refactor
 description: Systematic code refactoring methodology with safe, incremental transformations. Use when improving code structure, breaking up large files, extracting components/hooks, or when user mentions "refactor", "split file", "extract", "cleanup", "reorganize", "too big", or "technical debt".
 ---
 

@@ -1,15 +1,6 @@
 ---
 name: audit-uiux-design-system
-description: >
-  Audit webpage UI/UX coherency and modular implementation against a design system for any
-  project. Auto-detects CSS framework (Tailwind v3/v4, CSS Modules, Styled Components),
-  component library (shadcn, Radix, MUI, Chakra), and icon library. Uses browser MCP tools
-  for live visual verification, Firecrawl for current design system and WCAG best practices,
-  and Context7 for component library documentation. Use when reviewing design consistency,
-  checking component modularity, auditing color/typography/spacing tokens, validating
-  accessibility (WCAG), or when the user mentions design drift, UI inconsistency, design
-  system compliance, visual coherency, or component architecture review.
-  Covers React/Next.js/Vue/Svelte with Tailwind CSS, CSS Modules, or Styled Components.
+description: Audit visual UI coherency, design token compliance, and component modularity against a design system. Auto-detects CSS framework (Tailwind v3/v4, CSS Modules, Styled Components), component library (shadcn, Radix, MUI, Chakra), and icon library. Browser MCP for live visual verification, Context7 for component library docs. Use for "design consistency", "design drift", "UI inconsistency", "design system compliance", "visual coherency", "token violations", "component architecture review", or auditing color/typography/spacing tokens and dark mode. Visual UI only — for UX heuristics and content patterns use audit-ux instead.
 ---
 
 # UI/UX Design System Audit Skill

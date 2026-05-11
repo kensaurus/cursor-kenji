@@ -217,7 +217,7 @@ export default async function FeaturesPage() {
 
 | Need | Use Skill |
 |------|-----------|
-| Beautiful UI | `frontend-design` |
+| Beautiful UI | `design-frontend` |
 | Animations | `motion-design` |
 | 3D/WebGL effects | `creative-effects` |
 | Charts/data | `data-visualization` |
@@ -226,9 +226,9 @@ export default async function FeaturesPage() {
 | Real-time data | `realtime-features` |
 | Fun interactions | `interactive-ux` |
 | Backend logic | `backend-patterns` |
-| Performance | `performance-audit` |
-| Security | `security-audit` |
-| Accessibility | `accessibility-audit` |
+| Performance | `audit-performance` |
+| Security | `audit-security` |
+| Accessibility | `audit-accessibility` |
 
 ## Output Quality Standards
 

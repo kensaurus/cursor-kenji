@@ -81,9 +81,20 @@ graph TB
 
 ## What's New in 2026
 
-> Based on [Cursor's official agent best practices](https://cursor.com/blog/agent-best-practices) and the latest Cursor features (Jan-Apr 2026).
+> Based on [Cursor's official agent best practices](https://cursor.com/blog/agent-best-practices) and the latest Cursor features (Jan-May 2026).
 
-### Apr 2026 — The Enhance Family <sup>Latest</sup>
+### May 2026 — Housekeep & Direct-Tone Pass <sup>Latest</sup>
+
+> *Library housekeep aligning with Cursor's official skill spec and direct-tone description guidance.*
+
+| Change | Type | Why It Matters |
+|:-------|:-----|:---------------|
+| 11 skills renamed | Skill | `name:` frontmatter now matches folder names per Cursor spec — auto-loader was silently failing on `accessibility-audit`, `code-review`, `performance-audit`, `security-audit`, `api-design`, `frontend-design`, `doc-coauthoring`, `mcp-builder`, `skill-creator`, `git-workflow`, `refactoring` |
+| 22 descriptions tightened | Skill | Verbose `description: >` blocks (some 280+ words) reduced to direct-tone single-sentence WHAT + concrete trigger list, matching Cursor's canonical example pattern |
+| 9 commands demoted to pointers | Command | `/commit`, `/debug`, `/pr`, `/readme`, `/refactor`, `/review`, `/test`, `/uiux`, `/update-deps` now point to their skill equivalents instead of duplicating the playbook. Skills handle natural language; commands handle explicit slash invocation |
+| `audit-ux` cross-reference | Skill | Fixed broken pointer (`audit-ui-design-system` → `audit-uiux-design-system`) |
+
+### Apr 2026 — The Enhance Family
 
 > *Generic, research-grounded skills that turn AI-templated screens into hand-crafted ones, applicable to any web stack.*
 
@@ -139,7 +150,7 @@ pie title Toolkit Composition
 
 | | Count | Description |
 |-|-------|-------------|
-|| **Skills** | 57 | AI agent capabilities |
+|| **Skills** | 58 | AI agent capabilities |
 || **Cursor Skills** | 12 | IDE-specific tools |
 || **Commands** | 13 | Slash commands |
 || **Subagents** | 5 | Autonomous AI agents |
@@ -165,7 +176,7 @@ pie title Toolkit Composition
 
 ```
 cursor-kenji/
-├── skills/                  # 57 Agent Skills (each has SKILL.md)
+├── skills/                  # 58 Agent Skills (each has SKILL.md)
 │   ├── algorithmic-art/
 │   ├── audit-accessibility/
 │   ├── audit-code-review/

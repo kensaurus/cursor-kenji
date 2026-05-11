@@ -1,23 +1,6 @@
 ---
 name: test-emulator
-description: >
-  Comprehensive on-device QA for any native mobile build (React Native / Expo,
-  Capacitor, Flutter, Tauri-mobile, native Android) running on a local Android
-  emulator, paired with backend-truth verification via the Supabase MCP and
-  error telemetry via the Sentry MCP. Auto-detects the app stack, boots
-  Metro/the bundler if needed, launches the build through the dev launcher or
-  installed APK, walks every tab/route as a real signed-in user, triggers
-  full CRUD round-trips, verifies each mutation reached the database AND came
-  back to the UI, watches logcat + Sentry for crashes, and patches the most
-  common native failure modes (white screen, persisted-cache prototype loss,
-  missing migrations, sync-disabled empty states, stale tap coords). Use when
-  asked to "test the emulator", "test the native build", "test on Android",
-  "QA the mobile app", "walk through the app", "test signed-in flow",
-  "test mobile CRUD", "fix homepage blank", "diagnose freeze on emulator",
-  "smoke-test before TestFlight", or any request to verify a React Native /
-  Expo / Capacitor build end-to-end on a local emulator with backend +
-  observability MCPs in the loop. Generic across native stacks — not pinned
-  to any single repo.
+description: On-device QA for native mobile builds (React Native/Expo, Capacitor, Flutter, Tauri-mobile, native Android) on a local Android emulator. Boots Metro/bundler, launches via dev launcher or APK, walks tabs/routes as a signed-in user, triggers CRUD round-trips, verifies each mutation hits the database AND returns to UI, watches logcat plus Sentry. Patches common native failures: white screen, persisted-cache prototype loss, missing migrations, sync-disabled empty states, stale tap coords. Use for "test the emulator", "QA the mobile app", "smoke-test before TestFlight", "diagnose freeze on emulator", or end-to-end native verification. Generic across native stacks.
 ---
 
 # test-emulator — Native build QA on Android emulator + MCP loop

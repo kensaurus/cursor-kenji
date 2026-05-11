@@ -1,18 +1,6 @@
 ---
 name: enhance-readme
-description: >-
-  Turn a plain-text README into a visually rich showcase with a theme-aware hero
-  image, a feature tour grid, an optional animated guided-tour GIF, and updated
-  tech badges. Captures live screenshots via Playwright MCP in both dark and
-  light mode at hero-quality 1600x1000, pairs them with `<picture>` for auto
-  theme-swap, and inlines them into the README using GitHub-supported HTML.
-  Optionally records a guided-tour `.gif` (autoplays inline on github.com via
-  `record-readme-tour.mjs`) for an animated demo above the static screenshots.
-  Works with any web app that has a live URL or local dev server. Use when
-  asked to "enhance README", "make README prettier", "add screenshots to
-  README", "showcase the app in README", "design the README", "add hero
-  image", "spice up README", "make README more fun", "add animated demo to
-  README", "record a tour GIF", or "make a README GIF".
+description: Turn a plain README into a visually rich showcase — theme-aware hero image, feature tour grid, optional autoplay GIF, updated badges. Captures live screenshots via Playwright MCP at 1600x1000 in dark and light mode, pairs them with `<picture>` for theme-swap, inlines via GitHub-supported HTML. Optional `record-readme-tour.mjs` for animated demos. Use for "enhance README", "make README prettier", "add screenshots", "add hero image", "spice up README", "record a tour GIF". Works with any web app that has a live URL or local dev server.
 ---
 
 # Enhance README
