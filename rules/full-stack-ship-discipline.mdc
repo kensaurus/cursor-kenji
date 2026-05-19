@@ -1,0 +1,82 @@
+---
+description: Ship the backend with the frontend — every feature is full-stack until verified end-to-end, and database changes must reach the remote DB before the chat ends.
+alwaysApply: true
+---
+
+# Full-Stack Ship Discipline
+
+A feature is **not done** when the UI compiles. It is done when the user-visible
+flow works end-to-end against the **remote** backend the user actually hits.
+Every UI/UX task implicitly includes its database, migration, edge function,
+RLS, and config dependencies — handle them in the same chat.
+
+## The failure mode this rule prevents
+
+Local migration files (e.g. `supabase/migrations/<ts>_*.sql`,
+`prisma/migrations/`, `db/migrate/*.rb`) get authored alongside a feature, the
+frontend ships, and the migration is **never deployed**. The user opens the
+feature on the live site and the API returns `404` / `relation does not exist`
+/ `function not found`. The frontend's catch block surfaces a generic
+"Something went wrong" and the bug looks like a UI issue when it's actually a
+missing schema deploy.
+
+## Required behaviour
+
+1. **Treat every UI task as full-stack first.** Before editing components, ask:
+   "Does this read or write data? Does it call an RPC? Does it depend on a
+   column / table / function / policy / bucket / secret?" If yes, **inventory
+   the backend dependencies first** and fix them in the same turn.
+
+2. **Run and deploy database changes via the Supabase MCP, not by leaving SQL
+   files on disk.**
+   - Use `apply_migration` (DDL) or `execute_sql` (queries / data fixes) on
+     the correct `project_id`. Pick the project with `list_projects` if
+     unsure; confirm the ref with the user once and reuse it.
+   - **Verify the deploy worked** in the same turn: re-query
+     `information_schema` / `pg_proc` / `pg_policies` to confirm the object
+     exists, and run the function as the role the client uses
+     (`SET ROLE anon;` / `authenticated;`) to catch grant or RLS gaps.
+   - Check `get_logs(service: 'api' | 'postgres')` and `get_advisors` after
+     non-trivial changes. Treat new ERROR-level advisors as part of your
+     change set.
+   - **Keep the file and the deploy in sync.** If you add SQL via MCP, also
+     write the matching versioned file under `supabase/migrations/` (or the
+     repo's migration folder) so the next `db push` is idempotent and
+     reviewable. If you find a local file that wasn't pushed, push it.
+
+3. **Same rule for non-Supabase backends.** If the repo uses Prisma /
+   Drizzle / TypeORM / Rails / Django / Flyway / sqlx, the equivalent of
+   "deploy" must run before the turn ends — `prisma migrate deploy`,
+   `drizzle-kit push`, `rails db:migrate`, `manage.py migrate`,
+   `flyway migrate`, etc. — and you must confirm the target environment.
+   Don't leave a migration file uncommitted to the schema state of the
+   environment the user just demoed against.
+
+4. **Edge functions, secrets, RLS, storage buckets, cron jobs count as
+   schema.** A frontend that calls a brand-new edge function only works if
+   the function is `deploy`'d *and* `verify_jwt` / secrets / CORS are set
+   correctly. Bundle these with the UI change.
+
+5. **Ask before mutating production data, never before deploying schema the
+   user just asked you to ship.** DDL that's part of the requested feature
+   should ship without re-asking. `DELETE` / `TRUNCATE` / `UPDATE` against
+   real rows always asks first.
+
+## Checklist before declaring "done"
+
+- [ ] Every new RPC / table / column / policy / bucket / function I added in
+      code exists on the remote backend (verified, not assumed).
+- [ ] Anonymous + authenticated callers can hit the new surface as the UI
+      expects (verified with `SET ROLE` or a real client request).
+- [ ] The matching versioned migration file is on disk so this isn't a one-
+      off MCP edit that future `db reset` would lose.
+- [ ] The frontend error path I'm fixing is actually exercising the new
+      backend (logs / network tab confirm a 200, not a stale 404).
+- [ ] If the repo has CI for migrations or a `db push` step, I noted whether
+      the user needs to run it for the next environment (staging / prod).
+
+## When in doubt
+
+Default to "this is a full-stack change". A 30-second `list_tables` /
+`pg_proc` lookup beats a user reporting "it shows Something went wrong"
+hours later.

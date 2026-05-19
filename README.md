@@ -12,11 +12,11 @@
 <p align="center">
   <a href="#quick-start"><img src="https://img.shields.io/badge/-Quick_Start-10b981?style=flat-square" alt="Quick Start" /></a>
   <a href="#how-to-use-this-toolkit"><img src="https://img.shields.io/badge/-How_to_Use-22c55e?style=flat-square" alt="How to Use" /></a>
-  <a href="#skills-58"><img src="https://img.shields.io/badge/-58_Skills-6366f1?style=flat-square" alt="58 Skills" /></a>
+  <a href="#skills-60"><img src="https://img.shields.io/badge/-60_Skills-6366f1?style=flat-square" alt="60 Skills" /></a>
   <a href="#subagents-5"><img src="https://img.shields.io/badge/-5_Subagents-f59e0b?style=flat-square" alt="5 Subagents" /></a>
   <a href="#commands-13"><img src="https://img.shields.io/badge/-13_Commands-ef4444?style=flat-square" alt="13 Commands" /></a>
   <a href="#mcp-servers-16"><img src="https://img.shields.io/badge/-16_MCP_Servers-3b82f6?style=flat-square" alt="16 MCP Servers" /></a>
-  <a href="#project-rules-starter-pack"><img src="https://img.shields.io/badge/-6_Rules-8b5cf6?style=flat-square" alt="6 Rules" /></a>
+  <a href="#project-rules-starter-pack"><img src="https://img.shields.io/badge/-8_Rules-8b5cf6?style=flat-square" alt="8 Rules" /></a>
 </p>
 
 <p align="center">
@@ -40,12 +40,12 @@
 graph TB
   subgraph TOOLKIT["cursor-kenji Toolkit"]
     direction TB
-    SK["Skills (58)"]
+    SK["Skills (60)"]
     CS["Cursor Skills (12)"]
     CMD["Commands (13)"]
     SA["Subagents (5)"]
     MCP["MCP Servers (16)"]
-    RULES["Project Rules (6)"]
+    RULES["Project Rules (8)"]
     NP["Notepads (2)"]
   end
 
@@ -83,7 +83,18 @@ graph TB
 
 > Based on [Cursor's official agent best practices](https://cursor.com/blog/agent-best-practices) and the latest Cursor features (Jan-May 2026).
 
-### May 2026 — Housekeep & Direct-Tone Pass <sup>Latest</sup>
+### May 2026 — Native RN Loop & Cross-Surface UI <sup>Latest</sup>
+
+> *Two skills + two rules from real RN/Capacitor + Supabase shipping sessions — the "no-Mac dev loop" and the "looks great on web, atrocious on phone" patterns.*
+
+| Addition | Type | Why It Matters |
+|:---------|:-----|:---------------|
+| `start-emulator` | Skill | Boots Metro + Android emulator in the right order — kills duplicate ports, picks fresh-cache vs fast-iteration, defaults to 1080×4000 for tall QA screenshots, polls `/status` before deeplink to avoid "Cannot connect to Expo CLI" races. Pairs with `test-emulator` |
+| `enhance-web-mobile-ui` | Skill | Architecture skill for hybrid web/iOS/Android apps (Capacitor / Tauri / Expo Web / Ionic). Establishes three orthogonal axes — form factor, platform, pointer capability — so a UIUX sweep on one surface cannot silently degrade another. Catches axis conflation, viewport-as-form-factor abuse, hover-only affordances on touch shells |
+| `full-stack-ship-discipline.mdc` | Rule | `alwaysApply: true` — prevents the "local migration file never deployed" failure mode. Forces UI tasks to inventory backend deps (schema, RPC, RLS, edge functions) in the same chat, deploy via Supabase MCP, and verify against the remote DB |
+| `shell-first-search.md` | Rule | Workspace-wide rule routing routine search to `Shell` (`grep`/`find`/`ls`) instead of the `Grep`/`Glob` tools, which have hung for minutes on this Windows host. Keeps `SemanticSearch` and `Read` as the correct tools for their use cases |
+
+### May 2026 — Housekeep & Direct-Tone Pass
 
 > *Library housekeep aligning with Cursor's official skill spec and direct-tone description guidance.*
 
@@ -132,10 +143,10 @@ graph TB
 
 ```mermaid
 pie title Toolkit Composition
-    "Skills (58)" : 58
+    "Skills (60)" : 60
     "Commands (13)" : 13
     "MCP Servers (16)" : 16
-    "Project Rules (6)" : 6
+    "Project Rules (8)" : 8
     "Subagents (5)" : 5
     "Cursor Skills (12)" : 12
     "Notepads (2)" : 2
@@ -150,7 +161,7 @@ pie title Toolkit Composition
 
 | | Count | Description |
 |-|-------|-------------|
-|| **Skills** | 58 | AI agent capabilities |
+|| **Skills** | 60 | AI agent capabilities |
 || **Cursor Skills** | 12 | IDE-specific tools |
 || **Commands** | 13 | Slash commands |
 || **Subagents** | 5 | Autonomous AI agents |
@@ -163,7 +174,7 @@ pie title Toolkit Composition
 | | Count | Description |
 |-|-------|-------------|
 || **MCP Servers** | 16 | External tool integrations |
-|| **Project Rules** | 6 | Per-project AI guidance |
+|| **Project Rules** | 8 | Per-project AI guidance |
 || **Notepads** | 2 | Reusable context templates |
 || **Shell Aliases** | 8 | Terminal productivity |
 
@@ -205,9 +216,10 @@ cursor-kenji/
 │   ├── design-system/
 │   ├── docs-coauthor/
 │   ├── docs-writer/
-│   ├── enhance-page-ui/       # NEW Apr 2026 — composition + hierarchy + motion
-│   ├── enhance-page-ux/       # NEW Apr 2026 — heuristic-grounded UX enhancement
-│   ├── enhance-readme/        # NEW Apr 2026 — hero + tour + GIF for any README
+│   ├── enhance-page-ui/       # composition + hierarchy + motion
+│   ├── enhance-page-ux/       # heuristic-grounded UX enhancement
+│   ├── enhance-readme/        # hero + tour + GIF for any README
+│   ├── enhance-web-mobile-ui/ # NEW May 2026 — cross-surface (web/iOS/Android) architecture
 │   ├── error-handling/
 │   ├── file-docx/
 │   ├── file-pdf/
@@ -224,6 +236,7 @@ cursor-kenji/
 │   ├── protocol-browser-anti-stall/
 │   ├── realtime-features/
 │   ├── spec-writing/
+│   ├── start-emulator/        # NEW May 2026 — Metro + Android emulator bring-up
 │   ├── tdd/
 │   ├── test-emulator/
 │   ├── test-qa/
@@ -269,8 +282,11 @@ cursor-kenji/
 │   ├── deploy-checker.md
 │   └── perf-monitor.md
 ├── rules/
-│   ├── senior-engineer.md   # Global AI rules (alwaysApply: true)
-│   └── project-starter/     # 6 Project rule templates
+│   ├── senior-engineer.md           # Global rule — full-stack execution protocol
+│   ├── full-stack-ship-discipline.mdc  # NEW May 2026 — alwaysApply, migrations must deploy
+│   ├── shell-first-search.md        # NEW May 2026 — route search to Shell, not Grep/Glob
+│   ├── project-starter/             # 6 Project rule templates
+│   └── native-rn-monorepo/          # RN + Web monorepo, CI-only iOS bundle
 │       ├── components.mdc
 │       ├── data-fetching.mdc
 │       ├── git.mdc
@@ -480,17 +496,18 @@ All four are **generic** — they work in any web stack (Next.js, Remix, SvelteK
 
 ---
 
-## Skills (58)
+## Skills (60)
 
 ### Skill Categories at a Glance
 
 ```mermaid
 mindmap
-  root((58 Skills))
+  root((60 Skills))
     Enhance
       enhance-page-ui
       enhance-page-ux
       enhance-readme
+      enhance-web-mobile-ui
     Design & Frontend
       design-frontend
       design-system
@@ -538,6 +555,7 @@ mindmap
       test-unit
       test-qa
       test-emulator
+      start-emulator
       workflow-pr
       protocol-browser-anti-stall
     Process & Docs
@@ -560,7 +578,7 @@ mindmap
 
 ---
 
-### Enhance <sup>New Apr 2026</sup>
+### Enhance <sup>New Apr-May 2026</sup>
 
 > *Make existing pages and READMEs feel hand-crafted. Generic across any web stack.*
 
@@ -569,6 +587,7 @@ mindmap
 | `enhance-page-ui` | Composition before decoration — hierarchy, grouping, spacing, motion. Subtract clutter, group related, pin metadata, soften scroll edges. NN/g + Laws of UX grounded |
 | `enhance-page-ux` | Replace stacked / templated UI with semantic data wired to real backend state. Every change cites a Nielsen heuristic, uses existing primitives, verified at 1440/1024/800 viewports |
 | `enhance-readme` | Theme-aware hero (`<picture>` dark/light auto-swap) + tour grid + optional autoplay GIF via Playwright MCP. Works for any repo with a live URL or local dev server |
+| `enhance-web-mobile-ui` <sup>May 2026</sup> | Cross-surface architecture for hybrid PWA + iOS + Android apps (Capacitor / Tauri / Expo Web / Ionic). Three orthogonal axes (form factor / platform / pointer) + mode tokens + container-query primitives — so polish on one surface can't degrade another |
 
 ### Design & Frontend
 
@@ -665,6 +684,7 @@ mindmap
 | `test-unit` | Auto-detect framework, research patterns, Sentry coverage gaps, write tests |
 | `test-qa` | Comprehensive QA via browser MCP — CRUD lifecycle, data pipeline, UX quality audit |
 | `test-emulator` | Native build QA on Android emulator — Metro/adb walk + Supabase + Sentry MCPs, three-layer CRUD verification, fixes for white-screen / cache-rehydration / sync-empty-state failure modes |
+| `start-emulator` <sup>NEW May 2026</sup> | Boot Metro + Android emulator in the correct order — kills duplicate ports, fresh-cache vs fast-iteration choice, polls `/status` before deeplink to avoid "Cannot connect to Expo CLI" races. Pairs with `test-emulator` |
 | `workflow-pr` | PR lifecycle — validation, monitoring, bot feedback, merge criteria |
 | `protocol-browser-anti-stall` | Anti-stall protocol for browser automation — timeouts, retries, evidence gathering |
 
@@ -959,11 +979,20 @@ graph LR
 | `git.mdc` | Conventional commits, branch naming, no secrets |
 | `data-fetching.mdc` | TanStack Query, prefetch, query key factories |
 
-Plus a **global rule** — `senior-engineer.md` — that always applies and enforces the full-stack execution protocol with MCP tool usage.
+Plus three **global rules** that always apply across any project:
+
+| Rule | Enforces |
+|:-----|:---------|
+| `senior-engineer.md` | Full-stack execution protocol with MCP tool usage |
+| `full-stack-ship-discipline.mdc` <sup>NEW May 2026</sup> | Every UI task is full-stack until verified end-to-end — deploy migrations via Supabase MCP in the same chat, verify against the remote DB, not the local file |
+| `shell-first-search.md` <sup>NEW May 2026</sup> | Route routine search to `Shell` (`grep`/`find`/`ls`) instead of the `Grep`/`Glob` tools, which can hang for minutes on some Windows hosts. `SemanticSearch` stays for meaning-based queries |
 
 ```bash
 cp ~/cursor-kenji/rules/project-starter/*.mdc your-project/.cursor/rules/
+cp ~/cursor-kenji/rules/{senior-engineer.md,full-stack-ship-discipline.mdc,shell-first-search.md} your-project/.cursor/rules/
 ```
+
+The `native-rn-monorepo/` bundle is also available for React Native + Web monorepos targeting CI-only iOS — see [`rules/native-rn-monorepo/README.md`](rules/native-rn-monorepo/README.md).
 
 ---
 

@@ -23,6 +23,11 @@ Complete reference for all skills, commands, and their trigger phrases.
 **What it does:** Theme-aware hero + tour grid + optional autoplay GIF via Playwright MCP. Captures live screenshots at 1600x1000 in dark and light mode, pairs them with `<picture>` for auto theme-swap, and inlines them into the README with GitHub-supported HTML. Companion scripts at `~/.cursor/skills/enhance-readme/scripts/`.
 **Related:** `webapp-testing`, `protocol-browser-anti-stall`
 
+#### `enhance-web-mobile-ui` <sup>NEW May 2026</sup>
+**Triggers:** "improved one surface and broke the other", "looks great on web but cramped on mobile", "looks great on my laptop but atrocious on my phone", "ad-hoc useIsMobile branches", "single md: breakpoint everywhere", "platform-specific styling inline", "Capacitor / Tauri / Expo Web cross-surface issues", "hover-only affordances on touch"
+**What it does:** Cross-surface UIUX separation skill for hybrid PWA + iOS + Android apps. Establishes three orthogonal axes — **form factor** (compact / medium / expanded), **platform** (web / ios / android), **pointer capability** (fine / coarse) — and a three-layer architecture (context hook, mode tokens, container-query primitives). Catches axis conflation in single booleans, viewport queries used for component micro-layout, hover-only affordances shipped to native shells, hardcoded chrome dimensions leaking into primitives, SSR/Capacitor first-paint mismatch. Generic across Tailwind 3/4, Next.js / Vite / React Router, Capacitor / Tauri / Expo Web / Ionic.
+**Related:** `enhance-page-ui`, `enhance-page-ux`, `mobile-first`
+
 ### Design & Frontend
 
 #### `design-frontend`
@@ -264,6 +269,16 @@ Commands fall into two groups: **standalone** (full playbook lives in the comman
 **What it does:** Comprehensive QA via browser MCP tools. Auto-discovers pages, features, data entities, auth patterns from codebase. Generates user stories dynamically, performs real CRUD with data pipeline verification (FE → API → DB → FE), audits UX quality, tests edge cases. Structured pass/fail report with production readiness score.
 **Related:** `test-unit`, `webapp-testing`, `protocol-browser-anti-stall`
 
+#### `test-emulator`
+**Triggers:** "test on emulator", "QA Android build", "verify native build", "white screen", "cache rehydration", "RN sync empty state", "Expo dev-client QA"
+**What it does:** Native build QA on Android emulator — three-layer CRUD verification across UI / API / DB, build-freshness + dual-auth phases, fixes for white-screen / cache-rehydration / sync-empty-state failure modes. Pairs Metro/adb walk with Supabase + Sentry MCPs for end-to-end coverage.
+**Related:** `start-emulator`, `test-qa`, `debug-fe-be-integration`
+
+#### `start-emulator` <sup>NEW May 2026</sup>
+**Triggers:** "start emulator", "start Metro", "restart dev loop", "fix Cannot connect to Expo", "spin up new terminal instance", "stuck bundler", "align emulator geometry for scroll QA", "1080×4000 emulator"
+**What it does:** Boots Metro + Android emulator (Expo dev-client / bare RN) in the right order — inspect existing IDE terminals first, kill stale ports/processes, choose "fresh cache wipe" vs "fast iteration" for Hot Reload, default to 1080×4000 display for tall QA screenshots, adb reverse + poll Metro `/status` before deeplink to avoid connection races. Pairs with `test-emulator` for full QA.
+**Related:** `test-emulator`, native-rn-monorepo commands
+
 #### `workflow-pr`
 **Triggers:** "create PR", "pull request", "merge PR", "PR review", "PR checks", "merge criteria"
 **What it does:** PR lifecycle from creation to merge. Runs validations, security scans, creates PR with template. Monitors checks (polls status), addresses bot feedback, ensures all threads resolved. Two-gate merge criteria: clean state + zero unresolved threads.
@@ -357,6 +372,34 @@ Commands fall into two groups: **standalone** (full playbook lives in the comman
 
 ### Stack-Aware UI Quality (NEW)
 `audit-uiux-design-system` (visual tokens) + `audit-ux` (heuristics) → `enhance-page-ux` (data + primitives) → `enhance-page-ui` (composition + motion)
+
+### Cross-Surface UI Architecture (NEW May 2026)
+`enhance-web-mobile-ui` (architecture: axes + tokens + primitives) → `enhance-page-ui` (per-surface polish) → `enhance-page-ux` (data + heuristics)
+*Run the architecture pass first when a hybrid web/iOS/Android app has axis conflation — otherwise per-surface polish will keep introducing regressions on the other surface.*
+
+### Native RN Ship Loop (NEW May 2026)
+`start-emulator` (boot Metro + adb cleanly) → `test-emulator` (CRUD + Sentry + Supabase verification) → `/rn-ship-ios` (verify → push → CI → TestFlight)
+
+---
+
+## Rules
+
+Rules live at the repo's `rules/` top level (drop into a project's `.cursor/rules/` or `~/.cursor/rules/` for global).
+
+### Global rules (`alwaysApply: true`)
+
+| Rule | Enforces |
+|:-----|:---------|
+| `senior-engineer.md` | Full-stack execution protocol with MCP tool usage |
+| `full-stack-ship-discipline.mdc` <sup>NEW May 2026</sup> | Every UI task is full-stack until verified end-to-end. Local migration files (`supabase/migrations/`, `prisma/migrations/`, `db/migrate/`) must be deployed via Supabase MCP `apply_migration` / `execute_sql` in the same chat and verified against `information_schema` / `pg_proc` / `pg_policies`. Treats new ERROR-level advisors as part of your change |
+| `shell-first-search.md` <sup>NEW May 2026</sup> | Routes routine text/filename search to `Shell` (`grep -rn`, `find … -name`, `ls`) instead of `Grep`/`Glob`, which can hang for minutes on some Windows hosts. `SemanticSearch` stays for meaning-based queries, `Read` stays for known paths |
+
+### Project rule bundles
+
+| Bundle | When to install |
+|:-------|:----------------|
+| `rules/project-starter/` | Generic Next.js + Supabase + Tailwind starter — supabase, components, typescript, tailwind, git, data-fetching |
+| `rules/native-rn-monorepo/` | React Native + Web monorepo where the dev is on Linux/Windows (no Mac) and iOS verification is CI-only. Pairs with `commands/native-rn-monorepo/` |
 
 ---
 
