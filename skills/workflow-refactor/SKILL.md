@@ -1,412 +1,241 @@
 ---
 name: workflow-refactor
-description: Systematic code refactoring methodology with safe, incremental transformations. Use when improving code structure, breaking up large files, extracting components/hooks, or when user mentions "refactor", "split file", "extract", "cleanup", "reorganize", "too big", or "technical debt".
+description: >
+  Guide for refactoring code to improve quality without changing behavior. Use when refactoring,
+  cleaning up code, reducing duplication, improving readability, or restructuring code.
+  Integrates Firecrawl for researching modern patterns before refactoring,
+  and codebase-aware dependency analysis to avoid breaking changes.
 ---
 
-# Refactoring Skill
+# Refactor Code Skill
 
-Safe, systematic approach to improving code structure without changing behavior.
+Improve code quality without changing external behavior. Research-aware.
 
-## When to Use
+## MANDATORY: Pre-Refactoring Checks
 
-- Breaking up large files/components
-- Extracting reusable logic
-- Modernizing legacy patterns
-- Reducing code duplication
-- Improving testability
-- Paying down technical debt
+**BEFORE refactoring any code, you MUST:**
 
-## CRITICAL: Check Existing First
-
-**Before ANY refactoring, verify current state:**
-
-1. **Search for existing implementations:**
-```bash
-rg "function.*YourFunction" --type ts
-rg "export.*YourComponent" --type tsx
+### 1. Read Relevant Documentation
+```
+README.md                              (project overview)
+src/[domain]/@_[domain]-README.md      (domain architecture)
+CONTRIBUTING.md                        (code standards)
 ```
 
-2. **Check for existing hooks/utils:**
+### 2. Understand Existing Patterns
+
+Use `Grep` and `SemanticSearch` to find:
+- How similar code is structured elsewhere in the codebase
+- What patterns are already established
+- ALL files that import/depend on the code being refactored
+
+### 3. Map the Blast Radius
+
+Before changing any function, class, or component:
 ```bash
-ls -la src/hooks/ src/lib/ src/utils/
-rg "use[A-Z]" --type ts -l  # Find existing hooks
+rg "functionName" --type ts       # find all callers
+rg "import.*from.*module" --type ts  # find all importers
 ```
 
-3. **Check if extraction already exists:**
-```bash
-ls -la src/components/ui/   # @/components/ui primitives
-ls -la src/lib/             # @/lib utilities  
-ls -la src/hooks/           # @/hooks shared hooks
-rg "export function|export const" src/lib/ --type ts
+List every file that will be affected by the change. If the blast radius is large (10+ files), consider a phased approach.
+
+### 4. Research Modern Patterns (for non-trivial refactors)
+
+If the refactoring introduces a new pattern, verify it's current best practice:
+
+```json
+CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+  "query": "<framework> <pattern> best practice <current year>",
+  "limit": 5,
+  "sources": [{ "type": "web" }]
+})
 ```
 
-4. **Review recent commits:**
-```bash
-git log --oneline -20 --all -- "*.ts" "*.tsx"
+Scrape the most authoritative result:
+
+```json
+CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
+  "url": "<best-result-url>",
+  "formats": ["markdown"],
+  "onlyMainContent": true
+})
 ```
 
-**Why:** Duplicate utilities cause confusion, bloat, and maintenance burden. Always search before creating.
+This prevents refactoring FROM one outdated pattern TO another outdated pattern.
+
+### 5. Verification Statement (REQUIRED)
+
+Before refactoring, state:
+```
+"Pre-refactoring check:
+- README/docs read: [list]
+- Dependent files identified: [list files that import this code]
+- Blast radius: [N files affected]
+- Tests exist: [YES/NO — if NO, write tests first]
+- Pattern verified: [YES via research / YES matches codebase / SKIP — trivial refactor]"
+```
+
+---
 
 ## Refactoring Principles
 
-### Golden Rules
-1. **Never refactor and add features simultaneously**
-2. **Keep tests passing after each step**
-3. **Small, atomic commits**
-4. **Prefer incremental over big-bang**
-5. **Verify behavior before and after**
+1. **Behavior stays the same** — tests pass before and after
+2. **Small steps** — one change at a time, verify after each
+3. **Test frequently** — run tests after each change
+4. **Commit often** — easy to revert if something breaks
+5. **Research first** — don't replace old patterns with other old patterns
 
-### Safety Checklist
-- [ ] Tests exist (or write them first)
-- [ ] Can verify behavior manually
-- [ ] Changes are reversible
-- [ ] No deadline pressure
-- [ ] Team is aware
+---
 
-## Common Refactoring Patterns
+## Code Smells and Fixes
 
-### 1. Extract Component
+| Smell | Symptom | Solution |
+|-------|---------|----------|
+| **Long Function** | >20 lines, does multiple things | Extract functions |
+| **Duplicate Code** | Same logic in 2+ places | Extract shared function/hook |
+| **Magic Numbers** | Unexplained literals | Named constants or config |
+| **Deep Nesting** | 3+ levels of if/loops | Early returns, extract functions |
+| **Long Parameter List** | >3 parameters | Object parameter with interface |
+| **Feature Envy** | Function uses another module's data heavily | Move function to that module |
+| **God Object** | One class/component does everything | Split by responsibility |
+| **Primitive Obsession** | Using strings/numbers where a type would be safer | Create domain types |
+| **Shotgun Surgery** | One change requires editing many files | Consolidate related logic |
+| **Dead Code** | Unreachable or unused code | Delete it (git has history) |
 
-**When:** Component > 200 lines, clear UI boundary
+---
 
-**Process:**
-1. Identify self-contained UI section
-2. List all props/state it needs
-3. Create new component file
-4. Move JSX and relevant state
-5. Import and use in parent
+## Common Refactorings
 
-```tsx
-// Before: UserDashboard.tsx (500 lines)
-function UserDashboard() {
-  // ... 200 lines of stats logic and UI
-  return (
-    <div>
-      {/* Stats section - candidate for extraction */}
-      <div className="stats">
-        {stats.map(s => (
-          <div key={s.id}>
-            <span>{s.label}</span>
-            <span>{s.value}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
+### Extract Function
 
-// After: Extract StatsGrid component
-// components/StatsGrid.tsx
-interface StatsGridProps {
-  stats: Stat[]
-}
+**Before:**
+```typescript
+function processOrder(order: Order) {
+  if (!order.items.length) throw new Error('Empty order');
+  if (!order.customer) throw new Error('No customer');
+  if (order.total < 0) throw new Error('Invalid total');
 
-export function StatsGrid({ stats }: StatsGridProps) {
-  return (
-    <div className="stats">
-      {stats.map(s => (
-        <div key={s.id}>
-          <span>{s.label}</span>
-          <span>{s.value}</span>
-        </div>
-      ))}
-    </div>
-  )
-}
+  const subtotal = order.items.reduce((sum, i) => sum + i.price, 0);
+  const tax = subtotal * 0.1;
+  const total = subtotal + tax;
 
-// UserDashboard.tsx - now cleaner
-import { StatsGrid } from './StatsGrid'
-
-function UserDashboard() {
-  return (
-    <div>
-      <StatsGrid stats={stats} />
-    </div>
-  )
+  db.orders.insert({ ...order, total });
 }
 ```
 
-### 2. Extract Custom Hook
-
-**When:** Component has complex state/effect logic reused elsewhere
-
-**Process:**
-1. Identify state + effects that belong together
-2. Create `useX` hook
-3. Move state and effects
-4. Return needed values/functions
-5. Use hook in component
-
-```tsx
-// Before: inline fetch logic
-function UserProfile({ userId }: { userId: string }) {
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<Error | null>(null)
-  
-  useEffect(() => {
-    setLoading(true)
-    fetchUser(userId)
-      .then(setUser)
-      .catch(setError)
-      .finally(() => setLoading(false))
-  }, [userId])
-  
-  // ...render
-}
-
-// After: extracted hook
-// hooks/useUser.ts
-export function useUser(userId: string) {
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<Error | null>(null)
-  
-  useEffect(() => {
-    setLoading(true)
-    fetchUser(userId)
-      .then(setUser)
-      .catch(setError)
-      .finally(() => setLoading(false))
-  }, [userId])
-  
-  return { user, loading, error }
-}
-
-// Component - now simple
-function UserProfile({ userId }: { userId: string }) {
-  const { user, loading, error } = useUser(userId)
-  // ...render
+**After:**
+```typescript
+function processOrder(order: Order) {
+  validateOrder(order);
+  const total = calculateTotal(order);
+  saveOrder({ ...order, total });
 }
 ```
 
-### 3. Extract Utility Function
+### Flatten Nested Conditionals
 
-**When:** Pure logic used in multiple places
-
-**Process:**
-1. Identify pure function (no side effects)
-2. Create in appropriate location (`lib/` or feature utils)
-3. Add types and JSDoc
-4. Write unit tests
-5. Replace inline logic with import
-
-```tsx
-// Before: inline in multiple components
-const fullName = `${user.firstName} ${user.lastName}`.trim()
-const initials = user.firstName[0] + user.lastName[0]
-
-// After: lib/user.ts
-/**
- * Get user's full display name
- */
-export function getFullName(user: { firstName: string; lastName: string }) {
-  return `${user.firstName} ${user.lastName}`.trim()
-}
-
-/**
- * Get user's initials for avatar
- */
-export function getInitials(user: { firstName: string; lastName: string }) {
-  return `${user.firstName[0]}${user.lastName[0]}`.toUpperCase()
-}
-```
-
-### 4. Replace Magic Numbers/Strings with Constants
-
-**Process:**
-1. Find hardcoded values
-2. Extract to named constants
-3. Group related constants
-4. Consider config file for env-specific values
-
-```tsx
-// Before
-if (items.length > 100) { /* paginate */ }
-const timeout = 5000
-if (status === 'pending') { /* ... */ }
-
-// After
-// constants/limits.ts
-export const PAGINATION_THRESHOLD = 100
-export const DEFAULT_TIMEOUT_MS = 5000
-
-// types/status.ts
-export const Status = {
-  PENDING: 'pending',
-  ACTIVE: 'active',
-  COMPLETE: 'complete',
-} as const
-```
-
-### 5. Consolidate Conditional Logic
-
-**When:** Complex nested conditionals, repeated conditions
-
-```tsx
-// Before: nested conditionals
-function getPrice(user: User, item: Item) {
-  if (user.isPremium) {
-    if (item.onSale) {
-      return item.price * 0.7
-    } else {
-      return item.price * 0.9
-    }
-  } else {
-    if (item.onSale) {
-      return item.price * 0.8
-    } else {
-      return item.price
+**Before:**
+```typescript
+function getDiscount(user: User, order: Order) {
+  if (user) {
+    if (user.isPremium) {
+      if (order.total > 100) {
+        return 0.2;
+      } else {
+        return 0.1;
+      }
     }
   }
-}
-
-// After: extract to strategy pattern or lookup
-const DISCOUNT_MATRIX = {
-  premium: { sale: 0.7, regular: 0.9 },
-  regular: { sale: 0.8, regular: 1.0 },
-}
-
-function getPrice(user: User, item: Item) {
-  const tier = user.isPremium ? 'premium' : 'regular'
-  const type = item.onSale ? 'sale' : 'regular'
-  return item.price * DISCOUNT_MATRIX[tier][type]
+  return 0;
 }
 ```
 
-### 6. Split Large Files
-
-**When:** File > 400 lines, multiple unrelated concerns
-
-**Process:**
-1. Identify logical groupings
-2. Create new files for each group
-3. Move code maintaining imports
-4. Update index.ts barrel export
-5. Update imports in dependents
-
-```
-# Before
-features/orders/OrderService.ts (800 lines)
-  - Order CRUD
-  - Payment processing
-  - Notification sending
-  - Analytics tracking
-
-# After
-features/orders/
-  services/
-    orderCrud.ts
-    paymentProcessor.ts
-    notificationService.ts
-    analyticsTracker.ts
-  index.ts  # Re-exports for backward compatibility
-```
-
-### 7. Replace useEffect with Derived State
-
-**When:** useEffect updates state based on other state
-
-```tsx
-// Before: unnecessary effect
-const [items, setItems] = useState([])
-const [total, setTotal] = useState(0)
-
-useEffect(() => {
-  setTotal(items.reduce((sum, i) => sum + i.price, 0))
-}, [items])
-
-// After: derived value (useMemo)
-const [items, setItems] = useState([])
-const total = useMemo(
-  () => items.reduce((sum, i) => sum + i.price, 0),
-  [items]
-)
-
-// React 19+ with React Compiler: no useMemo needed
-// The compiler auto-memoizes when beneficial
-const total = items.reduce((sum, i) => sum + i.price, 0)
-```
-
-**Note:** React Compiler (2025+) auto-memoizes, making manual `useMemo`/`useCallback` optional in many cases.
-
-### 8. Modernize to Server Components (Next.js 15+)
-
-**When:** Component only fetches/displays data, no interactivity
-
-```tsx
-// Before: Client Component with useEffect
-'use client'
-function ProductList() {
-  const [products, setProducts] = useState([])
-  useEffect(() => {
-    fetch('/api/products').then(r => r.json()).then(setProducts)
-  }, [])
-  return <ul>{products.map(p => <li key={p.id}>{p.name}</li>)}</ul>
-}
-
-// After: Server Component (default in Next.js 15)
-async function ProductList() {
-  const products = await db.product.findMany()
-  return <ul>{products.map(p => <li key={p.id}>{p.name}</li>)}</ul>
-}
-
-// For mutations: Use Server Actions
-async function addProduct(formData: FormData) {
-  'use server'
-  await db.product.create({ data: { name: formData.get('name') } })
-  revalidatePath('/products')
+**After:**
+```typescript
+function getDiscount(user: User | null, order: Order) {
+  if (!user) return 0;
+  if (user.isPremium && order.total > 100) return 0.2;
+  if (user.isPremium) return 0.1;
+  return 0;
 }
 ```
 
-**Next.js 15 Patterns:**
-- Server Components are default (no directive needed)
-- `'use client'` only at leaf components
-- Server Actions for mutations (`'use server'`)
-- `revalidatePath`/`revalidateTag` for cache invalidation
+### Replace Magic Numbers
 
-## Refactoring Workflow
+```typescript
+// Before
+if (password.length < 8) { ... }
+if (retries > 3) { ... }
+const tax = amount * 0.1;
 
-### Phase 1: Preparation
-1. **Characterize current behavior** - Write tests or document expected behavior
-2. **Identify scope** - What files/functions will change?
-3. **Plan increments** - Break into small, testable steps
-
-### Phase 2: Execution
-1. **Make one change**
-2. **Run tests** - Verify nothing broke
-3. **Commit** - Small, atomic commit
-4. **Repeat**
-
-### Phase 3: Cleanup
-1. **Remove dead code**
-2. **Update imports**
-3. **Update documentation**
-4. **Final test run**
-
-## Refactoring Red Flags
-
-**Stop refactoring if:**
-- Tests start failing unexpectedly
-- Scope is growing beyond original plan
-- You're changing behavior, not just structure
-- You need to "just fix one more thing"
-- Deadline is approaching
-
-## Commit Message Templates
-
-```
-refactor(users): extract UserCard component from Dashboard
-
-- Move user card UI to separate component
-- Add UserCardProps interface
-- No behavior changes
+// After
+const MIN_PASSWORD_LENGTH = 8;
+const MAX_RETRIES = 3;
+const TAX_RATE = 0.1;
 ```
 
-```
-refactor(api): consolidate error handling
+### Use Object Parameters
 
-- Extract ApiError class
-- Standardize error response shape
-- Update all route handlers
+```typescript
+// Before — positional args are error-prone
+function createUser(name: string, email: string, age: number, role: string) { ... }
+
+// After — named, self-documenting, extensible
+interface CreateUserParams {
+  name: string;
+  email: string;
+  age: number;
+  role: string;
+}
+function createUser(params: CreateUserParams) { ... }
 ```
+
+---
+
+## Refactoring Process
+
+```
+1. Verify tests pass → 2. Make one small change → 3. Verify tests pass → 4. Commit → 5. Repeat
+```
+
+### Commit Message Format
+```
+refactor(scope): description of structural change
+
+- What was changed and why
+- No behavior change
+```
+
+---
+
+## Refactoring Checklist
+
+### Before Starting
+- [ ] Tests pass (if no tests, write them first)
+- [ ] Understand current behavior
+- [ ] All dependent files identified
+- [ ] Pattern researched (if introducing new pattern)
+- [ ] Specific smell identified
+
+### During Refactoring
+- [ ] One change at a time
+- [ ] Tests run after each change
+- [ ] Working states committed
+
+### After Refactoring
+- [ ] All tests still pass
+- [ ] Code is more readable
+- [ ] No behavior changes
+- [ ] Performance not degraded
+- [ ] All dependent files updated
+- [ ] Types still correct (no new `any` or casts)
+
+---
+
+## When NOT to Refactor
+
+- No test coverage (write tests first)
+- Don't understand the code yet (read and learn first)
+- Code is being deleted soon
+- The refactoring has no clear benefit
+- Under deadline pressure (ship first, refactor in a follow-up)

@@ -1,6 +1,13 @@
 ---
 name: design-prd
-description: Generate Product Requirements Documents through structured conversation. Auto-detects tech stack, existing features, and data model from the codebase. Firecrawl for competitor research, Context7 for framework feasibility, Supabase MCP for data model validation. Produces actionable PRDs with technical feasibility informed by real codebase analysis. Use when starting a new feature, documenting requirements, or creating specs before implementation.
+description: >
+  Generate Product Requirements Documents through structured conversation for any project.
+  Auto-detects tech stack, existing features, and data model from the codebase. Uses Firecrawl
+  to research competitor products and UX patterns, Context7 to check framework capabilities
+  for feasibility, and Supabase MCP to verify data model feasibility. Produces actionable PRDs
+  with technical feasibility sections informed by real codebase analysis. Use when starting a
+  new feature, documenting requirements, creating specs before implementation, or needing
+  clarity on scope and success criteria.
 ---
 
 # Generate PRD Skill

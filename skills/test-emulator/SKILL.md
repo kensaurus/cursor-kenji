@@ -1,6 +1,19 @@
 ---
 name: test-emulator
-description: On-device QA for native mobile builds (React Native/Expo, Capacitor, Flutter, Tauri-mobile, native Android) on a local Android emulator. Boots Metro/bundler, launches via dev launcher or APK, walks tabs/routes as a signed-in user, triggers CRUD round-trips, verifies each mutation hits the database AND returns to UI, watches logcat plus Sentry. Patches common native failures: white screen, persisted-cache prototype loss, missing migrations, sync-disabled empty states, stale tap coords. Use for "test the emulator", "QA the mobile app", "smoke-test before TestFlight", "diagnose freeze on emulator", or end-to-end native verification. Generic across native stacks.
+description: >
+  Comprehensive on-device QA for any native mobile build (React Native / Expo,
+  Capacitor, Flutter, Tauri-mobile, native Android) running on a local Android
+  emulator, paired with backend-truth verification via the Supabase MCP and
+  error telemetry via the Sentry MCP. Covers generic Android bootstrap gotchas:
+  tall-handset AVD preset (1080×4000 logical display), `_no_skin` / invalid skin
+  failures on current emulator builds + minimal custom skin layout, adb reverse /
+  adb-server churn, “device enumerated once” helper scripts missing reverse /
+  launch when the emulator arrives late, emulator-before-connectivity ordering,
+  and polling Metro / Expo `/status` before deep-link launch to avoid
+  “Cannot connect to Expo CLI” / localhost races — then walks every tab/route,
+  CRUD checks, DB + Sentry loop. Auto-detects the app stack; use when asked to
+  test the emulator, native build, QA mobile, white screen / Metro disconnect,
+  adb reverse, smoke-test Android, etc. Generic across repos and schemes.
 ---
 
 # test-emulator — Native build QA on Android emulator + MCP loop
@@ -110,46 +123,216 @@ sync-empty-state bugs live.
 
 ---
 
+## Phase 0.5: Tall-handset AVD + skin/display truth (any Android app)
+
+Use this whenever layout QA benefits from extra vertical runway (multi-section
+homes, drawers, FAB stacks) or whenever the emulator exits immediately / shows
+the wrong logical resolution after editing `hw.lcd.*`.
+
+### 0.5a. Target profile (recommended debug geometry)
+
+Goal: **`Physical size: 1080x4000`** (or `4000x1080` in landscape — verify with
+`adb shell wm size` after boot).
+
+Typical knobs live in **`%USERPROFILE%\.android\avd\<Something>.avd\config.ini`**
+(or `~/Library/Android/avd/` on macOS). Set at least:
+
+- `hw.lcd.width=1080`
+- `hw.lcd.height=4000`
+- `hw.lcd.density=<match your production class, often 420–480>`
+- `showDeviceFrame=no` *(optional but keeps focus on pixels, not chrome)*
+
+**Authoritative display check** (never trust the window chrome alone):
+
+```bash
+adb shell wm size
+adb shell wm density
+```
+
+### 0.5b. The `_no_skin` / invalid-skin trap (recent emulator builds)
+
+Older templates or blog posts recommend `skin.name=_no_skin` and
+`skin.path=_no_skin` to silence device frames on custom resolutions. Current
+Studio / emulator builds often terminate with **`unknown skin name '_no_skin'`**
+and **`exit_code: 1`** — so the emulator never joins `adb devices`, and helper
+scripts that wait for reverse / intent time out.
+
+**Rule:** Pick a skin path that resolves to an **existing** SDK skin directory,
+or ship a **minimal custom skin** next to the AVD.
+
+### 0.5c. Minimal custom skin folder (generic pattern for any app)
+
+Problem: pointing `skin.path` at a stock skin like `WXGA720` can force the guest
+framebuffer to **`720×1280`** even when `config.ini` declares `hw.lcd.*`;
+`adb shell wm size` will disagree with what you configured.
+
+Mitigation:
+
+1. Create e.g.
+   **`%USERPROFILE%\.android\avd\<YourAvdFolder>\emulator_skin_1080x4000/`**
+   (name is arbitrary; keep it alphanumeric + underscores).
+2. Copy **all PNG + `hardware.ini`** from any stock SDK skin (for example
+   `platforms/android-*/skins/WXGA720/`) so background assets exist — the emulator
+   parser expects referenced files.
+3. Replace **`layout`** in that folder with a definition whose `device.display`
+   block matches **1080×4000** and whose **portrait** canvas includes small
+   margins (≈ 27 px gutters mirror stock skins):
+
+```txt
+parts {
+    portrait {
+        background { image background_port.png }
+    }
+    landscape {
+        background { image background_land.png }
+    }
+
+    device {
+        display {
+            width   1080
+            height  4000
+            x       0
+            y       0
+        }
+    }
+}
+
+layouts {
+    portrait {
+        width     1134       # 1080 + 27*2 gutters
+        height    4054       # 4000 + 27*2 gutters
+        color     0xe0e0e0
+        event     EV_SW:0:1
+        part1 { name portrait;  x 0;    y 0 }
+        part2 { name landscape; x 4000; y 0 } # parked off-screen; adjust if emulator complains
+        part3 { name device;    x 27;   y 27 }
+    }
+
+    landscape {
+        width     4055       # swapped-ish canvas — tune if rotating AVD heavily
+        height    1175
+        color     0xe0e0e0
+        event     EV_SW:0:0
+        dpad-rotation 3
+        part1 { name portrait;  x 4000; y 0 }
+        part2 { name landscape; x 0;    y 0 }
+        part3 {
+            name     device
+            x        26
+            y        26
+            rotation 3
+        }
+    }
+}
+
+keyboard { charmap qwerty2 }
+network  { speed full; delay none }
+```
+
+4. Update **`config.ini`**:
+
+```
+skin.dynamic=no
+skin.name=emulator_skin_1080x4000
+skin.path=C:\\Users\\<you>\\.android\\avd\\<YourAvdFolder>\\emulator_skin_1080x4000
+```
+
+Reboot the AVD after edits. Expect first boot warnings about **unable to resume
+snapshot** after geometry/skin changes (`default_boot`) — cold boot once is OK.
+
+### 0.5d. adb / emulator ergonomics reminders
+
+| Issue | Typical fix |
+|------|-------------|
+| Stuck transports / duplicate `adb.exe` orphans on Windows | `taskkill /IM adb.exe /F /T` then `adb start-server` (prefer one supervised helper than many shells) |
+| Need to recycle guest without wiping data | `adb emu kill`, relaunch same AVD |
+| Ensure bundler reachable from emulator | `adb reverse tcp:<metroPort> tcp:<metroPort>` *per device attachment* |
+
+These apply equally to RN, Flutter, Compose, Kotlin XML, Cordova/Ionic shells,
+and Expo dev-client builds — only the URLs / ports change.
+
+---
+
 ## Phase 1: Bring the loop online
 
 ### 1a. Verify the emulator + adb
 
 ```bash
-"$ANDROID_HOME/platform-tools/adb.exe" devices
-# Expect: <serial>  device
+adb devices
+# Expect: emulator-5554   device      (transport_id ...)
 ```
 
-If no device, prompt the user to boot the AVD. Do not block waiting.
+If no device appears **within the script’s polling window**:
 
-### 1b. Confirm the bundler is alive
+- Boot/repair the AVD (Phase 0.5 if emulator exits instantly or wrong `wm size`).
+- Re-run **`adb reverse tcp:<port> tcp:<port>` after the serial shows `device`** — reverse mappings do not magically backfill when a late emulator attaches.
+
+If an automation script enumerated devices **once at startup**, it may skip
+reverse + deeplink when the emulator was offline. Prefer **polling** or a
+manual second step: reverse + intent once `adb devices` is non-empty.
+
+### 1b. Confirm the bundler is alive *(and reachable from the emulator)*
 
 ```bash
-# Metro
-curl -sf http://localhost:8081/status >/dev/null && echo "metro=ok" || echo "metro=DEAD"
-# Capacitor live-reload usually 5173/3000
-# Flutter typically 8080
+METRO_PORT=8081
+curl -sf "http://localhost:${METRO_PORT}/status"
+# PASS: contains "packager-status:running" (Metro/Expo) or HTTP 200 with running flag
 ```
 
-If dead, start it in the background and `adb reverse tcp:8081 tcp:8081`
-(adapt port). Do **not** block the foreground on the bundler — background it
-and poll `/status` every 5s for up to 60s.
+**Other stacks:**
 
-### 1c. Launch the app
+- Capacitor / Vite: usually `5173` / dev server ping you choose (`curl /`).
+- Flutter: tool-specific (often aggregator on `localhost`).
 
-| Stack | Launch command |
+If dead, boot the bundler in the background, then **poll aggressively** (`2–5s`
+backoff up to **`~180s` on cold cache wipes**):
+
+```bash
+while ! curl -sf "http://127.0.0.1:${METRO_PORT}/status" | grep -q running; do sleep 4; done
+```
+
+Only after **`/status`** is green should you fire a dev-client deeplink /
+reload — launching first produces logcat variants of **Cannot connect** /
+**ECONNREFUSED** to **`127.0.0.1:<port>`** even when Metro comes up seconds later.
+
+When the emulator is attached:
+
+```bash
+adb reverse tcp:${METRO_PORT} tcp:${METRO_PORT}
+```
+
+Re-run whenever `adb reconnect` / `adb kill-server` / new emulator session clears
+the tunnel.
+
+### 1c. Launch the app *(scheme-agnostic placeholders)*
+
+| Stack | Intent pattern |
 |---|---|
-| Expo dev client | `am start -W -a android.intent.action.VIEW -d "exp+<scheme>://expo-development-client/?url=http%3A%2F%2Flocalhost%3A8081"` |
-| Installed APK | `am start -n <app.id>/.MainActivity` |
-| Capacitor | `am start -n <app.id>/.MainActivity` then point at live-reload server |
+| Expo dev client | Replace `<SCHEME>` with `app.json`/`app.config.*` **`scheme`** (often **without** literal `exp+` unless using classic Expo Go tokens — follow the repo’s deeplink snippet). Typical shape: `"<SCHEME>://expo-development-client/?url=http%3A%2F%2Flocalhost%3A<PORT>"` |
+| Bare RN Android | `adb shell am start -W -n <applicationId>/.MainActivity` (+ dev menu attach if configured) |
+| Flutter | `adb shell am start -W -n <bundleId>/<activity>` or `flutter run` |
+| Capacitor / WebView shells | `-n <appId>/.MainActivity` plus ensure dev server URL reachable (reverse or LAN IP in config) |
 
-After launch, wait `~12-15s` for the JS bundle, then `screencap` to disk.
+**Example (substitute placeholders):**
+
+```bash
+adb shell am start -W -a android.intent.action.VIEW \
+  -d "<SCHEME>://expo-development-client/?url=http%3A%2F%2Flocalhost%3A8081"
+```
+
+If `am start` reports the intent delivered to an already-running activity,
+that is OK — Metro may still hot-reload afterward.
+
+After launch, wait `~12-15s` for the JS bundle (longer cold start), then
+`screencap` to disk.
 
 ### 1d. Health-check the first paint
 
 The first screen MUST be:
 1. Not pure white (= Metro died OR JS threw before mount)
 2. Not the dev launcher's "Error loading app · unexpected end of stream"
-   (= bundler is unreachable from device — fix `adb reverse`)
+   (= bundler unreachable from device — fix `adb reverse`, wrong port, **or**
+   dev client opened before `curl /status` showed running — see Phase `1b`)
 3. Not the dev launcher's "last time you tried to open … crashed" warning
    left as the only content (= a recent change crashed before mount)
 
@@ -292,9 +475,15 @@ to have landed:
 ### 2a. Coord math (don't skip this — most failed taps come from getting it wrong)
 
 `adb exec-out screencap -p > snap.png` writes a PNG at the device's full
-resolution (e.g. 1080×2400 on a Pixel emulator). When the agent reads the
-PNG it's downsampled to display (often ≈460×1024). To click an element you
-saw on screen:
+logical resolution (**Phase 0.5 preset: 1080×4000**; stock Pixels often
+1080×2400). When the agent reads the PNG it's downsampled for chat display.
+Scale taps back using the **ADB-reported size**, not the preview thumbnail:
+
+```
+adb shell wm size   # authoritative WxH for coord math
+```
+
+To click an element you saw on screen:
 
 ```
 real_x = display_x * (device_width  / display_width)
@@ -682,7 +871,7 @@ Then leave the app on the home tab so the next session starts clean.
 ### Environment
 - Stack: <Expo SDK / RN version / Capacitor version>
 - Bundler: <metro:8081 ok | dead | restarted>
-- Device: <emulator-5554, Android <ver>>
+- Device: <emulator-5554, Android <ver>>, `adb shell wm size` (**expect 1080×4000 if using Phase 0.5 preset**)
 - Account: <user@…> (workspace <id>) — <N> rows in primary table
 - MCPs available: <supabase, sentry>
 
@@ -721,7 +910,9 @@ Then leave the app on the home tab so the next session starts clean.
 |---|---|---|
 | "Nothing changed after my patch" | Stale Metro bundle, stale APK, or stale dev-launcher cache | Run **Phase 1.5** — re-curl bundle, `--clear` Metro, `pm clear` if needed |
 | White screen after dev-launcher tap | Metro died OR JS threw before mount | `curl localhost:8081/status` → restart bundler / read logcat for the throw |
-| "Error loading app · unexpected end of stream" | `adb reverse` lost / Metro restarted on a new port | `adb reverse tcp:8081 tcp:8081`, relaunch via deep-link |
+| Emulator exits <1s / `adb devices` stays empty (`exit 1`) | Invalid `skin.name` / `skin.path` (often `_no_skin` on newer emulator) | Phase **0.5b–c** — valid SDK skin dir or minimal **1080×4000** custom skin folder |
+| `adb shell wm size` shows **`720×1280`** despite `hw.lcd` edits | Stock skin `layout` overriding guest resolution | Phase **0.5c** custom skin with **1080×4000** `device.display`; re-verify **`wm size`** |
+| "Error loading app · unexpected end of stream" / Expo cannot connect | `adb reverse` never set, Metro bound after deeplink fired, stale port | **`curl /status`** until running, **`adb reverse tcp:<p> tcp:<p>`**, relaunch deeplink (`Phase 1b–c`); emulator boot **before** one-shot launch scripts (`Phase 0.5`, `§1a`) |
 | Blank where data should be (signed-in, populated user) | Sync replica empty; screen reads only from local SQLite | Add `isSyncEnabled()` runtime check + cloud-direct fallback |
 | Persistent skeletons that never resolve | `useFocusEffect(refetch)` with an unstable refetch identity → infinite invalidate→refetch loop | Wrap `refetch` in `useCallback` with stable deps |
 | `TypeError: x.isZero is not a function` after cold boot | Persisted cache rehydrated a `Money`/`Date` as a plain object | Skip persistence for that key + bump persister `buster` |
@@ -737,21 +928,24 @@ Then leave the app on the home tab so the next session starts clean.
 ## Important rules
 
 1. **Read the codebase first** — Phase 0 is mandatory. Never test blindly.
-2. **Verify the build is fresh — Phase 1.5 is mandatory.** Confirm the
+2. **Emulator/skin/`wm size` first** — Phase 0.5. If AVD exits instantly (`_no_skin`),
+wrong **`Physical size`** (stock skin overriding `hw.lcd`), or adb never sees a device,
+fix that loop before blaming Metro / JS.
+3. **Verify the build is fresh — Phase 1.5 is mandatory.** Confirm the
    patch is on disk, in the bundle, and on the device before walking.
    Skipping this phase is the #1 source of false "nothing changed"
    reports.
-3. **Walk both auth paths every session — Phase 2.5 is mandatory.** Guest
+4. **Walk both auth paths every session — Phase 2.5 is mandatory.** Guest
    and signed-in route through different adapters; a fix on one regresses
    the other. Always exercise both, plus the migration path between them.
-4. **Use `am start -W -n <pkg>/.MainActivity`** — `monkey -p` is unreliable
-   and silently no-ops on dev clients.
-5. **Always pair UI screencap with logcat** — a screen can lie, a
+5. **Prefer `am start -W`** for intents / activities — **`monkey -p` is unreliable**
+   and silently no-ops on some dev-client configurations.
+6. **Always pair UI screencap with logcat** — a screen can lie, a
    stack-trace cannot.
-6. **Verify mutations against the DB**, not just the UI cache.
-7. **Bump the persister buster** whenever you change what gets persisted,
+7. **Verify mutations against the DB**, not just the UI cache.
+8. **Bump the persister buster** whenever you change what gets persisted,
    so existing devices wipe corrupted blobs on first cold boot.
-8. **Resolve Sentry only what you actually fixed.** Auto-reopens are
+9. **Resolve Sentry only what you actually fixed.** Auto-reopens are
    louder than over-eager closures.
-9. **Clean up server state at the end** — leave the workspace exactly as
+10. **Clean up server state at the end** — leave the workspace exactly as
    you found it, minus the bugs you patched.

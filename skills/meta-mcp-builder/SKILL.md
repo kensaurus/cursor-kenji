@@ -1,227 +1,279 @@
 ---
 name: meta-mcp-builder
-description: Create high-quality MCP (Model Context Protocol) servers for LLM tool integration. Use when building MCP servers, integrating external APIs for AI agents, or when user mentions "MCP", "Model Context Protocol", "AI tools", "LLM integration", "agent tools", or "build MCP server".
+description: Guide for creating MCP (Model Context Protocol) servers that enable LLMs to interact with external services. Use when building MCP servers, integrating external APIs, or creating tools for AI agents.
 ---
 
 # MCP Server Development Guide
 
+Create MCP servers that enable LLMs to interact with external services.
+
 ## Overview
 
-Create MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. The quality of an MCP server is measured by how well it enables LLMs to accomplish real-world tasks.
-
-## CRITICAL: Check Existing First
-
-**Before creating ANY MCP server, verify:**
-
-1. **Check for existing MCP servers:**
-```bash
-ls -la mcp-servers/ src/mcp/ 2>/dev/null
-rg "McpServer|FastMCP|@modelcontextprotocol" --type ts --type py
-```
-
-2. **Check for existing integrations:**
-```bash
-cat package.json | grep -i "mcp\|modelcontextprotocol"
-cat pyproject.toml requirements.txt 2>/dev/null | grep -i "mcp\|fastmcp"
-```
-
-3. **Check MCP configuration:**
-```bash
-cat mcp.json .mcp/config.json claude_desktop_config.json 2>/dev/null
-```
-
-4. **Review existing tool patterns:**
-- Check naming conventions of existing tools
-- Verify authentication patterns in use
-- Look for shared utilities
-
-**Why:** MCP servers should follow consistent patterns. Reuse existing infrastructure.
+MCP (Model Context Protocol) servers expose tools that AI agents can use. Quality is measured by how well they enable agents to accomplish real tasks.
 
 ---
 
-# Process
+## Quick Start
 
-## 🚀 High-Level Workflow
+### 1. Choose Stack
 
-Creating a high-quality MCP server involves four main phases:
+**Recommended:** TypeScript with MCP SDK
+- High-quality SDK support
+- Good compatibility across environments
+- Strong type safety
 
-### Phase 1: Deep Research and Planning
+**Alternative:** Python with FastMCP
+- Good for Python-heavy workflows
 
-#### 1.1 Understand Modern MCP Design
+### 2. Project Structure
 
-**API Coverage vs. Workflow Tools:**
-Balance comprehensive API endpoint coverage with specialized workflow tools. Workflow tools can be more convenient for specific tasks, while comprehensive coverage gives agents flexibility to compose operations. Performance varies by client—some clients benefit from code execution that combines basic tools, while others work better with higher-level workflows. When uncertain, prioritize comprehensive API coverage.
-
-**Tool Naming and Discoverability:**
-Clear, descriptive tool names help agents find the right tools quickly. Use consistent prefixes (e.g., `github_create_issue`, `github_list_repos`) and action-oriented naming.
-
-**Context Management:**
-Agents benefit from concise tool descriptions and the ability to filter/paginate results. Design tools that return focused, relevant data. Some clients support code execution which can help agents filter and process data efficiently.
-
-**Actionable Error Messages:**
-Error messages should guide agents toward solutions with specific suggestions and next steps.
-
-#### 1.2 Study MCP Protocol Documentation
-
-**Navigate the MCP specification:**
-
-Start with the sitemap to find relevant pages: `https://modelcontextprotocol.io/sitemap.xml`
-
-Then fetch specific pages with `.md` suffix for markdown format (e.g., `https://modelcontextprotocol.io/specification/draft.md`).
-
-Key pages to review:
-- Specification overview and architecture
-- Transport mechanisms (streamable HTTP, stdio)
-- Tool, resource, and prompt definitions
-
-#### 1.3 Study Framework Documentation
-
-**Recommended stack:**
-- **Language**: TypeScript (high-quality SDK support and good compatibility in many execution environments)
-- **Transport**: Streamable HTTP for remote servers, using stateless JSON. stdio for local servers.
-
-**Load framework documentation:**
-
-- **MCP Best Practices**: See `reference/mcp_best_practices.md`
-
-**For TypeScript (recommended):**
-- **TypeScript SDK**: Use WebFetch to load `https://raw.githubusercontent.com/modelcontextprotocol/typescript-sdk/main/README.md`
-
-**For Python:**
-- **Python SDK**: Use WebFetch to load `https://raw.githubusercontent.com/modelcontextprotocol/python-sdk/main/README.md`
-
-#### 1.4 Plan Your Implementation
-
-**Understand the API:**
-Review the service's API documentation to identify key endpoints, authentication requirements, and data models. Use web search and WebFetch as needed.
-
-**Tool Selection:**
-Prioritize comprehensive API coverage. List endpoints to implement, starting with the most common operations.
+```
+my-mcp-server/
+├── src/
+│   ├── index.ts        # Entry point
+│   ├── tools/          # Tool implementations
+│   │   ├── search.ts
+│   │   └── create.ts
+│   └── utils/          # Shared utilities
+│       ├── api-client.ts
+│       └── error-handler.ts
+├── package.json
+├── tsconfig.json
+└── README.md
+```
 
 ---
 
-### Phase 2: Implementation
+## Tool Design Principles
 
-#### 2.1 Set Up Project Structure
+### 1. Clear Naming
+```typescript
+// ✅ Good - action-oriented, prefixed
+'github_create_issue'
+'github_list_repos'
+'slack_send_message'
 
-**TypeScript project setup:**
-```json
-// package.json
+// ❌ Avoid - vague
+'process'
+'handle'
+'do_thing'
+```
+
+### 2. Concise Descriptions
+```typescript
 {
-  "name": "my-mcp-server",
-  "type": "module",
-  "scripts": {
-    "build": "tsc",
-    "start": "node dist/index.js"
-  },
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.0",
-    "zod": "^3.23.0"
-  },
-  "devDependencies": {
-    "typescript": "^5.0.0"
-  }
+  name: 'github_search_issues',
+  description: 'Search GitHub issues by query, state, and labels. Returns issue title, number, and URL.',
 }
 ```
 
-#### 2.2 Implement Core Infrastructure
+### 3. Typed Parameters
 
-Create shared utilities:
-- API client with authentication
-- Error handling helpers
-- Response formatting (JSON/Markdown)
-- Pagination support
+```typescript
+import { z } from 'zod';
 
-#### 2.3 Implement Tools
-
-For each tool:
-
-**Input Schema:**
-- Use Zod (TypeScript) or Pydantic (Python)
-- Include constraints and clear descriptions
-- Add examples in field descriptions
-
-**Output Schema:**
-- Define `outputSchema` where possible for structured data
-- Use `structuredContent` in tool responses (TypeScript SDK feature)
-- Helps clients understand and process tool outputs
-
-**Tool Description:**
-- Concise summary of functionality
-- Parameter descriptions
-- Return type schema
-
-**Implementation:**
-- Async/await for I/O operations
-- Proper error handling with actionable messages
-- Support pagination where applicable
-- Return both text content and structured data when using modern SDKs
-
-**Annotations:**
-- `readOnlyHint`: true/false
-- `destructiveHint`: true/false
-- `idempotentHint`: true/false
-- `openWorldHint`: true/false
-
----
-
-### Phase 3: Review and Test
-
-#### 3.1 Code Quality
-
-Review for:
-- No duplicated code (DRY principle)
-- Consistent error handling
-- Full type coverage
-- Clear tool descriptions
-
-#### 3.2 Build and Test
-
-**TypeScript:**
-- Run `npm run build` to verify compilation
-- Test with MCP Inspector: `npx @modelcontextprotocol/inspector`
-
-**Python:**
-- Verify syntax: `python -m py_compile your_server.py`
-- Test with MCP Inspector
-
----
-
-### Phase 4: Create Evaluations
-
-After implementing your MCP server, create comprehensive evaluations to test its effectiveness.
-
-#### 4.1 Understand Evaluation Purpose
-
-Use evaluations to test whether LLMs can effectively use your MCP server to answer realistic, complex questions.
-
-#### 4.2 Create 10 Evaluation Questions
-
-1. **Tool Inspection**: List available tools and understand their capabilities
-2. **Content Exploration**: Use READ-ONLY operations to explore available data
-3. **Question Generation**: Create 10 complex, realistic questions
-4. **Answer Verification**: Solve each question yourself to verify answers
-
-#### 4.3 Evaluation Requirements
-
-Ensure each question is:
-- **Independent**: Not dependent on other questions
-- **Read-only**: Only non-destructive operations required
-- **Complex**: Requiring multiple tool calls and deep exploration
-- **Realistic**: Based on real use cases humans would care about
-- **Verifiable**: Single, clear answer that can be verified by string comparison
-- **Stable**: Answer won't change over time
-
-#### 4.4 Output Format
-
-Create an XML file with this structure:
-
-```xml
-<evaluation>
-  <qa_pair>
-    <question>Find discussions about AI model launches with animal codenames. One model needed a specific safety designation that uses the format ASL-X. What number X was being determined for the model named after a spotted wild cat?</question>
-    <answer>3</answer>
-  </qa_pair>
-<!-- More qa_pairs... -->
-</evaluation>
+const searchIssuesSchema = z.object({
+  query: z.string().describe('Search query string'),
+  state: z.enum(['open', 'closed', 'all']).default('open'),
+  labels: z.array(z.string()).optional().describe('Filter by labels'),
+  limit: z.number().min(1).max(100).default(10),
+});
 ```
+
+### 4. Actionable Errors
+
+```typescript
+// ❌ Bad
+throw new Error('Failed');
+
+// ✅ Good
+throw new Error(
+  `GitHub API rate limit exceeded. ` +
+  `Resets at ${resetTime}. ` +
+  `Try again later or authenticate for higher limits.`
+);
+```
+
+---
+
+## Implementation Pattern
+
+### Basic Tool Structure
+
+```typescript
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { z } from 'zod';
+
+const server = new McpServer({
+  name: 'my-service',
+  version: '1.0.0',
+});
+
+// Define tool
+server.tool(
+  'service_action',
+  'Description of what this tool does and when to use it',
+  {
+    param1: z.string().describe('What this param is for'),
+    param2: z.number().optional().describe('Optional param'),
+  },
+  async ({ param1, param2 }) => {
+    // Implementation
+    const result = await performAction(param1, param2);
+    
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(result, null, 2),
+        },
+      ],
+    };
+  }
+);
+```
+
+### Tool Annotations
+
+```typescript
+server.tool(
+  'delete_item',
+  'Delete an item permanently',
+  { id: z.string() },
+  async ({ id }) => { /* ... */ },
+  {
+    annotations: {
+      readOnlyHint: false,      // Modifies data
+      destructiveHint: true,    // Cannot be undone
+      idempotentHint: true,     // Safe to retry
+      openWorldHint: false,     // Closed set of operations
+    },
+  }
+);
+```
+
+---
+
+## Best Practices
+
+### API Coverage vs Workflow Tools
+
+| Approach | When to Use |
+|----------|-------------|
+| Comprehensive API coverage | Agent needs flexibility to compose operations |
+| Workflow tools | Specific task needs multi-step automation |
+
+**Default:** Start with comprehensive API coverage, add workflow tools for common patterns.
+
+### Response Formatting
+
+```typescript
+// Return structured data
+return {
+  content: [{
+    type: 'text',
+    text: JSON.stringify({
+      success: true,
+      data: results,
+      metadata: { count: results.length },
+    }, null, 2),
+  }],
+};
+```
+
+### Pagination Support
+
+```typescript
+const listItemsSchema = z.object({
+  limit: z.number().min(1).max(100).default(20),
+  cursor: z.string().optional().describe('Pagination cursor from previous response'),
+});
+
+// Return cursor in response
+return {
+  items: results,
+  nextCursor: hasMore ? lastId : null,
+};
+```
+
+---
+
+## Testing
+
+### 1. Build Check
+```bash
+npm run build  # Must pass without errors
+```
+
+### 2. Test with Inspector
+```bash
+npx @modelcontextprotocol/inspector
+```
+
+### 3. Test Each Tool
+- Valid inputs → expected output
+- Invalid inputs → helpful error
+- Edge cases → graceful handling
+
+---
+
+## Quality Checklist
+
+- [ ] All tools have clear, descriptive names
+- [ ] All parameters have descriptions
+- [ ] Error messages are actionable
+- [ ] Pagination for list operations
+- [ ] No hardcoded credentials
+- [ ] TypeScript types for all inputs/outputs
+- [ ] README documents all tools
+- [ ] Examples provided for complex tools
+
+---
+
+## Common Patterns
+
+### Authentication
+```typescript
+const apiKey = process.env.SERVICE_API_KEY;
+if (!apiKey) {
+  throw new Error('SERVICE_API_KEY environment variable required');
+}
+```
+
+### Rate Limiting
+```typescript
+import { RateLimiter } from 'limiter';
+
+const limiter = new RateLimiter({
+  tokensPerInterval: 100,
+  interval: 'minute',
+});
+
+async function callApi() {
+  await limiter.removeTokens(1);
+  // Make API call
+}
+```
+
+### Caching
+```typescript
+const cache = new Map<string, { data: any; expiry: number }>();
+
+async function getCached(key: string, fetcher: () => Promise<any>) {
+  const cached = cache.get(key);
+  if (cached && cached.expiry > Date.now()) {
+    return cached.data;
+  }
+  const data = await fetcher();
+  cache.set(key, { data, expiry: Date.now() + 60000 });
+  return data;
+}
+```
+
+---
+
+## Resources
+
+- MCP Specification: https://modelcontextprotocol.io
+- TypeScript SDK: https://github.com/modelcontextprotocol/typescript-sdk
+- Python SDK: https://github.com/modelcontextprotocol/python-sdk

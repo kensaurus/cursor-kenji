@@ -1,6 +1,19 @@
 ---
 name: test-qa
-description: Generic webapp QA fallback. Auto-discovers pages, features, data entities, and auth from the codebase, generates user stories dynamically, performs CRUD with data-pipeline verification (FE → API → DB → FE), audits UX at design-award level, tests edge cases. Use for "QA the app", "test the app", "find bugs", "test before release", "smoke test", "acceptance test", "test like a real user". For native mobile use test-emulator; for unit tests use test-unit.
+description: >
+  GENERIC webapp QA fallback — use ONLY when no project-specific QA skill applies
+  (66ai-user-story-testing for 6-6 AI, sbc-qa-data-integrity-audit/sbc-pdca-audit
+  for 一人社長, glotit-fresh-eyes-ux-audit for the Thai learning app, test-emulator
+  for native mobile builds). For unit tests, use test-unit.
+  Comprehensive QA testing of any webapp using browser MCP tools against a local dev server.
+  Auto-discovers pages, features, data entities, and auth patterns from the codebase.
+  Generates user stories dynamically, performs real CRUD operations with data pipeline
+  verification (FE -> API -> DB -> FE), audits UX quality at design-award level,
+  tests edge cases, and produces a structured pass/fail report. Use when asked to
+  "QA the app", "test the app", "find bugs", "test before release", "run QA",
+  "test CRUD", "test data pipeline", "check for dead buttons", "audit UX quality",
+  "pre-release testing", "smoke test", "acceptance test", or "test like a real user"
+  AND no project-specific QA skill matches the repo.
 ---
 
 # QA Testing Skill

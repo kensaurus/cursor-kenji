@@ -1,6 +1,10 @@
 ---
 name: debug-error
-description: Systematic debugging workflow for errors and bugs. Sentry MCP for production error context, Firecrawl for fix-pattern research, Sequential Thinking for complex multi-step diagnosis. Use when debugging errors, investigating bugs, troubleshooting issues, or when something isn't working as expected.
+description: >
+  Systematic debugging workflow for errors and bugs. Use when debugging errors,
+  investigating bugs, troubleshooting issues, or when something isn't working as expected.
+  Integrates Sentry MCP for production error context, Firecrawl for researching fix patterns,
+  and Sequential Thinking for complex multi-step diagnosis.
 ---
 
 # Debug Error Skill

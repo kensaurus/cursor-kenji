@@ -1,6 +1,11 @@
 ---
 name: protocol-browser-anti-stall
-description: Prevent browser automation from freezing, getting stuck, or waiting excessively during page navigation and interaction. Use BEFORE any browser automation session — testing webapps, running user-story tests, QA audits, UX audits, or any task calling cursor-ide-browser MCP tools (browser_navigate, browser_snapshot, browser_wait_for, browser_click, etc.).
+description: >-
+  Prevent browser automation from freezing, getting stuck, or waiting
+  excessively during page navigation and interaction. Use BEFORE any browser
+  automation session — when testing webapps, running user-story tests,
+  QA audits, UX audits, or any task that calls cursor-ide-browser MCP tools
+  (browser_navigate, browser_snapshot, browser_wait_for, browser_click, etc.).
 ---
 
 # Browser Anti-Stall Protocol

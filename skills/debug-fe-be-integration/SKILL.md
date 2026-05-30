@@ -1,6 +1,13 @@
 ---
 name: debug-fe-be-integration
-description: Debug frontend-backend integration issues by analyzing backend logs and identifying incorrect API calls. Auto-detects FE/BE frameworks, API style (REST/GraphQL/tRPC), and validation library. Sentry MCP for production errors, Supabase MCP for data verification. Use for "API 4xx/5xx errors", "validation failures", "FE-BE contract mismatches", or mismatched-request diagnosis.
+description: >
+  Debug frontend-backend integration issues for any project by analyzing backend logs,
+  identifying incorrect API calls, and fixing both sides. Auto-detects FE/BE frameworks,
+  API style (REST/GraphQL/tRPC), and validation library. Uses Sentry MCP for production error
+  context, Firecrawl for debugging pattern research, and Supabase MCP for data verification.
+  Replaces hardcoded paths with auto-detected patterns. Use when diagnosing API errors,
+  mismatched requests, integration issues between frontend and backend, or when the user
+  mentions API 4xx/5xx errors, validation failures, or FE-BE contract mismatches.
 ---
 
 # Frontend-Backend Integration Debug Skill

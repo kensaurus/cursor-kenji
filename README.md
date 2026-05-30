@@ -12,7 +12,7 @@
 <p align="center">
   <a href="#quick-start"><img src="https://img.shields.io/badge/-Quick_Start-10b981?style=flat-square" alt="Quick Start" /></a>
   <a href="#how-to-use-this-toolkit"><img src="https://img.shields.io/badge/-How_to_Use-22c55e?style=flat-square" alt="How to Use" /></a>
-  <a href="#skills-60"><img src="https://img.shields.io/badge/-60_Skills-6366f1?style=flat-square" alt="60 Skills" /></a>
+  <a href="#skills-62"><img src="https://img.shields.io/badge/-62_Skills-6366f1?style=flat-square" alt="62 Skills" /></a>
   <a href="#subagents-5"><img src="https://img.shields.io/badge/-5_Subagents-f59e0b?style=flat-square" alt="5 Subagents" /></a>
   <a href="#commands-13"><img src="https://img.shields.io/badge/-13_Commands-ef4444?style=flat-square" alt="13 Commands" /></a>
   <a href="#mcp-servers-16"><img src="https://img.shields.io/badge/-16_MCP_Servers-3b82f6?style=flat-square" alt="16 MCP Servers" /></a>
@@ -40,7 +40,7 @@
 graph TB
   subgraph TOOLKIT["cursor-kenji Toolkit"]
     direction TB
-    SK["Skills (60)"]
+    SK["Skills (62)"]
     CS["Cursor Skills (12)"]
     CMD["Commands (13)"]
     SA["Subagents (5)"]
@@ -83,7 +83,16 @@ graph TB
 
 > Based on [Cursor's official agent best practices](https://cursor.com/blog/agent-best-practices) and the latest Cursor features (Jan-May 2026).
 
-### May 2026 — Native RN Loop & Cross-Surface UI <sup>Latest</sup>
+### May 2026 — PDCA Browser Testing & npm Release <sup>Latest</sup>
+
+> *Two generic skills that close loops agents habitually skip — the post-implementation "did you actually drive it as a user?" check, and the end-to-end npm release chain.*
+
+| Addition | Type | Why It Matters |
+|:---------|:-----|:---------------|
+| `test-playwright` | Skill | Closes the PDCA loop after you ship a change. Scopes to the current session's diff + blast radius, drives the live localhost app through the Playwright MCP **manually like a real user**, and **fixes** pain points/errors as it goes (full-stack: UI/UX + API + DB), using Sentry/Supabase/Firecrawl. Red-teams the work and suggests enhancements. Distinct from `test-qa` (full-app crawl that only reports) |
+| `deploy-npm` | Skill | End-to-end release workflow for a Changesets + GitHub Actions + npm Trusted Publisher (OIDC) monorepo — green CI → merge release PR → resolve the `github-actions[bot]` anti-loop → dispatch publish → verify on npm and GitHub Releases |
+
+### May 2026 — Native RN Loop & Cross-Surface UI
 
 > *Two skills + two rules from real RN/Capacitor + Supabase shipping sessions — the "no-Mac dev loop" and the "looks great on web, atrocious on phone" patterns.*
 
@@ -143,7 +152,7 @@ graph TB
 
 ```mermaid
 pie title Toolkit Composition
-    "Skills (60)" : 60
+    "Skills (62)" : 62
     "Commands (13)" : 13
     "MCP Servers (16)" : 16
     "Project Rules (8)" : 8
@@ -187,7 +196,7 @@ pie title Toolkit Composition
 
 ```
 cursor-kenji/
-├── skills/                  # 58 Agent Skills (each has SKILL.md)
+├── skills/                  # 62 Agent Skills (each has SKILL.md)
 │   ├── algorithmic-art/
 │   ├── audit-accessibility/
 │   ├── audit-code-review/
@@ -209,6 +218,7 @@ cursor-kenji/
 │   ├── debug-error/
 │   ├── debug-fe-be-integration/
 │   ├── debug-sentry-monitor/
+│   ├── deploy-npm/           # NEW May 2026 — Changesets + npm OIDC release loop
 │   ├── deploy-verify/
 │   ├── design-api/
 │   ├── design-frontend/
@@ -239,6 +249,7 @@ cursor-kenji/
 │   ├── start-emulator/        # NEW May 2026 — Metro + Android emulator bring-up
 │   ├── tdd/
 │   ├── test-emulator/
+│   ├── test-playwright/      # NEW May 2026 — PDCA: drive localhost as a user + fix
 │   ├── test-qa/
 │   ├── test-unit/
 │   ├── theme-factory/
@@ -336,7 +347,7 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 ```mermaid
 flowchart LR
   A["./install.sh"] --> B["Backup existing\n~/.cursor/skills/"]
-  B --> C["Install 57 skills\n+ 12 cursor skills"]
+  B --> C["Install 62 skills\n+ 12 cursor skills"]
   C --> D["Install 5\nsubagents"]
   D --> E["Copy MCP\nconfig template"]
   E --> F["Ready!"]
@@ -496,13 +507,13 @@ All four are **generic** — they work in any web stack (Next.js, Remix, SvelteK
 
 ---
 
-## Skills (60)
+## Skills (62)
 
 ### Skill Categories at a Glance
 
 ```mermaid
 mindmap
-  root((60 Skills))
+  root((62 Skills))
     Enhance
       enhance-page-ui
       enhance-page-ux

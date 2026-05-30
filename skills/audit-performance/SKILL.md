@@ -1,261 +1,271 @@
 ---
 name: audit-performance
-description: Comprehensive web performance audit for Core Web Vitals and optimization. Use when analyzing page load times, bundle sizes, render performance, or when user mentions "slow", "performance", "LCP", "INP", "CLS", "bundle size", "loading time", "optimize", "Web Vitals", or "lighthouse score".
+description: >
+  Audit and optimize application performance. Use when optimizing performance,
+  debugging slow code, reducing load times, or when the user mentions performance issues.
+  Integrates Sentry MCP for production performance data (Web Vitals, slow transactions),
+  Firecrawl for researching current optimization techniques, and automated codebase analysis.
 ---
 
 # Performance Audit Skill
 
-Systematic methodology for auditing web application performance across Core Web Vitals, bundle analysis, and runtime performance.
+Systematic approach to finding and fixing performance issues. Research-driven, data-backed.
 
-## When to Use
+## Step 0: Gather Performance Data
 
-- Analyzing slow page loads or poor user experience
-- Preparing for production deployment
-- Investigating Core Web Vitals issues
-- Optimizing bundle sizes
-- Debugging render performance issues
+Before optimizing, measure. Collect data from multiple sources.
 
-## CRITICAL: Check Existing First
+### Production Data (Sentry)
 
-**Before ANY performance optimization, verify:**
+If Sentry performance monitoring is enabled, fetch real production metrics:
 
-1. **Check existing optimizations:**
+```json
+CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_events", arguments: {
+  "organizationSlug": "<ORG_SLUG>",
+  "projectSlug": "<PROJECT_SLUG>",
+  "regionUrl": "<REGION_URL>",
+  "naturalLanguageQuery": "slowest transactions by p95 duration in last 7 days",
+  "limit": 20
+})
+```
+
+```json
+CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_events", arguments: {
+  "organizationSlug": "<ORG_SLUG>",
+  "projectSlug": "<PROJECT_SLUG>",
+  "regionUrl": "<REGION_URL>",
+  "naturalLanguageQuery": "web vitals LCP INP CLS performance scores in last 7 days",
+  "limit": 20
+})
+```
+
+Check for performance-related issues:
+
+```json
+CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+  "organizationSlug": "<ORG_SLUG>",
+  "projectSlugOrId": "<PROJECT_SLUG>",
+  "regionUrl": "<REGION_URL>",
+  "naturalLanguageQuery": "performance issues slow queries N+1 in last 30 days",
+  "limit": 20
+})
+```
+
+### Research Current Benchmarks
+
+Fetch current performance targets:
+
+```json
+CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+  "query": "web vitals thresholds good score <current year>",
+  "limit": 3,
+  "sources": [{ "type": "web" }]
+})
+```
+
+---
+
+## Performance Targets
+
+### Core Web Vitals
+
+| Metric | Good | Needs Work | Poor |
+|--------|------|------------|------|
+| **LCP** (Largest Contentful Paint) | <2.5s | 2.5-4s | >4s |
+| **INP** (Interaction to Next Paint) | <200ms | 200-500ms | >500ms |
+| **CLS** (Cumulative Layout Shift) | <0.1 | 0.1-0.25 | >0.25 |
+
+### Other Key Metrics
+
+- **TTFB** (Time to First Byte): <200ms
+- **FCP** (First Contentful Paint): <1.8s
+- **TTI** (Time to Interactive): <3.8s
+
+---
+
+## Frontend Performance Audit
+
+### Bundle Size Analysis
+
 ```bash
-cat next.config.* vite.config.* 2>/dev/null | head -50
-rg "dynamic\(|lazy\(|React.lazy" --type tsx -l
-rg "useMemo|useCallback|React.memo" --type tsx -l | wc -l
+npm run build -- --analyze        # framework-specific
+npx source-map-explorer 'dist/**/*.js'
 ```
-
-2. **Check for existing monitoring:**
-```bash
-cat package.json | grep -i "web-vitals\|lighthouse\|bundle-analyzer"
-rg "reportWebVitals|analytics" --type ts -l
-```
-
-3. **Check image optimization:**
-```bash
-rg "next/image|Image.*src=" --type tsx -l | head -10
-ls -la public/images/ src/assets/ 2>/dev/null
-```
-
-4. **Check caching strategies:**
-```bash
-rg "Cache-Control|revalidate|unstable_cache" --type ts
-cat vercel.json 2>/dev/null | head -20
-```
-
-**Why:** Don't optimize prematurely. Measure first, then optimize the actual bottlenecks.
-
-## Audit Framework
-
-### 1. Core Web Vitals Assessment (2024+ Standards)
-
-| Metric | Good | Needs Improvement | Poor | What It Measures |
-|--------|------|-------------------|------|------------------|
-| **LCP** (Largest Contentful Paint) | ≤2.5s | 2.5s - 4s | >4s | Loading performance |
-| **INP** (Interaction to Next Paint) | ≤200ms | 200ms - 500ms | >500ms | Interactivity (replaced FID in 2024) |
-| **CLS** (Cumulative Layout Shift) | ≤0.1 | 0.1 - 0.25 | >0.25 | Visual stability |
-| **TTFB** (Time to First Byte) | ≤200ms | 200ms - 500ms | >500ms | Server response |
-| **FCP** (First Contentful Paint) | ≤1.8s | 1.8s - 3s | >3s | Initial render |
-
-**Note:** INP replaced FID as a Core Web Vital in March 2024. Focus on INP for interactivity.
-
-### 2. Bundle Analysis
-
-**Check for:**
-- Total bundle size (target: < 200KB gzipped for initial load)
-- Code splitting effectiveness
-- Tree shaking working properly
-- Duplicate dependencies
-- Large dependencies that could be lazy-loaded
-
-**Commands:**
-```bash
-# Vite bundle analysis
-npx vite-bundle-analyzer
-
-# Webpack bundle analysis
-npx webpack-bundle-analyzer stats.json
-
-# Check package sizes
-npx bundlephobia <package-name>
-```
-
-### 3. Network Performance
-
-**Optimize:**
-- Enable HTTP/2 or HTTP/3
-- Use CDN for static assets
-- Implement proper caching headers
-- Compress assets (gzip/brotli)
-- Preload critical resources
-- Prefetch likely next pages
-
-**Resource hints:**
-```html
-<link rel="preload" href="/critical.css" as="style">
-<link rel="prefetch" href="/likely-next-page.html">
-<link rel="preconnect" href="https://api.example.com">
-```
-
-### 4. JavaScript Performance
-
-**Check for:**
-- Long tasks blocking main thread (> 50ms)
-- Memory leaks
-- Excessive re-renders (React)
-- Expensive computations on main thread
-
-**Solutions:**
-- Use `requestIdleCallback` for non-critical work
-- Move heavy computation to Web Workers
-- Implement virtualization for long lists
-- Memoize expensive calculations
-- Debounce/throttle event handlers
-
-### 5. Image Optimization
 
 **Checklist:**
-- [ ] Use modern formats (WebP, AVIF)
-- [ ] Implement responsive images (`srcset`)
-- [ ] Lazy load below-fold images
-- [ ] Specify width/height to prevent CLS
-- [ ] Use image CDN for dynamic resizing
-- [ ] Compress images appropriately
+- [ ] Total bundle <200KB gzipped
+- [ ] No single chunk >100KB gzipped
+- [ ] Tree shaking working (no unused exports in bundle)
+- [ ] Heavy libraries lazy-loaded (charts, editors, maps)
+- [ ] No moment.js (use date-fns or dayjs)
+- [ ] No lodash full import (use lodash-es or specific imports)
 
-```html
-<img
-  src="image.webp"
-  srcset="image-400.webp 400w, image-800.webp 800w"
-  sizes="(max-width: 600px) 400px, 800px"
-  width="800"
-  height="600"
-  loading="lazy"
-  alt="Description"
->
-```
+### Code Splitting
 
-### 6. CSS Performance
+- [ ] Route-based splitting (each page loads its own chunk)
+- [ ] Component-level splitting for heavy components (`lazy()` / `dynamic()`)
+- [ ] Below-fold content deferred
 
-**Optimize:**
-- Remove unused CSS
-- Avoid `@import` (use bundler)
-- Critical CSS inlined in `<head>`
-- Avoid expensive selectors
-- Use `contain` for layout isolation
-- Hardware-accelerate animations
+### Image Optimization
 
-```css
-/* Good: GPU-accelerated */
-.animate {
-  transform: translateX(100px);
-  will-change: transform;
+- [ ] WebP/AVIF format used (not PNG/JPEG for photos)
+- [ ] Images sized appropriately (not serving 4K to mobile)
+- [ ] `loading="lazy"` on below-fold images
+- [ ] Responsive `srcSet` for different screen sizes
+- [ ] Image CDN used (Cloudinary, imgix, Vercel Image Optimization)
+
+### React Performance (if applicable)
+
+- [ ] No unnecessary re-renders (React DevTools Profiler)
+- [ ] `memo()` on expensive components that receive stable props
+- [ ] `useMemo()` for expensive computations
+- [ ] `useCallback()` for callbacks passed to memoized children
+- [ ] Long lists virtualized (react-window, @tanstack/react-virtual)
+- [ ] No inline object/array creation in JSX props
+- [ ] Context providers scoped narrowly (not wrapping entire app for local state)
+
+### CSS Performance
+
+- [ ] No layout thrashing (reads before writes)
+- [ ] Animations use `transform`/`opacity` (GPU-accelerated)
+- [ ] No `@import` chains (bundled instead)
+- [ ] Critical CSS inlined for above-fold content
+- [ ] Fonts subset and preloaded (`<link rel="preload">`)
+
+---
+
+## Backend Performance Audit
+
+### Database Queries
+
+**N+1 Detection:**
+```typescript
+// BAD: N+1
+const users = await User.findAll();
+for (const user of users) {
+  const orders = await Order.findByUserId(user.id);
 }
 
-/* Avoid: triggers layout */
-.animate {
-  left: 100px;
-}
+// GOOD: eager loading
+const users = await User.findAll({ include: [Order] });
 ```
 
-### 7. React-Specific Optimizations (React 19+)
+**Checklist:**
+- [ ] N+1 queries eliminated (eager loading, joins, batch loading)
+- [ ] Indexes on frequently queried columns (WHERE, JOIN, ORDER BY)
+- [ ] SELECT only needed columns (no `SELECT *`)
+- [ ] Pagination on all list endpoints
+- [ ] Connection pooling configured
+- [ ] Slow query logging enabled
 
-```tsx
-// Memoize expensive components (or let React Compiler handle it)
-const ExpensiveComponent = React.memo(({ data }) => {
-  return <div>{/* render */}</div>
+**Index verification:**
+```sql
+EXPLAIN ANALYZE SELECT * FROM orders WHERE user_id = '123';
+```
+
+### API Response Optimization
+
+- [ ] Response compression enabled (gzip/brotli)
+- [ ] Appropriate cache headers (`Cache-Control`, `ETag`)
+- [ ] No over-fetching (return only what the client needs)
+- [ ] Pagination for list endpoints
+- [ ] Response time <200ms for p95
+
+### Caching Strategy
+
+| Layer | Tool | TTL | Use For |
+|-------|------|-----|---------|
+| Browser | Cache-Control headers | Varies | Static assets, API responses |
+| CDN | Vercel/CloudFront/Cloudflare | 1h-1d | Static pages, images |
+| API | Redis/Memcached | 5m-1h | Expensive queries, computed data |
+| ORM | Query cache | 1m-5m | Repeated identical queries |
+
+### Network Optimization
+
+- [ ] CDN for static assets
+- [ ] HTTP/2 or HTTP/3 enabled
+- [ ] Preconnect to critical origins (`<link rel="preconnect">`)
+- [ ] DNS prefetch for third-party domains
+- [ ] API calls batched where possible (GraphQL, DataLoader)
+
+---
+
+## Research-Driven Optimization
+
+For specific performance bottlenecks, research current solutions:
+
+```json
+CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+  "query": "<framework> <specific bottleneck> performance optimization <current year>",
+  "limit": 5,
+  "sources": [{ "type": "web" }]
 })
-
-// Memoize expensive calculations
-// Note: React Compiler (2025+) auto-memoizes, making this optional
-const expensiveValue = useMemo(() => {
-  return computeExpensiveValue(data)
-}, [data])
-
-// Memoize callbacks (optional with React Compiler)
-const handleClick = useCallback(() => {
-  doSomething(id)
-}, [id])
-
-// Virtualize long lists
-import { useVirtualizer } from '@tanstack/react-virtual'
-
-// React 19: Use `use` for async data in render
-import { use } from 'react'
-
-function Comments({ commentsPromise }) {
-  const comments = use(commentsPromise)  // Suspends until resolved
-  return <ul>{comments.map(c => <li key={c.id}>{c.text}</li>)}</ul>
-}
 ```
 
-**React 19 Performance Features:**
-- `use()` hook for promises and context
-- React Compiler auto-memoization
-- Improved Suspense for streaming
-- `useOptimistic` for instant UI updates
+Then deep-read the best result:
 
-### 8. Server-Side Optimizations
+```json
+CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
+  "url": "<best-result-url>",
+  "formats": ["markdown"],
+  "onlyMainContent": true
+})
+```
 
-- Enable compression (gzip/brotli)
-- Implement proper caching (Cache-Control, ETag)
-- Use edge caching (CDN)
-- Optimize database queries
-- Implement connection pooling
-- Use streaming where possible
+Check official framework docs via Context7:
 
-## Audit Report Template
+```json
+CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
+  "libraryName": "<framework>",
+  "query": "performance optimization"
+})
+```
+
+---
+
+## Quick Wins (Highest Impact, Lowest Effort)
+
+| Issue | Solution | Impact |
+|-------|----------|--------|
+| Large bundle | Code split routes, lazy load heavy libs | High |
+| Slow images | WebP + lazy load + responsive | High |
+| No caching | Add Cache-Control headers | High |
+| N+1 queries | Eager load / batch | High |
+| Missing indexes | Add database indexes | High |
+| Unoptimized fonts | Subset + preload + font-display:swap | Medium |
+| No compression | Enable gzip/brotli | Medium |
+| Expensive re-renders | React.memo + useMemo | Medium |
+| Layout shifts | Set explicit width/height on images/embeds | Medium |
+
+---
+
+## Output: Performance Audit Report
 
 ```markdown
-# Performance Audit Report
+## Performance Audit: [Project Name]
 
-## Summary
-- **Overall Score**: X/100
-- **LCP**: Xs (Good/Needs Work/Poor)
-- **INP**: Xms (Good/Needs Work/Poor)
-- **CLS**: X.XX (Good/Needs Work/Poor)
+### Production Metrics (from Sentry)
+- LCP: [value] — [good/needs work/poor]
+- INP: [value] — [good/needs work/poor]
+- CLS: [value] — [good/needs work/poor]
+- Slowest transactions: [list with p95 times]
 
-## Critical Issues
-1. [Issue description]
-   - Impact: [High/Medium/Low]
-   - Fix: [Recommendation]
+### Critical Issues (fix immediately)
+| # | Area | Issue | Impact | Fix |
+|---|------|-------|--------|-----|
+| 1 | DB | N+1 on /users endpoint | p95 = 2.3s | Eager load orders relation |
 
-## Bundle Analysis
-- Total size: XKB (gzipped)
-- Largest chunks:
-  1. vendor.js - XKB
-  2. main.js - XKB
+### Optimizations (prioritized)
+| # | Area | Issue | Impact | Effort | Fix |
+|---|------|-------|--------|--------|-----|
+| 1 | FE | Bundle 450KB gzipped | High | Low | Code split routes |
 
-## Recommendations (Priority Order)
-1. [High priority fix]
-2. [Medium priority fix]
-3. [Low priority optimization]
+### Already Optimized
+- [list of performance areas that are well-implemented]
 
-## Estimated Impact
-- Expected LCP improvement: -Xs
-- Expected bundle reduction: -XKB
+### Monitoring Recommendations
+- [what to add to track performance over time]
+
+### Research Sources
+- [URL] — [what optimization pattern it provided]
 ```
-
-## Tools Reference
-
-| Tool | Purpose |
-|------|---------|
-| Chrome DevTools Performance tab | Runtime profiling |
-| Lighthouse | Comprehensive audit |
-| WebPageTest | Real-world testing |
-| `web-vitals` library | RUM metrics |
-| React DevTools Profiler | React performance |
-| `why-did-you-render` | Re-render debugging |
-
-## Quick Wins Checklist
-
-- [ ] Enable gzip/brotli compression
-- [ ] Add proper Cache-Control headers
-- [ ] Lazy load images below fold
-- [ ] Code split routes
-- [ ] Preload critical fonts
-- [ ] Remove unused CSS/JS
-- [ ] Optimize images to WebP
-- [ ] Add `loading="lazy"` to iframes
-- [ ] Use `font-display: swap`
-- [ ] Defer non-critical JavaScript

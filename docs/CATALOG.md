@@ -245,6 +245,11 @@ Commands fall into two groups: **standalone** (full playbook lives in the comman
 **What it does:** Post-deploy smoke test combining Sentry + Supabase + Langfuse + Playwright + Firecrawl. Checks for new errors, verifies migration health, confirms trace pipeline, runs browser smoke test on critical paths. Produces binary SHIP/ROLLBACK/MONITOR verdict with evidence.
 **Related:** `debug-sentry-monitor`, `audit-langfuse-llm`
 
+#### `deploy-npm` <sup>NEW May 2026</sup>
+**Triggers:** "release", "publish to npm", "ship a new version", "cut a release", "deploy to production", "update the changelog and publish"
+**What it does:** End-to-end release workflow for a Changesets + GitHub Actions + npm Trusted Publisher (OIDC) monorepo with per-package GitHub Releases. Drives the full chain — green CI → merge release PR → wait for the Version PR → resolve the `github-actions[bot]` anti-loop → dispatch publish → verify on npm and the GitHub Releases page.
+**Related:** `deploy-verify`, `workflow-pr`
+
 ### Debugging
 
 #### `debug-error`
@@ -268,6 +273,11 @@ Commands fall into two groups: **standalone** (full playbook lives in the comman
 **Triggers:** "QA the app", "test the app", "find bugs", "test before release", "run QA", "test CRUD", "test data pipeline", "check for dead buttons", "pre-release testing"
 **What it does:** Comprehensive QA via browser MCP tools. Auto-discovers pages, features, data entities, auth patterns from codebase. Generates user stories dynamically, performs real CRUD with data pipeline verification (FE → API → DB → FE), audits UX quality, tests edge cases. Structured pass/fail report with production readiness score.
 **Related:** `test-unit`, `webapp-testing`, `protocol-browser-anti-stall`
+
+#### `test-playwright` <sup>NEW May 2026</sup>
+**Triggers:** "test this with playwright", "test my changes", "test on localhost like a user", "PDCA this", "did you actually test it", "red-team this feature", "verify the work end-to-end"
+**What it does:** Closes the PDCA loop after an implementation. Scopes to the current session's diff + blast radius, drives the live localhost app through the Playwright MCP **manually like a real user**, and **fixes** pain points/errors as it goes — full-stack (UI/UX + API + DB) — using Sentry/Supabase/Firecrawl. Red-teams the change and proposes enhancements. Distinct from `test-qa` (full-app crawl that only reports).
+**Related:** `test-qa`, `protocol-browser-anti-stall`, `debug-fe-be-integration`
 
 #### `test-emulator`
 **Triggers:** "test on emulator", "QA Android build", "verify native build", "white screen", "cache rehydration", "RN sync empty state", "Expo dev-client QA"

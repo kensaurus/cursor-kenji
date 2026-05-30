@@ -1,379 +1,352 @@
 ---
 name: design-api
-description: Design and review REST/GraphQL APIs with best practices. Use when creating endpoints, reviewing API architecture, designing data contracts, route handlers, Server Actions, webhooks, or when user mentions "API", "endpoint", "REST", "GraphQL", "route handler", "request/response", or "HTTP methods".
+description: Design RESTful and GraphQL APIs following best practices. Use when designing APIs, creating endpoints, structuring responses, or planning API architecture.
 ---
 
 # API Design Skill
 
-Systematic methodology for designing, reviewing, and improving APIs following industry best practices.
+Design clean, consistent, and developer-friendly APIs.
 
-## When to Use
+## MANDATORY: Pre-Design Checks
 
-- Designing new API endpoints
-- Reviewing existing API architecture
-- Creating data contracts between services
-- Standardizing API patterns across a codebase
-- Migrating or versioning APIs
+**BEFORE designing any API, you MUST:**
 
-## CRITICAL: Check Existing First
-
-**Before creating ANY new endpoint, verify:**
-
-1. **Search for existing endpoints:**
-```bash
-rg "export.*GET|POST|PATCH|DELETE" app/api/ --type ts
-ls -la app/api/
+### 1. Check Existing API Documentation
+```
+http://localhost:8080/api-docs           (if backend running)
+http://localhost:8080/naming-conventions (naming standards)
+src/api/_api-README.md                   (frontend API layer docs)
 ```
 
-2. **Check for existing Server Actions:**
-```bash
-rg "'use server'" --type ts -l
-rg "export async function" src/features/*/server/
-```
-
-3. **Check existing RPC functions (Supabase):**
+### 2. Verify Database Schema
+Use Supabase MCP to understand existing data structure:
 ```sql
-SELECT proname FROM pg_proc WHERE pronamespace = 'public'::regnamespace;
+-- Check table schema
+SELECT column_name, data_type, is_nullable 
+FROM information_schema.columns WHERE table_name = 'your_table';
+
+-- Check enum values
+SELECT enum_range(NULL::your_enum_name);
+
+-- Check foreign keys
+SELECT tc.constraint_name, kcu.column_name, ccu.table_name AS foreign_table
+FROM information_schema.table_constraints tc
+JOIN information_schema.key_column_usage kcu ON tc.constraint_name = kcu.constraint_name
+JOIN information_schema.constraint_column_usage ccu ON tc.constraint_name = ccu.constraint_name
+WHERE tc.table_name = 'your_table' AND tc.constraint_type = 'FOREIGN KEY';
 ```
 
-4. **Review existing patterns:**
-- Check `app/api/` folder structure
-- Look at existing error handling patterns
-- Verify authentication patterns used
-
-**Why:** Duplicate endpoints cause routing conflicts, inconsistent behavior, and maintenance nightmares. Always search before creating.
-
-## API Design Principles
-
-### 1. RESTful Resource Design
-
-**URL Structure:**
+### 3. Check for Existing Endpoints
+Use `Grep` to search for similar endpoints already implemented:
 ```
-GET    /resources          → List resources
-GET    /resources/:id      → Get single resource
-POST   /resources          → Create resource
-PATCH  /resources/:id      → Partial update
-PUT    /resources/:id      → Full replace
-DELETE /resources/:id      → Delete resource
-
-# Nested resources
-GET    /users/:id/posts    → User's posts
-POST   /users/:id/posts    → Create post for user
-
-# Actions (when CRUD doesn't fit)
-POST   /orders/:id/cancel  → Cancel order
-POST   /users/:id/verify   → Verify user
+Grep: "router.get|router.post" to find existing route patterns
+Grep: "useQuery|useMutation" to find existing frontend integrations
 ```
 
-**Naming Conventions:**
-- Use plural nouns for resources (`/users`, not `/user`)
-- Use kebab-case for multi-word (`/user-profiles`)
-- Avoid verbs in URLs (let HTTP methods convey action)
-- Keep URLs shallow (max 2-3 levels deep)
+### 4. Verification Statement (REQUIRED)
+Before designing, state:
+```
+"Pre-design check:
+- Existing API docs reviewed: [YES/NO]
+- Database schema verified: [tables/enums checked]
+- Similar endpoints found: [list or none]
+- Naming conventions confirmed: [YES/NO]"
+```
 
-### 2. Request/Response Design
+---
 
-**Request Structure:**
-```typescript
-// Query params for filtering/sorting/pagination
-GET /products?category=electronics&sort=-price&page=2&limit=20
+## REST API Design
 
-// Body for mutations
-POST /products
+### URL Structure
+
+```
+GET    /resources          # List
+GET    /resources/:id      # Get one
+POST   /resources          # Create
+PUT    /resources/:id      # Replace
+PATCH  /resources/:id      # Update
+DELETE /resources/:id      # Delete
+```
+
+### Naming Conventions
+
+| Do | Don't |
+|----|-------|
+| `/users` | `/getUsers`, `/user-list` |
+| `/users/:id` | `/user/:id`, `/users/get/:id` |
+| `/users/:id/orders` | `/getUserOrders` |
+| Plural nouns | Verbs, singular |
+| kebab-case | camelCase, snake_case |
+
+### Examples
+
+```
+GET  /users                    # List users
+GET  /users/123                # Get user 123
+GET  /users/123/orders         # User's orders
+GET  /users/123/orders/456     # Specific order
+POST /users/123/orders         # Create order for user
+```
+
+---
+
+## Request/Response Format
+
+### Request Body
+
+```json
 {
-  "name": "Widget",
-  "price": 29.99,
-  "categoryId": "cat_123"
+  "name": "John Doe",
+  "email": "john@example.com",
+  "role": "admin"
 }
-
-// Partial updates with PATCH
-PATCH /products/123
-{
-  "price": 24.99  // Only changed fields
-}
 ```
 
-**Response Structure (Consistent Envelope):**
-```typescript
-// Success response
+### Successful Response
+
+```json
 {
-  "data": { /* resource or array */ },
-  "meta": {
-    "pagination": { "page": 1, "limit": 20, "total": 100 }
+  "data": {
+    "id": "123",
+    "name": "John Doe",
+    "email": "john@example.com",
+    "createdAt": "2024-01-15T10:30:00Z"
   }
 }
+```
 
-// Error response
+### List Response (with pagination)
+
+```json
+{
+  "data": [
+    { "id": "1", "name": "John" },
+    { "id": "2", "name": "Jane" }
+  ],
+  "meta": {
+    "total": 100,
+    "page": 1,
+    "perPage": 20,
+    "totalPages": 5
+  }
+}
+```
+
+### Error Response
+
+```json
 {
   "error": {
     "code": "VALIDATION_ERROR",
-    "message": "Invalid input",
+    "message": "Invalid input data",
     "details": [
-      { "field": "email", "message": "Invalid email format" }
+      { "field": "email", "message": "Invalid email format" },
+      { "field": "name", "message": "Name is required" }
     ]
   }
 }
 ```
 
-### 3. HTTP Status Codes
+---
 
-| Code | Meaning | When to Use |
-|------|---------|-------------|
-| 200 | OK | Successful GET, PATCH, PUT |
-| 201 | Created | Successful POST |
-| 204 | No Content | Successful DELETE |
-| 400 | Bad Request | Invalid input, validation error |
-| 401 | Unauthorized | Missing/invalid auth |
-| 403 | Forbidden | Auth valid but no permission |
-| 404 | Not Found | Resource doesn't exist |
-| 409 | Conflict | Duplicate, state conflict |
-| 422 | Unprocessable | Semantic validation error |
-| 429 | Too Many Requests | Rate limited |
-| 500 | Internal Error | Server error (never expose details) |
+## HTTP Status Codes
 
-### 4. Pagination Patterns
+### Success (2xx)
 
-**Offset-based (simple but slow at scale):**
-```typescript
-GET /posts?page=5&limit=20
+| Code | When to Use |
+|------|-------------|
+| `200 OK` | GET, PUT, PATCH success |
+| `201 Created` | POST created new resource |
+| `204 No Content` | DELETE success, no body |
 
-{
-  "data": [...],
-  "meta": {
-    "pagination": {
-      "page": 5,
-      "limit": 20,
-      "total": 543,
-      "totalPages": 28
-    }
-  }
-}
+### Client Errors (4xx)
+
+| Code | When to Use |
+|------|-------------|
+| `400 Bad Request` | Invalid request body |
+| `401 Unauthorized` | Not authenticated |
+| `403 Forbidden` | Authenticated but not allowed |
+| `404 Not Found` | Resource doesn't exist |
+| `409 Conflict` | Resource conflict (duplicate) |
+| `422 Unprocessable` | Validation failed |
+| `429 Too Many` | Rate limited |
+
+### Server Errors (5xx)
+
+| Code | When to Use |
+|------|-------------|
+| `500 Internal Error` | Unexpected server error |
+| `502 Bad Gateway` | Upstream service failed |
+| `503 Unavailable` | Service temporarily down |
+
+---
+
+## Query Parameters
+
+### Filtering
+
+```
+GET /users?role=admin
+GET /users?role=admin&status=active
+GET /orders?createdAfter=2024-01-01
 ```
 
-**Cursor-based (better for large datasets):**
-```typescript
-GET /posts?cursor=eyJpZCI6MTIzfQ&limit=20
+### Sorting
 
-{
-  "data": [...],
-  "meta": {
-    "pagination": {
-      "nextCursor": "eyJpZCI6MTQzfQ",
-      "prevCursor": "eyJpZCI6MTAzfQ",
-      "hasMore": true
-    }
-  }
-}
+```
+GET /users?sort=name           # Ascending
+GET /users?sort=-createdAt     # Descending (prefix with -)
+GET /users?sort=role,-name     # Multiple fields
 ```
 
-### 5. Filtering & Sorting
+### Pagination
 
-```typescript
-// Filtering
-GET /products?status=active&minPrice=10&maxPrice=100
-GET /products?category[in]=electronics,books
-GET /products?createdAt[gte]=2024-01-01
+```
+GET /users?page=2&perPage=20
+GET /users?offset=40&limit=20
+GET /users?cursor=abc123       # Cursor-based
+```
 
-// Sorting
-GET /products?sort=price         // Ascending
-GET /products?sort=-price        // Descending
-GET /products?sort=-createdAt,name  // Multiple
+### Field Selection
 
-// Field selection (reduce payload)
+```
 GET /users?fields=id,name,email
+GET /users?include=orders,profile
 ```
 
-### 6. Versioning Strategies
+---
 
-**URL versioning (recommended for breaking changes):**
-```
-/api/v1/users
-/api/v2/users
-```
+## Versioning
 
-**Header versioning (cleaner URLs):**
+### URL Path (Recommended)
+
 ```
-Accept: application/vnd.api+json; version=2
+GET /v1/users
+GET /v2/users
 ```
 
-**When to version:**
-- Breaking changes to response structure
-- Removing fields or endpoints
-- Changing field types
-- NOT for additive changes (new optional fields)
+### Header
 
-### 7. Authentication Patterns
+```
+GET /users
+Accept: application/vnd.api+json;version=2
+```
 
-**Bearer Token (JWT):**
-```typescript
-headers: {
-  'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIs...'
+---
+
+## Authentication
+
+### Bearer Token
+
+```
+Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
+```
+
+### API Key
+
+```
+X-API-Key: your-api-key
+# or
+?apiKey=your-api-key
+```
+
+---
+
+## Common Patterns
+
+### Bulk Operations
+
+```
+POST /users/bulk
+{
+  "create": [{ "name": "John" }, { "name": "Jane" }],
+  "update": [{ "id": "1", "name": "Updated" }],
+  "delete": ["2", "3"]
 }
 ```
 
-**API Key (service-to-service):**
-```typescript
-headers: {
-  'X-API-Key': 'sk_live_abc123...'
+### Search
+
+```
+POST /users/search
+{
+  "query": "john",
+  "filters": { "role": "admin" },
+  "sort": { "field": "name", "order": "asc" }
 }
 ```
 
-**Security Checklist:**
-- [ ] Auth on every endpoint (except public)
-- [ ] Rate limiting per user/IP
-- [ ] Request validation before processing
-- [ ] No sensitive data in URLs (use headers/body)
-- [ ] HTTPS only
+### Actions (non-CRUD)
 
-### 8. Error Handling
+```
+POST /orders/123/cancel
+POST /users/123/verify-email
+POST /payments/123/refund
+```
 
-**Consistent Error Schema:**
-```typescript
-interface ApiError {
-  error: {
-    code: string           // Machine-readable (VALIDATION_ERROR)
-    message: string        // Human-readable
-    details?: ErrorDetail[] // Field-level errors
-    requestId?: string     // For debugging
+---
+
+## API Design Checklist
+
+### Consistency
+- [ ] Consistent naming conventions
+- [ ] Consistent response format
+- [ ] Consistent error format
+- [ ] Consistent pagination
+
+### Usability
+- [ ] Intuitive URLs
+- [ ] Clear documentation
+- [ ] Meaningful error messages
+- [ ] Sensible defaults
+
+### Security
+- [ ] Authentication required
+- [ ] Authorization checked
+- [ ] Input validation
+- [ ] Rate limiting
+
+### Performance
+- [ ] Pagination for lists
+- [ ] Field selection available
+- [ ] Efficient queries
+- [ ] Caching headers
+
+---
+
+## Documentation Template
+
+```markdown
+## Create User
+
+Create a new user account.
+
+**Endpoint:** `POST /users`
+
+**Authentication:** Required (Bearer token)
+
+**Request Body:**
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| name | string | Yes | User's full name |
+| email | string | Yes | Valid email address |
+| role | string | No | User role (default: "user") |
+
+**Response:** `201 Created`
+\`\`\`json
+{
+  "data": {
+    "id": "123",
+    "name": "John Doe",
+    "email": "john@example.com",
+    "role": "user",
+    "createdAt": "2024-01-15T10:30:00Z"
   }
 }
+\`\`\`
 
-interface ErrorDetail {
-  field: string
-  message: string
-  code?: string
-}
-```
-
-**Implementation:**
-```typescript
-// Zod validation errors → API errors
-function formatZodError(error: ZodError): ApiError {
-  return {
-    error: {
-      code: 'VALIDATION_ERROR',
-      message: 'Invalid request data',
-      details: error.errors.map(e => ({
-        field: e.path.join('.'),
-        message: e.message,
-      }))
-    }
-  }
-}
-```
-
-### 9. Next.js Route Handler Patterns
-
-```typescript
-// app/api/products/route.ts
-import { z } from 'zod'
-import { NextRequest, NextResponse } from 'next/server'
-
-const CreateProductSchema = z.object({
-  name: z.string().min(1).max(200),
-  price: z.number().positive(),
-})
-
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json()
-    const validated = CreateProductSchema.parse(body)
-    
-    const product = await db.product.create({ data: validated })
-    
-    return NextResponse.json(
-      { data: product },
-      { status: 201 }
-    )
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        formatZodError(error),
-        { status: 400 }
-      )
-    }
-    return NextResponse.json(
-      { error: { code: 'INTERNAL_ERROR', message: 'Something went wrong' } },
-      { status: 500 }
-    )
-  }
-}
-```
-
-### 10. Server Actions vs Route Handlers (Next.js 15+)
-
-| Use Case | Recommendation |
-|----------|----------------|
-| Internal mutations | Server Actions |
-| Webhooks from external services | Route Handlers |
-| Third-party API proxy | Route Handlers |
-| File uploads | Route Handlers (or Server Actions with `unstable_after`) |
-| Streaming responses | Route Handlers |
-| Form submissions | Server Actions |
-| Background tasks | Server Actions + `after()` from next/server |
-
-**Server Action Example (Next.js 15):**
-```tsx
-// app/actions.ts
-'use server'
-
-import { revalidatePath } from 'next/cache'
-import { after } from 'next/server'
-
-export async function createProduct(formData: FormData) {
-  const product = await db.product.create({
-    data: { name: formData.get('name') }
-  })
-  
-  // Run after response (Next.js 15)
-  after(async () => {
-    await sendNotification(product.id)
-  })
-  
-  revalidatePath('/products')
-  return { success: true, data: product }
-}
-```
-
-## API Review Checklist
-
-- [ ] URLs follow RESTful conventions
-- [ ] HTTP methods used correctly
-- [ ] Status codes are appropriate
-- [ ] Request/response schemas defined (Zod)
-- [ ] Error responses consistent
-- [ ] Pagination implemented for lists
-- [ ] Authentication required where needed
-- [ ] Rate limiting in place
-- [ ] Input validation on all endpoints
-- [ ] No sensitive data in URLs
-- [ ] Versioning strategy defined
-- [ ] OpenAPI/Swagger docs generated
-
-## API Documentation Template
-
-```yaml
-# openapi.yaml
-openapi: 3.0.0
-info:
-  title: Product API
-  version: 1.0.0
-
-paths:
-  /products:
-    get:
-      summary: List products
-      parameters:
-        - name: page
-          in: query
-          schema:
-            type: integer
-            default: 1
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductList'
+**Errors:**
+- `400` - Invalid request body
+- `409` - Email already exists
+- `422` - Validation failed
 ```

@@ -1,339 +1,300 @@
 ---
 name: audit-security
-description: Web application security audit covering OWASP Top 10, authentication, and data protection. Use when reviewing vulnerabilities, auth flows, API security, or when user mentions "security", "vulnerability", "XSS", "CSRF", "SQL injection", "auth", "RLS", "secrets", or "security headers".
+description: >
+  Audit code for security vulnerabilities and best practices. Use when reviewing security,
+  checking for vulnerabilities, auditing auth code, or when the user mentions security concerns.
+  Integrates Firecrawl for researching current OWASP guidelines and CVEs,
+  Sentry MCP for checking production security-related errors, and automated codebase scanning.
 ---
 
 # Security Audit Skill
 
-Systematic methodology for auditing web application security covering OWASP Top 10, authentication, authorization, data protection, and secure coding practices.
+Systematic security review for any web application. Research-driven, using current OWASP guidelines.
 
-## When to Use
+## Step 0: Understand the Project
 
-- Before production deployment
-- After adding authentication/authorization
-- When handling sensitive data
-- Reviewing third-party integrations
-- Periodic security reviews
-- After dependency updates
+Before auditing, discover the tech stack and attack surface:
 
-## CRITICAL: Check Existing First
+1. Read `package.json` / `requirements.txt` / `go.mod` to identify:
+   - Auth library (next-auth, passport, supabase-auth, django-auth, etc.)
+   - Database ORM (Prisma, Sequelize, SQLAlchemy, etc.)
+   - HTTP framework (Express, Fastify, Django, Flask, etc.)
+   - Any security-specific packages (helmet, cors, csurf, rate-limit, etc.)
 
-**Before ANY security changes, verify:**
+2. Identify the auth pattern:
+   - Session-based vs JWT vs OAuth
+   - Where tokens are stored (cookies, localStorage, headers)
+   - How permissions/roles are enforced
 
-1. **Check existing security setup:**
-```bash
-cat next.config.* | grep -i "headers\|csp\|security"
-rg "Content-Security-Policy|X-Frame-Options" --type ts
-ls -la middleware.ts src/middleware.ts 2>/dev/null
-```
+3. Identify the data flow:
+   - Where user input enters the system
+   - How data is validated and sanitized
+   - How data reaches the database
 
-2. **Check existing auth patterns:**
-```bash
-rg "auth\(|getSession|getUser|supabase.auth" --type ts -l | head -10
-cat package.json | grep -i "auth\|supabase\|clerk\|next-auth"
-```
+---
 
-3. **Check for existing RLS:**
-```bash
-ls -la supabase/migrations/*.sql 2>/dev/null | head -10
-rg "CREATE POLICY|ENABLE ROW LEVEL" supabase/
-```
+## Step 1: Research Current Threats
 
-4. **Check env validation:**
-```bash
-cat src/env.* lib/env.* 2>/dev/null
-rg "createEnv|t3-env" --type ts
-```
+Fetch current OWASP and security best practices for the detected stack:
 
-**Why:** Security requires consistency. Understand existing patterns before modifying.
-
-## Security Audit Framework
-
-### 1. OWASP Top 10 (2021)
-
-| Rank | Vulnerability | Check |
-|------|---------------|-------|
-| A01 | Broken Access Control | Verify authorization on every endpoint |
-| A02 | Cryptographic Failures | Check encryption, hashing, secrets |
-| A03 | Injection | Parameterized queries, input validation |
-| A04 | Insecure Design | Threat modeling, security requirements |
-| A05 | Security Misconfiguration | Headers, defaults, error handling |
-| A06 | Vulnerable Components | Dependency audit |
-| A07 | Auth Failures | Session management, MFA |
-| A08 | Data Integrity Failures | Code signing, CI/CD security |
-| A09 | Logging Failures | Audit logs, monitoring |
-| A10 | SSRF | URL validation, network segmentation |
-
-### 2. Authentication Security
-
-**Checklist:**
-- [ ] Passwords hashed with bcrypt/Argon2 (cost factor ≥10)
-- [ ] No plaintext secrets in code or logs
-- [ ] Session tokens are secure random (≥128 bits)
-- [ ] Tokens stored in httpOnly, secure cookies
-- [ ] Implement rate limiting on auth endpoints
-- [ ] Account lockout after failed attempts
-- [ ] Secure password reset flow
-- [ ] MFA available for sensitive operations
-
-**Secure Session Example:**
-```typescript
-// Cookie configuration
-{
-  httpOnly: true,      // Prevent XSS access
-  secure: true,        // HTTPS only
-  sameSite: 'strict',  // CSRF protection
-  maxAge: 3600000,     // 1 hour
-  path: '/',
-}
-```
-
-### 3. Authorization & Access Control
-
-**Verify:**
-- [ ] Authorization checked on every request (not just UI)
-- [ ] Row-level security for multi-tenant data
-- [ ] Principle of least privilege
-- [ ] No IDOR vulnerabilities (direct object references)
-- [ ] Admin functions protected
-- [ ] API rate limiting implemented
-
-**Supabase RLS Example:**
-```sql
--- Enable RLS
-ALTER TABLE posts ENABLE ROW LEVEL SECURITY;
-
--- Users can only read their own posts
-CREATE POLICY "Users read own posts" ON posts
-  FOR SELECT USING (auth.uid() = user_id);
-
--- Users can only update their own posts
-CREATE POLICY "Users update own posts" ON posts
-  FOR UPDATE USING (auth.uid() = user_id)
-  WITH CHECK (auth.uid() = user_id);
-```
-
-### 4. Input Validation & Injection Prevention
-
-**Rules:**
-- Validate all input server-side (never trust client)
-- Use parameterized queries (never string concatenation)
-- Sanitize HTML output (XSS prevention)
-- Validate file uploads (type, size, content)
-
-**Safe Patterns:**
-```typescript
-// Zod validation
-const userSchema = z.object({
-  email: z.string().email(),
-  name: z.string().min(1).max(100),
-  age: z.number().int().positive().max(150),
-})
-
-// Parameterized query (Prisma)
-const user = await prisma.user.findUnique({
-  where: { id: userId }  // Safe
-})
-
-// NOT: `SELECT * FROM users WHERE id = ${userId}` // SQL injection!
-
-// HTML sanitization
-import DOMPurify from 'dompurify'
-const safeHTML = DOMPurify.sanitize(userInput)
-```
-
-### 5. Security Headers
-
-**Required Headers:**
-```typescript
-// Next.js next.config.js
-const securityHeaders = [
-  {
-    key: 'Content-Security-Policy',
-    value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';"
-  },
-  {
-    key: 'X-Frame-Options',
-    value: 'DENY'
-  },
-  {
-    key: 'X-Content-Type-Options',
-    value: 'nosniff'
-  },
-  {
-    key: 'Referrer-Policy',
-    value: 'strict-origin-when-cross-origin'
-  },
-  {
-    key: 'Permissions-Policy',
-    value: 'camera=(), microphone=(), geolocation=()'
-  },
-  {
-    key: 'Strict-Transport-Security',
-    value: 'max-age=31536000; includeSubDomains'
-  }
-]
-```
-
-### 6. Dependency Security
-
-**Commands:**
-```bash
-# NPM audit
-npm audit
-npm audit fix
-
-# Snyk (more comprehensive)
-npx snyk test
-npx snyk monitor
-
-# Check for outdated packages
-npm outdated
-
-# SBOM generation
-npx @cyclonedx/cyclonedx-npm --output-file sbom.json
-```
-
-**Dependency Rules:**
-- Regular audits (weekly minimum)
-- Pin versions in production
-- Review changelogs before updating
-- No packages with known CVEs in production
-
-### 7. Secrets Management
-
-**Never:**
-- Commit secrets to git
-- Log secrets or tokens
-- Expose secrets to client
-- Use production secrets in development
-
-**Best Practices:**
-```bash
-# Use environment variables
-DATABASE_URL="postgresql://..."
-
-# Validate with t3-env
-import { createEnv } from "@t3-oss/env-nextjs"
-
-export const env = createEnv({
-  server: {
-    DATABASE_URL: z.string().url(),
-    SECRET_KEY: z.string().min(32),
-  },
-  client: {
-    NEXT_PUBLIC_API_URL: z.string().url(),
-  },
+```json
+CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+  "query": "<framework> security best practices OWASP <current year>",
+  "limit": 5,
+  "sources": [{ "type": "web" }]
 })
 ```
 
-### 8. API Security
+Scrape the OWASP Top 10 for the relevant platform:
 
-**Checklist:**
-- [ ] Authentication on all endpoints
-- [ ] Rate limiting implemented
-- [ ] Input validation on all parameters
-- [ ] Proper error handling (no stack traces)
-- [ ] CORS configured correctly
-- [ ] Request size limits
-- [ ] Timeout limits
-
-**Rate Limiting Example:**
-```typescript
-import { Ratelimit } from "@upstash/ratelimit"
-import { Redis } from "@upstash/redis"
-
-const ratelimit = new Ratelimit({
-  redis: Redis.fromEnv(),
-  limiter: Ratelimit.slidingWindow(10, "10 s"),
+```json
+CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
+  "url": "https://owasp.org/Top10/",
+  "formats": ["markdown"],
+  "onlyMainContent": true
 })
-
-// In API route
-const { success } = await ratelimit.limit(ip)
-if (!success) {
-  return new Response("Too many requests", { status: 429 })
-}
 ```
 
-### 9. Data Protection
+Also check for known CVEs in dependencies:
 
-**Requirements:**
-- [ ] Encrypt sensitive data at rest
-- [ ] Use TLS 1.3 for data in transit
-- [ ] Implement data retention policies
-- [ ] PII handling compliant with regulations
-- [ ] Backup encryption
+```json
+CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+  "query": "<package-name> CVE vulnerability <current year>",
+  "limit": 5,
+  "sources": [{ "type": "web" }]
+})
+```
 
-**Data Classification:**
-| Level | Examples | Protection |
-|-------|----------|------------|
-| Public | Marketing content | Standard |
-| Internal | User emails | Encryption at rest |
-| Confidential | Payment data | Strong encryption, access logs |
-| Restricted | Auth credentials | HSM, never logged |
+---
 
-### 10. Error Handling
+## Step 2: Check Production Security Errors (Sentry)
 
-**Secure Error Handling:**
+If Sentry is configured, check for security-related production errors:
+
+```json
+CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+  "organizationSlug": "<ORG_SLUG>",
+  "naturalLanguageQuery": "401 unauthorized OR 403 forbidden OR CORS OR CSP violation in last 30 days",
+  "projectSlugOrId": "<PROJECT_SLUG>",
+  "regionUrl": "<REGION_URL>",
+  "limit": 20
+})
+```
+
+Patterns that indicate security issues:
+- Frequent 401/403 errors → possible auth bypass attempts
+- CORS errors from unexpected origins → misconfigured CORS
+- CSP violations → potential XSS vectors
+- Rate limit errors → possible brute force
+
+---
+
+## Step 3: Automated Code Scan
+
+### Authentication Audit
+
+- [ ] Passwords hashed with bcrypt/argon2/scrypt (not MD5/SHA1/SHA256 for passwords)
+- [ ] Session tokens are cryptographically random
+- [ ] Sessions expire appropriately (idle timeout + absolute timeout)
+- [ ] Password reset tokens are single-use and expire quickly
+- [ ] MFA available for sensitive accounts
+- [ ] Login rate limiting implemented
+- [ ] Account lockout after repeated failed attempts
+- [ ] OAuth state parameter validated (CSRF protection for OAuth flows)
+- [ ] JWT secret is strong and stored in env vars (not hardcoded)
+- [ ] JWT expiry is reasonable (access: 15min, refresh: 7d)
+
+### Authorization Audit
+
+- [ ] Every API endpoint checks permissions (not just authentication)
+- [ ] No direct object references without ownership/permission check (IDOR)
+- [ ] Role-based access properly enforced at the API layer (not just UI)
+- [ ] Principle of least privilege followed
+- [ ] Admin functions require elevated auth
+- [ ] Row-Level Security (RLS) enabled for multi-tenant databases
+- [ ] API keys scoped to minimum required permissions
+
+### Input Validation Audit
+
+- [ ] All user input validated server-side (client validation is UX only)
+- [ ] Input sanitized before use in queries, HTML, commands
+- [ ] File uploads validated: type (MIME + magic bytes), size, filename
+- [ ] JSON/XML parsing has depth/size limits
+- [ ] URL parameters decoded and validated
+- [ ] No raw SQL concatenation (parameterized queries only)
+- [ ] No `eval()`, `Function()`, `innerHTML` with user input
+- [ ] No `dangerouslySetInnerHTML` without DOMPurify
+
+### Data Protection Audit
+
+- [ ] Sensitive data encrypted at rest
+- [ ] TLS/HTTPS enforced (no HTTP fallback)
+- [ ] Secrets not in code, git history, or logs
+- [ ] PII handled according to applicable regulations (GDPR, CCPA)
+- [ ] Database connections encrypted (SSL)
+- [ ] API responses don't leak internal data (stack traces, SQL errors, file paths)
+- [ ] Password fields use `type="password"` and `autocomplete="new-password"`
+
+### Security Headers Audit
+
+- [ ] `Strict-Transport-Security` (HSTS) with long max-age
+- [ ] `Content-Security-Policy` (CSP) configured (not just `default-src *`)
+- [ ] `X-Content-Type-Options: nosniff`
+- [ ] `X-Frame-Options: DENY` or `SAMEORIGIN`
+- [ ] `Referrer-Policy: strict-origin-when-cross-origin` or stricter
+- [ ] `Permissions-Policy` restricting unnecessary browser features
+- [ ] CORS `Access-Control-Allow-Origin` is NOT `*` for authenticated endpoints
+- [ ] Cookies: `HttpOnly`, `Secure`, `SameSite=Strict` (or `Lax`)
+
+### Dependency Audit
+
+```bash
+npm audit          # Node.js
+pip-audit          # Python
+cargo audit        # Rust
+govulncheck ./...  # Go
+bundle audit       # Ruby
+```
+
+- [ ] No known high/critical CVEs
+- [ ] Dependencies reasonably up to date
+- [ ] Lock file committed (`package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`)
+- [ ] No unnecessary dependencies (smaller surface area)
+
+---
+
+## Step 4: Common Vulnerability Patterns
+
+### SQL Injection
+
+```javascript
+// VULNERABLE
+const query = `SELECT * FROM users WHERE id = '${userId}'`;
+
+// SAFE — parameterized
+const query = 'SELECT * FROM users WHERE id = $1';
+db.query(query, [userId]);
+
+// SAFE — ORM
+User.findById(userId);
+```
+
+### XSS (Cross-Site Scripting)
+
+```jsx
+// VULNERABLE
+<div dangerouslySetInnerHTML={{ __html: userInput }} />
+
+// SAFE — React escapes by default
+<div>{userInput}</div>
+
+// SAFE — sanitize when HTML is genuinely needed
+import DOMPurify from 'dompurify';
+<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(userInput) }} />
+```
+
+### IDOR (Insecure Direct Object Reference)
+
+```javascript
+// VULNERABLE — no ownership check
+app.get('/documents/:id', (req, res) => {
+  const doc = db.documents.findById(req.params.id);
+  res.json(doc);
+});
+
+// SAFE — verify ownership
+app.get('/documents/:id', (req, res) => {
+  const doc = db.documents.findOne({
+    where: { id: req.params.id, userId: req.user.id }
+  });
+  if (!doc) return res.status(404).json({ error: 'Not found' });
+  res.json(doc);
+});
+```
+
+### Sensitive Data Exposure
+
+```javascript
+// VULNERABLE — leaking sensitive fields
+res.json(user); // includes passwordHash, tokens, internal IDs
+
+// SAFE — explicit field selection
+const { id, name, email, avatar } = user;
+res.json({ id, name, email, avatar });
+```
+
+---
+
+## Step 5: Environment and Secrets
+
+### Scan for Hardcoded Secrets
+
+Search the codebase for potential leaked secrets:
+
+```
+Grep for: api_key, apiKey, secret, password, token, credentials, private_key
+Grep for: sk-, pk-, ghp_, gho_, xox[bpsa]-, AKIA
+Grep for: -----BEGIN (RSA|EC|OPENSSH) PRIVATE KEY-----
+```
+
+### Verify .gitignore
+
+```
+.env, .env.local, .env.production
+*.pem, *.key, *.p12
+credentials.json, service-account.json
+.sentryclirc (if it contains auth tokens)
+```
+
+### Validate Environment Variables
+
 ```typescript
-// Production: Generic error
-if (process.env.NODE_ENV === 'production') {
-  return { error: 'An error occurred' }
-}
+import { z } from 'zod';
 
-// Never expose:
-// - Stack traces
-// - Database errors
-// - Internal paths
-// - Configuration details
+const envSchema = z.object({
+  DATABASE_URL: z.string().url(),
+  API_KEY: z.string().min(1),
+  JWT_SECRET: z.string().min(32),
+  SENTRY_DSN: z.string().url().optional(),
+});
+
+const env = envSchema.parse(process.env);
 ```
 
-## Security Audit Report Template
+---
+
+## Output: Security Audit Report
 
 ```markdown
-# Security Audit Report
+## Security Audit: [Project Name]
 
-## Executive Summary
-- **Risk Level**: Critical/High/Medium/Low
-- **Vulnerabilities Found**: X
-- **Critical Issues**: X
+### Tech Stack
+- Framework: [name + version]
+- Auth: [library + pattern]
+- Database: [ORM + provider]
+- Security packages: [list]
 
-## Findings
+### Critical Issues (must fix)
+| # | Category | Finding | File | Recommendation |
+|---|----------|---------|------|----------------|
+| 1 | Auth | JWT secret hardcoded | config.ts:12 | Move to env var |
 
-### [SEV-1] Critical: [Title]
-- **Description**: [Details]
-- **Location**: [File/endpoint]
-- **Impact**: [What could happen]
-- **Remediation**: [How to fix]
-- **References**: [CVE, OWASP, etc.]
+### High Risk (should fix soon)
+| # | Category | Finding | File | Recommendation |
+|---|----------|---------|------|----------------|
 
-### [SEV-2] High: [Title]
-...
+### Medium Risk (improve when possible)
+| # | Category | Finding | File | Recommendation |
+|---|----------|---------|------|----------------|
 
-## Checklist Results
-- [x] Authentication secure
-- [ ] Authorization needs work
-- [x] Input validation present
-...
+### Passed Checks
+- [list of security areas that are properly implemented]
 
-## Recommendations
-1. [Priority 1 fix]
-2. [Priority 2 fix]
+### Dependencies
+- Critical CVEs: [count] — [details]
+- High CVEs: [count]
+- Outdated packages: [count]
 
-## Next Steps
-- Schedule remediation
-- Re-audit after fixes
+### Research Sources
+- [URL] — [what it confirmed or revealed]
 ```
-
-## Quick Security Wins
-
-- [ ] Enable HTTPS everywhere
-- [ ] Add security headers
-- [ ] Run `npm audit fix`
-- [ ] Enable RLS on all tables
-- [ ] Add rate limiting
-- [ ] Review .env.example (no real secrets)
-- [ ] Add CSRF protection
-- [ ] Validate all inputs with Zod
-- [ ] Log authentication events
-- [ ] Set up alerts for suspicious activity

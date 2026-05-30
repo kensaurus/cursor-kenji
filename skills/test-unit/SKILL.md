@@ -1,6 +1,11 @@
 ---
 name: test-unit
-description: Write effective unit tests for any project. Auto-detects test framework (Jest, Vitest, pytest, Go test, etc.), Firecrawl for current testing patterns, Context7 for library docs, Sentry MCP to identify production errors lacking coverage. Use when writing tests, creating test cases, improving coverage, or increasing confidence before release.
+description: >
+  Write effective unit tests with best practices for any project. Auto-detects test framework
+  (Jest, Vitest, pytest, Go test, etc.), researches current testing patterns via Firecrawl,
+  fetches testing library docs via Context7, and uses Sentry MCP to identify production errors
+  that lack test coverage. Use when writing tests, creating test cases, improving test coverage,
+  increasing confidence before release, or when the user mentions testing.
 ---
 
 # Unit Testing Skill
