@@ -12,7 +12,7 @@
 <p align="center">
   <a href="#quick-start"><img src="https://img.shields.io/badge/-Quick_Start-10b981?style=flat-square" alt="Quick Start" /></a>
   <a href="#how-to-use-this-toolkit"><img src="https://img.shields.io/badge/-How_to_Use-22c55e?style=flat-square" alt="How to Use" /></a>
-  <a href="#skills-62"><img src="https://img.shields.io/badge/-62_Skills-6366f1?style=flat-square" alt="62 Skills" /></a>
+  <a href="#skills-64"><img src="https://img.shields.io/badge/-64_Skills-6366f1?style=flat-square" alt="64 Skills" /></a>
   <a href="#subagents-5"><img src="https://img.shields.io/badge/-5_Subagents-f59e0b?style=flat-square" alt="5 Subagents" /></a>
   <a href="#commands-13"><img src="https://img.shields.io/badge/-13_Commands-ef4444?style=flat-square" alt="13 Commands" /></a>
   <a href="#mcp-servers-16"><img src="https://img.shields.io/badge/-16_MCP_Servers-3b82f6?style=flat-square" alt="16 MCP Servers" /></a>
@@ -113,6 +113,15 @@ graph TB
 | 22 descriptions tightened | Skill | Verbose `description: >` blocks (some 280+ words) reduced to direct-tone single-sentence WHAT + concrete trigger list, matching Cursor's canonical example pattern |
 | 9 commands demoted to pointers | Command | `/commit`, `/debug`, `/pr`, `/readme`, `/refactor`, `/review`, `/test`, `/uiux`, `/update-deps` now point to their skill equivalents instead of duplicating the playbook. Skills handle natural language; commands handle explicit slash invocation |
 | `audit-ux` cross-reference | Skill | Fixed broken pointer (`audit-ui-design-system` → `audit-uiux-design-system`) |
+
+### Jun 2026 — Taste & Redesign Skills
+
+> *Adapted from [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) — anti-slop frontend design with audit-first redesign workflow.*
+
+| Addition | Type | Why It Matters |
+|:---------|:-----|:---------------|
+| `enhance-taste-design` | Skill | Anti-slop frontend for landing pages, portfolios, and marketing sites — brief inference, variance/motion/density dials, real design systems when applicable |
+| `enhance-existing-redesign` | Skill | Audit-first upgrade of existing sites — scan, diagnose generic AI patterns, apply targeted premium fixes without breaking functionality |
 
 ### Apr 2026 — The Enhance Family
 
@@ -226,9 +235,11 @@ cursor-kenji/
 │   ├── design-system/
 │   ├── docs-coauthor/
 │   ├── docs-writer/
+│   ├── enhance-existing-redesign/  # audit-first redesign of existing sites (taste-skill)
 │   ├── enhance-page-ui/       # composition + hierarchy + motion
 │   ├── enhance-page-ux/       # heuristic-grounded UX enhancement
 │   ├── enhance-readme/        # hero + tour + GIF for any README
+│   ├── enhance-taste-design/  # anti-slop landing/portfolio design (taste-skill)
 │   ├── enhance-web-mobile-ui/ # NEW May 2026 — cross-surface (web/iOS/Android) architecture
 │   ├── error-handling/
 │   ├── file-docx/
@@ -347,7 +358,7 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 ```mermaid
 flowchart LR
   A["./install.sh"] --> B["Backup existing\n~/.cursor/skills/"]
-  B --> C["Install 62 skills\n+ 12 cursor skills"]
+  B --> C["Install 64 skills\n+ 12 cursor skills"]
   C --> D["Install 5\nsubagents"]
   D --> E["Copy MCP\nconfig template"]
   E --> F["Ready!"]
@@ -444,6 +455,8 @@ Skills auto-trigger from **trigger phrases in their description** (the `descript
 |:--------|:-----------------|
 | "this page feels AI-generated, fix it" | `enhance-page-ux` |
 | "make `/settings` more polished, less crowded" | `enhance-page-ui` |
+| "build a landing page that doesn't look like AI slop" | `enhance-taste-design` |
+| "redesign this site to feel premium, keep functionality" | `enhance-existing-redesign` |
 | "give the README a hero image and screenshots" | `enhance-readme` |
 | "audit the UX of the checkout flow" | `audit-ux` |
 | "split this branch into smaller PRs" | `split-to-prs` |
@@ -507,13 +520,13 @@ All four are **generic** — they work in any web stack (Next.js, Remix, SvelteK
 
 ---
 
-## Skills (62)
+## Skills (64)
 
 ### Skill Categories at a Glance
 
 ```mermaid
 mindmap
-  root((62 Skills))
+  root((64 Skills))
     Enhance
       enhance-page-ui
       enhance-page-ux
@@ -599,6 +612,8 @@ mindmap
 | `enhance-page-ux` | Replace stacked / templated UI with semantic data wired to real backend state. Every change cites a Nielsen heuristic, uses existing primitives, verified at 1440/1024/800 viewports |
 | `enhance-readme` | Theme-aware hero (`<picture>` dark/light auto-swap) + tour grid + optional autoplay GIF via Playwright MCP. Works for any repo with a live URL or local dev server |
 | `enhance-web-mobile-ui` <sup>May 2026</sup> | Cross-surface architecture for hybrid PWA + iOS + Android apps (Capacitor / Tauri / Expo Web / Ionic). Three orthogonal axes (form factor / platform / pointer) + mode tokens + container-query primitives — so polish on one surface can't degrade another |
+| `enhance-taste-design` <sup>Jun 2026</sup> | Anti-slop frontend for landing pages, portfolios, and marketing sites — brief inference, variance/motion/density dials, real design systems. Adapted from [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) |
+| `enhance-existing-redesign` <sup>Jun 2026</sup> | Audit-first upgrade of existing sites — scan codebase, diagnose generic AI patterns, apply targeted premium fixes without breaking functionality. Adapted from [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) |
 
 ### Design & Frontend
 
@@ -607,6 +622,8 @@ mindmap
 | Skill | What it Does |
 |:------|:-------------|
 | `design-frontend` | Production-grade UI avoiding generic AI aesthetics |
+| `enhance-taste-design` | Anti-slop landing/portfolio design with brief inference and configurable design dials |
+| `enhance-existing-redesign` | Audit-first redesign — remove AI slop patterns from existing sites without full rewrites |
 | `design-system` | Component libraries, tokens, variants, CVA patterns |
 | `motion-design` | Framer Motion, CSS animations, GSAP micro-interactions |
 | `creative-effects` | WebGL, Three.js, shaders, particles, Canvas 2D |
