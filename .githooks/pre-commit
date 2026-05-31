@@ -1,0 +1,14 @@
+#!/bin/sh
+# Keep the README skill count in sync with skills/*/SKILL.md on every commit.
+# The count is fully derived, so we auto-fix and re-stage rather than block.
+# Enable once per clone:  git config core.hooksPath .githooks  (npm run prepare does this)
+
+command -v node >/dev/null 2>&1 || { echo "pre-commit: node not found, skipping skill-count check"; exit 0; }
+
+node scripts/check-skill-count.mjs >/dev/null 2>&1 && exit 0
+
+echo "pre-commit: README skill count drifted — auto-fixing…"
+node scripts/check-skill-count.mjs --fix
+git add README.md
+echo "pre-commit: README.md re-staged with the correct count."
+exit 0

@@ -12,7 +12,7 @@
 <p align="center">
   <a href="#quick-start"><img src="https://img.shields.io/badge/-Quick_Start-10b981?style=flat-square" alt="Quick Start" /></a>
   <a href="#how-to-use-this-toolkit"><img src="https://img.shields.io/badge/-How_to_Use-22c55e?style=flat-square" alt="How to Use" /></a>
-  <a href="#skills-64"><img src="https://img.shields.io/badge/-64_Skills-6366f1?style=flat-square" alt="64 Skills" /></a>
+  <a href="#skills-70"><img src="https://img.shields.io/badge/-70_Skills-6366f1?style=flat-square" alt="70 Skills" /></a>
   <a href="#subagents-5"><img src="https://img.shields.io/badge/-5_Subagents-f59e0b?style=flat-square" alt="5 Subagents" /></a>
   <a href="#commands-13"><img src="https://img.shields.io/badge/-13_Commands-ef4444?style=flat-square" alt="13 Commands" /></a>
   <a href="#mcp-servers-16"><img src="https://img.shields.io/badge/-16_MCP_Servers-3b82f6?style=flat-square" alt="16 MCP Servers" /></a>
@@ -40,7 +40,7 @@
 graph TB
   subgraph TOOLKIT["cursor-kenji Toolkit"]
     direction TB
-    SK["Skills (62)"]
+    SK["Skills (70)"]
     CS["Cursor Skills (12)"]
     CMD["Commands (13)"]
     SA["Subagents (5)"]
@@ -174,7 +174,7 @@ graph TB
 
 ```mermaid
 pie title Toolkit Composition
-    "Skills (62)" : 62
+    "Skills (70)" : 70
     "Commands (13)" : 13
     "MCP Servers (16)" : 16
     "Project Rules (8)" : 8
@@ -377,7 +377,7 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 ```mermaid
 flowchart LR
   A["./install.sh"] --> B["Backup existing\n~/.cursor/skills/"]
-  B --> C["Install 64 skills\n+ 12 cursor skills"]
+  B --> C["Install 70 skills\n+ 12 cursor skills"]
   C --> D["Install 5\nsubagents"]
   D --> E["Copy MCP\nconfig template"]
   E --> F["Ready!"]
@@ -546,13 +546,17 @@ All four are **generic** — they work in any web stack (Next.js, Remix, SvelteK
 
 ---
 
-## Skills (64)
+## Skills (70)
+
+<!-- The skill count is derived from skills/*/SKILL.md and enforced by
+     scripts/check-skill-count.mjs (pre-commit hook + CI). Don't hand-edit counts;
+     run `npm run fix:skills` if they ever drift. -->
 
 ### Skill Categories at a Glance
 
 ```mermaid
 mindmap
-  root((64 Skills))
+  root((70 Skills))
     Enhance
       enhance-web-ui
       enhance-web-ux

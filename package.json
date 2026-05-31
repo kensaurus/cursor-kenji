@@ -1,0 +1,12 @@
+{
+  "name": "cursor-kenji",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Curated Cursor skills, commands, subagents, rules, and MCP config.",
+  "type": "module",
+  "scripts": {
+    "check:skills": "node scripts/check-skill-count.mjs",
+    "fix:skills": "node scripts/check-skill-count.mjs --fix",
+    "prepare": "git config core.hooksPath .githooks"
+  }
+}
