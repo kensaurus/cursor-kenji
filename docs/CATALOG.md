@@ -58,6 +58,11 @@ Complete reference for all skills, commands, and their trigger phrases.
 **What it does:** React Native / Expo performance, build, and upgrade depth — FPS & re-renders, Hermes, TTI/startup, bundle & app size, FlashList, memory, Reanimated UI-thread animation, Turbo Modules, Android 16KB page alignment, and RN/Expo version upgrades. Diagnose-first (profile before fixing). Distilled from [callstack/agent-skills](https://github.com/callstackincubator/agent-skills) (MIT).
 **Related:** `enhance-rn-screen`, `start-emulator`, `test-emulator`, `workflow-spec-tdd`
 
+#### `data-pipeline` <sup>NEW Jun 2026</sup>
+**Triggers:** "build an ingestion pipeline", "sync X into Y", "nightly aggregation", "process this queue", "backfill", "this cron double-counts", "dedupe", "the numbers are wrong after a retry", edge-function workers, `pg_cron` jobs
+**What it does:** Build-time correctness for data pipelines / ETL / ingestion / edge-function workers / cron / queue consumers. Bakes in the 5 non-negotiables (idempotency, atomicity, data contracts, explicit delivery semantics, observability), a 4-layer staging architecture (Raw → Staged → Curated → Aggregated), windowed/chunked backfills with watermarks, dead-letter handling, and anti-patterns (monolithic DAGs, silent catch, count+1 on retryable paths, cron overlap). Supabase `pg_cron`/edge-function specifics included. Complements the Supabase plugin and `sbc-qa-data-integrity-audit`.
+**Related:** `audit-db-schema`, `supabase-postgres-best-practices`, `full-stack-ship-discipline`, `workflow-spec-tdd`, `sbc-qa-data-integrity-audit`
+
 ### Design & Frontend
 
 #### `design-frontend`

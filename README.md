@@ -123,6 +123,7 @@ graph TB
 | `workflow-spec-tdd` | Skill | The anti-vibe-coding spine — brainstorm → spec → plan → RED/GREEN/REFACTOR TDD → self-review before "done". Stack-agnostic; operationalizes `karpathy-guidelines`. Adapted from [obra/superpowers](https://github.com/obra/superpowers) |
 | `capacitor-platform` | Skill | Capacitor platform + pipeline depth (plugins, OTA, deep links, push, native build CI, store submission + Apple preflight, security scan, migrations). Complements `enhance-capacitor-ui`. Distilled from [cap-go/capgo-skills](https://github.com/cap-go/capgo-skills) |
 | `rn-performance` | Skill | React Native perf/build/upgrade depth (FPS, Hermes, TTI, bundle size, FlashList, Reanimated, Turbo Modules, 16KB alignment, version upgrades). Complements `enhance-rn-screen`. Distilled from [callstack/agent-skills](https://github.com/callstackincubator/agent-skills) |
+| `data-pipeline` | Skill | Build-time data-pipeline correctness — idempotency, atomic writes, data contracts, 4-layer staging, windowed backfills, dead-letter, observability. For ETL / edge-function workers / `pg_cron` / queues. Complements the Supabase plugin + `sbc-qa-data-integrity-audit` |
 
 ### Jun 2026 — Enhance Family Coherence + Taste/Redesign Skills
 
@@ -284,7 +285,8 @@ cursor-kenji/
 │   ├── workflow-refactor/
 │   ├── workflow-spec-tdd/    # anti-vibe-coding spine (spec → plan → TDD → review)
 │   ├── capacitor-platform/   # Capacitor plugins, OTA, store submission, CI/CD
-│   └── rn-performance/       # React Native perf, bundle, upgrade depth
+│   ├── rn-performance/       # React Native perf, bundle, upgrade depth
+│   └── data-pipeline/        # ETL/edge-function/cron correctness (idempotency, staging, backfills)
 ├── skills-cursor/           # 12 Cursor-specific Skills
 │   ├── babysit/
 │   ├── canvas/                # Updated Apr 2026 — refreshed SDK + design rules
@@ -477,6 +479,7 @@ Skills auto-trigger from **trigger phrases in their description** (the `descript
 | "build this feature properly" / "this keeps breaking, do it right" | `workflow-spec-tdd` |
 | "add push notifications / deep links / ship an OTA update / submit to App Store" | `capacitor-platform` |
 | "the RN app is janky / slow to start / bundle is huge / upgrade RN" | `rn-performance` |
+| "build an ingestion pipeline / nightly aggregation / this cron double-counts / backfill" | `data-pipeline` |
 | "give the README a hero image and screenshots" | `enhance-readme` |
 | "audit the UX of the checkout flow" | `audit-ux` |
 | "split this branch into smaller PRs" | `split-to-prs` |
@@ -684,6 +687,7 @@ mindmap
 | `backend-patterns` | Server Actions, tRPC, Edge Functions, caching, jobs |
 | `database-optimization` | Indexes, N+1 fixes, RLS performance, query tuning |
 | `realtime-features` | WebSocket, Supabase Realtime, SSE, live data |
+| `data-pipeline` <sup>New Jun 2026</sup> | Build-time pipeline correctness — idempotency, atomic writes, data contracts, 4-layer staging, windowed backfills, dead-letter, observability. For ETL / edge-function workers / `pg_cron` / queues. Pairs with the Supabase plugin |
 
 ### Architecture & Quality
 
