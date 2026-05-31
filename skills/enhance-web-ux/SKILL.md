@@ -1,5 +1,5 @@
 ---
-name: enhance-page-ux
+name: enhance-web-ux
 description: >
   Generative, NN/g-grounded page enhancement skill. Given a route, screen, or component, this
   produces concrete, design-system-compliant code changes that replace generic, AI-templated, or
@@ -23,6 +23,20 @@ description: >
   audit-uiux-design-system. For pure heuristic evaluation report, use
   audit-ux.
 ---
+
+> ### Which enhance skill? (surface router)
+>
+> | Your surface | Use |
+> |:-------------|:----|
+> | **Web** product page / dashboard — composition, hierarchy, spacing, motion | `enhance-web-ui` |
+> | **Web** product page — UX heuristics, flows, data wiring | `enhance-web-ux` |
+> | **Web** landing / marketing / portfolio (greenfield, anti-slop) | `enhance-web-landing` |
+> | **Web** existing site upgrade (audit-first, preserve behavior) | `enhance-web-redesign` |
+> | **React Native** screen (Expo / bare) | `enhance-rn-screen` |
+> | **Capacitor / hybrid** shell (one web app shipped to iOS + Android) | `enhance-capacitor-ui` (axis architecture first) → then the web or rn skill |
+> | Repo **README** showcase | `enhance-readme` |
+>
+> **You are here: `enhance-web-ux`.** Native iOS/Android (SwiftUI / Compose, no web layer) is out of scope for all of these — use Apple HIG / Material directly.
 
 # Enhance Page UX
 
@@ -108,7 +122,7 @@ code changes that make the page feel hand-crafted — not template-generated.
 > reads as a tonal recess that frames the content. For active-state
 > signaling, prefer micro-indicators (underline, M3 32×16 pill on icon,
 > count-badge tint, font-weight bump) over full-cell fills — see Hidden
-> Failure Modes H1, H2, H3 in `enhance-page-ui`.
+> Failure Modes H1, H2, H3 in `enhance-web-ui`.
 
 > **One brand-color element per visual zone.** A page should have ONE
 > brand/accent-tinted element per zone (header, breadcrumb, tab row, dock,
@@ -127,7 +141,7 @@ Copy this to track progress across the enhancement:
 ```
 ENHANCE /<route>
 - [ ] 0. PRODUCT TIER: domain class → colour-tier (A vibrant / B expressive /
-       C productive / D restrained) — see enhance-page-ui §1.5
+       C productive / D restrained) — see enhance-web-ui §1.5
 - [ ] 1. RECON: route, components, data shape, primitives, tokens, wrappers
 - [ ] 2. LIVE: browser MCP at 1440 / 1024 / 800, screenshots, console
 - [ ] 2.5 DOM FORENSICS: rect widths/heights for repeated tiles, conditional
@@ -337,7 +351,7 @@ Cite NN/g #8 (Aesthetic & Minimalist) when documenting these.
 After the layout passes, take the desktop screenshot and apply a 10–15px
 Gaussian blur (any image tool). For tier-A / tier-B products (consumer,
 gamified, learning, lifestyle — see *Domain Colour Tier* in
-`enhance-page-ui`), check that:
+`enhance-web-ui`), check that:
 
 - A 3-up or 4-up of category tiles renders as 3–4 *distinct* colour
   blobs after blur. If they all blur to the same neutral, the tile
@@ -542,7 +556,7 @@ Rules during implementation:
     rings to read as semantic categories at a squint. Tier C/D
     (productive / data-dense) keeps `/5–/10` for restraint. Tier mismatch
     = monochromatic / washed-out feel even when every token is correct.
-    See *Domain Colour Tier* in `enhance-page-ui` SKILL.md.
+    See *Domain Colour Tier* in `enhance-web-ui` SKILL.md.
 11. **Make conditional slots collapse when empty.** Any optional region
     (`media`, `aside`, `cover`, `eyebrow`, `secondaryCTA`) must drop its
     wrapper or its `min-h` floor when its content is sparse. Reserve
@@ -573,7 +587,7 @@ Rules during implementation:
     For active states, prefer micro-indicators (underline, M3 32×16 pill
     on icon, count-badge tint, font-weight bump) over full-cell fills —
     see "Heavy Active State" pattern + Hidden Failure Modes H1, H3 in
-    `enhance-page-ui`. On root / index routes, actively suppress the
+    `enhance-web-ui`. On root / index routes, actively suppress the
     breadcrumb / context row — the dock active indicator + page H1
     already answer "where am I?", and the breadcrumb on root is pure
     tautology (Failure Mode H2 / S13).
@@ -773,7 +787,7 @@ For complete before/after enhancement examples, read `examples.md`.
 - [`HEURISTICS.md`](HEURISTICS.md) — NN/g 10 + Laws of UX, condensed
 - [`PATTERNS.md`](PATTERNS.md) — anti-pattern → replacement library
 - [`examples.md`](examples.md) — complete before / after enhancement walkthroughs
-- [`enhance-page-ui` SKILL.md](../enhance-page-ui/SKILL.md) — companion
+- [`enhance-web-ui` SKILL.md](../enhance-web-ui/SKILL.md) — companion
   artistic/composition skill. The §"Hidden Failure Modes" section there
   enumerates H1–H12 with detection probes and fix shapes that this skill's
   S11–S18 reference. Read both together when feedback is vague-but-visceral
@@ -843,5 +857,5 @@ For complete before/after enhancement examples, read `examples.md`.
   <https://vitalitydesignsystem.com/foundations/colour/>
 - **Figma — 2026 Web Design Trends**: vibrant maximalist palettes
   returning, especially for lifestyle / youth / learning brands.
-  Validates the *Domain Colour Tier* framing in `enhance-page-ui`.
+  Validates the *Domain Colour Tier* framing in `enhance-web-ui`.
   <https://www.figma.com/resource-library/web-design-trends/>

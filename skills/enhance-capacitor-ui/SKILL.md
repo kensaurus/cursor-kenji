@@ -1,5 +1,5 @@
 ---
-name: enhance-web-mobile-ui
+name: enhance-capacitor-ui
 description: >
   Cross-surface UIUX separation skill for hybrid web apps that ship as PWA +
   iOS + Android via Capacitor (or Tauri / Expo Web / Ionic / RN-Web). Use when
@@ -24,9 +24,23 @@ description: >
   mismatch when form-factor is read in render. Generic across stacks
   (Tailwind 4 / Tailwind 3 / vanilla CSS variables, Next.js / Vite /
   React Router, Capacitor / Tauri / Expo Web / Ionic). For pure visual polish
-  on a single surface, use enhance-page-ui first; this skill is the
+  on a single surface, use enhance-web-ui first; this skill is the
   prerequisite *architecture* that makes per-surface polish safe.
 ---
+
+> ### Which enhance skill? (surface router)
+>
+> | Your surface | Use |
+> |:-------------|:----|
+> | **Web** product page / dashboard — composition, hierarchy, spacing, motion | `enhance-web-ui` |
+> | **Web** product page — UX heuristics, flows, data wiring | `enhance-web-ux` |
+> | **Web** landing / marketing / portfolio (greenfield, anti-slop) | `enhance-web-landing` |
+> | **Web** existing site upgrade (audit-first, preserve behavior) | `enhance-web-redesign` |
+> | **React Native** screen (Expo / bare) | `enhance-rn-screen` |
+> | **Capacitor / hybrid** shell (one web app shipped to iOS + Android) | `enhance-capacitor-ui` (axis architecture first) → then the web or rn skill |
+> | Repo **README** showcase | `enhance-readme` |
+>
+> **You are here: `enhance-capacitor-ui`.** Native iOS/Android (SwiftUI / Compose, no web layer) is out of scope for all of these — use Apple HIG / Material directly.
 
 # Enhance Web ↔ Mobile UI
 
@@ -101,7 +115,7 @@ predictable, reviewable change instead of a regression.
 > legitimately become **tier-C calm** on the *expanded* form factor
 > (more chrome, more data density, less novelty). The mistake is
 > applying one saturation tier across all surfaces. Pick a tier per
-> form factor; document it. (See `enhance-page-ui` § Domain Colour
+> form factor; document it. (See `enhance-web-ui` § Domain Colour
 > Tier.)
 
 > **Never ship mock, dead, or rogue platform branches.** Platform-mode
@@ -117,7 +131,7 @@ predictable, reviewable change instead of a regression.
 > primitive within a week unless the rule warns them.
 
 > **Patch the axis primitive, not the consumer.** Same rule as
-> `enhance-page-ui` *Primitive-First Patch Rule*, scoped to axes: if
+> `enhance-web-ui` *Primitive-First Patch Rule*, scoped to axes: if
 > twelve cards each carry their own `lg:flex-row` branch, the bug is
 > that the card primitive isn't a `@container`. Patch the primitive
 > once, delete the twelve consumer branches.
@@ -318,7 +332,7 @@ console.table(cards.map(c => ({
 
 ## Hidden Failure Modes (the cross-surface ones)
 
-Parallel to `enhance-page-ui` H1–H16 but specific to multi-surface
+Parallel to `enhance-web-ui` H1–H16 but specific to multi-surface
 contracts. Each entry has a **detection probe** and a **fix shape**.
 Generic across stacks.
 
@@ -473,7 +487,7 @@ attribute, then convert primitives:
 
 Same applies to `group-hover:opacity-100` row actions: gate behind
 `can-hover:` and provide a tap fallback (long-press menu, always-visible
-on coarse pointer) — see `enhance-page-ui` H7.
+on coarse pointer) — see `enhance-web-ui` H7.
 
 ### M6. Capacitor split-screen / iPad landscape / fold ignored
 
@@ -781,9 +795,9 @@ Per-cell checks:
 
 - **Chrome** — correct nav pattern? (compact: bottom dock; medium:
   side rail; expanded: persistent sidebar). Active state is a
-  micro-indicator, not a full-cell wash (see `enhance-page-ui` H1).
+  micro-indicator, not a full-cell wash (see `enhance-web-ui` H1).
 - **Hierarchy squint** — primary content obvious in 0.5 s? (see
-  `enhance-page-ui` § 3a)
+  `enhance-web-ui` § 3a)
 - **Category squint** — color tier matches the form factor? (compact
   vibrant for tier-A apps; expanded calmer)
 - **Hit targets** — touch targets ≥ 44 px on coarse-pointer cells; no
@@ -1017,7 +1031,7 @@ adoption checklist.
 8. **Run the six-cell matrix before declaring done.** Three viewports
    × at least PWA + one native shell. Five cells passing is not done.
 9. **Patch the primitive, not the call site.** Same rule as
-   `enhance-page-ui` *Primitive-First Patch Rule* — if a `lg:` shows up
+   `enhance-web-ui` *Primitive-First Patch Rule* — if a `lg:` shows up
    in three feature components, the bug is that the underlying
    primitive isn't a `@container`.
 10. **Document the why of every axis decision.** A comment on the
@@ -1063,7 +1077,7 @@ adoption checklist.
       vibrant, expanded = tier-C calm) and per platform.
 - [ ] **Six-cell matrix passed**: 3 form factors × at least PWA + iOS
       WebView + Android WebView. Each cell screenshot reviewed with
-      the squint test from `enhance-page-ui` § 3a.
+      the squint test from `enhance-web-ui` § 3a.
 - [ ] **Guardrail in place**: ESLint `no-restricted-syntax` + Cursor /
       AGENTS rule (`responsive-design-axes.mdc`) live in the repo so
       the next enhancer can't reintroduce axis conflation.
@@ -1106,7 +1120,7 @@ adoption checklist.
 ## When Not To Use This Skill
 
 - Single-surface visual polish (web only or iOS only) → use
-  `enhance-page-ui` directly; this skill is the *prerequisite
+  `enhance-web-ui` directly; this skill is the *prerequisite
   architecture* but isn't needed if you only ship one surface.
 - Pure heuristic audit (no code changes) → use `audit-uiux-design-system`
   or `audit-ux`.
@@ -1123,13 +1137,13 @@ adoption checklist.
 
 ## Companion / Sibling Skills
 
-- [`enhance-page-ui`](../enhance-page-ui/SKILL.md) — single-surface
+- [`enhance-web-ui`](../enhance-web-ui/SKILL.md) — single-surface
   artistic / composition skill. Read after this one when you're polishing
   *one cell* of the matrix; the H1–H16 hidden failure modes there
   catalogue *within-surface* bugs (active-state mass, chrome tautology,
   brand-color competition, wrapper-collapsed tiles, etc.) that this
   skill assumes are handled separately per surface.
-- [`enhance-page-ux`](../enhance-page-ux/SKILL.md) — task-flow / data-
+- [`enhance-web-ux`](../enhance-web-ux/SKILL.md) — task-flow / data-
   correctness companion. Use *before* this skill to fix the *what*
   (pain → heuristic → primitive); use *this* skill to make the *how*
   (per surface) safe.
@@ -1149,7 +1163,7 @@ adoption checklist.
   <https://m3.material.io/foundations/layout/applying-layout/window-size-classes>
 - **Material Design 3 — NavigationBar / NavigationRail / NavigationDrawer** —
   per-form-factor navigation pattern; spec for active-indicator pill
-  (32×16 wrapping the icon) referenced in `enhance-page-ui` H1.
+  (32×16 wrapping the icon) referenced in `enhance-web-ui` H1.
   <https://m3.material.io/components/navigation-bar/overview>
   <https://m3.material.io/components/navigation-rail/overview>
 - **Apple Human Interface Guidelines — Adaptive Layouts** — iOS form

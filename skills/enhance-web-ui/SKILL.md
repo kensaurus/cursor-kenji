@@ -1,5 +1,5 @@
 ---
-name: enhance-page-ui
+name: enhance-web-ui
 description: >
   Artistic, research-grounded UI enhancement skill for making an existing page feel
   intentional, spacious, and human-crafted. Use when the user asks to make a page
@@ -20,9 +20,23 @@ description: >
   domain-colour-tier mismatch (consumer/learning apps using B2B tints), and
   left-anchored stacked cards lacking horizontal balance. General across web
   repos. Focuses on content choreography, hierarchy, spacing, motion, and visual
-  psychology; for task-flow usability/data correctness use enhance-page-ux first
+  psychology; for task-flow usability/data correctness use enhance-web-ux first
   or alongside it.
 ---
+
+> ### Which enhance skill? (surface router)
+>
+> | Your surface | Use |
+> |:-------------|:----|
+> | **Web** product page / dashboard — composition, hierarchy, spacing, motion | `enhance-web-ui` |
+> | **Web** product page — UX heuristics, flows, data wiring | `enhance-web-ux` |
+> | **Web** landing / marketing / portfolio (greenfield, anti-slop) | `enhance-web-landing` |
+> | **Web** existing site upgrade (audit-first, preserve behavior) | `enhance-web-redesign` |
+> | **React Native** screen (Expo / bare) | `enhance-rn-screen` |
+> | **Capacitor / hybrid** shell (one web app shipped to iOS + Android) | `enhance-capacitor-ui` (axis architecture first) → then the web or rn skill |
+> | Repo **README** showcase | `enhance-readme` |
+>
+> **You are here: `enhance-web-ui`.** Native iOS/Android (SwiftUI / Compose, no web layer) is out of scope for all of these — use Apple HIG / Material directly.
 
 # Enhance Page UI
 
@@ -1051,7 +1065,7 @@ Verification:
 ## When Not To Use
 
 - Pure workflow correctness, data modeling, or task usability: use
-  `enhance-page-ux` first.
+  `enhance-web-ux` first.
 - Pure design-token compliance audit: use `audit-uiux-design-system`.
 - Report-only heuristic audit: use `audit-ux`.
 - Brand-new product/page from scratch: use `design-frontend`.

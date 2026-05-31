@@ -243,7 +243,7 @@ impress. For the changed surfaces, push hard:
   (`<script>`, `'; DROP TABLE`, emoji, very long strings), slow/failed network.
 - **Question the UX:** Is the primary action obvious in 3 seconds? Is feedback
   immediate and clear? Is anything redundant, cramped, or confusing? Would a real user
-  get stuck? (Lean on `enhance-page-ux` / `enhance-page-ui` heuristics if deep polish
+  get stuck? (Lean on `enhance-web-ux` / `enhance-web-ui` heuristics if deep polish
   is warranted.)
 - **Question the design:** Does it match the rest of the app's patterns and tokens, or
   did this change introduce drift?

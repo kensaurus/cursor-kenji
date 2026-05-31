@@ -8,25 +8,40 @@ Complete reference for all skills, commands, and their trigger phrases.
 
 ### Enhance
 
-#### `enhance-page-ui`
+#### `enhance-web-ui`
 **Triggers:** "make this page nicer", "more polished", "more beautiful", "more editorial", "more premium", "less crowded", "less AI-generated", "better laid out", "better balanced", "typography", "visual hierarchy", "progressive disclosure", "empty/dead space", "scroll fades", "microinteractions", "motion", "hover states", "cards", "grids", "density", "cosmetic UI polish"
 **What it does:** Composition before decoration — fix hierarchy, grouping, alignment, and rhythm before adding gradients, motion, blur, masks, or shadows. Subtract clutter, group related, pin metadata, soften scroll cuts, animate purposefully. Generic across web stacks.
-**Related:** `enhance-page-ux`, `audit-uiux-design-system`, `design-frontend`
+**Related:** `enhance-web-ux`, `audit-uiux-design-system`, `design-frontend`
 
-#### `enhance-page-ux`
+#### `enhance-web-ux`
 **Triggers:** "enhance this page", "make /xxx better", "this page feels AI-generated", "fix UX of /xxx", "improve information density", "icons all look the same", "buttons wrap to 2 lines", "empty columns", "I can't tell which is which"
 **What it does:** Replaces generic / "stacked" UI with semantic data wired to real backend state. Inventories primitives FIRST, maps every pain to an NN/g heuristic, fixes at the helper / token level (not row-by-row), verified live at 1440/1024/800 viewports via browser MCP. Generic — works on any webapp regardless of stack.
-**Related:** `enhance-page-ui`, `audit-ux`, `audit-uiux-design-system`
+**Related:** `enhance-web-ui`, `audit-ux`, `audit-uiux-design-system`
 
 #### `enhance-readme`
 **Triggers:** "enhance README", "make README prettier", "add screenshots to README", "showcase the app in README", "design the README", "add hero image", "spice up README", "make README more fun", "add animated demo to README", "record a tour GIF", "make a README GIF"
 **What it does:** Theme-aware hero + tour grid + optional autoplay GIF via Playwright MCP. Captures live screenshots at 1600x1000 in dark and light mode, pairs them with `<picture>` for auto theme-swap, and inlines them into the README with GitHub-supported HTML. Companion scripts at `~/.cursor/skills/enhance-readme/scripts/`.
 **Related:** `webapp-testing`, `protocol-browser-anti-stall`
 
-#### `enhance-web-mobile-ui` <sup>NEW May 2026</sup>
+#### `enhance-capacitor-ui` <sup>NEW May 2026</sup>
 **Triggers:** "improved one surface and broke the other", "looks great on web but cramped on mobile", "looks great on my laptop but atrocious on my phone", "ad-hoc useIsMobile branches", "single md: breakpoint everywhere", "platform-specific styling inline", "Capacitor / Tauri / Expo Web cross-surface issues", "hover-only affordances on touch"
 **What it does:** Cross-surface UIUX separation skill for hybrid PWA + iOS + Android apps. Establishes three orthogonal axes — **form factor** (compact / medium / expanded), **platform** (web / ios / android), **pointer capability** (fine / coarse) — and a three-layer architecture (context hook, mode tokens, container-query primitives). Catches axis conflation in single booleans, viewport queries used for component micro-layout, hover-only affordances shipped to native shells, hardcoded chrome dimensions leaking into primitives, SSR/Capacitor first-paint mismatch. Generic across Tailwind 3/4, Next.js / Vite / React Router, Capacitor / Tauri / Expo Web / Ionic.
-**Related:** `enhance-page-ui`, `enhance-page-ux`, `mobile-first`
+**Related:** `enhance-web-ui`, `enhance-web-ux`, `mobile-first`
+
+#### `enhance-rn-screen`
+**Triggers:** "this screen looks off", "feels clunky on iOS", "Android version looks wrong", "jank when scrolling", "button is unreachable", "polish this React Native screen", "safe area", "keyboard covers input", "FlatList re-renders"
+**What it does:** Polishes an existing React Native screen to feel intentional and native. Catches RN-specific silent failures — safe-area violations, sub-minimum touch targets, keyboard occlusion, JS-thread animation jank, gesture conflicts, tab-bar content clipping, double safe-area insets, FlatList re-render storms — plus the platform-agnostic composition failures shared with the web skills. Applies to bare React Native, Expo bare, and Expo managed.
+**Related:** `enhance-capacitor-ui`, `start-emulator`, `test-emulator`
+
+#### `enhance-web-landing` <sup>NEW Jun 2026</sup>
+**Triggers:** "build a landing page", "portfolio", "marketing site", "anti-slop", "Awwwards-style", "premium frontend", "make it not look AI-generated", "taste"
+**What it does:** Anti-slop frontend skill for landing pages, portfolios, and marketing sites. Reads the brief, infers design direction, and tunes three dials (variance / motion / density). Brief inference, design-system map, hard em-dash ban, canonical motion code skeletons, strict pre-flight check. NOT for dashboards, data tables, or multi-step product UI. Adapted from [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill).
+**Related:** `enhance-web-redesign`, `design-frontend`, `enhance-web-ui`
+
+#### `enhance-web-redesign` <sup>NEW Jun 2026</sup>
+**Triggers:** "redesign this site", "upgrade UI to premium", "remove AI slop patterns", "redesign audit", "make this existing site feel premium without breaking it"
+**What it does:** Audit-first upgrade of an existing web project. Opens with a 60-second AI-tell triage (Inter, purple gradients, three equal cards, pill-everything, em-dash overuse), then scans the codebase, diagnoses generic patterns, and applies targeted fixes working with the existing stack — no rewrites. Adapted from [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) + [anti-slop-ui](https://github.com/awaken7050dev/anti-slop-ui).
+**Related:** `enhance-web-landing`, `enhance-web-ui`, `audit-uiux-design-system`
 
 ### Design & Frontend
 
@@ -203,7 +218,7 @@ Commands fall into two groups: **standalone** (full playbook lives in the comman
 | `/refactor` | `refactor.md` | `workflow-refactor` | Analyze → split → extract → verify behavior |
 | `/review` | `review.md` | `audit-code-review` | Agent review + manual checklist |
 | `/test` | `test.md` | `test-unit`, `test-qa`, `test-emulator` | Type check → unit → integration → E2E |
-| `/uiux` | `uiux.md` | `audit-uiux-design-system`, `audit-ux`, `enhance-page-ui`, `enhance-page-ux` | Audit + enhance UI/UX |
+| `/uiux` | `uiux.md` | `audit-uiux-design-system`, `audit-ux`, `enhance-web-ui`, `enhance-web-ux` | Audit + enhance UI/UX |
 | `/update-deps` | `update-deps.md` | `workflow-housekeep` (Phase 3) | Audit and update dependencies safely |
 
 ---
@@ -228,7 +243,7 @@ Commands fall into two groups: **standalone** (full playbook lives in the comman
 #### `audit-ux`
 **Triggers:** "UX audit", "usability review", "heuristic evaluation", "content audit", "interaction design review", "user flow analysis", "UX quality", "evaluate usability", "audit microcopy", "check UX heuristics", "assess cognitive load"
 **What it does:** Research-driven UX audit grounded in Nielsen Norman Group's 10 heuristics, Laws of UX (Fitts's, Hick's, Miller's, Jakob's), Intuit Content Design principles, and Google HEART metrics. Browser MCP for live walkthrough, Firecrawl for fresh research, Sequential Thinking for complex flow analysis. Generic — works with any webapp regardless of tech stack. For visual design system compliance only, use `audit-uiux-design-system`.
-**Related:** `audit-uiux-design-system`, `audit-accessibility`, `enhance-page-ux`
+**Related:** `audit-uiux-design-system`, `audit-accessibility`, `enhance-web-ux`
 
 #### `audit-uiux-design-system`
 **Triggers:** "design system audit", "UI consistency", "token compliance", "design drift", "component audit", "visual coherency", "Nielsen heuristics"
@@ -375,16 +390,16 @@ Commands fall into two groups: **standalone** (full playbook lives in the comman
 `workflow-housekeep` → `docs-writer` + `workflow-refactor` + `audit-code-review`
 
 ### UX Polish (NEW)
-`audit-ux` → `enhance-page-ux` → `enhance-page-ui` → `/commit`
+`audit-ux` → `enhance-web-ux` → `enhance-web-ui` → `/commit`
 
 ### README Showcase (NEW)
 `enhance-readme` → `/readme` → `/commit`
 
 ### Stack-Aware UI Quality (NEW)
-`audit-uiux-design-system` (visual tokens) + `audit-ux` (heuristics) → `enhance-page-ux` (data + primitives) → `enhance-page-ui` (composition + motion)
+`audit-uiux-design-system` (visual tokens) + `audit-ux` (heuristics) → `enhance-web-ux` (data + primitives) → `enhance-web-ui` (composition + motion)
 
 ### Cross-Surface UI Architecture (NEW May 2026)
-`enhance-web-mobile-ui` (architecture: axes + tokens + primitives) → `enhance-page-ui` (per-surface polish) → `enhance-page-ux` (data + heuristics)
+`enhance-capacitor-ui` (architecture: axes + tokens + primitives) → `enhance-web-ui` (per-surface polish) → `enhance-web-ux` (data + heuristics)
 *Run the architecture pass first when a hybrid web/iOS/Android app has axis conflation — otherwise per-surface polish will keep introducing regressions on the other surface.*
 
 ### Native RN Ship Loop (NEW May 2026)

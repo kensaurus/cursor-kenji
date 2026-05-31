@@ -1,7 +1,21 @@
 ---
-name: enhance-existing-redesign
+name: enhance-web-redesign
 description: Upgrades existing websites and apps to premium quality. Audits current design, identifies generic AI patterns, and applies high-end design standards without breaking functionality. Use when redesigning existing projects, upgrading UI to premium quality, removing AI slop patterns, or when the user asks for a redesign audit. Works with any CSS framework or vanilla CSS.
 ---
+
+> ### Which enhance skill? (surface router)
+>
+> | Your surface | Use |
+> |:-------------|:----|
+> | **Web** product page / dashboard — composition, hierarchy, spacing, motion | `enhance-web-ui` |
+> | **Web** product page — UX heuristics, flows, data wiring | `enhance-web-ux` |
+> | **Web** landing / marketing / portfolio (greenfield, anti-slop) | `enhance-web-landing` |
+> | **Web** existing site upgrade (audit-first, preserve behavior) | `enhance-web-redesign` |
+> | **React Native** screen (Expo / bare) | `enhance-rn-screen` |
+> | **Capacitor / hybrid** shell (one web app shipped to iOS + Android) | `enhance-capacitor-ui` (axis architecture first) → then the web or rn skill |
+> | Repo **README** showcase | `enhance-readme` |
+>
+> **You are here: `enhance-web-redesign`.** Native iOS/Android (SwiftUI / Compose, no web layer) is out of scope for all of these — use Apple HIG / Material directly.
 
 # Redesign Skill
 
@@ -12,6 +26,23 @@ When applied to an existing project, follow this sequence:
 1. **Scan** — Read the codebase. Identify the framework, styling method (Tailwind, vanilla CSS, styled-components, etc.), and current design patterns.
 2. **Diagnose** — Run through the audit below. List every generic pattern, weak point, and missing state you find.
 3. **Fix** — Apply targeted upgrades working with the existing stack. Do not rewrite from scratch. Improve what's there.
+
+## Phase 0: 60-Second AI-Tell Triage
+
+Before the full audit, scan for the highest-signal "AI-generated look" fingerprints. If you spot 3+, the page reads as slop and these are the fastest wins. (Distilled from anti-slop research — see [anti-slop-ui](https://github.com/awaken7050dev/anti-slop-ui) and [taste-skill](https://github.com/Leonxlnx/taste-skill).)
+
+- [ ] **Inter / Roboto** as the only typeface
+- [ ] **Purple→blue gradient** on hero, buttons, or icons
+- [ ] **Three equal feature cards** in a row
+- [ ] **Pill-shaped everything** (uniform `rounded-full` badges + buttons)
+- [ ] **"Welcome to [Product]" / "Elevate your…"** hero copy
+- [ ] **Em dashes** sprinkled through every sentence of body copy
+- [ ] **Lucide/Feather icons** with a rocket = "launch", shield = "security"
+- [ ] **Centered-everything** symmetrical layout with no asymmetry or overlap
+- [ ] **Generic `shadow-lg`** pure-black shadows on white cards
+- [ ] **No hover / active / focus states** on interactive elements
+
+Kill these first, then run the full audit.
 
 ## Design Audit
 

@@ -1,7 +1,21 @@
 ---
-name: enhance-taste-design
+name: enhance-web-landing
 description: Anti-slop frontend skill for landing pages, portfolios, and redesigns. Infers design direction from brief and ships non-templated interfaces with configurable variance, motion, and density dials. Use when building landing pages, portfolios, marketing sites, or when the user mentions taste, anti-slop, Awwwards-style, or premium frontend design.
 ---
+
+> ### Which enhance skill? (surface router)
+>
+> | Your surface | Use |
+> |:-------------|:----|
+> | **Web** product page / dashboard — composition, hierarchy, spacing, motion | `enhance-web-ui` |
+> | **Web** product page — UX heuristics, flows, data wiring | `enhance-web-ux` |
+> | **Web** landing / marketing / portfolio (greenfield, anti-slop) | `enhance-web-landing` |
+> | **Web** existing site upgrade (audit-first, preserve behavior) | `enhance-web-redesign` |
+> | **React Native** screen (Expo / bare) | `enhance-rn-screen` |
+> | **Capacitor / hybrid** shell (one web app shipped to iOS + Android) | `enhance-capacitor-ui` (axis architecture first) → then the web or rn skill |
+> | Repo **README** showcase | `enhance-readme` |
+>
+> **You are here: `enhance-web-landing`.** Native iOS/Android (SwiftUI / Compose, no web layer) is out of scope for all of these — use Apple HIG / Material directly.
 
 # tasteskill: Anti-Slop Frontend Skill
 

@@ -99,7 +99,7 @@ graph TB
 | Addition | Type | Why It Matters |
 |:---------|:-----|:---------------|
 | `start-emulator` | Skill | Boots Metro + Android emulator in the right order — kills duplicate ports, picks fresh-cache vs fast-iteration, defaults to 1080×4000 for tall QA screenshots, polls `/status` before deeplink to avoid "Cannot connect to Expo CLI" races. Pairs with `test-emulator` |
-| `enhance-web-mobile-ui` | Skill | Architecture skill for hybrid web/iOS/Android apps (Capacitor / Tauri / Expo Web / Ionic). Establishes three orthogonal axes — form factor, platform, pointer capability — so a UIUX sweep on one surface cannot silently degrade another. Catches axis conflation, viewport-as-form-factor abuse, hover-only affordances on touch shells |
+| `enhance-capacitor-ui` | Skill | Architecture skill for hybrid web/iOS/Android apps (Capacitor / Tauri / Expo Web / Ionic). Establishes three orthogonal axes — form factor, platform, pointer capability — so a UIUX sweep on one surface cannot silently degrade another. Catches axis conflation, viewport-as-form-factor abuse, hover-only affordances on touch shells |
 | `full-stack-ship-discipline.mdc` | Rule | `alwaysApply: true` — prevents the "local migration file never deployed" failure mode. Forces UI tasks to inventory backend deps (schema, RPC, RLS, edge functions) in the same chat, deploy via Supabase MCP, and verify against the remote DB |
 | `shell-first-search.md` | Rule | Workspace-wide rule routing routine search to `Shell` (`grep`/`find`/`ls`) instead of the `Grep`/`Glob` tools, which have hung for minutes on this Windows host. Keeps `SemanticSearch` and `Read` as the correct tools for their use cases |
 
@@ -114,14 +114,15 @@ graph TB
 | 9 commands demoted to pointers | Command | `/commit`, `/debug`, `/pr`, `/readme`, `/refactor`, `/review`, `/test`, `/uiux`, `/update-deps` now point to their skill equivalents instead of duplicating the playbook. Skills handle natural language; commands handle explicit slash invocation |
 | `audit-ux` cross-reference | Skill | Fixed broken pointer (`audit-ui-design-system` → `audit-uiux-design-system`) |
 
-### Jun 2026 — Taste & Redesign Skills
+### Jun 2026 — Enhance Family Coherence + Taste/Redesign Skills
 
-> *Adapted from [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) — anti-slop frontend design with audit-first redesign workflow.*
+> *Adapted anti-slop skills from [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill), then renamed the whole `enhance-*` family to a surface-first convention so you reach for the right one by surface (web / RN / Capacitor).*
 
 | Addition | Type | Why It Matters |
 |:---------|:-----|:---------------|
-| `enhance-taste-design` | Skill | Anti-slop frontend for landing pages, portfolios, and marketing sites — brief inference, variance/motion/density dials, real design systems when applicable |
-| `enhance-existing-redesign` | Skill | Audit-first upgrade of existing sites — scan, diagnose generic AI patterns, apply targeted premium fixes without breaking functionality |
+| `enhance-web-landing` | Skill | Anti-slop frontend for landing pages, portfolios, and marketing sites — brief inference, variance/motion/density dials, real design systems when applicable |
+| `enhance-web-redesign` | Skill | Audit-first upgrade of existing sites — 60-second AI-tell triage, then scan/diagnose/fix generic AI patterns without breaking functionality |
+| Family renamed | Skill | `enhance-page-ui`→`enhance-web-ui`, `enhance-page-ux`→`enhance-web-ux`, `enhance-screen-rn`→`enhance-rn-screen`, `enhance-web-mobile-ui`→`enhance-capacitor-ui`. New `enhance-<surface>-<aspect>` convention + a surface-router block added to every enhance skill |
 
 ### Apr 2026 — The Enhance Family
 
@@ -129,8 +130,8 @@ graph TB
 
 | Addition | Type | Why It Matters |
 |:---------|:-----|:---------------|
-| `enhance-page-ui` | Skill | Composition over decoration — fix hierarchy, grouping, spacing, motion before adding visual flourish. NN/g visual hierarchy + Laws of UX grounded |
-| `enhance-page-ux` | Skill | Replace generic "stacked" UI with semantic data — every change cites a Nielsen heuristic, uses existing primitives, verified at 3 viewports via browser MCP |
+| `enhance-web-ui` | Skill | Composition over decoration — fix hierarchy, grouping, spacing, motion before adding visual flourish. NN/g visual hierarchy + Laws of UX grounded |
+| `enhance-web-ux` | Skill | Replace generic "stacked" UI with semantic data — every change cites a Nielsen heuristic, uses existing primitives, verified at 3 viewports via browser MCP |
 | `enhance-readme` | Skill | Theme-aware hero + tour grid + animated GIF — turns plain READMEs into showcases via Playwright MCP screenshot capture |
 | `audit-ux` | Skill | Deep UX audit grounded in NN/g 10 heuristics, Laws of UX, Intuit Content Design, and Google HEART — generic across any webapp |
 | `split-to-prs` | Cursor Skill | Slice a single chat / branch / PR into small reviewable PRs with safe snapshot, no destructive git ops |
@@ -235,12 +236,13 @@ cursor-kenji/
 │   ├── design-system/
 │   ├── docs-coauthor/
 │   ├── docs-writer/
-│   ├── enhance-existing-redesign/  # audit-first redesign of existing sites (taste-skill)
-│   ├── enhance-page-ui/       # composition + hierarchy + motion
-│   ├── enhance-page-ux/       # heuristic-grounded UX enhancement
+│   ├── enhance-capacitor-ui/  # Capacitor/hybrid cross-surface architecture (web+iOS+Android)
 │   ├── enhance-readme/        # hero + tour + GIF for any README
-│   ├── enhance-taste-design/  # anti-slop landing/portfolio design (taste-skill)
-│   ├── enhance-web-mobile-ui/ # NEW May 2026 — cross-surface (web/iOS/Android) architecture
+│   ├── enhance-rn-screen/     # React Native screen polish (Expo / bare)
+│   ├── enhance-web-landing/   # anti-slop landing/portfolio design (taste-skill)
+│   ├── enhance-web-redesign/  # audit-first redesign of existing web sites (taste-skill)
+│   ├── enhance-web-ui/        # web composition + hierarchy + motion
+│   ├── enhance-web-ux/        # web heuristic-grounded UX enhancement
 │   ├── error-handling/
 │   ├── file-docx/
 │   ├── file-pdf/
@@ -407,7 +409,7 @@ flowchart LR
 
 | Primitive | When | How to invoke | Example |
 |:----------|:-----|:--------------|:--------|
-| **Skill** | Specific task with a known workflow (audit, enhance, debug, build) | Just describe the task — Cursor matches keywords from skill descriptions | "make `/dashboard` feel less AI-generated" → triggers `enhance-page-ux` |
+| **Skill** | Specific task with a known workflow (audit, enhance, debug, build) | Just describe the task — Cursor matches keywords from skill descriptions | "make `/dashboard` feel less AI-generated" → triggers `enhance-web-ux` |
 | **Command** | Repeatable workflow you run often | Type `/<name>` in chat | `/commit`, `/research`, `/pr` |
 | **Subagent** | Background autonomous work (review, migrate, deploy) | Mention a trigger keyword — Cursor auto-delegates | "review this PR" → `code-reviewer` |
 | **Rule** | Always-on project conventions | Drop `.mdc` into `.cursor/rules/` of any project | `supabase.mdc`, `typescript.mdc` |
@@ -431,8 +433,8 @@ flowchart TB
   end
 
   subgraph POLISH["Polishing UI"]
-    P1["audit-ux skill\n(report)"] --> P2["enhance-page-ux skill\n(implement)"]
-    P2 --> P3["enhance-page-ui skill\n(visual polish)"]
+    P1["audit-ux skill\n(report)"] --> P2["enhance-web-ux skill\n(implement)"]
+    P2 --> P3["enhance-web-ui skill\n(visual polish)"]
     P3 --> P4["/commit"]
   end
 
@@ -453,17 +455,19 @@ Skills auto-trigger from **trigger phrases in their description** (the `descript
 
 | You say | Skill that fires |
 |:--------|:-----------------|
-| "this page feels AI-generated, fix it" | `enhance-page-ux` |
-| "make `/settings` more polished, less crowded" | `enhance-page-ui` |
-| "build a landing page that doesn't look like AI slop" | `enhance-taste-design` |
-| "redesign this site to feel premium, keep functionality" | `enhance-existing-redesign` |
+| "this page feels AI-generated, fix it" | `enhance-web-ux` |
+| "make `/settings` more polished, less crowded" | `enhance-web-ui` |
+| "build a landing page that doesn't look like AI slop" | `enhance-web-landing` |
+| "redesign this site to feel premium, keep functionality" | `enhance-web-redesign` |
+| "polish this React Native screen, it feels clunky on iOS" | `enhance-rn-screen` |
+| "my Capacitor app looks great on web but cramped on mobile" | `enhance-capacitor-ui` |
 | "give the README a hero image and screenshots" | `enhance-readme` |
 | "audit the UX of the checkout flow" | `audit-ux` |
 | "split this branch into smaller PRs" | `split-to-prs` |
 | "show me a canvas with these query results" | `canvas` |
 | "the agent keeps hanging on browser steps" | `protocol-browser-anti-stall` |
 
-If you want to force a skill, mention it explicitly: *"use `enhance-page-ux` on `/dashboard`"*.
+If you want to force a skill, mention it explicitly: *"use `enhance-web-ux` on `/dashboard`"*.
 
 ### How the new "Enhance" family works
 
@@ -473,8 +477,8 @@ The three `enhance-*` skills compose like a pipeline — pick the layer that mat
 flowchart LR
   AUDIT["audit-ux\n(diagnose)"] -.->|"report only"| REPORT["UX report"]
   AUDIT --> UX
-  UX["enhance-page-ux\n(workflow + data)"] --> UI
-  UI["enhance-page-ui\n(composition + motion)"] --> DONE["Polished page"]
+  UX["enhance-web-ux\n(workflow + data)"] --> UI
+  UI["enhance-web-ui\n(composition + motion)"] --> DONE["Polished page"]
   README["enhance-readme\n(showcase the repo itself)"] --> SHIP["Pretty README"]
 
   style AUDIT fill:#312e81,stroke:#818cf8,color:#e0e7ff
@@ -488,8 +492,8 @@ flowchart LR
 | Want to... | Use |
 |:-----------|:----|
 | **Get a heuristic-grounded report** (NN/g + Laws of UX + HEART, no code changes) | `audit-ux` |
-| **Replace stacked / templated UI with semantic data** that maps to real backend state | `enhance-page-ux` |
-| **Refine layout, hierarchy, spacing, motion** of an already-correct page | `enhance-page-ui` |
+| **Replace stacked / templated UI with semantic data** that maps to real backend state | `enhance-web-ux` |
+| **Refine layout, hierarchy, spacing, motion** of an already-correct page | `enhance-web-ui` |
 | **Visually showcase the repo itself** with hero image + tour + animated GIF | `enhance-readme` |
 
 All four are **generic** — they work in any web stack (Next.js, Remix, SvelteKit, Vite + React, etc.) because they rely on browser MCP for live observation and on inventory of existing primitives rather than assumed framework APIs.
@@ -512,9 +516,9 @@ All four are **generic** — they work in any web stack (Next.js, Remix, SvelteK
 ### Tips for getting the most out of skills
 
 - **Be specific about scope.** "Enhance the page" is vague. "Enhance `/dashboard` so empty cells get folder-aggregate counts and the toolbar buttons stop wrapping at 1024px" gives the agent a concrete target.
-- **Let skills cite heuristics.** `audit-ux` and `enhance-page-ux` insist every change names the heuristic it satisfies — review the citation, not just the diff. If the citation is weak, the change probably is too.
+- **Let skills cite heuristics.** `audit-ux` and `enhance-web-ux` insist every change names the heuristic it satisfies — review the citation, not just the diff. If the citation is weak, the change probably is too.
 - **Stack a slow-then-fast workflow.** `/plan` first (slow, in Plan Mode) → switch to Agent Mode for execution → `/review` before `/commit` → `/pr` at the end.
-- **Compose skills.** Run `audit-ux` → review report → run `enhance-page-ux` for the top 3 issues → run `enhance-page-ui` for visual polish → `/commit`. Each skill leaves clear write-up tables for the next one.
+- **Compose skills.** Run `audit-ux` → review report → run `enhance-web-ux` for the top 3 issues → run `enhance-web-ui` for visual polish → `/commit`. Each skill leaves clear write-up tables for the next one.
 - **Don't fight the rules.** Project rules in `.cursor/rules/*.mdc` constrain the agent; if a rule blocks something legitimate, edit the rule rather than ignoring it.
 - **Update often.** `cd ~/cursor-kenji && git pull && ./install.sh`.
 
@@ -528,10 +532,10 @@ All four are **generic** — they work in any web stack (Next.js, Remix, SvelteK
 mindmap
   root((64 Skills))
     Enhance
-      enhance-page-ui
-      enhance-page-ux
+      enhance-web-ui
+      enhance-web-ux
       enhance-readme
-      enhance-web-mobile-ui
+      enhance-capacitor-ui
     Design & Frontend
       design-frontend
       design-system
@@ -602,18 +606,33 @@ mindmap
 
 ---
 
-### Enhance <sup>New Apr-May 2026</sup>
+### Enhance <sup>New Apr-Jun 2026</sup>
 
-> *Make existing pages and READMEs feel hand-crafted. Generic across any web stack.*
+> *Make pages, screens, and READMEs feel hand-crafted. The family follows an `enhance-<surface>-<aspect>` naming convention so you reach for the right one by surface.*
+
+**Surface router — pick by what you're polishing:**
+
+| Your surface | Use |
+|:-------------|:----|
+| **Web** product page / dashboard (composition, hierarchy, motion) | `enhance-web-ui` |
+| **Web** product page (UX heuristics, flows, data wiring) | `enhance-web-ux` |
+| **Web** landing / marketing / portfolio (greenfield, anti-slop) | `enhance-web-landing` |
+| **Web** existing site upgrade (audit-first, preserve behavior) | `enhance-web-redesign` |
+| **React Native** screen (Expo / bare) | `enhance-rn-screen` |
+| **Capacitor / hybrid** app (one web app on iOS + Android) | `enhance-capacitor-ui` → then a web or rn skill |
+| Repo **README** showcase | `enhance-readme` |
+
+> Pure native iOS/Android (SwiftUI / Compose, no web layer) is out of scope — use Apple HIG / Material directly.
 
 | Skill | What it Does |
 |:------|:-------------|
-| `enhance-page-ui` | Composition before decoration — hierarchy, grouping, spacing, motion. Subtract clutter, group related, pin metadata, soften scroll edges. NN/g + Laws of UX grounded |
-| `enhance-page-ux` | Replace stacked / templated UI with semantic data wired to real backend state. Every change cites a Nielsen heuristic, uses existing primitives, verified at 1440/1024/800 viewports |
+| `enhance-web-ui` | Composition before decoration — hierarchy, grouping, spacing, motion. Subtract clutter, group related, pin metadata, soften scroll edges. NN/g + Laws of UX grounded |
+| `enhance-web-ux` | Replace stacked / templated UI with semantic data wired to real backend state. Every change cites a Nielsen heuristic, uses existing primitives, verified at 1440/1024/800 viewports |
+| `enhance-rn-screen` | Polish an existing React Native screen — safe-area, touch targets, keyboard occlusion, JS-thread animation jank, gesture conflicts, FlatList re-render storms. Bare RN + Expo. Pairs with `start-emulator` / `test-emulator` |
 | `enhance-readme` | Theme-aware hero (`<picture>` dark/light auto-swap) + tour grid + optional autoplay GIF via Playwright MCP. Works for any repo with a live URL or local dev server |
-| `enhance-web-mobile-ui` <sup>May 2026</sup> | Cross-surface architecture for hybrid PWA + iOS + Android apps (Capacitor / Tauri / Expo Web / Ionic). Three orthogonal axes (form factor / platform / pointer) + mode tokens + container-query primitives — so polish on one surface can't degrade another |
-| `enhance-taste-design` <sup>Jun 2026</sup> | Anti-slop frontend for landing pages, portfolios, and marketing sites — brief inference, variance/motion/density dials, real design systems. Adapted from [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) |
-| `enhance-existing-redesign` <sup>Jun 2026</sup> | Audit-first upgrade of existing sites — scan codebase, diagnose generic AI patterns, apply targeted premium fixes without breaking functionality. Adapted from [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) |
+| `enhance-capacitor-ui` | Cross-surface architecture for hybrid PWA + iOS + Android apps (Capacitor / Tauri / Expo Web / Ionic). Three orthogonal axes (form factor / platform / pointer) + mode tokens + container-query primitives — so polish on one surface can't degrade another |
+| `enhance-web-landing` <sup>Jun 2026</sup> | Anti-slop frontend for landing pages, portfolios, and marketing sites — brief inference, variance/motion/density dials, real design systems. Adapted from [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) |
+| `enhance-web-redesign` <sup>Jun 2026</sup> | Audit-first upgrade of existing sites — 60-second AI-tell triage, then scan/diagnose/fix generic AI patterns without breaking functionality. Adapted from [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) + [anti-slop-ui](https://github.com/awaken7050dev/anti-slop-ui) |
 
 ### Design & Frontend
 
@@ -622,8 +641,8 @@ mindmap
 | Skill | What it Does |
 |:------|:-------------|
 | `design-frontend` | Production-grade UI avoiding generic AI aesthetics |
-| `enhance-taste-design` | Anti-slop landing/portfolio design with brief inference and configurable design dials |
-| `enhance-existing-redesign` | Audit-first redesign — remove AI slop patterns from existing sites without full rewrites |
+| `enhance-web-landing` | Anti-slop landing/portfolio design with brief inference and configurable design dials |
+| `enhance-web-redesign` | Audit-first redesign — remove AI slop patterns from existing sites without full rewrites |
 | `design-system` | Component libraries, tokens, variants, CVA patterns |
 | `motion-design` | Framer Motion, CSS animations, GSAP micro-interactions |
 | `creative-effects` | WebGL, Three.js, shaders, particles, Canvas 2D |

@@ -1,5 +1,5 @@
 ---
-name: enhance-screen-rn
+name: enhance-rn-screen
 description: >
   Polish an existing React Native screen to feel intentional, native, and
   human-crafted. Catches RN-specific silent failures — safe area violations,
@@ -12,9 +12,23 @@ description: >
   iOS", "Android version looks wrong", "jank when scrolling", "button is
   unreachable", or any RN-specific UX polish pass. Applies to bare React
   Native, Expo bare workflow, and Expo managed workflow. Pairs with
-  start-emulator and test-emulator. For web/PWA surfaces use enhance-page-ui
-  or enhance-page-ux instead.
+  start-emulator and test-emulator. For web/PWA surfaces use enhance-web-ui
+  or enhance-web-ux instead.
 ---
+
+> ### Which enhance skill? (surface router)
+>
+> | Your surface | Use |
+> |:-------------|:----|
+> | **Web** product page / dashboard — composition, hierarchy, spacing, motion | `enhance-web-ui` |
+> | **Web** product page — UX heuristics, flows, data wiring | `enhance-web-ux` |
+> | **Web** landing / marketing / portfolio (greenfield, anti-slop) | `enhance-web-landing` |
+> | **Web** existing site upgrade (audit-first, preserve behavior) | `enhance-web-redesign` |
+> | **React Native** screen (Expo / bare) | `enhance-rn-screen` |
+> | **Capacitor / hybrid** shell (one web app shipped to iOS + Android) | `enhance-capacitor-ui` (axis architecture first) → then the web or rn skill |
+> | Repo **README** showcase | `enhance-readme` |
+>
+> **You are here: `enhance-rn-screen`.** Native iOS/Android (SwiftUI / Compose, no web layer) is out of scope for all of these — use Apple HIG / Material directly.
 
 # Enhance Screen — React Native
 
@@ -425,7 +439,7 @@ an existing component?" Almost always: yes.**
 
 ### 6b — Primitive-First Patch Decision
 
-Same rule as `enhance-page-ui` — fix the wrapper, not the consumer:
+Same rule as `enhance-web-ui` — fix the wrapper, not the consumer:
 
 ```
 Does the bug appear on more than one screen?
@@ -1136,9 +1150,9 @@ function AnimatedChip({ active }) {
 
 ## When Not To Use This Skill
 
-- **Web / PWA surface (Next.js, browser)** → use `enhance-page-ui` + `enhance-page-ux`.
+- **Web / PWA surface (Next.js, browser)** → use `enhance-web-ui` + `enhance-web-ux`.
 - **Hybrid web app (Capacitor, Ionic, RN-Web)** with web and native surfaces → use
-  `enhance-web-mobile-ui` first (separates the axis architecture), then this skill
+  `enhance-capacitor-ui` first (separates the axis architecture), then this skill
   for the native-specific polish.
 - **Pure UX audit (no code changes)** → use `audit-ux` or `audit-uiux-design-system`.
 - **Brand-new screen from scratch** → use `design-frontend` for the web equivalent;
@@ -1156,15 +1170,15 @@ function AnimatedChip({ active }) {
   dev loop cleanly; run this first before taking screenshots.
 - [`test-emulator`](../test-emulator/SKILL.md) — full QA walk on the emulator;
   use after this skill to verify the enhanced screen end-to-end.
-- [`enhance-page-ui`](../enhance-page-ui/SKILL.md) — web companion for the same
+- [`enhance-web-ui`](../enhance-web-ui/SKILL.md) — web companion for the same
   composition and colour-tier principles. The H1–H16 hidden failure modes there
   catalogue *web-specific* bugs; many of the underlying principles (active-state
   mass, brand-color budget, monochromatic tier mismatch, information duplication,
   left-anchored stacks) apply to RN with adapted detection probes.
-- [`enhance-page-ux`](../enhance-page-ux/SKILL.md) — web companion for heuristic-
+- [`enhance-web-ux`](../enhance-web-ux/SKILL.md) — web companion for heuristic-
   driven task-flow improvements. The NN/g heuristic framework and content-rank
   methodology apply identically to RN screens.
-- [`enhance-web-mobile-ui`](../enhance-web-mobile-ui/SKILL.md) — prerequisite for
+- [`enhance-capacitor-ui`](../enhance-capacitor-ui/SKILL.md) — prerequisite for
   hybrid apps (Capacitor / Ionic / RN-Web) that ship both a web PWA and a native
   shell from the same codebase. Establishes the three-axis architecture (form
   factor / platform / pointer) before per-surface polish.
