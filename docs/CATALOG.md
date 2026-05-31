@@ -63,6 +63,11 @@ Complete reference for all skills, commands, and their trigger phrases.
 **What it does:** Build-time correctness for data pipelines / ETL / ingestion / edge-function workers / cron / queue consumers. Bakes in the 5 non-negotiables (idempotency, atomicity, data contracts, explicit delivery semantics, observability), a 4-layer staging architecture (Raw → Staged → Curated → Aggregated), windowed/chunked backfills with watermarks, dead-letter handling, and anti-patterns (monolithic DAGs, silent catch, count+1 on retryable paths, cron overlap). Supabase `pg_cron`/edge-function specifics included. Complements the Supabase plugin and `sbc-qa-data-integrity-audit`.
 **Related:** `audit-db-schema`, `supabase-postgres-best-practices`, `full-stack-ship-discipline`, `workflow-spec-tdd`, `sbc-qa-data-integrity-audit`
 
+#### `observability-instrumentation` <sup>NEW Jun 2026</sup>
+**Triggers:** "add logging", "instrument this", "why can't I debug prod", "no observability", "correlate the error to the trace", "redact PII from logs", "set up alerts/SLOs", wiring Sentry context / Langfuse traces / structured logs
+**What it does:** Build-time observability + logging discipline — the counterpart to the setup plugins and post-hoc audit skills. Centers on **correlation** (a shared request/trace id stamped on every log line, the Sentry scope, and the Langfuse trace so you pivot error ↔ trace ↔ log ↔ user in ≤2 clicks), structured + correctly-leveled logging (no `console.log` in prod), PII/secret redaction enforced at the logger + Sentry `beforeSend` + Langfuse masking, OTel-conventional span design with sampling that never drops errors, LLM trace capture (model/tokens/cost/latency linked back to the request id), and symptom-based alerts/SLOs. Vendor-neutral with Sentry, Langfuse, and OpenTelemetry GenAI patterns.
+**Related:** `debug-sentry-monitor`, `audit-langfuse-llm`, `debug-error`, `data-pipeline`, `workflow-spec-tdd`
+
 ### Design & Frontend
 
 #### `design-frontend`

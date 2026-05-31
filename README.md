@@ -116,7 +116,7 @@ graph TB
 
 ### Jun 2026 — Anti-Vibe-Coding Spine + Platform Depth
 
-> *Skills that attack LLM code-correctness (not just visual slop) across web / RN / Capacitor. Researched against the 2026 ecosystem ([awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills), [obra/superpowers](https://github.com/obra/superpowers), [cap-go/capgo-skills](https://github.com/cap-go/capgo-skills), [callstack/agent-skills](https://github.com/callstackincubator/agent-skills)).*
+> *Skills that attack LLM code-correctness (not just visual slop) across web / RN / Capacitor / backend. Researched against the 2026 ecosystem ([awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills), [obra/superpowers](https://github.com/obra/superpowers), [cap-go/capgo-skills](https://github.com/cap-go/capgo-skills), [callstack/agent-skills](https://github.com/callstackincubator/agent-skills)). Observability instrumentation grounded in the 2026 [OpenTelemetry GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/).*
 
 | Addition | Type | Why It Matters |
 |:---------|:-----|:---------------|
@@ -124,6 +124,7 @@ graph TB
 | `capacitor-platform` | Skill | Capacitor platform + pipeline depth (plugins, OTA, deep links, push, native build CI, store submission + Apple preflight, security scan, migrations). Complements `enhance-capacitor-ui`. Distilled from [cap-go/capgo-skills](https://github.com/cap-go/capgo-skills) |
 | `rn-performance` | Skill | React Native perf/build/upgrade depth (FPS, Hermes, TTI, bundle size, FlashList, Reanimated, Turbo Modules, 16KB alignment, version upgrades). Complements `enhance-rn-screen`. Distilled from [callstack/agent-skills](https://github.com/callstackincubator/agent-skills) |
 | `data-pipeline` | Skill | Build-time data-pipeline correctness — idempotency, atomic writes, data contracts, 4-layer staging, windowed backfills, dead-letter, observability. For ETL / edge-function workers / `pg_cron` / queues. Complements the Supabase plugin + `sbc-qa-data-integrity-audit` |
+| `observability-instrumentation` | Skill | Build-time observability + logging discipline — correlate error ↔ trace ↔ log via a shared id, structured leveled logs, PII/secret redaction, OTel span design + sampling, LLM trace capture, alert/SLO design. Vendor-neutral (Sentry + Langfuse + OTel). Complements the Sentry/Langfuse plugins, `debug-sentry-monitor`, `audit-langfuse-llm` |
 
 ### Jun 2026 — Enhance Family Coherence + Taste/Redesign Skills
 
@@ -286,7 +287,8 @@ cursor-kenji/
 │   ├── workflow-spec-tdd/    # anti-vibe-coding spine (spec → plan → TDD → review)
 │   ├── capacitor-platform/   # Capacitor plugins, OTA, store submission, CI/CD
 │   ├── rn-performance/       # React Native perf, bundle, upgrade depth
-│   └── data-pipeline/        # ETL/edge-function/cron correctness (idempotency, staging, backfills)
+│   ├── data-pipeline/        # ETL/edge-function/cron correctness (idempotency, staging, backfills)
+│   └── observability-instrumentation/  # build-time logging+tracing; error↔trace↔log correlation
 ├── skills-cursor/           # 12 Cursor-specific Skills
 │   ├── babysit/
 │   ├── canvas/                # Updated Apr 2026 — refreshed SDK + design rules
@@ -480,6 +482,7 @@ Skills auto-trigger from **trigger phrases in their description** (the `descript
 | "add push notifications / deep links / ship an OTA update / submit to App Store" | `capacitor-platform` |
 | "the RN app is janky / slow to start / bundle is huge / upgrade RN" | `rn-performance` |
 | "build an ingestion pipeline / nightly aggregation / this cron double-counts / backfill" | `data-pipeline` |
+| "add logging / instrument this / why can't I debug prod / correlate the error to the trace / redact PII from logs" | `observability-instrumentation` |
 | "give the README a hero image and screenshots" | `enhance-readme` |
 | "audit the UX of the checkout flow" | `audit-ux` |
 | "split this branch into smaller PRs" | `split-to-prs` |
@@ -589,6 +592,7 @@ mindmap
       audit-uiux-design-system
       audit-ux
       debug-sentry-monitor
+      observability-instrumentation
       deploy-verify
     Debugging
       debug-error
@@ -688,6 +692,7 @@ mindmap
 | `database-optimization` | Indexes, N+1 fixes, RLS performance, query tuning |
 | `realtime-features` | WebSocket, Supabase Realtime, SSE, live data |
 | `data-pipeline` <sup>New Jun 2026</sup> | Build-time pipeline correctness — idempotency, atomic writes, data contracts, 4-layer staging, windowed backfills, dead-letter, observability. For ETL / edge-function workers / `pg_cron` / queues. Pairs with the Supabase plugin |
+| `observability-instrumentation` <sup>New Jun 2026</sup> | Build-time observability + logging — error↔trace↔log correlation via shared id, structured leveled logs, PII/secret redaction, OTel spans + sampling, LLM trace capture, alert/SLO design. Vendor-neutral (Sentry + Langfuse + OTel) |
 
 ### Architecture & Quality
 
