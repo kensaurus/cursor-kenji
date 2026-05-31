@@ -43,6 +43,21 @@ Complete reference for all skills, commands, and their trigger phrases.
 **What it does:** Audit-first upgrade of an existing web project. Opens with a 60-second AI-tell triage (Inter, purple gradients, three equal cards, pill-everything, em-dash overuse), then scans the codebase, diagnoses generic patterns, and applies targeted fixes working with the existing stack — no rewrites. Adapted from [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) + [anti-slop-ui](https://github.com/awaken7050dev/anti-slop-ui).
 **Related:** `enhance-web-landing`, `enhance-web-ui`, `audit-uiux-design-system`
 
+#### `workflow-spec-tdd` <sup>NEW Jun 2026</sup>
+**Triggers:** "build X", "implement", "add a feature", "do it properly", "this keeps breaking", "make it right", non-trivial feature/refactor/bug across web / RN / Capacitor
+**What it does:** The anti-vibe-coding spine. Runs brainstorm → spec (the contract) → plan (file-mapped, ordered) → TDD (RED failing test → GREEN minimal code → REFACTOR) → self-review gate before declaring done. Operationalizes `karpathy-guidelines`. Adapted from [obra/superpowers](https://github.com/obra/superpowers) (MIT).
+**Related:** `karpathy-guidelines`, `tdd`, `full-stack-ship-discipline`, `test-unit`, `test-playwright`
+
+#### `capacitor-platform` <sup>NEW Jun 2026</sup>
+**Triggers:** "add push notifications", "deep linking", "ship an OTA update", "set up native build CI", "submit to the App Store", "fix an App Store rejection", "make the app work offline", "migrate my web app to Capacitor"
+**What it does:** Capacitor platform + pipeline depth — plugin selection, OTA/live updates, deep/universal links, push (FCM/APNs), offline-first, safe-area, native build CI/CD (Actions/GitLab/Fastlane), App Store/Play Store submission + Apple preflight, Capsec security scan, and web/Cordova/SPM/SQLite migrations. Distilled from [cap-go/capgo-skills](https://github.com/cap-go/capgo-skills) (48 skills, MIT).
+**Related:** `enhance-capacitor-ui`, `workflow-spec-tdd`, `full-stack-ship-discipline`
+
+#### `rn-performance` <sup>NEW Jun 2026</sup>
+**Triggers:** "janky scroll", "slow startup", "huge bundle", "memory leak", "frame drops", "FlashList", "upgrade React Native", "bump Expo SDK"
+**What it does:** React Native / Expo performance, build, and upgrade depth — FPS & re-renders, Hermes, TTI/startup, bundle & app size, FlashList, memory, Reanimated UI-thread animation, Turbo Modules, Android 16KB page alignment, and RN/Expo version upgrades. Diagnose-first (profile before fixing). Distilled from [callstack/agent-skills](https://github.com/callstackincubator/agent-skills) (MIT).
+**Related:** `enhance-rn-screen`, `start-emulator`, `test-emulator`, `workflow-spec-tdd`
+
 ### Design & Frontend
 
 #### `design-frontend`

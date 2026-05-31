@@ -114,6 +114,16 @@ graph TB
 | 9 commands demoted to pointers | Command | `/commit`, `/debug`, `/pr`, `/readme`, `/refactor`, `/review`, `/test`, `/uiux`, `/update-deps` now point to their skill equivalents instead of duplicating the playbook. Skills handle natural language; commands handle explicit slash invocation |
 | `audit-ux` cross-reference | Skill | Fixed broken pointer (`audit-ui-design-system` → `audit-uiux-design-system`) |
 
+### Jun 2026 — Anti-Vibe-Coding Spine + Platform Depth
+
+> *Skills that attack LLM code-correctness (not just visual slop) across web / RN / Capacitor. Researched against the 2026 ecosystem ([awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills), [obra/superpowers](https://github.com/obra/superpowers), [cap-go/capgo-skills](https://github.com/cap-go/capgo-skills), [callstack/agent-skills](https://github.com/callstackincubator/agent-skills)).*
+
+| Addition | Type | Why It Matters |
+|:---------|:-----|:---------------|
+| `workflow-spec-tdd` | Skill | The anti-vibe-coding spine — brainstorm → spec → plan → RED/GREEN/REFACTOR TDD → self-review before "done". Stack-agnostic; operationalizes `karpathy-guidelines`. Adapted from [obra/superpowers](https://github.com/obra/superpowers) |
+| `capacitor-platform` | Skill | Capacitor platform + pipeline depth (plugins, OTA, deep links, push, native build CI, store submission + Apple preflight, security scan, migrations). Complements `enhance-capacitor-ui`. Distilled from [cap-go/capgo-skills](https://github.com/cap-go/capgo-skills) |
+| `rn-performance` | Skill | React Native perf/build/upgrade depth (FPS, Hermes, TTI, bundle size, FlashList, Reanimated, Turbo Modules, 16KB alignment, version upgrades). Complements `enhance-rn-screen`. Distilled from [callstack/agent-skills](https://github.com/callstackincubator/agent-skills) |
+
 ### Jun 2026 — Enhance Family Coherence + Taste/Redesign Skills
 
 > *Adapted anti-slop skills from [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill), then renamed the whole `enhance-*` family to a surface-first convention so you reach for the right one by surface (web / RN / Capacitor).*
@@ -271,7 +281,10 @@ cursor-kenji/
 │   ├── workflow-git-commit/
 │   ├── workflow-housekeep/
 │   ├── workflow-pr/
-│   └── workflow-refactor/
+│   ├── workflow-refactor/
+│   ├── workflow-spec-tdd/    # anti-vibe-coding spine (spec → plan → TDD → review)
+│   ├── capacitor-platform/   # Capacitor plugins, OTA, store submission, CI/CD
+│   └── rn-performance/       # React Native perf, bundle, upgrade depth
 ├── skills-cursor/           # 12 Cursor-specific Skills
 │   ├── babysit/
 │   ├── canvas/                # Updated Apr 2026 — refreshed SDK + design rules
@@ -461,6 +474,9 @@ Skills auto-trigger from **trigger phrases in their description** (the `descript
 | "redesign this site to feel premium, keep functionality" | `enhance-web-redesign` |
 | "polish this React Native screen, it feels clunky on iOS" | `enhance-rn-screen` |
 | "my Capacitor app looks great on web but cramped on mobile" | `enhance-capacitor-ui` |
+| "build this feature properly" / "this keeps breaking, do it right" | `workflow-spec-tdd` |
+| "add push notifications / deep links / ship an OTA update / submit to App Store" | `capacitor-platform` |
+| "the RN app is janky / slow to start / bundle is huge / upgrade RN" | `rn-performance` |
 | "give the README a hero image and screenshots" | `enhance-readme` |
 | "audit the UX of the checkout flow" | `audit-ux` |
 | "split this branch into smaller PRs" | `split-to-prs` |
@@ -649,6 +665,8 @@ mindmap
 | `uiux-enhancement` | Incremental UI/UX improvements and polish |
 | `interactive-ux` | Gamification, Easter eggs, delightful interactions |
 | `mobile-first` | Touch-optimized, responsive, PWA patterns |
+| `capacitor-platform` <sup>New Jun 2026</sup> | Capacitor platform + pipeline — plugins, OTA/live updates, deep links, push, native build CI/CD, App/Play Store submission + Apple preflight, security scan, web→Capacitor migrations. Distilled from [cap-go/capgo-skills](https://github.com/cap-go/capgo-skills) |
+| `rn-performance` <sup>New Jun 2026</sup> | React Native perf/build/upgrade — FPS & re-renders, Hermes, TTI, bundle size, FlashList, Reanimated, Turbo Modules, Android 16KB alignment, RN/Expo version upgrades. Distilled from [callstack/agent-skills](https://github.com/callstackincubator/agent-skills) |
 | `theme-factory` | Apply cohesive visual themes across artifacts |
 
 ### Data & Creative
@@ -685,6 +703,7 @@ mindmap
 
 | Skill | What it Does |
 |:------|:-------------|
+| `workflow-spec-tdd` <sup>New Jun 2026</sup> | The anti-vibe-coding spine — brainstorm → spec → plan → RED/GREEN/REFACTOR TDD → self-review before "done". Stack-agnostic; fires on "build", "implement", "do it properly", "this keeps breaking". Adapted from [obra/superpowers](https://github.com/obra/superpowers) |
 | `tdd` | Test-driven development with AI — Red/Green/Refactor, Vitest patterns, agent-compatible TDD workflow |
 | `spec-writing` | Write effective specs and briefs so agents produce correct implementations first time |
 | `parallel-agents` | Run agents in parallel via git worktrees, cloud agents, and multi-model comparison |
