@@ -11,6 +11,7 @@ description: Anti-slop frontend skill for landing pages, portfolios, and redesig
 > | **Web** product page — UX heuristics, flows, data wiring | `enhance-web-ux` |
 > | **Web** landing / marketing / portfolio (greenfield, anti-slop) | `enhance-web-landing` |
 > | **Web** existing site upgrade (audit-first, preserve behavior) | `enhance-web-redesign` |
+> | **Web** 3D / WebGL / cinematic scroll on an existing site (audit-first) | `enhance-web-web3d` |
 > | **React Native** screen (Expo / bare) | `enhance-rn-screen` |
 > | **Capacitor / hybrid** shell (one web app shipped to iOS + Android) | `enhance-capacitor-ui` (axis architecture first) → then the web or rn skill |
 > | Repo **README** showcase | `enhance-readme` |

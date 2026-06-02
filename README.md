@@ -12,7 +12,7 @@
 <p align="center">
   <a href="#quick-start"><img src="https://img.shields.io/badge/-Quick_Start-10b981?style=flat-square" alt="Quick Start" /></a>
   <a href="#how-to-use-this-toolkit"><img src="https://img.shields.io/badge/-How_to_Use-22c55e?style=flat-square" alt="How to Use" /></a>
-  <a href="#skills-70"><img src="https://img.shields.io/badge/-70_Skills-6366f1?style=flat-square" alt="70 Skills" /></a>
+  <a href="#skills-71"><img src="https://img.shields.io/badge/-71_Skills-6366f1?style=flat-square" alt="71 Skills" /></a>
   <a href="#subagents-5"><img src="https://img.shields.io/badge/-5_Subagents-f59e0b?style=flat-square" alt="5 Subagents" /></a>
   <a href="#commands-13"><img src="https://img.shields.io/badge/-13_Commands-ef4444?style=flat-square" alt="13 Commands" /></a>
   <a href="#mcp-servers-16"><img src="https://img.shields.io/badge/-16_MCP_Servers-3b82f6?style=flat-square" alt="16 MCP Servers" /></a>
@@ -40,7 +40,7 @@
 graph TB
   subgraph TOOLKIT["cursor-kenji Toolkit"]
     direction TB
-    SK["Skills (70)"]
+    SK["Skills (71)"]
     CS["Cursor Skills (12)"]
     CMD["Commands (13)"]
     SA["Subagents (5)"]
@@ -134,6 +134,7 @@ graph TB
 |:---------|:-----|:---------------|
 | `enhance-web-landing` | Skill | Anti-slop frontend for landing pages, portfolios, and marketing sites — brief inference, variance/motion/density dials, real design systems when applicable |
 | `enhance-web-redesign` | Skill | Audit-first upgrade of existing sites — 60-second AI-tell triage, then scan/diagnose/fix generic AI patterns without breaking functionality |
+| `enhance-web-web3d` | Skill | Audit-first 3D/WebGL + GSAP cinematic-motion elevation of an existing web app — fit check, minimal-stack decision matrix (Three.js / R3F + ScrollTrigger + Motion / React Spring), then ships with a performance budget, mobile + no-WebGL fallbacks, reduced-motion, and SSR/hydration safety. Generalized from `web3d-integration-patterns` ([freshtechbro/claudedesignskills](https://github.com/freshtechbro/claudedesignskills)) |
 | Family renamed | Skill | `enhance-page-ui`→`enhance-web-ui`, `enhance-page-ux`→`enhance-web-ux`, `enhance-screen-rn`→`enhance-rn-screen`, `enhance-web-mobile-ui`→`enhance-capacitor-ui`. New `enhance-<surface>-<aspect>` convention + a surface-router block added to every enhance skill |
 
 ### Apr 2026 — The Enhance Family
@@ -174,7 +175,7 @@ graph TB
 
 ```mermaid
 pie title Toolkit Composition
-    "Skills (70)" : 70
+    "Skills (71)" : 71
     "Commands (13)" : 13
     "MCP Servers (16)" : 16
     "Project Rules (8)" : 8
@@ -192,7 +193,7 @@ pie title Toolkit Composition
 
 | | Count | Description |
 |-|-------|-------------|
-|| **Skills** | 60 | AI agent capabilities |
+|| **Skills** | 71 | AI agent capabilities |
 || **Cursor Skills** | 12 | IDE-specific tools |
 || **Commands** | 13 | Slash commands |
 || **Subagents** | 5 | Autonomous AI agents |
@@ -218,7 +219,7 @@ pie title Toolkit Composition
 
 ```
 cursor-kenji/
-├── skills/                  # 62 Agent Skills (each has SKILL.md)
+├── skills/                  # 71 Agent Skills (each has SKILL.md)
 │   ├── algorithmic-art/
 │   ├── audit-accessibility/
 │   ├── audit-code-review/
@@ -255,6 +256,7 @@ cursor-kenji/
 │   ├── enhance-web-redesign/  # audit-first redesign of existing web sites (taste-skill)
 │   ├── enhance-web-ui/        # web composition + hierarchy + motion
 │   ├── enhance-web-ux/        # web heuristic-grounded UX enhancement
+│   ├── enhance-web-web3d/     # audit-first 3D/WebGL + GSAP cinematic motion on existing web
 │   ├── error-handling/
 │   ├── file-docx/
 │   ├── file-pdf/
@@ -377,7 +379,7 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 ```mermaid
 flowchart LR
   A["./install.sh"] --> B["Backup existing\n~/.cursor/skills/"]
-  B --> C["Install 70 skills\n+ 12 cursor skills"]
+  B --> C["Install 71 skills\n+ 12 cursor skills"]
   C --> D["Install 5\nsubagents"]
   D --> E["Copy MCP\nconfig template"]
   E --> F["Ready!"]
@@ -546,7 +548,7 @@ All four are **generic** — they work in any web stack (Next.js, Remix, SvelteK
 
 ---
 
-## Skills (70)
+## Skills (71)
 
 <!-- The skill count is derived from skills/*/SKILL.md and enforced by
      scripts/check-skill-count.mjs (pre-commit hook + CI). Don't hand-edit counts;
@@ -556,10 +558,11 @@ All four are **generic** — they work in any web stack (Next.js, Remix, SvelteK
 
 ```mermaid
 mindmap
-  root((70 Skills))
+  root((71 Skills))
     Enhance
       enhance-web-ui
       enhance-web-ux
+      enhance-web-web3d
       enhance-readme
       enhance-capacitor-ui
     Design & Frontend
@@ -645,6 +648,7 @@ mindmap
 | **Web** product page (UX heuristics, flows, data wiring) | `enhance-web-ux` |
 | **Web** landing / marketing / portfolio (greenfield, anti-slop) | `enhance-web-landing` |
 | **Web** existing site upgrade (audit-first, preserve behavior) | `enhance-web-redesign` |
+| **Web** 3D / WebGL / cinematic scroll on an existing site (audit-first) | `enhance-web-web3d` |
 | **React Native** screen (Expo / bare) | `enhance-rn-screen` |
 | **Capacitor / hybrid** app (one web app on iOS + Android) | `enhance-capacitor-ui` → then a web or rn skill |
 | Repo **README** showcase | `enhance-readme` |
@@ -660,6 +664,7 @@ mindmap
 | `enhance-capacitor-ui` | Cross-surface architecture for hybrid PWA + iOS + Android apps (Capacitor / Tauri / Expo Web / Ionic). Three orthogonal axes (form factor / platform / pointer) + mode tokens + container-query primitives — so polish on one surface can't degrade another |
 | `enhance-web-landing` <sup>Jun 2026</sup> | Anti-slop frontend for landing pages, portfolios, and marketing sites — brief inference, variance/motion/density dials, real design systems. Adapted from [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) |
 | `enhance-web-redesign` <sup>Jun 2026</sup> | Audit-first upgrade of existing sites — 60-second AI-tell triage, then scan/diagnose/fix generic AI patterns without breaking functionality. Adapted from [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) + [anti-slop-ui](https://github.com/awaken7050dev/anti-slop-ui) |
+| `enhance-web-web3d` <sup>Jun 2026</sup> | Audit-first elevation of an existing web app with 3D + cinematic motion (Three.js / R3F + GSAP ScrollTrigger + Motion / React Spring). Fit check, minimal-stack decision matrix, then ships the effect with a performance budget, mobile + no-WebGL fallbacks, reduced-motion, and SSR/hydration safety. Generalized from `web3d-integration-patterns` in [freshtechbro/claudedesignskills](https://github.com/freshtechbro/claudedesignskills) |
 
 ### Design & Frontend
 

@@ -43,6 +43,11 @@ Complete reference for all skills, commands, and their trigger phrases.
 **What it does:** Audit-first upgrade of an existing web project. Opens with a 60-second AI-tell triage (Inter, purple gradients, three equal cards, pill-everything, em-dash overuse), then scans the codebase, diagnoses generic patterns, and applies targeted fixes working with the existing stack — no rewrites. Adapted from [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) + [anti-slop-ui](https://github.com/awaken7050dev/anti-slop-ui).
 **Related:** `enhance-web-landing`, `enhance-web-ui`, `audit-uiux-design-system`
 
+#### `enhance-web-web3d` <sup>NEW Jun 2026</sup>
+**Triggers:** "add 3D", "add a WebGL hero", "make it cinematic", "scroll-driven 3D", "three.js scene", "React Three Fiber", "GSAP scroll animation", "product configurator", "3D model viewer", "pinned scroll storytelling", "make the landing page feel immersive", "add a wow factor"
+**What it does:** Audit-first elevation of an existing web app with 3D + cinematic motion. Scans the stack, runs a fit check (rejects 3D-for-3D's-sake), picks the minimal library combination (Three.js / R3F + GSAP ScrollTrigger + Motion / React Spring, optional Lenis), then ships the effect with a performance budget (DPR cap, <100 draw calls, Draco/KTX2, lazy-load, on-demand render, off-screen pause), mobile + no-WebGL fallbacks, `prefers-reduced-motion` support, and SSR/hydration safety (`ssr: false`, `useGSAP` cleanup) baked into the same change. GSAP is 100% free since Apr 2025. Generalized from the `web3d-integration-patterns` meta-skill in [freshtechbro/claudedesignskills](https://github.com/freshtechbro/claudedesignskills).
+**Related:** `enhance-web-redesign`, `enhance-web-landing`, `creative-effects`, `motion-design`, `audit-performance`
+
 #### `workflow-spec-tdd` <sup>NEW Jun 2026</sup>
 **Triggers:** "build X", "implement", "add a feature", "do it properly", "this keeps breaking", "make it right", non-trivial feature/refactor/bug across web / RN / Capacitor
 **What it does:** The anti-vibe-coding spine. Runs brainstorm → spec (the contract) → plan (file-mapped, ordered) → TDD (RED failing test → GREEN minimal code → REFACTOR) → self-review gate before declaring done. Operationalizes `karpathy-guidelines`. Adapted from [obra/superpowers](https://github.com/obra/superpowers) (MIT).
