@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Every Cursor AI workflow you'd build yourself — already built.</strong><br/>
-  58 agent skills · 13 slash commands · 16 MCP servers · 12 Cursor extensions · 5 subagents
+  60 agent skills · 13 slash commands · 16 MCP servers · 12 Cursor extensions · 5 subagents
 </p>
 
 <p align="center">
@@ -21,7 +21,7 @@
 
 ---
 
-**cursor-kenji** is a production-ready toolkit of 58 Cursor agent skills, 13 slash commands, and 5 pre-built subagents for React / Next.js / Supabase development. Install once — the agent picks the right skill automatically.
+**cursor-kenji** is a production-ready toolkit of 60 Cursor agent skills, 13 slash commands, and 5 pre-built subagents for React / Next.js / Supabase development. Install once — the agent picks the right skill automatically.
 
 ---
 
@@ -31,7 +31,7 @@
 npx skills add kensaurus/cursor-kenji
 ```
 
-That's it. Restart Cursor. Done. The agent now has 58 skills it picks automatically.
+That's it. Restart Cursor. Done. The agent now has 60 skills it picks automatically.
 
 > No Cursor? **[Download Cursor free](https://cursor.com)** (it's VS Code with AI built in).
 > Don't have `skills`? Run `npm install -g skills` first, or use the manual install below.
@@ -48,7 +48,7 @@ That's it. Restart Cursor. Done. The agent now has 58 skills it picks automatica
 npx skills add kensaurus/cursor-kenji
 ```
 
-Installs all 58 skills to `~/.cursor/skills/` (or `~/.agents/skills/`) automatically.
+Installs all 60 skills to `~/.cursor/skills/` (or `~/.agents/skills/`) automatically.
 
 Also install [Mushi Mushi skills](https://github.com/kensaurus/mushi-mushi) for bug-report triage + fix dispatch from inside Cursor:
 ```bash
@@ -86,7 +86,7 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 
 | | Count | What it does |
 |:--|------:|:-------------|
-| **Skills** | 58 | Auto-triggering agent capabilities (audits, enhance, debug, test, build) |
+| **Skills** | 60 | Auto-triggering agent capabilities (audits, enhance, debug, test, build) |
 | **Cursor Skills** | 12 | IDE-specific tools (canvas, hooks, rules, PR splitter) |
 | **Commands** | 13 | Slash commands for repeatable workflows (`/commit`, `/pr`, `/research`) |
 | **Subagents** | 5 | Background autonomous agents (code-reviewer, debugger, db-migrator…) |
@@ -172,6 +172,8 @@ graph TB
 | "audit the UX of the checkout flow" | `audit-ux` |
 | "split this branch into smaller PRs" | `split-to-prs` |
 | "agent keeps hanging on browser steps" | `protocol-browser-anti-stall` |
+| "is mushi working" / "mushi health check" / "check mushi pipeline" | `mushi-health` |
+| "test mushi integration" / "verify full mushi pipeline" / "mushi e2e" | `mushi-integration` |
 
 > **Force a specific skill:** *"use `enhance-web-ux` on `/dashboard`"*
 
@@ -206,7 +208,7 @@ flowchart LR
 
 ### Naming taxonomy
 
-Every skill name is `<prefix>-<topic>`. 13 prefixes, one concern each:
+Every skill name is `<prefix>-<topic>`. 14 prefixes, one concern each:
 
 | Prefix | Purpose |
 |:-------|:--------|
@@ -220,6 +222,7 @@ Every skill name is `<prefix>-<topic>`. 13 prefixes, one concern each:
 | `enhance-` | Improve existing web/mobile UI & UX |
 | `meta-` | Skills and MCP authoring |
 | `mobile-` | React Native, Capacitor, emulator |
+| `mushi-` | Mushi Mushi integration — health, pipeline, TDD |
 | `protocol-` | Procedural guardrails (browser anti-stall, etc.) |
 | `test-` | QA, unit tests, acceptance tests |
 | `workflow-` | Dev-process skills (git, refactor, PR, spec-TDD) |
@@ -245,10 +248,9 @@ Pick by surface:
 |:------|:-------------|
 | `design-frontend` | Production-grade UI — avoids generic AI aesthetics |
 | `design-system` | Component libraries, tokens, variants, CVA |
-| `design-motion` | Framer Motion, CSS animations, GSAP micro-interactions |
+| `design-motion` | Framer Motion, CSS animations, GSAP micro-interactions, gamification, Easter eggs |
 | `enhance-web-web3d` | WebGL, Three.js, shaders, particles, Canvas 2D |
 | `enhance-web-ui` | Incremental UI/UX improvements and polish |
-| `design-motion` | Gamification, Easter eggs, delightful interactions |
 | `design-mobile-first` | Touch-optimized, responsive, PWA patterns |
 | `design-theme` | Apply cohesive visual themes across artifacts |
 | `mobile-capacitor-platform` | Capacitor plugins, OTA updates, deep links, push, store submission, Apple preflight |
@@ -278,9 +280,8 @@ Pick by surface:
 |:------|:-------------|
 | `design-api` | REST conventions, error schemas, pagination, versioning |
 | `backend-error-handling` | Error boundaries, Server Action errors, toast patterns |
-| `audit-code-quality` | Detect and fix React, TypeScript, state anti-patterns |
+| `audit-code-quality` | Detect and fix React / TypeScript anti-patterns, naming, imports, organization |
 | `audit-code-review` | Thorough PR reviews — correctness, security, perf, a11y |
-| `audit-code-quality` | Naming, imports, organization consistency audit |
 | `workflow-refactor` | Safe, incremental code transformations |
 | `audit-performance` | Core Web Vitals, bundle analysis, runtime profiling |
 | `audit-security` | OWASP Top 10, auth flows, RLS, secrets management |
@@ -321,9 +322,7 @@ Pick by surface:
 
 | Skill | What it does |
 |:------|:-------------|
-| `workflow-spec-tdd` | Anti-vibe-coding spine — brainstorm → spec → plan → RED/GREEN/REFACTOR → self-review |
-| `workflow-spec-tdd` | Test-driven development — Red/Green/Refactor, Vitest patterns, agent-compatible |
-| `workflow-spec-tdd` | Write effective specs so agents produce correct implementations first time |
+| `workflow-spec-tdd` | Anti-vibe-coding: brainstorm → spec → plan → RED/GREEN/REFACTOR → self-review |
 | `workflow-parallel-agents` | Run agents in parallel via git worktrees, cloud agents, multi-model comparison |
 | `create-hook` | Build Cursor Agent Hooks — auto-formatters, security gates, secret scanners |
 | `workflow-coding-discipline` | Behavioral guardrails (Think before coding, Simplicity first, Surgical changes) |
@@ -337,7 +336,13 @@ Pick by surface:
 | `docs-coauthor` | Structured co-authoring for specs, PRDs, RFCs |
 | `workflow-git-commit` | Conventional commits, branching, PRs, releases |
 | `workflow-housekeep` | Full-cycle repo maintenance — README sync, dead file cleanup, dependency updates |
-| `workflow-spec-tdd` | End-to-end feature development workflow |
+
+### Mushi Mushi
+
+| Skill | What it does |
+|:------|:-------------|
+| `mushi-health` | Pass/fail health check — CLI, edge functions, BYOK key pool, QA cron running |
+| `mushi-integration` | Full end-to-end smoke test — bug capture → triage → story map → TDD gen → run → PDCA |
 
 ### Meta & Tooling
 
@@ -345,7 +350,6 @@ Pick by surface:
 |:------|:-------------|
 | `meta-skill-creator` | Guide for creating new Agent Skills |
 | `meta-mcp-builder` | Build MCP servers for LLM tool integration |
-| `test-qa` | Playwright browser automation and E2E testing |
 
 <details>
 <summary><strong>Cursor-Specific Skills (12)</strong></summary>
@@ -512,7 +516,7 @@ source ~/cursor-kenji/shell-aliases/cursor-helpers.sh
 
 ```
 cursor-kenji/
-├── skills/                  # 58 Agent Skills (each has SKILL.md)
+├── skills/                  # 60 Agent Skills (each has SKILL.md)
 │   ├── enhance-web-ui/      # Composition, hierarchy, spacing, motion
 │   ├── enhance-web-ux/      # NN/g heuristic-grounded UX enhancement
 │   ├── enhance-web-landing/ # Anti-slop landing/portfolio design
@@ -628,7 +632,7 @@ npx mushi-mushi   # React / Next.js / Vue / Svelte / Angular / RN / Expo / Capac
 
 [kensaur.us/mushi-mushi](https://kensaur.us/mushi-mushi) · [GitHub](https://github.com/kensaurus/mushi-mushi) · [npm](https://www.npmjs.com/package/mushi-mushi) · free tier 1,000 reports/month · MIT SDK
 
-> cursor-kenji's `deploy-npm` skill was built for Mushi's Changesets + OIDC monorepo. `debug-sentry-monitor` and `test-playwright` pair naturally with it.
+> cursor-kenji's `deploy-npm` skill was built for Mushi's Changesets + OIDC monorepo. `debug-sentry-monitor` and `test-playwright` pair naturally with it. Use `mushi-health` to verify the pipeline is running and `mushi-integration` to smoke-test the full TDD loop.
 
 ### Mobile apps — iOS & Android
 
