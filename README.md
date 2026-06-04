@@ -635,7 +635,7 @@ npx mushi-mushi   # React / Next.js / Vue / Svelte / Angular / RN / Expo / Capac
 | App | What it does | Links |
 |:----|:-------------|:------|
 | **[glot.it — Learn Thai Free](https://kensaur.us/glot-it/)** | 161 lessons, AI roleplay chat, pitch-contour tone mirror, offline-first. Actually free. | [iOS](https://apps.apple.com/us/app/glot-it/id6761582648) · [Android](https://play.google.com/store/apps/details?id=com.glotit.app) |
-| **[yen-yen — Expense Tracker](https://kensaur.us/yen-yen/)** | Kakeibo-style household ledger. No bank password, no ads, multi-currency + historical FX. | [iOS](https://kensaur.us/yen-yen/) · [Android](https://play.google.com/store/apps/details?id=app.yenyen) |
+| **[yen-yen — Expense Tracker](https://kensaur.us/yen-yen/)** | Kakeibo-style household ledger. No bank password, no ads, multi-currency + historical FX. | [iOS](https://apps.apple.com/app/id6764548441) · [Android](https://play.google.com/store/apps/details?id=app.yenyen) |
 | **[Help Her Take Photo](https://kensaur.us/help-her-take-photo/)** | Two phones → remote photo studio. Live preview + remote shutter. No account. | [iOS](https://apps.apple.com/app/help-her-take-photo/id6762513666) · [Android](https://play.google.com/store/apps/details?id=com.kensaurus.helphertakephoto) |
 | **[The Wanting Mind — Free Book](https://kensaur.us/the-wanting-mind/)** | 147,000-word interactive book. 3D knowledge graph, 12 narrators, karaoke highlight, EN/JA/ZH/TH. No ads, no paywalls. | [iOS](https://apps.apple.com/us/app/the-wanting-mind/id6761361305) · [Android](https://play.google.com/store/apps/details?id=us.kensaur.thewantingmind) |
 
