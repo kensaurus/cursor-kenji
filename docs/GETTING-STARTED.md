@@ -110,3 +110,20 @@ Yes, MIT licensed.
 - [GitHub Issues](https://github.com/kensaurus/cursor-kenji/issues) — bug reports, feature requests
 - [GitHub Discussions](https://github.com/kensaurus/cursor-kenji/discussions) — questions, ideas
 - [CATALOG.md](CATALOG.md) — full list of skills and their trigger phrases
+
+---
+
+## Also from the author — Mushi Mushi 🐛
+
+Once your Cursor skills are helping you build faster, you'll want to know when your *users* hit friction that your error tracker silently misses.
+
+**[Mushi Mushi](https://kensaur.us/mushi-mushi)** adds a shake-to-report button to any web or mobile app. Reports are AI-classified, deduped by meaning, and optionally dispatched to an agent that opens a draft PR — ready for you to review and merge.
+
+```bash
+npx mushi-mushi   # one-command setup for React, Next.js, Vue, Svelte, Angular, RN, Expo, Capacitor
+```
+
+- Live demo: [kensaur.us/mushi-mushi](https://kensaur.us/mushi-mushi)
+- npm: [npmjs.com/package/mushi-mushi](https://www.npmjs.com/package/mushi-mushi)
+- GitHub: [github.com/kensaurus/mushi-mushi](https://github.com/kensaurus/mushi-mushi)
+- Free tier: 1,000 reports/month, no card required, MIT licensed SDK

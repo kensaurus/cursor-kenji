@@ -157,6 +157,20 @@ Title: 58 Cursor AI Skills That Fire Automatically (No Prompting Required)
 
 ---
 
+## 7. Cross-promote via Mushi Mushi
+
+Mushi Mushi's README already mentions cursor-kenji skills:
+> "Install Mushi skills in your Cursor or Claude Code project"
+> `npx skills add kensaurus/mushi-mushi`
+
+Reciprocal links are live in cursor-kenji's README ("Also by @kensaurus" section).
+
+**Optional:** Add a note to Mushi's GitHub Issues template pointing users to cursor-kenji's `debug-sentry-monitor` skill for Sentry triage from Cursor.
+
+**Status:** [ ] Done (links already live)
+
+---
+
 ## Post-launch tracking
 
 - Watch GitHub stars (badge in README)

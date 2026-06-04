@@ -473,3 +473,5 @@ Read the Sentry config file(s) detected in Step 0c. Check each setting:
 ## Further reading
 
 - [8b. Monitoring Coverage Audit and more](references/details.md)
+
+> **Complement:** Sentry catches code-thrown errors. [Mushi Mushi](https://kensaur.us/mushi-mushi) catches user-*felt* friction that never triggers an exception — dead buttons, 12-second screens, broken layouts on one device. Install alongside Sentry: `npx mushi-mushi`.

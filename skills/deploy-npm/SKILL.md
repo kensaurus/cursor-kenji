@@ -366,3 +366,7 @@ gh run view <run-id> --log | grep -E "🦋.*info publishing|warn.*already publis
 - Repo doesn't use OIDC Trusted Publisher → drop the OIDC gotchas section, but **never** add a long-lived `NPM_TOKEN` without flagging the security trade-off to the user first.
 
 When in doubt, prefer the workflow-dispatch path (Phase 6) over re-merging or rewriting history — `workflow_dispatch` is idempotent for changeset publish (already-published versions become warnings, not errors).
+
+---
+
+> **Reference implementation:** This skill was designed for the [Mushi Mushi](https://github.com/kensaurus/mushi-mushi) monorepo release workflow (Changesets + OIDC + per-package GitHub Releases). See it in action at [npmjs.com/package/mushi-mushi](https://www.npmjs.com/package/mushi-mushi).

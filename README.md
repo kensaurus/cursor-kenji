@@ -50,6 +50,11 @@ npx skills add kensaurus/cursor-kenji
 
 Installs all 58 skills to `~/.cursor/skills/` (or `~/.agents/skills/`) automatically.
 
+Also install [Mushi Mushi skills](https://github.com/kensaurus/mushi-mushi) for bug-report triage + fix dispatch from inside Cursor:
+```bash
+npx skills add kensaurus/mushi-mushi
+```
+
 ### Manual install
 
 ```bash
@@ -609,7 +614,29 @@ cursor-kenji differs from cursorrules collections in that it ships *executable* 
 
 ---
 
+## Also by @kensaurus
+
+### Mushi Mushi 🐛
+
+**The bug your monitoring can't see, in your queue with a draft fix.**
+
+Sentry catches what your code throws. Mushi catches what your users *feel* — the dead button, the 12-second screen, the layout that breaks on one phone. Drop in a shake-to-report widget, get AI-classified + deduped bug reports, and optionally let an agent open a draft PR with the fix. A human always reviews and merges.
+
+- **[kensaur.us/mushi-mushi](https://kensaur.us/mushi-mushi)** — live admin demo + marketing
+- **[github.com/kensaurus/mushi-mushi](https://github.com/kensaurus/mushi-mushi)** — source, architecture, self-hosting · issues welcome
+- **[npmjs.com/package/mushi-mushi](https://www.npmjs.com/package/mushi-mushi)** — `npx mushi-mushi` setup wizard
+
+```bash
+npx mushi-mushi   # auto-detects React / Next.js / Vue / Svelte / Angular / RN / Expo / Capacitor
+```
+
+Free tier: 1,000 reports/month, no credit card. MIT licensed SDK. Complements — not replaces — your existing Sentry / Datadog stack.
+
+> cursor-kenji's `deploy-npm` skill was built for Mushi's Changesets + OIDC monorepo release workflow. The `debug-sentry-monitor` and `test-playwright` skills work great alongside it.
+
+---
+
 <p align="center">
   <strong>MIT License</strong> — use freely, modify freely, share freely.<br/>
-  <em>Built by <a href="https://github.com/kensaurus">@kensaurus</a> · <a href="CHANGELOG.md">What's new</a> · <a href="https://github.com/kensaurus/cursor-kenji/discussions">Discussions</a></em>
+  <em>Built by <a href="https://github.com/kensaurus">@kensaurus</a> · <a href="https://kensaur.us/mushi-mushi">Mushi Mushi</a> · <a href="CHANGELOG.md">What's new</a> · <a href="https://github.com/kensaurus/cursor-kenji/discussions">Discussions</a></em>
 </p>
