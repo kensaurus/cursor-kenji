@@ -616,23 +616,28 @@ cursor-kenji differs from cursorrules collections in that it ships *executable* 
 
 ## Also by @kensaurus
 
-### Mushi Mushi 🐛
+Other free apps and tools from the same Tokyo studio — all built with the skills in this repo.
 
-**The bug your monitoring can't see, in your queue with a draft fix.**
+### Mushi Mushi 🐛 — bug reporting + AI auto-fix
 
-Sentry catches what your code throws. Mushi catches what your users *feel* — the dead button, the 12-second screen, the layout that breaks on one phone. Drop in a shake-to-report widget, get AI-classified + deduped bug reports, and optionally let an agent open a draft PR with the fix. A human always reviews and merges.
-
-- **[kensaur.us/mushi-mushi](https://kensaur.us/mushi-mushi)** — live admin demo + marketing
-- **[github.com/kensaurus/mushi-mushi](https://github.com/kensaurus/mushi-mushi)** — source, architecture, self-hosting · issues welcome
-- **[npmjs.com/package/mushi-mushi](https://www.npmjs.com/package/mushi-mushi)** — `npx mushi-mushi` setup wizard
+Drop in a shake-to-report widget → AI-classified + deduped bug reports → optional agent opens a draft PR. Complements Sentry; never replaces it.
 
 ```bash
-npx mushi-mushi   # auto-detects React / Next.js / Vue / Svelte / Angular / RN / Expo / Capacitor
+npx mushi-mushi   # React / Next.js / Vue / Svelte / Angular / RN / Expo / Capacitor
 ```
 
-Free tier: 1,000 reports/month, no credit card. MIT licensed SDK. Complements — not replaces — your existing Sentry / Datadog stack.
+[kensaur.us/mushi-mushi](https://kensaur.us/mushi-mushi) · [GitHub](https://github.com/kensaurus/mushi-mushi) · [npm](https://www.npmjs.com/package/mushi-mushi) · free tier 1,000 reports/month · MIT SDK
 
-> cursor-kenji's `deploy-npm` skill was built for Mushi's Changesets + OIDC monorepo release workflow. The `debug-sentry-monitor` and `test-playwright` skills work great alongside it.
+> cursor-kenji's `deploy-npm` skill was built for Mushi's Changesets + OIDC monorepo. `debug-sentry-monitor` and `test-playwright` pair naturally with it.
+
+### Mobile apps — iOS & Android
+
+| App | What it does | Links |
+|:----|:-------------|:------|
+| **[glot.it — Learn Thai Free](https://kensaur.us/glot-it/)** | 161 lessons, AI roleplay chat, pitch-contour tone mirror, offline-first. Actually free. | [iOS](https://apps.apple.com/us/app/glot-it/id6761582648) · [Android](https://play.google.com/store/apps/details?id=com.glotit.app) |
+| **[yen-yen — Expense Tracker](https://kensaur.us/yen-yen/)** | Kakeibo-style household ledger. No bank password, no ads, multi-currency + historical FX. | [iOS](https://kensaur.us/yen-yen/) · [Android](https://play.google.com/store/apps/details?id=app.yenyen) |
+| **[Help Her Take Photo](https://kensaur.us/help-her-take-photo/)** | Two phones → remote photo studio. Live preview + remote shutter. No account. | [iOS](https://apps.apple.com/app/help-her-take-photo/id6762513666) · [Android](https://play.google.com/store/apps/details?id=com.kensaurus.helphertakephoto) |
+| **[The Wanting Mind — Free Book](https://kensaur.us/the-wanting-mind/)** | 147,000-word interactive book. 3D knowledge graph, 12 narrators, karaoke highlight, EN/JA/ZH/TH. No ads, no paywalls. | [iOS](https://apps.apple.com/us/app/the-wanting-mind/id6761361305) · [Android](https://play.google.com/store/apps/details?id=us.kensaur.thewantingmind) |
 
 ---
 

@@ -113,17 +113,26 @@ Yes, MIT licensed.
 
 ---
 
-## Also from the author — Mushi Mushi 🐛
+## More from @kensaurus
 
-Once your Cursor skills are helping you build faster, you'll want to know when your *users* hit friction that your error tracker silently misses.
+Other free apps and tools from the same studio — all built with these skills.
 
-**[Mushi Mushi](https://kensaur.us/mushi-mushi)** adds a shake-to-report button to any web or mobile app. Reports are AI-classified, deduped by meaning, and optionally dispatched to an agent that opens a draft PR — ready for you to review and merge.
+### Mushi Mushi 🐛 — know when users hit a bug your monitoring missed
 
 ```bash
-npx mushi-mushi   # one-command setup for React, Next.js, Vue, Svelte, Angular, RN, Expo, Capacitor
+npx mushi-mushi
 ```
 
-- Live demo: [kensaur.us/mushi-mushi](https://kensaur.us/mushi-mushi)
-- npm: [npmjs.com/package/mushi-mushi](https://www.npmjs.com/package/mushi-mushi)
-- GitHub: [github.com/kensaurus/mushi-mushi](https://github.com/kensaurus/mushi-mushi)
-- Free tier: 1,000 reports/month, no card required, MIT licensed SDK
+Shake-to-report widget → AI-classified bug reports → optional AI draft PR fix. Free tier 1,000 reports/month, MIT SDK.
+
+- [kensaur.us/mushi-mushi](https://kensaur.us/mushi-mushi) — live demo
+- [github.com/kensaurus/mushi-mushi](https://github.com/kensaurus/mushi-mushi) — source + issues
+
+### Mobile apps
+
+| App | What it does | Download |
+|:----|:-------------|:---------|
+| **[glot.it — Learn Thai Free](https://kensaur.us/glot-it/)** | 161 lessons, tone mirror, AI chat, offline. Actually free. | [iOS](https://apps.apple.com/us/app/glot-it/id6761582648) · [Android](https://play.google.com/store/apps/details?id=com.glotit.app) |
+| **[yen-yen — Expense Tracker](https://kensaur.us/yen-yen/)** | Kakeibo ledger. No bank password. Multi-currency + historical FX. | [iOS](https://kensaur.us/yen-yen/) · [Android](https://play.google.com/store/apps/details?id=app.yenyen) |
+| **[Help Her Take Photo](https://kensaur.us/help-her-take-photo/)** | Two phones → remote photo studio. No account. | [iOS](https://apps.apple.com/app/help-her-take-photo/id6762513666) · [Android](https://play.google.com/store/apps/details?id=com.kensaurus.helphertakephoto) |
+| **[The Wanting Mind](https://kensaur.us/the-wanting-mind/)** | Free 147,000-word interactive book. EN/JA/ZH/TH. No ads. | [iOS](https://apps.apple.com/us/app/the-wanting-mind/id6761361305) · [Android](https://play.google.com/store/apps/details?id=us.kensaur.thewantingmind) |
