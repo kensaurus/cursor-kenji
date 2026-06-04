@@ -103,7 +103,7 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 graph TB
   subgraph TOOLKIT["cursor-kenji Toolkit"]
     direction TB
-    SK["Skills (58)"]
+    SK["Skills (60)"]
     CS["Cursor Skills (12)"]
     CMD["Commands (13)"]
     SA["Subagents (5)"]
@@ -200,7 +200,7 @@ flowchart LR
 
 ---
 
-## Skills (58)
+## Skills (60)
 
 > **Note:** The `file-docx`, `file-pdf`, `file-pptx`, and `file-xlsx` skills (Anthropic proprietary, source-available only) have been removed from this public repo. Keep personal copies in `~/.cursor/skills/` if needed.
 
