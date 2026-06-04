@@ -5,6 +5,7 @@ description: >
   checking for vulnerabilities, auditing auth code, or when the user mentions security concerns.
   Integrates Firecrawl for researching current OWASP guidelines and CVEs,
   Sentry MCP for checking production security-related errors, and automated codebase scanning.
+license: MIT
 ---
 
 # Security Audit Skill
@@ -16,20 +17,20 @@ Systematic security review for any web application. Research-driven, using curre
 Before auditing, discover the tech stack and attack surface:
 
 1. Read `package.json` / `requirements.txt` / `go.mod` to identify:
-   - Auth library (next-auth, passport, supabase-auth, django-auth, etc.)
-   - Database ORM (Prisma, Sequelize, SQLAlchemy, etc.)
-   - HTTP framework (Express, Fastify, Django, Flask, etc.)
-   - Any security-specific packages (helmet, cors, csurf, rate-limit, etc.)
+ - Auth library (next-auth, passport, supabase-auth, django-auth, etc.)
+ - Database ORM (Prisma, Sequelize, SQLAlchemy, etc.)
+ - HTTP framework (Express, Fastify, Django, Flask, etc.)
+ - Any security-specific packages (helmet, cors, csurf, rate-limit, etc.)
 
 2. Identify the auth pattern:
-   - Session-based vs JWT vs OAuth
-   - Where tokens are stored (cookies, localStorage, headers)
-   - How permissions/roles are enforced
+ - Session-based vs JWT vs OAuth
+ - Where tokens are stored (cookies, localStorage, headers)
+ - How permissions/roles are enforced
 
 3. Identify the data flow:
-   - Where user input enters the system
-   - How data is validated and sanitized
-   - How data reaches the database
+ - Where user input enters the system
+ - How data is validated and sanitized
+ - How data reaches the database
 
 ---
 
@@ -39,9 +40,9 @@ Fetch current OWASP and security best practices for the detected stack:
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
-  "query": "<framework> security best practices OWASP <current year>",
-  "limit": 5,
-  "sources": [{ "type": "web" }]
+ "query": "<framework> security best practices OWASP <current year>",
+ "limit": 5,
+ "sources": [{ "type": "web" }]
 })
 ```
 
@@ -49,9 +50,9 @@ Scrape the OWASP Top 10 for the relevant platform:
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
-  "url": "https://owasp.org/Top10/",
-  "formats": ["markdown"],
-  "onlyMainContent": true
+ "url": "https://owasp.org/Top10/",
+ "formats": ["markdown"],
+ "onlyMainContent": true
 })
 ```
 
@@ -59,9 +60,9 @@ Also check for known CVEs in dependencies:
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
-  "query": "<package-name> CVE vulnerability <current year>",
-  "limit": 5,
-  "sources": [{ "type": "web" }]
+ "query": "<package-name> CVE vulnerability <current year>",
+ "limit": 5,
+ "sources": [{ "type": "web" }]
 })
 ```
 
@@ -73,11 +74,11 @@ If Sentry is configured, check for security-related production errors:
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "naturalLanguageQuery": "401 unauthorized OR 403 forbidden OR CORS OR CSP violation in last 30 days",
-  "projectSlugOrId": "<PROJECT_SLUG>",
-  "regionUrl": "<REGION_URL>",
-  "limit": 20
+ "organizationSlug": "<ORG_SLUG>",
+ "naturalLanguageQuery": "401 unauthorized OR 403 forbidden OR CORS OR CSP violation in last 30 days",
+ "projectSlugOrId": "<PROJECT_SLUG>",
+ "regionUrl": "<REGION_URL>",
+ "limit": 20
 })
 ```
 
@@ -149,11 +150,11 @@ Patterns that indicate security issues:
 ### Dependency Audit
 
 ```bash
-npm audit          # Node.js
-pip-audit          # Python
-cargo audit        # Rust
-govulncheck ./...  # Go
-bundle audit       # Ruby
+npm audit # Node.js
+pip-audit # Python
+cargo audit # Rust
+govulncheck ./... # Go
+bundle audit # Ruby
 ```
 
 - [ ] No known high/critical CVEs
@@ -198,17 +199,17 @@ import DOMPurify from 'dompurify';
 ```javascript
 // VULNERABLE — no ownership check
 app.get('/documents/:id', (req, res) => {
-  const doc = db.documents.findById(req.params.id);
-  res.json(doc);
+ const doc = db.documents.findById(req.params.id);
+ res.json(doc);
 });
 
 // SAFE — verify ownership
 app.get('/documents/:id', (req, res) => {
-  const doc = db.documents.findOne({
-    where: { id: req.params.id, userId: req.user.id }
-  });
-  if (!doc) return res.status(404).json({ error: 'Not found' });
-  res.json(doc);
+ const doc = db.documents.findOne({
+ where: { id: req.params.id, userId: req.user.id }
+ });
+ if (!doc) return res.status(404).json({ error: 'Not found' });
+ res.json(doc);
 });
 ```
 
@@ -252,10 +253,10 @@ credentials.json, service-account.json
 import { z } from 'zod';
 
 const envSchema = z.object({
-  DATABASE_URL: z.string().url(),
-  API_KEY: z.string().min(1),
-  JWT_SECRET: z.string().min(32),
-  SENTRY_DSN: z.string().url().optional(),
+ DATABASE_URL: z.string().url(),
+ API_KEY: z.string().min(1),
+ JWT_SECRET: z.string().min(32),
+ SENTRY_DSN: z.string().url().optional(),
 });
 
 const env = envSchema.parse(process.env);

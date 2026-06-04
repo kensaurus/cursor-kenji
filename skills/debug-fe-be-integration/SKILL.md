@@ -8,6 +8,7 @@ description: >
   Replaces hardcoded paths with auto-detected patterns. Use when diagnosing API errors,
   mismatched requests, integration issues between frontend and backend, or when the user
   mentions API 4xx/5xx errors, validation failures, or FE-BE contract mismatches.
+license: MIT
 ---
 
 # Frontend-Backend Integration Debug Skill
@@ -37,13 +38,13 @@ Read `package.json` and look for:
 ### 0b. Detect Backend Framework
 
 ```
-Glob: **/app/api/**/route.ts          → Next.js App Router
-Glob: **/pages/api/**/*.ts            → Next.js Pages Router
-Glob: **/server/api/**/*.ts           → Nuxt server
-Glob: **/src/routes/**/*.ts           → Express/Hono/Fastify
+Glob: **/app/api/**/route.ts → Next.js App Router
+Glob: **/pages/api/**/*.ts → Next.js Pages Router
+Glob: **/server/api/**/*.ts → Nuxt server
+Glob: **/src/routes/**/*.ts → Express/Hono/Fastify
 Glob: **/src/app.ts or **/src/index.ts → Node backend entry
-Glob: **/main.py or **/app.py         → Python backend
-Glob: **/main.go                      → Go backend
+Glob: **/main.py or **/app.py → Python backend
+Glob: **/main.go → Go backend
 ```
 
 ### 0c. Detect API Style and Validation
@@ -88,9 +89,9 @@ STACK DISCOVERY:
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
-  "query": "<FE_FRAMEWORK> <BE_FRAMEWORK> API integration debugging best practices [current year]",
-  "limit": 5,
-  "sources": [{ "type": "web" }]
+ "query": "<FE_FRAMEWORK> <BE_FRAMEWORK> API integration debugging best practices [current year]",
+ "limit": 5,
+ "sources": [{ "type": "web" }]
 })
 ```
 
@@ -106,8 +107,8 @@ Additional targeted searches:
 
 ```json
 CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
-  "libraryName": "<VALIDATION_LIB>",
-  "query": "error handling error messages custom errors"
+ "libraryName": "<VALIDATION_LIB>",
+ "query": "error handling error messages custom errors"
 })
 ```
 
@@ -119,11 +120,11 @@ CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "naturalLanguageQuery": "API integration errors 4xx 5xx validation from the last 7 days",
-  "projectSlugOrId": "<PROJECT_SLUG>",
-  "regionUrl": "<REGION_URL>",
-  "limit": 25
+ "organizationSlug": "<ORG_SLUG>",
+ "naturalLanguageQuery": "API integration errors 4xx 5xx validation from the last 7 days",
+ "projectSlugOrId": "<PROJECT_SLUG>",
+ "regionUrl": "<REGION_URL>",
+ "limit": 25
 })
 ```
 
@@ -201,8 +202,8 @@ If the error might be data-related:
 
 ```json
 CallMcpTool(server: "plugin-supabase-supabase", toolName: "execute_sql", arguments: {
-  "project_id": "<PROJECT_ID>",
-  "query": "SELECT * FROM <TABLE> WHERE <CONDITION> LIMIT 5"
+ "project_id": "<PROJECT_ID>",
+ "query": "SELECT * FROM <TABLE> WHERE <CONDITION> LIMIT 5"
 })
 ```
 
@@ -255,16 +256,16 @@ Example backend enhancement pattern:
 ```typescript
 // Before: bare schema, cryptic error on missing param
 const schema = z.object({
-  year: z.string(),
+ year: z.string(),
 });
 
 // After: defaults, coercion, clear errors
 const schema = z.object({
-  year: z.string({
-    required_error: "year is required (format: YYYY)"
-  }).default(() => new Date().getFullYear().toString()),
-  page: z.coerce.number().default(1).int().positive(),
-  limit: z.coerce.number().default(10).int().max(100),
+ year: z.string({
+ required_error: "year is required (format: YYYY)"
+ }).default(() => new Date().getFullYear().toString()),
+ page: z.coerce.number().default(1).int().positive(),
+ limit: z.coerce.number().default(10).int().max(100),
 });
 ```
 

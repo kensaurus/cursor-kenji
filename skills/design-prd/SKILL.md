@@ -8,6 +8,7 @@ description: >
   with technical feasibility sections informed by real codebase analysis. Use when starting a
   new feature, documenting requirements, creating specs before implementation, or needing
   clarity on scope and success criteria.
+license: MIT
 ---
 
 # Generate PRD Skill
@@ -35,33 +36,33 @@ Read `package.json` (or equivalent) to extract:
 ### 0b. Discover Existing Features
 
 ```
-Glob: **/app/**/page.tsx              → Next.js routes (features)
-Glob: **/features/*/                  → Feature directories
-Glob: **/src/routes/**/*.tsx          → Route-based features
+Glob: **/app/**/page.tsx → Next.js routes (features)
+Glob: **/features/*/ → Feature directories
+Glob: **/src/routes/**/*.tsx → Route-based features
 Grep: pattern "export default" glob "**/page.tsx" output_mode "files_with_matches"
 ```
 
 Read feature READMEs if they exist:
 ```
-Glob: **/*README*.md                  → Feature docs
-Glob: **/docs/*.md                    → Documentation
+Glob: **/*README*.md → Feature docs
+Glob: **/docs/*.md → Documentation
 ```
 
 ### 0c. Discover Data Model
 
 ```
-Glob: **/supabase/migrations/*.sql    → SQL migrations
-Glob: **/prisma/schema.prisma         → Prisma schema
-Glob: **/drizzle/schema.ts            → Drizzle schema
-Glob: **/types/*.ts                   → TypeScript type definitions
+Glob: **/supabase/migrations/*.sql → SQL migrations
+Glob: **/prisma/schema.prisma → Prisma schema
+Glob: **/drizzle/schema.ts → Drizzle schema
+Glob: **/types/*.ts → TypeScript type definitions
 ```
 
 ### 0d. Check for Existing PRDs
 
 ```
-Glob: **/tasks/prd-*.md              → Existing PRDs
-Glob: **/docs/prd-*.md               → Existing PRDs (alt location)
-Glob: **/specs/*.md                  → Spec documents
+Glob: **/tasks/prd-*.md → Existing PRDs
+Glob: **/docs/prd-*.md → Existing PRDs (alt location)
+Glob: **/specs/*.md → Spec documents
 ```
 
 ### 0e. Record Context
@@ -86,9 +87,9 @@ When the user describes a feature, research how others have solved it:
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
-  "query": "<FEATURE_TYPE> UX patterns best practices [current year]",
-  "limit": 5,
-  "sources": [{ "type": "web" }]
+ "query": "<FEATURE_TYPE> UX patterns best practices [current year]",
+ "limit": 5,
+ "sources": [{ "type": "web" }]
 })
 ```
 
@@ -109,9 +110,9 @@ Scrape the most relevant result for detailed patterns:
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
-  "url": "<BEST_RESULT_URL>",
-  "formats": ["markdown"],
-  "onlyMainContent": true
+ "url": "<BEST_RESULT_URL>",
+ "formats": ["markdown"],
+ "onlyMainContent": true
 })
 ```
 
@@ -121,15 +122,15 @@ Check if the framework supports what the feature needs:
 
 ```json
 CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
-  "libraryName": "<FRAMEWORK>",
-  "query": "<FEATURE_CAPABILITY> support"
+ "libraryName": "<FRAMEWORK>",
+ "query": "<FEATURE_CAPABILITY> support"
 })
 ```
 
 ```json
 CallMcpTool(server: "context7", toolName: "query-docs", arguments: {
-  "libraryId": "<RESOLVED_ID>",
-  "query": "<FEATURE_CAPABILITY> implementation guide"
+ "libraryId": "<RESOLVED_ID>",
+ "query": "<FEATURE_CAPABILITY> implementation guide"
 })
 ```
 
@@ -139,9 +140,9 @@ If the feature involves data, check the existing schema:
 
 ```json
 CallMcpTool(server: "plugin-supabase-supabase", toolName: "list_tables", arguments: {
-  "project_id": "<PROJECT_ID>",
-  "schemas": ["public"],
-  "verbose": true
+ "project_id": "<PROJECT_ID>",
+ "schemas": ["public"],
+ "verbose": true
 })
 ```
 
@@ -149,8 +150,8 @@ Or for specific tables:
 
 ```json
 CallMcpTool(server: "plugin-supabase-supabase", toolName: "execute_sql", arguments: {
-  "project_id": "<PROJECT_ID>",
-  "query": "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name = '<RELEVANT_TABLE>' ORDER BY ordinal_position"
+ "project_id": "<PROJECT_ID>",
+ "query": "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name = '<RELEVANT_TABLE>' ORDER BY ordinal_position"
 })
 ```
 
@@ -206,21 +207,21 @@ If similar functionality already exists, the PRD should extend it rather than du
 Before I write the PRD, a few questions:
 
 1. What is the primary goal?
-   A. Improve UX for existing workflow
-   B. Add net-new capability
-   C. Fix a pain point
-   D. Performance improvement
+ A. Improve UX for existing workflow
+ B. Add net-new capability
+ C. Fix a pain point
+ D. Performance improvement
 
 2. Who is the target user?
-   A. Power users (daily use)
-   B. New users (onboarding)
-   C. All users equally
-   D. Internal / admin users
+ A. Power users (daily use)
+ B. New users (onboarding)
+ C. All users equally
+ D. Internal / admin users
 
 3. What is the expected scope?
-   A. MVP (ship fast, iterate later)
-   B. Complete feature with polish
-   C. Foundation for larger system
+ A. MVP (ship fast, iterate later)
+ B. Complete feature with polish
+ C. Foundation for larger system
 
 Reply with selections (e.g., "1B, 2A, 3B")
 ```
@@ -357,10 +358,10 @@ Reply with selections (e.g., "1B, 2A, 3B")
 ```sql
 -- New table or ALTER TABLE
 CREATE TABLE IF NOT EXISTS [table_name] (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  [columns...],
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now()
+ id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+ [columns...],
+ created_at timestamptz NOT NULL DEFAULT now(),
+ updated_at timestamptz NOT NULL DEFAULT now()
 );
 ```
 

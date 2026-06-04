@@ -1,6 +1,7 @@
 ---
 name: workflow-git-commit
 description: Generate clear, descriptive commit messages following conventional commits format. Use when committing code, writing commit messages, or when the user asks for help with git commits.
+license: MIT
 ---
 
 # Git Commit Message Generator
@@ -76,9 +77,9 @@ refactor(utils): extract date formatting logic
 
 **Bad:**
 ```
-Fixed the bug.                    # Vague, past tense
-feat(cart): Added new feature     # Past tense, vague
-Update stuff                      # No type, vague
+Fixed the bug. # Vague, past tense
+feat(cart): Added new feature # Past tense, vague
+Update stuff # No type, vague
 ```
 
 ### 4. Write Body (If Needed)
@@ -171,23 +172,23 @@ git log --oneline -10
 Create `~/.gitmessage`:
 ```
 # <type>(<scope>): <subject>
-# |<----  Using a Maximum Of 50 Characters  ---->|
+# |<---- Using a Maximum Of 50 Characters ---->|
 
 # Explain why this change is being made
-# |<----   Try To Limit Each Line to a Maximum Of 72 Characters   ---->|
+# |<---- Try To Limit Each Line to a Maximum Of 72 Characters ---->|
 
 # Provide links or keys to any relevant tickets, articles or other resources
 # Example: Fixes #23
 
 # --- COMMIT END ---
 # Type can be:
-#    feat     (new feature)
-#    fix      (bug fix)
-#    refactor (refactoring code)
-#    style    (formatting, missing semi colons, etc)
-#    docs     (changes to documentation)
-#    test     (adding or refactoring tests)
-#    chore    (updating grunt tasks etc)
+# feat (new feature)
+# fix (bug fix)
+# refactor (refactoring code)
+# style (formatting, missing semi colons, etc)
+# docs (changes to documentation)
+# test (adding or refactoring tests)
+# chore (updating grunt tasks etc)
 # --------------------
 ```
 

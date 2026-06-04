@@ -1,6 +1,7 @@
 ---
 name: workflow-spec-tdd
-description: Spec-first, test-driven workflow that stops vibe-coding before it starts. Use for any non-trivial feature, refactor, or bug fix (3+ files, ambiguous requirements, or "build X") on web, React Native, or Capacitor. Runs brainstorm -> spec -> plan -> RED/GREEN/REFACTOR TDD -> self-review before declaring done. Use when the user says "build", "implement", "add a feature", "this keeps breaking", "do it properly", or when an LLM keeps producing plausible-but-wrong code.
+description: Stop vibe-coding with a spec → plan → TDD loop before writing a line. Use for any non-trivial feature, refactor, or bug fix on web, React Native, or Capacitor. Use when asked to "build", "implement", "add a feature", "this keeps breaking", "do it properly", or when LLM output keeps being wrong.
+license: MIT
 ---
 
 # Spec → Plan → TDD Workflow
@@ -18,17 +19,17 @@ Skip for: one-line edits, pure formatting, a single obvious fix. Don't ceremony-
 ## The loop (do not skip phases)
 
 ```
-0. Read the room   → understand repo + exact ask
-1. Brainstorm      → surface assumptions, explore alternatives
-2. Spec            → write the contract: behavior, inputs, outputs, edge cases
-3. Plan            → ordered, file-mapped steps with a verification per step
-4. TDD             → RED (failing test) → GREEN (minimal code) → REFACTOR, per step
-5. Self-review     → spec coverage + quality gate before "done"
+0. Read the room → understand repo + exact ask
+1. Brainstorm → surface assumptions, explore alternatives
+2. Spec → write the contract: behavior, inputs, outputs, edge cases
+3. Plan → ordered, file-mapped steps with a verification per step
+4. TDD → RED (failing test) → GREEN (minimal code) → REFACTOR, per step
+5. Self-review → spec coverage + quality gate before "done"
 ```
 
 ### Phase 0 — Read the room (always first)
 - Read the dependency manifest for exact versions; read the files you'll touch in full.
-- Restate the ask in one sentence and name the surface (web / RN / Capacitor). If the surface has a domain skill (`capacitor-platform`, `rn-performance`, `enhance-*`), note it.
+- Restate the ask in one sentence and name the surface (web / RN / Capacitor). If the surface has a domain skill (`mobile-mobile-capacitor-platform`, `mobile-mobile-rn-performance`, `enhance-*`), note it.
 - If the request is genuinely ambiguous, ask **exactly one** clarifying question. Otherwise state your reading and proceed.
 
 ### Phase 1 — Brainstorm (before any code)
@@ -73,7 +74,7 @@ Rules:
 - The first implementation task is always "write the failing test."
 - Never write code with no test path unless the repo has zero test setup — then add the smallest harness first, or explicitly flag that you're skipping TDD and why.
 - One concern per test. Test behavior, not implementation details.
-- Surface-specific runners: web → vitest/jest/playwright; RN → jest + RNTL, `test-emulator` for device; Capacitor → vitest + `capacitor-platform` E2E.
+- Surface-specific runners: web → vitest/jest/playwright; RN → jest + RNTL, `mobile-emulator-test` for device; Capacitor → vitest + `mobile-mobile-capacitor-platform` E2E.
 
 ### Phase 5 — Self-review (gate before "done")
 Run this checklist. If any box fails, you are not done:
@@ -96,8 +97,13 @@ Run this checklist. If any box fails, you are not done:
 - Drive-by refactors of unrelated code → **scope creep**.
 - A migration file written but never deployed → see `full-stack-ship-discipline`.
 
+## References
+
+- [TDD patterns & test examples by type](references/workflow-spec-tdd-patterns.md)
+- [Spec template & writing principles](references/spec-template.md)
+
 ## Composes with
-- `karpathy-guidelines` — behavioral guardrails (this skill operationalizes them).
+- `workflow-coding-discipline` — behavioral guardrails (this skill operationalizes them).
 - `full-stack-ship-discipline` — Phase 5 backend-deploy gate.
-- `capacitor-platform` / `rn-performance` / `enhance-*` — surface domain knowledge for the plan.
-- `test-playwright` / `test-emulator` / `test-unit` — the verification runners for Phase 4–5.
+- `mobile-mobile-capacitor-platform` / `mobile-mobile-rn-performance` / `enhance-*` — surface domain knowledge for the plan.
+- `test-playwright` / `mobile-emulator-test` / `test-unit` — the verification runners for Phase 4–5.

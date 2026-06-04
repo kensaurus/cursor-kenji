@@ -1,11 +1,12 @@
 ---
 name: workflow-pr
-description: Comprehensive PR lifecycle management from creation to merge. Use when creating pull requests, managing PR reviews, addressing bot feedback, or merging PRs. Handles validation, monitoring, and merge criteria.
+description: Manage the full PR lifecycle — create, review, address bot feedback, resolve conflicts, and merge. Use when creating pull requests, managing PR reviews, addressing bot feedback, or merging PRs.
+license: MIT
 ---
 
 # PR Workflow Skill
 
-Comprehensive checklist for every pull request.
+full checklist for every pull request.
 
 ## Phase 1: Before Creating PR
 
@@ -67,11 +68,11 @@ When reviews complete:
 
 1. **Read every comment** - Track unresolved threads
 2. **For each issue:**
-   - Analyze feedback
-   - Implement fix
-   - Commit and push
-   - Reply confirming fix
-   - **Mark thread resolved**
+ - Analyze feedback
+ - Implement fix
+ - Commit and push
+ - Reply confirming fix
+ - **Mark thread resolved**
 
 3. **Never ignore feedback** - Every comment must be addressed
 

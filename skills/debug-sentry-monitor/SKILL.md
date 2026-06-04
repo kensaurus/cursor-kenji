@@ -9,6 +9,7 @@ description: >
   framework, and config. Fetches issues via Sentry MCP, triages them,
   performs root cause analysis, fixes code bugs, updates noise filters,
   audits the monitoring architecture, and resolves issues only after verified fixes.
+license: MIT
 ---
 
 # Sentry Monitor
@@ -59,8 +60,8 @@ Then for the target org:
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "find_projects", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "regionUrl": "<REGION_URL>"
+ "organizationSlug": "<ORG_SLUG>",
+ "regionUrl": "<REGION_URL>"
 })
 ```
 
@@ -96,15 +97,15 @@ Grep for: web-vitals, webVitals, reportWebVitals
 ### 0d. Record Detected Configuration
 
 ```
-ORG_SLUG:        [detected or ask user]
-PROJECT_SLUG:    [detected or ask user]
-REGION_URL:      [detected or ask user — typically https://us.sentry.io or https://de.sentry.io]
-FRAMEWORK:       [detected from packages]
-PLATFORM:        [browser | server | hybrid]
-SENTRY_CONFIG:   [path to Sentry.init file]
-NOISE_FILTER:    [path to file with ignoreErrors/beforeSend]
-ERROR_BOUNDARY:  [path to error boundary component, if any]
-LOGGER:          [path to logging utility, if any]
+ORG_SLUG: [detected or ask user]
+PROJECT_SLUG: [detected or ask user]
+REGION_URL: [detected or ask user — typically https://us.sentry.io or https://de.sentry.io]
+FRAMEWORK: [detected from packages]
+PLATFORM: [browser | server | hybrid]
+SENTRY_CONFIG: [path to Sentry.init file]
+NOISE_FILTER: [path to file with ignoreErrors/beforeSend]
+ERROR_BOUNDARY: [path to error boundary component, if any]
+LOGGER: [path to logging utility, if any]
 ```
 
 If any critical values cannot be detected, ask the user.
@@ -117,19 +118,19 @@ Run these two MCP calls in parallel:
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "projectSlugOrId": "<PROJECT_SLUG>",
-  "regionUrl": "<REGION_URL>",
-  "naturalLanguageQuery": "all unresolved issues from the last 7 days",
-  "limit": 50
+ "organizationSlug": "<ORG_SLUG>",
+ "projectSlugOrId": "<PROJECT_SLUG>",
+ "regionUrl": "<REGION_URL>",
+ "naturalLanguageQuery": "all unresolved issues from the last 7 days",
+ "limit": 50
 })
 
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_events", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "projectSlug": "<PROJECT_SLUG>",
-  "regionUrl": "<REGION_URL>",
-  "naturalLanguageQuery": "count of errors grouped by error type in the last 7 days",
-  "limit": 50
+ "organizationSlug": "<ORG_SLUG>",
+ "projectSlug": "<PROJECT_SLUG>",
+ "regionUrl": "<REGION_URL>",
+ "naturalLanguageQuery": "count of errors grouped by error type in the last 7 days",
+ "limit": 50
 })
 ```
 
@@ -137,11 +138,11 @@ Also check for regressions (issues that were resolved but re-opened):
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "projectSlugOrId": "<PROJECT_SLUG>",
-  "regionUrl": "<REGION_URL>",
-  "naturalLanguageQuery": "regressed issues in the last 14 days",
-  "limit": 20
+ "organizationSlug": "<ORG_SLUG>",
+ "projectSlugOrId": "<PROJECT_SLUG>",
+ "regionUrl": "<REGION_URL>",
+ "naturalLanguageQuery": "regressed issues in the last 14 days",
+ "limit": 20
 })
 ```
 
@@ -155,9 +156,9 @@ For each issue with >1 event or >0 users impacted:
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "get_sentry_resource", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "resourceType": "issue",
-  "resourceId": "<ISSUE_ID>"
+ "organizationSlug": "<ORG_SLUG>",
+ "resourceType": "issue",
+ "resourceId": "<ISSUE_ID>"
 })
 ```
 
@@ -167,9 +168,9 @@ For hard-to-diagnose issues, also fetch breadcrumbs:
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "get_sentry_resource", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "resourceType": "breadcrumbs",
-  "resourceId": "<ISSUE_ID>"
+ "organizationSlug": "<ORG_SLUG>",
+ "resourceType": "breadcrumbs",
+ "resourceId": "<ISSUE_ID>"
 })
 ```
 
@@ -177,9 +178,9 @@ And optionally use Seer for AI-assisted root cause analysis:
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "analyze_issue_with_seer", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "regionUrl": "<REGION_URL>",
-  "issueId": "<ISSUE_ID>"
+ "organizationSlug": "<ORG_SLUG>",
+ "regionUrl": "<REGION_URL>",
+ "issueId": "<ISSUE_ID>"
 })
 ```
 
@@ -187,10 +188,10 @@ For understanding issue distribution, check tag values:
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "get_issue_tag_values", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "regionUrl": "<REGION_URL>",
-  "issueId": "<ISSUE_ID>",
-  "tagKey": "browser"
+ "organizationSlug": "<ORG_SLUG>",
+ "regionUrl": "<REGION_URL>",
+ "issueId": "<ISSUE_ID>",
+ "tagKey": "browser"
 })
 ```
 
@@ -223,8 +224,8 @@ Run Sentry's AI root-cause analysis before manual investigation:
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "analyze_issue_with_seer", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "issueId": "<ISSUE_ID>"
+ "organizationSlug": "<ORG_SLUG>",
+ "issueId": "<ISSUE_ID>"
 })
 ```
 
@@ -260,9 +261,9 @@ From the Sentry issue details, extract:
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "find_releases", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "regionUrl": "<REGION_URL>",
-  "projectSlug": "<PROJECT_SLUG>"
+ "organizationSlug": "<ORG_SLUG>",
+ "regionUrl": "<REGION_URL>",
+ "projectSlug": "<PROJECT_SLUG>"
 })
 ```
 
@@ -276,10 +277,10 @@ git log --oneline <previous-release-tag>..<current-release-tag>
 1. **Start from the crash site**: Read the full function where the error was thrown.
 2. **Walk up the call chain**: For each app-code frame in the stacktrace, read the file and function.
 3. **Walk down to the data source**: If the error involves unexpected data, trace where that data comes from:
-   - Database query? Read the query, check the schema.
-   - React state/props? Find where the state is set.
-   - URL param or user input? Check validation/parsing.
-   - Cache or store? Check invalidation and staleness.
+ - Database query? Read the query, check the schema.
+ - React state/props? Find where the state is set.
+ - URL param or user input? Check validation/parsing.
+ - Cache or store? Check invalidation and staleness.
 4. **Check recent changes**: `git log --oneline -20 -- <file>` on culprit files.
 
 ### 4d. Research Best Practices Before Fixing
@@ -288,9 +289,9 @@ For non-trivial bugs, research the correct fix pattern:
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
-  "query": "<framework> <error-type> best practice fix <current year>",
-  "limit": 5,
-  "sources": [{ "type": "web" }]
+ "query": "<framework> <error-type> best practice fix <current year>",
+ "limit": 5,
+ "sources": [{ "type": "web" }]
 })
 ```
 
@@ -298,9 +299,9 @@ Then scrape the most authoritative result:
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
-  "url": "<best-result-url>",
-  "formats": ["markdown"],
-  "onlyMainContent": true
+ "url": "<best-result-url>",
+ "formats": ["markdown"],
+ "onlyMainContent": true
 })
 ```
 
@@ -428,10 +429,10 @@ For each verified fix:
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "update_issue", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "regionUrl": "<REGION_URL>",
-  "issueId": "<ISSUE_ID>",
-  "status": "resolved"
+ "organizationSlug": "<ORG_SLUG>",
+ "regionUrl": "<REGION_URL>",
+ "issueId": "<ISSUE_ID>",
+ "status": "resolved"
 })
 ```
 
@@ -469,166 +470,6 @@ Read the Sentry config file(s) detected in Step 0c. Check each setting:
 | Python | `DjangoIntegration` / `FlaskIntegration`, `SqlalchemyIntegration` |
 | Vue | `BrowserTracing`, `Replay`, `Sentry.vueRouterInstrumentation` |
 
-### 8b. Monitoring Coverage Audit
+## Further reading
 
-Check what IS and IS NOT being monitored:
-
-**Error Monitoring:**
-- [ ] Global error handler configured (browser: `window.onerror`; Node: `process.on('unhandledRejection')`)
-- [ ] Error boundaries catch all component trees (React) / global error handler (Vue/Angular)
-- [ ] API error responses are captured with context
-- [ ] Background job/worker errors are captured
-
-**Performance Monitoring:**
-- [ ] `tracesSampleRate > 0` (performance monitoring is ON)
-- [ ] Key transactions instrumented (API routes, DB queries, external calls)
-- [ ] Web Vitals being reported (LCP, INP, CLS)
-- [ ] Custom spans for business-critical operations
-
-**Session Replay:**
-- [ ] Replay SDK installed and configured
-- [ ] `replaysOnErrorSampleRate` set to 1.0 (capture replays when errors occur)
-- [ ] Privacy masking configured appropriately
-
-**Contextual Data:**
-- [ ] User identity set (`Sentry.setUser()` after auth)
-- [ ] Custom tags for business context (feature flags, plan tier, locale)
-- [ ] Breadcrumbs rich enough (not just defaults — custom breadcrumbs for key user actions)
-- [ ] Structured context (`Sentry.setContext()`) for debugging
-
-**Source Maps:**
-- [ ] Source maps uploaded during build (check for `@sentry/webpack-plugin`, `@sentry/cli`, or framework-specific upload)
-- [ ] Verify stacktraces in Sentry show original source, not minified code
-- [ ] `.sentryclirc` or auth token configured for uploads
-
-### 8c. Research Current Best Practices
-
-Search for the latest Sentry recommendations for the detected framework:
-
-```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
-  "query": "<FRAMEWORK> sentry best practices configuration <current year>",
-  "limit": 5,
-  "sources": [{ "type": "web" }]
-})
-```
-
-Scrape the Sentry official docs for the framework:
-
-```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
-  "url": "https://docs.sentry.io/platforms/<platform>/",
-  "formats": ["markdown"],
-  "onlyMainContent": true
-})
-```
-
-Platform paths: `javascript/nextjs`, `javascript/react`, `javascript/vue`, `python/django`, `python/flask`, `node`, `go`, `java/spring-boot`, `ruby/rails`.
-
-### 8d. Alerting Audit
-
-Check if alert rules exist and are useful:
-- Are there alerts for error spikes? (e.g., >10x normal rate in 5 min)
-- Are there alerts for new issue types?
-- Are there alerts for regression (previously resolved issue re-opening)?
-- Are there alerts for performance degradation (p95 response time)?
-
-Recommend alert rules if none exist.
-
----
-
-## Step 9: Summary Report
-
-Output this report after all work is complete:
-
-```markdown
-## Sentry Monitor Report — [Project Name]
-
-### Configuration Detected
-- Organization: [org slug]
-- Project: [project slug]
-- Framework: [framework]
-- Platform: [browser/server/hybrid]
-- Sentry Config: [file path]
-
-### Issues Addressed
-
-| Issue ID | Title | Events | Users | Bucket | Root Cause | Fix Applied | Status |
-|----------|-------|--------|-------|--------|-----------|-------------|--------|
-| XX-123 | ... | N | N | Bug | "query returns null when..." | "added explicit empty state..." | resolved |
-| XX-124 | ... | N | N | Noise | "browser extension injects..." | "added ignoreErrors pattern" | resolved |
-
-### Seer AI Analysis
-
-| Issue ID | Seer Root Cause | Seer Suggested Fix | Used? | Notes |
-|----------|----------------|--------------------|-------|-------|
-| XX-123 | [Seer's root cause explanation] | [Seer's code fix summary] | Yes/No | [why used or why overridden] |
-
-### Root Cause Analysis Details
-
-For each Code Bug / Data Bug:
-
-**XX-123: [Title]**
-- **Seer analysis**: [summary of Seer's findings, or "N/A — below threshold"]
-- **What happened**: [runtime state that caused the crash]
-- **Why it happened**: [upstream reason — the actual root cause]
-- **Fix location**: [file(s) changed and what was changed]
-- **Why this fix is correct**: [1-2 sentences]
-- **Blast radius check**: [other callers verified unaffected]
-
-### Architecture Audit
-
-#### SDK Configuration
-- Current: [what's configured]
-- Gaps: [what's missing or suboptimal]
-- Recommended changes: [specific code changes]
-
-#### Monitoring Coverage
-- Covered: [what's being monitored]
-- Blind spots: [what's NOT being monitored but should be]
-- Recommended instrumentation: [specific additions]
-
-#### Alerting
-- Current alerts: [if any]
-- Recommended alerts: [with thresholds]
-
-#### Source Maps
-- Status: [working / broken / not configured]
-- Fix: [if needed]
-
-### Files Modified
-- [path] — [description]
-
-### Requires Manual Follow-Up
-- XX-125: [Title] — [why it cannot be fixed automatically]
-```
-
----
-
-## Decision Tree: Is This Noise or a Bug?
-
-```
-1. Does the stacktrace contain ANY frame from your app code?
-   YES → likely a Bug, go to 2
-   NO  → likely Noise, go to 5
-
-2. Does the error reference a variable, function, or component YOU wrote?
-   YES → Code Bug (proceed to Root Cause Analysis)
-   NO  → go to 3
-
-3. Is the error triggered by a user action in your app?
-   YES → Code Bug or Data Bug (your code should handle this)
-   NO  → go to 4
-
-4. Does the error only happen in specific browsers/OS or with specific extensions?
-   YES → likely Noise (browser/extension incompatibility)
-   NO  → treat as Code Bug to be safe
-
-5. Is the error from a browser extension, ad blocker, or third-party script?
-   YES → Noise (add to ignoreErrors)
-   NO  → go to 6
-
-6. Is the error a known framework issue (React hydration, HMR, chunk loading)?
-   YES → Noise (add framework-specific filter)
-   NO  → treat as Code Bug to be safe (investigate before filtering)
-```
+- [8b. Monitoring Coverage Audit and more](references/details.md)

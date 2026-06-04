@@ -1,6 +1,7 @@
 ---
 name: meta-mcp-builder
-description: Guide for creating MCP (Model Context Protocol) servers that enable LLMs to interact with external services. Use when building MCP servers, integrating external APIs, or creating tools for AI agents.
+description: Build MCP (Model Context Protocol) servers that give LLMs access to external services and APIs. Use when building MCP servers, integrating external APIs, or creating tools for AI agents.
+license: MIT
 ---
 
 # MCP Server Development Guide
@@ -30,13 +31,13 @@ MCP (Model Context Protocol) servers expose tools that AI agents can use. Qualit
 ```
 my-mcp-server/
 ├── src/
-│   ├── index.ts        # Entry point
-│   ├── tools/          # Tool implementations
-│   │   ├── search.ts
-│   │   └── create.ts
-│   └── utils/          # Shared utilities
-│       ├── api-client.ts
-│       └── error-handler.ts
+│ ├── index.ts # Entry point
+│ ├── tools/ # Tool implementations
+│ │ ├── search.ts
+│ │ └── create.ts
+│ └── utils/ # Shared utilities
+│ ├── api-client.ts
+│ └── error-handler.ts
 ├── package.json
 ├── tsconfig.json
 └── README.md
@@ -62,8 +63,8 @@ my-mcp-server/
 ### 2. Concise Descriptions
 ```typescript
 {
-  name: 'github_search_issues',
-  description: 'Search GitHub issues by query, state, and labels. Returns issue title, number, and URL.',
+ name: 'github_search_issues',
+ description: 'Search GitHub issues by query, state, and labels. Returns issue title, number, and URL.',
 }
 ```
 
@@ -73,10 +74,10 @@ my-mcp-server/
 import { z } from 'zod';
 
 const searchIssuesSchema = z.object({
-  query: z.string().describe('Search query string'),
-  state: z.enum(['open', 'closed', 'all']).default('open'),
-  labels: z.array(z.string()).optional().describe('Filter by labels'),
-  limit: z.number().min(1).max(100).default(10),
+ query: z.string().describe('Search query string'),
+ state: z.enum(['open', 'closed', 'all']).default('open'),
+ labels: z.array(z.string()).optional().describe('Filter by labels'),
+ limit: z.number().min(1).max(100).default(10),
 });
 ```
 
@@ -88,9 +89,9 @@ throw new Error('Failed');
 
 // ✅ Good
 throw new Error(
-  `GitHub API rate limit exceeded. ` +
-  `Resets at ${resetTime}. ` +
-  `Try again later or authenticate for higher limits.`
+ `GitHub API rate limit exceeded. ` +
+ `Resets at ${resetTime}. ` +
+ `Try again later or authenticate for higher limits.`
 );
 ```
 
@@ -105,31 +106,31 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 
 const server = new McpServer({
-  name: 'my-service',
-  version: '1.0.0',
+ name: 'my-service',
+ version: '1.0.0',
 });
 
 // Define tool
 server.tool(
-  'service_action',
-  'Description of what this tool does and when to use it',
-  {
-    param1: z.string().describe('What this param is for'),
-    param2: z.number().optional().describe('Optional param'),
-  },
-  async ({ param1, param2 }) => {
-    // Implementation
-    const result = await performAction(param1, param2);
-    
-    return {
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify(result, null, 2),
-        },
-      ],
-    };
-  }
+ 'service_action',
+ 'Description of what this tool does and when to use it',
+ {
+ param1: z.string().describe('What this param is for'),
+ param2: z.number().optional().describe('Optional param'),
+ },
+ async ({ param1, param2 }) => {
+ // Implementation
+ const result = await performAction(param1, param2);
+
+ return {
+ content: [
+ {
+ type: 'text',
+ text: JSON.stringify(result, null, 2),
+ },
+ ],
+ };
+ }
 );
 ```
 
@@ -137,18 +138,18 @@ server.tool(
 
 ```typescript
 server.tool(
-  'delete_item',
-  'Delete an item permanently',
-  { id: z.string() },
-  async ({ id }) => { /* ... */ },
-  {
-    annotations: {
-      readOnlyHint: false,      // Modifies data
-      destructiveHint: true,    // Cannot be undone
-      idempotentHint: true,     // Safe to retry
-      openWorldHint: false,     // Closed set of operations
-    },
-  }
+ 'delete_item',
+ 'Delete an item permanently',
+ { id: z.string() },
+ async ({ id }) => { /* ... */ },
+ {
+ annotations: {
+ readOnlyHint: false, // Modifies data
+ destructiveHint: true, // Cannot be undone
+ idempotentHint: true, // Safe to retry
+ openWorldHint: false, // Closed set of operations
+ },
+ }
 );
 ```
 
@@ -160,24 +161,24 @@ server.tool(
 
 | Approach | When to Use |
 |----------|-------------|
-| Comprehensive API coverage | Agent needs flexibility to compose operations |
+| full API coverage | Agent needs flexibility to compose operations |
 | Workflow tools | Specific task needs multi-step automation |
 
-**Default:** Start with comprehensive API coverage, add workflow tools for common patterns.
+**Default:** Start with full API coverage, add workflow tools for common patterns.
 
 ### Response Formatting
 
 ```typescript
 // Return structured data
 return {
-  content: [{
-    type: 'text',
-    text: JSON.stringify({
-      success: true,
-      data: results,
-      metadata: { count: results.length },
-    }, null, 2),
-  }],
+ content: [{
+ type: 'text',
+ text: JSON.stringify({
+ success: true,
+ data: results,
+ metadata: { count: results.length },
+ }, null, 2),
+ }],
 };
 ```
 
@@ -185,14 +186,14 @@ return {
 
 ```typescript
 const listItemsSchema = z.object({
-  limit: z.number().min(1).max(100).default(20),
-  cursor: z.string().optional().describe('Pagination cursor from previous response'),
+ limit: z.number().min(1).max(100).default(20),
+ cursor: z.string().optional().describe('Pagination cursor from previous response'),
 });
 
 // Return cursor in response
 return {
-  items: results,
-  nextCursor: hasMore ? lastId : null,
+ items: results,
+ nextCursor: hasMore ? lastId : null,
 };
 ```
 
@@ -202,7 +203,7 @@ return {
 
 ### 1. Build Check
 ```bash
-npm run build  # Must pass without errors
+npm run build # Must pass without errors
 ```
 
 ### 2. Test with Inspector
@@ -236,7 +237,7 @@ npx @modelcontextprotocol/inspector
 ```typescript
 const apiKey = process.env.SERVICE_API_KEY;
 if (!apiKey) {
-  throw new Error('SERVICE_API_KEY environment variable required');
+ throw new Error('SERVICE_API_KEY environment variable required');
 }
 ```
 
@@ -245,13 +246,13 @@ if (!apiKey) {
 import { RateLimiter } from 'limiter';
 
 const limiter = new RateLimiter({
-  tokensPerInterval: 100,
-  interval: 'minute',
+ tokensPerInterval: 100,
+ interval: 'minute',
 });
 
 async function callApi() {
-  await limiter.removeTokens(1);
-  // Make API call
+ await limiter.removeTokens(1);
+ // Make API call
 }
 ```
 
@@ -260,13 +261,13 @@ async function callApi() {
 const cache = new Map<string, { data: any; expiry: number }>();
 
 async function getCached(key: string, fetcher: () => Promise<any>) {
-  const cached = cache.get(key);
-  if (cached && cached.expiry > Date.now()) {
-    return cached.data;
-  }
-  const data = await fetcher();
-  cache.set(key, { data, expiry: Date.now() + 60000 });
-  return data;
+ const cached = cache.get(key);
+ if (cached && cached.expiry > Date.now()) {
+ return cached.data;
+ }
+ const data = await fetcher();
+ cache.set(key, { data, expiry: Date.now() + 60000 });
+ return data;
 }
 ```
 

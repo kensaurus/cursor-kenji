@@ -5,6 +5,7 @@ description: >
   investigating bugs, troubleshooting issues, or when something isn't working as expected.
   Integrates Sentry MCP for production error context, Firecrawl for researching fix patterns,
   and Sequential Thinking for complex multi-step diagnosis.
+license: MIT
 ---
 
 # Debug Error Skill
@@ -17,9 +18,9 @@ Systematic approach to debugging errors and unexpected behavior. Works with any 
 
 ### 1. Read Relevant Documentation
 ```
-README.md                              (project overview)
-src/[domain]/@_[domain]-README.md      (domain-specific behavior)
-docs/                                  (system documentation)
+README.md (project overview)
+src/[domain]/@_[domain]-README.md (domain-specific behavior)
+docs/ (system documentation)
 ```
 
 ### 2. Check for Sentry Context (if production error)
@@ -28,11 +29,11 @@ If the error is from production and Sentry is configured, fetch the full context
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "naturalLanguageQuery": "<error message or description>",
-  "projectSlugOrId": "<PROJECT_SLUG>",
-  "regionUrl": "<REGION_URL>",
-  "limit": 5
+ "organizationSlug": "<ORG_SLUG>",
+ "naturalLanguageQuery": "<error message or description>",
+ "projectSlugOrId": "<PROJECT_SLUG>",
+ "regionUrl": "<REGION_URL>",
+ "limit": 5
 })
 ```
 
@@ -40,9 +41,9 @@ Then get details for the matching issue:
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "get_sentry_resource", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "resourceType": "issue",
-  "resourceId": "<ISSUE_ID>"
+ "organizationSlug": "<ORG_SLUG>",
+ "resourceType": "issue",
+ "resourceId": "<ISSUE_ID>"
 })
 ```
 
@@ -83,8 +84,8 @@ Error Report:
 - What happened: [description]
 - Expected behavior: [what should happen]
 - Steps to reproduce:
-  1. [step]
-  2. [step]
+ 1. [step]
+ 2. [step]
 - Environment: [browser/OS/Node version]
 - Error message: [exact message]
 - Stack trace: [if available]
@@ -104,13 +105,13 @@ Error Report:
 ### Narrow Down the Problem
 
 ```
-Works in:          Fails in:
-├─ Production?     ├─ Production?
-├─ Staging?        ├─ Staging?
-├─ Local?          ├─ Local?
-├─ All browsers?   ├─ Specific browser?
-├─ All users?      ├─ Specific user?
-└─ All data?       └─ Specific data?
+Works in: Fails in:
+├─ Production? ├─ Production?
+├─ Staging? ├─ Staging?
+├─ Local? ├─ Local?
+├─ All browsers? ├─ Specific browser?
+├─ All users? ├─ Specific user?
+└─ All data? └─ Specific data?
 ```
 
 ### Trace the Data Flow
@@ -126,8 +127,8 @@ Identify where the data goes wrong by checking each boundary.
 
 1. Comment out half the code
 2. Does error still occur?
-   - Yes: Bug is in remaining code
-   - No: Bug is in commented code
+ - Yes: Bug is in remaining code
+ - No: Bug is in commented code
 3. Repeat until isolated
 
 ---
@@ -138,9 +139,9 @@ For non-trivial errors, research the correct fix before implementing:
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
-  "query": "<framework> <exact error message> fix best practice",
-  "limit": 5,
-  "sources": [{ "type": "web" }]
+ "query": "<framework> <exact error message> fix best practice",
+ "limit": 5,
+ "sources": [{ "type": "web" }]
 })
 ```
 
@@ -148,9 +149,9 @@ Then scrape the most relevant result:
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
-  "url": "<best-result-url>",
-  "formats": ["markdown"],
-  "onlyMainContent": true
+ "url": "<best-result-url>",
+ "formats": ["markdown"],
+ "onlyMainContent": true
 })
 ```
 
@@ -158,8 +159,8 @@ Also check official docs via Context7 if the error relates to a library:
 
 ```json
 CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
-  "libraryName": "<library>",
-  "query": "<error description>"
+ "libraryName": "<library>",
+ "query": "<error description>"
 })
 ```
 

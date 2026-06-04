@@ -1,12 +1,12 @@
 ---
 name: meta-skill-creator
-description: Guide for creating effective skills. This skill should be used when users want to create a new skill (or update an existing skill) that extends Claude's capabilities with specialized knowledge, workflows, or tool integrations.
-license: Complete terms in LICENSE.txt
+description: Create or update Cursor agent skills (SKILL.md). Use when authoring a new skill, updating an existing skill, or asking about SKILL.md structure and best practices.
+license: Apache-2.0
 ---
 
 # Skill Creator
 
-This skill provides guidance for creating effective skills.
+ guidance for creating effective skills.
 
 ## About Skills
 
@@ -18,7 +18,7 @@ equipped with procedural knowledge that no model can fully possess.
 ### What Skills Provide
 
 1. Specialized workflows - Multi-step procedures for specific domains
-2. Tool integrations - Instructions for working with specific file formats or APIs
+2. Tool integrations - working with specific file formats or APIs
 3. Domain expertise - Company-specific knowledge, schemas, business logic
 4. Bundled resources - Scripts, references, and assets for complex and repetitive tasks
 
@@ -51,21 +51,21 @@ Every skill consists of a required SKILL.md file and optional bundled resources:
 ```
 skill-name/
 ├── SKILL.md (required)
-│   ├── YAML frontmatter metadata (required)
-│   │   ├── name: (required)
-│   │   └── description: (required)
-│   └── Markdown instructions (required)
+│ ├── YAML frontmatter metadata (required)
+│ │ ├── name: (required)
+│ │ └── description: (required)
+│ └── Markdown instructions (required)
 └── Bundled Resources (optional)
-    ├── scripts/    - Executable code (Python/Bash/etc.)
-    ├── references/ - Documentation intended to be loaded into context as needed
-    └── assets/     - Files used in output (templates, icons, fonts, etc.)
+ ├── scripts/ - Executable code (Python/Bash/etc.)
+ ├── references/ - Documentation intended to be loaded into context as needed
+ └── assets/ - Files used in output (templates, icons, fonts, etc.)
 ```
 
 #### SKILL.md (required)
 
 Every SKILL.md consists of:
 
-- **Frontmatter** (YAML): Contains `name` and `description` fields. These are the only fields that Claude reads to determine when the skill gets used, thus it is very important to be clear and comprehensive in describing what the skill is, and when it should be used.
+- **Frontmatter** (YAML): Contains `name` and `description` fields. These are the only fields that Claude reads to determine when the skill gets used, thus it is very important to be clear and full in describing what the skill is, and when it should be used.
 - **Body** (Markdown): Instructions and guidance for using the skill. Only loaded AFTER the skill triggers (if at all).
 
 #### Bundled Resources (optional)
@@ -156,9 +156,9 @@ Create the skill directory structure:
 ```
 skill-name/
 ├── SKILL.md
-├── scripts/    (optional)
+├── scripts/ (optional)
 ├── references/ (optional)
-└── assets/     (optional)
+└── assets/ (optional)
 ```
 
 ### Step 4: Edit the Skill
@@ -175,14 +175,14 @@ Write the YAML frontmatter with `name` and `description`:
 
 - `name`: The skill name
 - `description`: This is the primary triggering mechanism for your skill, and helps Claude understand when to use the skill.
-  - Include both what the Skill does and specific triggers/contexts for when to use it.
-  - Include all "when to use" information here - Not in the body. The body is only loaded after triggering, so "When to Use This Skill" sections in the body are not helpful to Claude.
+ - Include both what the Skill does and specific triggers/contexts for when to use it.
+ - Include all "when to use" information here - Not in the body. The body is only loaded after triggering, so "When to Use This Skill" sections in the body are not helpful to Claude.
 
 Do not include any other fields in YAML frontmatter.
 
 ##### Body
 
-Write instructions for using the skill and its bundled resources.
+Write using the skill and its bundled resources.
 
 ### Step 5: Iterate
 

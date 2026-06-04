@@ -6,6 +6,7 @@ description: >-
   automation session — when testing webapps, running user-story tests,
   QA audits, UX audits, or any task that calls cursor-ide-browser MCP tools
   (browser_navigate, browser_snapshot, browser_wait_for, browser_click, etc.).
+license: MIT
 ---
 
 # Browser Anti-Stall Protocol
@@ -41,11 +42,11 @@ Never assume navigation succeeded without a snapshot to confirm it.
 
 ```
 wait 2s → snapshot → check condition
-  ↓ not ready
+ ↓ not ready
 wait 2s → snapshot → check condition
-  ↓ not ready
+ ↓ not ready
 wait 2s → snapshot → check condition
-  ↓ still not ready
+ ↓ still not ready
 STOP → report blocker with evidence
 ```
 

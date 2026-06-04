@@ -1,6 +1,7 @@
 ---
 name: deploy-npm
-description: End-to-end release workflow for a monorepo that uses Changesets, GitHub Actions, npm Trusted Publisher (OIDC), and per-package GitHub Releases. Use when the user asks to "release", "publish to npm", "ship a new version", "cut a release", "deploy to production", "update the changelog and publish", or names a specific package like "mushi-mushi" / "@scope/pkg" together with a release verb. Handles the full chain — green CI → merge release PR → wait for the Version PR → resolve the github-actions[bot] anti-loop → dispatch publish → verify on npm and on the GitHub Releases page → create per-package release notes when changesets/action drops tags.
+description: Release a Changesets + GitHub Actions + npm OIDC (trusted publisher) monorepo end-to-end. Use when asked to "release", "publish to npm", "ship a new version", "cut a release", "update the changelog and publish", or any package name + release verb.
+license: MIT
 ---
 
 # deploy-npm — Full release workflow
@@ -163,7 +164,7 @@ git fetch origin changeset-release/master
 git checkout changeset-release/master
 git commit --allow-empty -m "chore: trigger CI for version packages PR"
 git push origin changeset-release/master
-git checkout -  # back to your previous branch
+git checkout - # back to your previous branch
 
 sleep 10
 gh run list --branch changeset-release/master --limit 3
@@ -203,8 +204,8 @@ gh run watch <new-run-id> --exit-status
 ```
 
 Watch for the "Version & Publish" job. Look in its log for either:
-- `🦋  info publishing @scope/pkg@x.y.z` (success)
-- `🦋  warn @scope/pkg is not being published because version x.y.z is already published on npm` (means an earlier run already shipped it — fine)
+- `🦋 info publishing @scope/pkg@x.y.z` (success)
+- `🦋 warn @scope/pkg is not being published because version x.y.z is already published on npm` (means an earlier run already shipped it — fine)
 - `404 Not Found - "<pkg>@<version>" is not in this registry` (this is npm's misleading error for **OIDC trusted-publisher mismatch**, not a missing package — see "OIDC gotcha" below)
 
 ---
@@ -215,9 +216,9 @@ Confirm every package landed on the public registry:
 
 ```bash
 for pkg in <space-separated-package-names>; do
-  echo -n "$pkg: "
-  npm view "$pkg" version dist-tags.latest 2>&1 | tr '\n' ' '
-  echo
+ echo -n "$pkg: "
+ npm view "$pkg" version dist-tags.latest 2>&1 | tr '\n' ' '
+ echo
 done
 ```
 
@@ -250,9 +251,9 @@ MASTER_SHA=$(gh api repos/<owner>/<repo>/commits/master --jq '.sha')
 
 # Create each tag
 for tag in "main-pkg@x.y.z" "@scope/cli@x.y.z" "@scope/core@x.y.z" ...; do
-  gh api -X POST repos/<owner>/<repo>/git/refs \
-    -f ref="refs/tags/$tag" \
-    -f sha="$MASTER_SHA"
+ gh api -X POST repos/<owner>/<repo>/git/refs \
+ -f ref="refs/tags/$tag" \
+ -f sha="$MASTER_SHA"
 done
 
 # Write the umbrella release notes once
@@ -290,19 +291,19 @@ EOF
 
 # Create the umbrella release (marked Latest)
 gh release create "main-pkg@x.y.z" \
-  --title "<Project> — <Month Year> release (<3-word highlight>)" \
-  --notes-file /tmp/release-notes.md \
-  --latest --target master
+ --title "<Project> — <Month Year> release (<3-word highlight>)" \
+ --notes-file /tmp/release-notes.md \
+ --latest --target master
 
 # Create per-package release stubs that link back
 for tag in "@scope/cli@x.y.z" "@scope/core@x.y.z" ...; do
-  gh release create "$tag" --title "$tag" \
-    --notes "Part of the [<Project> <Month Year> release](https://github.com/<owner>/<repo>/releases/tag/main-pkg%40x.y.z). See the umbrella release for full notes.
+ gh release create "$tag" --title "$tag" \
+ --notes "Part of the [<Project> <Month Year> release](https://github.com/<owner>/<repo>/releases/tag/main-pkg%40x.y.z). See the umbrella release for full notes.
 
 \`\`\`bash
 npm install $tag
 \`\`\`" \
-    --target master
+ --target master
 done
 
 # Clean up

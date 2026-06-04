@@ -5,6 +5,7 @@ description: >
   cleaning up code, reducing duplication, improving readability, or restructuring code.
   Integrates Firecrawl for researching modern patterns before refactoring,
   and codebase-aware dependency analysis to avoid breaking changes.
+license: MIT
 ---
 
 # Refactor Code Skill
@@ -17,9 +18,9 @@ Improve code quality without changing external behavior. Research-aware.
 
 ### 1. Read Relevant Documentation
 ```
-README.md                              (project overview)
-src/[domain]/@_[domain]-README.md      (domain architecture)
-CONTRIBUTING.md                        (code standards)
+README.md (project overview)
+src/[domain]/@_[domain]-README.md (domain architecture)
+CONTRIBUTING.md (code standards)
 ```
 
 ### 2. Understand Existing Patterns
@@ -33,8 +34,8 @@ Use `Grep` and `SemanticSearch` to find:
 
 Before changing any function, class, or component:
 ```bash
-rg "functionName" --type ts       # find all callers
-rg "import.*from.*module" --type ts  # find all importers
+rg "functionName" --type ts # find all callers
+rg "import.*from.*module" --type ts # find all importers
 ```
 
 List every file that will be affected by the change. If the blast radius is large (10+ files), consider a phased approach.
@@ -45,9 +46,9 @@ If the refactoring introduces a new pattern, verify it's current best practice:
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
-  "query": "<framework> <pattern> best practice <current year>",
-  "limit": 5,
-  "sources": [{ "type": "web" }]
+ "query": "<framework> <pattern> best practice <current year>",
+ "limit": 5,
+ "sources": [{ "type": "web" }]
 })
 ```
 
@@ -55,9 +56,9 @@ Scrape the most authoritative result:
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
-  "url": "<best-result-url>",
-  "formats": ["markdown"],
-  "onlyMainContent": true
+ "url": "<best-result-url>",
+ "formats": ["markdown"],
+ "onlyMainContent": true
 })
 ```
 
@@ -111,24 +112,24 @@ Before refactoring, state:
 **Before:**
 ```typescript
 function processOrder(order: Order) {
-  if (!order.items.length) throw new Error('Empty order');
-  if (!order.customer) throw new Error('No customer');
-  if (order.total < 0) throw new Error('Invalid total');
+ if (!order.items.length) throw new Error('Empty order');
+ if (!order.customer) throw new Error('No customer');
+ if (order.total < 0) throw new Error('Invalid total');
 
-  const subtotal = order.items.reduce((sum, i) => sum + i.price, 0);
-  const tax = subtotal * 0.1;
-  const total = subtotal + tax;
+ const subtotal = order.items.reduce((sum, i) => sum + i.price, 0);
+ const tax = subtotal * 0.1;
+ const total = subtotal + tax;
 
-  db.orders.insert({ ...order, total });
+ db.orders.insert({ ...order, total });
 }
 ```
 
 **After:**
 ```typescript
 function processOrder(order: Order) {
-  validateOrder(order);
-  const total = calculateTotal(order);
-  saveOrder({ ...order, total });
+ validateOrder(order);
+ const total = calculateTotal(order);
+ saveOrder({ ...order, total });
 }
 ```
 
@@ -137,26 +138,26 @@ function processOrder(order: Order) {
 **Before:**
 ```typescript
 function getDiscount(user: User, order: Order) {
-  if (user) {
-    if (user.isPremium) {
-      if (order.total > 100) {
-        return 0.2;
-      } else {
-        return 0.1;
-      }
-    }
-  }
-  return 0;
+ if (user) {
+ if (user.isPremium) {
+ if (order.total > 100) {
+ return 0.2;
+ } else {
+ return 0.1;
+ }
+ }
+ }
+ return 0;
 }
 ```
 
 **After:**
 ```typescript
 function getDiscount(user: User | null, order: Order) {
-  if (!user) return 0;
-  if (user.isPremium && order.total > 100) return 0.2;
-  if (user.isPremium) return 0.1;
-  return 0;
+ if (!user) return 0;
+ if (user.isPremium && order.total > 100) return 0.2;
+ if (user.isPremium) return 0.1;
+ return 0;
 }
 ```
 
@@ -182,10 +183,10 @@ function createUser(name: string, email: string, age: number, role: string) { ..
 
 // After — named, self-documenting, extensible
 interface CreateUserParams {
-  name: string;
-  email: string;
-  age: number;
-  role: string;
+ name: string;
+ email: string;
+ age: number;
+ role: string;
 }
 function createUser(params: CreateUserParams) { ... }
 ```

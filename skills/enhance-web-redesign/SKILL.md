@@ -1,6 +1,7 @@
 ---
 name: enhance-web-redesign
 description: Upgrades existing websites and apps to premium quality. Audits current design, identifies generic AI patterns, and applies high-end design standards without breaking functionality. Use when redesigning existing projects, upgrading UI to premium quality, removing AI slop patterns, or when the user asks for a redesign audit. Works with any CSS framework or vanilla CSS.
+license: MIT
 ---
 
 > ### Which enhance skill? (surface router)
@@ -12,7 +13,7 @@ description: Upgrades existing websites and apps to premium quality. Audits curr
 > | **Web** landing / marketing / portfolio (greenfield, anti-slop) | `enhance-web-landing` |
 > | **Web** existing site upgrade (audit-first, preserve behavior) | `enhance-web-redesign` |
 > | **Web** 3D / WebGL / cinematic scroll on an existing site (audit-first) | `enhance-web-web3d` |
-> | **React Native** screen (Expo / bare) | `enhance-rn-screen` |
+> | **React Native** screen (Expo / bare) | `mobile-rn-screen` |
 > | **Capacitor / hybrid** shell (one web app shipped to iOS + Android) | `enhance-capacitor-ui` (axis architecture first) → then the web or rn skill |
 > | Repo **README** showcase | `enhance-readme` |
 >
@@ -36,7 +37,7 @@ Before the full audit, scan for the highest-signal "AI-generated look" fingerpri
 - [ ] **Purple→blue gradient** on hero, buttons, or icons
 - [ ] **Three equal feature cards** in a row
 - [ ] **Pill-shaped everything** (uniform `rounded-full` badges + buttons)
-- [ ] **"Welcome to [Product]" / "Elevate your…"** hero copy
+- [ ] **"Welcome to [Product]" / "improve your…"** hero copy
 - [ ] **Em dashes** sprinkled through every sentence of body copy
 - [ ] **Lucide/Feather icons** with a rocket = "launch", shield = "security"
 - [ ] **Centered-everything** symmetrical layout with no asymmetry or overlap
@@ -111,7 +112,7 @@ Check for these problems and fix them:
 - **Generic names like "John Doe" or "Jane Smith".** Use diverse, realistic-sounding names.
 - **Fake round numbers like `99.99%`, `50%`, `$100.00`.** Use organic, messy data: `47.2%`, `$99.00`, `+1 (312) 847-1928`.
 - **Placeholder company names like "Acme Corp", "Nexus", "SmartFlow".** Invent contextual, believable brand names.
-- **AI copywriting cliches.** Never use "Elevate", "Seamless", "Unleash", "Next-Gen", "Game-changer", "Delve", "Tapestry", or "In the world of...". Write plain, specific language.
+- **AI copywriting cliches.** Never use "improve", "clean", "Unleash", "Next-Gen", "Game-changer", "look", "Tapestry", or "In the world of...". Write plain, specific language.
 - **Exclamation marks in success messages.** Remove them. Be confident, not loud.
 - **"Oops!" error messages.** Be direct: "Connection failed. Please try again."
 - **Passive voice.** Use active voice: "We couldn't save your changes" instead of "Mistakes were made."

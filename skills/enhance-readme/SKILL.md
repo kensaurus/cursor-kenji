@@ -13,6 +13,7 @@ description: >-
   README", "showcase the app in README", "design the README", "add hero
   image", "spice up README", "make README more fun", "add animated demo to
   README", "record a tour GIF", or "make a README GIF".
+license: MIT
 ---
 
 > ### Which enhance skill? (surface router)
@@ -24,7 +25,7 @@ description: >-
 > | **Web** landing / marketing / portfolio (greenfield, anti-slop) | `enhance-web-landing` |
 > | **Web** existing site upgrade (audit-first, preserve behavior) | `enhance-web-redesign` |
 > | **Web** 3D / WebGL / cinematic scroll on an existing site (audit-first) | `enhance-web-web3d` |
-> | **React Native** screen (Expo / bare) | `enhance-rn-screen` |
+> | **React Native** screen (Expo / bare) | `mobile-rn-screen` |
 > | **Capacitor / hybrid** shell (one web app shipped to iOS + Android) | `enhance-capacitor-ui` (axis architecture first) → then the web or rn skill |
 > | Repo **README** showcase | `enhance-readme` |
 >
@@ -95,9 +96,9 @@ browser_resize { width: 1600, height: 1000 }
 ```
 browser_navigate { url: <demo-url> }
 browser_wait_for { time: 2 }
-browser_snapshot               # find login refs
-browser_fill_form              # username + password
-browser_click                  # log in
+browser_snapshot # find login refs
+browser_fill_form # username + password
+browser_click # log in
 browser_wait_for { time: 2 }
 browser_take_screenshot { filename: "<page>-dark.png" }
 ```
@@ -108,10 +109,10 @@ Repeat for each feature page you want in the tour (analytics, settings, list vie
 
 ```
 browser_evaluate {
-  function: "() => { document.documentElement.classList.remove('dark');
-                     document.documentElement.classList.add('light');
-                     localStorage.setItem('theme', 'light');
-                     return 'ok'; }"
+ function: "() => { document.documentElement.classList.remove('dark');
+ document.documentElement.classList.add('light');
+ localStorage.setItem('theme', 'light');
+ return 'ok'; }"
 }
 browser_wait_for { time: 2 }
 browser_take_screenshot { filename: "<page>-light.png" }
@@ -134,12 +135,12 @@ Use kebab-case with a `-dark` / `-light` suffix:
 
 ```
 docs/screenshots/
-  dashboard-dark.png      # hero (auto-detected by name)
-  dashboard-light.png
-  analytics-dark.png
-  analytics-light.png     # optional: only needed if used in hero
-  projects-dark.png
-  ai-palette-dark.png     # tour-only cells need just the dark variant
+ dashboard-dark.png # hero (auto-detected by name)
+ dashboard-light.png
+ analytics-dark.png
+ analytics-light.png # optional: only needed if used in hero
+ projects-dark.png
+ ai-palette-dark.png # tour-only cells need just the dark variant
 ```
 
 The generator script picks the hero by looking for these keywords (in order): `hero`, `dashboard`, `home`, `landing`, `overview`, `main`. Override with `--hero=<basename>` if needed.
@@ -222,7 +223,7 @@ Good caption pattern:
 Bad caption pattern:
 
 ```
-<b>Analytics</b> · Powerful insights to drive your business forward!
+<b>Analytics</b> · insights to drive your business forward!
 ```
 
 ---
@@ -281,8 +282,8 @@ The companion script handles everything: launches a headless Chromium, dismisses
 
 ```bash
 node ~/.cursor/skills/enhance-readme/scripts/record-readme-tour.mjs \
-  --url=https://your-live-demo.example.com/ \
-  --out=docs/screenshots/tour.gif
+ --url=https://your-live-demo.example.com/ \
+ --out=docs/screenshots/tour.gif
 ```
 
 Optional flags:
@@ -393,11 +394,11 @@ If the script is unavailable, here are the raw templates.
 Subtitle line.
 
 <a href="LIVE_URL" title="Open the live demo">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/HERO-dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/HERO-light.png">
-    <img alt="Project hero — what it shows" src="docs/screenshots/HERO-dark.png" width="100%">
-  </picture>
+ <picture>
+ <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/HERO-dark.png">
+ <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/HERO-light.png">
+ <img alt="Project hero — what it shows" src="docs/screenshots/HERO-dark.png" width="100%">
+ </picture>
 </a>
 
 <sub>↑ click to open the live demo · the image swaps with your system theme</sub>
@@ -411,7 +412,7 @@ Subtitle line.
 <div align="center">
 
 <a href="LIVE_URL" title="Open the live demo">
-  <img alt="Animated guided tour of the app" src="docs/screenshots/tour.gif" width="100%">
+ <img alt="Animated guided tour of the app" src="docs/screenshots/tour.gif" width="100%">
 </a>
 
 <sub>↑ a 9-second guided tour · click to open the live demo</sub>
@@ -427,38 +428,38 @@ Subtitle line.
 A quick look at the rooms inside. Click any panel to land on it in the live demo.
 
 <table>
-  <tr>
-    <td width="50%" align="center">
-      <a href="LIVE_URL/page-1">
-        <img alt="Page 1 alt" src="docs/screenshots/page-1-dark.png" width="100%">
-      </a>
-      <br>
-      <sub><b>Page 1</b> · concrete technical detail with library name</sub>
-    </td>
-    <td width="50%" align="center">
-      <a href="LIVE_URL/page-2">
-        <img alt="Page 2 alt" src="docs/screenshots/page-2-dark.png" width="100%">
-      </a>
-      <br>
-      <sub><b>Page 2</b> · concrete technical detail with library name</sub>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" align="center">
-      <a href="LIVE_URL/page-3">
-        <img alt="Page 3 alt" src="docs/screenshots/page-3-dark.png" width="100%">
-      </a>
-      <br>
-      <sub><b>Page 3</b> · concrete technical detail with library name</sub>
-    </td>
-    <td width="50%" align="center">
-      <a href="LIVE_URL">
-        <img alt="Light mode showcase" src="docs/screenshots/HERO-light.png" width="100%">
-      </a>
-      <br>
-      <sub><b>Light mode</b> · how the app looks in daytime</sub>
-    </td>
-  </tr>
+ <tr>
+ <td width="50%" align="center">
+ <a href="LIVE_URL/page-1">
+ <img alt="Page 1 alt" src="docs/screenshots/page-1-dark.png" width="100%">
+ </a>
+ <br>
+ <sub><b>Page 1</b> · concrete technical detail with library name</sub>
+ </td>
+ <td width="50%" align="center">
+ <a href="LIVE_URL/page-2">
+ <img alt="Page 2 alt" src="docs/screenshots/page-2-dark.png" width="100%">
+ </a>
+ <br>
+ <sub><b>Page 2</b> · concrete technical detail with library name</sub>
+ </td>
+ </tr>
+ <tr>
+ <td width="50%" align="center">
+ <a href="LIVE_URL/page-3">
+ <img alt="Page 3 alt" src="docs/screenshots/page-3-dark.png" width="100%">
+ </a>
+ <br>
+ <sub><b>Page 3</b> · concrete technical detail with library name</sub>
+ </td>
+ <td width="50%" align="center">
+ <a href="LIVE_URL">
+ <img alt="Light mode showcase" src="docs/screenshots/HERO-light.png" width="100%">
+ </a>
+ <br>
+ <sub><b>Light mode</b> · how the app looks in daytime</sub>
+ </td>
+ </tr>
 </table>
 ```
 

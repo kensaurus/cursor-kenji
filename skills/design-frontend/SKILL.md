@@ -1,6 +1,7 @@
 ---
 name: design-frontend
 description: Create distinctive, production-grade frontend interfaces. Use when building web components, pages, dashboards, or beautifying UI. Avoids generic AI aesthetics.
+license: MIT
 ---
 
 # Frontend Design Skill

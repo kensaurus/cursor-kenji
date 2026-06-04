@@ -9,6 +9,7 @@ description: >
   Use when asked to: "verify deploy", "post-deploy check", "smoke test production",
   "check if deploy is healthy", "ship or rollback", "post-release check",
   "verify release", "deploy health check", or "run post-deploy".
+license: MIT
 ---
 
 # Post-Deploy Verification
@@ -118,8 +119,8 @@ Use the detected org slug and project slug from Phase 0c.
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "find_releases", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "projectSlug": "<PROJECT_SLUG>"
+ "organizationSlug": "<ORG_SLUG>",
+ "projectSlug": "<PROJECT_SLUG>"
 })
 ```
 
@@ -131,10 +132,10 @@ Verify:
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "projectSlug": "<PROJECT_SLUG>",
-  "query": "is:unresolved firstSeen:>1h",
-  "sortBy": "freq"
+ "organizationSlug": "<ORG_SLUG>",
+ "projectSlug": "<PROJECT_SLUG>",
+ "query": "is:unresolved firstSeen:>1h",
+ "sortBy": "freq"
 })
 ```
 
@@ -142,10 +143,10 @@ Also check for regressions (previously resolved issues that re-opened):
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "projectSlug": "<PROJECT_SLUG>",
-  "query": "is:regressed",
-  "sortBy": "freq"
+ "organizationSlug": "<ORG_SLUG>",
+ "projectSlug": "<PROJECT_SLUG>",
+ "query": "is:regressed",
+ "sortBy": "freq"
 })
 ```
 
@@ -155,8 +156,8 @@ For any new issue with high event count or critical severity, run Sentry's AI ro
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "analyze_issue_with_seer", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "issueId": "<ISSUE_ID>"
+ "organizationSlug": "<ORG_SLUG>",
+ "issueId": "<ISSUE_ID>"
 })
 ```
 
@@ -181,7 +182,7 @@ Skip this phase if no Supabase integration detected.
 
 ```json
 CallMcpTool(server: "plugin-supabase-supabase", toolName: "list_migrations", arguments: {
-  "project_id": "<PROJECT_ID>"
+ "project_id": "<PROJECT_ID>"
 })
 ```
 
@@ -193,8 +194,8 @@ Verify:
 
 ```json
 CallMcpTool(server: "plugin-supabase-supabase", toolName: "get_logs", arguments: {
-  "project_id": "<PROJECT_ID>",
-  "service": "api"
+ "project_id": "<PROJECT_ID>",
+ "service": "api"
 })
 ```
 
@@ -207,8 +208,8 @@ Check for:
 
 ```json
 CallMcpTool(server: "plugin-supabase-supabase", toolName: "get_logs", arguments: {
-  "project_id": "<PROJECT_ID>",
-  "service": "edge-function"
+ "project_id": "<PROJECT_ID>",
+ "service": "edge-function"
 })
 ```
 
@@ -221,8 +222,8 @@ Check for:
 
 ```json
 CallMcpTool(server: "plugin-supabase-supabase", toolName: "get_logs", arguments: {
-  "project_id": "<PROJECT_ID>",
-  "service": "auth"
+ "project_id": "<PROJECT_ID>",
+ "service": "auth"
 })
 ```
 
@@ -235,15 +236,15 @@ Check for:
 
 ```json
 CallMcpTool(server: "plugin-supabase-supabase", toolName: "get_advisors", arguments: {
-  "project_id": "<PROJECT_ID>",
-  "type": "security"
+ "project_id": "<PROJECT_ID>",
+ "type": "security"
 })
 ```
 
 ```json
 CallMcpTool(server: "plugin-supabase-supabase", toolName: "get_advisors", arguments: {
-  "project_id": "<PROJECT_ID>",
-  "type": "performance"
+ "project_id": "<PROJECT_ID>",
+ "type": "performance"
 })
 ```
 
@@ -255,8 +256,8 @@ Run a quick data integrity check on the most important tables:
 
 ```json
 CallMcpTool(server: "plugin-supabase-supabase", toolName: "execute_sql", arguments: {
-  "project_id": "<PROJECT_ID>",
-  "query": "SELECT schemaname, relname, n_dead_tup, last_autovacuum FROM pg_stat_user_tables WHERE n_dead_tup > 10000 ORDER BY n_dead_tup DESC LIMIT 5"
+ "project_id": "<PROJECT_ID>",
+ "query": "SELECT schemaname, relname, n_dead_tup, last_autovacuum FROM pg_stat_user_tables WHERE n_dead_tup > 10000 ORDER BY n_dead_tup DESC LIMIT 5"
 })
 ```
 
@@ -310,7 +311,7 @@ Confirm that active prompt versions match what the deploy should be using (check
 
 ```json
 CallMcpTool(server: "user-playwright", toolName: "browser_navigate", arguments: {
-  "url": "<PRODUCTION_URL>"
+ "url": "<PRODUCTION_URL>"
 })
 ```
 
@@ -383,33 +384,33 @@ Aggregate all phase results into a final verdict.
 
 ```
 ═══════════════════════════════════════════════════════
-   POST-DEPLOY VERIFICATION REPORT
-   Project: <PROJECT_NAME>
-   Deploy Time: <TIMESTAMP>
-   Production URL: <URL>
-   Checked At: <CHECK_TIMESTAMP>
+ POST-DEPLOY VERIFICATION REPORT
+ Project: <PROJECT_NAME>
+ Deploy Time: <TIMESTAMP>
+ Production URL: <URL>
+ Checked At: <CHECK_TIMESTAMP>
 ═══════════════════════════════════════════════════════
 
 ## HEALTH CHECK RESULTS
 
-| Check                        | Status  | Details                              |
+| Check | Status | Details |
 |------------------------------|---------|--------------------------------------|
-| Sentry: new errors           | ✅/❌  | [0 new / N new — list top issues]    |
-| Sentry: regressions          | ✅/❌  | [0 regressed / N regressed]          |
-| Sentry: release tracked      | ✅/❌  | [release ID and timestamp]           |
-| Supabase: migrations         | ✅/❌  | [all applied / N pending/failed]     |
-| Supabase: API logs           | ✅/❌  | [clean / N errors in last 30m]       |
-| Supabase: Edge Function logs | ✅/❌  | [clean / N errors]                   |
-| Supabase: Auth logs          | ✅/❌  | [clean / N errors]                   |
-| Supabase: advisors           | ✅/❌  | [no new warnings / N new warnings]   |
-| Langfuse: traces flowing     | ✅/❌  | [N traces in last 15m / no traces]   |
-| Langfuse: latency            | ✅/❌  | [normal / Xms above baseline]        |
-| Langfuse: prompt versions    | ✅/❌  | [match expected / mismatch on N]     |
-| Smoke: home page             | ✅/❌  | [loads in Xs / error]                |
-| Smoke: auth flow             | ✅/❌  | [works / broken]                     |
-| Smoke: main feature          | ✅/❌  | [works / broken]                     |
-| Smoke: console errors        | ✅/❌  | [0 errors / N errors]                |
-| Smoke: network 5xx           | ✅/❌  | [0 / N failed requests]              |
+| Sentry: new errors | ✅/❌ | [0 new / N new — list top issues] |
+| Sentry: regressions | ✅/❌ | [0 regressed / N regressed] |
+| Sentry: release tracked | ✅/❌ | [release ID and timestamp] |
+| Supabase: migrations | ✅/❌ | [all applied / N pending/failed] |
+| Supabase: API logs | ✅/❌ | [clean / N errors in last 30m] |
+| Supabase: Edge Function logs | ✅/❌ | [clean / N errors] |
+| Supabase: Auth logs | ✅/❌ | [clean / N errors] |
+| Supabase: advisors | ✅/❌ | [no new warnings / N new warnings] |
+| Langfuse: traces flowing | ✅/❌ | [N traces in last 15m / no traces] |
+| Langfuse: latency | ✅/❌ | [normal / Xms above baseline] |
+| Langfuse: prompt versions | ✅/❌ | [match expected / mismatch on N] |
+| Smoke: home page | ✅/❌ | [loads in Xs / error] |
+| Smoke: auth flow | ✅/❌ | [works / broken] |
+| Smoke: main feature | ✅/❌ | [works / broken] |
+| Smoke: console errors | ✅/❌ | [0 errors / N errors] |
+| Smoke: network 5xx | ✅/❌ | [0 / N failed requests] |
 
 ## SEER ANALYSIS (if any P0 issues)
 
@@ -421,13 +422,13 @@ Files Affected: <FILE_LIST>
 ## VERDICT
 
 ┌─────────────────────────────────────────────────┐
-│                                                 │
-│   [SHIP / MONITOR / HOTFIX / ROLLBACK]          │
-│                                                 │
-│   Reason: <one-line explanation>                │
-│                                                 │
-│   Next action: <what to do now>                 │
-│                                                 │
+│ │
+│ [SHIP / MONITOR / HOTFIX / ROLLBACK] │
+│ │
+│ Reason: <one-line explanation> │
+│ │
+│ Next action: <what to do now> │
+│ │
 └─────────────────────────────────────────────────┘
 
 ## MONITOR ESCALATION (if verdict is MONITOR)

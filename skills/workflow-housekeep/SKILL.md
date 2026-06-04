@@ -9,6 +9,7 @@ description: >
   "housekeep", "clean up repo", "update README", "update dependencies",
   "fix vulnerabilities", "remove dead code", "tidy up", "repo maintenance",
   "spring clean", "prune", "declutter", or "modernize the repo".
+license: MIT
 ---
 
 # Repo Housekeep
@@ -69,14 +70,14 @@ Glob("**/*.png", in test/debug/temp folders)
 ### 0c. Record Configuration
 
 ```
-ECOSYSTEM:       [Node.js / Python / Rust / Go / etc.]
-PKG_MANAGER:     [npm / pnpm / yarn / bun / pip / poetry / cargo / etc.]
-MANIFEST:        [package.json / requirements.txt / Cargo.toml / etc.]
-LOCKFILE:        [package-lock.json / yarn.lock / etc.]
-README_PATH:     [README.md or detected path]
-SRC_DIR:         [src/ / app/ / lib/ / etc.]
-BUILD_DIR:       [dist/ / build/ / .next/ / out/ / etc.]
-FRAMEWORK:       [Next.js / React / Vue / Django / FastAPI / etc.]
+ECOSYSTEM: [Node.js / Python / Rust / Go / etc.]
+PKG_MANAGER: [npm / pnpm / yarn / bun / pip / poetry / cargo / etc.]
+MANIFEST: [package.json / requirements.txt / Cargo.toml / etc.]
+LOCKFILE: [package-lock.json / yarn.lock / etc.]
+README_PATH: [README.md or detected path]
+SRC_DIR: [src/ / app/ / lib/ / etc.]
+BUILD_DIR: [dist/ / build/ / .next/ / out/ / etc.]
+FRAMEWORK: [Next.js / React / Vue / Django / FastAPI / etc.]
 ```
 
 ---
@@ -199,7 +200,7 @@ Glob("**/.next/**")
 Glob("**/node_modules/**")
 Glob("**/__pycache__/**")
 Glob("**/*.pyc")
-Glob("**/target/debug/**")  (Rust)
+Glob("**/target/debug/**") (Rust)
 ```
 
 **Deprecated / dead code:**
@@ -225,7 +226,7 @@ Glob("**/*.swo")
 
 **Stale config files:**
 ```
-Glob("**/.env.local")     (should not be committed)
+Glob("**/.env.local") (should not be committed)
 Glob("**/.env.production") (check if contains secrets)
 ```
 
@@ -235,9 +236,9 @@ For each candidate file:
 
 1. **Check git blame**: When was it last modified? By whom?
 2. **Check imports/references**: Is any code importing or referencing this file?
-   ```
-   Grep for the filename across the codebase
-   ```
+ ```
+ Grep for the filename across the codebase
+ ```
 3. **Check .gitignore**: Should this file type already be ignored?
 4. **Check CI/CD**: Does any workflow reference this file?
 
@@ -259,13 +260,13 @@ After cleanup, ensure `.gitignore` prevents reoccurrence:
 
 ```
 Check existing .gitignore covers:
-- logs/          *.log
-- build output   dist/ build/ .next/ out/
-- env files      .env.local .env.production
-- OS files       .DS_Store Thumbs.db
-- IDE files      .idea/ .vscode/ (unless project uses shared settings)
-- temp files     *.tmp *.bak *.swp
-- dependencies   node_modules/ __pycache__/ target/
+- logs/ *.log
+- build output dist/ build/ .next/ out/
+- env files .env.local .env.production
+- OS files .DS_Store Thumbs.db
+- IDE files .idea/ .vscode/ (unless project uses shared settings)
+- temp files *.tmp *.bak *.swp
+- dependencies node_modules/ __pycache__/ target/
 ```
 
 ### 2d. Find Dead Exports / Unused Code
@@ -294,14 +295,14 @@ If these tools aren't available, do a manual check:
 
 **Node.js:**
 ```bash
-npm outdated              # see what's behind
-npm audit                 # check vulnerabilities
+npm outdated # see what's behind
+npm audit # check vulnerabilities
 ```
 
 **Python:**
 ```bash
 pip list --outdated
-pip-audit                 # or safety check
+pip-audit # or safety check
 ```
 
 **Rust:**
@@ -329,19 +330,19 @@ govulncheck ./...
 
 **Step 1: Fix vulnerabilities first**
 ```bash
-npm audit fix                    # safe fixes only
-npm audit fix --force            # ONLY if safe fixes insufficient, review changes
+npm audit fix # safe fixes only
+npm audit fix --force # ONLY if safe fixes insufficient, review changes
 ```
 
 **Step 2: Update patch + minor**
 ```bash
-npm update                       # updates within semver range
+npm update # updates within semver range
 ```
 
 Or for more control:
 ```bash
-npx npm-check-updates -u -t minor   # update package.json to latest minor
-npm install                           # install updated versions
+npx npm-check-updates -u -t minor # update package.json to latest minor
+npm install # install updated versions
 ```
 
 **Step 3: Research major updates**
@@ -350,9 +351,9 @@ For each major version bump available:
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
-  "query": "<package-name> v<new-major> migration guide changelog breaking changes",
-  "limit": 3,
-  "sources": [{ "type": "web" }]
+ "query": "<package-name> v<new-major> migration guide changelog breaking changes",
+ "limit": 3,
+ "sources": [{ "type": "web" }]
 })
 ```
 
@@ -363,9 +364,9 @@ Only apply major updates if:
 
 **Step 4: Verify after updates**
 ```bash
-npm run build        # or equivalent
-npm run lint         # or equivalent
-npm test             # if tests exist
+npm run build # or equivalent
+npm run lint # or equivalent
+npm test # if tests exist
 ```
 
 ### 3d. Lock File Hygiene
@@ -384,9 +385,9 @@ Research the recommended `.gitignore` for the detected ecosystem:
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
-  "query": "<framework> gitignore best practices <current year>",
-  "limit": 3,
-  "sources": [{ "type": "web" }]
+ "query": "<framework> gitignore best practices <current year>",
+ "limit": 3,
+ "sources": [{ "type": "web" }]
 })
 ```
 
@@ -461,9 +462,9 @@ If the project uses TypeScript:
 ### Phase 3: Dependency Updates
 - Vulnerabilities fixed: [count] ([critical/high/moderate])
 - Packages updated: [count]
-  - Patch: [list]
-  - Minor: [list]
-  - Major: [list with migration notes]
+ - Patch: [list]
+ - Minor: [list]
+ - Major: [list with migration notes]
 - Build verified: [pass/fail]
 - Tests verified: [pass/fail/no tests]
 

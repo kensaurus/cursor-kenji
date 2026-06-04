@@ -1,6 +1,7 @@
 ---
 name: docs-writer
 description: Write clear, helpful documentation including READMEs, API docs, and code comments. Use when writing documentation, creating READMEs, documenting APIs, or when the user needs help with docs.
+license: MIT
 ---
 
 # Documentation Writer Skill
@@ -13,9 +14,9 @@ Create clear, useful documentation for developers.
 
 ### 1. Read Existing Documentation
 ```
-README.md                               (project root)
-docs/                                   (existing docs)
-src/[domain]/@_[domain]-README.md       (feature-specific READMEs)
+README.md (project root)
+docs/ (existing docs)
+src/[domain]/@_[domain]-README.md (feature-specific READMEs)
 ```
 
 ### 2. Check Documentation Patterns
@@ -151,9 +152,9 @@ function createUser(params: CreateUserParams): Promise<User>
 
 \`\`\`typescript
 const user = await createUser({
-  name: 'John Doe',
-  email: 'john@example.com',
-  role: 'admin'
+ name: 'John Doe',
+ email: 'john@example.com',
+ role: 'admin'
 });
 \`\`\`
 
@@ -170,31 +171,31 @@ const user = await createUser({
 ```typescript
 /**
  * Calculate the total price including tax and discounts.
- * 
+ *
  * @param items - Array of cart items
  * @param taxRate - Tax rate as decimal (e.g., 0.1 for 10%)
  * @param discount - Optional discount code
  * @returns Total price in cents
- * 
+ *
  * @example
  * const total = calculateTotal(items, 0.1, 'SAVE10');
  */
 function calculateTotal(
-  items: CartItem[],
-  taxRate: number,
-  discount?: string
+ items: CartItem[],
+ taxRate: number,
+ discount?: string
 ): number {
-  // Sum up item prices
-  const subtotal = items.reduce((sum, item) => sum + item.price, 0);
-  
-  // Apply discount if valid
-  const discountAmount = discount ? getDiscountAmount(discount, subtotal) : 0;
-  
-  // Calculate tax on discounted amount
-  const taxableAmount = subtotal - discountAmount;
-  const tax = Math.round(taxableAmount * taxRate);
-  
-  return taxableAmount + tax;
+ // Sum up item prices
+ const subtotal = items.reduce((sum, item) => sum + item.price, 0);
+
+ // Apply discount if valid
+ const discountAmount = discount ? getDiscountAmount(discount, subtotal) : 0;
+
+ // Calculate tax on discounted amount
+ const taxableAmount = subtotal - discountAmount;
+ const tax = Math.round(taxableAmount * taxRate);
+
+ return taxableAmount + tax;
 }
 ```
 
@@ -206,16 +207,16 @@ function calculateTotal(
 ## System Components
 
 \`\`\`
-┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│   Client    │────▶│   API       │────▶│  Database   │
-│   (React)   │     │   (Node)    │     │  (Postgres) │
-└─────────────┘     └─────────────┘     └─────────────┘
-                           │
-                           ▼
-                    ┌─────────────┐
-                    │   Cache     │
-                    │   (Redis)   │
-                    └─────────────┘
+┌─────────────┐ ┌─────────────┐ ┌─────────────┐
+│ Client │────▶│ API │────▶│ Database │
+│ (React) │ │ (Node) │ │ (Postgres) │
+└─────────────┘ └─────────────┘ └─────────────┘
+ │
+ ▼
+ ┌─────────────┐
+ │ Cache │
+ │ (Redis) │
+ └─────────────┘
 \`\`\`
 
 ## Data Flow
@@ -265,9 +266,9 @@ The function accepts configuration options.
 Configure the logger:
 \`\`\`typescript
 const logger = createLogger({
-  level: 'info',
-  format: 'json',
-  output: 'stdout'
+ level: 'info',
+ format: 'json',
+ output: 'stdout'
 });
 \`\`\`
 ```
@@ -283,19 +284,19 @@ a .env file with your configuration, then run the migrations...
 ## Setup
 
 1. Install dependencies
-   \`\`\`bash
-   npm install
-   \`\`\`
+ \`\`\`bash
+ npm install
+ \`\`\`
 
 2. Configure environment
-   \`\`\`bash
-   cp .env.example .env
-   \`\`\`
+ \`\`\`bash
+ cp .env.example .env
+ \`\`\`
 
 3. Run migrations
-   \`\`\`bash
-   npm run migrate
-   \`\`\`
+ \`\`\`bash
+ npm run migrate
+ \`\`\`
 ```
 
 ---
@@ -337,10 +338,10 @@ a .env file with your configuration, then run the migrations...
 ```markdown
 \`\`\`mermaid
 flowchart LR
-    A[User] --> B[Frontend]
-    B --> C[API]
-    C --> D[Database]
-    C --> E[Cache]
+ A[User] --> B[Frontend]
+ B --> C[API]
+ C --> D[Database]
+ C --> E[Cache]
 \`\`\`
 ```
 
@@ -349,10 +350,10 @@ flowchart LR
 ```markdown
 \`\`\`mermaid
 sequenceDiagram
-    User->>+API: POST /login
-    API->>+DB: Verify credentials
-    DB-->>-API: User data
-    API-->>-User: JWT token
+ User->>+API: POST /login
+ API->>+DB: Verify credentials
+ DB-->>-API: User data
+ API-->>-User: JWT token
 \`\`\`
 ```
 

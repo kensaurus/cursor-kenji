@@ -5,6 +5,7 @@ description: >
   debugging slow code, reducing load times, or when the user mentions performance issues.
   Integrates Sentry MCP for production performance data (Web Vitals, slow transactions),
   Firecrawl for researching current optimization techniques, and automated codebase analysis.
+license: MIT
 ---
 
 # Performance Audit Skill
@@ -21,21 +22,21 @@ If Sentry performance monitoring is enabled, fetch real production metrics:
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_events", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "projectSlug": "<PROJECT_SLUG>",
-  "regionUrl": "<REGION_URL>",
-  "naturalLanguageQuery": "slowest transactions by p95 duration in last 7 days",
-  "limit": 20
+ "organizationSlug": "<ORG_SLUG>",
+ "projectSlug": "<PROJECT_SLUG>",
+ "regionUrl": "<REGION_URL>",
+ "naturalLanguageQuery": "slowest transactions by p95 duration in last 7 days",
+ "limit": 20
 })
 ```
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_events", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "projectSlug": "<PROJECT_SLUG>",
-  "regionUrl": "<REGION_URL>",
-  "naturalLanguageQuery": "web vitals LCP INP CLS performance scores in last 7 days",
-  "limit": 20
+ "organizationSlug": "<ORG_SLUG>",
+ "projectSlug": "<PROJECT_SLUG>",
+ "regionUrl": "<REGION_URL>",
+ "naturalLanguageQuery": "web vitals LCP INP CLS performance scores in last 7 days",
+ "limit": 20
 })
 ```
 
@@ -43,11 +44,11 @@ Check for performance-related issues:
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "projectSlugOrId": "<PROJECT_SLUG>",
-  "regionUrl": "<REGION_URL>",
-  "naturalLanguageQuery": "performance issues slow queries N+1 in last 30 days",
-  "limit": 20
+ "organizationSlug": "<ORG_SLUG>",
+ "projectSlugOrId": "<PROJECT_SLUG>",
+ "regionUrl": "<REGION_URL>",
+ "naturalLanguageQuery": "performance issues slow queries N+1 in last 30 days",
+ "limit": 20
 })
 ```
 
@@ -57,9 +58,9 @@ Fetch current performance targets:
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
-  "query": "web vitals thresholds good score <current year>",
-  "limit": 3,
-  "sources": [{ "type": "web" }]
+ "query": "web vitals thresholds good score <current year>",
+ "limit": 3,
+ "sources": [{ "type": "web" }]
 })
 ```
 
@@ -88,7 +89,7 @@ CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
 ### Bundle Size Analysis
 
 ```bash
-npm run build -- --analyze        # framework-specific
+npm run build -- --analyze # framework-specific
 npx source-map-explorer 'dist/**/*.js'
 ```
 
@@ -143,7 +144,7 @@ npx source-map-explorer 'dist/**/*.js'
 // BAD: N+1
 const users = await User.findAll();
 for (const user of users) {
-  const orders = await Order.findByUserId(user.id);
+ const orders = await Order.findByUserId(user.id);
 }
 
 // GOOD: eager loading
@@ -196,9 +197,9 @@ For specific performance bottlenecks, research current solutions:
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
-  "query": "<framework> <specific bottleneck> performance optimization <current year>",
-  "limit": 5,
-  "sources": [{ "type": "web" }]
+ "query": "<framework> <specific bottleneck> performance optimization <current year>",
+ "limit": 5,
+ "sources": [{ "type": "web" }]
 })
 ```
 
@@ -206,9 +207,9 @@ Then deep-read the best result:
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
-  "url": "<best-result-url>",
-  "formats": ["markdown"],
-  "onlyMainContent": true
+ "url": "<best-result-url>",
+ "formats": ["markdown"],
+ "onlyMainContent": true
 })
 ```
 
@@ -216,8 +217,8 @@ Check official framework docs via Context7:
 
 ```json
 CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
-  "libraryName": "<framework>",
-  "query": "performance optimization"
+ "libraryName": "<framework>",
+ "query": "performance optimization"
 })
 ```
 

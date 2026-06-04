@@ -10,6 +10,7 @@ description: >
   Use when asked to: "audit accessibility", "check a11y", "WCAG audit", "check keyboard nav",
   "test screen reader", "accessibility compliance", "ADA compliance check",
   "run a11y audit", "check color contrast", or "audit for disabilities".
+license: MIT
 ---
 
 # Accessibility Audit
@@ -81,22 +82,22 @@ Record:
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
-  "query": "WCAG 2.2 success criteria checklist web accessibility 2026",
-  "limit": 5
+ "query": "WCAG 2.2 success criteria checklist web accessibility 2026",
+ "limit": 5
 })
 ```
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
-  "query": "axe-core automated accessibility testing best practices common false positives",
-  "limit": 5
+ "query": "axe-core automated accessibility testing best practices common false positives",
+ "limit": 5
 })
 ```
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
-  "query": "<CSS_FRAMEWORK> <COMPONENT_LIB> accessibility best practices common issues",
-  "limit": 5
+ "query": "<CSS_FRAMEWORK> <COMPONENT_LIB> accessibility best practices common issues",
+ "limit": 5
 })
 ```
 
@@ -104,9 +105,9 @@ Scrape the 2-3 most authoritative results:
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
-  "url": "<BEST_RESULT_URL>",
-  "formats": ["markdown"],
-  "onlyMainContent": true
+ "url": "<BEST_RESULT_URL>",
+ "formats": ["markdown"],
+ "onlyMainContent": true
 })
 ```
 
@@ -116,14 +117,14 @@ If the project uses a component library, fetch its accessibility documentation:
 
 ```json
 CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
-  "libraryName": "<COMPONENT_LIB e.g. radix-ui or chakra-ui>"
+ "libraryName": "<COMPONENT_LIB e.g. radix-ui or chakra-ui>"
 })
 ```
 
 ```json
 CallMcpTool(server: "context7", toolName: "query-docs", arguments: {
-  "libraryId": "<RESOLVED_ID>",
-  "query": "accessibility ARIA keyboard navigation focus management"
+ "libraryId": "<RESOLVED_ID>",
+ "query": "accessibility ARIA keyboard navigation focus management"
 })
 ```
 
@@ -137,7 +138,7 @@ For each page discovered in Phase 0a:
 
 ```json
 CallMcpTool(server: "user-playwright", toolName: "browser_navigate", arguments: {
-  "url": "<APP_URL><ROUTE>"
+ "url": "<APP_URL><ROUTE>"
 })
 ```
 
@@ -149,7 +150,7 @@ Use `browser_evaluate` to inject axe-core from CDN and run a full scan:
 
 ```json
 CallMcpTool(server: "user-playwright", toolName: "browser_evaluate", arguments: {
-  "javascript": "await new Promise((resolve, reject) => { const script = document.createElement('script'); script.src = 'https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.10.2/axe.min.js'; script.onload = resolve; script.onerror = reject; document.head.appendChild(script); }); const results = await axe.run(); return JSON.stringify({ violations: results.violations.map(v => ({ id: v.id, impact: v.impact, description: v.description, help: v.help, helpUrl: v.helpUrl, nodes: v.nodes.length, targets: v.nodes.slice(0, 3).map(n => n.target[0]) })), passes: results.passes.length, incomplete: results.incomplete.length, inapplicable: results.inapplicable.length });"
+ "javascript": "await new Promise((resolve, reject) => { const script = document.createElement('script'); script.src = 'https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.10.2/axe.min.js'; script.onload = resolve; script.onerror = reject; document.head.appendChild(script); }); const results = await axe.run(); return JSON.stringify({ violations: results.violations.map(v => ({ id: v.id, impact: v.impact, description: v.description, help: v.help, helpUrl: v.helpUrl, nodes: v.nodes.length, targets: v.nodes.slice(0, 3).map(n => n.target[0]) })), passes: results.passes.length, incomplete: results.incomplete.length, inapplicable: results.inapplicable.length });"
 })
 ```
 
@@ -168,7 +169,7 @@ axe-core cannot catch everything. For each page, also check:
 
 ```json
 CallMcpTool(server: "user-playwright", toolName: "browser_evaluate", arguments: {
-  "javascript": "return JSON.stringify(Array.from(document.querySelectorAll('h1,h2,h3,h4,h5,h6')).map(h => ({ tag: h.tagName, text: h.textContent.trim().substring(0, 50) })));"
+ "javascript": "return JSON.stringify(Array.from(document.querySelectorAll('h1,h2,h3,h4,h5,h6')).map(h => ({ tag: h.tagName, text: h.textContent.trim().substring(0, 50) })));"
 })
 ```
 
@@ -178,7 +179,7 @@ Verify: only one `h1`, headings don't skip levels (h1 -> h3 without h2).
 
 ```json
 CallMcpTool(server: "user-playwright", toolName: "browser_evaluate", arguments: {
-  "javascript": "return JSON.stringify(Array.from(document.querySelectorAll('img')).map(img => ({ src: img.src.substring(img.src.lastIndexOf('/') + 1), alt: img.alt, hasAlt: img.hasAttribute('alt'), decorative: img.getAttribute('role') === 'presentation' || img.alt === '' })));"
+ "javascript": "return JSON.stringify(Array.from(document.querySelectorAll('img')).map(img => ({ src: img.src.substring(img.src.lastIndexOf('/') + 1), alt: img.alt, hasAlt: img.hasAttribute('alt'), decorative: img.getAttribute('role') === 'presentation' || img.alt === '' })));"
 })
 ```
 
@@ -188,7 +189,7 @@ Verify: all informative images have descriptive alt text, decorative images have
 
 ```json
 CallMcpTool(server: "user-playwright", toolName: "browser_evaluate", arguments: {
-  "javascript": "return JSON.stringify(Array.from(document.querySelectorAll('a')).filter(a => { const text = (a.textContent || '').trim().toLowerCase(); return text === 'click here' || text === 'here' || text === 'read more' || text === 'learn more' || text === '' || text === 'link'; }).map(a => ({ href: a.href, text: (a.textContent || '').trim(), ariaLabel: a.getAttribute('aria-label') })));"
+ "javascript": "return JSON.stringify(Array.from(document.querySelectorAll('a')).filter(a => { const text = (a.textContent || '').trim().toLowerCase(); return text === 'click here' || text === 'here' || text === 'read more' || text === 'learn more' || text === '' || text === 'link'; }).map(a => ({ href: a.href, text: (a.textContent || '').trim(), ariaLabel: a.getAttribute('aria-label') })));"
 })
 ```
 
@@ -198,7 +199,7 @@ Flag generic link text ("click here", "read more", empty links without aria-labe
 
 ```json
 CallMcpTool(server: "user-playwright", toolName: "browser_evaluate", arguments: {
-  "javascript": "return JSON.stringify(Array.from(document.querySelectorAll('input,select,textarea')).map(el => ({ type: el.type, name: el.name, id: el.id, hasLabel: !!document.querySelector('label[for=\"' + el.id + '\"]'), ariaLabel: el.getAttribute('aria-label'), ariaLabelledBy: el.getAttribute('aria-labelledby'), placeholder: el.placeholder })));"
+ "javascript": "return JSON.stringify(Array.from(document.querySelectorAll('input,select,textarea')).map(el => ({ type: el.type, name: el.name, id: el.id, hasLabel: !!document.querySelector('label[for=\"' + el.id + '\"]'), ariaLabel: el.getAttribute('aria-label'), ariaLabelledBy: el.getAttribute('aria-labelledby'), placeholder: el.placeholder })));"
 })
 ```
 
@@ -208,7 +209,7 @@ Verify: every form control has an associated `<label>`, `aria-label`, or `aria-l
 
 ```json
 CallMcpTool(server: "user-playwright", toolName: "browser_evaluate", arguments: {
-  "javascript": "return JSON.stringify({ htmlLang: document.documentElement.lang, htmlDir: document.documentElement.dir });"
+ "javascript": "return JSON.stringify({ htmlLang: document.documentElement.lang, htmlDir: document.documentElement.dir });"
 })
 ```
 
@@ -232,7 +233,7 @@ For each page, test that all interactive elements are reachable via Tab key:
 
 ```json
 CallMcpTool(server: "user-playwright", toolName: "browser_navigate", arguments: {
-  "url": "<APP_URL><ROUTE>"
+ "url": "<APP_URL><ROUTE>"
 })
 ```
 
@@ -240,7 +241,7 @@ Press Tab repeatedly and snapshot after each press to track focus movement:
 
 ```json
 CallMcpTool(server: "user-playwright", toolName: "browser_press_key", arguments: {
-  "key": "Tab"
+ "key": "Tab"
 })
 ```
 
@@ -269,7 +270,7 @@ For each interactive component (dropdowns, modals, tabs, accordions):
 
 ```json
 CallMcpTool(server: "user-playwright", toolName: "browser_press_key", arguments: {
-  "key": "Escape"
+ "key": "Escape"
 })
 ```
 
@@ -279,7 +280,7 @@ Verify: modals/dropdowns close, focus returns to the trigger element.
 
 ```json
 CallMcpTool(server: "user-playwright", toolName: "browser_press_key", arguments: {
-  "key": "ArrowDown"
+ "key": "ArrowDown"
 })
 ```
 
@@ -299,9 +300,9 @@ Test that focus is managed correctly after dynamic updates:
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "projectSlug": "<PROJECT_SLUG>",
-  "query": "is:unresolved aria OR screenreader OR voiceover OR talkback OR nvda OR jaws OR focus OR tabindex OR keyboard"
+ "organizationSlug": "<ORG_SLUG>",
+ "projectSlug": "<PROJECT_SLUG>",
+ "query": "is:unresolved aria OR screenreader OR voiceover OR talkback OR nvda OR jaws OR focus OR tabindex OR keyboard"
 })
 ```
 
@@ -309,9 +310,9 @@ CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "projectSlug": "<PROJECT_SLUG>",
-  "query": "is:unresolved keydown OR keyup OR keypress OR focusin OR focusout"
+ "organizationSlug": "<ORG_SLUG>",
+ "projectSlug": "<PROJECT_SLUG>",
+ "query": "is:unresolved keydown OR keyup OR keypress OR focusin OR focusout"
 })
 ```
 
@@ -321,9 +322,9 @@ Check if errors disproportionately affect specific browsers or devices that assi
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "get_issue_tag_values", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "issueId": "<ISSUE_ID>",
-  "tagKey": "browser"
+ "organizationSlug": "<ORG_SLUG>",
+ "issueId": "<ISSUE_ID>",
+ "tagKey": "browser"
 })
 ```
 
@@ -367,64 +368,64 @@ Light gray text on white background is the most common contrast failure. Flag fi
 
 ```
 ═══════════════════════════════════════════════════════
-   WCAG 2.2 ACCESSIBILITY AUDIT REPORT
-   Project: <PROJECT_NAME>
-   Date: <DATE>
-   Standard: WCAG 2.2 Level AA
-   Pages Tested: <COUNT>
+ WCAG 2.2 ACCESSIBILITY AUDIT REPORT
+ Project: <PROJECT_NAME>
+ Date: <DATE>
+ Standard: WCAG 2.2 Level AA
+ Pages Tested: <COUNT>
 ═══════════════════════════════════════════════════════
 
 ## 1. EXECUTIVE SUMMARY
 
-| Metric                    | Result          |
+| Metric | Result |
 |---------------------------|-----------------|
-| Pages tested              | X               |
-| Total violations          | N               |
-| Critical violations       | N               |
-| Serious violations        | N               |
-| axe-core rules passed     | N               |
-| Keyboard navigable pages  | X/Y             |
-| Overall compliance        | X% (estimated)  |
+| Pages tested | X |
+| Total violations | N |
+| Critical violations | N |
+| Serious violations | N |
+| axe-core rules passed | N |
+| Keyboard navigable pages | X/Y |
+| Overall compliance | X% (estimated) |
 
 ## 2. AXE-CORE SCAN RESULTS (per page)
 
 | Page | Critical | Serious | Moderate | Minor | Pass | Score |
 |------|----------|---------|----------|-------|------|-------|
-| /    | ...      | ...     | ...      | ...   | ...  | A-F   |
-| /about | ...   | ...     | ...      | ...   | ...  | A-F   |
+| / | ... | ... | ... | ... | ... | A-F |
+| /about | ... | ... | ... | ... | ... | A-F |
 
 ## 3. VIOLATIONS BY WCAG CRITERION
 
 | WCAG SC | Name | Level | Pages Affected | Elements | Impact | Status |
 |---------|------|-------|----------------|----------|--------|--------|
-| 1.1.1   | Non-text Content | A | ... | ... | ... | PASS/FAIL |
-| 1.3.1   | Info and Relationships | A | ... | ... | ... | PASS/FAIL |
-| 1.4.3   | Contrast (Minimum) | AA | ... | ... | ... | PASS/FAIL |
-| 2.1.1   | Keyboard | A | ... | ... | ... | PASS/FAIL |
-| 2.4.3   | Focus Order | A | ... | ... | ... | PASS/FAIL |
-| 2.4.4   | Link Purpose | A | ... | ... | ... | PASS/FAIL |
-| 2.4.7   | Focus Visible | AA | ... | ... | ... | PASS/FAIL |
-| 3.1.1   | Language of Page | A | ... | ... | ... | PASS/FAIL |
-| 4.1.2   | Name, Role, Value | A | ... | ... | ... | PASS/FAIL |
+| 1.1.1 | Non-text Content | A | ... | ... | ... | PASS/FAIL |
+| 1.3.1 | Info and Relationships | A | ... | ... | ... | PASS/FAIL |
+| 1.4.3 | Contrast (Minimum) | AA | ... | ... | ... | PASS/FAIL |
+| 2.1.1 | Keyboard | A | ... | ... | ... | PASS/FAIL |
+| 2.4.3 | Focus Order | A | ... | ... | ... | PASS/FAIL |
+| 2.4.4 | Link Purpose | A | ... | ... | ... | PASS/FAIL |
+| 2.4.7 | Focus Visible | AA | ... | ... | ... | PASS/FAIL |
+| 3.1.1 | Language of Page | A | ... | ... | ... | PASS/FAIL |
+| 4.1.2 | Name, Role, Value | A | ... | ... | ... | PASS/FAIL |
 
 ## 4. KEYBOARD NAVIGATION
 
 | Page | Tab Order Logical | Focus Visible | No Focus Trap | Skip Link | Score |
 |------|-------------------|---------------|---------------|-----------|-------|
-| /    | ...               | ...           | ...           | ...       | A-F   |
+| / | ... | ... | ... | ... | A-F |
 
 ## 5. INTERACTIVE COMPONENTS
 
 | Component | Location | ARIA Roles | Keyboard Operable | Focus Managed | Score |
 |-----------|----------|------------|-------------------|---------------|-------|
-| Modal     | ...      | ...        | ...               | ...           | A-F   |
-| Dropdown  | ...      | ...        | ...               | ...           | A-F   |
+| Modal | ... | ... | ... | ... | A-F |
+| Dropdown | ... | ... | ... | ... | A-F |
 
 ## 6. SENTRY ASSISTIVE TECHNOLOGY ERRORS
 
 | Issue | Error Type | Events | Browser/AT | Fix Needed |
 |-------|------------|--------|------------|------------|
-| ...   | ...        | ...    | ...        | ...        |
+| ... | ... | ... | ... | ... |
 
 ## 7. STATIC CODE FINDINGS
 
@@ -449,7 +450,7 @@ P2 — Best practice improvements:
 
 | # | WCAG SC | Current | Recommended | Effort | Files to Change |
 |---|---------|---------|-------------|--------|-----------------|
-| 1 | ...     | ...     | ...         | S/M/L  | ...             |
+| 1 | ... | ... | ... | S/M/L | ... |
 
 ═══════════════════════════════════════════════════════
 ```

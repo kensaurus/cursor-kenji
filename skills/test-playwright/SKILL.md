@@ -12,6 +12,7 @@ description: >-
   changing a feature, or when the user says "test this with playwright", "test my
   changes", "test on localhost like a user", "PDCA this", "did you actually test it",
   "red-team this feature", or "verify the work end-to-end".
+license: MIT
 ---
 
 # test-playwright — Develop → Test → Fix (PDCA)
@@ -88,23 +89,23 @@ git diff --stat HEAD
 git diff HEAD --name-only
 ```
 
-   If work spans multiple repos in the workspace, run this in each repo root.
+ If work spans multiple repos in the workspace, run this in each repo root.
 
 2. **Map files → user-facing surfaces.** For each changed file, ask:
-   - Is it a page/route? → test that page.
-   - Is it a shared component/hook/util? → find every page that imports it and test
-     each one (`grep -rl "ComponentName" src/`). This is the **blast radius**.
-   - Is it an API route / controller / service? → test every UI flow that calls it.
-   - Is it a migration / schema / RLS change? → test the read AND write paths that
-     touch those tables, as the role the client actually uses.
-   - Is it config / env / pricing / prompt? → test the feature it drives.
+ - Is it a page/route? → test that page.
+ - Is it a shared component/hook/util? → find every page that imports it and test
+ each one (`grep -rl "ComponentName" src/`). This is the **blast radius**.
+ - Is it an API route / controller / service? → test every UI flow that calls it.
+ - Is it a migration / schema / RLS change? → test the read AND write paths that
+ touch those tables, as the role the client actually uses.
+ - Is it config / env / pricing / prompt? → test the feature it drives.
 
 3. **Detect the stack & dev URL** (only what you need):
-   - Framework + dev port from `package.json` `scripts.dev` (3000 / 5173 / etc.).
-   - Auth method + test credentials (`.env.local`, `.env.test`, README). If none,
-     ask the user once.
-   - Backend MCPs available this session: Supabase (`plugin-supabase-supabase`),
-     Sentry (`plugin-sentry-sentry`), Firecrawl (`user-firecrawl`).
+ - Framework + dev port from `package.json` `scripts.dev` (3000 / 5173 / etc.).
+ - Auth method + test credentials (`.env.local`, `.env.test`, README). If none,
+ ask the user once.
+ - Backend MCPs available this session: Supabase (`plugin-supabase-supabase`),
+ Sentry (`plugin-sentry-sentry`), Firecrawl (`user-firecrawl`).
 
 4. **Write the test plan** before opening the browser:
 
@@ -114,7 +115,7 @@ SESSION SCOPE:
 - Changed surfaces (pages/flows): [list]
 - Blast radius (shared code → consumers): [list]
 - Backend paths touched (APIs/tables/RPCs): [list]
-- Dev URL: http://localhost:[port]   Auth: [method / test account]
+- Dev URL: http://localhost:[port] Auth: [method / test account]
 - User journeys to drive: [ordered list of 2–6 real flows]
 ```
 
@@ -123,14 +124,14 @@ SESSION SCOPE:
 ## Phase 2: Environment verification
 
 1. Check the `terminals/` folder for a running dev server (`npm run dev`, `next dev`,
-   `vite`, etc.). If none is running, start it (`block_until_ms` sized to startup) and
-   wait until it serves, or tell the user and stop.
+ `vite`, etc.). If none is running, start it (`block_until_ms` sized to startup) and
+ wait until it serves, or tell the user and stop.
 2. `browser_navigate` to the dev URL → anti-stall (wait 2s → `browser_snapshot` →
-   verify content). 
+ verify content).
 3. `browser_console_messages` + `browser_network_requests` → capture a clean baseline
-   BEFORE touching the changed feature (so you can attribute new errors to your work).
+ BEFORE touching the changed feature (so you can attribute new errors to your work).
 4. Authenticate if required (navigate to login, `browser_fill_form`, submit, verify
-   redirect). If auth is impossible, test only what's reachable and flag the rest.
+ redirect). If auth is impossible, test only what's reachable and flag the rest.
 
 ---
 
@@ -143,9 +144,9 @@ Per step, follow this cycle (anti-stall applies throughout):
 ```
 1. browser_navigate (if moving pages)
 2. wait 2s → browser_snapshot → confirm the page/feature rendered
-3. browser_take_screenshot  → visual evidence
+3. browser_take_screenshot → visual evidence
 4. Interact like a user: browser_click / browser_type / browser_fill_form /
-   browser_select_option / browser_hover / browser_press_key / browser_drag
+ browser_select_option / browser_hover / browser_press_key / browser_drag
 5. browser_snapshot (FRESH refs) after every interaction
 6. browser_console_messages → any NEW error vs baseline?
 7. browser_network_requests → any 4xx/5xx, CORS, timeout, or missing call?
@@ -177,23 +178,23 @@ This is the **Act** phase agents skip. The moment you find a problem, fix its ro
 cause before moving on. Do not just log it.
 
 1. **Diagnose to root cause** — don't patch symptoms.
-   - Frontend bug → fix the component/hook/state.
-   - 4xx/5xx → read the request payload + backend log; fix the controller/service/
-     validation/serialization. Use `debug-fe-be-integration` mindset if FE↔BE mismatch.
-   - `relation does not exist` / `function not found` / missing column → the migration
-     wasn't deployed. **Deploy it via the Supabase MCP** (`apply_migration` for DDL,
-     `execute_sql` for data) AND keep the versioned migration file on disk in sync.
-     (See the always-on `full-stack-ship-discipline` rule — schema the user just asked
-     for ships without re-asking; `DELETE`/`UPDATE`/`TRUNCATE` on real rows asks first.)
-   - RLS/permission error → verify as the client's role (`SET ROLE anon;` /
-     `authenticated;`), fix the policy, re-verify.
-   - Config/env/CORS → fix and note what the user must set in other environments.
+ - Frontend bug → fix the component/hook/state.
+ - 4xx/5xx → read the request payload + backend log; fix the controller/service/
+ validation/serialization. Use `debug-fe-be-integration` mindset if FE↔BE mismatch.
+ - `relation does not exist` / `function not found` / missing column → the migration
+ wasn't deployed. **Deploy it via the Supabase MCP** (`apply_migration` for DDL,
+ `execute_sql` for data) AND keep the versioned migration file on disk in sync.
+ (See the always-on `full-stack-ship-discipline` rule — schema the user just asked
+ for ships without re-asking; `DELETE`/`UPDATE`/`TRUNCATE` on real rows asks first.)
+ - RLS/permission error → verify as the client's role (`SET ROLE anon;` /
+ `authenticated;`), fix the policy, re-verify.
+ - Config/env/CORS → fix and note what the user must set in other environments.
 2. **Apply the fix** with the normal edit tools (surgical, repo conventions, no
-   unrelated refactors). Run `ReadLints` on files you edited.
+ unrelated refactors). Run `ReadLints` on files you edited.
 3. **Re-drive the exact same flow** in the browser to confirm the fix — green console,
-   2xx network, correct UI, persisted data. A fix is not done until re-tested live.
+ 2xx network, correct UI, persisted data. A fix is not done until re-tested live.
 4. If a fix is genuinely out of scope or risky, STOP and surface it explicitly with a
-   recommendation rather than silently shipping a broken flow.
+ recommendation rather than silently shipping a broken flow.
 
 Keep a running fix log:
 
@@ -213,14 +214,14 @@ schemas under `mcps/plugin-sentry-sentry/tools/` first, then:
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
-  "organizationSlug": "<ORG>", "naturalLanguageQuery": "unresolved issues in the last 7 days",
-  "projectSlugOrId": "<PROJECT>", "regionUrl": "<REGION_URL>", "limit": 25
+ "organizationSlug": "<ORG>", "naturalLanguageQuery": "unresolved issues in the last 7 days",
+ "projectSlugOrId": "<PROJECT>", "regionUrl": "<REGION_URL>", "limit": 25
 })
 ```
 
-   Cross-reference issues with the surfaces you touched. Use `analyze_issue_with_seer`
-   for root cause on anything that maps to your change. Only `update_issue` to resolve
-   AFTER a verified fix.
+ Cross-reference issues with the surfaces you touched. Use `analyze_issue_with_seer`
+ for root cause on anything that maps to your change. Only `update_issue` to resolve
+ AFTER a verified fix.
 
 **Supabase** — verify schema, data, and logs for the paths you touched. Check tool
 schemas under `mcps/plugin-supabase-supabase/tools/` first, then use `list_tables`,
@@ -239,22 +240,22 @@ Switch hats: you are now a skeptical senior reviewer + a demanding user who is h
 impress. For the changed surfaces, push hard:
 
 - **Break it:** double-click submits (dupes?), rapid toggling, back/forward buttons,
-  direct-URL deep links, empty states, huge inputs, special chars
-  (`<script>`, `'; DROP TABLE`, emoji, very long strings), slow/failed network.
+ direct-URL deep links, empty states, huge inputs, special chars
+ (`<script>`, `'; DROP TABLE`, emoji, very long strings), slow/failed network.
 - **Question the UX:** Is the primary action obvious in 3 seconds? Is feedback
-  immediate and clear? Is anything redundant, cramped, or confusing? Would a real user
-  get stuck? (Lean on `enhance-web-ux` / `enhance-web-ui` heuristics if deep polish
-  is warranted.)
+ immediate and clear? Is anything redundant, cramped, or confusing? Would a real user
+ get stuck? (Lean on `enhance-web-ux` / `enhance-web-ui` heuristics if deep polish
+ is warranted.)
 - **Question the design:** Does it match the rest of the app's patterns and tokens, or
-  did this change introduce drift?
+ did this change introduce drift?
 - **Research when unsure:** if you're not certain what "good" looks like for this
-  feature/pattern, use Firecrawl (`user-firecrawl`) to check current best practices,
-  then map findings back to concrete changes:
+ feature/pattern, use Firecrawl (`user-firecrawl`) to check current best practices,
+ then map findings back to concrete changes:
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
-  "query": "[pattern/feature] best practices [current year]", "limit": 5,
-  "sources": [{ "type": "web" }]
+ "query": "[pattern/feature] best practices [current year]", "limit": 5,
+ "sources": [{ "type": "web" }]
 })
 ```
 
@@ -268,15 +269,15 @@ it helps the user, and rough effort. Distinguish "fix now" (done in Phase 4) fro
 
 1. Re-drive every flow you fixed, end to end, one final time. Confirm green.
 2. Clean up `QA-TEST-` data; reset any settings you changed; verify cleanup in DB if
-   applicable.
+ applicable.
 3. Produce the report:
 
 ```markdown
 ## PDCA Test Report — [feature / session summary]
 
 ### Scope (what this session changed)
-- Repos: [...]  Surfaces tested: [...]  Backend paths: [...]
-- Dev URL: [...]  Auth: [...]
+- Repos: [...] Surfaces tested: [...] Backend paths: [...]
+- Dev URL: [...] Auth: [...]
 
 ### Flows driven (as a user)
 | # | Journey | Result | Evidence |
@@ -325,17 +326,17 @@ Console clean: [Y/N] · All flows green on re-test: [Y/N] · Test data cleaned: 
 ## Guardrails
 
 1. **Scope discipline** — test session changes + blast radius, not the entire app. For
-   a full-app sweep use `test-qa`.
+ a full-app sweep use `test-qa`.
 2. **Anti-stall always** — never block >3s; incremental wait → snapshot → check; max 4
-   attempts per goal; skip a stuck step (`[TIMEOUT]`) rather than freeze the session.
+ attempts per goal; skip a stuck step (`[TIMEOUT]`) rather than freeze the session.
 3. **Fix the root cause, full-stack** — UI, API, DB, config; re-test live after each fix.
 4. **Schema in sync** — anything you change via MCP also gets a versioned migration file
-   on disk; verify the remote actually has it.
+ on disk; verify the remote actually has it.
 5. **Ask before mutating real data** — DDL for the requested feature ships; `DELETE` /
-   `UPDATE` / `TRUNCATE` on production rows asks first.
+ `UPDATE` / `TRUNCATE` on production rows asks first.
 6. **No secrets in chat** — use `.env*` values by name only; never print them.
 7. **Evidence for every finding and every fix** — screenshot + console + network + a
-   green re-test.
+ green re-test.
 8. **Honest verdict** — don't declare "done" with a red console or an unfixed pain point.
-   If you couldn't fix something, say so clearly with a recommendation.
+ If you couldn't fix something, say so clearly with a recommendation.
 ```

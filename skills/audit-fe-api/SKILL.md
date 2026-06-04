@@ -8,11 +8,12 @@ description: >
   hardcoded paths with auto-detected patterns. Use when reviewing frontend API integration,
   optimizing network requests, ensuring FE-BE contract alignment, or when the user mentions
   API audit, API errors, or network optimization.
+license: MIT
 ---
 
 # Frontend API Audit Skill
 
-Comprehensive audit of frontend API calls against backend implementation to ensure correctness,
+full audit of frontend API calls against backend implementation to ensure correctness,
 optimize performance, and improve reliability.
 
 ---
@@ -42,23 +43,23 @@ Read `package.json` (or equivalent) and extract:
 Look for backend indicators:
 
 ```
-Glob: **/app/api/**/route.ts        → Next.js App Router API routes
-Glob: **/pages/api/**/*.ts          → Next.js Pages Router API routes
-Glob: **/src/routes/**/*.ts         → Express/Hono/Fastify routes
-Glob: **/server/api/**/*.ts         → Nuxt server routes
-Glob: **/src/app.py                 → Flask/Django
-Glob: **/main.go                    → Go backend
+Glob: **/app/api/**/route.ts → Next.js App Router API routes
+Glob: **/pages/api/**/*.ts → Next.js Pages Router API routes
+Glob: **/src/routes/**/*.ts → Express/Hono/Fastify routes
+Glob: **/server/api/**/*.ts → Nuxt server routes
+Glob: **/src/app.py → Flask/Django
+Glob: **/main.go → Go backend
 ```
 
 ### 0c. Find API Service Files
 
 ```
-Glob: **/services/*api*.ts          → API service files
-Glob: **/services/*service*.ts      → Service files
-Glob: **/api/*.ts                   → API client files
-Glob: **/hooks/use*.ts              → Custom hooks (may contain API calls)
-Glob: **/lib/api*.ts                → API client config
-Glob: **/features/*/api.*           → Feature-specific API files
+Glob: **/services/*api*.ts → API service files
+Glob: **/services/*service*.ts → Service files
+Glob: **/api/*.ts → API client files
+Glob: **/hooks/use*.ts → Custom hooks (may contain API calls)
+Glob: **/lib/api*.ts → API client config
+Glob: **/features/*/api.* → Feature-specific API files
 ```
 
 ### 0d. Detect Dev Server Port
@@ -92,15 +93,15 @@ Fetch docs for the detected data-fetching library:
 
 ```json
 CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
-  "libraryName": "<DETECTED_LIBRARY>",
-  "query": "caching deduplication error handling best practices"
+ "libraryName": "<DETECTED_LIBRARY>",
+ "query": "caching deduplication error handling best practices"
 })
 ```
 
 ```json
 CallMcpTool(server: "context7", toolName: "query-docs", arguments: {
-  "libraryId": "<RESOLVED_ID>",
-  "query": "staleTime cacheTime retry error handling optimistic updates"
+ "libraryId": "<RESOLVED_ID>",
+ "query": "staleTime cacheTime retry error handling optimistic updates"
 })
 ```
 
@@ -110,9 +111,9 @@ Run for each major dependency (e.g., `@tanstack/react-query`, `axios`, `zod`).
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
-  "query": "<FRAMEWORK> API integration best practices [current year]",
-  "limit": 5,
-  "sources": [{ "type": "web" }]
+ "query": "<FRAMEWORK> API integration best practices [current year]",
+ "limit": 5,
+ "sources": [{ "type": "web" }]
 })
 ```
 
@@ -133,11 +134,11 @@ Additional searches:
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "naturalLanguageQuery": "API errors 4xx 5xx fetch axios network from the last 14 days",
-  "projectSlugOrId": "<PROJECT_SLUG>",
-  "regionUrl": "<REGION_URL>",
-  "limit": 25
+ "organizationSlug": "<ORG_SLUG>",
+ "naturalLanguageQuery": "API errors 4xx 5xx fetch axios network from the last 14 days",
+ "projectSlugOrId": "<PROJECT_SLUG>",
+ "regionUrl": "<REGION_URL>",
+ "limit": 25
 })
 ```
 
@@ -145,12 +146,12 @@ CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_events", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "projectSlugOrId": "<PROJECT_SLUG>",
-  "regionUrl": "<REGION_URL>",
-  "query": "transaction.op:http.client",
-  "sort": "-duration",
-  "limit": 15
+ "organizationSlug": "<ORG_SLUG>",
+ "projectSlugOrId": "<PROJECT_SLUG>",
+ "regionUrl": "<REGION_URL>",
+ "query": "transaction.op:http.client",
+ "sort": "-duration",
+ "limit": 15
 })
 ```
 
@@ -213,8 +214,8 @@ If the backend reads from Supabase, verify the DB schema matches what the fronte
 
 ```json
 CallMcpTool(server: "plugin-supabase-supabase", toolName: "execute_sql", arguments: {
-  "project_id": "<PROJECT_ID>",
-  "query": "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name = '<TABLE>' ORDER BY ordinal_position"
+ "project_id": "<PROJECT_ID>",
+ "query": "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name = '<TABLE>' ORDER BY ordinal_position"
 })
 ```
 
@@ -262,15 +263,15 @@ Compare column names and types against frontend TypeScript interfaces.
 ```typescript
 // Per-query staleTime based on data freshness needs
 const { data } = useQuery({
-  queryKey: ['user', userId],
-  queryFn: () => getUser(userId),
-  staleTime: 1000 * 60 * 10,  // User data: 10 minutes
+ queryKey: ['user', userId],
+ queryFn: () => getUser(userId),
+ staleTime: 1000 * 60 * 10, // User data: 10 minutes
 });
 
 const { data: settings } = useQuery({
-  queryKey: ['settings'],
-  queryFn: getSettings,
-  staleTime: Infinity,  // Settings rarely change
+ queryKey: ['settings'],
+ queryFn: getSettings,
+ staleTime: Infinity, // Settings rarely change
 });
 ```
 
@@ -278,19 +279,19 @@ const { data: settings } = useQuery({
 
 ```typescript
 const mutation = useMutation({
-  mutationFn: updateUser,
-  onMutate: async (newData) => {
-    await queryClient.cancelQueries({ queryKey: ['user', userId] });
-    const previous = queryClient.getQueryData(['user', userId]);
-    queryClient.setQueryData(['user', userId], newData);
-    return { previous };
-  },
-  onError: (_err, _newData, context) => {
-    queryClient.setQueryData(['user', userId], context?.previous);
-  },
-  onSettled: () => {
-    queryClient.invalidateQueries({ queryKey: ['user', userId] });
-  },
+ mutationFn: updateUser,
+ onMutate: async (newData) => {
+ await queryClient.cancelQueries({ queryKey: ['user', userId] });
+ const previous = queryClient.getQueryData(['user', userId]);
+ queryClient.setQueryData(['user', userId], newData);
+ return { previous };
+ },
+ onError: (_err, _newData, context) => {
+ queryClient.setQueryData(['user', userId], context?.previous);
+ },
+ onSettled: () => {
+ queryClient.invalidateQueries({ queryKey: ['user', userId] });
+ },
 });
 ```
 
@@ -298,15 +299,15 @@ const mutation = useMutation({
 
 ```typescript
 const prefetchUser = (userId: string) => {
-  queryClient.prefetchQuery({
-    queryKey: ['user', userId],
-    queryFn: () => getUser(userId),
-  });
+ queryClient.prefetchQuery({
+ queryKey: ['user', userId],
+ queryFn: () => getUser(userId),
+ });
 };
 
 // On hover or focus
 <Link onMouseEnter={() => prefetchUser(userId)} to={`/users/${userId}`}>
-  View User
+ View User
 </Link>
 ```
 
@@ -314,10 +315,10 @@ const prefetchUser = (userId: string) => {
 
 ```typescript
 const { data, error, isError, isLoading } = useQuery({
-  queryKey: ['users'],
-  queryFn: getUsers,
-  retry: 3,
-  retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000),
+ queryKey: ['users'],
+ queryFn: getUsers,
+ retry: 3,
+ retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000),
 });
 
 if (isLoading) return <Skeleton />;
@@ -331,17 +332,17 @@ if (!data?.length) return <EmptyState message="No users found" />;
 import { z } from 'zod';
 
 const UserSchema = z.object({
-  id: z.string().uuid(),
-  email: z.string().email(),
-  name: z.string(),
-  createdAt: z.string().datetime(),
+ id: z.string().uuid(),
+ email: z.string().email(),
+ name: z.string(),
+ createdAt: z.string().datetime(),
 });
 
 type User = z.infer<typeof UserSchema>;
 
 const getUser = async (id: string): Promise<User> => {
-  const response = await api.get(`/api/users/${id}`);
-  return UserSchema.parse(response.data);
+ const response = await api.get(`/api/users/${id}`);
+ return UserSchema.parse(response.data);
 };
 ```
 

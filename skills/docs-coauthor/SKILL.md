@@ -1,11 +1,12 @@
 ---
 name: docs-coauthor
-description: Guide users through a structured workflow for co-authoring documentation. Use when user wants to write documentation, proposals, technical specs, decision docs, or similar structured content. This workflow helps users efficiently transfer context, refine content through iteration, and verify the doc works for readers. Trigger when user mentions writing docs, creating proposals, drafting specs, or similar documentation tasks.
+description: Co-author structured documents (specs, PRDs, RFCs, ADRs) through a 3-stage workflow: context gathering, drafting, and reader testing. Use when writing proposals, technical specs, decision docs, or similar structured content.
+license: MIT
 ---
 
 # Doc Co-Authoring Workflow
 
-This skill provides a structured workflow for guiding users through collaborative document creation. Act as an active guide, walking users through three stages: Context Gathering, Refinement & Structure, and Reader Testing.
+ a structured workflow for guiding users through collaborative document creation. Act as an active guide, walking users through three stages: Context Gathering, Refinement & Structure, and Reader Testing.
 
 ## When to Offer This Workflow
 
@@ -76,12 +77,12 @@ Inform them clarifying questions will be asked once they've done their initial d
 **During context gathering:**
 
 - If user mentions team channels or shared documents:
-  - If integrations available: Inform them the content will be read now, then use the appropriate integration
-  - If integrations not available: Explain lack of access. Suggest they enable connectors in Claude settings, or paste the relevant content directly.
+ - If integrations available: Inform them the content will be read now, then use the appropriate integration
+ - If integrations not available: Explain lack of access. Suggest they enable connectors in Claude settings, or paste the relevant content directly.
 
 - If user mentions entities/projects that are unknown:
-  - Ask if connected tools should be searched to learn more
-  - Wait for user confirmation before searching
+ - Ask if connected tools should be searched to learn more
+ - Wait for user confirmation before searching
 
 - As user provides context, track what's being learned and what's still unclear
 

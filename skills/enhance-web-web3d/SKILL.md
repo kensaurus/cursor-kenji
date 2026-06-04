@@ -14,6 +14,7 @@ description: >
   combination, and ships the effect with performance budgets, mobile + no-WebGL
   fallbacks, reduced-motion support, and SSR/hydration safety baked in — no
   rewrites, no broken builds, no janky scroll.
+license: MIT
 ---
 
 > ### Which enhance skill? (surface router)
@@ -25,7 +26,7 @@ description: >
 > | **Web** landing / marketing / portfolio (greenfield, anti-slop) | `enhance-web-landing` |
 > | **Web** existing site upgrade (audit-first, preserve behavior) | `enhance-web-redesign` |
 > | **Web** 3D / WebGL / cinematic scroll on an existing site (audit-first) | `enhance-web-web3d` |
-> | **React Native** screen (Expo / bare) | `enhance-rn-screen` |
+> | **React Native** screen (Expo / bare) | `mobile-rn-screen` |
 > | **Capacitor / hybrid** shell (one web app shipped to iOS + Android) | `enhance-capacitor-ui` (axis architecture first) → then the web or rn skill |
 > | Repo **README** showcase | `enhance-readme` |
 >
@@ -58,18 +59,18 @@ audit and jump to code** — that is how 3D ends up as a 4 MB hero nobody on
 mobile can load.
 
 1. **Scan** — Read the codebase. Identify framework, rendering model (SSR /
-   SSG / SPA), styling system, existing motion/3D libraries, build tool, and
-   the current performance baseline.
+ SSG / SPA), styling system, existing motion/3D libraries, build tool, and
+ the current performance baseline.
 2. **Fit check** — Decide *whether* 3D/cinematic motion belongs on this
-   surface and *where*. Reject 3D-for-3D's-sake.
+ surface and *where*. Reject 3D-for-3D's-sake.
 3. **Diagnose** — Map concrete opportunities (hero, product viewer,
-   scroll-story, background ambience) and the constraints around each.
+ scroll-story, background ambience) and the constraints around each.
 4. **Choose stack** — Use the Decision Matrix to pick the minimal library
-   combination that fits the existing stack.
+ combination that fits the existing stack.
 5. **Implement** — Build with the chosen pattern, wiring performance budget,
-   fallbacks, reduced-motion, and SSR/hydration safety in the same change.
+ fallbacks, reduced-motion, and SSR/hydration safety in the same change.
 6. **Verify** — Profile on a mid-tier device, test the no-WebGL and
-   reduced-motion paths, confirm Lighthouse / Web Vitals didn't regress.
+ reduced-motion paths, confirm Lighthouse / Web Vitals didn't regress.
 
 ---
 
@@ -79,24 +80,24 @@ Before touching any library, answer these. If you can't justify the effect,
 the right move is `enhance-web-ui` or `enhance-web-landing`, not WebGL.
 
 - [ ] **Does the effect serve comprehension or brand, or is it decoration?**
-  A product configurator, a data-driven globe, a hero that shows the actual
-  product in 3D — these earn their cost. A generic floating-blob background
-  usually does not.
+ A product configurator, a data-driven globe, a hero that shows the actual
+ product in 3D — these earn their cost. A generic floating-blob background
+ usually does not.
 - [ ] **What is the performance budget?** A marketing landing page can spend
-  more than a dashboard a user opens 40× a day. Name the budget (KB, LCP, INP,
-  target FPS) *before* designing.
+ more than a dashboard a user opens 40× a day. Name the budget (KB, LCP, INP,
+ target FPS) *before* designing.
 - [ ] **Who is the audience / device mix?** Heavy mobile traffic → design the
-  mobile fallback first, then enhance up. Desktop-only internal tool → you
-  have more headroom.
+ mobile fallback first, then enhance up. Desktop-only internal tool → you
+ have more headroom.
 - [ ] **Is there a non-3D alternative that's 90% as good for 10% of the cost?**
-  A pre-rendered `<video>`, an animated SVG, a CSS scroll effect, or a
-  high-quality image sequence often beats live WebGL. The DEV community lesson
-  holds: a scripted DOM/GSAP walkthrough can be **under 40 KB gzip vs a
-  multi-MB MP4/GIF** — reach for real WebGL only when interactivity or true 3D
-  depth is the point.
+ A pre-rendered `<video>`, an animated SVG, a CSS scroll effect, or a
+ high-quality image sequence often beats live WebGL. The DEV community lesson
+ holds: a scripted DOM/GSAP walkthrough can be **under 40 KB gzip vs a
+ multi-MB MP4/GIF** — reach for real WebGL only when interactivity or true 3D
+ depth is the point.
 - [ ] **Reduced-motion + no-WebGL story exists?** If you can't describe what a
-  `prefers-reduced-motion` user and a no-WebGL user see, you're not ready to
-  build.
+ `prefers-reduced-motion` user and a no-WebGL user see, you're not ready to
+ build.
 
 > **Anti-slop guardrail.** A spinning torus knot, a particle field with no
 > meaning, or a tilt-on-mouse card that fights scrolling are the 3D equivalent
@@ -110,15 +111,15 @@ the right move is `enhance-web-ui` or `enhance-web-landing`, not WebGL.
 Read the entry point, layout, and any existing animated component. Then record:
 
 ```
-FRAMEWORK:       [Next.js (app/pages?) / Vite+React / Astro / Remix / SvelteKit / vanilla]
-RENDER MODEL:    [SSR / SSG / CSR — matters for hydration + dynamic import]
-REACT?:          [yes → R3F is on the table | no → vanilla three.js]
-STYLING:         [Tailwind v3/v4 / CSS modules / styled-components / vanilla]
-BUILD TOOL:      [Vite / Webpack / Turbopack / esbuild — affects code-split + worker setup]
+FRAMEWORK: [Next.js (app/pages?) / Vite+React / Astro / Remix / SvelteKit / vanilla]
+RENDER MODEL: [SSR / SSG / CSR — matters for hydration + dynamic import]
+REACT?: [yes → R3F is on the table | no → vanilla three.js]
+STYLING: [Tailwind v3/v4 / CSS modules / styled-components / vanilla]
+BUILD TOOL: [Vite / Webpack / Turbopack / esbuild — affects code-split + worker setup]
 EXISTING MOTION: [framer-motion/motion? GSAP? Lenis? CSS only?]
-EXISTING 3D:     [three? @react-three/fiber? drei? none?]
-PERF BASELINE:   [current LCP / bundle size / Lighthouse, if measurable]
-ASSET PIPELINE:  [is there a /public model dir? a CDN? Draco/KTX2 already set up?]
+EXISTING 3D: [three? @react-three/fiber? drei? none?]
+PERF BASELINE: [current LCP / bundle size / Lighthouse, if measurable]
+ASSET PIPELINE: [is there a /public model dir? a CDN? Draco/KTX2 already set up?]
 ```
 
 Check the dependency manifest **before importing anything** — reuse what's
@@ -198,12 +199,12 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 export function initScrollAnimations({ camera, model }) {
-  const tl = gsap.timeline({
-    scrollTrigger: { trigger: "#stage", start: "top top", end: "+=3000", scrub: 1, pin: true },
-  });
-  tl.to(camera.position, { x: 5, z: 10, onUpdate: () => camera.lookAt(0, 0, 0) })
-    .to(model.rotation, { y: Math.PI * 2 }, 0);
-  return () => tl.scrollTrigger?.kill(); // always return teardown
+ const tl = gsap.timeline({
+ scrollTrigger: { trigger: "#stage", start: "top top", end: "+=3000", scrub: 1, pin: true },
+ });
+ tl.to(camera.position, { x: 5, z: 10, onUpdate: () => camera.lookAt(0, 0, 0) })
+ .to(model.rotation, { y: Math.PI * 2 }, 0);
+ return () => tl.scrollTrigger?.kill(); // always return teardown
 }
 ```
 
@@ -218,7 +219,7 @@ mutating **refs**, never React state.
 const Scene = dynamic(() => import("./Scene"), { ssr: false, loading: () => <Poster /> });
 
 <Canvas camera={{ position: [0, 2, 5], fov: 45 }} dpr={[1, 1.5]} frameloop="demand">
-  <Suspense fallback={null}><Scene /></Suspense>
+ <Suspense fallback={null}><Scene /></Suspense>
 </Canvas>
 ```
 
@@ -230,8 +231,8 @@ auto-cleaned) and target the R3F object's `.current`.
 ```tsx
 import { useGSAP } from "@gsap/react";
 useGSAP(() => {
-  const tl = gsap.timeline({ scrollTrigger: { trigger: ref.current, scrub: 1 } });
-  tl.to(groupRef.current.position, { y: 2, ease: "power2.inOut" });
+ const tl = gsap.timeline({ scrollTrigger: { trigger: ref.current, scrub: 1 } });
+ tl.to(groupRef.current.position, { y: 2, ease: "power2.inOut" });
 }, { scope: ref }); // useGSAP reverts on unmount — handles Strict Mode double-invoke
 ```
 
@@ -279,27 +280,27 @@ first commit, not after a complaint.
 A 3D enhancement that breaks for some users is a regression, not an upgrade.
 
 - [ ] **Reduced motion.** Respect `prefers-reduced-motion`: disable scroll
-  scrub / auto-rotation / parallax, or swap to a static poster frame. Gate at
-  the source so the whole scene honors it.
+ scrub / auto-rotation / parallax, or swap to a static poster frame. Gate at
+ the source so the whole scene honors it.
 
 ```ts
 const reduce = typeof window !== "undefined"
-  && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+ && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 // reduce ? render static poster / no scrub : full experience
 ```
 
 - [ ] **No-WebGL fallback.** Feature-detect; if WebGL/WebGPU is unavailable,
-  render a static image/`<video>`/SVG that preserves the visual language and the
-  conversion path. Never a blank canvas.
+ render a static image/`<video>`/SVG that preserves the visual language and the
+ conversion path. Never a blank canvas.
 - [ ] **Mobile fallback designed first**, then enhanced up — simpler scene,
-  fewer particles, no heavy post-processing, fewer transparent layers.
+ fewer particles, no heavy post-processing, fewer transparent layers.
 - [ ] **Keep semantic HTML for anything interactive.** Buttons, links, and
-  text content live in real DOM (overlay), not as click targets inside the
-  canvas — screen readers and keyboard users need them, and it protects INP.
+ text content live in real DOM (overlay), not as click targets inside the
+ canvas — screen readers and keyboard users need them, and it protects INP.
 - [ ] **Don't trap scroll or focus.** Pinned scroll sections must release; the
-  canvas must not steal keyboard focus or block tabbing.
+ canvas must not steal keyboard focus or block tabbing.
 - [ ] **Protect LCP.** The hero's largest contentful element should not wait on
-  WebGL init — show a poster immediately, hydrate the scene after.
+ WebGL init — show a poster immediately, hydrate the scene after.
 
 ---
 
@@ -310,14 +311,14 @@ Strict Mode.
 
 - [ ] **Don't render WebGL on the server.** Next.js: `dynamic(() => import("./Scene"), { ssr: false })`. Guard any `window`/`document` access with a client check.
 - [ ] **Use `useGSAP()` from `@gsap/react`**, not bare `useEffect` — it scopes
-  selectors and auto-reverts animations on unmount, surviving route changes and
-  Strict Mode's double-invoke. Never create tweens in the render body (a new
-  animation per re-render).
+ selectors and auto-reverts animations on unmount, surviving route changes and
+ Strict Mode's double-invoke. Never create tweens in the render body (a new
+ animation per re-render).
 - [ ] **Clean up everything on unmount** — ScrollTriggers, RAF loops, resize
-  listeners, IntersectionObservers, disposables.
+ listeners, IntersectionObservers, disposables.
 - [ ] **Lenis (if used):** integrate with ScrollTrigger via the recommended
-  `lenis.on("scroll", ScrollTrigger.update)` + ticker wiring so scroll position
-  stays in sync.
+ `lenis.on("scroll", ScrollTrigger.update)` + ticker wiring so scroll position
+ stays in sync.
 
 ---
 
@@ -371,16 +372,16 @@ Strict Mode.
 - Greenfield anti-slop landing page → `enhance-web-landing`.
 - Generic existing-site premium upgrade (no 3D) → `enhance-web-redesign`.
 - UX heuristics / flows / data wiring → `enhance-web-ux`.
-- A hover/drag delight that needs no WebGL → `motion-design` / `interactive-ux`.
+- A hover/drag delight that needs no WebGL → `design-motion` / `design-motion`.
 
 ---
 
 ## Research & Foundation Skills
 
 **Foundation / deeper mechanics (in this repo):**
-- `creative-effects` — Three.js, R3F, shaders, particle systems (greenfield mechanics).
-- `motion-design` — Framer Motion / Motion, GSAP, CSS animation patterns.
-- `interactive-ux` — physics-y micro-interactions and delight.
+- `enhance-web-web3d` — Three.js, R3F, shaders, particle systems (greenfield mechanics).
+- `design-motion` — Framer Motion / Motion, GSAP, CSS animation patterns.
+- `design-motion` — physics-y micro-interactions and delight.
 - `audit-performance` — Core Web Vitals (LCP/INP/CLS), bundle analysis.
 - `audit-accessibility` — reduced-motion, keyboard, screen-reader compliance.
 

@@ -6,11 +6,12 @@ description: >
   or when the user asks for a code review. Integrates research via Firecrawl
   to verify patterns against current best practices, and Sentry MCP to check
   if the code change relates to production errors.
+license: MIT
 ---
 
 # Code Review Skill
 
-Comprehensive code review following industry best practices. Research-aware.
+full code review following industry best practices. Research-aware.
 
 ## MANDATORY: Pre-Review Checks
 
@@ -18,18 +19,18 @@ Comprehensive code review following industry best practices. Research-aware.
 
 ### 1. Read Relevant Documentation
 ```
-README.md                              (project conventions)
-src/[domain]/@_[domain]-README.md      (domain-specific patterns)
-CONTRIBUTING.md                        (code standards)
+README.md (project conventions)
+src/[domain]/@_[domain]-README.md (domain-specific patterns)
+CONTRIBUTING.md (code standards)
 ```
 
 ### 2. Understand the Full Change
 
 If reviewing a PR or commit:
 ```bash
-git log --oneline -10                    # recent context
-git diff <base>..HEAD --stat             # files changed
-git diff <base>..HEAD                    # full diff
+git log --oneline -10 # recent context
+git diff <base>..HEAD --stat # files changed
+git diff <base>..HEAD # full diff
 ```
 
 If reviewing a specific file, read the FULL file for context — not just the changed lines.
@@ -47,11 +48,11 @@ If the change touches error-prone code, check if related Sentry issues exist:
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
-  "organizationSlug": "<ORG_SLUG>",
-  "naturalLanguageQuery": "issues related to <component or function being changed>",
-  "projectSlugOrId": "<PROJECT_SLUG>",
-  "regionUrl": "<REGION_URL>",
-  "limit": 10
+ "organizationSlug": "<ORG_SLUG>",
+ "naturalLanguageQuery": "issues related to <component or function being changed>",
+ "projectSlugOrId": "<PROJECT_SLUG>",
+ "regionUrl": "<REGION_URL>",
+ "limit": 10
 })
 ```
 
@@ -63,9 +64,9 @@ If the code uses a pattern you want to verify:
 
 ```json
 CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
-  "query": "<framework> <pattern> best practice <current year>",
-  "limit": 5,
-  "sources": [{ "type": "web" }]
+ "query": "<framework> <pattern> best practice <current year>",
+ "limit": 5,
+ "sources": [{ "type": "web" }]
 })
 ```
 
@@ -87,7 +88,7 @@ Before line-by-line review:
 - [ ] Logic is correct for all expected inputs
 - [ ] Edge cases handled (null, empty, overflow, concurrent access)
 - [ ] No obvious bugs (off-by-one, wrong operator, missing await)
-- [ ] Error handling is comprehensive and appropriate
+- [ ] Error handling is full and appropriate
 - [ ] Async code handles race conditions and cleanup (AbortController, etc.)
 
 #### Security
@@ -200,7 +201,7 @@ if (status === 'active') // use constant or enum
 
 // BLOCK: stale closure in useEffect
 useEffect(() => {
-  setInterval(() => console.log(count), 1000); // captures stale count
+ setInterval(() => console.log(count), 1000); // captures stale count
 }, []);
 
 // SUGGEST: inline object creation in props

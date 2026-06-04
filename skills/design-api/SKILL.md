@@ -1,6 +1,7 @@
 ---
 name: design-api
 description: Design RESTful and GraphQL APIs following best practices. Use when designing APIs, creating endpoints, structuring responses, or planning API architecture.
+license: MIT
 ---
 
 # API Design Skill
@@ -13,16 +14,16 @@ Design clean, consistent, and developer-friendly APIs.
 
 ### 1. Check Existing API Documentation
 ```
-http://localhost:8080/api-docs           (if backend running)
+http://localhost:8080/api-docs (if backend running)
 http://localhost:8080/naming-conventions (naming standards)
-src/api/_api-README.md                   (frontend API layer docs)
+src/api/_api-README.md (frontend API layer docs)
 ```
 
 ### 2. Verify Database Schema
 Use Supabase MCP to understand existing data structure:
 ```sql
 -- Check table schema
-SELECT column_name, data_type, is_nullable 
+SELECT column_name, data_type, is_nullable
 FROM information_schema.columns WHERE table_name = 'your_table';
 
 -- Check enum values
@@ -60,12 +61,12 @@ Before designing, state:
 ### URL Structure
 
 ```
-GET    /resources          # List
-GET    /resources/:id      # Get one
-POST   /resources          # Create
-PUT    /resources/:id      # Replace
-PATCH  /resources/:id      # Update
-DELETE /resources/:id      # Delete
+GET /resources # List
+GET /resources/:id # Get one
+POST /resources # Create
+PUT /resources/:id # Replace
+PATCH /resources/:id # Update
+DELETE /resources/:id # Delete
 ```
 
 ### Naming Conventions
@@ -81,11 +82,11 @@ DELETE /resources/:id      # Delete
 ### Examples
 
 ```
-GET  /users                    # List users
-GET  /users/123                # Get user 123
-GET  /users/123/orders         # User's orders
-GET  /users/123/orders/456     # Specific order
-POST /users/123/orders         # Create order for user
+GET /users # List users
+GET /users/123 # Get user 123
+GET /users/123/orders # User's orders
+GET /users/123/orders/456 # Specific order
+POST /users/123/orders # Create order for user
 ```
 
 ---
@@ -96,9 +97,9 @@ POST /users/123/orders         # Create order for user
 
 ```json
 {
-  "name": "John Doe",
-  "email": "john@example.com",
-  "role": "admin"
+ "name": "John Doe",
+ "email": "john@example.com",
+ "role": "admin"
 }
 ```
 
@@ -106,12 +107,12 @@ POST /users/123/orders         # Create order for user
 
 ```json
 {
-  "data": {
-    "id": "123",
-    "name": "John Doe",
-    "email": "john@example.com",
-    "createdAt": "2024-01-15T10:30:00Z"
-  }
+ "data": {
+ "id": "123",
+ "name": "John Doe",
+ "email": "john@example.com",
+ "createdAt": "2024-01-15T10:30:00Z"
+ }
 }
 ```
 
@@ -119,16 +120,16 @@ POST /users/123/orders         # Create order for user
 
 ```json
 {
-  "data": [
-    { "id": "1", "name": "John" },
-    { "id": "2", "name": "Jane" }
-  ],
-  "meta": {
-    "total": 100,
-    "page": 1,
-    "perPage": 20,
-    "totalPages": 5
-  }
+ "data": [
+ { "id": "1", "name": "John" },
+ { "id": "2", "name": "Jane" }
+ ],
+ "meta": {
+ "total": 100,
+ "page": 1,
+ "perPage": 20,
+ "totalPages": 5
+ }
 }
 ```
 
@@ -136,14 +137,14 @@ POST /users/123/orders         # Create order for user
 
 ```json
 {
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "Invalid input data",
-    "details": [
-      { "field": "email", "message": "Invalid email format" },
-      { "field": "name", "message": "Name is required" }
-    ]
-  }
+ "error": {
+ "code": "VALIDATION_ERROR",
+ "message": "Invalid input data",
+ "details": [
+ { "field": "email", "message": "Invalid email format" },
+ { "field": "name", "message": "Name is required" }
+ ]
+ }
 }
 ```
 
@@ -194,9 +195,9 @@ GET /orders?createdAfter=2024-01-01
 ### Sorting
 
 ```
-GET /users?sort=name           # Ascending
-GET /users?sort=-createdAt     # Descending (prefix with -)
-GET /users?sort=role,-name     # Multiple fields
+GET /users?sort=name # Ascending
+GET /users?sort=-createdAt # Descending (prefix with -)
+GET /users?sort=role,-name # Multiple fields
 ```
 
 ### Pagination
@@ -204,7 +205,7 @@ GET /users?sort=role,-name     # Multiple fields
 ```
 GET /users?page=2&perPage=20
 GET /users?offset=40&limit=20
-GET /users?cursor=abc123       # Cursor-based
+GET /users?cursor=abc123 # Cursor-based
 ```
 
 ### Field Selection
@@ -259,9 +260,9 @@ X-API-Key: your-api-key
 ```
 POST /users/bulk
 {
-  "create": [{ "name": "John" }, { "name": "Jane" }],
-  "update": [{ "id": "1", "name": "Updated" }],
-  "delete": ["2", "3"]
+ "create": [{ "name": "John" }, { "name": "Jane" }],
+ "update": [{ "id": "1", "name": "Updated" }],
+ "delete": ["2", "3"]
 }
 ```
 
@@ -270,9 +271,9 @@ POST /users/bulk
 ```
 POST /users/search
 {
-  "query": "john",
-  "filters": { "role": "admin" },
-  "sort": { "field": "name", "order": "asc" }
+ "query": "john",
+ "filters": { "role": "admin" },
+ "sort": { "field": "name", "order": "asc" }
 }
 ```
 
@@ -335,13 +336,13 @@ Create a new user account.
 **Response:** `201 Created`
 \`\`\`json
 {
-  "data": {
-    "id": "123",
-    "name": "John Doe",
-    "email": "john@example.com",
-    "role": "user",
-    "createdAt": "2024-01-15T10:30:00Z"
-  }
+ "data": {
+ "id": "123",
+ "name": "John Doe",
+ "email": "john@example.com",
+ "role": "user",
+ "createdAt": "2024-01-15T10:30:00Z"
+ }
 }
 \`\`\`
 
