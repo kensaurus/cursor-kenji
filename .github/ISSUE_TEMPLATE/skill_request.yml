@@ -1,0 +1,75 @@
+name: Skill / Command Request
+description: Request a new skill, command, rule, or MCP config
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Got a workflow that should be a skill? Describe it here.
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: What type of addition?
+      options:
+        - Skill (skills/)
+        - Cursor Skill (skills-cursor/)
+        - Command (commands/)
+        - Rule (rules/)
+        - MCP Config (mcp/)
+        - Subagent (agents/)
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: name
+    attributes:
+      label: Suggested name
+      description: lowercase-hyphen format
+      placeholder: e.g. optimize-images
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the workflow you repeat manually today that an agent could handle.
+      placeholder: Every time I want to optimize images I have to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: triggers
+    attributes:
+      label: Trigger phrases
+      description: What would you say to Cursor to invoke this skill?
+      placeholder: |
+        - "optimize images"
+        - "compress assets"
+        - "reduce image size"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Proposed workflow steps
+      description: Rough outline of what the skill should do (optional but helpful).
+      placeholder: |
+        1. Scan for unoptimized images
+        2. Run through sharp / squoosh
+        3. Replace originals
+    validations:
+      required: false
+
+  - type: textarea
+    id: related
+    attributes:
+      label: Related existing skills
+      description: Which existing skills does this complement or overlap with?
+      placeholder: e.g. audit-performance, workflow-housekeep
+    validations:
+      required: false

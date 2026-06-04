@@ -1,0 +1,62 @@
+name: Bug Report
+description: A skill, command, or script behaves incorrectly
+title: "bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Please fill in as much as you can.
+
+  - type: input
+    id: affected
+    attributes:
+      label: Affected skill / command / file
+      description: e.g. `skills/enhance-web-ui/SKILL.md`, `install.sh`, `commands/commit.md`
+      placeholder: skills/my-skill/SKILL.md
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the incorrect behaviour. Include the Cursor agent response if relevant.
+      placeholder: When I ask Cursor to "make the page nicer", the skill fires but...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+      placeholder: I expected the skill to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Install via install.sh
+        2. Open Cursor and type "..."
+        3. See error / unexpected output
+    validations:
+      required: false
+
+  - type: input
+    id: cursor-version
+    attributes:
+      label: Cursor version
+      placeholder: e.g. 0.45.0
+    validations:
+      required: false
+
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      placeholder: e.g. Windows 11, macOS 14, Ubuntu 24.04
+    validations:
+      required: false

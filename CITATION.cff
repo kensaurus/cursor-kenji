@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+message: "If you use cursor-kenji in your work or build on top of it, please cite it as below."
+type: software
+title: cursor-kenji
+abstract: >
+  A curated toolkit of Cursor AI agent skills, slash commands, MCP server
+  configurations, subagents, and project rules for full-stack development
+  with React, Next.js, Supabase, Tailwind CSS, and TypeScript. Designed to
+  make Cursor agents faster, more accurate, and production-ready out of the box.
+authors:
+  - alias: kensaurus
+    given-names: Kenji
+repository-code: https://github.com/kensaurus/cursor-kenji
+url: https://github.com/kensaurus/cursor-kenji
+license: MIT
+date-released: "2026-01-01"
+keywords:
+  - cursor
+  - cursor-ai
+  - ai-agent
+  - mcp
+  - model-context-protocol
+  - llm
+  - developer-tools
+  - react
+  - nextjs
+  - typescript
+  - tailwindcss
+  - supabase
+  - agent-skills
+  - slash-commands
+  - dotfiles
