@@ -11,8 +11,13 @@
     "install:cursor:clean": "node bin/install.mjs --clean",
     "install:cursor:dry": "node bin/install.mjs --dry-run",
     "install:cursor:clean:dry": "node bin/install.mjs --clean --dry-run",
+    "install:cursor:link": "node bin/install.mjs --link",
+    "install:cursor:restore": "node bin/install.mjs --restore",
     "check:skills": "node scripts/check-skill-count.mjs",
     "fix:skills": "node scripts/check-skill-count.mjs --fix",
+    "validate:skills": "node scripts/validate-skills.mjs",
+    "test:install": "node scripts/test-install.mjs",
+    "test": "node scripts/validate-skills.mjs && node scripts/check-skill-count.mjs && node scripts/test-install.mjs",
     "prepare": "git config core.hooksPath .githooks"
   },
   "keywords": [

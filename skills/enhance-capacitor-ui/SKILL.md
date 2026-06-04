@@ -1,31 +1,7 @@
 ---
 name: enhance-capacitor-ui
 description: >
-  Cross-surface UIUX separation skill for hybrid web apps that ship as PWA +
-  iOS + Android via Capacitor (or Tauri / Expo Web / Ionic / RN-Web). Use when
-  the user reports that a previous UI/UX sweep "improved one surface and broke
-  the other" — desktop got polished and mobile feels cramped, or mobile feels
-  native but desktop wastes space. Also use proactively when the project has
-  ANY of: ad-hoc `useIsMobile` / `isNative` / `pathname.startsWith("/desktop")`
-  branches scattered across components, a single `md:` viewport breakpoint
-  doing double duty as "is desktop" and "is wider component slot", design-system
-  primitives that hardcode `lg:grid-cols-2`, or platform-specific styling
-  (rounded-2xl on iOS, rounded-md on Android) inlined per component instead
-  of mode tokens. The skill establishes three orthogonal axes — **form factor**
-  (compact / medium / expanded), **platform** (web / ios / android), **pointer
-  capability** (fine / coarse) — and a three-layer architecture (context hook,
-  mode tokens, container-query primitives) that lets a single sweep enhance
-  one axis without degrading the others. Catches the silent failures that
-  surface as "looks great on my laptop, atrocious on my phone": axis
-  conflation in a single boolean, viewport queries used for component
-  micro-layout, hover-only affordances shipped to native shells, M3 form-factor
-  heuristics applied to the wrong size class, hardcoded chrome dimensions
-  (`md:pl-[72px]`) leaking into primitives, and SSR/Capacitor first-paint
-  mismatch when form-factor is read in render. Generic across stacks
-  (Tailwind 4 / Tailwind 3 / vanilla CSS variables, Next.js / Vite /
-  React Router, Capacitor / Tauri / Expo Web / Ionic). For pure visual polish
-  on a single surface, use enhance-web-ui first; this skill is the
-  prerequisite *architecture* that makes per-surface polish safe.
+  Cross-surface UIUX separation skill for hybrid web apps that ship as PWA + iOS + Android via Capacitor (or Tauri / Expo Web / Ionic / RN-Web). Use when a previous UI/UX sweep "improved one surface and broke the other" — desktop polished but mobile cramped, or mobile native but desktop wastes space. Also use when the project has ad-hoc useIsMobile / isNative branches scattered across components, a single md: breakpoint doing double duty as "is desktop" and "wider slot", or per-component platform styling instead of mode tokens. Establishes three orthogonal axes — form factor (compact/medium/expanded), platform (web/ios/android), pointer (fine/coarse) — and a three-layer architecture (context hook, mode tokens, container-query primitives) so one sweep can enhance one axis without degrading the others. Catches axis conflation in a single boolean, hover-only affordances on native shells, and SSR/Capacitor first-paint mismatch. For pure visual polish on a single surface, use enhance-web-ui first.
 license: MIT
 ---
 

@@ -3,12 +3,19 @@
 # The count is fully derived, so we auto-fix and re-stage rather than block.
 # Enable once per clone:  git config core.hooksPath .githooks  (npm run prepare does this)
 
-command -v node >/dev/null 2>&1 || { echo "pre-commit: node not found, skipping skill-count check"; exit 0; }
+command -v node >/dev/null 2>&1 || { echo "pre-commit: node not found, skipping checks"; exit 0; }
 
-node scripts/check-skill-count.mjs >/dev/null 2>&1 && exit 0
+# 1. Validate every skill against the Agent Skills spec (blocks on error).
+if ! node scripts/validate-skills.mjs; then
+  echo "pre-commit: skill validation failed — fix the errors above before committing."
+  exit 1
+fi
 
-echo "pre-commit: README skill count drifted — auto-fixing…"
-node scripts/check-skill-count.mjs --fix
-git add README.md
-echo "pre-commit: README.md re-staged with the correct count."
+# 2. Keep the README skill count in sync (auto-fix + re-stage, never block).
+if ! node scripts/check-skill-count.mjs >/dev/null 2>&1; then
+  echo "pre-commit: README skill count drifted — auto-fixing…"
+  node scripts/check-skill-count.mjs --fix
+  git add README.md
+  echo "pre-commit: README.md re-staged with the correct count."
+fi
 exit 0

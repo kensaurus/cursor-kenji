@@ -4,6 +4,34 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## Jun 2026 — Installer hardening + spec compliance
+
+### Installer (`bin/install.mjs`)
+
+- **Fixed a shipped bug:** the installer only copied subdirectories, silently
+  dropping every top-level `.md`/`.mdc` file — `npx` installs landed 0 subagents,
+  only 1 of 14 commands, and no rules files. It now copies files and directories.
+- **`--clean` / `--mirror`** — make `~/.cursor` exactly mirror this repo (no
+  overlap/duplicates); takes a timestamped backup first (`--no-backup` to skip).
+- **`--restore [stamp]`** — restore a previous `--clean` backup.
+- **`--only <csv>`** and **`--skill <name>`** — partial installs.
+- **`--link`** — dev mode: symlink (junction on Windows) instead of copy.
+- MCP template is written only when missing and never overwrites existing keys.
+
+### Quality gates
+
+- `scripts/validate-skills.mjs` — validates every skill against the
+  [Agent Skills spec](https://agentskills.io/specification): frontmatter present,
+  `name` matches its directory, `description` ≤ 1024 chars, body length warnings.
+- `scripts/test-install.mjs` — install smoke test (would have caught the bug above).
+- Both run in the pre-commit hook, a new cross-OS `validate` workflow, and before
+  `npm publish`.
+- Trimmed 4 over-long skill descriptions to ≤ 1024 chars (`audit-ux`,
+  `enhance-web-ui`, `enhance-web-ux`, `enhance-capacitor-ui`).
+- Added `.gitattributes` to normalize line endings (LF) across machines.
+
+---
+
 ## Jun 2026 — Anti-Vibe-Coding Spine + Taste Skills
 
 ### New Skills

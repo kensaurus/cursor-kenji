@@ -73,6 +73,22 @@ npx @kensaurus/cursor-kenji --dry-run  # preview without changing anything
   contents are backed up to `~/.cursor/.cursor-kenji-backups/<timestamp>/` first
   (add `--no-backup` to skip). `mcp.json` is never touched, so your API keys are safe.
 
+Advanced flags:
+
+```bash
+npx @kensaurus/cursor-kenji --only skills,commands   # install a subset of groups
+npx @kensaurus/cursor-kenji --skill audit-ux         # install a single skill
+npx @kensaurus/cursor-kenji --link                   # dev mode: symlink instead of copy
+npx @kensaurus/cursor-kenji --restore                # restore the latest --clean backup
+```
+
+- **`--skill <name>`** mirrors `npx skills add … --skill <name>` for one-off installs.
+- **`--link`** symlinks the repo into `~/.cursor` (junctions on Windows) so edits to
+  skills show up live — ideal when authoring skills in this repo. Files that can't be
+  symlinked without elevated rights fall back to a copy automatically.
+- **`--restore [timestamp]`** copies a snapshot from
+  `~/.cursor/.cursor-kenji-backups/` back into place (latest if omitted).
+
 From a clone, the same operations are available as npm scripts:
 
 ```bash
@@ -80,7 +96,17 @@ npm run install:cursor            # merge
 npm run install:cursor:clean      # mirror (with backup)
 npm run install:cursor:dry        # preview merge
 npm run install:cursor:clean:dry  # preview mirror
+npm run install:cursor:link       # dev mode (symlink)
+npm run install:cursor:restore    # restore latest backup
+npm test                          # validate spec + skill count + install smoke test
 ```
+
+> **Authoring skills?** Every skill is validated against the
+> [Agent Skills spec](https://agentskills.io/specification) (`npm run validate:skills`):
+> frontmatter present, `name` matches the directory, `description` ≤ 1024 chars (it's
+> the always-in-context trigger), and SKILL.md body < 500 lines (move detail to
+> `references/`). For slash-command-only behavior set `disable-model-invocation: true`;
+> to auto-scope a skill to a subtree use the `paths` frontmatter field.
 
 ### Manual install
 

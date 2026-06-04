@@ -1,0 +1,21 @@
+# Normalize line endings across machines (this repo is authored on Windows).
+# Text files are stored with LF in git and checked out with LF everywhere.
+* text=auto eol=lf
+
+# Explicit: scripts and skill/markdown sources are always LF.
+*.sh    text eol=lf
+*.mjs   text eol=lf
+*.js    text eol=lf
+*.json  text eol=lf
+*.md    text eol=lf
+*.mdc   text eol=lf
+*.yml   text eol=lf
+*.yaml  text eol=lf
+
+# Treat these as binary (never normalize / diff as text).
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.pdf   binary

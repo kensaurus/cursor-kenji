@@ -1,27 +1,7 @@
 ---
 name: enhance-web-ux
 description: >
-  Generative, NN/g-grounded page enhancement skill. Given a route, screen, or component, this
-  produces concrete, design-system-compliant code changes that replace generic, AI-templated, or
-  "stacked" UI with intelligent, context-aware, human-centric layouts. Inventories the page's
-  data domain and primitives FIRST, then maps every observed pain point to a Nielsen Norman
-  heuristic, then proposes the smallest change that uses an existing primitive (Badge, Button,
-  Card, Tooltip, semantic token). Replaces empty cells with semantic data instead of stacking
-  more chips on top, color-codes by user mental model not technical type, fixes label-wrap and
-  overflow at the helper level not row-by-row, and verifies live at desktop / tablet / narrow
-  viewports via the browser MCP. Use when the user says "enhance this page", "make /xxx better",
-  "this page feels AI-generated", "fix UX of /xxx", "improve information density", "icons all
-  look the same", "buttons wrap to 2 lines", "empty columns", "I can't tell which is which",
-  or asks for any non-trivial UX improvement on a specific screen. Generic — works on any
-  webapp regardless of stack. Now also catches the "vague but visceral"
-  failures (`clunky`, `atrocious`, `wasted space`, `incoherent`) that survive
-  a normal audit: third-party CSS specificity wars (TanStack Table / AG-Grid
-  inline width override), chrome tautology on root routes, card-on-card
-  layering, brand-color competition, full-cell active-state washes where a
-  micro-indicator belongs, and hover-only affordances on touch devices. For
-  pure visual-token compliance audit (no enhancement), use
-  audit-uiux-design-system. For pure heuristic evaluation report, use
-  audit-ux.
+  Generative, NN/g-grounded page enhancement skill. Given a route, screen, or component, it produces concrete, design-system-compliant code changes that replace generic, AI-templated, or "stacked" UI with intelligent, context-aware layouts. Inventories the page's data domain and primitives FIRST, maps each pain point to a Nielsen Norman heuristic, then proposes the smallest change using an existing primitive (Badge, Button, Card, Tooltip, semantic token). Replaces empty cells with semantic data, fixes label-wrap/overflow at the helper level, and verifies live across viewports via the browser MCP. Use when the user says "enhance this page", "make /xxx better", "this page feels AI-generated", "fix UX of /xxx", "improve information density", "icons all look the same", or asks for any non-trivial UX improvement on a screen. Generic across stacks. For visual-token compliance use audit-uiux-design-system; for a heuristic report use audit-ux.
 license: MIT
 ---
 
