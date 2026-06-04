@@ -12,7 +12,25 @@ Guide for adding, updating, and maintaining skills and commands.
 mkdir -p skills/my-skill-name
 ```
 
-Naming: lowercase, hyphens only. Example: `data-visualization`, `mobile-first`.
+Naming: `<prefix>-<topic>`, lowercase, hyphens only. 13 prefixes:
+
+| Prefix | Purpose |
+|:-------|:--------|
+| `audit-` | Quality/security assessments |
+| `backend-` | Server-side patterns (DB, observability, realtime) |
+| `data-` | Pipelines, ETL, visualization |
+| `debug-` | Reproduce → isolate → fix failures |
+| `deploy-` | Release, publish, post-deploy verify |
+| `design-` | Create new visual/API surfaces |
+| `docs-` | Write or co-author documentation |
+| `enhance-` | Improve existing web/mobile UI & UX |
+| `meta-` | Skills and MCP authoring |
+| `mobile-` | React Native, Capacitor, emulator |
+| `protocol-` | Procedural guardrails |
+| `test-` | QA, unit tests, acceptance tests |
+| `workflow-` | Dev-process skills (git, refactor, PR, spec-TDD) |
+
+Examples: `audit-performance`, `backend-realtime`, `mobile-rn-screen`.
 
 ### 2. Create SKILL.md
 
@@ -22,6 +40,7 @@ Every skill needs a `SKILL.md` with YAML frontmatter:
 ---
 name: my-skill-name
 description: Clear description with trigger words. Use when user mentions "keyword1", "keyword2", or wants "specific task".
+license: MIT
 ---
 
 # My Skill Name
@@ -77,15 +96,34 @@ Every skill MUST have:
 
 The `description` field is critical — it's how Cursor decides when to use the skill.
 
-**Good:** Specific trigger words, mentions use cases
+**Rules:**
+- Open with an action verb (`Fix`, `Wire`, `Build`, `Audit`, `Release` …)
+- Keep under 300 characters
+- Include 3-6 trigger keywords/phrases users actually type
+- Never write "This skill provides…" or "This skill should be used when…"
+- No AI-tells: avoid `leverage`, `seamless`, `robust`, `powerful`, `elevate`, `cutting-edge`, `delve`, `comprehensive solution`
+
+**Good:**
 ```yaml
-description: Optimize database queries, schemas, and performance. Use when fixing slow queries, adding indexes, N+1 problems, schema design, RLS policies, or when user mentions "slow query", "database performance", "timeout", "index", "query optimization".
+description: Fix slow Postgres queries and N+1 problems. Use when asked about "slow query", "add index", "database timeout", "optimize query", schema design, or RLS policies.
 ```
 
-**Bad:** Vague, no triggers
+**Bad:**
 ```yaml
-description: Helps with database stuff.
+description: This comprehensive skill leverages powerful AI capabilities to seamlessly help with database stuff.
 ```
+
+### 5. Voice & tone
+
+- Imperative, direct: "Fix X", "Wire Y", "Run Z"
+- No hedging: ~~"This might help with…"~~ → "Use when…"
+- No filler: ~~"In order to…"~~ → "To…"
+- Body prose: short sentences, bullet points preferred over dense paragraphs
+
+### 6. Language
+
+- `SKILL.md` bodies: English only (SEO + Cursor intent matching)
+- `references/*.md` detail files: English tight prose (reference files are link-only, not auto-loaded; Japanese would save zero tokens for typical sessions)
 
 ---
 
@@ -154,8 +192,8 @@ Use git commit messages to track skill evolution:
 
 ```
 feat(skills): add React 19 use() patterns to data-visualization
-fix(skills): update motion-design for Framer Motion v11 API
-docs(skills): add cross-references to creative-effects
+fix(skills): update design-motion for Framer Motion v11 API
+docs(skills): add cross-references to enhance-web-web3d
 ```
 
 ---

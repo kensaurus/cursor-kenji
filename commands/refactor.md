@@ -6,4 +6,4 @@ This command is a thin entry point. The full playbook lives in the **`workflow-r
 
 Use `/refactor` when you want to explicitly trigger refactoring. Otherwise, say "refactor this", "split this file", "extract a hook", or "clean up this module" and the skill auto-fires.
 
-Related: `code-antipatterns` for spotting smells before refactoring, `audit-code-review` for verifying behavior preservation after.
+Related: `audit-code-quality` for spotting smells before refactoring, `audit-code-review` for verifying behavior preservation after.

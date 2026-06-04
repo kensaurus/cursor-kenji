@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Every Cursor AI workflow you'd build yourself — already built.</strong><br/>
-  71 agent skills · 13 slash commands · 16 MCP servers · 12 Cursor extensions · 5 subagents
+  58 agent skills · 13 slash commands · 16 MCP servers · 12 Cursor extensions · 5 subagents
 </p>
 
 <p align="center">
@@ -21,16 +21,36 @@
 
 ---
 
-**You'll want this if you:**
-- Find yourself writing the same Cursor prompts every day
-- Want the agent to automatically pick the right approach for debugging, UI polish, testing, or deploy
-- Ship React / Next.js / Supabase apps and want production-quality AI assistance without starting from scratch
+**cursor-kenji** is a production-ready toolkit of 58 Cursor agent skills, 13 slash commands, and 5 pre-built subagents for React / Next.js / Supabase development. Install once — the agent picks the right skill automatically.
 
-One `./install.sh` drops everything into `~/.cursor/`. Restart Cursor — the toolkit is live.
+---
+
+## 30-second install
+
+```bash
+npx skills add kensaurus/cursor-kenji
+```
+
+That's it. Restart Cursor. Done. The agent now has 58 skills it picks automatically.
+
+> No Cursor? **[Download Cursor free](https://cursor.com)** (it's VS Code with AI built in).
+> Don't have `skills`? Run `npm install -g skills` first, or use the manual install below.
 
 ---
 
 ## Quick Start
+
+> New to Cursor? Read [docs/GETTING-STARTED.md](docs/GETTING-STARTED.md) — plain-language walkthrough.
+
+### Via skills.sh (recommended)
+
+```bash
+npx skills add kensaurus/cursor-kenji
+```
+
+Installs all 58 skills to `~/.cursor/skills/` (or `~/.agents/skills/`) automatically.
+
+### Manual install
 
 ```bash
 git clone https://github.com/kensaurus/cursor-kenji.git
@@ -39,7 +59,7 @@ cd cursor-kenji
 ```
 
 <details>
-<summary>Or one-liner</summary>
+<summary>Or one-liner (curl)</summary>
 
 ```bash
 curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.sh | bash
@@ -53,7 +73,7 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 3. Try it: describe any task in chat. Skills auto-trigger from keywords.
 4. Optional: `source ~/cursor-kenji/shell-aliases/cursor-helpers.sh`
 
-**Keep it fresh:** `cd ~/cursor-kenji && git pull && ./install.sh`
+**Keep it fresh:** `npx skills add kensaurus/cursor-kenji` (or `cd ~/cursor-kenji && git pull && ./install.sh`)
 
 ---
 
@@ -61,7 +81,7 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 
 | | Count | What it does |
 |:--|------:|:-------------|
-| **Skills** | 71 | Auto-triggering agent capabilities (audits, enhance, debug, test, build) |
+| **Skills** | 58 | Auto-triggering agent capabilities (audits, enhance, debug, test, build) |
 | **Cursor Skills** | 12 | IDE-specific tools (canvas, hooks, rules, PR splitter) |
 | **Commands** | 13 | Slash commands for repeatable workflows (`/commit`, `/pr`, `/research`) |
 | **Subagents** | 5 | Background autonomous agents (code-reviewer, debugger, db-migrator…) |
@@ -78,7 +98,7 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 graph TB
   subgraph TOOLKIT["cursor-kenji Toolkit"]
     direction TB
-    SK["Skills (71)"]
+    SK["Skills (58)"]
     CS["Cursor Skills (12)"]
     CMD["Commands (13)"]
     SA["Subagents (5)"]
@@ -136,13 +156,13 @@ graph TB
 | "make `/settings` more polished, less crowded" | `enhance-web-ui` |
 | "build a landing page that doesn't look like AI slop" | `enhance-web-landing` |
 | "redesign this site to feel premium, keep functionality" | `enhance-web-redesign` |
-| "polish this React Native screen, feels clunky on iOS" | `enhance-rn-screen` |
+| "polish this React Native screen, feels clunky on iOS" | `mobile-rn-screen` |
 | "Capacitor app looks great on web but cramped on mobile" | `enhance-capacitor-ui` |
 | "build this feature properly" / "this keeps breaking" | `workflow-spec-tdd` |
-| "add push notifications / deep links / ship OTA / App Store" | `capacitor-platform` |
-| "the RN app is janky / slow to start / bundle is huge" | `rn-performance` |
+| "add push notifications / deep links / ship OTA / App Store" | `mobile-capacitor-platform` |
+| "the RN app is janky / slow to start / bundle is huge" | `mobile-rn-performance` |
 | "build an ingestion pipeline / cron double-counts / backfill" | `data-pipeline` |
-| "add logging / instrument this / why can't I debug prod" | `observability-instrumentation` |
+| "add logging / instrument this / why can't I debug prod" | `backend-observability` |
 | "give the README a hero image and screenshots" | `enhance-readme` |
 | "audit the UX of the checkout flow" | `audit-ux` |
 | "split this branch into smaller PRs" | `split-to-prs` |
@@ -175,7 +195,29 @@ flowchart LR
 
 ---
 
-## Skills (71)
+## Skills (58)
+
+> **Note:** The `file-docx`, `file-pdf`, `file-pptx`, and `file-xlsx` skills (Anthropic proprietary, source-available only) have been removed from this public repo. Keep personal copies in `~/.cursor/skills/` if needed.
+
+### Naming taxonomy
+
+Every skill name is `<prefix>-<topic>`. 13 prefixes, one concern each:
+
+| Prefix | Purpose |
+|:-------|:--------|
+| `audit-` | Quality/security assessments |
+| `backend-` | Server-side patterns (DB, observability, realtime) |
+| `data-` | Pipelines, ETL, visualization |
+| `debug-` | Reproduce → isolate → fix failures |
+| `deploy-` | Release, publish, post-deploy verify |
+| `design-` | Create new visual/API surfaces |
+| `docs-` | Write or co-author documentation |
+| `enhance-` | Improve existing web/mobile UI & UX |
+| `meta-` | Skills and MCP authoring |
+| `mobile-` | React Native, Capacitor, emulator |
+| `protocol-` | Procedural guardrails (browser anti-stall, etc.) |
+| `test-` | QA, unit tests, acceptance tests |
+| `workflow-` | Dev-process skills (git, refactor, PR, spec-TDD) |
 
 ### Enhance — make pages feel hand-crafted
 
@@ -188,7 +230,7 @@ Pick by surface:
 | Web landing / marketing / portfolio | `enhance-web-landing` |
 | Existing site upgrade (audit-first, preserve behaviour) | `enhance-web-redesign` |
 | 3D / WebGL / cinematic scroll on an existing site | `enhance-web-web3d` |
-| React Native screen (Expo / bare) | `enhance-rn-screen` |
+| React Native screen (Expo / bare) | `mobile-rn-screen` |
 | Capacitor / hybrid app (one web app on iOS + Android) | `enhance-capacitor-ui` |
 | Repo README showcase | `enhance-readme` |
 
@@ -198,42 +240,42 @@ Pick by surface:
 |:------|:-------------|
 | `design-frontend` | Production-grade UI — avoids generic AI aesthetics |
 | `design-system` | Component libraries, tokens, variants, CVA |
-| `motion-design` | Framer Motion, CSS animations, GSAP micro-interactions |
-| `creative-effects` | WebGL, Three.js, shaders, particles, Canvas 2D |
-| `uiux-enhancement` | Incremental UI/UX improvements and polish |
-| `interactive-ux` | Gamification, Easter eggs, delightful interactions |
-| `mobile-first` | Touch-optimized, responsive, PWA patterns |
-| `theme-factory` | Apply cohesive visual themes across artifacts |
-| `capacitor-platform` | Capacitor plugins, OTA updates, deep links, push, store submission, Apple preflight |
-| `rn-performance` | React Native perf/build/upgrade — FPS, Hermes, TTI, bundle size, FlashList, Reanimated |
+| `design-motion` | Framer Motion, CSS animations, GSAP micro-interactions |
+| `enhance-web-web3d` | WebGL, Three.js, shaders, particles, Canvas 2D |
+| `enhance-web-ui` | Incremental UI/UX improvements and polish |
+| `design-motion` | Gamification, Easter eggs, delightful interactions |
+| `design-mobile-first` | Touch-optimized, responsive, PWA patterns |
+| `design-theme` | Apply cohesive visual themes across artifacts |
+| `mobile-capacitor-platform` | Capacitor plugins, OTA updates, deep links, push, store submission, Apple preflight |
+| `mobile-rn-performance` | React Native perf/build/upgrade — FPS, Hermes, TTI, bundle size, FlashList, Reanimated |
 
 ### Data & Creative
 
 | Skill | What it does |
 |:------|:-------------|
 | `data-visualization` | Recharts, D3.js, sparklines, real-time charts |
-| `algorithmic-art` | Generative art, flow fields, L-systems, circle packing |
-| `canvas-design` | Museum-quality visual design in `.png` and `.pdf` formats |
+| `design-generative-art` | Generative art, flow fields, L-systems, circle packing |
+| `design-canvas` | Museum-quality visual design in `.png` and `.pdf` formats |
 
 ### Backend & Database
 
 | Skill | What it does |
 |:------|:-------------|
 | `backend-patterns` | Server Actions, tRPC, Edge Functions, caching, jobs |
-| `database-optimization` | Indexes, N+1 fixes, RLS performance, query tuning |
-| `realtime-features` | WebSocket, Supabase Realtime, SSE, live data |
+| `backend-db-performance` | Indexes, N+1 fixes, RLS performance, query tuning |
+| `backend-realtime` | WebSocket, Supabase Realtime, SSE, live data |
 | `data-pipeline` | ETL / edge-function / `pg_cron` correctness — idempotency, atomic writes, backfills, dead-letter |
-| `observability-instrumentation` | Error↔trace↔log correlation, structured logs, PII redaction, OTel spans, LLM traces, SLO design |
+| `backend-observability` | Error↔trace↔log correlation, structured logs, PII redaction, OTel spans, LLM traces, SLO design |
 
 ### Architecture & Quality
 
 | Skill | What it does |
 |:------|:-------------|
 | `design-api` | REST conventions, error schemas, pagination, versioning |
-| `error-handling` | Error boundaries, Server Action errors, toast patterns |
-| `code-antipatterns` | Detect and fix React, TypeScript, state anti-patterns |
+| `backend-error-handling` | Error boundaries, Server Action errors, toast patterns |
+| `audit-code-quality` | Detect and fix React, TypeScript, state anti-patterns |
 | `audit-code-review` | Thorough PR reviews — correctness, security, perf, a11y |
-| `codebase-coherency` | Naming, imports, organization consistency audit |
+| `audit-code-quality` | Naming, imports, organization consistency audit |
 | `workflow-refactor` | Safe, incremental code transformations |
 | `audit-performance` | Core Web Vitals, bundle analysis, runtime profiling |
 | `audit-security` | OWASP Top 10, auth flows, RLS, secrets management |
@@ -265,8 +307,8 @@ Pick by surface:
 | `test-unit` | Auto-detect framework, research patterns, Sentry coverage gaps, write tests |
 | `test-qa` | Comprehensive QA via browser MCP — CRUD lifecycle, data pipeline, UX quality |
 | `test-playwright` | PDCA loop closer — drive localhost like a real user, fix pain points as you go |
-| `test-emulator` | Native build QA on Android emulator — adb walk + Supabase + Sentry MCPs |
-| `start-emulator` | Boot Metro + Android emulator in the correct order — prevents "Cannot connect to Expo CLI" races |
+| `mobile-emulator-test` | Native build QA on Android emulator — adb walk + Supabase + Sentry MCPs |
+| `mobile-emulator-start` | Boot Metro + Android emulator in the correct order — prevents "Cannot connect to Expo CLI" races |
 | `workflow-pr` | PR lifecycle — validation, bot feedback, merge criteria |
 | `protocol-browser-anti-stall` | Anti-hang protocol for browser automation sessions |
 
@@ -275,11 +317,11 @@ Pick by surface:
 | Skill | What it does |
 |:------|:-------------|
 | `workflow-spec-tdd` | Anti-vibe-coding spine — brainstorm → spec → plan → RED/GREEN/REFACTOR → self-review |
-| `tdd` | Test-driven development — Red/Green/Refactor, Vitest patterns, agent-compatible |
-| `spec-writing` | Write effective specs so agents produce correct implementations first time |
-| `parallel-agents` | Run agents in parallel via git worktrees, cloud agents, multi-model comparison |
-| `hooks-builder` | Build Cursor Agent Hooks — auto-formatters, security gates, secret scanners |
-| `karpathy-guidelines` | Behavioral guardrails (Think before coding, Simplicity first, Surgical changes) |
+| `workflow-spec-tdd` | Test-driven development — Red/Green/Refactor, Vitest patterns, agent-compatible |
+| `workflow-spec-tdd` | Write effective specs so agents produce correct implementations first time |
+| `workflow-parallel-agents` | Run agents in parallel via git worktrees, cloud agents, multi-model comparison |
+| `create-hook` | Build Cursor Agent Hooks — auto-formatters, security gates, secret scanners |
+| `workflow-coding-discipline` | Behavioral guardrails (Think before coding, Simplicity first, Surgical changes) |
 
 ### Product & Documentation
 
@@ -290,16 +332,7 @@ Pick by surface:
 | `docs-coauthor` | Structured co-authoring for specs, PRDs, RFCs |
 | `workflow-git-commit` | Conventional commits, branching, PRs, releases |
 | `workflow-housekeep` | Full-cycle repo maintenance — README sync, dead file cleanup, dependency updates |
-| `creative-workflow` | End-to-end feature development workflow |
-
-### File Handling
-
-| Skill | What it does |
-|:------|:-------------|
-| `file-docx` | Word documents — create, edit, tracked changes, comments |
-| `file-pdf` | PDF processing — extract, create, merge/split, forms |
-| `file-pptx` | PowerPoint — create from HTML, edit slides, extract content |
-| `file-xlsx` | Spreadsheets — formulas, formatting, data analysis |
+| `workflow-spec-tdd` | End-to-end feature development workflow |
 
 ### Meta & Tooling
 
@@ -307,7 +340,7 @@ Pick by surface:
 |:------|:-------------|
 | `meta-skill-creator` | Guide for creating new Agent Skills |
 | `meta-mcp-builder` | Build MCP servers for LLM tool integration |
-| `webapp-testing` | Playwright browser automation and E2E testing |
+| `test-qa` | Playwright browser automation and E2E testing |
 
 <details>
 <summary><strong>Cursor-Specific Skills (12)</strong></summary>
@@ -434,7 +467,7 @@ cp ~/cursor-kenji/rules/project-starter/*.mdc your-project/.cursor/rules/
 | `supabase.mdc` | Typed clients, RLS mandatory, migration patterns |
 | `components.mdc` | Reuse primitives, Server Components, a11y |
 | `typescript.mdc` | No `any`, Zod validation, ActionResult pattern |
-| `tailwind.mdc` | Design tokens, `cn()`, mobile-first, motion prefs |
+| `tailwind.mdc` | Design tokens, `cn()`, design-mobile-first, motion preferences |
 | `git.mdc` | Conventional commits, branch naming, no secrets |
 | `data-fetching.mdc` | TanStack Query, prefetch, query key factories |
 
@@ -474,24 +507,24 @@ source ~/cursor-kenji/shell-aliases/cursor-helpers.sh
 
 ```
 cursor-kenji/
-├── skills/                  # 71 Agent Skills (each has SKILL.md)
+├── skills/                  # 58 Agent Skills (each has SKILL.md)
 │   ├── enhance-web-ui/      # Composition, hierarchy, spacing, motion
 │   ├── enhance-web-ux/      # NN/g heuristic-grounded UX enhancement
 │   ├── enhance-web-landing/ # Anti-slop landing/portfolio design
 │   ├── enhance-web-redesign/# Audit-first redesign of existing sites
 │   ├── enhance-web-web3d/   # 3D/WebGL + GSAP cinematic motion
-│   ├── enhance-rn-screen/   # React Native screen polish
+│   ├── mobile-rn-screen/       # React Native screen polish
 │   ├── enhance-capacitor-ui/# Cross-surface hybrid app architecture
 │   ├── enhance-readme/      # Hero + tour + GIF for any README
 │   ├── workflow-spec-tdd/   # Anti-vibe-coding: spec → plan → TDD → review
 │   ├── data-pipeline/       # ETL/edge-function/cron correctness
-│   ├── observability-instrumentation/  # Build-time logging + tracing
-│   ├── capacitor-platform/  # Capacitor plugins, OTA, store submission
-│   ├── rn-performance/      # React Native perf, bundle, upgrade depth
+│   ├── backend-observability/  # Build-time logging + tracing
+│   ├── mobile-capacitor-platform/ # Capacitor plugins, OTA, store submission
+│   ├── mobile-rn-performance/  # React Native perf, bundle, upgrade depth
 │   ├── test-playwright/     # PDCA: drive localhost as a user + fix
-│   ├── start-emulator/      # Metro + Android emulator bring-up
+│   ├── mobile-emulator-start/ # Metro + Android emulator bring-up
 │   ├── deploy-npm/          # Changesets + npm OIDC release loop
-│   └── ...58 more skills
+│   └── ...55 more skills
 ├── skills-cursor/           # 12 Cursor-specific Skills
 │   ├── babysit/
 │   ├── canvas/
@@ -561,7 +594,18 @@ npm run check:skills
 # Open a PR — template is pre-filled
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide and [docs/CATALOG.md](docs/CATALOG.md) for the complete trigger phrase reference.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide, [docs/CATALOG.md](docs/CATALOG.md) for the complete trigger phrase reference, and [docs/TRIGGER-CHEATSHEET.md](docs/TRIGGER-CHEATSHEET.md) for a plain-English "say X → skill Y fires" lookup table.
+
+---
+
+## Alternatives & see also
+
+- **[awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules)** — curated `.cursorrules` / `.cursor/rules` collection
+- **[skills.sh](https://skills.sh)** — the skills registry this repo is listed on
+- **[cursor.directory](https://cursor.directory)** — Cursor plugin and rules directory
+- **[agentskills.io](https://agentskills.io)** — community agent skill index
+
+cursor-kenji differs from cursorrules collections in that it ships *executable* skill files (not static rules), MCP server configs, slash commands, and subagent definitions in one installable package.
 
 ---
 
