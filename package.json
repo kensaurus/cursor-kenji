@@ -1,12 +1,56 @@
 {
-  "name": "cursor-kenji",
-  "version": "0.0.0",
-  "private": true,
-  "description": "Curated Cursor skills, commands, subagents, rules, and MCP config.",
+  "name": "@kensaurus/cursor-kenji",
+  "version": "1.0.0",
+  "description": "58 Cursor AI agent skills, 13 slash commands, 5 subagents, and MCP configs for React/Next.js/Supabase development.",
   "type": "module",
+  "bin": {
+    "cursor-kenji": "./bin/install.mjs"
+  },
   "scripts": {
     "check:skills": "node scripts/check-skill-count.mjs",
     "fix:skills": "node scripts/check-skill-count.mjs --fix",
     "prepare": "git config core.hooksPath .githooks"
-  }
+  },
+  "keywords": [
+    "cursor",
+    "cursor-ai",
+    "cursor-skills",
+    "agent-skills",
+    "ai-agents",
+    "llm-tools",
+    "claude",
+    "mcp",
+    "nextjs",
+    "supabase"
+  ],
+  "files": [
+    "skills/",
+    "skills-cursor/",
+    "commands/",
+    "agents/",
+    "rules/",
+    "mcp/",
+    "install.sh",
+    "bin/",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kensaurus/cursor-kenji.git"
+  },
+  "homepage": "https://github.com/kensaurus/cursor-kenji#readme",
+  "bugs": {
+    "url": "https://github.com/kensaurus/cursor-kenji/issues"
+  },
+  "author": "kensaurus",
+  "license": "MIT"
 }
