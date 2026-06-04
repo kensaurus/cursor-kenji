@@ -55,6 +55,33 @@ Also install [Mushi Mushi skills](https://github.com/kensaurus/mushi-mushi) for 
 npx skills add kensaurus/mushi-mushi
 ```
 
+### Via npm (`npx @kensaurus/cursor-kenji`)
+
+The npm installer copies skills, commands, agents, and rules into `~/.cursor/`. It
+has two modes:
+
+```bash
+npx @kensaurus/cursor-kenji            # merge: add/overwrite this repo's items, keep your others
+npx @kensaurus/cursor-kenji --clean    # mirror: make ~/.cursor EXACTLY match this repo
+npx @kensaurus/cursor-kenji --dry-run  # preview without changing anything
+```
+
+- **merge** (default) — overwrites same-named items and leaves everything else in
+  `~/.cursor` untouched. Safe for a shared machine with skills from other sources.
+- **`--clean` / mirror** — wipes `~/.cursor/{skills,commands,agents,rules}` so they
+  contain *only* what this repo ships (no overlap, no duplicates). Your previous
+  contents are backed up to `~/.cursor/.cursor-kenji-backups/<timestamp>/` first
+  (add `--no-backup` to skip). `mcp.json` is never touched, so your API keys are safe.
+
+From a clone, the same operations are available as npm scripts:
+
+```bash
+npm run install:cursor            # merge
+npm run install:cursor:clean      # mirror (with backup)
+npm run install:cursor:dry        # preview merge
+npm run install:cursor:clean:dry  # preview mirror
+```
+
 ### Manual install
 
 ```bash
@@ -199,6 +226,89 @@ flowchart LR
   style COMMIT fill:#1e3a5f,stroke:#60a5fa,color:#dbeafe
   style PR fill:#064e3b,stroke:#10b981,color:#d1fae5
 ```
+
+---
+
+## Skill Chaining — improve & iterate any repo
+
+The real power isn't one skill — it's **chaining** them so the output of one becomes
+the input of the next. You can run a chain two ways:
+
+- **One prompt** — name the whole pipeline and let the agent walk it:
+  *"Adopt this repo: research the stack, housekeep, then audit code-quality →
+  security → performance, refactor the worst offenders, add tests, and open a PR."*
+- **Step by step** — run each skill/command, review the diff, then continue. Best
+  when stakes are high or the repo is unfamiliar.
+
+> Rule of thumb: **audit → plan → change behind tests → verify → commit.** Never let
+> a chain *change* code before something can *prove* the change is safe.
+
+### The core iterate-a-repo loop
+
+```mermaid
+flowchart LR
+  R["/research<br/>understand stack"] --> H["workflow-housekeep<br/>dead code, deps"]
+  H --> A["audit-* <br/>quality / security / perf"]
+  A --> P["/plan<br/>prioritize fixes"]
+  P --> T["workflow-spec-tdd<br/>lock behavior in tests"]
+  T --> RF["workflow-refactor<br/>make the change"]
+  RF --> V["test-playwright<br/>verify like a user"]
+  V --> RV["code-reviewer<br/>subagent review"]
+  RV --> C["/commit → /pr"]
+  C -. next slice .-> A
+
+  style R fill:#064e3b,stroke:#10b981,color:#d1fae5
+  style H fill:#1e293b,stroke:#64748b,color:#e2e8f0
+  style A fill:#3b0764,stroke:#a78bfa,color:#ede9fe
+  style P fill:#064e3b,stroke:#10b981,color:#d1fae5
+  style T fill:#312e81,stroke:#818cf8,color:#e0e7ff
+  style RF fill:#78350f,stroke:#fbbf24,color:#fef3c7
+  style V fill:#312e81,stroke:#818cf8,color:#e0e7ff
+  style RV fill:#3b0764,stroke:#a78bfa,color:#ede9fe
+  style C fill:#1e3a5f,stroke:#60a5fa,color:#dbeafe
+```
+
+### Recipes
+
+**1. Adopt & harden an inherited codebase**
+`/research` → `workflow-housekeep` → `audit-code-quality` → `audit-security` →
+`audit-performance` → `/plan` → `workflow-refactor` → `test-unit` →
+`code-reviewer` (subagent) → `/commit` → `/pr`
+*Use when:* you just cloned a repo you didn't write and need a safe map + a first
+round of cleanup without breaking anything.
+
+**2. Ship a feature the disciplined way (spec → TDD → verify)**
+`design-prd` → `workflow-spec-tdd` → *(implement)* → `test-playwright` →
+`backend-observability` → `deploy-verify` → `/commit` → `/pr`
+*Use when:* "build this properly" / "this keeps breaking." Tests are written
+**before** code, so the feature is done only when the suite is green end-to-end.
+
+**3. Make a page stop looking AI-generated**
+`audit-ux` → `audit-uiux-design-system` → `enhance-web-ux` → `enhance-web-ui` →
+`test-playwright` → `/commit`
+*Use when:* "this screen feels clunky / crowded / generic." Audits first so the
+enhancement targets real heuristic + design-token violations, then verify live.
+
+**4. Fix a production incident & prevent recurrence**
+`debug-sentry-monitor` → `debug-error` (or `debug-fe-be-integration`) →
+`debugger` (subagent) → *(fix)* → `test-unit` (regression test) → `deploy-verify` →
+`/commit`
+*Use when:* something is on fire in prod. Triage from real error data, root-cause,
+fix, then lock the bug out with a test before redeploying.
+
+**5. Cut a clean npm / package release**
+`audit-code-quality` → `test-unit` → `enhance-readme` (or `docs-writer`) →
+`deploy-npm` → `deploy-checker` (subagent)
+*Use when:* you're publishing. Quality + docs + release checklist in one pass.
+
+**6. Land a big change as small, reviewable PRs**
+`workflow-refactor` → `split-to-prs` → `workflow-pr` → `babysit`
+*Use when:* a branch grew too large. Split into stacked PRs, then keep each one
+merge-ready (CI green, conflicts resolved) automatically.
+
+> **Tip:** chain *audits in parallel* with `workflow-parallel-agents` — run
+> `audit-security`, `audit-performance`, and `audit-code-quality` as separate agents,
+> then merge their findings into a single `/plan` before you touch code.
 
 ---
 
