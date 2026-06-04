@@ -10,6 +10,8 @@
 </p>
 
 <p align="center">
+  <a href="https://www.npmjs.com/package/@kensaurus/cursor-kenji"><img src="https://img.shields.io/npm/v/@kensaurus/cursor-kenji?style=flat-square&color=cb3837&logo=npm" alt="npm version" /></a>
+  <a href="https://www.npmjs.com/package/@kensaurus/cursor-kenji"><img src="https://img.shields.io/npm/dm/@kensaurus/cursor-kenji?style=flat-square&color=cb3837&logo=npm" alt="npm downloads" /></a>
   <img src="https://img.shields.io/github/license/kensaurus/cursor-kenji?style=flat-square&color=444" alt="License" />
   <img src="https://img.shields.io/github/stars/kensaurus/cursor-kenji?style=flat-square&color=f59e0b" alt="Stars" />
   <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/changelog-Jun_2026-6366f1?style=flat-square" alt="Latest" /></a>
