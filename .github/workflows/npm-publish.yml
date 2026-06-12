@@ -33,7 +33,10 @@ jobs:
       - name: Install smoke test
         run: node scripts/test-install.mjs
 
-      # Do NOT set NODE_AUTH_TOKEN — empty secrets block OIDC fallback.
-      # Requires Trusted Publisher on npmjs.com for kensaurus/cursor-kenji + this workflow file.
+      # Auth: prefer NPM_TOKEN secret if set; otherwise OIDC trusted publishing.
+      # If both fail: add NPM_TOKEN at github.com/kensaurus/cursor-kenji/settings/secrets/actions
+      # OR configure Trusted Publisher on npmjs.com → @kensaurus/cursor-kenji → workflow: npm-publish.yml
       - name: Publish with provenance
         run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
