@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Every Cursor AI workflow you'd build yourself — already built.</strong><br/>
-  60 agent skills · 13 slash commands · 16 MCP servers · 12 Cursor extensions · 5 subagents
+  61 agent skills · 13 slash commands · 16 MCP servers · 12 Cursor extensions · 5 subagents
 </p>
 
 <p align="center">
@@ -23,7 +23,7 @@
 
 ---
 
-**cursor-kenji** is a production-ready toolkit of 60 Cursor agent skills, 13 slash commands, and 5 pre-built subagents for React / Next.js / Supabase development. Install once — the agent picks the right skill automatically.
+**cursor-kenji** is a production-ready toolkit of 61 Cursor agent skills, 13 slash commands, and 5 pre-built subagents for React / Next.js / Supabase development. Install once — the agent picks the right skill automatically.
 
 ---
 
@@ -33,7 +33,7 @@
 npx skills add kensaurus/cursor-kenji
 ```
 
-That's it. Restart Cursor. Done. The agent now has 60 skills it picks automatically.
+That's it. Restart Cursor. Done. The agent now has 61 skills it picks automatically.
 
 > No Cursor? **[Download Cursor free](https://cursor.com)** (it's VS Code with AI built in).
 > Don't have `skills`? Run `npm install -g skills` first, or use the manual install below.
@@ -50,7 +50,7 @@ That's it. Restart Cursor. Done. The agent now has 60 skills it picks automatica
 npx skills add kensaurus/cursor-kenji
 ```
 
-Installs all 60 skills to `~/.cursor/skills/` (or `~/.agents/skills/`) automatically.
+Installs all 61 skills to `~/.cursor/skills/` (or `~/.agents/skills/`) automatically.
 
 Also install [Mushi Mushi skills](https://github.com/kensaurus/mushi-mushi) for bug-report triage + fix dispatch from inside Cursor:
 ```bash
@@ -158,7 +158,7 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 graph TB
   subgraph TOOLKIT["cursor-kenji Toolkit"]
     direction TB
-    SK["Skills (60)"]
+    SK["Skills (68)"]
     CS["Cursor Skills (12)"]
     CMD["Commands (13)"]
     SA["Subagents (5)"]
@@ -340,7 +340,7 @@ merge-ready (CI green, conflicts resolved) automatically.
 
 ---
 
-## Skills (60)
+## Skills (68)
 
 > **Note:** The `file-docx`, `file-pdf`, `file-pptx`, and `file-xlsx` skills (Anthropic proprietary, source-available only) have been removed from this public repo. Keep personal copies in `~/.cursor/skills/` if needed.
 
@@ -379,6 +379,8 @@ Pick by surface:
 | React Native screen (Expo / bare) | `mobile-rn-screen` |
 | Capacitor / hybrid app (one web app on iOS + Android) | `enhance-capacitor-ui` |
 | Repo README showcase | `enhance-readme` |
+| SEO — meta, OG, structured data, Core Web Vitals | `enhance-web-seo` |
+| PWA — offline, install prompt, service worker, push | `enhance-pwa` |
 
 ### Design & Frontend
 
@@ -391,6 +393,7 @@ Pick by surface:
 | `enhance-web-ui` | Incremental UI/UX improvements and polish |
 | `design-mobile-first` | Touch-optimized, responsive, PWA patterns |
 | `design-theme` | Apply cohesive visual themes across artifacts |
+| `design-email` | Transactional + marketing email templates — React Email, MJML, dark mode, natural copy, deliverability |
 | `mobile-capacitor-platform` | Capacitor plugins, OTA updates, deep links, push, store submission, Apple preflight |
 | `mobile-rn-performance` | React Native perf/build/upgrade — FPS, Hermes, TTI, bundle size, FlashList, Reanimated |
 
@@ -422,8 +425,10 @@ Pick by surface:
 | `audit-code-review` | Thorough PR reviews — correctness, security, perf, a11y |
 | `workflow-refactor` | Safe, incremental code transformations |
 | `audit-performance` | Core Web Vitals, bundle analysis, runtime profiling |
+| `audit-bundle-size` | Find and eliminate JS bundle bloat — tree shaking, code splitting, lazy loading |
 | `audit-security` | OWASP Top 10, auth flows, RLS, secrets management |
 | `audit-accessibility` | WCAG 2.1 AA, screen reader, keyboard navigation, ARIA |
+| `audit-i18n` | Internationalisation audit — hardcoded strings, natural-sounding translations, locale formatting |
 
 ### Audits & Monitoring
 
@@ -436,6 +441,7 @@ Pick by surface:
 | `audit-ux` | Generic UX audit — NN/g 10 heuristics, Laws of UX, Intuit Content Design, HEART |
 | `debug-sentry-monitor` | Sentry triage, root cause analysis, noise filtering, architecture audit |
 | `deploy-verify` | Post-deploy smoke test — Sentry + Supabase + Langfuse + Playwright, ship-or-rollback verdict |
+| `iterate-post-launch` | Post-launch improvement loop — Sentry + Supabase signals → triage → fix → verify |
 
 ### Debugging
 
@@ -451,6 +457,7 @@ Pick by surface:
 | `test-unit` | Auto-detect framework, research patterns, Sentry coverage gaps, write tests |
 | `test-qa` | Comprehensive QA via browser MCP — CRUD lifecycle, data pipeline, UX quality |
 | `test-playwright` | PDCA loop closer — drive localhost like a real user, fix pain points as you go |
+| `test-red-team` | Adversarial full-app sweep — feature-first coverage matrix × UI/UX + pipeline + security (OWASP) + perf; severity-ranked defect list |
 | `mobile-emulator-test` | Native build QA on Android emulator — adb walk + Supabase + Sentry MCPs |
 | `mobile-emulator-start` | Boot Metro + Android emulator in the correct order — prevents "Cannot connect to Expo CLI" races |
 | `workflow-pr` | PR lifecycle — validation, bot feedback, merge criteria |
@@ -462,6 +469,7 @@ Pick by surface:
 |:------|:-------------|
 | `workflow-spec-tdd` | Anti-vibe-coding: brainstorm → spec → plan → RED/GREEN/REFACTOR → self-review |
 | `workflow-parallel-agents` | Run agents in parallel via git worktrees, cloud agents, multi-model comparison |
+| `workflow-feature-flag` | Feature-flag rollout discipline — gate → staged release → monitor → promote or roll back |
 | `create-hook` | Build Cursor Agent Hooks — auto-formatters, security gates, secret scanners |
 | `workflow-coding-discipline` | Behavioral guardrails (Think before coding, Simplicity first, Surgical changes) |
 
@@ -654,7 +662,7 @@ source ~/cursor-kenji/shell-aliases/cursor-helpers.sh
 
 ```
 cursor-kenji/
-├── skills/                  # 60 Agent Skills (each has SKILL.md)
+├── skills/                  # 61 Agent Skills (each has SKILL.md)
 │   ├── enhance-web-ui/      # Composition, hierarchy, spacing, motion
 │   ├── enhance-web-ux/      # NN/g heuristic-grounded UX enhancement
 │   ├── enhance-web-landing/ # Anti-slop landing/portfolio design
@@ -669,6 +677,14 @@ cursor-kenji/
 │   ├── mobile-capacitor-platform/ # Capacitor plugins, OTA, store submission
 │   ├── mobile-rn-performance/  # React Native perf, bundle, upgrade depth
 │   ├── test-playwright/     # PDCA: drive localhost as a user + fix
+│   ├── test-red-team/       # Adversarial sweep: feature matrix × UX+pipeline+security+perf
+│   ├── iterate-post-launch/ # Post-launch loop: Sentry+Supabase signals → fix → verify
+│   ├── enhance-web-seo/     # SEO audit + meta/OG/JSON-LD/sitemap/CWV fixes
+│   ├── audit-bundle-size/   # Bundle analysis, tree-shaking, code-splitting
+│   ├── enhance-pwa/         # Service worker, offline, install prompt, push
+│   ├── workflow-feature-flag/ # Gate → staged rollout → monitor → promote or roll back
+│   ├── audit-i18n/          # i18n audit — natural tone, locale formatting, no jargon
+│   ├── design-email/        # Transactional email — React Email, dark mode, deliverability
 │   ├── mobile-emulator-start/ # Metro + Android emulator bring-up
 │   ├── deploy-npm/          # Changesets + npm OIDC release loop
 │   └── ...55 more skills

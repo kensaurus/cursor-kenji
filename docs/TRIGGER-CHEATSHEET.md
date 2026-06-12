@@ -11,10 +11,12 @@ You don't have to type the skill name. Just describe the task in plain language.
 | Say this in chat | Skill |
 |:-----------------|:------|
 | "audit accessibility", "WCAG audit", "check a11y", "check keyboard nav" | `audit-accessibility` |
+| "reduce bundle size", "why is the bundle so big", "tree shaking", "code splitting" | `audit-bundle-size` |
 | "code smell", "anti-pattern", "naming conventions", "tech debt" | `audit-code-quality` |
 | "code review", "review this PR", "review this function" | `audit-code-review` |
 | "audit database schema", "check my DB design", "naming conventions in DB" | `audit-db-schema` |
 | "audit my API calls", "check frontend API", "FE-BE contract" | `audit-fe-api` |
+| "audit i18n", "fix translations", "the Japanese feels like Google Translate", "hardcoded strings" | `audit-i18n` |
 | "audit LLM", "check Langfuse", "audit prompts", "check AI quality", "check traces" | `audit-langfuse-llm` |
 | "performance audit", "optimize performance", "slow page", "Web Vitals" | `audit-performance` |
 | "audit security", "check for vulnerabilities", "OWASP", "security review" | `audit-security` |
@@ -53,6 +55,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 |:-----------------|:------|
 | "publish to npm", "release", "cut a release", "ship a new version" | `deploy-npm` |
 | "verify deploy", "post-deploy check", "smoke test production", "ship or rollback" | `deploy-verify` |
+| "post-launch polish", "what should I fix next", "iterate on prod feedback", "make it better based on real usage" | `iterate-post-launch` |
 
 ---
 
@@ -62,9 +65,10 @@ You don't have to type the skill name. Just describe the task in plain language.
 |:-----------------|:------|
 | "design an API", "create endpoints", "REST API design", "GraphQL schema" | `design-api` |
 | "create a poster", "design an infographic", "make a banner", "social graphic" | `design-canvas` |
+| "build an email template", "transactional email", "welcome email", "why is my email in spam" | `design-email` |
 | "build a component", "new UI page", "make this look good" | `design-frontend` |
 | "generative art", "creative coding", "flow fields", "particle system" | `design-generative-art` |
-| "mobile design", "responsive layout", "PWA", "touch UI", "small screen" | `design-mobile-first` |
+| "mobile design", "responsive layout", "touch UI", "small screen" | `design-mobile-first` |
 | "animation", "micro-interaction", "hover effect", "scroll animation" | `design-motion` |
 | "write a PRD", "product requirements", "spec this feature", "what should we build" | `design-prd` |
 | "design system", "component library", "design tokens", "theming" | `design-system` |
@@ -86,7 +90,9 @@ You don't have to type the skill name. Just describe the task in plain language.
 | Say this in chat | Skill |
 |:-----------------|:------|
 | "make this Capacitor/Ionic app work on all screen sizes" | `enhance-capacitor-ui` |
+| "make it a PWA", "offline support", "service worker", "install prompt", "add to home screen" | `enhance-pwa` |
 | "improve my README", "add screenshots to README", "make README prettier" | `enhance-readme` |
+| "improve SEO", "add meta tags", "sitemap", "Open Graph", "Google indexing", "rich results" | `enhance-web-seo` |
 | "make this landing page look premium", "anti-slop design", "portfolio design" | `enhance-web-landing` |
 | "redesign this page", "remove AI slop", "make this look hand-crafted" | `enhance-web-redesign` |
 | "make this page nicer", "better layout", "improve spacing", "polish UI" | `enhance-web-ui` |
@@ -128,8 +134,9 @@ You don't have to type the skill name. Just describe the task in plain language.
 
 | Say this in chat | Skill |
 |:-----------------|:------|
-| "test this with Playwright", "test like a real user", "PDCA this", "red-team my feature" | `test-playwright` |
+| "test this with Playwright", "test like a real user", "PDCA this" | `test-playwright` |
 | "QA the app", "find bugs", "test before release", "smoke test" | `test-qa` |
+| "red team this app", "attack my app", "break it", "find all the defects", "pre-launch hardening" | `test-red-team` |
 | "write unit tests", "add test coverage", "write tests for this function" | `test-unit` |
 
 ---
@@ -139,6 +146,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | Say this in chat | Skill |
 |:-----------------|:------|
 | "think before coding", "simplicity first", "stop overcomplicating" | `workflow-coding-discipline` |
+| "add a feature flag", "gradual rollout", "kill switch", "dark launch", "canary release" | `workflow-feature-flag` |
 | "commit my changes", "write a commit message" | `workflow-git-commit` |
 | "clean up the repo", "update README", "update dependencies", "remove dead code" | `workflow-housekeep` |
 | "run agents in parallel", "best-of-N", "compare approaches", "multi-model" | `workflow-parallel-agents` |

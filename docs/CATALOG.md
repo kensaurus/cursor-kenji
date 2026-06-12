@@ -26,7 +26,7 @@ Every skill has a category prefix that tells you what it does at a glance:
 
 ---
 
-## Skills (58)
+## Skills (68)
 
 ### Enhance
 
@@ -64,6 +64,16 @@ Every skill has a category prefix that tells you what it does at a glance:
 **Triggers:** "enhance README", "make README prettier", "add screenshots to README", "add hero image", "make README more fun", "add animated demo to README", "record a tour GIF"
 **What it does:** Theme-aware hero + tour grid + optional autoplay GIF via Playwright MCP. Captures live screenshots at 1600×1000 in dark and light mode with `<picture>` auto theme-swap.
 **Related:** `docs-writer`, `test-playwright`
+
+#### `enhance-web-seo`
+**Triggers:** "improve SEO", "add meta tags", "fix search ranking", "add structured data", "sitemap", "canonical URLs", "Open Graph", "Google indexing", "rich results", "SEO audit", "why is my site not ranking"
+**What it does:** Full SEO audit and fix for any web app. Checks meta tags, OG/Twitter Card, JSON-LD structured data, robots.txt, sitemap, canonical URLs, heading hierarchy, image alt text, and Core Web Vitals (LCP, CLS) via Playwright. Researches current Google guidelines, applies fixes, verifies with Playwright.
+**Related:** `audit-performance`, `audit-bundle-size`, `enhance-web-ui`
+
+#### `enhance-pwa`
+**Triggers:** "make it a PWA", "offline support", "install prompt", "push notifications", "service worker", "add to home screen", "background sync", "Lighthouse PWA score", "app-like experience", "installable", "works offline"
+**What it does:** Adds or upgrades PWA features: Web App Manifest, Workbox service worker with per-asset caching strategies (CacheFirst / NetworkFirst / StaleWhileRevalidate), install prompt, push notifications, offline page. Capacitor-compatible. Lighthouse PWA audit before and after.
+**Related:** `enhance-capacitor-ui`, `mobile-capacitor-platform`, `audit-performance`
 
 ---
 
@@ -103,6 +113,11 @@ Every skill has a category prefix that tells you what it does at a glance:
 **Triggers:** "apply theme", "color palette", "brand colors", "styling slides", "presentation design", "visual identity"
 **What it does:** Pre-set visual themes with curated colors and fonts. Apply cohesive styling across artifacts.
 **Related:** `design-system`, `design-frontend`
+
+#### `design-email`
+**Triggers:** "build an email template", "transactional email", "welcome email", "password reset email", "email design", "React Email", "MJML", "dark mode email", "deliverability", "SPF DKIM", "email copy review", "why is my email in spam"
+**What it does:** Full-stack transactional and marketing email. Detects React Email / MJML / plain HTML and Resend / SendGrid / Postmark / SES. Builds mobile-first templates (600px, inline styles, dark mode), reviews copy for natural conversational tone (no jargon, one action per email), checks SPF/DKIM/DMARC deliverability, and wires Supabase Edge Function triggers.
+**Related:** `design-frontend`, `backend-patterns`, `workflow-feature-flag`
 
 #### `design-generative-art` *(Apache-2.0, adapted from Anthropic)*
 **Triggers:** "generative art", "procedural art", "flow fields", "particle systems", "creative coding", "noise patterns", "mathematical visualizations", "art from code", "generate visuals", "interactive animation"
@@ -207,6 +222,16 @@ Every skill has a category prefix that tells you what it does at a glance:
 **What it does:** Research-driven UX audit — Nielsen Norman Group's 10 heuristics, Laws of UX, Intuit Content Design, Google HEART metrics. Browser MCP for live walkthrough, Firecrawl for research, Sequential Thinking for complex flow analysis.
 **Related:** `audit-uiux-design-system`, `audit-accessibility`, `enhance-web-ux`
 
+#### `audit-bundle-size`
+**Triggers:** "reduce bundle size", "analyse bundle", "tree shaking", "lazy loading", "code splitting", "slow initial load", "large JS", "chunk size", "why is the bundle so big", "first load JS too large", "LCP caused by JS"
+**What it does:** Finds and eliminates JS bundle bloat. Detects bundler (Vite/Webpack/Next.js/Rollup). Runs production build with analysis (rollup-plugin-visualizer, @next/bundle-analyzer), identifies largest chunks, duplicate deps, non-tree-shakeable imports, missing code-splitting. Maps every finding to a specific file and import with before/after size estimates.
+**Related:** `audit-performance`, `enhance-web-seo`, `workflow-refactor`
+
+#### `audit-i18n`
+**Triggers:** "audit i18n", "fix translations", "add locale", "natural language", "translation quality", "hardcoded strings", "localisation", "the Japanese feels like Google Translate", "translations sound robotic", "add language support"
+**What it does:** i18n audit with emphasis on **natural, human-sounding copy** — not machine-translated jargon. Finds hardcoded strings, checks translation completeness across all locales, rewrites stiff/literal copy to sound like a real person, fixes date/number/currency locale formatting, walks the live app in each locale via Playwright. Works with react-i18next, next-intl, vue-i18n, lingui, and any other library.
+**Related:** `audit-ux`, `audit-code-quality`, `enhance-web-ux`
+
 ---
 
 ### Debug
@@ -244,6 +269,11 @@ Every skill has a category prefix that tells you what it does at a glance:
 **Triggers:** "test this with playwright", "test my changes", "test on localhost like a user", "PDCA this", "did you actually test it", "red-team this feature", "verify the work end-to-end"
 **What it does:** Closes the PDCA loop after an implementation. Scopes to the current session's diff, drives the live localhost app through the Playwright MCP manually like a real user, and **fixes** pain points — full-stack (UI/UX + API + DB).
 **Related:** `test-qa`, `protocol-browser-anti-stall`, `debug-fe-be-integration`
+
+#### `test-red-team`
+**Triggers:** "red team this app", "attack my app", "break it", "find all the defects", "adversarial test", "pre-launch hardening", "pentest the app", "full app QA", "security + perf + UX sweep", "try to break it"
+**What it does:** Adversarial full-app sweep driven by a **feature-first coverage matrix**: each feature decomposed to surfaces, sub-pages, components, and states, attacked across 4 dimensions — UI/UX, data pipeline, security (OWASP Top 10 + MASVS), and performance. Drives Playwright browser MCP (web), Playwright Android WebView attach (Capacitor), or adb tap-walk (native chrome). Cross-references Sentry + Supabase + Firecrawl. Produces a severity-ranked defect list with repro evidence and a launch-readiness verdict.
+**Related:** `test-playwright`, `test-qa`, `audit-security`, `iterate-post-launch`
 
 #### `protocol-browser-anti-stall`
 **Triggers:** (protocol — used by other skills before browser automation sessions)
@@ -288,6 +318,11 @@ Every skill has a category prefix that tells you what it does at a glance:
 **What it does:** Post-deploy smoke test combining Sentry + Supabase + Langfuse + Playwright + Firecrawl. Checks for new errors, verifies migration health, confirms trace pipeline, runs browser smoke test. Binary SHIP/ROLLBACK/MONITOR verdict.
 **Related:** `debug-sentry-monitor`, `audit-langfuse-llm`
 
+#### `iterate-post-launch`
+**Triggers:** "improve the app after launch", "fix the top issues", "post-launch polish", "what should I fix next", "production issues", "iterate on feedback", "post-release improvements", "what is broken in prod", "ship a polish pass", "make it better based on real usage"
+**What it does:** Closes the post-ship improvement loop. Pulls Sentry top errors (with Seer AI root-cause), Supabase slow-query and API logs, advisor warnings, and a live Playwright walkthrough into a ranked improvement backlog (impact × effort). Implements the approved fixes full-stack and verifies each one live. Resolves confirmed Sentry issues.
+**Related:** `test-red-team`, `deploy-verify`, `debug-sentry-monitor`, `test-playwright`
+
 #### `deploy-npm`
 **Triggers:** "release", "publish to npm", "ship a new version", "cut a release", "deploy to production", "update the changelog and publish"
 **What it does:** End-to-end release workflow for a Changesets + GitHub Actions + npm Trusted Publisher (OIDC) monorepo with per-package GitHub Releases.
@@ -331,6 +366,11 @@ Every skill has a category prefix that tells you what it does at a glance:
 **Triggers:** "coding guidelines", "LLM discipline", "avoid vibe-coding", "think before coding", "simplicity first", "Karpathy guidelines"
 **What it does:** Behavioral guardrails for writing, editing, refactoring, debugging, or reviewing code. Reduces LLM mistakes — overcomplication, drive-by edits, hidden assumptions, weak success criteria. Adapted from Karpathy's observations.
 **Related:** `workflow-spec-tdd`, `audit-code-quality`
+
+#### `workflow-feature-flag`
+**Triggers:** "add a feature flag", "gradual rollout", "staged release", "kill switch", "dark launch", "flag cleanup", "canary release", "rollback plan", "safe feature release", "deploy without switching on", "LaunchDarkly", "PostHog flags", "GrowthBook"
+**What it does:** Disciplined feature-flag rollout. Detects existing flag infrastructure (LaunchDarkly, Flagsmith, GrowthBook, Unleash, PostHog, or env-var gates). Designs flag contract (name, targeting, kill-switch path), implements the gate, stages rollout (0% → internal → 5% → 100%), monitors Sentry error rate + Supabase logs at each stage, promotes or rolls back, then schedules cleanup from code.
+**Related:** `workflow-spec-tdd`, `deploy-verify`, `iterate-post-launch`
 
 ---
 
