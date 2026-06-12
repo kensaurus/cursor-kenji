@@ -4,6 +4,14 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.2.1] — 2026-06-12
+
+### Fixed
+
+- npm CI publish: use OIDC trusted publishing (remove empty `NPM_TOKEN` that blocked auth)
+
+---
+
 ## [1.2.0] — 2026-06-12
 
 ### Added (13 skills since v1.1.0)
