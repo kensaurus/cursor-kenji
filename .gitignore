@@ -15,5 +15,9 @@ mcp.json
 *.env
 *.env.local
 
+# Playwright / browser MCP scratch (logs, screenshots, page snapshots)
+.playwright-mcp/
+.qa-screenshots/
+
 # Backups
 *.backup.*

@@ -1,0 +1,98 @@
+---
+description: >-
+  Capabilities catalog for cursor-kenji skills. Routes requests to the right
+  skill or bundled workflow. Always-on routing index — the agent consults this
+  to pick between individual skills and bundled workflows.
+globs:
+alwaysApply: true
+---
+
+# Skill Routing Index
+
+## Bundled workflows (use these first — they chain multiple skills)
+
+| Intent | Workflow skill |
+|--------|----------------|
+| Build a new feature end-to-end | `workflow-build-feature` |
+| Fix a bug and ship it | `workflow-fix-and-ship` |
+| Pre-release quality check | `workflow-quality-gate` |
+| Full launch preparation | `workflow-launch-ready` |
+| Orient to a new codebase | `workflow-onboard` |
+| Close post-launch feedback loop | `iterate-post-launch` |
+| Disciplined feature-flag rollout | `workflow-feature-flag` |
+
+## When to use a bundled workflow vs individual skill
+
+- **Use a bundle** when the user's request spans multiple phases (spec + build + test, or launch + verify + iterate)
+- **Use an individual skill** when the request is scoped to one phase ("just run the security audit", "just write tests", "just write the PR")
+- **Bundles call individual skills** — they never duplicate instructions; they sequence them
+
+## Individual skill quick-reference
+
+### Testing & quality
+| Task | Skill |
+|------|-------|
+| Adversarial full-app sweep | `test-red-team` |
+| Drive app as real user, fix inline | `test-playwright` |
+| Comprehensive QA with CRUD verification | `test-qa` |
+| Write unit/integration tests | `test-unit` |
+
+### Audits
+| Task | Skill |
+|------|-------|
+| Static security review (OWASP) | `audit-security` |
+| JS bundle analysis & reduction | `audit-bundle-size` |
+| Core Web Vitals & performance | `audit-performance` |
+| Database schema health | `audit-db-schema` |
+| Translation quality & hardcoded strings | `audit-i18n` |
+| UX heuristics audit | `audit-ux` |
+| Accessibility (WCAG 2.2) | `audit-accessibility` |
+| Design system compliance | `audit-uiux-design-system` |
+
+### Enhancement
+| Task | Skill |
+|------|-------|
+| SEO (meta, OG, JSON-LD, sitemap) | `enhance-web-seo` |
+| PWA (manifest, service worker, offline) | `enhance-pwa` |
+| UI polish & layout | `enhance-web-ui` |
+| UX & information architecture | `enhance-web-ux` |
+| Cross-surface (web + mobile) consistency | `enhance-capacitor-ui` |
+
+### Deploy
+| Task | Skill |
+|------|-------|
+| Post-deploy smoke test | `deploy-verify` |
+| npm package release | `deploy-npm` |
+
+### Debug
+| Task | Skill |
+|------|-------|
+| Debug any error | `debug-error` |
+| Triage & fix Sentry issues | `debug-sentry-monitor` |
+| FE-BE integration mismatches | `debug-fe-be-integration` |
+
+## Skill chaining diagram
+
+```
+workflow-build-feature
+  └─ workflow-spec-tdd → test-unit → test-playwright → workflow-pr
+
+workflow-fix-and-ship
+  └─ debug-error → test-playwright → workflow-pr → deploy-verify
+
+workflow-quality-gate
+  └─ test-red-team → audit-security → audit-bundle-size → audit-performance → test-unit
+
+workflow-launch-ready
+  └─ enhance-web-seo → enhance-pwa → audit-bundle-size → audit-i18n
+     → workflow-quality-gate → deploy-verify → iterate-post-launch
+
+iterate-post-launch
+  └─ debug-sentry-monitor → deploy-verify → test-playwright
+```
+
+## Rules vs Skills
+
+- **Rules** (this file, `full-stack-ship-discipline.mdc`, etc.) = always-on policies, guardrails, routing
+- **Skills** = activated on demand when a task matches the description
+- Never put task-specific workflows in rules — they waste context on unrelated tasks

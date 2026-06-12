@@ -4,6 +4,32 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.2.0] — 2026-06-12
+
+### Added (13 skills since v1.1.0)
+
+- **Red team & quality:** `test-red-team`, `workflow-quality-gate`
+- **Post-launch & shipping:** `iterate-post-launch`, `workflow-launch-ready`, `workflow-feature-flag`
+- **Enhance & audit:** `enhance-web-seo`, `enhance-pwa`, `audit-bundle-size`, `audit-i18n`, `design-email`
+- **Bundled workflows:** `workflow-build-feature`, `workflow-fix-and-ship`, `workflow-onboard`
+- **Routing rule:** `rules/skill-workflows.mdc` — capabilities catalog with skill-chaining diagram
+
+### Changed
+
+- Skill count: 60 → **73**
+- `test-red-team` trimmed to stay under 500-line spec limit
+- `.gitignore`: ignore `.playwright-mcp/` and `.qa-screenshots/` scratch artifacts
+
+### Install
+
+```bash
+npx skills add kensaurus/cursor-kenji
+# or
+npx @kensaurus/cursor-kenji@1.2.0
+```
+
+---
+
 ## Jun 2026 — Bundled Workflows, Gap-Filling, & Verbosity Trim
 
 ### New Bundled Workflow Skills
