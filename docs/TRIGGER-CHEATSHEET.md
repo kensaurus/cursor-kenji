@@ -6,6 +6,18 @@ You don't have to type the skill name. Just describe the task in plain language.
 
 ---
 
+## Bundled workflows (start here for multi-phase tasks)
+
+| Say this in chat | Skill |
+|:-----------------|:------|
+| "build a feature", "implement this", "add X end-to-end", "ship a new capability" | `workflow-build-feature` |
+| "fix this bug and ship it", "patch this and close the ticket", "fix and deploy" | `workflow-fix-and-ship` |
+| "is this ready to ship?", "quality gate", "pre-release checklist", "ship-readiness" | `workflow-quality-gate` |
+| "prepare for launch", "launch week", "everything before going live", "pre-launch sweep" | `workflow-launch-ready` |
+| "I'm new to this repo", "orient me", "explain this codebase", "onboard me" | `workflow-onboard` |
+
+---
+
 ## Audits & code quality
 
 | Say this in chat | Skill |
@@ -149,6 +161,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "add a feature flag", "gradual rollout", "kill switch", "dark launch", "canary release" | `workflow-feature-flag` |
 | "commit my changes", "write a commit message" | `workflow-git-commit` |
 | "clean up the repo", "update README", "update dependencies", "remove dead code" | `workflow-housekeep` |
+| "I'm new to this repo", "orient me", "explain this codebase", "catch me up" | `workflow-onboard` |
 | "run agents in parallel", "best-of-N", "compare approaches", "multi-model" | `workflow-parallel-agents` |
 | "create a PR", "write pull request", "manage PR review", "merge PR" | `workflow-pr` |
 | "refactor this", "clean up code", "reduce duplication", "improve readability" | `workflow-refactor` |

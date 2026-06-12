@@ -26,7 +26,7 @@ Every skill has a category prefix that tells you what it does at a glance:
 
 ---
 
-## Skills (68)
+## Skills (73)
 
 ### Enhance
 
@@ -372,6 +372,41 @@ Every skill has a category prefix that tells you what it does at a glance:
 **What it does:** Disciplined feature-flag rollout. Detects existing flag infrastructure (LaunchDarkly, Flagsmith, GrowthBook, Unleash, PostHog, or env-var gates). Designs flag contract (name, targeting, kill-switch path), implements the gate, stages rollout (0% → internal → 5% → 100%), monitors Sentry error rate + Supabase logs at each stage, promotes or rolls back, then schedules cleanup from code.
 **Related:** `workflow-spec-tdd`, `deploy-verify`, `iterate-post-launch`
 
+#### `workflow-onboard`
+**Triggers:** "I'm new to this repo", "orient me", "explain this codebase", "what does this do?", "onboard me", "first day on this project", "catch me up on the codebase", "help me understand this project"
+**What it does:** First-contact orientation for any codebase. Reads package manifests, entry points, routing, data layer, auth, env vars, and recent git history. Produces a concise briefing: what the app does, how it's structured, how to run it, and the top 3 areas to understand first.
+**Related:** `workflow-build-feature`, `docs-writer`
+
+---
+
+### Bundled Workflows
+
+Orchestrator skills that sequence multiple individual skills into a tracked, phase-gated loop. **Use these first** — they eliminate the need to manually chain skills.
+
+#### `workflow-build-feature`
+**Triggers:** "build a feature", "implement this", "add X", "ship a new capability", "build this end to end", "implement from scratch"
+**What it does:** End-to-end feature build: spec (`workflow-spec-tdd`) → implement → unit tests (`test-unit`) → smoke test (`test-playwright`) → PR (`workflow-pr`). Enforces spec-before-code discipline and full-stack verification. Done criteria: spec written, RED test was failing, GREEN after implementation, smoke test passed, PR open with evidence.
+**Chain:** `workflow-spec-tdd` → `test-unit` → `test-playwright` → `workflow-pr`
+**Related:** `workflow-spec-tdd`, `test-unit`, `test-playwright`, `workflow-pr`
+
+#### `workflow-fix-and-ship`
+**Triggers:** "fix this bug and ship it", "patch this and close the ticket", "fix this Sentry issue", "bug report from user", "fix and deploy", "triage and fix"
+**What it does:** Complete bug-fix lifecycle: triage Sentry/logs → reproduce locally → root cause (`debug-error`) → surgical fix + regression test → smoke test (`test-playwright`) → PR (`workflow-pr`) → optional post-deploy smoke (`deploy-verify`) → resolve Sentry issue. Leaves evidence at every step.
+**Chain:** `debug-error` → `test-playwright` → `workflow-pr` → `deploy-verify`
+**Related:** `debug-error`, `debug-sentry-monitor`, `test-playwright`, `workflow-pr`, `deploy-verify`
+
+#### `workflow-quality-gate`
+**Triggers:** "is this ready to ship?", "quality gate", "pre-release checklist", "what do I need to fix before launch?", "ship-readiness check", "run the quality gate"
+**What it does:** Pre-release go/no-go. Sequences: adversarial red team (`test-red-team`) → static security review (`audit-security`) → bundle size (`audit-bundle-size`) → Core Web Vitals (`audit-performance`) → unit test coverage (`test-unit`). Produces a single GO / NO-GO / GO WITH CONDITIONS verdict with a ranked defect list.
+**Chain:** `test-red-team` → `audit-security` → `audit-bundle-size` → `audit-performance` → `test-unit`
+**Related:** `test-red-team`, `audit-security`, `audit-bundle-size`, `audit-performance`, `test-unit`
+
+#### `workflow-launch-ready`
+**Triggers:** "prepare for launch", "launch week", "everything before going live", "is the app launch-ready?", "pre-launch sweep", "ship it to the world", "launch prep"
+**What it does:** Full launch preparation sweep. Sequences: SEO (`enhance-web-seo`) → PWA (`enhance-pwa`) → bundle (`audit-bundle-size`) → i18n (`audit-i18n`) → quality gate (`workflow-quality-gate`) → deploy smoke (`deploy-verify`) → day-1 iteration (`iterate-post-launch`). Produces a launch checklist with go/no-go verdict.
+**Chain:** `enhance-web-seo` → `enhance-pwa` → `audit-bundle-size` → `audit-i18n` → `workflow-quality-gate` → `deploy-verify` → `iterate-post-launch`
+**Related:** `workflow-quality-gate`, `iterate-post-launch`, `deploy-verify`
+
 ---
 
 ### Docs
@@ -431,31 +466,58 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 
 ## Skill Composition Patterns
 
-### Full Feature Build
+> **Prefer bundled workflows** (`workflow-build-feature`, `workflow-fix-and-ship`, `workflow-quality-gate`, `workflow-launch-ready`) for multi-phase tasks. Use individual skills when the request is scoped to one phase.
+
+### Bundled workflows (start here)
+
+| Intent | Bundled skill | What it chains |
+|--------|--------------|----------------|
+| Build a feature end-to-end | `workflow-build-feature` | spec → TDD → unit tests → smoke → PR |
+| Fix a bug and ship it | `workflow-fix-and-ship` | debug → fix → smoke → PR → deploy |
+| Pre-release quality check | `workflow-quality-gate` | red-team → security → bundle → perf → unit tests |
+| Full launch preparation | `workflow-launch-ready` | SEO + PWA + bundle + i18n + quality gate + deploy + iterate |
+
+### Chaining diagram
+
+```
+workflow-build-feature
+  └─ workflow-spec-tdd → test-unit → test-playwright → workflow-pr
+
+workflow-fix-and-ship
+  └─ debug-error → test-playwright → workflow-pr → deploy-verify
+
+workflow-quality-gate
+  └─ test-red-team → audit-security → audit-bundle-size → audit-performance → test-unit
+
+workflow-launch-ready
+  └─ enhance-web-seo → enhance-pwa → audit-bundle-size → audit-i18n
+     → workflow-quality-gate → deploy-verify → iterate-post-launch
+```
+
+### Specialist compositions (individual skills)
+
+#### Full Feature Build (manual)
 `workflow-spec-tdd` → `backend-patterns` + `design-api` + `backend-error-handling` + `audit-security`
 
-### Performance Fix
+#### Performance Fix
 `audit-performance` → `backend-db-performance` + `audit-code-quality` + `workflow-refactor`
 
-### Design System Sprint
+#### Design System Sprint
 `design-system` → `design-frontend` + `audit-accessibility` + `design-mobile-first` + `design-theme`
 
-### Deploy Pipeline
-`test-unit` → `test-qa` → `workflow-pr` → `deploy-verify`
-
-### LLM Quality Cycle
+#### LLM Quality Cycle
 `audit-langfuse-llm` → `debug-sentry-monitor` → `deploy-verify`
 
-### UX Polish
+#### UX Polish
 `audit-ux` → `enhance-web-ux` → `enhance-web-ui` → `/commit`
 
-### Native RN Ship Loop
+#### Native RN Ship Loop
 `mobile-emulator-start` → `mobile-emulator-test` → `workflow-pr` → `deploy-verify`
 
-### Cross-Surface UI Architecture
-`enhance-capacitor-ui` (axis architecture) → `enhance-web-ui` (per-surface polish) → `enhance-web-ux` (data + heuristics)
+#### Cross-Surface UI Architecture
+`enhance-capacitor-ui` → `enhance-web-ui` → `enhance-web-ux`
 
-### Repo Maintenance
+#### Repo Maintenance
 `workflow-housekeep` → `docs-writer` + `workflow-refactor` + `audit-code-review`
 
 ---

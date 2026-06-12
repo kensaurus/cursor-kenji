@@ -54,18 +54,31 @@ Close and reopen Cursor. That's all — the skills are now active.
 
 ## Step 4: Use a skill
 
-Open Cursor, open a project, and type in the chat. You don't have to remember skill names. Just describe what you want:
+Open Cursor, open a project, and type in the chat. You don't have to remember skill names. Just describe what you want.
+
+### Bundled workflows (do the most work with one phrase)
+
+These chain multiple skills into a single tracked loop:
+
+| Type this in chat… | What happens |
+|:-------------------|:-------------|
+| `build a feature: user notifications` | Spec → TDD → implement → smoke test → PR — the whole loop |
+| `fix this Sentry error and ship it` | Triage → reproduce → fix → verify → PR → resolve issue |
+| `is this ready to ship?` | Adversarial test + security + bundle + perf → go/no-go verdict |
+| `prepare the app for launch` | SEO + PWA + bundle + quality gate + deploy smoke → launch checklist |
+| `I'm new to this repo, orient me` | Reads the codebase and produces a 5-minute briefing |
+
+### Individual skills
 
 | Type this in chat… | What happens |
 |:-------------------|:-------------|
 | `audit my app's security` | Scans for OWASP vulnerabilities, checks auth, flags secrets in code |
 | `make this page look better` | Improves layout, spacing, hierarchy — like a designer would |
-| `fix this bug` | Reproduces, finds root cause, patches, verifies |
 | `commit my changes` | Writes a proper conventional commit message for you |
 | `audit my database schema` | Checks naming, indexes, RLS policies, data types |
-| `add a feature: user notifications` | Runs spec → plan → TDD loop before writing a line |
 | `deploy my npm package` | Walks through Changesets → CI → publish, step by step |
 | `write a PR` | Creates the pull request with a proper title and description |
+| `red team this app` | Adversarial sweep — UX, data pipeline, security, performance |
 
 The AI picks the right skill automatically based on what you typed.
 

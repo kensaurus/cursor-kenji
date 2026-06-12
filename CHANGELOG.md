@@ -4,6 +4,30 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## Jun 2026 — Bundled Workflows, Gap-Filling, & Verbosity Trim
+
+### New Bundled Workflow Skills
+
+Orchestrator skills that chain multiple individual skills into a single tracked loop. Inspired by community patterns from `darthlinuxer/Agentic-Skills`, `kscius/KS-Cursor-Orchestrator`, and the Anthropic agent skills ecosystem.
+
+| Skill | What it chains |
+|:------|:--------------|
+| `workflow-build-feature` | spec → TDD → unit tests → smoke test → PR |
+| `workflow-fix-and-ship` | debug → root cause → fix → regression test → smoke → PR → deploy |
+| `workflow-quality-gate` | red-team → security → bundle → perf → unit tests → go/no-go verdict |
+| `workflow-launch-ready` | SEO + PWA + bundle + i18n + quality gate + deploy smoke + iterate |
+| `workflow-onboard` | First-contact orientation — reads codebase, produces 5-minute briefing |
+
+### New `.cursor/rules/skill-workflows.mdc`
+
+Always-on routing index that routes intent to bundled workflows vs individual skills, with a full skill-chaining diagram. Reduces the cognitive load of "which skill do I use?" to a single lookup.
+
+### Improvements
+
+- `test-red-team` trimmed from 515 → 417 lines: security priority table replaced verbose prose sections; Playwright quick-ref removed (already in platform docs).
+
+---
+
 ## Jun 2026 — Post-Launch Iteration & Shipping-Quality Skills
 
 ### New Skills

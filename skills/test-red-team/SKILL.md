@@ -268,108 +268,20 @@ New ERROR-level advisors count as pipeline defects.
 
 ## Phase 4: Security red team (per matrix cell, OWASP-mapped)
 
-See `references/owasp-attack-checklist.md` for exhaustive payload libraries
-and OWASP Top 10 / MASVS mapping. Key attacks by priority:
+Full payload tables and OWASP/MASVS mapping: `references/owasp-attack-checklist.md`.
 
-### Priority 1 — Authorization & tenant boundaries (OWASP A01)
+Priority order (highest real-world impact first):
 
-The #1 real-world bug class. For every resource-bearing endpoint/RPC:
+| # | Class (OWASP) | Key test |
+|---|---------------|----------|
+| 1 | Authorization / IDOR (A01) | User B reads/mutates User A's resource by ID; verify at DB layer with `SET ROLE authenticated` |
+| 2 | Authentication (A07) | Password-reset token reuse, session fixation, JWT payload tampering, missing brute-force lockout |
+| 3 | Injection (A03) | XSS `<img src=x onerror=alert(1)>`, SQLi `' OR 1=1--`, path traversal `../../etc/passwd` in every input |
+| 4 | Sensitive data (A02) | API responses include `password`/`token`/PII? `localStorage` stores tokens? Env vars in bundle? |
+| 5 | Security headers | Missing `CSP`, `HSTS`, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy` |
+| 6 | Capacitor MASVS | `allowUniversalAccessFromFileURLs`? Bridge calls lack input validation? XSS can invoke native plugin? |
 
-1. **IDOR test**: Create a resource as User A. Log in as User B. Access the
-   resource directly by its ID (URL param, API param). Expect 404 or 403,
-   not the resource.
-2. **Horizontal privilege escalation**: User B's actions should never affect
-   User A's data. Try modifying/deleting User A's records as User B.
-3. **Vertical privilege escalation**: Perform admin-only actions as a regular
-   user (e.g., add `role=admin` param, call admin API endpoints).
-4. **Tenant boundary (multi-tenant apps)**: Switch org/workspace context.
-   No data from the previous tenant should bleed through.
-
-Verify at the DB layer with `SET ROLE authenticated` queries, not just UI.
-
-### Priority 2 — Authentication weaknesses (OWASP A07)
-
-- Account takeover via password reset: predict-able token? Reusable? Long expiry?
-- Session fixation: auth token change after login?
-- JWT manipulation: tamper the payload (change role, user ID), verify rejection.
-- Brute force: no lockout after N failed attempts?
-- OAuth state parameter: present and validated (CSRF protection)?
-
-### Priority 3 — Injection (OWASP A03)
-
-Test every input surface with payloads from `references/owasp-attack-checklist.md`:
-
-```
-XSS:       <script>document.title='XSS'</script>    <img src=x onerror=alert(1)>
-SQLi:      ' OR 1=1--    '; DROP TABLE users; --    " OR ""="
-Path:      ../../etc/passwd    ..%2F..%2Fetc%2Fpasswd
-Template:  {{7*7}}    ${7*7}    <% 7*7 %>
-```
-
-A hit is confirmed if: the payload appears un-escaped in the DOM, a DB error
-message surfaces, or server-side evaluation occurs. **Evidence = screenshot +
-console + network response body.**
-
-### Priority 4 — Sensitive data & PII leakage (OWASP A02)
-
-- API responses: does the response body contain `password`, `hash`, `token`,
-  `secret`, internal IDs, or other users' PII?
-- JS bundle: does the compiled bundle expose environment variables or API keys?
-  (`browser_evaluate(() => JSON.stringify(process.env))`)
-- Network: does any request send sensitive data over HTTP (not HTTPS in prod)?
-- Storage: `browser_evaluate(() => JSON.stringify(localStorage))` — tokens
-  should not be in localStorage; use HttpOnly cookies.
-
-### Priority 5 — Security headers
-
-```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
-  "url": "http://localhost:<PORT>/",
-  "formats": ["markdown"],
-  "onlyMainContent": false
-})
-```
-
-Check response headers for: `Strict-Transport-Security`, `Content-Security-Policy`,
-`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`.
-Missing or misconfigured headers are Medium defects.
-
-### Priority 6 — Capacitor / hybrid specific (MASVS-PLATFORM-2)
-
-- Is `setJavaScriptEnabled(true)` with `allowUniversalAccessFromFileURLs` or
-  `allowFileAccessFromFileURLs` set? That is a Critical defect.
-- Are JS-to-native bridge calls (Capacitor plugins) exposed without input validation?
-- Can an injected XSS payload call a Capacitor native plugin?
-
-### Sentry correlation
-
-```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
-  "organizationSlug": "<ORG>",
-  "naturalLanguageQuery": "401 OR 403 OR CORS OR CSP violation in last 30 days",
-  "projectSlugOrId": "<PROJECT>",
-  "regionUrl": "<REGION_URL>",
-  "limit": 25
-})
-```
-
-Cross-reference Sentry issues with attack surfaces touched. Patterns:
-- Frequent 401/403 → possible auth bypass attempts or broken RLS
-- CSP violations → active XSS vectors in the wild
-- CORS errors from unexpected origins → misconfigured CORS
-
-Always look up Sentry tool schemas under `mcps/plugin-sentry-sentry/tools/`
-before calling.
-
-### Research current OWASP guidance
-
-```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
-  "query": "<framework> OWASP Top 10 security vulnerabilities 2026",
-  "limit": 3,
-  "sources": [{ "type": "web" }]
-})
-```
+Correlate with Sentry (search 401/403/CSP violations last 30 days) and research current OWASP guidance via Firecrawl.
 
 ---
 
@@ -503,13 +415,3 @@ For each finding, assign:
    before calling any MCP tool.
 9. **Pure-native iOS/Android out of scope** — document it in the report if relevant.
 
----
-
-## Quick-reference: Playwright browser MCP tools
-
-`browser_navigate` · `browser_snapshot` · `browser_take_screenshot` ·
-`browser_click` · `browser_type` · `browser_fill_form` · `browser_select_option` ·
-`browser_hover` · `browser_drag` · `browser_press_key` · `browser_file_upload` ·
-`browser_handle_dialog` · `browser_resize` · `browser_wait_for` ·
-`browser_console_messages` · `browser_network_requests` · `browser_network_request` ·
-`browser_evaluate` · `browser_tabs` · `browser_close`

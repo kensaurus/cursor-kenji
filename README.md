@@ -158,7 +158,7 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 graph TB
   subgraph TOOLKIT["cursor-kenji Toolkit"]
     direction TB
-    SK["Skills (68)"]
+    SK["Skills (73)"]
     CS["Cursor Skills (12)"]
     CMD["Commands (13)"]
     SA["Subagents (5)"]
@@ -296,43 +296,38 @@ flowchart LR
   style C fill:#1e3a5f,stroke:#60a5fa,color:#dbeafe
 ```
 
-### Recipes
+### Bundled workflows — one phrase, full loop
+
+| Say this | Bundle | What runs |
+|----------|--------|-----------|
+| "build a feature" | `workflow-build-feature` | spec → TDD → unit → smoke → PR |
+| "fix this and ship" | `workflow-fix-and-ship` | debug → fix → regression → smoke → PR → deploy |
+| "is this ready?" | `workflow-quality-gate` | red-team → security → bundle → perf → unit → verdict |
+| "prepare for launch" | `workflow-launch-ready` | SEO + PWA + bundle + i18n + quality gate + deploy |
+| "orient me" | `workflow-onboard` | reads codebase → briefing in 5 min |
+
+### Recipes (manual skill chains)
 
 **1. Adopt & harden an inherited codebase**
-`/research` → `workflow-housekeep` → `audit-code-quality` → `audit-security` →
+`workflow-onboard` → `workflow-housekeep` → `audit-code-quality` → `audit-security` →
 `audit-performance` → `/plan` → `workflow-refactor` → `test-unit` →
 `code-reviewer` (subagent) → `/commit` → `/pr`
-*Use when:* you just cloned a repo you didn't write and need a safe map + a first
-round of cleanup without breaking anything.
 
 **2. Ship a feature the disciplined way (spec → TDD → verify)**
-`design-prd` → `workflow-spec-tdd` → *(implement)* → `test-playwright` →
-`backend-observability` → `deploy-verify` → `/commit` → `/pr`
-*Use when:* "build this properly" / "this keeps breaking." Tests are written
-**before** code, so the feature is done only when the suite is green end-to-end.
+`design-prd` → `workflow-build-feature` *(or manually: `workflow-spec-tdd` → implement → `test-playwright`)* → `backend-observability` → `deploy-verify`
 
 **3. Make a page stop looking AI-generated**
 `audit-ux` → `audit-uiux-design-system` → `enhance-web-ux` → `enhance-web-ui` →
 `test-playwright` → `/commit`
-*Use when:* "this screen feels clunky / crowded / generic." Audits first so the
-enhancement targets real heuristic + design-token violations, then verify live.
 
 **4. Fix a production incident & prevent recurrence**
-`debug-sentry-monitor` → `debug-error` (or `debug-fe-be-integration`) →
-`debugger` (subagent) → *(fix)* → `test-unit` (regression test) → `deploy-verify` →
-`/commit`
-*Use when:* something is on fire in prod. Triage from real error data, root-cause,
-fix, then lock the bug out with a test before redeploying.
+`workflow-fix-and-ship` *(or manually: `debug-sentry-monitor` → `debug-error` → fix → `test-unit` → `deploy-verify`)*
 
-**5. Cut a clean npm / package release**
-`audit-code-quality` → `test-unit` → `enhance-readme` (or `docs-writer`) →
-`deploy-npm` → `deploy-checker` (subagent)
-*Use when:* you're publishing. Quality + docs + release checklist in one pass.
+**5. Full pre-launch sweep**
+`workflow-launch-ready` *(covers SEO + PWA + bundle + i18n + red-team + security + deploy)*
 
 **6. Land a big change as small, reviewable PRs**
 `workflow-refactor` → `split-to-prs` → `workflow-pr` → `babysit`
-*Use when:* a branch grew too large. Split into stacked PRs, then keep each one
-merge-ready (CI green, conflicts resolved) automatically.
 
 > **Tip:** chain *audits in parallel* with `workflow-parallel-agents` — run
 > `audit-security`, `audit-performance`, and `audit-code-quality` as separate agents,
@@ -340,7 +335,7 @@ merge-ready (CI green, conflicts resolved) automatically.
 
 ---
 
-## Skills (68)
+## Skills (73)
 
 > **Note:** The `file-docx`, `file-pdf`, `file-pptx`, and `file-xlsx` skills (Anthropic proprietary, source-available only) have been removed from this public repo. Keep personal copies in `~/.cursor/skills/` if needed.
 
@@ -463,6 +458,18 @@ Pick by surface:
 | `workflow-pr` | PR lifecycle — validation, bot feedback, merge criteria |
 | `protocol-browser-anti-stall` | Anti-hang protocol for browser automation sessions |
 
+### Bundled Workflows
+
+One phrase that chains multiple skills into a tracked, phase-gated loop.
+
+| Skill | What it chains |
+|:------|:--------------|
+| `workflow-build-feature` | spec → TDD → implement → unit tests → smoke → PR |
+| `workflow-fix-and-ship` | debug → root cause → fix → regression test → smoke → PR → deploy |
+| `workflow-quality-gate` | red-team → security → bundle → perf → unit tests → go/no-go verdict |
+| `workflow-launch-ready` | SEO + PWA + bundle + i18n + quality gate + deploy smoke + iterate |
+| `workflow-onboard` | reads codebase → orientation briefing in 5 minutes |
+
 ### Engineering Practices
 
 | Skill | What it does |
@@ -472,6 +479,8 @@ Pick by surface:
 | `workflow-feature-flag` | Feature-flag rollout discipline — gate → staged release → monitor → promote or roll back |
 | `create-hook` | Build Cursor Agent Hooks — auto-formatters, security gates, secret scanners |
 | `workflow-coding-discipline` | Behavioral guardrails (Think before coding, Simplicity first, Surgical changes) |
+| `workflow-refactor` | Safe, incremental code transformations with behaviour-preserving steps |
+| `workflow-housekeep` | Full-cycle repo maintenance — README sync, dead file cleanup, dependency updates |
 
 ### Product & Documentation
 
@@ -685,9 +694,14 @@ cursor-kenji/
 │   ├── workflow-feature-flag/ # Gate → staged rollout → monitor → promote or roll back
 │   ├── audit-i18n/          # i18n audit — natural tone, locale formatting, no jargon
 │   ├── design-email/        # Transactional email — React Email, dark mode, deliverability
+│   ├── workflow-build-feature/ # BUNDLE: spec → TDD → unit → smoke → PR
+│   ├── workflow-fix-and-ship/  # BUNDLE: debug → fix → smoke → PR → deploy
+│   ├── workflow-quality-gate/  # BUNDLE: red-team → security → bundle → perf → unit
+│   ├── workflow-launch-ready/  # BUNDLE: SEO + PWA + bundle + i18n + quality gate + deploy
+│   ├── workflow-onboard/    # First-contact codebase orientation in 5 minutes
 │   ├── mobile-emulator-start/ # Metro + Android emulator bring-up
 │   ├── deploy-npm/          # Changesets + npm OIDC release loop
-│   └── ...55 more skills
+│   └── ...50 more skills
 ├── skills-cursor/           # 12 Cursor-specific Skills
 │   ├── babysit/
 │   ├── canvas/
@@ -698,6 +712,8 @@ cursor-kenji/
 │   └── ...6 more
 ├── commands/                # 13 Slash Commands (.md files)
 ├── agents/                  # 5 Subagents
+├── .cursor/rules/
+│   ├── skill-workflows.mdc  # Routing index — bundles → individual skills chaining diagram
 ├── rules/
 │   ├── senior-engineer.md
 │   ├── full-stack-ship-discipline.mdc
