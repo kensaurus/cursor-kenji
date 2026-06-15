@@ -13,7 +13,9 @@ license: MIT
 
 **Apply these rules to EVERY browser automation action. No exceptions.**
 
----
+**Also read `references/playwright-session-coordination.md`** before the first
+`browser_*` call — shared Playwright instance, tab ownership, persisted Google/OAuth
+sessions under `.playwright-mcp/auth/`.
 
 ## 1. Navigation Guard
 
@@ -116,7 +118,25 @@ before the next interaction. Old refs are invalid after state changes.
 
 ---
 
-## 9. Lock/Unlock Discipline
+## 9. Tab discipline (shared Playwright MCP)
+
+The `user-playwright` server exposes **one browser** for all agents in this Cursor
+instance. There is no lock/unlock API on this server — coordinate with tabs instead.
+
+```
+browser_tabs list → read .playwright-mcp/session.json → select auth tab OR new tab
+→ work only in your tab → save storage state → update session.json
+```
+
+- **Never** `browser_navigate` blindly on the default tab — another agent may be mid-test.
+- **Never** `browser_close` tabs you did not open.
+- **Reuse** signed-in sessions — see `references/playwright-session-coordination.md`.
+- For cursor-ide-browser MCP (has `browser_lock`), use lock/unlock there; this skill's
+  tab rules still apply when sharing tabs across chats.
+
+---
+
+## 10. Lock/Unlock (cursor-ide-browser MCP only)
 
 ```
 browser_navigate → browser_lock({ action: "lock" }) → interactions → browser_lock({ action: "unlock" })
@@ -128,7 +148,7 @@ browser_navigate → browser_lock({ action: "lock" }) → interactions → brows
 
 ---
 
-## 10. Blocker Reporting Format
+## 11. Blocker Reporting Format
 
 When you must stop, report exactly:
 

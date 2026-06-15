@@ -70,7 +70,8 @@ SELECT * FROM <table> WHERE <name_column> LIKE 'QA-TEST-%';
 -- Should return 0 rows
 ```
 
-4. Log out if testing required authentication
+4. **Keep auth session** — do not log out; leave auth tab + storage state for the next
+   agent/skill unless you were testing logout explicitly.
 
 ---
 

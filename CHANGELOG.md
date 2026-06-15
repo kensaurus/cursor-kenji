@@ -4,6 +4,16 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.2.2] — 2026-06-16
+
+### Changed
+
+- **Playwright test skills:** shared signed-in session reuse (Google OAuth, etc.) and multi-agent tab discipline — no fighting over the same browser tab
+- New reference: `protocol-browser-anti-stall/references/playwright-session-coordination.md`
+- Updated: `test-playwright`, `test-qa`, `test-red-team`, `protocol-browser-anti-stall`
+
+---
+
 ## [1.2.1] — 2026-06-12
 
 ### Fixed

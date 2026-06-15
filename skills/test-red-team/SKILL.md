@@ -31,6 +31,8 @@ finds the gaps before real users do.
 
 **Before ANY browser action, read `protocol-browser-anti-stall`
 (`~/.cursor/skills/protocol-browser-anti-stall/SKILL.md`) and apply every rule.**
+Also read `references/playwright-session-coordination.md` in that skill — shared
+browser, tab discipline, persisted auth.
 
 ---
 
@@ -105,6 +107,16 @@ with coordinates from `adb shell uiautomator dump`.
 - Do NOT mutate production data; ask before any non-reversible operation
 - Confirm exploits with evidence; no destructive PoCs against real rows
 - Secrets referenced by name only — never printed in chat
+
+### 0e. Browser session (before Phases 2–5)
+
+Read `protocol-browser-anti-stall/references/playwright-session-coordination.md`.
+
+1. `browser_tabs` list → claim auth tab or open `new` tab for your sweep.
+2. Reuse Google/OAuth/email session via storage state — sign in once, save to
+   `.playwright-mcp/auth/<host>.json`, update `session.json`.
+3. Work only in your tab; never close tabs another agent may be using.
+4. Do not log out between attack phases unless testing logout/session fixation.
 
 ---
 

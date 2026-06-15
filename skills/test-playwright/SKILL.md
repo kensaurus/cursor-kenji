@@ -31,7 +31,9 @@ phases of PDCA. You will not skip them.
 (`~/.cursor/skills/protocol-browser-anti-stall/SKILL.md`) and apply every rule**:
 navigation guard, max-3s waits, incremental wait pattern, fresh `browser_snapshot`
 after every state change, max-4-attempts-per-goal, evidence-before-retry, timeout
-budgets. Those rules are mandatory for this whole workflow.
+budgets, **shared-browser tab discipline**, and **persisted auth** (see
+`references/playwright-session-coordination.md` in that skill). Those rules are
+mandatory for this whole workflow.
 
 ---
 
@@ -123,15 +125,27 @@ SESSION SCOPE:
 
 ## Phase 2: Environment verification
 
+**Read `protocol-browser-anti-stall/references/playwright-session-coordination.md`
+before opening the browser** — shared Playwright instance, tab claiming, Google/OAuth
+session reuse.
+
 1. Check the `terminals/` folder for a running dev server (`npm run dev`, `next dev`,
  `vite`, etc.). If none is running, start it (`block_until_ms` sized to startup) and
  wait until it serves, or tell the user and stop.
-2. `browser_navigate` to the dev URL → anti-stall (wait 2s → `browser_snapshot` →
+2. `browser_tabs` → `list` — note open tabs; read `.playwright-mcp/session.json` if present.
+3. **Claim or create your tab** — `select` the auth tab from `session.json`, or `new` with
+ the dev URL. Do not hijack another agent's tab.
+4. `browser_navigate` (in your tab only) → anti-stall (wait 2s → `browser_snapshot` →
  verify content).
-3. `browser_console_messages` + `browser_network_requests` → capture a clean baseline
- BEFORE touching the changed feature (so you can attribute new errors to your work).
-4. Authenticate if required (navigate to login, `browser_fill_form`, submit, verify
- redirect). If auth is impossible, test only what's reachable and flag the rest.
+5. `browser_console_messages` + `browser_network_requests` → baseline before touching the
+ changed feature.
+6. **Auth (reuse, don't re-login every time):**
+   - Hit a protected route → if already signed in, continue.
+   - Else restore `.playwright-mcp/auth/<host>.json` via `browser_run_code_unsafe` (see
+     coordination reference).
+   - Else complete login once (Google OAuth may need the user in the browser window),
+     save storage state + `session.json`, leave tab open for the next agent.
+   - Do **not** log out at end unless testing logout.
 
 ---
 
@@ -327,16 +341,20 @@ Console clean: [Y/N] · All flows green on re-test: [Y/N] · Test data cleaned: 
 
 1. **Scope discipline** — test session changes + blast radius, not the entire app. For
  a full-app sweep use `test-qa`.
-2. **Anti-stall always** — never block >3s; incremental wait → snapshot → check; max 4
+2. **Shared browser** — one Playwright MCP per Cursor; `browser_tabs` list before every
+ turn; work in your tab only; never close tabs you didn't open. See
+ `protocol-browser-anti-stall/references/playwright-session-coordination.md`.
+3. **Auth reuse** — restore storage state or select the auth tab; sign in once per
+ environment; save state after OAuth; do not log out unless testing logout.
+4. **Anti-stall always** — never block >3s; incremental wait → snapshot → check; max 4
  attempts per goal; skip a stuck step (`[TIMEOUT]`) rather than freeze the session.
-3. **Fix the root cause, full-stack** — UI, API, DB, config; re-test live after each fix.
-4. **Schema in sync** — anything you change via MCP also gets a versioned migration file
+5. **Fix the root cause, full-stack** — UI, API, DB, config; re-test live after each fix.
+6. **Schema in sync** — anything you change via MCP also gets a versioned migration file
  on disk; verify the remote actually has it.
-5. **Ask before mutating real data** — DDL for the requested feature ships; `DELETE` /
+7. **Ask before mutating real data** — DDL for the requested feature ships; `DELETE` /
  `UPDATE` / `TRUNCATE` on production rows asks first.
-6. **No secrets in chat** — use `.env*` values by name only; never print them.
-7. **Evidence for every finding and every fix** — screenshot + console + network + a
+8. **No secrets in chat** — use `.env*` values by name only; never print them.
+9. **Evidence for every finding and every fix** — screenshot + console + network + a
  green re-test.
-8. **Honest verdict** — don't declare "done" with a red console or an unfixed pain point.
+10. **Honest verdict** — don't declare "done" with a red console or an unfixed pain point.
  If you couldn't fix something, say so clearly with a recommendation.
-```

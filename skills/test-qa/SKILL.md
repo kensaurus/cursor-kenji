@@ -24,10 +24,10 @@ mindset of a senior QA engineer preparing an app for production release. This is
 simple page-navigation monkey test — it is controlled, intelligent, user-story-driven
 testing that covers CRUD operations, data pipeline integrity, UX quality, and edge cases.
 
-**Before ANY browser interaction, read the `browser-anti-stall` skill and apply its
-rules to every step.** That skill lives at `~/.cursor/skills/browser-anti-stall/SKILL.md`.
-Its rules (navigation guards, max 3s waits, incremental wait pattern, fresh refs after
-state changes, lock/unlock discipline) are mandatory for this entire workflow.
+**Before ANY browser interaction, read the `protocol-browser-anti-stall` skill and apply its
+rules to every step.** That skill lives at `~/.cursor/skills/protocol-browser-anti-stall/SKILL.md`.
+Also read `references/playwright-session-coordination.md` in that folder — shared browser,
+tab claiming, persisted Google/OAuth auth under `.playwright-mcp/auth/`.
 
 ## Critical Rules
 
@@ -155,7 +155,12 @@ Check the terminals folder for active dev server processes:
 - Read terminal files to find running `npm run dev`, `pnpm dev`, `next dev`, etc.
 - If no dev server found, inform the user and stop.
 
-### 1b. Load the App
+### 1b. Load the app (shared browser — claim a tab first)
+
+1. `browser_tabs` → `list`; read `.playwright-mcp/session.json` if present.
+2. `select` the auth tab from `session.json`, or `new` with the dev URL — do not hijack
+   another agent's tab.
+3. In **your tab only**:
 
 ```
 browser_navigate → root URL (e.g., http://localhost:3000)
@@ -168,18 +173,20 @@ browser_network_requests → capture initial API calls
 
 If the page is blank after 3 incremental wait cycles (6s total), report a blocker.
 
-### 1c. Authenticate (if required)
+### 1c. Authenticate (reuse session — do not re-login every run)
 
-If auth is required and test credentials are available:
+Follow `protocol-browser-anti-stall/references/playwright-session-coordination.md`.
 
-1. Navigate to the login page (detected in Phase 0d)
-2. Fill email and password fields
-3. Submit the form
-4. Wait for redirect to authenticated page
-5. Verify auth state (user name visible, auth-required pages accessible)
+1. Navigate to a **protected route** — if already signed in, skip to 1d.
+2. Restore `.playwright-mcp/auth/<host>.json` via `browser_run_code_unsafe` if it exists.
+3. If still logged out:
+   - Email/password: use test credentials from `.env.test` / README (never paste secrets in chat).
+   - **Google / OAuth / SSO**: complete sign-in in the browser (user may need to approve);
+     wait with incremental snapshots; then **save storage state** + `session.json`.
+4. Verify auth (avatar, dashboard, protected pages load).
+5. **Do not log out** at cleanup unless explicitly testing the logout flow.
 
-If no test credentials found, ask the user. If auth is impossible, mark auth-required
-pages as BLOCKED and test only public pages.
+If auth is impossible, mark auth-required pages as BLOCKED and test only public pages.
 
 ### 1d. Capture Baseline
 
