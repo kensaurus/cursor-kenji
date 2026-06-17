@@ -32,7 +32,8 @@ do not replace it, strip features, fabricate data, or rewrite UI in this pass.**
 | `enhance-web-ui` / `enhance-web-ux` | Implement visual/UX improvements |
 | `design-system` | Build or extend the design system itself |
 
-**Chain:** `plan-uiux-unification` → user approval → `enhance-web-ux` / `enhance-web-ui` → `test-playwright`
+**Chain:** Step 1 of six-skill plan loop — see `docs/PLAN-LOOPS.md`  
+**Execute:** `enhance-web-ux` / `enhance-web-ui` → `test-playwright`
 
 ---
 

@@ -66,8 +66,10 @@ alwaysApply: true
 | Performance audit + optimization plan (no fixes) | `plan-perf-audit` |
 | Security/OWASP/RLS audit + hardening plan (no fixes) | `plan-security-audit` |
 | Docs drift audit + sync plan (no rewrites) | `plan-docs-sync` |
+| User-story test coverage plan (no tests written) | `plan-test-coverage` |
 
-**Five-skill loop:** `plan-uiux-unification` → `plan-stub-checker` → `plan-perf-audit` / `plan-security-audit` → `plan-docs-sync`
+**Six-skill plan loop:** see `docs/PLAN-LOOPS.md` —  
+`plan-uiux-unification` → `plan-stub-checker` → `plan-test-coverage` → `plan-perf-audit` / `plan-security-audit` → `plan-docs-sync`
 
 ### Deploy
 | Task | Skill |

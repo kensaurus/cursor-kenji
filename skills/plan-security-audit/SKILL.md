@@ -27,7 +27,7 @@ destructive testing.**
 | `test-red-team` | Adversarial runtime testing |
 | `audit-db-schema` | Schema health including RLS review |
 
-**Loop:** `plan-stub-checker` → **plan-security-audit** (harden) → `plan-docs-sync`
+**Loop:** see `docs/PLAN-LOOPS.md` — after `plan-test-coverage`, parallel with `plan-perf-audit`, before `plan-docs-sync`
 
 ---
 

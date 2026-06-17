@@ -28,8 +28,7 @@ architecture notes, `.env.example`, CLI `--help`, changelogs. **Audit & plan onl
 | `workflow-housekeep` | README refresh as part of housekeeping |
 | `plan-stub-checker` | Stubs/dead UI — often surfaces phantom docs |
 
-**Loop position:** run **last** after other plan skills record reality:  
-`plan-uiux-unification` → `plan-stub-checker` → `plan-perf-audit` / `plan-security-audit` → **plan-docs-sync**
+**Loop position:** run **last** in the six-skill plan loop. See `docs/PLAN-LOOPS.md`.
 
 ---
 

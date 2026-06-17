@@ -118,8 +118,31 @@ Yes, MIT licensed.
 
 ---
 
+## Planning skills — audit first, fix after you approve
+
+Six `plan-*` skills run **before** you change code. They produce burndowns and phased roadmaps. You approve each phase, then run the matching execution skills.
+
+**Full guide:** [PLAN-LOOPS.md](PLAN-LOOPS.md) — diagram, order, copy-paste prompts, slash aliases.
+
+**Quick order:**
+
+1. `plan-uiux-unification` — UI/UX + design system
+2. `plan-stub-checker` — dead buttons, fake data, unwired handlers
+3. `plan-test-coverage` — user stories → test matrix, fake-green gaps
+4. `plan-perf-audit` + `plan-security-audit` — performance + security (parallel)
+5. `plan-docs-sync` — docs match reality (**last**)
+
+**Say in Cursor:**
+
+```
+Run the six-skill plan loop — plan only, no fixes until I approve each phase.
+```
+
+---
+
 ## Get help
 
+- [PLAN-LOOPS.md](PLAN-LOOPS.md) — how to chain the six planning skills
 - [GitHub Issues](https://github.com/kensaurus/cursor-kenji/issues) — bug reports, feature requests
 - [GitHub Discussions](https://github.com/kensaurus/cursor-kenji/discussions) — questions, ideas
 - [CATALOG.md](CATALOG.md) — full list of skills and their trigger phrases

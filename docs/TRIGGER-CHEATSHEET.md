@@ -88,6 +88,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "docs drift", "sync docs with code", "stale README", "onboarding docs broken", "phantom docs" | `plan-docs-sync` |
 | "performance audit plan", "perf burndown", "measure before optimize", "plan performance improvements" | `plan-perf-audit` |
 | "security audit plan", "OWASP audit", "RLS audit", "Supabase security review", "hardening plan" | `plan-security-audit` |
+| "test coverage plan", "traceability matrix", "fake-green tests", "what's not tested" | `plan-test-coverage` |
 | "design system", "component library", "design tokens", "theming" | `design-system` |
 | "apply brand colors", "consistent styling", "color palette", "apply theme" | `design-theme` |
 

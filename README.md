@@ -197,7 +197,53 @@ offenders behind tests, verify with Playwright like a real user, then open a PR.
 | Ship | `/commit` → `/pr` → `deploy-verify` | *"/pr"* |
 | Repeat | → back to Measure | Tighter scope, compounding quality |
 
-See [Skill Chaining](#skill-chaining----improve--iterate-any-repo) below for six ready-to-run chain recipes with copy-paste prompts.
+See [Skill Chaining](#skill-chaining----improve--iterate-any-repo) below for ready-to-run chain recipes, and **[docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md)** for the six-skill **plan-only** loop (audit → approve → execute).
+
+### Six-skill plan loop (audit only — approve before each execution phase)
+
+For inherited codebases or pre-launch hardening. **Nothing changes until you approve.**
+
+```mermaid
+flowchart LR
+  UI["plan-uiux-unification"]
+  ST["plan-stub-checker"]
+  TC["plan-test-coverage"]
+  PF["plan-perf-audit"]
+  SC["plan-security-audit"]
+  DS["plan-docs-sync"]
+
+  UI --> ST --> TC
+  TC --> PF
+  TC --> SC
+  PF --> DS
+  SC --> DS
+
+  style UI fill:#3b0764,stroke:#a78bfa,color:#ede9fe
+  style ST fill:#78350f,stroke:#fbbf24,color:#fef3c7
+  style TC fill:#312e81,stroke:#818cf8,color:#e0e7ff
+  style PF fill:#1e3a5f,stroke:#60a5fa,color:#dbeafe
+  style SC fill:#7f1d1d,stroke:#f87171,color:#fee2e2
+  style DS fill:#064e3b,stroke:#10b981,color:#d1fae5
+```
+
+| Step | Skill | Plans |
+|:----:|:------|:------|
+| 1 | `plan-uiux-unification` | IA, design-system burndown |
+| 2 | `plan-stub-checker` | Dead buttons, fake data, unwired handlers |
+| 3 | `plan-test-coverage` | Story→test matrix, fake-green gaps |
+| 4 | `plan-perf-audit` ∥ `plan-security-audit` | Measured perf + OWASP/RLS |
+| 5 | `plan-docs-sync` | Docs drift (run **last**) |
+
+**One-shot prompt (plan only):**
+
+```
+Run the six-skill plan loop — no code/doc/test changes until I approve:
+plan-uiux-unification → plan-stub-checker → plan-test-coverage →
+plan-perf-audit + plan-security-audit (parallel) → plan-docs-sync.
+Consolidated burndown report at the end.
+```
+
+Full prompts, slash aliases (`/uiux-plan`, `/stub-plan`, `/test-plan`, …), and execution mapping → **[docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md)**
 
 ---
 
@@ -207,7 +253,7 @@ See [Skill Chaining](#skill-chaining----improve--iterate-any-repo) below for six
 graph TB
   subgraph TOOLKIT["cursor-kenji Toolkit"]
     direction TB
-    SK["Skills (78)"]
+    SK["Skills (79)"]
     CS["Cursor Skills (12)"]
     CMD["Commands (13)"]
     SA["Subagents (5)"]
@@ -452,13 +498,38 @@ until merged."
 
 </details>
 
+<details>
+<summary><strong>7 · Six-skill plan loop (audit inherited / pre-launch codebase)</strong></summary>
+
+**Chain (plan only):** `plan-uiux-unification` → `plan-stub-checker` → `plan-test-coverage` → `plan-perf-audit` + `plan-security-audit` → `plan-docs-sync`
+
+**After approval, execute:** `enhance-web-ux` · `debug-fe-be-integration` · `test-unit` · `audit-performance` · `audit-security` · `docs-writer` · `test-playwright`
+
+**Paste into Cursor:**
+
+```
+Run the full six-skill plan loop on this repo — audit and plan only, no fixes yet:
+
+1. plan-uiux-unification — IA + design-system burndown
+2. plan-stub-checker — stubs, dead buttons, unwired handlers
+3. plan-test-coverage — user stories from code, traceability matrix, fake-green scan
+4. plan-perf-audit + plan-security-audit in parallel
+5. plan-docs-sync last — docs match shipped reality
+
+One consolidated report with phased burndowns. I'll approve phases before execution.
+```
+
+See also: [docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md)
+
+</details>
+
 > **Tip — run audits in parallel:** use `workflow-parallel-agents` to run
 > `audit-security`, `audit-performance`, and `audit-code-quality` as three separate
 > agents simultaneously, then merge findings into one `/plan` before touching code.
 
 ---
 
-## Skills (78)
+## Skills (79)
 
 > **Note:** The `file-docx`, `file-pdf`, `file-pptx`, and `file-xlsx` skills (Anthropic proprietary, source-available only) have been removed from this public repo. Keep personal copies in `~/.cursor/skills/` if needed.
 
@@ -479,6 +550,7 @@ Every skill name is `<prefix>-<topic>`. 14 prefixes, one concern each:
 | `meta-` | Skills and MCP authoring |
 | `mobile-` | React Native, Capacitor, emulator |
 | `mushi-` | Mushi Mushi integration — health, pipeline, TDD |
+| `plan-` | Audit-and-plan only (burndown → approve → execute) |
 | `protocol-` | Procedural guardrails (browser anti-stall, etc.) |
 | `test-` | QA, unit tests, acceptance tests |
 | `workflow-` | Dev-process skills (git, refactor, PR, spec-TDD) |

@@ -124,6 +124,11 @@ Every skill has a category prefix that tells you what it does at a glance:
 **What it does:** Audit docs vs actual code behavior. Drift taxonomy (stale/missing/phantom/contradictory/onboarding-breaking/inline-rot/API-contract). Code-as-source-of-truth; onboarding-drift check vs `.env.example` + CLI `--help`. Docs-as-code guardrails. **Plan only — no rewrites until approved.** Never aspirational or invented behavior.
 **Related:** `docs-writer`, `workflow-housekeep`, `plan-stub-checker`
 
+#### `plan-test-coverage`
+**Triggers:** "test coverage plan", "coverage audit", "traceability matrix", "fake-green tests", "uncovered user stories", "plan tests for critical flows", "mutation testing plan", "what's not tested"
+**What it does:** User-story-driven coverage audit from real code — traceability matrix, multi-lens coverage (branch/path/risk/integration), fake-green detection, mutation-testing recommendations. **Plan only — no test writing until approved.** Natural lock-in after stub-wiring.
+**Related:** `test-unit`, `workflow-spec-tdd`, `test-playwright`, `plan-stub-checker`
+
 #### `design-motion`
 **Triggers:** "animation", "transition", "micro-interaction", "motion", "animate", "hover effect", "scroll animation", "page transition", "make it interactive", "fun interactions", "playful UI", "gamification", "delightful", "Easter eggs"
 **What it does:** Framer Motion, CSS animations, GSAP. Covers entrance/exit, staggered lists, scroll-triggered effects, layout animations. Includes delight patterns (bouncy buttons, magnetic elements, confetti, Konami code). Always respects `prefers-reduced-motion`.
@@ -490,6 +495,7 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/perf-plan` | `plan-perf-audit` | Performance audit + optimization plan (no fixes) |
 | `/security-plan` | `plan-security-audit` | Security/OWASP/RLS audit + hardening plan (no fixes) |
 | `/docs-plan` | `plan-docs-sync` | Docs drift audit + sync plan (no rewrites) |
+| `/test-plan` | `plan-test-coverage` | User-story test coverage audit + plan (no tests written) |
 | `/update-deps` | `workflow-housekeep` (Phase 3) | Audit and update dependencies safely |
 
 ---
@@ -529,11 +535,16 @@ workflow-launch-ready
 #### Full Feature Build (manual)
 `workflow-spec-tdd` → `backend-patterns` + `design-api` + `backend-error-handling` + `audit-security`
 
-#### Five-Skill Plan Loop (audit → approve → execute)
+#### Six-Skill Plan Loop (audit → approve → execute)
 
-`plan-uiux-unification` → `plan-stub-checker` → `plan-perf-audit` / `plan-security-audit` (harden) → `plan-docs-sync` (record reality last)
+See **[docs/PLAN-LOOPS.md](PLAN-LOOPS.md)** for diagrams, prompts, and execution mapping.
 
-After approval, execute via: `enhance-web-ux`, `debug-fe-be-integration`, `audit-performance`, `audit-security`, `docs-writer`, `test-playwright`
+```
+plan-uiux-unification → plan-stub-checker → plan-test-coverage
+  → plan-perf-audit ∥ plan-security-audit → plan-docs-sync
+```
+
+After approval: `enhance-web-ux`, `debug-fe-be-integration`, `test-unit`, `audit-performance`, `audit-security`, `docs-writer`, `test-playwright`
 
 #### Stub & Wiring Audit
 `plan-stub-checker` → user approval → `debug-fe-be-integration` → `workflow-fix-and-ship` → `test-playwright`

@@ -4,6 +4,19 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.2.6] — 2026-06-17
+
+### Added
+
+- **`plan-test-coverage`** — user-story-driven coverage audit, traceability matrix, fake-green detection (plan only)
+- **`docs/PLAN-LOOPS.md`** — six-skill plan loop: link, chain, prompts, execution mapping
+
+### Changed
+
+- Six-skill plan loop (was five): adds `plan-test-coverage` after stub-checker, before perf/security
+
+---
+
 ## [1.2.5] — 2026-06-17
 
 ### Added

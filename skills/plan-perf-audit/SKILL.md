@@ -29,7 +29,7 @@ guess. Audit & plan only — do not optimize in this pass.**
 | `backend-db-performance` | Query/index fixes (execution) |
 | `mobile-rn-performance` | RN perf fixes (execution) |
 
-**Loop:** `plan-stub-checker` → **plan-perf-audit** (harden) → `plan-docs-sync`
+**Loop:** see `docs/PLAN-LOOPS.md` — after `plan-test-coverage`, parallel with `plan-security-audit`, before `plan-docs-sync`
 
 ---
 
