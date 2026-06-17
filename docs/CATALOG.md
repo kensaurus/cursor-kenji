@@ -109,6 +109,21 @@ Every skill has a category prefix that tells you what it does at a glance:
 **What it does:** Exhaustive audit for stubs, dead buttons, fake/placeholder components, unwired handlers, dead links, orphans, and severed integrations. Traces intended backend, Supabase, Sentry, and pipeline targets; conservative false-positive filtering. Burndown + phased wiring plan — **no implementation until user approves**. Optional Playwright, Sentry, and Supabase MCP.
 **Related:** `debug-fe-be-integration`, `audit-fe-api`, `test-qa`, `debug-sentry-monitor`, `workflow-fix-and-ship`
 
+#### `plan-perf-audit`
+**Triggers:** "performance audit plan", "perf burndown", "measure before optimize", "bundle size audit plan", "LCP slow plan", "N+1 audit plan", "plan performance improvements", "Core Web Vitals audit"
+**What it does:** Measure-don't-guess performance audit across web, mobile, backend, and data. Burndown + optimization plan — **no fixes in this pass**. No fabricated metrics; baselines or `[NEEDS PROFILING]`. Research-backed proposals: React code-split/memo/virtualization, RN Hermes/JSI/cold start, EXPLAIN-verified indexes, Lighthouse CI budgets + RUM. Mobile thresholds stricter than web CWV.
+**Related:** `audit-performance`, `audit-bundle-size`, `backend-db-performance`, `mobile-rn-performance`
+
+#### `plan-security-audit`
+**Triggers:** "security audit plan", "OWASP audit plan", "RLS audit", "Supabase security review", "hardening plan", "secrets scan plan", "plan security fixes", "security burndown"
+**What it does:** OWASP Top 10 audit with Supabase-first methodology (RLS pass, service_role bundle scan, auth-path trace, CVE deps). Plan only — no patches, no destructive testing. Never pastes secret values. Top classes: tables without RLS, service_role in client, permissive policies.
+**Related:** `audit-security`, `audit-db-schema`, `test-red-team`, `plan-stub-checker`
+
+#### `plan-docs-sync`
+**Triggers:** "docs drift", "sync docs with code", "audit documentation", "stale README", "onboarding docs broken", "doc sync plan", "phantom docs", "docs out of date"
+**What it does:** Audit docs vs actual code behavior. Drift taxonomy (stale/missing/phantom/contradictory/onboarding-breaking/inline-rot/API-contract). Code-as-source-of-truth; onboarding-drift check vs `.env.example` + CLI `--help`. Docs-as-code guardrails. **Plan only — no rewrites until approved.** Never aspirational or invented behavior.
+**Related:** `docs-writer`, `workflow-housekeep`, `plan-stub-checker`
+
 #### `design-motion`
 **Triggers:** "animation", "transition", "micro-interaction", "motion", "animate", "hover effect", "scroll animation", "page transition", "make it interactive", "fun interactions", "playful UI", "gamification", "delightful", "Easter eggs"
 **What it does:** Framer Motion, CSS animations, GSAP. Covers entrance/exit, staggered lists, scroll-triggered effects, layout animations. Includes delight patterns (bouncy buttons, magnetic elements, confetti, Konami code). Always respects `prefers-reduced-motion`.
@@ -472,6 +487,9 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/uiux` | `audit-uiux-design-system`, `audit-ux`, `enhance-web-ui`, `enhance-web-ux` | Audit + enhance UI/UX |
 | `/uiux-plan` | `plan-uiux-unification` | Full UI/UX unification plan (audit only, no fixes) |
 | `/stub-plan` | `plan-stub-checker` | Stub/dead-link/fake-component audit + wiring plan (no fixes) |
+| `/perf-plan` | `plan-perf-audit` | Performance audit + optimization plan (no fixes) |
+| `/security-plan` | `plan-security-audit` | Security/OWASP/RLS audit + hardening plan (no fixes) |
+| `/docs-plan` | `plan-docs-sync` | Docs drift audit + sync plan (no rewrites) |
 | `/update-deps` | `workflow-housekeep` (Phase 3) | Audit and update dependencies safely |
 
 ---
@@ -510,6 +528,12 @@ workflow-launch-ready
 
 #### Full Feature Build (manual)
 `workflow-spec-tdd` → `backend-patterns` + `design-api` + `backend-error-handling` + `audit-security`
+
+#### Five-Skill Plan Loop (audit → approve → execute)
+
+`plan-uiux-unification` → `plan-stub-checker` → `plan-perf-audit` / `plan-security-audit` (harden) → `plan-docs-sync` (record reality last)
+
+After approval, execute via: `enhance-web-ux`, `debug-fe-be-integration`, `audit-performance`, `audit-security`, `docs-writer`, `test-playwright`
 
 #### Stub & Wiring Audit
 `plan-stub-checker` → user approval → `debug-fe-be-integration` → `workflow-fix-and-ship` → `test-playwright`

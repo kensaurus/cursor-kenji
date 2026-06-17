@@ -63,6 +63,11 @@ alwaysApply: true
 |------|-------|
 | UI/UX + design-system unification plan (no fixes) | `plan-uiux-unification` |
 | Stub/dead-link/fake-component audit + wiring plan (no fixes) | `plan-stub-checker` |
+| Performance audit + optimization plan (no fixes) | `plan-perf-audit` |
+| Security/OWASP/RLS audit + hardening plan (no fixes) | `plan-security-audit` |
+| Docs drift audit + sync plan (no rewrites) | `plan-docs-sync` |
+
+**Five-skill loop:** `plan-uiux-unification` → `plan-stub-checker` → `plan-perf-audit` / `plan-security-audit` → `plan-docs-sync`
 
 ### Deploy
 | Task | Skill |

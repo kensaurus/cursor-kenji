@@ -4,6 +4,17 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.2.5] — 2026-06-17
+
+### Added
+
+- **`plan-docs-sync`** — docs drift audit vs code truth; onboarding-drift checks; docs-as-code guardrails (plan only)
+- **`plan-perf-audit`** — measure-don't-guess perf audit across web/mobile/backend/data; Lighthouse CI + RUM guardrails (plan only)
+- **`plan-security-audit`** — OWASP + Supabase-first (RLS, service_role scan); no destructive testing; secrets location-only (plan only)
+- Five-skill plan loop documented in `skill-workflows` and CATALOG
+
+---
+
 ## [1.2.4] — 2026-06-17
 
 ### Added

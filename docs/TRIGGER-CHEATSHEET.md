@@ -85,6 +85,9 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "write a PRD", "product requirements", "spec this feature", "what should we build" | `design-prd` |
 | "UI/UX unification plan", "design system audit plan", "UI burndown", "unify design system", "plan UI overhaul", "audit UI without fixing" | `plan-uiux-unification` |
 | "find dead buttons", "stub checker", "fake components", "unwired handlers", "dead links", "buttons that do nothing", "stub audit" | `plan-stub-checker` |
+| "docs drift", "sync docs with code", "stale README", "onboarding docs broken", "phantom docs" | `plan-docs-sync` |
+| "performance audit plan", "perf burndown", "measure before optimize", "plan performance improvements" | `plan-perf-audit` |
+| "security audit plan", "OWASP audit", "RLS audit", "Supabase security review", "hardening plan" | `plan-security-audit` |
 | "design system", "component library", "design tokens", "theming" | `design-system` |
 | "apply brand colors", "consistent styling", "color palette", "apply theme" | `design-theme` |
 
