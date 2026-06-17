@@ -104,6 +104,11 @@ Every skill has a category prefix that tells you what it does at a glance:
 **What it does:** Exhaustive, non-destructive UI/UX + design-system audit that produces a burndown and unification plan — **no code changes in this pass**. IA-first (hierarchy before layout), preservation contract, full surface inventory, violation log, prioritized burndown with risk column, phased roadmap, guardrails. Enhances existing DS; does not replace it. Optional browser MCP for evidence; Firecrawl for current-year best practices.
 **Related:** `audit-uiux-design-system`, `audit-ux`, `enhance-web-ux`, `enhance-web-ui`, `design-system`
 
+#### `plan-stub-checker`
+**Triggers:** "find dead buttons", "stub checker", "fake components", "unwired handlers", "dead links", "orphaned components", "plan stub wiring", "what's not connected", "mock data in prod", "buttons that do nothing", "stub audit"
+**What it does:** Exhaustive audit for stubs, dead buttons, fake/placeholder components, unwired handlers, dead links, orphans, and severed integrations. Traces intended backend, Supabase, Sentry, and pipeline targets; conservative false-positive filtering. Burndown + phased wiring plan — **no implementation until user approves**. Optional Playwright, Sentry, and Supabase MCP.
+**Related:** `debug-fe-be-integration`, `audit-fe-api`, `test-qa`, `debug-sentry-monitor`, `workflow-fix-and-ship`
+
 #### `design-motion`
 **Triggers:** "animation", "transition", "micro-interaction", "motion", "animate", "hover effect", "scroll animation", "page transition", "make it interactive", "fun interactions", "playful UI", "gamification", "delightful", "Easter eggs"
 **What it does:** Framer Motion, CSS animations, GSAP. Covers entrance/exit, staggered lists, scroll-triggered effects, layout animations. Includes delight patterns (bouncy buttons, magnetic elements, confetti, Konami code). Always respects `prefers-reduced-motion`.
@@ -466,6 +471,7 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/test` | `test-unit`, `test-qa`, `mobile-emulator-test` | Type check → unit → integration → E2E |
 | `/uiux` | `audit-uiux-design-system`, `audit-ux`, `enhance-web-ui`, `enhance-web-ux` | Audit + enhance UI/UX |
 | `/uiux-plan` | `plan-uiux-unification` | Full UI/UX unification plan (audit only, no fixes) |
+| `/stub-plan` | `plan-stub-checker` | Stub/dead-link/fake-component audit + wiring plan (no fixes) |
 | `/update-deps` | `workflow-housekeep` (Phase 3) | Audit and update dependencies safely |
 
 ---
@@ -504,6 +510,9 @@ workflow-launch-ready
 
 #### Full Feature Build (manual)
 `workflow-spec-tdd` → `backend-patterns` + `design-api` + `backend-error-handling` + `audit-security`
+
+#### Stub & Wiring Audit
+`plan-stub-checker` → user approval → `debug-fe-be-integration` → `workflow-fix-and-ship` → `test-playwright`
 
 #### Performance Fix
 `audit-performance` → `backend-db-performance` + `audit-code-quality` + `workflow-refactor`

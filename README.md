@@ -207,7 +207,7 @@ See [Skill Chaining](#skill-chaining----improve--iterate-any-repo) below for six
 graph TB
   subgraph TOOLKIT["cursor-kenji Toolkit"]
     direction TB
-    SK["Skills (74)"]
+    SK["Skills (75)"]
     CS["Cursor Skills (12)"]
     CMD["Commands (13)"]
     SA["Subagents (5)"]
@@ -458,7 +458,7 @@ until merged."
 
 ---
 
-## Skills (74)
+## Skills (75)
 
 > **Note:** The `file-docx`, `file-pdf`, `file-pptx`, and `file-xlsx` skills (Anthropic proprietary, source-available only) have been removed from this public repo. Keep personal copies in `~/.cursor/skills/` if needed.
 

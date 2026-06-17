@@ -62,6 +62,7 @@ alwaysApply: true
 | Task | Skill |
 |------|-------|
 | UI/UX + design-system unification plan (no fixes) | `plan-uiux-unification` |
+| Stub/dead-link/fake-component audit + wiring plan (no fixes) | `plan-stub-checker` |
 
 ### Deploy
 | Task | Skill |

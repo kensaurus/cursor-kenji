@@ -84,6 +84,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "animation", "micro-interaction", "hover effect", "scroll animation" | `design-motion` |
 | "write a PRD", "product requirements", "spec this feature", "what should we build" | `design-prd` |
 | "UI/UX unification plan", "design system audit plan", "UI burndown", "unify design system", "plan UI overhaul", "audit UI without fixing" | `plan-uiux-unification` |
+| "find dead buttons", "stub checker", "fake components", "unwired handlers", "dead links", "buttons that do nothing", "stub audit" | `plan-stub-checker` |
 | "design system", "component library", "design tokens", "theming" | `design-system` |
 | "apply brand colors", "consistent styling", "color palette", "apply theme" | `design-theme` |
 

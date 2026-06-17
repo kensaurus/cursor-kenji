@@ -4,6 +4,14 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.2.4] — 2026-06-17
+
+### Added
+
+- **`plan-stub-checker`** — exhaustive stub/dead-button/fake-component/unwired-handler audit with burndown and phased wiring plan (plan only; no implementation until user approves)
+
+---
+
 ## [1.2.3] — 2026-06-16
 
 ### Added
