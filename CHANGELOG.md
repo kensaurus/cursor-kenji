@@ -4,6 +4,14 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.2.3] — 2026-06-16
+
+### Added
+
+- **`plan-uiux-unification`** — exhaustive non-destructive UI/UX + design-system audit that outputs burndown, unification plan, and phased roadmap (plan only; no fixes until user approves)
+
+---
+
 ## [1.2.2] — 2026-06-16
 
 ### Changed

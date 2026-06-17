@@ -58,6 +58,11 @@ alwaysApply: true
 | UX & information architecture | `enhance-web-ux` |
 | Cross-surface (web + mobile) consistency | `enhance-capacitor-ui` |
 
+### Plan (audit → approve → execute)
+| Task | Skill |
+|------|-------|
+| UI/UX + design-system unification plan (no fixes) | `plan-uiux-unification` |
+
 ### Deploy
 | Task | Skill |
 |------|-------|

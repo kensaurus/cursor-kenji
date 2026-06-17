@@ -152,13 +152,62 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 
 ---
 
+## The Improvement Loop
+
+> **Skills chain. Chains loop. Each loop pass levels up your codebase.**
+> The arc repeats: **Understand → Clean → Measure → Plan → Change → Verify → Ship**.
+
+```mermaid
+flowchart LR
+  U["Understand<br/>workflow-onboard · /research"] --> C["Clean<br/>workflow-housekeep"]
+  C --> M["Measure<br/>audit-code-quality<br/>audit-security · audit-performance"]
+  M --> P["Plan<br/>/plan"]
+  P --> CH["Change<br/>workflow-spec-tdd<br/>workflow-refactor"]
+  CH --> V["Verify<br/>test-playwright · test-unit<br/>code-reviewer"]
+  V --> S["Ship<br/>/commit → /pr · deploy-verify"]
+  S -. "next slice" .-> M
+
+  style U fill:#064e3b,stroke:#10b981,color:#d1fae5
+  style C fill:#1e293b,stroke:#64748b,color:#e2e8f0
+  style M fill:#3b0764,stroke:#a78bfa,color:#ede9fe
+  style P fill:#064e3b,stroke:#10b981,color:#d1fae5
+  style CH fill:#78350f,stroke:#fbbf24,color:#fef3c7
+  style V fill:#312e81,stroke:#818cf8,color:#e0e7ff
+  style S fill:#1e3a5f,stroke:#60a5fa,color:#dbeafe
+```
+
+**Trigger the full loop in one message:**
+
+```
+"Research this repo, housekeep dead code and stale deps, audit code quality +
+security + performance, plan the top 10 findings by impact, refactor the worst
+offenders behind tests, verify with Playwright like a real user, then open a PR."
+```
+
+**Or step through it stage-by-stage** — review each diff before continuing:
+
+| Stage | Skill / Command | Say this in Cursor |
+|:------|:---------------|:-------------------|
+| Understand | `workflow-onboard` · `/research` | *"onboard me to this codebase"* |
+| Clean | `workflow-housekeep` | *"housekeep — dead files, README sync, update deps"* |
+| Measure | `audit-code-quality` `audit-security` `audit-performance` | *"audit code quality, security, and performance"* |
+| Plan | `/plan` | *"/plan — rank findings by impact × effort, pick top 5"* |
+| Change | `workflow-spec-tdd` → `workflow-refactor` | *"refactor [finding] behind tests"* |
+| Verify | `test-playwright` · `test-unit` · `code-reviewer` | *"test this with Playwright like a real user"* |
+| Ship | `/commit` → `/pr` → `deploy-verify` | *"/pr"* |
+| Repeat | → back to Measure | Tighter scope, compounding quality |
+
+See [Skill Chaining](#skill-chaining----improve--iterate-any-repo) below for six ready-to-run chain recipes with copy-paste prompts.
+
+---
+
 ## How It All Fits Together
 
 ```mermaid
 graph TB
   subgraph TOOLKIT["cursor-kenji Toolkit"]
     direction TB
-    SK["Skills (73)"]
+    SK["Skills (74)"]
     CS["Cursor Skills (12)"]
     CMD["Commands (13)"]
     SA["Subagents (5)"]
@@ -306,36 +355,110 @@ flowchart LR
 | "prepare for launch" | `workflow-launch-ready` | SEO + PWA + bundle + i18n + quality gate + deploy |
 | "orient me" | `workflow-onboard` | reads codebase → briefing in 5 min |
 
-### Recipes (manual skill chains)
+### Recipes — copy, paste, and run
 
-**1. Adopt & harden an inherited codebase**
-`workflow-onboard` → `workflow-housekeep` → `audit-code-quality` → `audit-security` →
-`audit-performance` → `/plan` → `workflow-refactor` → `test-unit` →
-`code-reviewer` (subagent) → `/commit` → `/pr`
+> Paste any prompt below into Cursor chat. The agent chains the skills automatically.
 
-**2. Ship a feature the disciplined way (spec → TDD → verify)**
-`design-prd` → `workflow-build-feature` *(or manually: `workflow-spec-tdd` → implement → `test-playwright`)* → `backend-observability` → `deploy-verify`
+<details>
+<summary><strong>1 · Adopt and harden an inherited codebase</strong></summary>
 
-**3. Make a page stop looking AI-generated**
-`audit-ux` → `audit-uiux-design-system` → `enhance-web-ux` → `enhance-web-ui` →
-`test-playwright` → `/commit`
+**Chain:** `workflow-onboard` → `workflow-housekeep` → `audit-code-quality` → `audit-security` → `audit-performance` → `/plan` → `workflow-refactor` → `test-unit` → `code-reviewer` → `/commit` → `/pr`
 
-**4. Fix a production incident & prevent recurrence**
-`workflow-fix-and-ship` *(or manually: `debug-sentry-monitor` → `debug-error` → fix → `test-unit` → `deploy-verify`)*
+**Paste into Cursor:**
 
-**5. Full pre-launch sweep**
-`workflow-launch-ready` *(covers SEO + PWA + bundle + i18n + red-team + security + deploy)*
+```
+"Adopt this repo: onboard me to the codebase, housekeep dead code and stale deps,
+then audit code quality + security + performance. Plan the top 10 findings by
+impact × effort, refactor the worst offenders behind tests, run unit tests to
+verify nothing broke, do a code review, then commit and open a PR."
+```
 
-**6. Land a big change as small, reviewable PRs**
-`workflow-refactor` → `split-to-prs` → `workflow-pr` → `babysit`
+</details>
 
-> **Tip:** chain *audits in parallel* with `workflow-parallel-agents` — run
-> `audit-security`, `audit-performance`, and `audit-code-quality` as separate agents,
-> then merge their findings into a single `/plan` before you touch code.
+<details>
+<summary><strong>2 · Ship a feature the disciplined way (spec → TDD → verify)</strong></summary>
+
+**Chain:** `design-prd` → `workflow-spec-tdd` → implement → `test-playwright` → `backend-observability` → `deploy-verify`
+
+**Paste into Cursor:**
+
+```
+"Build [feature] the right way: write a one-page PRD, spec it with TDD
+(write failing tests first), implement, add logging and traces, then
+verify with Playwright like a real user and confirm the deploy is healthy."
+```
+
+</details>
+
+<details>
+<summary><strong>3 · Make a page stop looking AI-generated</strong></summary>
+
+**Chain:** `audit-ux` → `audit-uiux-design-system` → `enhance-web-ux` → `enhance-web-ui` → `test-playwright` → `/commit`
+
+**Paste into Cursor:**
+
+```
+"Audit the UX and design system compliance of [page/route]. Then enhance it:
+fix information hierarchy, spacing, and visual weight so it feels intentional
+and hand-crafted, not AI-generated. Verify the result with Playwright, then commit."
+```
+
+</details>
+
+<details>
+<summary><strong>4 · Fix a production incident and prevent recurrence</strong></summary>
+
+**Chain (one shot):** `workflow-fix-and-ship`
+
+**Or manually:** `debug-sentry-monitor` → `debug-error` → fix → `test-unit` → `deploy-verify`
+
+**Paste into Cursor:**
+
+```
+"Check Sentry for the top error. Reproduce it locally, fix it, write a
+regression test so it can't come back, then deploy and confirm the
+error rate drops."
+```
+
+</details>
+
+<details>
+<summary><strong>5 · Full pre-launch sweep</strong></summary>
+
+**Chain (one shot):** `workflow-launch-ready` *(SEO + PWA + bundle + i18n + red-team + security + deploy)*
+
+**Paste into Cursor:**
+
+```
+"Run a full pre-launch sweep: audit SEO, PWA readiness, JS bundle size, and
+i18n coverage. Red-team the app for bugs + security + perf issues. Prepare
+everything for launch, then deploy and smoke test."
+```
+
+</details>
+
+<details>
+<summary><strong>6 · Land a big change as small, reviewable PRs</strong></summary>
+
+**Chain:** `workflow-refactor` → `split-to-prs` → `workflow-pr` → `babysit`
+
+**Paste into Cursor:**
+
+```
+"Refactor [area] into clean, modular architecture. Split the changes into
+small PRs (max 300 lines each), open them in sequence, and babysit them
+until merged."
+```
+
+</details>
+
+> **Tip — run audits in parallel:** use `workflow-parallel-agents` to run
+> `audit-security`, `audit-performance`, and `audit-code-quality` as three separate
+> agents simultaneously, then merge findings into one `/plan` before touching code.
 
 ---
 
-## Skills (73)
+## Skills (74)
 
 > **Note:** The `file-docx`, `file-pdf`, `file-pptx`, and `file-xlsx` skills (Anthropic proprietary, source-available only) have been removed from this public repo. Keep personal copies in `~/.cursor/skills/` if needed.
 

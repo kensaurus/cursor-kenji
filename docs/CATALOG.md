@@ -99,6 +99,11 @@ Every skill has a category prefix that tells you what it does at a glance:
 **What it does:** Generate PRDs via structured conversation. Auto-detects tech stack, features, data model. Uses Firecrawl for competitive research, Context7 for feasibility, Supabase MCP for data model verification.
 **Related:** `docs-coauthor`, `workflow-spec-tdd`
 
+#### `plan-uiux-unification`
+**Triggers:** "UI/UX unification plan", "design system audit plan", "UI burndown", "unify the design system", "plan UI overhaul", "design system consolidation", "IA audit before redesign", "audit UI without fixing", "UI/UX unification"
+**What it does:** Exhaustive, non-destructive UI/UX + design-system audit that produces a burndown and unification plan — **no code changes in this pass**. IA-first (hierarchy before layout), preservation contract, full surface inventory, violation log, prioritized burndown with risk column, phased roadmap, guardrails. Enhances existing DS; does not replace it. Optional browser MCP for evidence; Firecrawl for current-year best practices.
+**Related:** `audit-uiux-design-system`, `audit-ux`, `enhance-web-ux`, `enhance-web-ui`, `design-system`
+
 #### `design-motion`
 **Triggers:** "animation", "transition", "micro-interaction", "motion", "animate", "hover effect", "scroll animation", "page transition", "make it interactive", "fun interactions", "playful UI", "gamification", "delightful", "Easter eggs"
 **What it does:** Framer Motion, CSS animations, GSAP. Covers entrance/exit, staggered lists, scroll-triggered effects, layout animations. Includes delight patterns (bouncy buttons, magnetic elements, confetti, Konami code). Always respects `prefers-reduced-motion`.
@@ -460,6 +465,7 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/review` | `audit-code-review` | Agent review + manual checklist |
 | `/test` | `test-unit`, `test-qa`, `mobile-emulator-test` | Type check → unit → integration → E2E |
 | `/uiux` | `audit-uiux-design-system`, `audit-ux`, `enhance-web-ui`, `enhance-web-ux` | Audit + enhance UI/UX |
+| `/uiux-plan` | `plan-uiux-unification` | Full UI/UX unification plan (audit only, no fixes) |
 | `/update-deps` | `workflow-housekeep` (Phase 3) | Audit and update dependencies safely |
 
 ---
@@ -503,7 +509,7 @@ workflow-launch-ready
 `audit-performance` → `backend-db-performance` + `audit-code-quality` + `workflow-refactor`
 
 #### Design System Sprint
-`design-system` → `design-frontend` + `audit-accessibility` + `design-mobile-first` + `design-theme`
+`plan-uiux-unification` → user approval → `enhance-web-ux` + `enhance-web-ui` → `audit-accessibility` + `design-mobile-first` + `design-theme`
 
 #### LLM Quality Cycle
 `audit-langfuse-llm` → `debug-sentry-monitor` → `deploy-verify`
