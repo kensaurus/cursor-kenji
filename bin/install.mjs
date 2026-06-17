@@ -3,14 +3,19 @@
  * cursor-kenji installer
  *
  * Usage:
- *   npx @kensaurus/cursor-kenji                  Merge-install into ~/.cursor/
- *   npx @kensaurus/cursor-kenji --clean          Mirror: make ~/.cursor match this repo exactly
+ *   npx @kensaurus/cursor-kenji                  Merge-install into ~/.cursor/ AND ~/.agents/skills/
+ *   npx @kensaurus/cursor-kenji --clean          Mirror: make both paths match this repo exactly
  *   npx @kensaurus/cursor-kenji --only skills     Install only some groups (csv)
  *   npx @kensaurus/cursor-kenji --skill audit-ux  Install a single skill
  *   npx @kensaurus/cursor-kenji --link           Dev mode: symlink instead of copy
  *   npx @kensaurus/cursor-kenji --restore [stamp] Restore a previous --clean backup
  *   npx @kensaurus/cursor-kenji --dry-run        Preview without changing anything
  *   npx @kensaurus/cursor-kenji --help
+ *
+ * Why two paths?
+ *   ~/.cursor/skills/   — read by the Cursor agent at runtime
+ *   ~/.agents/skills/   — indexed by the Cursor Skills UI panel
+ *   Both must be populated for skills to appear AND work.
  */
 
 import {
@@ -41,8 +46,8 @@ if (has('help', 'h')) {
 cursor-kenji installer
 
 Usage:
-  npx @kensaurus/cursor-kenji                   Merge-install into ~/.cursor/
-  npx @kensaurus/cursor-kenji --clean           Mirror: make ~/.cursor match this repo exactly
+  npx @kensaurus/cursor-kenji                   Merge-install into ~/.cursor/ + ~/.agents/skills/
+  npx @kensaurus/cursor-kenji --clean           Mirror: wipe and rebuild both paths from this repo
   npx @kensaurus/cursor-kenji --only skills      Install only some groups (skills,commands,agents,rules)
   npx @kensaurus/cursor-kenji --skill <name>     Install one skill by name
   npx @kensaurus/cursor-kenji --link            Dev mode: symlink repo into ~/.cursor (live edits)
@@ -50,7 +55,7 @@ Usage:
   npx @kensaurus/cursor-kenji --dry-run         Preview without changing anything
 
 Flags:
-  --clean, --mirror   Wipe managed dirs first so ~/.cursor exactly mirrors this repo.
+  --clean, --mirror   Wipe managed dirs first so both paths exactly mirror this repo.
   --no-backup         Skip the timestamped backup taken before a --clean wipe.
   --only <csv>        Limit to a subset of: skills, commands, agents, rules.
   --skill <name>      Install a single skill (implies --only skills).
@@ -59,7 +64,8 @@ Flags:
   --dry-run           Show what would happen; make no changes.
 
 What gets installed:
-  ~/.cursor/skills/       ← agent skills (skills/ + skills-cursor/ merged)
+  ~/.cursor/skills/       ← agent skills at runtime (skills/ + skills-cursor/ merged)
+  ~/.agents/skills/       ← Cursor Skills UI index (same content, required for UI visibility)
   ~/.cursor/commands/     ← slash commands
   ~/.cursor/agents/       ← subagent definitions
   ~/.cursor/rules/        ← project rules starter pack
@@ -73,6 +79,7 @@ const isClean = has('clean', 'mirror', 'force');
 const noBackup = has('no-backup');
 const useLink = has('link');
 const targetBase = join(homedir(), '.cursor');
+const agentsBase = join(homedir(), '.agents');   // Cursor Skills UI reads ~/.agents/skills/
 const backupsRoot = join(targetBase, '.cursor-kenji-backups');
 
 const ALL_DIRS = [
@@ -182,6 +189,25 @@ if (skillName && copiedDirs + copiedFiles === 0) {
   process.exit(1);
 }
 
+// ---- also write skills to ~/.agents/skills/ (Cursor Skills UI reads here) --
+// ~/.cursor/skills/ is used by the Cursor agent at runtime.
+// ~/.agents/skills/ is the path Cursor's Skills UI panel indexes.
+// Both must be populated or skills appear in the agent context but not the UI.
+if (!onlyGroups || onlyGroups.has('skills')) {
+  const agentsSkillsDest = join(agentsBase, 'skills');
+  const cursorSkillsSrc = join(targetBase, 'skills');
+  if (isDryRun) {
+    console.log(`  [dry-run] sync ${cursorSkillsSrc} → ${agentsSkillsDest}`);
+  } else if (existsSync(cursorSkillsSrc)) {
+    if (isClean) rmSync(agentsSkillsDest, { recursive: true, force: true });
+    mkdirSync(agentsSkillsDest, { recursive: true });
+    for (const item of readdirSync(cursorSkillsSrc)) {
+      if (skillName && item !== skillName) continue;
+      cpSync(join(cursorSkillsSrc, item), join(agentsSkillsDest, item), { recursive: true });
+    }
+  }
+}
+
 // ---- MCP config template (only if missing; never overwritten) --------------
 const mcpDest = join(targetBase, 'mcp.json');
 const mcpTemplate = resolve(__dir, 'mcp', 'mcp.json.template');
@@ -209,6 +235,10 @@ if (isDryRun) {
     console.log(`✓ Backed up previous ~/.cursor/{${managedDests.join(',')}} → ${backupRoot}`);
   }
   console.log(`\n✓ cursor-kenji installed (${mode}) — ${copiedDirs} directories and ${copiedFiles} files ${verb} to ${targetBase}`);
+  if (!onlyGroups || onlyGroups.has('skills')) {
+    const agentsCount = existsSync(join(agentsBase, 'skills')) ? readdirSync(join(agentsBase, 'skills')).length : 0;
+    console.log(`✓ Skills synced to ${join(agentsBase, 'skills')} (${agentsCount} skills — Cursor UI path)`);
+  }
   if (linkFallbacks) console.log(`  (note: ${linkFallbacks} file(s) copied instead of linked — symlinks need elevated rights on this OS)`);
   if (mcpInstalled) console.log(`✓ MCP template written to ${mcpDest} — edit it to add your API keys.`);
   console.log('Restart Cursor to activate skills, commands, and agents.');

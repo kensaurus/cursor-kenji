@@ -2,14 +2,20 @@
 set -euo pipefail
 
 # ============================================================
-# cursor_kenji installer
-# Installs skills, commands, and MCP config to ~/.cursor/
+# cursor-kenji installer
+#
+# Installs skills, commands, agents, rules, and MCP config.
+#
+# Why two skill paths?
+#   ~/.cursor/skills/   — Cursor agent reads skills from here at runtime
+#   ~/.agents/skills/   — Cursor Skills UI panel indexes from here
+#   Both must be populated for skills to show up AND be used.
 # ============================================================
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CURSOR_DIR="$HOME/.cursor"
 SKILLS_DIR="$CURSOR_DIR/skills"
-SKILLS_CURSOR_DIR="$CURSOR_DIR/skills-cursor"
+AGENTS_SKILLS_DIR="$HOME/.agents/skills"
 MCP_CONFIG="$CURSOR_DIR/mcp.json"
 
 QUIET=false
@@ -21,7 +27,7 @@ ok() { $QUIET || echo "  [+] $1"; }
 
 log ""
 log "======================================"
-log "  cursor_kenji installer"
+log "  cursor-kenji installer"
 log "======================================"
 log ""
 
@@ -33,32 +39,54 @@ if [ -d "$SKILLS_DIR" ] && [ ! -L "$SKILLS_DIR" ]; then
     ok "Backup created"
 fi
 
-# ---- Install skills ----
+# ---- Install skills (skills/ + skills-cursor/ merged into ~/.cursor/skills/) ----
 mkdir -p "$SKILLS_DIR"
 SKILL_COUNT=0
 for skill_dir in "$SCRIPT_DIR"/skills/*/; do
     skill_name=$(basename "$skill_dir")
     target="$SKILLS_DIR/$skill_name"
-    
-    # Copy skill directory (overwrite if exists)
+    rm -rf "$target"
+    cp -r "$skill_dir" "$target"
+    SKILL_COUNT=$((SKILL_COUNT + 1))
+done
+
+# Merge cursor-specific skills into the same skills dir (not a separate dir)
+for skill_dir in "$SCRIPT_DIR"/skills-cursor/*/; do
+    [ -d "$skill_dir" ] || continue
+    skill_name=$(basename "$skill_dir")
+    target="$SKILLS_DIR/$skill_name"
     rm -rf "$target"
     cp -r "$skill_dir" "$target"
     SKILL_COUNT=$((SKILL_COUNT + 1))
 done
 ok "Installed $SKILL_COUNT skills to $SKILLS_DIR"
 
-# ---- Install cursor-specific skills ----
-mkdir -p "$SKILLS_CURSOR_DIR"
-CURSOR_SKILL_COUNT=0
-for skill_dir in "$SCRIPT_DIR"/skills-cursor/*/; do
+# ---- Sync to ~/.agents/skills/ (Cursor Skills UI reads from here) ----
+mkdir -p "$AGENTS_SKILLS_DIR"
+for skill_dir in "$SKILLS_DIR"/*/; do
+    [ -d "$skill_dir" ] || continue
     skill_name=$(basename "$skill_dir")
-    target="$SKILLS_CURSOR_DIR/$skill_name"
-    
+    target="$AGENTS_SKILLS_DIR/$skill_name"
     rm -rf "$target"
     cp -r "$skill_dir" "$target"
-    CURSOR_SKILL_COUNT=$((CURSOR_SKILL_COUNT + 1))
 done
-ok "Installed $CURSOR_SKILL_COUNT cursor-specific skills to $SKILLS_CURSOR_DIR"
+ok "Synced $SKILL_COUNT skills to $AGENTS_SKILLS_DIR (Cursor UI)"
+
+# ---- Install commands ----
+COMMANDS_DIR="$CURSOR_DIR/commands"
+if [ -d "$SCRIPT_DIR/commands" ]; then
+    mkdir -p "$COMMANDS_DIR"
+    COMMAND_COUNT=0
+    for item in "$SCRIPT_DIR"/commands/*.md "$SCRIPT_DIR"/commands/*/; do
+        [ -e "$item" ] || continue
+        name=$(basename "$item")
+        target="$COMMANDS_DIR/$name"
+        rm -rf "$target"
+        cp -r "$item" "$target"
+        COMMAND_COUNT=$((COMMAND_COUNT + 1))
+    done
+    ok "Installed $COMMAND_COUNT commands to $COMMANDS_DIR"
+fi
 
 # ---- Install agents ----
 AGENTS_DIR="$CURSOR_DIR/agents"
@@ -74,7 +102,21 @@ if [ -d "$SCRIPT_DIR/agents" ]; then
     ok "Installed $AGENT_COUNT subagents to $AGENTS_DIR"
 fi
 
-# ---- Install MCP config ----
+# ---- Install rules ----
+RULES_DIR="$CURSOR_DIR/rules"
+if [ -d "$SCRIPT_DIR/rules" ]; then
+    mkdir -p "$RULES_DIR"
+    for item in "$SCRIPT_DIR"/rules/*; do
+        [ -e "$item" ] || continue
+        name=$(basename "$item")
+        rm -rf "$RULES_DIR/$name"
+        cp -r "$item" "$RULES_DIR/$name"
+    done
+    RULE_COUNT=$(ls "$RULES_DIR" | wc -l | tr -d ' ')
+    ok "Installed $RULE_COUNT rules to $RULES_DIR"
+fi
+
+# ---- Install MCP config (only if missing; never overwritten) ----
 if [ ! -f "$MCP_CONFIG" ]; then
     if [ -f "$SCRIPT_DIR/mcp/mcp.json.template" ]; then
         cp "$SCRIPT_DIR/mcp/mcp.json.template" "$MCP_CONFIG"
@@ -91,14 +133,15 @@ log "======================================"
 log "  Installation complete!"
 log "======================================"
 log ""
-log "  Skills:         $SKILL_COUNT installed"
-log "  Cursor Skills:  $CURSOR_SKILL_COUNT installed"
-log "  Subagents:      ${AGENT_COUNT:-0} installed"
-log "  Location:       $SKILLS_DIR"
+log "  Skills (runtime):  $SKILL_COUNT → $SKILLS_DIR"
+log "  Skills (UI index): $SKILL_COUNT → $AGENTS_SKILLS_DIR"
+log "  Commands:          ${COMMAND_COUNT:-0} → $COMMANDS_DIR"
+log "  Subagents:         ${AGENT_COUNT:-0} → $AGENTS_DIR"
+log "  Rules:             ${RULE_COUNT:-0} → $RULES_DIR"
 log ""
 log "  Next steps:"
-log "  1. Restart Cursor to pick up new skills"
-log "  2. Edit ~/.cursor/mcp.json with your API keys"
-log "  3. Try: /commit, /test, /research in Cursor"
-log "  4. Source shell helpers: source ~/cursor-kenji/shell-aliases/cursor-helpers.sh"
+log "  1. Fully quit and reopen Cursor (not just reload window)"
+log "  2. Skills will appear in Cursor Settings > Skills"
+log "  3. Edit ~/.cursor/mcp.json to add your API keys"
+log "  4. Try: 'red team this app', 'audit my security', 'commit my changes'"
 log ""
