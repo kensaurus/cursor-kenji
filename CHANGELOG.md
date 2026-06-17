@@ -4,6 +4,19 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.2.7] — 2026-06-17
+
+### Added
+
+- **`composer-2.5-execution.mdc`** rule (`alwaysApply: true`) — execution-time guardrails for Composer 2.5 when implementing an approved `plan-*.md`: anti-reward-hacking, anti-feature-deletion, checkpointing, context + terminal discipline, STOP-and-ask on auth/RLS/secrets/payments/migrations
+- Documents the two-model workflow (strong model plans, Composer 2.5 executes) in README and `docs/PLAN-LOOPS.md`
+
+### Changed
+
+- Project rules count: 8 → **9**
+
+---
+
 ## [1.2.6] — 2026-06-17
 
 ### Added

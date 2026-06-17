@@ -146,7 +146,7 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 | **Commands** | 13 | Slash commands for repeatable workflows (`/commit`, `/pr`, `/research`) |
 | **Subagents** | 5 | Background autonomous agents (code-reviewer, debugger, db-migrator…) |
 | **MCP Servers** | 16 | External integrations: Supabase · GitHub · Sentry · Playwright · AWS · Slack |
-| **Project Rules** | 8 | Drop-in `.mdc` files for any project's `.cursor/rules/` |
+| **Project Rules** | 9 | Drop-in `.mdc` files for any project's `.cursor/rules/` |
 | **Notepads** | 2 | Reusable context templates (architecture, design tokens) |
 | **Shell Aliases** | 8 | Terminal shortcuts (`newskill`, `cursor-sync`, `gc`, `gp`) |
 
@@ -258,7 +258,7 @@ graph TB
     CMD["Commands (13)"]
     SA["Subagents (5)"]
     MCP["MCP Servers (16)"]
-    RULES["Project Rules (8)"]
+    RULES["Project Rules (9)"]
     NP["Notepads (2)"]
   end
 
@@ -837,6 +837,13 @@ cp ~/cursor-kenji/rules/project-starter/*.mdc your-project/.cursor/rules/
 | `senior-engineer.md` | Full-stack execution protocol with MCP tool usage |
 | `full-stack-ship-discipline.mdc` | Every UI task is full-stack until verified end-to-end — migrations must deploy in the same chat |
 | `shell-first-search.md` | Route routine search to `Shell` instead of `Grep`/`Glob` (prevents Windows hang) |
+| `composer-2.5-execution.mdc` | Execution-time guardrails when Composer 2.5 implements an approved `plan-*.md` — anti-reward-hacking, anti-feature-deletion, checkpointing |
+
+> **Plan with a strong model, execute with the rule on.** The six `plan-*` skills are
+> meant to be authored/reviewed with a stronger reasoning model (e.g. Opus 4.8), then
+> handed to Composer 2.5 for implementation. `composer-2.5-execution.mdc` is
+> `alwaysApply: true`, so it rides along on every Composer execution run to keep the
+> handoff honest — the plan says *what* to do; the rule constrains *how* it's allowed to do it.
 
 ---
 
@@ -913,6 +920,7 @@ cursor-kenji/
 │   ├── senior-engineer.md
 │   ├── full-stack-ship-discipline.mdc
 │   ├── shell-first-search.md
+│   ├── composer-2.5-execution.mdc  # Composer execution guardrails for approved plans
 │   ├── project-starter/     # 6 drop-in project rule templates
 │   └── native-rn-monorepo/  # RN + Web monorepo bundle
 ├── notepads/                # Reusable context (architecture, design-tokens)

@@ -97,6 +97,23 @@ Use plan-test-coverage on this repo. Stories from real routes/handlers, traceabi
 matrix, multi-lens coverage (not just line %), fake-green detection. Plan only.
 ```
 
+## Plan with a strong model, execute with the rule on
+
+These `plan-*` skills are designed for a **two-model workflow**:
+
+1. **Plan** — author and review the `plan-*.md` burndown with a stronger reasoning model (e.g. Opus 4.8). Planning is where architecture and scope decisions live.
+2. **Execute** — hand the approved plan to Composer 2.5 for implementation, one burndown item at a time.
+
+The execution handoff is governed by **`composer-2.5-execution.mdc`** (`alwaysApply: true` — it rides along automatically on every Composer run). It is tuned to Composer 2.5's known failure modes:
+
+- **Anti-reward-hacking** — satisfy intent, never narrow/skip/`.only` tests or silence errors to go green
+- **Anti-feature-deletion** — never simplify away working code/routes/props to pass checks
+- **Checkpointing** — one unit at a time, stop at phase boundaries for review
+- **Context + terminal discipline** — per-surface loading; dry-run destructive commands
+- **STOP-and-ask** — auth, RLS, secrets, payments, migrations → consider routing back to the stronger model rather than executing directly
+
+> The plan says **what** to do; the rule constrains **how** Composer is allowed to do it. They are two layers — keep both.
+
 ## Preservation contract (all plan skills)
 
 Every `plan-*` skill shares the same discipline:
