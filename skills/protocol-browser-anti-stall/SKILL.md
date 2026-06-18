@@ -2,10 +2,11 @@
 name: protocol-browser-anti-stall
 description: >-
   Prevent browser automation from freezing, getting stuck, or waiting
-  excessively during page navigation and interaction. Use BEFORE any browser
+  excessively during page navigation and interaction, and enforce manual,
+  headed, real-user driving (never scripted). Use BEFORE any browser
   automation session — when testing webapps, running user-story tests,
-  QA audits, UX audits, or any task that calls cursor-ide-browser MCP tools
-  (browser_navigate, browser_snapshot, browser_wait_for, browser_click, etc.).
+  QA audits, UX audits, or any task that calls Playwright/cursor-ide-browser
+  MCP tools (browser_navigate, browser_snapshot, browser_click, etc.).
 license: MIT
 ---
 
@@ -14,8 +15,33 @@ license: MIT
 **Apply these rules to EVERY browser automation action. No exceptions.**
 
 **Also read `references/playwright-session-coordination.md`** before the first
-`browser_*` call — shared Playwright instance, tab ownership, persisted Google/OAuth
-sessions under `.playwright-mcp/auth/`.
+`browser_*` call — shared Playwright instance, tab ownership, persisted login.
+
+---
+
+## 0. Manual & headed — never scripted (read first)
+
+You are driving a **real, visible browser** to feel what a user feels. A green
+script proves nothing about UX — so *see the screen* and *watch the logs*.
+
+1. **Headed, visible.** The `user-playwright` MCP runs **headed by default** — never
+   pass `--headless`. Drive the on-screen window; if you can't see it, say so.
+2. **One real action at a time.** Click, type, and submit with the individual tools
+   (`browser_click`, `browser_type`, `browser_fill_form`, `browser_select_option`,
+   `browser_hover`, `browser_press_key`, `browser_drag`) exactly as a user would.
+   Never chain a whole flow into one code snippet.
+3. **`browser_evaluate` / `browser_run_code_unsafe` are inspection-only.** Use them
+   ONLY to *read* state (DOM, computed styles, storage, perf) or restore auth in
+   `--isolated` mode — never to click, type, navigate, or submit. Driving the UI
+   through code bypasses the real events and hides the bug you're hunting.
+4. **No scripts, no runner.** Do not write `*.spec.ts`, run `npx playwright test`, or
+   use codegen. You are here to *experience* the flow, not automate past it.
+5. **Look after every action.** Fresh `browser_snapshot` + `browser_take_screenshot`
+   (graphics) + `browser_console_messages` (logs) + `browser_network_requests` + the
+   dev-server terminal. Real pain points surface on the screen and in the logs, not
+   in an assertion.
+
+---
 
 ## 1. Navigation Guard
 

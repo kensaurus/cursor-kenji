@@ -3,8 +3,9 @@ name: test-playwright
 description: >-
   Close the PDCA loop on the work you just did. After implementing changes, drive
   the LIVE app on localhost through the Playwright browser MCP like a real end user —
-  manually, not programmatically — exercising every page, component, and flow the
-  current session touched. Reproduce real user journeys, hunt for pain points, and
+  manually, in a visible (headed) browser, clicking and typing one action at a time,
+  NEVER through scripts or test runners — exercising every page, component, and flow
+  the current session touched. Reproduce real user journeys, hunt for pain points, and
   FIX them as you go (full-stack: UI/UX + backend + DB), using already-enabled MCP
   servers (Sentry for production errors, Supabase for schema/logs/data, Firecrawl for
   research). Red-team your own work, give brutally honest critique, and suggest
@@ -28,35 +29,35 @@ phases of PDCA. You will not skip them.
 > **Act** = fix every pain point and error you find, in the same turn.
 
 **Before ANY browser action, read `protocol-browser-anti-stall`
-(`~/.cursor/skills/protocol-browser-anti-stall/SKILL.md`) and apply every rule**:
-navigation guard, max-3s waits, incremental wait pattern, fresh `browser_snapshot`
-after every state change, max-4-attempts-per-goal, evidence-before-retry, timeout
-budgets, **shared-browser tab discipline**, and **persisted auth** (see
-`references/playwright-session-coordination.md` in that skill). Those rules are
-mandatory for this whole workflow.
+(`~/.cursor/skills/protocol-browser-anti-stall/SKILL.md`) and apply every rule** —
+especially **Rule 0 (manual & headed, never scripted)**, plus the navigation guard,
+≤3s waits, fresh `browser_snapshot` after every state change, max-4-attempts-per-goal,
+timeout budgets, tab discipline, and persisted auth
+(`references/playwright-session-coordination.md`).
 
 ---
 
 ## Core principles
 
-> **Test only what this session changed — plus its blast radius.**
-> This is not a full-app crawl (that's `test-qa`). Scope to the files you edited and
-> the pages/flows/APIs that consume them. Touch a shared component → test every page
-> that renders it.
+> **Drive a visible browser by hand, never a script.**
+> Headed (never `--headless`). Click, type, scroll, read, react — one real action at a
+> time, as someone discovering the feature for the first time. `browser_evaluate` /
+> `browser_run_code_unsafe` are inspection-only; never write `*.spec.ts` or run
+> `npx playwright test`. You're here to *feel* the pain points, not pass a green check.
 
-> **Manual, like a human. Not scripted.**
-> Click, type, scroll, read, react. Navigate as someone discovering the feature for
-> the first time. Use `browser_evaluate` / `browser_run_code_unsafe` only to *inspect*
-> state, never to shortcut the user journey you're supposed to be living.
+> **Test only what this session changed — plus its blast radius.**
+> Not a full-app crawl (that's `test-qa`). Scope to the files you edited and the
+> pages/flows/APIs that consume them. Touch a shared component → test every page that
+> renders it.
 
 > **Fix as you go — full-stack.**
-> When you hit a bug, a 500, a confusing label, a dead button, an ugly layout: fix it
-> now. Frontend, backend, migration, RLS, config — whatever the root cause is. Then
-> re-test the same flow to confirm the fix. Do not batch fixes for "later".
+> Hit a bug, 500, confusing label, dead button, ugly layout → fix the root cause now
+> (frontend, backend, migration, RLS, config), then re-test the same flow. Don't batch
+> fixes for "later".
 
 > **Evidence or it didn't happen.**
-> Every finding needs a screenshot + console + network. Every fix needs a re-test that
-> proves it works against the real backend (a 200, persisted data, no console error).
+> Every finding needs a screenshot + console + network. Every fix needs a live re-test
+> that proves it against the real backend (a 200, persisted data, clean console).
 
 > **Red-team your own work.**
 > Assume your change is subtly wrong. Try to break it. Be the harshest critic of the
@@ -139,13 +140,15 @@ session reuse.
  verify content).
 5. `browser_console_messages` + `browser_network_requests` → baseline before touching the
  changed feature.
-6. **Auth (reuse, don't re-login every time):**
-   - Hit a protected route → if already signed in, continue.
-   - Else restore `.playwright-mcp/auth/<host>.json` via `browser_run_code_unsafe` (see
-     coordination reference).
-   - Else complete login once (Google OAuth may need the user in the browser window),
-     save storage state + `session.json`, leave tab open for the next agent.
-   - Do **not** log out at end unless testing logout.
+6. **Auth (log in once, by hand — it persists):**
+   - Hit a protected route → if already signed in, continue. The Playwright MCP uses a
+     **persistent profile by default**, so a one-time manual login survives across turns
+     and sessions — you rarely re-login.
+   - Else complete login **manually in the visible window** like a user (Google/OAuth may
+     need you to approve in the browser). Then verify a protected route loads.
+   - Only restore `.playwright-mcp/auth/<host>.json` via `browser_run_code_unsafe` if the
+     server runs `--isolated` (no persistent profile) — see coordination reference.
+   - Do **not** log out at end unless testing logout. Leave the tab open for the next agent.
 
 ---
 
@@ -328,33 +331,41 @@ Console clean: [Y/N] · All flows green on re-test: [Y/N] · Test data cleaned: 
 
 ## Playwright MCP tools (server: `user-playwright`)
 
-`browser_navigate`, `browser_navigate_back`, `browser_snapshot`, `browser_take_screenshot`,
+Headed by default; snapshot/ref-based (accessibility tree), no lock/unlock — just
+snapshot freshly after each change.
+
+**Drive with these (real user actions):** `browser_navigate`, `browser_navigate_back`,
 `browser_click`, `browser_type`, `browser_fill_form`, `browser_select_option`,
-`browser_hover`, `browser_drag`, `browser_drop`, `browser_press_key`, `browser_file_upload`,
-`browser_handle_dialog`, `browser_resize`, `browser_wait_for`, `browser_console_messages`,
-`browser_network_requests`, `browser_network_request`, `browser_evaluate`, `browser_tabs`,
-`browser_close`. (This server has no lock/unlock — just snapshot freshly after each change.)
+`browser_hover`, `browser_drag`, `browser_drop`, `browser_press_key`,
+`browser_file_upload`, `browser_handle_dialog`, `browser_resize`, `browser_tabs`.
+
+**Observe with these:** `browser_snapshot`, `browser_take_screenshot`, `browser_wait_for`,
+`browser_console_messages`, `browser_network_requests`, `browser_network_request`.
+
+**Inspection-only (never to drive the UI):** `browser_evaluate`, `browser_run_code_unsafe`.
 
 ---
 
 ## Guardrails
 
-1. **Scope discipline** — test session changes + blast radius, not the entire app. For
+1. **Manual & headed, never scripted** — visible browser, one real user action at a
+ time; `browser_evaluate` / `browser_run_code_unsafe` for inspection only; no
+ `*.spec.ts`, no `npx playwright test`. See anti-stall Rule 0.
+2. **Scope discipline** — test session changes + blast radius, not the entire app. For
  a full-app sweep use `test-qa`.
-2. **Shared browser** — one Playwright MCP per Cursor; `browser_tabs` list before every
- turn; work in your tab only; never close tabs you didn't open. See
- `protocol-browser-anti-stall/references/playwright-session-coordination.md`.
-3. **Auth reuse** — restore storage state or select the auth tab; sign in once per
- environment; save state after OAuth; do not log out unless testing logout.
-4. **Anti-stall always** — never block >3s; incremental wait → snapshot → check; max 4
+3. **Shared browser** — one Playwright MCP per Cursor; `browser_tabs` list before every
+ turn; work in your tab only; never close tabs you didn't open.
+4. **Auth reuse** — log in once by hand; the persistent profile keeps you signed in;
+ don't log out unless testing logout.
+5. **Anti-stall always** — never block >3s; incremental wait → snapshot → check; max 4
  attempts per goal; skip a stuck step (`[TIMEOUT]`) rather than freeze the session.
-5. **Fix the root cause, full-stack** — UI, API, DB, config; re-test live after each fix.
-6. **Schema in sync** — anything you change via MCP also gets a versioned migration file
+6. **Fix the root cause, full-stack** — UI, API, DB, config; re-test live after each fix.
+7. **Schema in sync** — anything you change via MCP also gets a versioned migration file
  on disk; verify the remote actually has it.
-7. **Ask before mutating real data** — DDL for the requested feature ships; `DELETE` /
+8. **Ask before mutating real data** — DDL for the requested feature ships; `DELETE` /
  `UPDATE` / `TRUNCATE` on production rows asks first.
-8. **No secrets in chat** — use `.env*` values by name only; never print them.
-9. **Evidence for every finding and every fix** — screenshot + console + network + a
- green re-test.
-10. **Honest verdict** — don't declare "done" with a red console or an unfixed pain point.
+9. **No secrets in chat** — use `.env*` values by name only; never print them.
+10. **Evidence for every finding and fix** — screenshot + console + network + a green
+ re-test.
+11. **Honest verdict** — don't declare "done" with a red console or an unfixed pain point.
  If you couldn't fix something, say so clearly with a recommendation.

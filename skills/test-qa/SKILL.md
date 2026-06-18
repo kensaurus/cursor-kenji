@@ -2,18 +2,16 @@
 name: test-qa
 description: >
   GENERIC webapp QA fallback — use ONLY when no project-specific QA skill applies
-  (66ai-user-story-testing for 6-6 AI, sbc-qa-data-integrity-audit/sbc-pdca-audit
-  for 一人社長, glotit-fresh-eyes-ux-audit for the Thai learning app, mobile-emulator-test
-  for native mobile builds). For unit tests, use test-unit.
-  Comprehensive QA testing of any webapp using browser MCP tools against a local dev server.
-  Auto-discovers pages, features, data entities, and auth patterns from the codebase.
-  Generates user stories dynamically, performs real CRUD operations with data pipeline
-  verification (FE -> API -> DB -> FE), audits UX quality at design-award level,
-  tests edge cases, and produces a structured pass/fail report. Use when asked to
-  "QA the app", "test the app", "find bugs", "test before release", "run QA",
-  "test CRUD", "test data pipeline", "check for dead buttons", "audit UX quality",
-  "pre-release testing", "smoke test", "acceptance test", or "test like a real user"
-  AND no project-specific QA skill matches the repo.
+  (66ai-user-story-testing, sbc-qa-data-integrity-audit, glotit-fresh-eyes-ux-audit,
+  or mobile-emulator-test for native builds). For unit tests use test-unit.
+  Drives a visible (headed) browser manually through the Playwright MCP like a real
+  user — clicking and typing one action at a time, never via scripts or test runners.
+  Auto-discovers pages, entities, and auth from the codebase, generates user stories,
+  performs real CRUD with data-pipeline verification (FE -> API -> DB -> FE), audits
+  UX quality, tests edge cases, and produces a pass/fail report. Use when asked to
+  "QA the app", "test the app", "find bugs", "run QA", "test CRUD", "smoke test",
+  "check for dead buttons", or "test like a real user" AND no project-specific QA
+  skill matches the repo.
 license: MIT
 ---
 
@@ -25,11 +23,18 @@ simple page-navigation monkey test — it is controlled, intelligent, user-story
 testing that covers CRUD operations, data pipeline integrity, UX quality, and edge cases.
 
 **Before ANY browser interaction, read the `protocol-browser-anti-stall` skill and apply its
-rules to every step.** That skill lives at `~/.cursor/skills/protocol-browser-anti-stall/SKILL.md`.
-Also read `references/playwright-session-coordination.md` in that folder — shared browser,
-tab claiming, persisted Google/OAuth auth under `.playwright-mcp/auth/`.
+rules to every step — especially Rule 0 (manual & headed, never scripted).** That skill lives
+at `~/.cursor/skills/protocol-browser-anti-stall/SKILL.md`. Also read
+`references/playwright-session-coordination.md` in that folder — shared browser, tab claiming,
+persisted login.
 
 ## Critical Rules
+
+> **Manual & headed, never scripted.**
+> Drive a visible browser one real action at a time with the individual `browser_*` tools.
+> `browser_evaluate` / `browser_run_code_unsafe` are inspection-only — never use them to click,
+> type, or navigate. Do not write `*.spec.ts` or run `npx playwright test`; experience the app,
+> don't automate past it.
 
 > **Test as a real user, think as an engineer.**
 > Navigate like someone who just opened the app for the first time.

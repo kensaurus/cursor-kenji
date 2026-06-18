@@ -13,7 +13,15 @@
     },
     "playwright": {
       "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest"]
+      "args": [
+        "-y",
+        "@playwright/mcp@latest",
+        "--viewport-size",
+        "1280x800",
+        "--save-session",
+        "--output-dir",
+        ".playwright-mcp"
+      ]
     },
     "supabase": {
       "command": "npx",

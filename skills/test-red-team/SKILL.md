@@ -2,9 +2,9 @@
 name: test-red-team
 description: >-
   Adversarial red-team of a running web, React Native, or Capacitor hybrid app.
-  Drives Playwright browser MCP (web/PWA), Playwright Android WebView attach
-  (Capacitor), or adb tap-walk (native chrome) against a feature-first coverage
-  matrix: each feature decomposed to surfaces, sub-pages, components, and
+  Drives a visible (headed) browser by hand — Playwright browser MCP (web/PWA),
+  Playwright Android WebView attach (Capacitor), or adb tap-walk (native chrome),
+  never scripted test files — against a feature-first coverage matrix: each feature decomposed to surfaces, sub-pages, components, and
   states, attacked across 4 dimensions — UI/UX, data pipeline, security
   (OWASP-mapped), and performance. Cross-references Sentry for production
   telemetry, Supabase for DB-layer mutation truth and RLS verification, and
@@ -30,9 +30,16 @@ finds the gaps before real users do.
 > to fix after the report is delivered; ask which defects to prioritize.
 
 **Before ANY browser action, read `protocol-browser-anti-stall`
-(`~/.cursor/skills/protocol-browser-anti-stall/SKILL.md`) and apply every rule.**
-Also read `references/playwright-session-coordination.md` in that skill — shared
-browser, tab discipline, persisted auth.
+(`~/.cursor/skills/protocol-browser-anti-stall/SKILL.md`) and apply every rule —
+especially Rule 0 (manual & headed, never scripted).** Also read
+`references/playwright-session-coordination.md` — shared browser, tab discipline,
+persisted auth.
+
+> **Attack through the visible UI, by hand.** Drive a headed browser one real action at
+> a time. Code execution (`browser_evaluate` / CDP / WebView attach) is allowed ONLY to
+> *set a condition* (throttle network, kill a request, emulate a device) or *inspect*
+> state — never to perform the click/type/submit you're attacking. The defect must be
+> reachable the way a real attacker or user reaches it.
 
 ---
 
@@ -87,7 +94,9 @@ Record:
 
 ### 0c. Capacitor WebView attach (when target includes Capacitor)
 
-Ensure the app is running, then in a script or shell:
+**Exception to Rule 0:** a native WebView can't be driven by snapshot-ref tools, so
+attaching is the only option here. Once attached, still interact like a user (tap,
+type, scroll) — don't script the flow end-to-end. Ensure the app is running, then:
 
 ```javascript
 const { _android } = require('playwright');
@@ -303,7 +312,8 @@ Focus on the conditions real users hit: cold start, slow network, large data.
 
 ### Network throttling
 
-Use Playwright's CDP layer via `browser_evaluate`:
+Condition-setup only — throttling can't be done by clicking. Set the condition via
+Playwright's CDP layer, then drive the actual load/scroll/submit by hand:
 
 ```javascript
 // Simulate Slow 3G
@@ -410,20 +420,23 @@ For each finding, assign:
 
 ## Guardrails
 
-1. **Anti-stall always** — never block >3 s on a browser action; incremental
+1. **Manual & headed, never scripted** — attack through the visible UI one real action
+   at a time; code execution is for condition-setup/inspection only, not for driving
+   the click/type/submit under test; no `*.spec.ts`, no `npx playwright test`.
+2. **Anti-stall always** — never block >3 s on a browser action; incremental
    wait → snapshot → check; max 4 attempts per goal; mark `[TIMEOUT]` and move on.
-2. **Evidence for every DEFECT** — screenshot + console + network + DB query
+3. **Evidence for every DEFECT** — screenshot + console + network + DB query
    result. "It looked broken" is not a defect.
-3. **No destructive PoCs** — confirm XSS/SQLi with a benign payload
+4. **No destructive PoCs** — confirm XSS/SQLi with a benign payload
    (`document.title='XSS'`, `SELECT 1`), never `DROP TABLE` or real data exfil.
-4. **Ask before mutating production rows** — DDL (schema changes) for a requested
+5. **Ask before mutating production rows** — DDL (schema changes) for a requested
    fix ships; `DELETE`/`UPDATE`/`TRUNCATE` on real production data asks first.
-5. **Secrets by name only** — never print `.env` values in chat or screenshots.
-6. **Honest verdict** — do not declare "no defects" if any cell is untested. Mark
+6. **Secrets by name only** — never print `.env` values in chat or screenshots.
+7. **Honest verdict** — do not declare "no defects" if any cell is untested. Mark
    untested cells N-A with a note explaining why (auth blocked, no data, etc.).
-7. **Offer to fix after the report** — ask which Critical/High defects to address
+8. **Offer to fix after the report** — ask which Critical/High defects to address
    first; use `test-playwright` PDCA discipline when applying fixes.
-8. **MCP schemas first** — always check tool schemas under `mcps/<server>/tools/`
+9. **MCP schemas first** — always check tool schemas under `mcps/<server>/tools/`
    before calling any MCP tool.
-9. **Pure-native iOS/Android out of scope** — document it in the report if relevant.
+10. **Pure-native iOS/Android out of scope** — document it in the report if relevant.
 

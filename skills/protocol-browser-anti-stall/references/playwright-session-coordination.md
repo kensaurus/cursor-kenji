@@ -66,7 +66,14 @@ All artifacts live under `.playwright-mcp/` (gitignored).
 
 ## Auth persistence (Google OAuth, magic link, email/password)
 
-Goal: **sign in once**, reuse across skills (`test-playwright`, `test-qa`, `test-red-team`) and across agent turns.
+Goal: **sign in once, by hand**, reuse across skills (`test-playwright`, `test-qa`,
+`test-red-team`) and across agent turns.
+
+> **Default = persistent profile.** The Playwright MCP stores all logged-in state in a
+> persistent profile on disk, so a one-time **manual** login survives turns and restarts.
+> Just do Step 1, then log in like a user if needed — you almost never touch storage
+> state. Steps 2–3 (the `browser_run_code_unsafe` storage-state scripts) are a fallback
+> ONLY when the server runs `--isolated` (profile kept in memory, not saved).
 
 ### Step 1 — Check existing session
 
@@ -76,9 +83,11 @@ Goal: **sign in once**, reuse across skills (`test-playwright`, `test-qa`, `test
    - **Logged in** (dashboard, avatar, app shell) → skip login; optionally refresh storage state file.
    - **Redirect to login** → continue to Step 2.
 
-### Step 2 — Restore saved storage state
+### Step 2 — Restore saved storage state (`--isolated` mode only)
 
-If `.playwright-mcp/auth/<host>.json` exists, inject before navigating:
+Skip this with the default persistent profile — go straight to Step 3 and log in by hand.
+Only when running `--isolated`: if `.playwright-mcp/auth/<host>.json` exists, inject it
+before navigating (this is the one sanctioned non-driving use of `browser_run_code_unsafe`):
 
 ```json
 CallMcpTool(server: "user-playwright", toolName: "browser_run_code_unsafe", arguments: {
@@ -88,13 +97,15 @@ CallMcpTool(server: "user-playwright", toolName: "browser_run_code_unsafe", argu
 
 Replace `localhost-3000.json` with your host file. Navigate to protected route again — if still logged out, continue to Step 3.
 
-### Step 3 — Interactive login (once per environment)
+### Step 3 — Interactive login (the normal path — once per environment)
+
+Log in **by hand in the visible window**, exactly as a user would:
 
 1. Navigate to login; complete auth in the browser:
-   - **Google / OAuth / SSO**: user may need to approve in the browser window — wait up to 60s with incremental snapshots (2s waits, anti-stall rules still apply).
-   - **Email/password**: use test credentials from `.env.test` / README — never paste secrets into chat.
-2. Verify protected route loads.
-3. **Save storage state** immediately:
+   - **Google / OAuth / SSO**: approve in the browser window — wait up to 60s with incremental snapshots (2s waits, anti-stall rules still apply).
+   - **Email/password**: type the test credentials from `.env.test` / README into the form — never paste secrets into chat.
+2. Verify protected route loads. With the persistent profile, you're done — it sticks.
+3. Only under `--isolated`, **save storage state** so Step 2 can restore it next time:
 
 ```json
 CallMcpTool(server: "user-playwright", toolName: "browser_run_code_unsafe", arguments: {
