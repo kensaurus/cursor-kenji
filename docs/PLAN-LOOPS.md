@@ -34,6 +34,7 @@ flowchart LR
 | Step | Skill | What it plans | Run after |
 |------|-------|---------------|-----------|
 | 1 | `plan-uiux-unification` | IA, design-system drift, UI burndown | Onboarding or before a UI sweep |
+| 1b | `plan-antislop` *(optional)* | AI slop across prose, visual, code, structure | After UI plan or pre-launch authenticity pass |
 | 2 | `plan-stub-checker` | Dead buttons, fake data, unwired handlers | UI plan or when "nothing works" |
 | 3 | `plan-test-coverage` | Story→test matrix, fake-green, gaps | **Stub wiring approved** — lock behavior in tests |
 | 4a | `plan-perf-audit` | Measured perf burndown (web/RN/API/DB) | Parallel with 4b after tests are specced |
@@ -47,19 +48,135 @@ flowchart LR
 | Plan skill | Execution skills |
 |------------|------------------|
 | `plan-uiux-unification` | `enhance-web-ux`, `enhance-web-ui`, `audit-accessibility` |
+| `plan-antislop` | `docs-writer`, `audit-i18n`, `enhance-web-ui`, `enhance-web-ux`, `enhance-web-landing`, `workflow-refactor` |
 | `plan-stub-checker` | `debug-fe-be-integration`, `workflow-fix-and-ship` |
 | `plan-test-coverage` | `test-unit`, `workflow-spec-tdd`, `test-playwright` |
 | `plan-perf-audit` | `audit-performance`, `audit-bundle-size`, `backend-db-performance`, `mobile-rn-performance` |
 | `plan-security-audit` | `audit-security`, `audit-db-schema` |
 | `plan-docs-sync` | `docs-writer`, `workflow-housekeep` |
+| `plan-rls-audit` | `db-migrator`, `backend-patterns`, `backend-db-performance`, `audit-security` |
+| `plan-error-handling` | `backend-observability`, `audit-langfuse-llm`, `debug-sentry-monitor` |
+| `plan-input-validation` | `backend-patterns`, `backend-error-handling`, `audit-security`, `audit-fe-api` |
+| `plan-secrets-audit` | provider dashboards, Vercel/AWS env, `audit-security`, `create-hook` |
+| `plan-data-integrity` | `db-migrator`, `backend-patterns`, infra config, `create-hook` |
+| `plan-dependency-provenance` | `workflow-housekeep`, `create-hook`, `/update-deps`, `audit-security` |
+| `plan-llm-cost-guardrails` | `backend-patterns`, `audit-langfuse-llm`, `backend-observability` |
+| `plan-aeo-readiness` | `enhance-web-seo`, `docs-writer`, `enhance-web-landing` |
+| `plan-mobile-readiness` | `mobile-capacitor-platform`, `enhance-capacitor-ui`, `plan-stub-checker`, `mobile-emulator-test` |
+| `plan-capacitor-hardening` | `mobile-capacitor-platform`, `plan-secrets-audit`, `plan-input-validation`, `mobile-emulator-test` |
 
 **Verify every execution phase:** `test-playwright` (live user paths) + `deploy-verify` (prod smoke).
+
+## Plan skill map (17 skills — pick loops, don't run all at once)
+
+| Group | Skills | When |
+|-------|--------|------|
+| **Six-skill loop** | uiux → stub → test-coverage → perf ∥ security → docs | Inherited codebase, UI/IA hardening |
+| **Authenticity** | `plan-antislop` | "Feels AI-generated" — after UI plan or pre-launch |
+| **Pre-launch hardening** | security spine + `plan-dependency-provenance` | Supabase/Stripe apps, vibe-coded repos, pre-open-source |
+| **Observability & spend** | `plan-error-handling` + `plan-llm-cost-guardrails` | Sentry/Langfuse gaps, LLM features shipping |
+| **Mobile gate** | `plan-capacitor-hardening` + `plan-mobile-readiness` | Capacitor/hybrid pre-store; native-layer security + paperwork |
+| **Growth gate** | `plan-aeo-readiness` | AI citation / GEO — run as needed |
+
+## Pre-launch hardening loop (security + supply chain)
+
+Run layers that apply; cross-hand findings (e.g. exposed `service_role` →
+`plan-rls-audit`; suspect package → never install to verify).
+
+```
+Entry          plan-input-validation
+Credentials    plan-secrets-audit
+Data access    plan-rls-audit
+Blast radius   plan-data-integrity
+Supply chain   plan-dependency-provenance
+```
+
+Copy-paste (plan only):
+
+```
+Run the pre-launch hardening loop — audit only, no changes until I approve each phase:
+plan-input-validation → plan-secrets-audit → plan-rls-audit → plan-data-integrity → plan-dependency-provenance
+Cross-hand findings between skills. One consolidated report per skill or merged burndown.
+Stop after planning.
+```
+
+## Security spine (five layers — subset of hardening loop)
+
+Distinct from the six-skill loop — maps to **layers**, not sequence. Run the layers
+that apply; cross-hand findings between skills (e.g. exposed `service_role` from
+`plan-secrets-audit` → `plan-rls-audit` to assess blast radius).
+
+```
+Entry (trust boundaries)     plan-input-validation
+Credentials (rotate/relocate) plan-secrets-audit
+Data access (RLS)            plan-rls-audit
+Blast radius (destructive ops) plan-data-integrity
+Observability (silent fails)  plan-error-handling
+```
+
+| Layer | Skill | Anchored to |
+|-------|-------|-------------|
+| Entry | `plan-input-validation` | Happy-path bias, XSS, CVE-2026-41432 webhook forgery |
+| Credentials | `plan-secrets-audit` | Moltbook key leak, git-history permanence trap |
+| Data access | `plan-rls-audit` | 88% RLS-off apps, CVE-2025-48757 inverted policies |
+| Blast radius | `plan-data-integrity` | PocketOS/Railway Apr 2026 — prod + backups deleted in 9s |
+| Observability | `plan-error-handling` | ~2× error-handling gaps in AI PRs, Langfuse eval gaps |
+| Supply chain | `plan-dependency-provenance` | CSA 2026 slopsquatting — ~20% hallucinated deps, 43% recurring |
+
+## Observability & spend loop
+
+Visibility (`plan-error-handling`) and prevention (`plan-llm-cost-guardrails`) are
+complementary — run both for LLM-powered apps.
+
+```
+Silent failures / Sentry / Langfuse gaps  →  plan-error-handling
+Runaway token spend / no caps / no breaker →  plan-llm-cost-guardrails
+```
+
+Cross-hand: forged-webhook quota fraud and prompt-injection cost amplification →
+`plan-input-validation`.
+
+Slash aliases: `/error-plan`, `/cost-plan`
+
+## Launch gates (run as needed)
+
+Independent of the six-skill and hardening loops — run when you're about to ship.
+
+| Gate | Skill | Trigger |
+|------|-------|---------|
+| Capacitor native security | `plan-capacitor-hardening` | WebView, secure storage, OAuth/deep links, OTA, cleartext |
+| App Store / Play | `plan-mobile-readiness` | Pre-submission, privacy manifest, 2.5.2 thin-app |
+| AI citation / GEO | `plan-aeo-readiness` | "Do ChatGPT/Perplexity cite me?", llms.txt, crawler block |
+
+**Capacitor hybrid apps:** run `plan-capacitor-hardening` **before** `plan-mobile-readiness` — native-layer gaps are invisible to web-only review.
+
+Copy-paste (mobile gate, plan only):
+
+```
+Run the mobile gate — audit only, no native/config changes until I approve each phase:
+plan-capacitor-hardening → plan-mobile-readiness
+Cross-hand: bundle secrets → plan-secrets-audit; deep-link input → plan-input-validation.
+Stop after planning.
+```
+
+Slash aliases: `/capacitor-plan`, `/mobile-plan`, `/aeo-plan`
 
 ## Slash aliases (CATALOG)
 
 | Alias | Skill |
 |-------|-------|
 | `/uiux-plan` | `plan-uiux-unification` |
+| `/slop-plan` | `plan-antislop` |
+| `/rls-plan` | `plan-rls-audit` |
+| `/secrets-plan` | `plan-secrets-audit` |
+| `/validation-plan` | `plan-input-validation` |
+| `/integrity-plan` | `plan-data-integrity` |
+| `/error-plan` | `plan-error-handling` |
+| `/deps-plan` | `plan-dependency-provenance` |
+| `/cost-plan` | `plan-llm-cost-guardrails` |
+| `/aeo-plan` | `plan-aeo-readiness` |
+| `/mobile-plan` | `plan-mobile-readiness` |
+| `/capacitor-plan` | `plan-capacitor-hardening` |
 | `/stub-plan` | `plan-stub-checker` |
 | `/test-plan` | `plan-test-coverage` |
 | `/perf-plan` | `plan-perf-audit` |
@@ -127,7 +244,11 @@ Every `plan-*` skill shares the same discipline:
 
 | Loop | Entry | Use when |
 |------|-------|----------|
-| **Six-skill plan** | `plan-uiux-unification` | Inherited codebase, pre-launch hardening |
+| **Six-skill plan** | `plan-uiux-unification` | Inherited codebase, UI/IA hardening |
+| **Pre-launch hardening** | `plan-input-validation` | Supabase/Stripe, vibe-coded, pre-open-source |
+| **Observability & spend** | `plan-error-handling` | Silent failures, LLM cost exposure |
+| **Mobile gate** | `plan-capacitor-hardening` / `plan-mobile-readiness` | Capacitor pre-store, native security |
+| **Growth gate** | `plan-aeo-readiness` | AI citation |
 | `workflow-quality-gate` | `test-red-team` | Ship/no-ship verdict with fixes |
 | `workflow-launch-ready` | SEO + PWA + … | Launch week |
 | Core iterate | `/research` → audits → `/plan` → TDD | General improvement |

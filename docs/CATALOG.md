@@ -26,7 +26,7 @@ Every skill has a category prefix that tells you what it does at a glance:
 
 ---
 
-## Skills (73)
+## Skills (90)
 
 ### Enhance
 
@@ -103,6 +103,61 @@ Every skill has a category prefix that tells you what it does at a glance:
 **Triggers:** "UI/UX unification plan", "design system audit plan", "UI burndown", "unify the design system", "plan UI overhaul", "design system consolidation", "IA audit before redesign", "audit UI without fixing", "UI/UX unification"
 **What it does:** Exhaustive, non-destructive UI/UX + design-system audit that produces a burndown and unification plan — **no code changes in this pass**. IA-first (hierarchy before layout), preservation contract, full surface inventory, violation log, prioritized burndown with risk column, phased roadmap, guardrails. Enhances existing DS; does not replace it. Optional browser MCP for evidence; Firecrawl for current-year best practices.
 **Related:** `audit-uiux-design-system`, `audit-ux`, `enhance-web-ux`, `enhance-web-ui`, `design-system`
+
+#### `plan-antislop`
+**Triggers:** "feels AI-generated", "AI slop", "de-slop", "reads like ChatGPT", "generic/templated/soulless", "every component looks the same", "voice pass", "authenticity pass", "strip the AI smell"
+**What it does:** Audit-and-plan for machine-generated tells across four surfaces — prose (cadence, filler vocab, hedge-and-pad), visual/UI (default palette, card-grid monotony, centered-everything), code (placeholder residue, comment slop, over-abstraction), structure/IA (listicle-brain, symmetrical scaffolding, README slop). Scores findings by recognizability × effort; emits `plan-antislop.md` phased burndown — **no rewrites until each phase is approved**. Recommends directions, never ghost-written replacements.
+**Related:** `enhance-web-ux`, `enhance-web-ui`, `enhance-web-landing`, `design-frontend`, `audit-i18n`, `docs-writer`, `plan-uiux-unification`
+
+#### `plan-rls-audit`
+**Triggers:** "RLS", "row level security", "is my Supabase secure", "anyone can read my data", "check my database policies", "lock down my tables", "service_role key", "Supabase security advisor"
+**What it does:** Table-by-table Supabase/Postgres RLS audit — relrowsecurity, permissive/inverted policies (CVE-2025-48757 class), service_role client-side, auth.uid() perf. Produces access matrix + `plan-rls-audit.md` — **no SQL until approved**.
+**Related:** `plan-secrets-audit`, `plan-security-audit`, `audit-db-schema`, `db-migrator`
+
+#### `plan-error-handling`
+**Triggers:** "errors aren't showing in Sentry", "fail silently", "empty catch blocks", "observability", "check my Langfuse", "LLM tracing"
+**What it does:** Audits silent failures across Sentry (swallowed catches, PII in events, coverage holes) and Langfuse (untraced calls, missing evals, prompt versioning). Emits `plan-error-handling.md` — **no code until approved**.
+**Related:** `backend-observability`, `audit-langfuse-llm`, `debug-sentry-monitor`, `plan-test-coverage`
+
+#### `plan-input-validation`
+**Triggers:** "validate my inputs", "XSS", "dangerouslySetInnerHTML", "Stripe webhook", "forge requests", "injection-safe", "sanitize user content"
+**What it does:** Trust-boundary audit — forms/API (Zod gaps, mass assignment), rendered content (XSS), webhooks (CVE-2026-41432, raw-body, idempotency), uploads. Emits `plan-input-validation.md` — **no hardening until approved**.
+**Related:** `plan-rls-audit`, `plan-secrets-audit`, `plan-security-audit`, `audit-fe-api`
+
+#### `plan-secrets-audit`
+**Triggers:** "hardcoded secrets", "did I commit a key", "secret scan", "rotate keys", "are my API keys exposed", "is my .env safe"
+**What it does:** Credential scan + **rotate vs relocate** judgment (git-history permanence trap). Classifies anon vs service_role, NEXT_PUBLIC_ leaks, Vercel/AWS env. Emits `plan-secrets-audit.md` — **no rotation until approved**.
+**Related:** `plan-rls-audit`, `create-hook`, `audit-security`
+
+#### `plan-data-integrity`
+**Triggers:** "is my migration safe", "could I lose data", "check my backups", "agent might delete prod", "destructive operations", "disaster recovery"
+**What it does:** Destructive-op and migration safety audit — unguarded DELETE/DROP, backfill-before-drop, backup blast radius (PocketOS Apr 2026), overprivileged agent/CI tokens, confirmation gates. Emits `plan-data-integrity.md` — **no migrations/tokens until approved**.
+**Related:** `plan-secrets-audit`, `plan-rls-audit`, `audit-db-schema`, `db-migrator`
+
+#### `plan-dependency-provenance`
+**Triggers:** "check my dependencies", "slopsquatting", "is this package real", "supply chain audit", "license check", "SBOM", "did the AI hallucinate a package"
+**What it does:** Supply-chain audit — existence/slopsquatting (CSA 2026 ~20% hallucinated deps), lockfile integrity, license/provenance, transitive bloat. Provenance table + `plan-dependency-provenance.md` — **never install suspect packages to verify**.
+**Related:** `plan-secrets-audit`, `create-hook`, `workflow-housekeep`, `/update-deps`
+
+#### `plan-llm-cost-guardrails`
+**Triggers:** "cap my AI costs", "LLM bill could blow up", "token budget", "runaway agent loop", "per-user AI limits", "drain my API quota"
+**What it does:** 3-layer guardrail audit — token-bucket limits, cost-velocity circuit breakers, fallback chain (cheaper model → cache → 503). Complements Langfuse observability. Emits `plan-llm-cost-guardrails.md`.
+**Related:** `audit-langfuse-llm`, `plan-input-validation`, `backend-patterns`
+
+#### `plan-aeo-readiness`
+**Triggers:** "AEO", "GEO", "do AI engines cite me", "llms.txt", "blocking AI crawlers", "ChatGPT/Perplexity visibility"
+**What it does:** Answer-engine citation audit — crawler access (Cloudflare AI-bot defaults), SSR/extractability, schema, Princeton GEO levers (quotes +41%, stats +30%). Google/AI overlap <20%. Emits `plan-aeo-readiness.md`.
+**Related:** `enhance-web-seo`, `docs-writer`, `plan-antislop`
+
+#### `plan-mobile-readiness`
+**Triggers:** "App Store ready", "Google Play reject", "privacy manifest", "data safety form", "pre-submission", "Guideline 2.5.2"
+**What it does:** Store submission audit — privacy manifests, Data Safety ↔ permissions, IAP via billing, demo account, 2.5.2 thin-app risk, Android closed-test gate. Emits `plan-mobile-readiness.md`.
+**Related:** `mobile-capacitor-platform`, `enhance-capacitor-ui`, `plan-stub-checker`, `plan-capacitor-hardening`
+
+#### `plan-capacitor-hardening`
+**Triggers:** "Capacitor app secure", "harden hybrid app", "WebView security", "secure storage tokens", "deep link OAuth", "cleartext traffic", "allowNavigation", "exported activity", "OTA update safe"
+**What it does:** Capacitor four-pillar native audit (Data, Auth/Deep-Link, Network, WebView) + OTA store-policy — Keychain vs localStorage, PKCE, App/Universal Links, dev config in prod. Invisible to web-only review. Emits `plan-capacitor-hardening.md`.
+**Related:** `plan-secrets-audit`, `plan-input-validation`, `plan-mobile-readiness`, `mobile-capacitor-platform`
 
 #### `plan-stub-checker`
 **Triggers:** "find dead buttons", "stub checker", "fake components", "unwired handlers", "dead links", "orphaned components", "plan stub wiring", "what's not connected", "mock data in prod", "buttons that do nothing", "stub audit"
@@ -491,6 +546,17 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/test` | `test-unit`, `test-qa`, `mobile-emulator-test` | Type check → unit → integration → E2E |
 | `/uiux` | `audit-uiux-design-system`, `audit-ux`, `enhance-web-ui`, `enhance-web-ux` | Audit + enhance UI/UX |
 | `/uiux-plan` | `plan-uiux-unification` | Full UI/UX unification plan (audit only, no fixes) |
+| `/slop-plan` | `plan-antislop` | AI slop / authenticity audit + de-slop burndown (plan only) |
+| `/rls-plan` | `plan-rls-audit` | Supabase RLS + access-control audit (plan only) |
+| `/secrets-plan` | `plan-secrets-audit` | Secrets scan + rotate-vs-relocate plan (plan only) |
+| `/validation-plan` | `plan-input-validation` | Input-validation + trust-boundary audit (plan only) |
+| `/integrity-plan` | `plan-data-integrity` | Data-integrity + destructive-op safeguard plan (plan only) |
+| `/error-plan` | `plan-error-handling` | Error-handling + observability audit (plan only) |
+| `/deps-plan` | `plan-dependency-provenance` | Dependency provenance + slopsquatting audit (plan only) |
+| `/cost-plan` | `plan-llm-cost-guardrails` | LLM cost guardrails audit (plan only) |
+| `/aeo-plan` | `plan-aeo-readiness` | Answer-engine / AEO readiness audit (plan only) |
+| `/mobile-plan` | `plan-mobile-readiness` | App Store / Play submission audit (plan only) |
+| `/capacitor-plan` | `plan-capacitor-hardening` | Capacitor native-layer security audit (plan only) |
 | `/stub-plan` | `plan-stub-checker` | Stub/dead-link/fake-component audit + wiring plan (no fixes) |
 | `/perf-plan` | `plan-perf-audit` | Performance audit + optimization plan (no fixes) |
 | `/security-plan` | `plan-security-audit` | Security/OWASP/RLS audit + hardening plan (no fixes) |
@@ -540,11 +606,29 @@ workflow-launch-ready
 See **[docs/PLAN-LOOPS.md](PLAN-LOOPS.md)** for diagrams, prompts, and execution mapping.
 
 ```
-plan-uiux-unification → plan-stub-checker → plan-test-coverage
+plan-uiux-unification → plan-antislop (optional) → plan-stub-checker → plan-test-coverage
   → plan-perf-audit ∥ plan-security-audit → plan-docs-sync
 ```
 
-After approval: `enhance-web-ux`, `debug-fe-be-integration`, `test-unit`, `audit-performance`, `audit-security`, `docs-writer`, `test-playwright`
+After approval: `enhance-web-ux`, `docs-writer`, `audit-i18n`, `debug-fe-be-integration`, `test-unit`, `audit-performance`, `audit-security`, `docs-writer`, `test-playwright`
+
+#### Anti-Slop / Authenticity Pass
+`plan-antislop` → user approval per phase → `docs-writer` / `audit-i18n` (copy) → `enhance-web-ui` (visual) → `enhance-web-ux` (IA) → `test-playwright` → re-run `plan-antislop`
+
+#### Security Spine (layered pre-launch)
+See **[docs/PLAN-LOOPS.md](PLAN-LOOPS.md)** — five layers with cross-hand references:
+
+```
+plan-input-validation → plan-secrets-audit → plan-rls-audit → plan-data-integrity → plan-error-handling
+```
+
+After approval: `backend-patterns`, `db-migrator`, `backend-observability`, provider rotation, infra gates → `test-playwright` + `test-red-team`
+
+#### Observability & Spend Loop
+`plan-error-handling` + `plan-llm-cost-guardrails` → approval → `backend-observability`, `audit-langfuse-llm`, `backend-patterns`
+
+#### Launch Gates
+`plan-capacitor-hardening` → `plan-mobile-readiness` (Capacitor pre-store) · `plan-aeo-readiness` → `enhance-web-seo` / `docs-writer`
 
 #### Stub & Wiring Audit
 `plan-stub-checker` → user approval → `debug-fe-be-integration` → `workflow-fix-and-ship` → `test-playwright`

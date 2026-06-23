@@ -67,9 +67,28 @@ alwaysApply: true
 | Security/OWASP/RLS audit + hardening plan (no fixes) | `plan-security-audit` |
 | Docs drift audit + sync plan (no rewrites) | `plan-docs-sync` |
 | User-story test coverage plan (no tests written) | `plan-test-coverage` |
+| AI slop / authenticity / voice audit + de-slop burndown (no rewrites) | `plan-antislop` |
+| RLS & Supabase access-control audit + remediation plan (no SQL) | `plan-rls-audit` |
+| Error-handling & observability audit (Sentry + Langfuse, no fixes) | `plan-error-handling` |
+| Input-validation & trust-boundary audit (no hardening) | `plan-input-validation` |
+| Secrets & key-scope audit (rotate vs relocate, no rotation) | `plan-secrets-audit` |
+| Data-integrity & destructive-op audit (no migrations/tokens) | `plan-data-integrity` |
+| Dependency provenance & slopsquatting audit (no install) | `plan-dependency-provenance` |
+| LLM cost guardrails & quota-abuse audit (no limits added) | `plan-llm-cost-guardrails` |
+| Answer-engine / AEO citation readiness audit (no edits) | `plan-aeo-readiness` |
+| App Store / Play submission readiness audit (no manifest edits) | `plan-mobile-readiness` |
+| Capacitor native-layer security audit (no config edits) | `plan-capacitor-hardening` |
 
 **Six-skill plan loop:** see `docs/PLAN-LOOPS.md` —  
-`plan-uiux-unification` → `plan-stub-checker` → `plan-test-coverage` → `plan-perf-audit` / `plan-security-audit` → `plan-docs-sync`
+`plan-uiux-unification` → `plan-stub-checker` → `plan-test-coverage` → `plan-perf-audit` / `plan-security-audit` → `plan-docs-sync`  
+Optional: **pre-launch hardening** · **observability & spend** · **launch gates** · `plan-antislop` — see `docs/PLAN-LOOPS.md`
+
+**Pre-launch hardening (layered):**  
+`plan-input-validation` → `plan-secrets-audit` → `plan-rls-audit` → `plan-data-integrity` → `plan-dependency-provenance`
+
+**Observability & spend:** `plan-error-handling` + `plan-llm-cost-guardrails`
+
+**Launch gates:** `plan-capacitor-hardening` → `plan-mobile-readiness` · `plan-aeo-readiness`
 
 ### Deploy
 | Task | Skill |

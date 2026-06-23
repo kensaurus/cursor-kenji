@@ -8,6 +8,7 @@ Thanks for wanting to improve this toolkit. Every contribution — a better skil
 
 - [Full contribution guide](docs/CONTRIBUTING.md) — detailed instructions for adding skills, commands, and rules
 - [Skill catalog](docs/CATALOG.md) — full reference with all trigger phrases
+- [AGENTS.template.md](docs/AGENTS.template.md) — copy to consumer projects as root `AGENTS.md`
 - [Open an issue](https://github.com/kensaurus/cursor-kenji/issues) — report a bug or request a skill
 
 ---

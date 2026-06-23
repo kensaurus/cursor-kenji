@@ -33,7 +33,7 @@ If skills.sh has a submit/index page, submit via:
 ```
 Title: Add kensaurus/cursor-kenji
 
-58 Cursor agent skills for React/Next.js/Supabase development.
+90 Cursor agent skills for React/Next.js/Supabase development.
 Install: `npx skills add kensaurus/cursor-kenji`
 Repo: https://github.com/kensaurus/cursor-kenji
 ```
@@ -52,7 +52,7 @@ Repo: https://github.com/kensaurus/cursor-kenji
 ```markdown
 ## cursor-kenji
 
-- [cursor-kenji](https://github.com/kensaurus/cursor-kenji) — 58 production-ready agent skills,
+- [cursor-kenji](https://github.com/kensaurus/cursor-kenji) — 90 production-ready agent skills,
   13 slash commands, 5 subagents, and MCP configs for React/Next.js/Supabase development.
   `npx skills add kensaurus/cursor-kenji`
 ```
@@ -87,7 +87,7 @@ Repo: https://github.com/kensaurus/cursor-kenji
 Submit the repo link via their submission form.
 
 **One-liner description:**
-> 58 Cursor agent skills for React/Next.js/Supabase — installs in one command.
+> 90 Cursor agent skills for React/Next.js/Supabase — installs in one command.
 
 **Status:** [ ] Submitted
 

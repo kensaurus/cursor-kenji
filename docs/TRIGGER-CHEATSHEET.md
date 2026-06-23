@@ -84,6 +84,17 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "animation", "micro-interaction", "hover effect", "scroll animation" | `design-motion` |
 | "write a PRD", "product requirements", "spec this feature", "what should we build" | `design-prd` |
 | "UI/UX unification plan", "design system audit plan", "UI burndown", "unify design system", "plan UI overhaul", "audit UI without fixing" | `plan-uiux-unification` |
+| "feels AI-generated", "de-slop", "AI slop", "reads like ChatGPT", "generic/templated/soulless", "voice pass", "authenticity pass" | `plan-antislop` |
+| "check my RLS", "row level security", "is my Supabase secure", "anyone can read my data", "service_role key", "lock down my tables" | `plan-rls-audit` |
+| "errors aren't showing in Sentry", "fail silently", "empty catch blocks", "check my Langfuse", "observability before launch" | `plan-error-handling` |
+| "validate my inputs", "XSS", "dangerouslySetInnerHTML", "Stripe webhook", "forge requests", "injection-safe" | `plan-input-validation` |
+| "hardcoded secrets", "did I commit a key", "secret scan", "rotate keys", "are my API keys exposed" | `plan-secrets-audit` |
+| "is my migration safe", "could I lose data", "check my backups", "agent might delete prod", "destructive operations" | `plan-data-integrity` |
+| "check my dependencies", "slopsquatting", "is this package real", "supply chain audit", "did the AI hallucinate a package" | `plan-dependency-provenance` |
+| "cap my AI costs", "LLM bill could blow up", "token budget", "runaway agent loop", "per-user AI limits" | `plan-llm-cost-guardrails` |
+| "AEO", "GEO", "do AI engines cite me", "llms.txt", "am I blocking AI crawlers", "ChatGPT visibility" | `plan-aeo-readiness` |
+| "App Store ready", "will Google Play reject", "privacy manifest", "data safety form", "pre-submission check" | `plan-mobile-readiness` |
+| "Capacitor app secure", "WebView security", "secure storage tokens", "cleartext traffic", "allowNavigation", "OTA update safe" | `plan-capacitor-hardening` |
 | "find dead buttons", "stub checker", "fake components", "unwired handlers", "dead links", "buttons that do nothing", "stub audit" | `plan-stub-checker` |
 | "docs drift", "sync docs with code", "stale README", "onboarding docs broken", "phantom docs" | `plan-docs-sync` |
 | "performance audit plan", "perf burndown", "measure before optimize", "plan performance improvements" | `plan-perf-audit` |

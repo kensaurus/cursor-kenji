@@ -120,11 +120,20 @@ Yes, MIT licensed.
 
 ## Planning skills — audit first, fix after you approve
 
-Six `plan-*` skills run **before** you change code. They produce burndowns and phased roadmaps. You approve each phase, then run the matching execution skills.
+**17 `plan-*` skills** run **before** you change code. They produce burndowns and phased roadmaps. You approve each phase, then run the matching execution skills.
 
-**Full guide:** [PLAN-LOOPS.md](PLAN-LOOPS.md) — diagram, order, copy-paste prompts, slash aliases.
+**Full guide:** [PLAN-LOOPS.md](PLAN-LOOPS.md) — grouped loops (not one mega-chain):
 
-**Quick order:**
+| Loop | When to run |
+|:-----|:------------|
+| **Six-skill loop** | UI/IA hardening on an inherited codebase |
+| **Pre-launch hardening** | Security spine + dependency provenance |
+| **Observability & spend** | Sentry/Langfuse gaps, LLM cost caps |
+| **Mobile gate** | Capacitor native security, then App Store / Play paperwork |
+| **Growth gate** | Answer-engine (AEO) visibility |
+| **Authenticity** | `plan-antislop` — prose/visual/code slop pass |
+
+**Quick start (six-skill loop only):**
 
 1. `plan-uiux-unification` — UI/UX + design system
 2. `plan-stub-checker` — dead buttons, fake data, unwired handlers
@@ -138,11 +147,14 @@ Six `plan-*` skills run **before** you change code. They produce burndowns and p
 Run the six-skill plan loop — plan only, no fixes until I approve each phase.
 ```
 
+For security or launch prep, see the other loop prompts in [PLAN-LOOPS.md](PLAN-LOOPS.md).
+
 ---
 
 ## Get help
 
-- [PLAN-LOOPS.md](PLAN-LOOPS.md) — how to chain the six planning skills
+- [PLAN-LOOPS.md](PLAN-LOOPS.md) — how to chain the 17 planning skills
+- [AGENTS.template.md](AGENTS.template.md) — project constitution for your app repo
 - [GitHub Issues](https://github.com/kensaurus/cursor-kenji/issues) — bug reports, feature requests
 - [GitHub Discussions](https://github.com/kensaurus/cursor-kenji/discussions) — questions, ideas
 - [CATALOG.md](CATALOG.md) — full list of skills and their trigger phrases
@@ -151,9 +163,9 @@ Run the six-skill plan loop — plan only, no fixes until I approve each phase.
 
 ## More from @kensaurus
 
-Other free apps and tools from the same studio — all built with these skills.
+Other free apps and tools from the same studio — all built with these skills. Full list with descriptions → [README § Also by @kensaurus](../README.md#also-by-kensaurus).
 
-### Mushi Mushi 🐛 — know when users hit a bug your monitoring missed
+### Mushi Mushi — know when users hit a bug your monitoring missed
 
 ```bash
 npx mushi-mushi
@@ -163,12 +175,3 @@ Shake-to-report widget → AI-classified bug reports → optional AI draft PR fi
 
 - [kensaur.us/mushi-mushi](https://kensaur.us/mushi-mushi) — live demo
 - [github.com/kensaurus/mushi-mushi](https://github.com/kensaurus/mushi-mushi) — source + issues
-
-### Mobile apps
-
-| App | What it does | Download |
-|:----|:-------------|:---------|
-| **[glot.it — Learn Thai Free](https://kensaur.us/glot-it/)** | 161 lessons, tone mirror, AI chat, offline. Actually free. | [iOS](https://apps.apple.com/us/app/glot-it/id6761582648) · [Android](https://play.google.com/store/apps/details?id=com.glotit.app) |
-| **[yen-yen — Expense Tracker](https://kensaur.us/yen-yen/)** | Kakeibo ledger. No bank password. Multi-currency + historical FX. | [iOS](https://apps.apple.com/app/id6764548441) · [Android](https://play.google.com/store/apps/details?id=app.yenyen) |
-| **[Help Her Take Photo](https://kensaur.us/help-her-take-photo/)** | Two phones → remote photo studio. No account. | [iOS](https://apps.apple.com/app/help-her-take-photo/id6762513666) · [Android](https://play.google.com/store/apps/details?id=com.kensaurus.helphertakephoto) |
-| **[The Wanting Mind](https://kensaur.us/the-wanting-mind/)** | Free 147,000-word interactive book. EN/JA/ZH/TH. No ads. | [iOS](https://apps.apple.com/us/app/the-wanting-mind/id6761361305) · [Android](https://play.google.com/store/apps/details?id=us.kensaur.thewantingmind) |
