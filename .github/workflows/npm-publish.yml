@@ -39,10 +39,14 @@ jobs:
       - name: MCP pin check
         run: node scripts/check-mcp-pins.mjs
 
-      # Auth: prefer NPM_TOKEN secret if set; otherwise OIDC trusted publishing.
-      # If both fail: add NPM_TOKEN at github.com/kensaurus/cursor-kenji/settings/secrets/actions
-      # OR configure Trusted Publisher on npmjs.com → @kensaurus/cursor-kenji → workflow: npm-publish.yml
-      - name: Publish with provenance
+      # OIDC: omit NODE_AUTH_TOKEN when NPM_TOKEN secret is unset so npm uses Trusted Publishing.
+      # Fallback: set NPM_TOKEN in GitHub Actions secrets for token-based publish.
+      - name: Publish with provenance (OIDC)
+        if: ${{ secrets.NPM_TOKEN == '' }}
+        run: npm publish --provenance --access public
+
+      - name: Publish with provenance (NPM_TOKEN)
+        if: ${{ secrets.NPM_TOKEN != '' }}
         run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
