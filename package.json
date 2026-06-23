@@ -1,10 +1,10 @@
 {
   "name": "@kensaurus/cursor-kenji",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "90 Cursor AI agent skills, 13 slash commands, 5 subagents, and MCP configs for React/Next.js/Supabase development.",
   "type": "module",
   "bin": {
-    "cursor-kenji": "./bin/install.mjs"
+    "cursor-kenji": "bin/install.mjs"
   },
   "scripts": {
     "install:cursor": "node bin/install.mjs",
@@ -58,7 +58,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kensaurus/cursor-kenji.git"
+    "url": "git+https://github.com/kensaurus/cursor-kenji.git"
   },
   "homepage": "https://github.com/kensaurus/cursor-kenji#readme",
   "bugs": {

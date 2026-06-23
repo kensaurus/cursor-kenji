@@ -4,6 +4,20 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.4.1] — 2026-06-23
+
+### Fixed
+
+- **`package.json` bin** — `cursor-kenji` → `bin/install.mjs` (npm publish no longer strips the bin entry)
+- **`repository.url`** — normalized to `git+https://github.com/kensaurus/cursor-kenji.git`
+
+### Changed
+
+- **npm OIDC Trusted Publisher** configured (`kensaurus/cursor-kenji` · workflow `npm-publish.yml`)
+- **CI publish** — OIDC-first; `NPM_TOKEN` only used when the secret is set
+
+---
+
 ## [1.4.0] — 2026-06-23
 
 ### Added

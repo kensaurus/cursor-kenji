@@ -37,9 +37,11 @@ npm run prepare   # sets core.hooksPath → .githooks
 
 ## npm publish (maintainers)
 
-Prefer **npm Trusted Publishing (OIDC)** via [`.github/workflows/npm-publish.yml`](.github/workflows/npm-publish.yml) — no long-lived `NPM_TOKEN` required when OIDC is configured on npmjs.com.
+**Primary:** npm Trusted Publishing (OIDC) — configured for `kensaurus/cursor-kenji` + workflow [`npm-publish.yml`](.github/workflows/npm-publish.yml). Releases publish with `--provenance` via GitHub Actions; no long-lived token required.
 
-`NPM_TOKEN` in GitHub Actions secrets is a **fallback only** (see `.env.example` for local publish shape). Rotate immediately if exposed.
+**Fallback:** `NPM_TOKEN` in GitHub Actions secrets (optional). The workflow only sets `NODE_AUTH_TOKEN` when the secret is non-empty so OIDC is not blocked.
+
+Local emergency publish: copy a granular token to gitignored `.env` as `NPM_TOKEN=…` and run `npm publish --access public --//registry.npmjs.org/:_authToken="$NPM_TOKEN"`.
 
 ## Zero runtime dependencies
 

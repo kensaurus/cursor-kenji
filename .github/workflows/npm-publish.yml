@@ -39,8 +39,13 @@ jobs:
       - name: MCP pin check
         run: node scripts/check-mcp-pins.mjs
 
-      # Uses NPM_TOKEN secret when set; omit NODE_AUTH_TOKEN entirely for OIDC-only trusted publishing.
+      # OIDC trusted publisher (npm-publish.yml on kensaurus/cursor-kenji) is primary.
+      # NPM_TOKEN secret is optional fallback — only exported when non-empty so OIDC is not blocked.
       - name: Publish with provenance
-        run: npm publish --provenance --access public
+        run: |
+          if [ -n "${NPM_TOKEN:-}" ]; then
+            export NODE_AUTH_TOKEN="$NPM_TOKEN"
+          fi
+          npm publish --provenance --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

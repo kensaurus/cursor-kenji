@@ -65,19 +65,16 @@ Repo: https://github.com/kensaurus/cursor-kenji
 
 **Prerequisite:** npm account in the `@kensaurus` org.
 
-**Preferred — Trusted Publishing (OIDC):** no long-lived token required.
+**Preferred — Trusted Publishing (OIDC):** configured ✅
 
-1. On [npmjs.com](https://www.npmjs.com/package/@kensaurus/cursor-kenji) → **Settings** → **Trusted Publishers** → link GitHub repo `kensaurus/cursor-kenji`, workflow `npm-publish.yml`, environment `npmjs`
-2. Create a GitHub Release (tag `v1.4.0`) → `.github/workflows/npm-publish.yml` publishes with `--provenance`
+- Publisher: `kensaurus/cursor-kenji` · workflow `npm-publish.yml` · permission `npm publish`
+- Create a GitHub Release (tag `v1.4.x`) → `.github/workflows/npm-publish.yml` publishes with `--provenance`
 
-**Fallback — `NPM_TOKEN` secret:** only if OIDC is not configured.
-
-1. https://www.npmjs.com/settings/kensaurus/tokens → Automation token
-2. Add to https://github.com/kensaurus/cursor-kenji/settings/secrets/actions as `NPM_TOKEN`
+**Fallback — `NPM_TOKEN` secret:** optional; CI uses OIDC when the secret is unset.
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/cursor-kenji
 
-**Status:** [ ] Published at latest (`npm view @kensaurus/cursor-kenji version`)
+**Status:** [x] Published — `npm view @kensaurus/cursor-kenji version` (latest **1.4.x**)
 
 ---
 
