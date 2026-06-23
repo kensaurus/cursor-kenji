@@ -12,6 +12,8 @@ Quick map of `docs/` — start with [GETTING-STARTED.md](GETTING-STARTED.md) if 
 | [examples/](examples/) | Sample `plan-*.md` audit outputs |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Skill authoring, validation, PR expectations |
 | [PROMOTION.md](PROMOTION.md) | Checklist for listing on skills.sh, cursor.directory, etc. |
+| [DISTRIBUTION.md](DISTRIBUTION.md) | Install surfaces, directory listings, discovery links |
+| [PUBLISHING.md](PUBLISHING.md) | Maintainer release guide (OIDC npm publish) |
 
 Repo root also has [README.md](../README.md) (install + overview), [llms.txt](../llms.txt) (AI/crawler index), [SECURITY.md](../SECURITY.md) (secrets + MCP hygiene), [CONTRIBUTING.md](../CONTRIBUTING.md) (short form), and [CHANGELOG.md](../CHANGELOG.md).
 

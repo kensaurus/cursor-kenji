@@ -48,7 +48,8 @@
     "LICENSE",
     "NOTICE",
     "llms.txt",
-    "SECURITY.md"
+    "SECURITY.md",
+    ".cursor-plugin/"
   ],
   "engines": {
     "node": ">=18"

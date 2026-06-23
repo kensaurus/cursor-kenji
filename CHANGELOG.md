@@ -4,6 +4,22 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- **`.cursor-plugin/plugin.json`** — Cursor Marketplace / Open Plugins manifest
+- **`docs/DISTRIBUTION.md`** — install surfaces, directory listings, discovery status
+- **`docs/PUBLISHING.md`** — maintainer release guide (OIDC npm publish)
+
+### Changed
+
+- **`docs/PROMOTION.md`** — listing checklist updated with submission URLs
+- **`docs/README.md`**, **`llms.txt`**, **`README.md`** — distribution and discovery links
+- **`package.json`** — include `.cursor-plugin/` in npm `files`
+
+---
+
 ## [1.4.1] — 2026-06-23
 
 ### Fixed

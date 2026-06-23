@@ -1,6 +1,8 @@
 # Promotion Checklist
 
-Everything you need to submit and announce cursor-kenji. All repo-side requirements are already done. The items below require your account/login.
+Everything you need to submit and announce cursor-kenji. Repo-side requirements (plugin manifest, docs, npm OIDC) are done. External listings may take manual review.
+
+**Tracking:** [DISTRIBUTION.md](DISTRIBUTION.md) · Maintainer releases: [PUBLISHING.md](PUBLISHING.md)
 
 ---
 
@@ -13,7 +15,7 @@ Everything you need to submit and announce cursor-kenji. All repo-side requireme
 - The site auto-detects skills from `skills/*/SKILL.md`, rules from `rules/`, agents from `agents/`, MCP config from `.mcp.json`
 - No extra config needed — the repo structure matches the Open Plugins standard
 
-**Status:** [ ] Submitted
+**Status:** [x] Submitted — https://cursor.directory/plugins/cursor-kenji (pending security scan)
 
 ---
 
@@ -26,19 +28,9 @@ Everything you need to submit and announce cursor-kenji. All repo-side requireme
 npx skills add kensaurus/cursor-kenji
 ```
 
-If skills.sh has a submit/index page, submit via:
-- https://github.com/vercel-labs/skills/issues → open an issue requesting indexing of `kensaurus/cursor-kenji`
+**Issue opened:** https://github.com/vercel-labs/skills/issues/1499
 
-**Copy for the issue:**
-```
-Title: Add kensaurus/cursor-kenji
-
-90 Cursor agent skills for React/Next.js/Supabase development.
-Install: `npx skills add kensaurus/cursor-kenji`
-Repo: https://github.com/kensaurus/cursor-kenji
-```
-
-**Status:** [ ] Submitted
+**Status:** [x] Submitted — awaiting index merge
 
 ---
 
@@ -46,18 +38,16 @@ Repo: https://github.com/kensaurus/cursor-kenji
 
 **URL:** https://github.com/PatrickJS/awesome-cursorrules
 
-**How:** Open a PR adding cursor-kenji to the appropriate section.
+**How:** Open a PR adding cursor-kenji to the Directories section.
 
 **PR copy:**
 ```markdown
-## cursor-kenji
-
 - [cursor-kenji](https://github.com/kensaurus/cursor-kenji) — 90 production-ready agent skills,
   13 slash commands, 5 subagents, and MCP configs for React/Next.js/Supabase development.
   `npx skills add kensaurus/cursor-kenji`
 ```
 
-**Status:** [ ] PR opened
+**Status:** [x] PR opened — https://github.com/PatrickJS/awesome-cursorrules/pull/320
 
 ---
 
@@ -74,30 +64,44 @@ Repo: https://github.com/kensaurus/cursor-kenji
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/cursor-kenji
 
-**Status:** [x] Published — `npm view @kensaurus/cursor-kenji version` (latest **1.4.x**)
+**Status:** [x] Published — `@kensaurus/cursor-kenji@1.4.1` ([npm](https://www.npmjs.com/package/@kensaurus/cursor-kenji))
 
 ---
 
-## 5. CursorList
+## 5. Cursor Marketplace (official)
 
-**URL:** https://cursorlist.com (or check current URL)
+**URL:** https://cursor.com/marketplace/publish
 
-Submit the repo link via their submission form.
+**Repo requirement:** [`.cursor-plugin/plugin.json`](../.cursor-plugin/plugin.json) at repo root ✅
+
+Submit the GitHub repo URL; Cursor reviews manually.
+
+**Status:** [x] Submitted — publisher application received (awaiting Cursor review)
+
+---
+
+## 6. CursorList / Enterprise DNA directory
+
+**URLs:**
+- https://cursorlist.com
+- https://enterprisedna.co/directories/submit (alternative submission form)
 
 **One-liner description:**
 > 90 Cursor agent skills for React/Next.js/Supabase — installs in one command.
 
-**Status:** [ ] Submitted
+**Status:** [x] Submitted via fallback form at enterprisedna.co/directories/submit (Skills directory; email draft to directories@enterprisedna.co)
 
 ---
 
-## 6. agentskills.io
+## 7. agentskills.io
 
 **URL:** https://agentskills.io
 
-Submit via their listing form.
+All skills validate against the [Agent Skills specification](https://agentskills.io/specification) in CI.
 
-**Status:** [ ] Submitted
+**Showcase request:** https://github.com/agentskills/agentskills/issues/432
+
+**Status:** [x] Submitted — awaiting showcase listing
 
 ---
 
@@ -155,7 +159,7 @@ Title: 90 Cursor AI Skills That Fire Automatically (No Prompting Required)
 
 ---
 
-## 7. Cross-promote via Mushi Mushi
+## 8. Cross-promote via Mushi Mushi
 
 Mushi Mushi's README already mentions cursor-kenji skills:
 > "Install Mushi skills in your Cursor or Claude Code project"
@@ -165,7 +169,7 @@ Reciprocal links are live in cursor-kenji's README ("Also by @kensaurus" section
 
 **Optional:** Add a note to Mushi's GitHub Issues template pointing users to cursor-kenji's `debug-sentry-monitor` skill for Sentry triage from Cursor.
 
-**Status:** [ ] Done (links already live)
+**Status:** [x] Done (reciprocal links live)
 
 ---
 
@@ -175,3 +179,4 @@ Reciprocal links are live in cursor-kenji's README ("Also by @kensaurus" section
 - Watch npm download count: https://www.npmjs.com/package/@kensaurus/cursor-kenji
 - Check skills.sh install count (if they expose it)
 - Monitor GitHub Issues for user feedback
+- Directory status table: [DISTRIBUTION.md](DISTRIBUTION.md)

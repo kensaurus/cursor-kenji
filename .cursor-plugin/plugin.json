@@ -1,0 +1,25 @@
+{
+  "name": "cursor-kenji",
+  "version": "1.4.1",
+  "description": "90 Cursor agent skills, 13 slash commands, 5 subagents, and MCP configs for React/Next.js/Supabase development.",
+  "author": {
+    "name": "kensaurus"
+  },
+  "homepage": "https://github.com/kensaurus/cursor-kenji#readme",
+  "repository": "https://github.com/kensaurus/cursor-kenji.git",
+  "license": "MIT",
+  "keywords": [
+    "cursor",
+    "agent-skills",
+    "mcp",
+    "nextjs",
+    "supabase",
+    "react",
+    "typescript"
+  ],
+  "skills": ["skills", "skills-cursor"],
+  "commands": "commands",
+  "agents": "agents",
+  "rules": "rules",
+  "mcpServers": ".mcp.json"
+}

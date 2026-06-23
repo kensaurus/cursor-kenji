@@ -21,9 +21,11 @@ Validated against the [Agent Skills specification](https://agentskills.io/specif
 - [mcp/README.md](https://github.com/kensaurus/cursor-kenji/blob/main/mcp/README.md): MCP server setup, pinned package versions
 - [SECURITY.md](https://github.com/kensaurus/cursor-kenji/blob/main/SECURITY.md): Secrets hygiene, `.mcp.json` guidance, reporting vulnerabilities
 
-## Optional
+## Distribution & publishing
 
-- [docs/PROMOTION.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/PROMOTION.md): Listing copy for skills.sh, npm, cursor.directory
+- [docs/DISTRIBUTION.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/DISTRIBUTION.md): Install channels, directory listings, discovery status
+- [docs/PUBLISHING.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/PUBLISHING.md): Maintainer release guide (GitHub Release → OIDC npm)
+- [docs/PROMOTION.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/PROMOTION.md): Listing copy for skills.sh, cursor.directory, marketplace
 - [docs/examples/plan-audits/](https://github.com/kensaurus/cursor-kenji/tree/main/docs/examples/plan-audits): Sample `plan-*.md` audit outputs
 - [CHANGELOG.md](https://github.com/kensaurus/cursor-kenji/blob/main/CHANGELOG.md): Release history
 - [CONTRIBUTING.md](https://github.com/kensaurus/cursor-kenji/blob/main/CONTRIBUTING.md): Adding skills, validation, PR workflow

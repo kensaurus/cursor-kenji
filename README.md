@@ -321,7 +321,7 @@ mkdir -p skills/my-skill && vim skills/my-skill/SKILL.md
 npm run test   # validate + count + install smoke
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md), [docs/README.md](docs/README.md), [llms.txt](llms.txt), [docs/CATALOG.md](docs/CATALOG.md), [docs/TRIGGER-CHEATSHEET.md](docs/TRIGGER-CHEATSHEET.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md), [docs/README.md](docs/README.md), [docs/DISTRIBUTION.md](docs/DISTRIBUTION.md), [llms.txt](llms.txt), [docs/CATALOG.md](docs/CATALOG.md), [docs/TRIGGER-CHEATSHEET.md](docs/TRIGGER-CHEATSHEET.md).
 
 ---
 
@@ -353,10 +353,11 @@ Yes — [llms.txt](llms.txt) at the repo root links to canonical docs surfaces.
 ## Alternatives
 
 - [awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) — curated rules collections
-- [skills.sh](https://skills.sh) — skills registry
+- [skills.sh](https://skills.sh) — skills registry (`npx skills add kensaurus/cursor-kenji`)
 - [agentskills.io](https://agentskills.io) — Agent Skills spec + index
+- [npm](https://www.npmjs.com/package/@kensaurus/cursor-kenji) · [Cursor Marketplace](https://cursor.com/marketplace) · [cursor.directory](https://cursor.directory/)
 
-cursor-kenji ships executable skills, MCP configs, commands, and subagents in one installable package — not static rules alone.
+cursor-kenji ships executable skills, MCP configs, commands, and subagents in one installable package — not static rules alone. Full listing status → **[docs/DISTRIBUTION.md](docs/DISTRIBUTION.md)**.
 
 ---
 
