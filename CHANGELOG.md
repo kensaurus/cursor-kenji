@@ -4,6 +4,23 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.3.0] — 2026-06-23
+
+### Added
+
+- **Eleven new `plan-*` skills** — security spine, launch gates, antislop, Capacitor hardening, observability/spend (`plan-rls-audit` through `plan-capacitor-hardening`)
+- **`docs/AGENTS.template.md`** — project constitution (mission / stack / roadmap / agent discipline)
+- **`docs/examples/plan-audits/`** — sample plan burndown outputs; root `/plan-*.md` gitignored
+
+### Changed
+
+- **README** de-duplicated (~340 lines); CATALOG canonical; skill count **90** (17 plan-*)
+- **`check-skill-count.mjs`** syncs README, CATALOG, PROMOTION, package.json
+- **Pre-commit hook** re-stages all count-sync files on drift
+- **`create-skill`** body split — detail in `references/authoring-guide.md` (<500 lines)
+
+---
+
 ## [1.2.7] — 2026-06-17
 
 ### Added

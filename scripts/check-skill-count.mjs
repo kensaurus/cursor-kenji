@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
- * Single source of truth for the skill count across README and key docs.
+ * Single source of truth for the skill count across README, CATALOG, PROMOTION,
+ * and package.json. Plan-* count tokens in README are also derived.
  *
  * Derived from filesystem: `skills/<name>/SKILL.md` directories.
  *

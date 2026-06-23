@@ -52,6 +52,12 @@ npx @kensaurus/cursor-kenji --link     # dev: symlink for live skill authoring
 
 From a clone: `npm run install:cursor` · `npm test` validates skills + count + install smoke test.
 
+**Optional — [Mushi Mushi](https://github.com/kensaurus/mushi-mushi)** bug-report triage + AI draft PRs (pairs with `mushi-health`, `test-playwright`):
+
+```bash
+npx skills add kensaurus/mushi-mushi
+```
+
 **After install:** (1) Restart Cursor (2) Copy `mcp/mcp.json.template` → `~/.cursor/mcp.json`, fill `YOUR_*` keys (3) Describe any task — skills match on keywords.
 
 **Authoring skills?** Each skill must pass [Agent Skills spec](https://agentskills.io/specification) validation (`npm run validate:skills`): `name` matches directory, `description` ≤ 1024 chars, body < 500 lines.

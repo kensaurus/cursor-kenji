@@ -9,6 +9,7 @@ Quick map of `docs/` — start with [GETTING-STARTED.md](GETTING-STARTED.md) if 
 | [TRIGGER-CHEATSHEET.md](TRIGGER-CHEATSHEET.md) | "Say X → skill Y" lookup table |
 | [PLAN-LOOPS.md](PLAN-LOOPS.md) | How to chain the 17 `plan-*` skills (grouped loops) |
 | [AGENTS.template.md](AGENTS.template.md) | Project constitution template (mission / stack / roadmap / agent discipline) |
+| [examples/](examples/) | Sample `plan-*.md` audit outputs |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Skill authoring, validation, PR expectations |
 | [PROMOTION.md](PROMOTION.md) | Checklist for listing on skills.sh, cursor.directory, etc. |
 
