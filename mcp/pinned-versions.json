@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Pinned MCP server versions for npx/uvx templates. Bump here, then sync mcp/*.template, .mcp.json, and mcp/README.md. Verified 2026-06-23.",
+  "npm": {
+    "@modelcontextprotocol/server-sequential-thinking": "2025.12.18",
+    "@modelcontextprotocol/server-github": "2025.4.8",
+    "@modelcontextprotocol/server-postgres": "0.6.2",
+    "@modelcontextprotocol/server-redis": "2025.4.25",
+    "@modelcontextprotocol/server-slack": "2025.4.25",
+    "@modelcontextprotocol/server-memory": "2026.1.26",
+    "@upstash/context7-mcp": "3.2.2",
+    "firecrawl-mcp": "3.21.3",
+    "chrome-devtools-mcp": "1.3.0",
+    "@supabase/mcp-server-supabase": "0.8.2",
+    "@playwright/mcp": "0.0.76",
+    "@notionhq/notion-mcp-server": "2.4.1"
+  },
+  "pypi_uvx": {
+    "awslabs.lambda-tool-mcp-server": "2.0.19",
+    "awslabs.aws-api-mcp-server": "1.3.45",
+    "awslabs.cloudwatch-mcp-server": "0.0.8"
+  },
+  "notes": {
+    "aws-s3": "aws-s3 key uses awslabs.aws-api-mcp-server (S3 via AWS CLI). Legacy awslabs.s3-mcp-server is not on PyPI.",
+    "aws-lambda": "awslabs.lambda-mcp-server is yanked; use awslabs.lambda-tool-mcp-server.",
+    "aws-cloudwatch": "awslabs.cloudwatch-logs-mcp-server is deprecated; use awslabs.cloudwatch-mcp-server."
+  }
+}

@@ -4,6 +4,25 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.4.0] — 2026-06-23
+
+### Added
+
+- **`llms.txt`** — machine-readable doc index for answer-engine / AI crawler discoverability
+- **`SECURITY.md`** — MCP secrets hygiene, OIDC-first publish guidance, zero-dep policy
+- **`scripts/scan-secrets.mjs`** — pre-commit secret pattern scanner (zero-deps)
+- **`scripts/check-mcp-pins.mjs`** + **`mcp/pinned-versions.json`** + **`mcp/VERSIONS.md`** — semver-pinned MCP templates
+- **README FAQ** — install, skill count, audit vs plan, MCP keys, llms.txt
+
+### Changed
+
+- **MCP templates** — all `@latest` removed; npm + uvx packages pinned; AWS servers migrated to valid PyPI names (`lambda-tool`, `aws-api`, unified `cloudwatch-mcp`)
+- **Pre-commit** — runs secret scan before skill validation
+- **`npm test`** — includes secret self-test + MCP pin check
+- **`docs/PROMOTION.md`** — OIDC-first npm publish; launch copy skill count 90
+
+---
+
 ## [1.3.0] — 2026-06-23
 
 ### Added

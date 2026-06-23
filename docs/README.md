@@ -13,6 +13,6 @@ Quick map of `docs/` — start with [GETTING-STARTED.md](GETTING-STARTED.md) if 
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Skill authoring, validation, PR expectations |
 | [PROMOTION.md](PROMOTION.md) | Checklist for listing on skills.sh, cursor.directory, etc. |
 
-Repo root also has [README.md](../README.md) (install + overview), [CONTRIBUTING.md](../CONTRIBUTING.md) (short form), and [CHANGELOG.md](../CHANGELOG.md).
+Repo root also has [README.md](../README.md) (install + overview), [llms.txt](../llms.txt) (AI/crawler index), [SECURITY.md](../SECURITY.md) (secrets + MCP hygiene), [CONTRIBUTING.md](../CONTRIBUTING.md) (short form), and [CHANGELOG.md](../CHANGELOG.md).
 
 **Skill count:** run `npm run check:skills` — the number in README, `package.json`, and this catalog is derived from `skills/*/SKILL.md`, not hand-edited.

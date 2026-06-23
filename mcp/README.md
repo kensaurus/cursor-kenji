@@ -120,7 +120,7 @@ pip install uvx  # or use pipx
 {
   "aws-lambda": {
     "command": "uvx",
-    "args": ["awslabs.lambda-mcp-server@latest"],
+    "args": ["awslabs.lambda-tool-mcp-server@2.0.19"],
     "env": {
       "AWS_PROFILE": "default",
       "AWS_REGION": "ap-northeast-1"
@@ -145,10 +145,12 @@ Zero config — just add and go:
 {
   "playwright": {
     "command": "npx",
-    "args": ["-y", "@playwright/mcp@latest"]
+    "args": ["-y", "@playwright/mcp@0.0.76"]
   }
 }
 ```
+
+Pinned versions: see [VERSIONS.md](VERSIONS.md) and [pinned-versions.json](pinned-versions.json). CI fails on `@latest` drift.
 
 **What you can do:**
 - "Open localhost:3000 and take a screenshot"

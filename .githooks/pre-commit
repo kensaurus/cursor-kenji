@@ -4,6 +4,12 @@
 
 command -v node >/dev/null 2>&1 || { echo "pre-commit: node not found, skipping checks"; exit 0; }
 
+# 0. Block likely secrets in staged files (fail closed).
+if ! node scripts/scan-secrets.mjs; then
+  echo "pre-commit: secret scan failed — remove credentials or use placeholders."
+  exit 1
+fi
+
 # 1. Validate every skill against the Agent Skills spec (blocks on error).
 if ! node scripts/validate-skills.mjs; then
   echo "pre-commit: skill validation failed — fix the errors above before committing."

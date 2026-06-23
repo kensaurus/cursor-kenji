@@ -33,6 +33,12 @@ jobs:
       - name: Install smoke test
         run: node scripts/test-install.mjs
 
+      - name: Secret scanner self-test
+        run: node scripts/scan-secrets.mjs --self-test
+
+      - name: MCP pin check
+        run: node scripts/check-mcp-pins.mjs
+
       # Auth: prefer NPM_TOKEN secret if set; otherwise OIDC trusted publishing.
       # If both fail: add NPM_TOKEN at github.com/kensaurus/cursor-kenji/settings/secrets/actions
       # OR configure Trusted Publisher on npmjs.com → @kensaurus/cursor-kenji → workflow: npm-publish.yml

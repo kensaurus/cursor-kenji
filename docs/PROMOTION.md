@@ -63,20 +63,21 @@ Repo: https://github.com/kensaurus/cursor-kenji
 
 ## 4. npm publish
 
-**Prerequisite:** npm account in the `@kensaurus` org, and `NPM_TOKEN` secret set in GitHub repo settings.
+**Prerequisite:** npm account in the `@kensaurus` org.
 
-**One-time setup:**
-1. Go to https://www.npmjs.com/settings/kensaurus/tokens → generate an Automation token
-2. Add it to https://github.com/kensaurus/cursor-kenji/settings/secrets/actions as `NPM_TOKEN`
-3. Also enable Trusted Publishing (OIDC) on npmjs.com for the package — this enables `--provenance`
+**Preferred — Trusted Publishing (OIDC):** no long-lived token required.
 
-**To publish:**
-- Create a GitHub Release (tag `v1.0.0`) → the `npm-publish.yml` workflow fires automatically
-- Or locally: `npm publish --access public`
+1. On [npmjs.com](https://www.npmjs.com/package/@kensaurus/cursor-kenji) → **Settings** → **Trusted Publishers** → link GitHub repo `kensaurus/cursor-kenji`, workflow `npm-publish.yml`, environment `npmjs`
+2. Create a GitHub Release (tag `v1.4.0`) → `.github/workflows/npm-publish.yml` publishes with `--provenance`
+
+**Fallback — `NPM_TOKEN` secret:** only if OIDC is not configured.
+
+1. https://www.npmjs.com/settings/kensaurus/tokens → Automation token
+2. Add to https://github.com/kensaurus/cursor-kenji/settings/secrets/actions as `NPM_TOKEN`
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/cursor-kenji
 
-**Status:** [ ] Published
+**Status:** [ ] Published at latest (`npm view @kensaurus/cursor-kenji version`)
 
 ---
 
@@ -108,10 +109,10 @@ Submit via their listing form.
 ### Reddit (r/cursor, r/ChatGPT, r/webdev)
 
 ```
-Title: I packaged 58 Cursor AI skills so you don't have to build them yourself
+Title: I packaged 90 Cursor AI skills so you don't have to build them yourself
 
 I got tired of writing the same Cursor prompts every time I started a debugging session
-or wanted to polish a UI. So I built cursor-kenji — a collection of 58 agent skills that
+or wanted to polish a UI. So I built cursor-kenji — a collection of 90 agent skills that
 Cursor picks automatically based on what you type.
 
 Say "audit my security" → it runs an OWASP scan.
@@ -130,13 +131,13 @@ GitHub: https://github.com/kensaurus/cursor-kenji
 ### X / Twitter
 
 ```
-I built 58 Cursor agent skills so you don't have to:
+I built 90 Cursor agent skills so you don't have to:
 
 • audit security → OWASP scan runs
 • "make this nicer" → NN/g UX polish
 • "commit" → proper conventional commit message
 
-One install, 58 skills auto-activate:
+One install, 90 skills auto-activate:
 npx skills add kensaurus/cursor-kenji
 
 → github.com/kensaurus/cursor-kenji
@@ -145,11 +146,11 @@ npx skills add kensaurus/cursor-kenji
 ### dev.to / Hashnode article outline
 
 ```
-Title: 58 Cursor AI Skills That Fire Automatically (No Prompting Required)
+Title: 90 Cursor AI Skills That Fire Automatically (No Prompting Required)
 
 1. The problem: writing the same prompts over and over
 2. What Cursor skills are and how they work
-3. What's in cursor-kenji (58 skills, 13 categories)
+3. What's in cursor-kenji (90 skills, 13 commands, 5 subagents)
 4. How to install (one line)
 5. Demo: 5 skills in action with example prompts
 6. How to add your own skills

@@ -1,0 +1,29 @@
+# cursor-kenji
+
+> Installable Cursor AI toolkit: 90 agent skills, 13 slash commands, 5 subagents, and MCP server templates for React / Next.js / Supabase. One-line install: `npx skills add kensaurus/cursor-kenji`.
+
+Validated against the [Agent Skills specification](https://agentskills.io/specification) on every commit. npm package: `@kensaurus/cursor-kenji`.
+
+## Install
+
+- [README.md](https://github.com/kensaurus/cursor-kenji/blob/main/README.md): Quick start, install modes, FAQ, skill taxonomy
+- [docs/GETTING-STARTED.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/GETTING-STARTED.md): First-time Cursor setup, MCP copy steps, troubleshooting
+
+## Reference
+
+- [docs/CATALOG.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/CATALOG.md): Full skill list with trigger phrases and composition patterns
+- [docs/TRIGGER-CHEATSHEET.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/TRIGGER-CHEATSHEET.md): Plain lookup table for skill triggers
+- [docs/PLAN-LOOPS.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/PLAN-LOOPS.md): 17 `plan-*` audit skills in grouped loops (approve before execution)
+- [docs/AGENTS.template.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/AGENTS.template.md): Project constitution template for consumer repos
+
+## MCP & security
+
+- [mcp/README.md](https://github.com/kensaurus/cursor-kenji/blob/main/mcp/README.md): MCP server setup, pinned package versions
+- [SECURITY.md](https://github.com/kensaurus/cursor-kenji/blob/main/SECURITY.md): Secrets hygiene, `.mcp.json` guidance, reporting vulnerabilities
+
+## Optional
+
+- [docs/PROMOTION.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/PROMOTION.md): Listing copy for skills.sh, npm, cursor.directory
+- [docs/examples/plan-audits/](https://github.com/kensaurus/cursor-kenji/tree/main/docs/examples/plan-audits): Sample `plan-*.md` audit outputs
+- [CHANGELOG.md](https://github.com/kensaurus/cursor-kenji/blob/main/CHANGELOG.md): Release history
+- [CONTRIBUTING.md](https://github.com/kensaurus/cursor-kenji/blob/main/CONTRIBUTING.md): Adding skills, validation, PR workflow

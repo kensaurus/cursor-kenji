@@ -41,7 +41,8 @@ mkdir -p skills/my-new-skill
 # 3. Verify skill count
 npm run check:skills
 
-# 4. Update README + CATALOG
+# 4. Run full test gate (spec + secrets + MCP pins + install smoke)
+npm run test
 # Add an entry to the right table in README.md
 # Add trigger phrases to docs/CATALOG.md
 

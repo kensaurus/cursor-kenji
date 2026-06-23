@@ -22,6 +22,8 @@
 
 **cursor-kenji** ships **90 Cursor agent skills**, 13 slash commands, and 5 subagents for React / Next.js / Supabase projects. Install once — describe a task in chat and the matching skill auto-triggers.
 
+Skills conform to the [Agent Skills specification](https://agentskills.io/specification) and pass automated validation on every commit (`npm test` — **102** installable skills including Cursor IDE tools). MCP templates pin semver versions to reduce supply-chain drift ([CSA on package hallucination / slopsquatting](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations)).
+
 ```bash
 npx skills add kensaurus/cursor-kenji
 ```
@@ -305,7 +307,7 @@ cursor-kenji/
 | 1 | Check existing first | `workflow-housekeep`, `plan-stub-checker` |
 | 2 | Production-ready examples | `workflow-spec-tdd`, skill validation CI |
 | 3 | Modular & composable | `skill-workflows.mdc`, bundled workflows |
-| 4 | Audit before change | 16 `plan-*` skills, `/plan` |
+| 4 | Audit before change | 17 `plan-*` skills, `/plan` |
 | 5 | Verify end-to-end | `full-stack-ship-discipline.mdc`, `test-playwright` |
 | 6 | Accessible by default | `audit-accessibility`, project-starter rules |
 | 7 | Performance aware | `audit-performance`, `audit-bundle-size` |
@@ -319,7 +321,32 @@ mkdir -p skills/my-skill && vim skills/my-skill/SKILL.md
 npm run test   # validate + count + install smoke
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md), [docs/README.md](docs/README.md), [docs/CATALOG.md](docs/CATALOG.md), [docs/TRIGGER-CHEATSHEET.md](docs/TRIGGER-CHEATSHEET.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md), [docs/README.md](docs/README.md), [llms.txt](llms.txt), [docs/CATALOG.md](docs/CATALOG.md), [docs/TRIGGER-CHEATSHEET.md](docs/TRIGGER-CHEATSHEET.md).
+
+---
+
+## FAQ
+
+**What is cursor-kenji?**  
+A installable toolkit of [Agent Skills](https://agentskills.io)-compatible markdown skills, slash commands, subagents, and MCP templates for [Cursor](https://cursor.com). One command installs everything into `~/.cursor/` and `~/.agents/skills/`.
+
+**How do I install?**  
+`npx skills add kensaurus/cursor-kenji` (recommended) or `npx @kensaurus/cursor-kenji`. Restart Cursor after install.
+
+**How many skills?**  
+**90** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**102** total). Counts are derived from the filesystem and synced by `npm run check:skills`.
+
+**How do skills trigger?**  
+Cursor matches your chat message against each skill's YAML `description` keywords. Force one with *"use \`audit-security\` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).
+
+**What's the difference between `audit-*` and `plan-*`?**  
+`audit-*` skills assess and may fix inline. `plan-*` skills produce a `plan-{name}.md` burndown only — you approve each phase before any code changes. See [docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md).
+
+**Where do MCP API keys go?**  
+Copy `mcp/mcp.json.template` to `~/.cursor/mcp.json` and fill `YOUR_*` placeholders — never commit real keys. See [SECURITY.md](SECURITY.md) and [mcp/README.md](mcp/README.md).
+
+**Is there machine-readable docs for AI crawlers?**  
+Yes — [llms.txt](llms.txt) at the repo root links to canonical docs surfaces.
 
 ---
 

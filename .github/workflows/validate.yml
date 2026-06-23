@@ -10,6 +10,10 @@ on:
       - "rules/**"
       - "bin/**"
       - "scripts/**"
+      - "mcp/**"
+      - ".mcp.json"
+      - "llms.txt"
+      - "SECURITY.md"
   push:
     branches: [main]
 
@@ -29,5 +33,11 @@ jobs:
           node-version: "20"
       - name: Validate skills against the Agent Skills spec
         run: node scripts/validate-skills.mjs
+      - name: Skill count sync check
+        run: node scripts/check-skill-count.mjs
+      - name: Secret scanner self-test
+        run: node scripts/scan-secrets.mjs --self-test
+      - name: MCP pin check
+        run: node scripts/check-mcp-pins.mjs
       - name: Install smoke test (files preserved, --skill works)
         run: node scripts/test-install.mjs

@@ -1,55 +1,50 @@
-# Security Policy
+# Security
 
-## Supported Versions
+How to handle secrets when using cursor-kenji skills, MCP templates, and the npm installer.
 
-`cursor-kenji` is a **configuration and prompt toolkit** — it ships Markdown skill files, shell scripts, and JSON config templates. There is no compiled binary, no server, and no npm package published to a registry.
+## Reporting vulnerabilities
 
-| Component | Supported |
-|:----------|:----------|
-| `skills/` — Agent skill SKILL.md files | Always (latest `main`) |
-| `install.sh` — Installer script | Always (latest `main`) |
-| `mcp/*.json.template` — MCP config templates | Always (latest `main`) |
-| Older commits / forks | Not supported |
+Email or open a **private** [GitHub Security Advisory](https://github.com/kensaurus/cursor-kenji/security/advisories/new) for credential leaks, malicious skill content, or installer issues. Do not post live tokens in public issues.
 
----
+## Where secrets belong
 
-## Reporting a Vulnerability
+| Location | Purpose | Commit? |
+|----------|---------|---------|
+| `~/.cursor/mcp.json` | Your personal MCP config with real API keys | **Never** |
+| `.env` (gitignored) | Local publish tokens (`NPM_TOKEN`) for maintainers | **Never** |
+| `mcp/mcp.json.template` | Placeholders (`YOUR_*`) for copy-paste | Yes — templates only |
+| Repo root `.mcp.json` | Shared example using `${ENV}` refs | Yes — **no literal secrets** |
 
-If you find a security issue — for example:
+Real keys live only on your machine. Forks must not commit filled MCP configs.
 
-- `install.sh` downloading or executing untrusted content
-- A skill file that leaks secrets or credentials when executed by an agent
-- An MCP config template that exposes API keys or tokens insecurely
+## MCP supply chain
 
-**Please do not open a public GitHub issue.**
+MCP templates pin semver versions in [`mcp/pinned-versions.json`](mcp/pinned-versions.json). When copying a template:
 
-Instead, use one of these private channels:
+1. Replace every `YOUR_*` placeholder or `${ENV}` variable with env vars — not inline secrets in tracked project files.
+2. Prefer pinned `@version` over `@latest` when adding servers manually.
+3. AWS servers use `uvx` with PyPI packages documented in `mcp/pinned-versions.json` (legacy `awslabs.s3-mcp-server` / `lambda-mcp-server` names are **not** valid on PyPI).
 
-1. **GitHub private vulnerability reporting** (preferred) — [Report a vulnerability](https://github.com/kensaurus/cursor-kenji/security/advisories/new)
-2. **Email** — contact the maintainer via the email on the GitHub profile
+## Pre-commit protection
 
-### What to include
+This repo runs `scripts/scan-secrets.mjs` on staged files before commit. It blocks common patterns (GitHub PATs, npm tokens, Stripe live keys, AWS access keys, private key blocks). Placeholders like `ghp_your_token_here` and `YOUR_*` are allowed.
 
-- A description of the vulnerability and its potential impact
-- Steps to reproduce (or a minimal example)
-- Which file(s) are affected
-- Any suggested fix (optional but appreciated)
+Enable hooks after clone:
 
----
+```bash
+npm run prepare   # sets core.hooksPath → .githooks
+```
 
-## Response Timeline
+## npm publish (maintainers)
 
-| Action | Target |
-|:-------|:-------|
-| Acknowledge receipt | Within 48 hours |
-| Initial triage | Within 5 business days |
-| Fix or mitigation | Within 14 days for critical issues |
-| Public disclosure | Coordinated with reporter |
+Prefer **npm Trusted Publishing (OIDC)** via [`.github/workflows/npm-publish.yml`](.github/workflows/npm-publish.yml) — no long-lived `NPM_TOKEN` required when OIDC is configured on npmjs.com.
 
----
+`NPM_TOKEN` in GitHub Actions secrets is a **fallback only** (see `.env.example` for local publish shape). Rotate immediately if exposed.
 
-## Secrets in Skills
+## Zero runtime dependencies
 
-Skills are agent instructions, not code. They **should never contain** real API keys, tokens, passwords, or other secrets. If you see a skill that references or echoes secrets, that is a bug — please report it.
+`package.json` declares no runtime or dev dependencies — install/validate scripts use Node built-ins only. If you add dependencies, add a lockfile and run `npm audit` before merging.
 
-MCP config **templates** use placeholder values like `YOUR_API_KEY_HERE`. Fill these in your local `~/.cursor/mcp.json` only — never commit real keys to this repository.
+## Consumer projects
+
+Skills that touch Supabase, Stripe, or auth (`plan-secrets-audit`, `plan-rls-audit`, `audit-security`) assume **your app repo** follows the same rules: service-role keys never in client bundles, RLS on every table, env vars in deployment secrets — not in git.
