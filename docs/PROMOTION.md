@@ -1,6 +1,6 @@
 # Promotion Checklist
 
-Everything you need to submit and announce cursor-kenji. Repo-side requirements (plugin manifest, docs, npm OIDC) are done. External listings may take manual review.
+Checklist for external listings and launch copy. Repo-side requirements (plugin manifest, docs, npm OIDC) are done. External listings may take manual review.
 
 **Tracking:** [DISTRIBUTION.md](DISTRIBUTION.md) · Maintainer releases: [PUBLISHING.md](PUBLISHING.md)
 
@@ -42,7 +42,7 @@ npx skills add kensaurus/cursor-kenji
 
 **PR copy:**
 ```markdown
-- [cursor-kenji](https://github.com/kensaurus/cursor-kenji) — 90 production-ready agent skills,
+- [cursor-kenji](https://github.com/kensaurus/cursor-kenji) — 90 agent skills,
   13 slash commands, 5 subagents, and MCP configs for React/Next.js/Supabase development.
   `npx skills add kensaurus/cursor-kenji`
 ```
@@ -64,7 +64,7 @@ npx skills add kensaurus/cursor-kenji
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/cursor-kenji
 
-**Status:** [x] Published — `@kensaurus/cursor-kenji@1.4.1` ([npm](https://www.npmjs.com/package/@kensaurus/cursor-kenji))
+**Status:** [x] Published — `@kensaurus/cursor-kenji@1.4.2` ([npm](https://www.npmjs.com/package/@kensaurus/cursor-kenji))
 
 ---
 
@@ -147,7 +147,7 @@ npx skills add kensaurus/cursor-kenji
 ### dev.to / Hashnode article outline
 
 ```
-Title: 90 Cursor AI Skills That Fire Automatically (No Prompting Required)
+Title: 90 Cursor AI Skills That Match on Keywords
 
 1. The problem: writing the same prompts over and over
 2. What Cursor skills are and how they work

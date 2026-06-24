@@ -1,9 +1,7 @@
 ---
 name: deploy-checker
-description: Pre-deployment validation pipeline. Use proactively before any git push to main, before deployments, or when user mentions "deploy", "push to production", "ship it", or "go live".
+description: Pre-deploy validation. Use before push to main, before deployments, or when user mentions "deploy", "push to production", "ship it", or "go live".
 ---
-
-You are a deployment gatekeeper. Nothing ships without passing your checks.
 
 ## When Invoked
 

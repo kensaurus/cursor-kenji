@@ -33,17 +33,17 @@ Then edit `~/.cursor/mcp.json` and replace `YOUR_*` placeholders with real crede
 | **Context7** | No | Live, up-to-date library documentation |
 | **Firecrawl** | Yes | Web scraping for research ([firecrawl.dev](https://firecrawl.dev)) |
 | **Supabase** | Yes | Direct DB access, auth, storage, migrations |
-| **Chrome DevTools** | No* | Browser testing, console checks, screenshots |
+| **Playwright** | No | Browser automation, E2E testing, screenshots |
 
-*Requires Chrome with `--remote-debugging-port=9222`
+Chrome DevTools MCP is in the full template — attach to Chrome with `--remote-debugging-port=9222` (see below).
 
-### Tier 2: Development Power-Ups
+### Tier 2: Development servers
 
 | Server | API Key? | What it Does |
 |--------|----------|-------------|
 | **GitHub** | Yes (PAT) | Repos, issues, PRs, code search, reviews |
 | **GitHub Official** | Yes (PAT) | Official Go-based server (Docker, more features) |
-| **Playwright** | No | Browser automation, E2E testing, screenshots |
+| **Chrome DevTools** | No* | Attach to running Chrome for console checks, screenshots |
 | **Postgres** | Yes (conn) | Direct PostgreSQL queries, schema inspection |
 | **Memory** | No | Persistent memory across sessions |
 
@@ -209,7 +209,7 @@ Persistent memory that survives across sessions:
 
 ### Solo Developer (Web App)
 ```
-sequential-thinking + context7 + firecrawl + supabase + chrome-devtools + github + playwright
+sequential-thinking + context7 + firecrawl + supabase + playwright + github
 ```
 
 ### Team / Full-Stack

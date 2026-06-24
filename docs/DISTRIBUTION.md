@@ -16,7 +16,7 @@ Current npm version: see [npm package page](https://www.npmjs.com/package/@kensa
 
 | Directory | URL | Status |
 |-----------|-----|--------|
-| **npm** | https://www.npmjs.com/package/@kensaurus/cursor-kenji | Live @ 1.4.x |
+| **npm** | https://www.npmjs.com/package/@kensaurus/cursor-kenji | Live @ 1.4.2 |
 | **GitHub** | https://github.com/kensaurus/cursor-kenji | Source of truth |
 | **Cursor Marketplace** | https://cursor.com/marketplace | Publisher application submitted — awaiting review |
 | **cursor.directory** | https://cursor.directory/plugins/cursor-kenji | Submitted — pending security scan |
@@ -35,11 +35,21 @@ Track submission URLs and review status in [PROMOTION.md](PROMOTION.md).
 
 ## What gets installed
 
+### By install channel
+
+| Channel | Cursor | Claude Code | Commands | Agents | Rules | MCP config |
+|---------|:------:|:-------------:|:--------:|:------:|:-----:|:----------:|
+| `npx skills add kensaurus/cursor-kenji` | Yes | No | Yes | Yes | Yes | Template copy if missing |
+| `npx @kensaurus/cursor-kenji` | Yes | No | Yes | Yes | Yes | Template copy if missing |
+| `./install.sh` (clone) | Yes | Yes | Yes | Yes | Yes | Template copy if missing |
+| Cursor Marketplace / cursor.directory | Yes | No | Yes | Yes | Yes | `.mcp.json` at repo root |
+
 The installer merges into:
 
 - `~/.cursor/skills/` and `~/.agents/skills/` — agent skills (runtime)
 - `~/.cursor/commands/` — slash commands
 - `~/.cursor/agents/` — subagents
+- `~/.claude/skills/`, `~/.claude/agents/`, `~/.claude/rules/` — Claude Code only (`./install.sh`)
 
 MCP templates live in the repo under `mcp/` — copy `mcp/mcp.json.template` to `~/.cursor/mcp.json` and fill `YOUR_*` placeholders. See [mcp/README.md](../mcp/README.md).
 

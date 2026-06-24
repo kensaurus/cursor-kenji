@@ -23,8 +23,6 @@ license: MIT
 access matrix, score findings by exposure, emit `plan-rls-audit.md`. **Audit & plan only —
 no SQL runs until each phase is approved.**
 
-**Every table, checked. Every policy, proven. Nothing altered until approved.**
-
 Missing or misconfigured Row-Level Security is the most documented vibe-coding
 catastrophe of the 2025–2026 era. An audit of 50 vibe-coded apps across Lovable,
 Bolt, v0, Cursor, and Claude Code found **88% had RLS entirely disabled** — not
@@ -53,8 +51,8 @@ RLS is specifically *who can read/write which rows*, enforced at the database.
 ## Why a dedicated skill (not generic security audit)
 
 RLS failure is *mechanical and table-by-table*. A generic OWASP sweep glances at
-it; this enumerates every table and applies a deterministic checklist. The
-highest-leverage thing you can hand a Supabase vibe-coded app.
+it; this enumerates every table and applies a deterministic checklist. Fixing RLS
+is the first step when the anon key can read rows it should not.
 
 ---
 

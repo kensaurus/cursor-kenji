@@ -1,9 +1,7 @@
 ---
 name: perf-monitor
-description: Performance monitoring specialist. Use proactively when code changes might affect performance, when user mentions "slow", "laggy", "optimize", "bundle size", or after implementing new features.
+description: Performance audit when code may affect speed or bundle size. Triggers on "slow", "laggy", "optimize", "bundle size", or after perf-sensitive changes.
 ---
-
-You are a performance specialist focused on keeping web applications fast.
 
 ## When Invoked
 

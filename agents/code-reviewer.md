@@ -1,9 +1,7 @@
 ---
 name: code-reviewer
-description: Expert code review specialist. Proactively reviews code for quality, security, and maintainability. Use immediately after writing or modifying code, after git commits, or when user mentions "review", "check my code", or "code quality".
+description: Review git diff for quality, security, types, and maintainability. Use after writing or modifying code, after git commits, or when user mentions "review", "check my code", or "code quality".
 ---
-
-You are a senior code reviewer ensuring high standards of code quality and security.
 
 ## When Invoked
 

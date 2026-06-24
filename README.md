@@ -6,16 +6,12 @@
 
 <p align="center">
   <strong>Agent skills, slash commands, and MCP configs for Cursor.</strong><br/>
-  90 agent skills · 13 slash commands · 16 MCP servers · 12 Cursor extensions · 5 subagents
+  90 agent skills · 13 slash commands · 16 MCP servers · 12 Cursor skills · 5 subagents
 </p>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@kensaurus/cursor-kenji"><img src="https://img.shields.io/npm/v/@kensaurus/cursor-kenji?style=flat-square&color=cb3837&logo=npm" alt="npm version" /></a>
-  <a href="https://www.npmjs.com/package/@kensaurus/cursor-kenji"><img src="https://img.shields.io/npm/dm/@kensaurus/cursor-kenji?style=flat-square&color=cb3837&logo=npm" alt="npm downloads" /></a>
   <img src="https://img.shields.io/github/license/kensaurus/cursor-kenji?style=flat-square&color=444" alt="License" />
-  <img src="https://img.shields.io/github/stars/kensaurus/cursor-kenji?style=flat-square&color=f59e0b" alt="Stars" />
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/changelog-Jun_2026-6366f1?style=flat-square" alt="Latest" /></a>
-  <img src="https://img.shields.io/badge/targets-React_·_Next_·_Supabase-444?style=flat-square" alt="Target stack" />
 </p>
 
 ---
@@ -64,6 +60,30 @@ npx skills add kensaurus/mushi-mushi
 
 **Authoring skills?** Each skill must pass [Agent Skills spec](https://agentskills.io/specification) validation (`npm run validate:skills`): `name` matches directory, `description` ≤ 1024 chars, body < 500 lines.
 
+### Claude Code (bash installer only)
+
+The npm and skills.sh installers target **Cursor only**. For Claude Code, clone the repo and use `install.sh`:
+
+All skills, agents, and rules install to Claude Code (`~/.claude/`). Skills appear as `/slash-commands` — type `/` inside any `claude` session.
+
+```bash
+# Install for Claude Code only
+./install.sh --claude
+
+# Install for both Cursor and Claude Code (default)
+./install.sh
+```
+
+```bash
+# Inside Claude Code — use skills as slash commands
+/workflow-build-feature
+/debug-error the login endpoint returns 401
+/plan-security-audit
+/docs-writer
+```
+
+Skills are read from `~/.claude/skills/<name>/SKILL.md`. No restart required when you re-run the installer — Claude Code picks up file changes at the start of each new session.
+
 ### Manual install
 
 ```bash
@@ -92,7 +112,7 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 | **Commands** | 13 | Slash workflows (`/commit`, `/pr`, `/research`) |
 | **Subagents** | 5 | Background agents (code-reviewer, debugger, db-migrator…) |
 | **MCP Servers** | 16 | Supabase · GitHub · Sentry · Playwright · AWS · Slack |
-| **Project Rules** | 9 | Drop-in `.mdc` for `.cursor/rules/` |
+| **Project Rules** | 6 | Drop-in `.mdc` for `.cursor/rules/` (plus 3 global, 5 RN bundle optional) |
 | **Notepads** | 2 | Context templates (architecture, design tokens) |
 | **Shell Aliases** | 8 | `newskill`, `cursor-sync`, `gc`, `gp` |
 
@@ -102,7 +122,7 @@ Full skill list + trigger phrases → **[docs/CATALOG.md](docs/CATALOG.md)** · 
 
 ## Workflows
 
-Skills chain: **Understand → Clean → Measure → Plan → Change → Verify → Ship**. Bundled workflows run the full arc; `plan-*` skills audit first — you approve each phase before anything changes.
+Skills chain bundled workflows from onboarding through ship; `plan-*` skills audit first — you approve each phase before anything changes.
 
 ```mermaid
 flowchart LR
@@ -239,7 +259,7 @@ Replace `YOUR_*` placeholders with real keys. Setup details → **[mcp/README.md
 
 | Tier | Servers | Keys? |
 |:-----|:--------|:------|
-| Essential | Sequential Thinking, Context7, Firecrawl, Supabase, Chrome DevTools | Firecrawl + Supabase |
+| Essential | Sequential Thinking, Context7, Firecrawl, Supabase, Playwright | Firecrawl + Supabase |
 | Dev | GitHub, Playwright, Postgres, Memory | PAT / conn string |
 | Cloud | AWS Lambda, S3, CloudWatch, Redis | AWS profile / URL |
 | Productivity | Slack, Notion | Bot token / API key |
@@ -276,10 +296,16 @@ source ~/cursor-kenji/shell-aliases/cursor-helpers.sh
 
 | Command | Action |
 |:--------|:-------|
-| `newskill <name>` | Skill template |
+| `newskill <name>` | Create skill template |
 | `lsskills` | List installed skills |
-| `cursor-sync` | Pull + reinstall |
+| `cursor-sync` | Pull repo + reinstall |
+| `cursor-dev` | Open Chrome (debug port) + Cursor |
+| `newrule <name>` | Create project rule template |
+| `newagent <name>` | Create subagent template |
 | `gc <type> <msg>` | Conventional commit |
+| `gp` | Push current branch |
+
+Full definitions in [shell-aliases/cursor-helpers.sh](shell-aliases/cursor-helpers.sh) (clone-only; not in npm tarball).
 
 ---
 
@@ -294,6 +320,8 @@ cursor-kenji/
 ├── rules/            # Global + project-starter rules
 ├── mcp/              # MCP templates
 ├── docs/             # CATALOG, PLAN-LOOPS, GETTING-STARTED, …
+├── notepads/         # Context templates (clone-only)
+├── shell-aliases/    # Bash helpers (clone-only)
 ├── scripts/          # validate-skills, check-skill-count, install tests
 └── bin/install.mjs   # npm installer
 ```
@@ -305,7 +333,7 @@ cursor-kenji/
 | # | Principle | Enforced by |
 |---|:----------|:------------|
 | 1 | Check existing first | `workflow-housekeep`, `plan-stub-checker` |
-| 2 | Production-ready examples | `workflow-spec-tdd`, skill validation CI |
+| 2 | CI-validated examples | `workflow-spec-tdd`, skill validation CI |
 | 3 | Modular & composable | `skill-workflows.mdc`, bundled workflows |
 | 4 | Audit before change | 17 `plan-*` skills, `/plan` |
 | 5 | Verify end-to-end | `full-stack-ship-discipline.mdc`, `test-playwright` |
@@ -375,6 +403,6 @@ cursor-kenji ships executable skills, MCP configs, commands, and subagents in on
 ---
 
 <p align="center">
-  <strong>MIT License</strong><br/>
+  <strong>MIT License</strong> · Apache-2.0 portions noted in <a href="NOTICE">NOTICE</a><br/>
   <em><a href="https://github.com/kensaurus">@kensaurus</a> · <a href="CHANGELOG.md">Changelog</a> · <a href="https://github.com/kensaurus/cursor-kenji/discussions">Discussions</a></em>
 </p>

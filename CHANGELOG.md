@@ -6,17 +6,22 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
-### Added
+---
 
-- **`.cursor-plugin/plugin.json`** — Cursor Marketplace / Open Plugins manifest
-- **`docs/DISTRIBUTION.md`** — install surfaces, directory listings, discovery status
-- **`docs/PUBLISHING.md`** — maintainer release guide (OIDC npm publish)
+## [1.4.2] — 2026-06-24
+
+### Fixed
+
+- **npm tarball** — `.mcp.json` included in published package (Cursor Marketplace MCP reference)
+- **MCP essential 5** — aligned `mcp/mcp.json.template`, `.mcp.json`, and docs on Playwright (was Chrome DevTools in template)
 
 ### Changed
 
-- **`docs/PROMOTION.md`** — listing checklist updated with submission URLs
-- **`docs/README.md`**, **`llms.txt`**, **`README.md`** — distribution and discovery links
-- **`package.json`** — include `.cursor-plugin/` in npm `files`
+- **Anti-slop pass** — skill YAML descriptions, subagent frontmatter, README badges, CATALOG/PROMOTION/GETTING-STARTED copy
+- **`docs/DISTRIBUTION.md`** — install channel matrix (Cursor vs Claude Code vs Marketplace)
+- **README** — Claude Code labeled bash-only; shell helpers table expanded; project rules count clarified
+- **`package.json`** — removed `prepare` git-hooks side effect on consumer `npm install`
+- **`.gitignore`** — `*.log`, `*.bak`, `*.old`, `*.tmp`
 
 ---
 

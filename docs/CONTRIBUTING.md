@@ -108,7 +108,7 @@ The `description` field is critical — it's how Cursor decides when to use the 
 description: Fix slow Postgres queries and N+1 problems. Use when asked about "slow query", "add index", "database timeout", "optimize query", schema design, or RLS policies.
 ```
 
-**Bad:**
+**Bad:** <!-- intentional anti-pattern — do not copy -->
 ```yaml
 description: This comprehensive skill leverages powerful AI capabilities to seamlessly help with database stuff.
 ```
@@ -246,6 +246,16 @@ docs(skills): add cross-references to enhance-web-web3d
 ---
 
 ## Repository Maintenance
+
+### Git hooks (clone contributors)
+
+After cloning, enable pre-commit validation:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+This is not run automatically on `npm install` — only set it when working from a git clone.
 
 ### Regular Tasks
 

@@ -1,8 +1,8 @@
 ---
 name: enhance-web-web3d
 description: >
-  Audit-first skill for elevating an existing website or web app with 3D and
-  cinematic motion — Three.js / React Three Fiber for the scene, GSAP
+  Add 3D and scroll-driven motion to an existing website or web app —
+  Three.js / React Three Fiber for the scene, GSAP
   ScrollTrigger for scroll-driven choreography, and Motion / React Spring for
   UI and physics. Works with any web stack (Next.js, Vite, Astro, Remix,
   vanilla) and any styling system. Use when the user asks to "add 3D", "add a

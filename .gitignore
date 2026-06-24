@@ -22,5 +22,12 @@ mcp.json
 # Backups
 *.backup.*
 
+# Logs and temp
+*.log
+*.bak
+*.old
+*.orig
+*.tmp
+
 # Local plan-* audit outputs at repo root (committed samples live under docs/examples/plan-audits/)
 /plan-*.md

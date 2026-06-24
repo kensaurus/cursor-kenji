@@ -153,7 +153,7 @@ const titleCase = (s) =>
 const captionFor = (cell) =>
   cell.isLightShowcase
     ? `<b>Light mode</b> · how the app looks in daytime`
-    : `<b>${titleCase(cell.captionKey)}</b> · TODO short caption`;
+    : `<b>${titleCase(cell.captionKey)}</b> · [add caption]`;
 
 const renderedCells = tourCells.map((cell) => {
   return `    <td width="50%" align="center">

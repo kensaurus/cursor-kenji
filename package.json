@@ -1,6 +1,6 @@
 {
   "name": "@kensaurus/cursor-kenji",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "90 Cursor AI agent skills, 13 slash commands, 5 subagents, and MCP configs for React/Next.js/Supabase development.",
   "type": "module",
   "bin": {
@@ -19,8 +19,7 @@
     "scan:secrets": "node scripts/scan-secrets.mjs --self-test",
     "check:mcp-pins": "node scripts/check-mcp-pins.mjs",
     "test:install": "node scripts/test-install.mjs",
-    "test": "node scripts/validate-skills.mjs && node scripts/check-skill-count.mjs && node scripts/scan-secrets.mjs --self-test && node scripts/check-mcp-pins.mjs && node scripts/test-install.mjs",
-    "prepare": "git config core.hooksPath .githooks"
+    "test": "node scripts/validate-skills.mjs && node scripts/check-skill-count.mjs && node scripts/scan-secrets.mjs --self-test && node scripts/check-mcp-pins.mjs && node scripts/test-install.mjs"
   },
   "keywords": [
     "cursor",
@@ -49,7 +48,8 @@
     "NOTICE",
     "llms.txt",
     "SECURITY.md",
-    ".cursor-plugin/"
+    ".cursor-plugin/",
+    ".mcp.json"
   ],
   "engines": {
     "node": ">=18"

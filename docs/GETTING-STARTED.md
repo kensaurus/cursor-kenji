@@ -10,13 +10,13 @@ A plain-language guide for non-technical users and Cursor beginners.
 
 Think of skills like apps on a phone. You install them once and they're there when you need them. When you type something in Cursor chat — like "audit my security" or "make this page look better" — the matching skill activates and tells the AI exactly how to do that job properly.
 
-Without skills, the AI does its best. With skills, it follows a specific, production-tested workflow.
+Without skills, the AI does its best. With skills, it follows a documented step-by-step workflow.
 
 ---
 
 ## Step 1: Install Cursor
 
-If you don't have Cursor yet: [download it at cursor.com](https://cursor.com). It's free and it's basically VS Code with a very capable AI built in.
+If you don't have Cursor yet: [download it at cursor.com](https://cursor.com). It's free and it's basically VS Code with AI chat built in.
 
 ---
 

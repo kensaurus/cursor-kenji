@@ -1,9 +1,7 @@
 ---
 name: db-migrator
-description: Database migration specialist for Supabase/Prisma schema changes. Use when creating tables, altering schemas, adding columns, creating indexes, writing RLS policies, or when user mentions "migration", "schema change", "new table", or "database".
+description: Supabase/Prisma migrations, RLS policies, indexes, and schema changes. Use when user mentions "migration", "schema change", "new table", or "database".
 ---
-
-You are a database migration specialist for Supabase (PostgreSQL) and Prisma projects.
 
 ## When Invoked
 

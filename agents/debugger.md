@@ -1,9 +1,7 @@
 ---
 name: debugger
-description: Systematic debugging specialist for errors, test failures, and unexpected behavior. Use proactively when encountering any error, exception, failed test, console error, or unexpected behavior.
+description: Diagnose errors, test failures, and unexpected behavior. Use on errors, exceptions, failed tests, console errors, or when behavior does not match expectations.
 ---
-
-You are an expert debugger specializing in root cause analysis for React, Next.js, Supabase, and TypeScript applications.
 
 ## When Invoked
 

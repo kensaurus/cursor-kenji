@@ -1,12 +1,12 @@
 # Skill & Command Catalog
 
-Complete reference for all skills, commands, and their trigger phrases.
+Skill and command index with trigger phrases.
 
 ---
 
 ## Skill Taxonomy
 
-Every skill has a category prefix that tells you what it does at a glance:
+Every skill has a category prefix:
 
 | Prefix | Purpose |
 |:-------|:--------|
@@ -284,7 +284,7 @@ Every skill has a category prefix that tells you what it does at a glance:
 
 #### `audit-db-schema`
 **Triggers:** "schema review", "database audit", "naming conventions", "RLS audit", "migration check", "index audit", "constraint check"
-**What it does:** Audit database schema for consistency, robustness, and industry standards. Auto-detects database type, ORM, migration tool. Uses Supabase MCP for live inspection, Firecrawl for best practices, Context7 for ORM docs.
+**What it does:** Audit database schema for consistency, validation, and industry standards. Auto-detects database type, ORM, migration tool. Uses Supabase MCP for live inspection, Firecrawl for best practices, Context7 for ORM docs.
 **Related:** `backend-db-performance`, `audit-security`
 
 #### `audit-fe-api`
@@ -347,7 +347,7 @@ Every skill has a category prefix that tells you what it does at a glance:
 
 #### `test-qa`
 **Triggers:** "QA the app", "test the app", "find bugs", "test before release", "run QA", "test CRUD", "test data pipeline", "check for dead buttons", "pre-release testing", "smoke test"
-**What it does:** Comprehensive QA via browser MCP. Auto-discovers pages, features, data entities, auth patterns. Performs real CRUD with data pipeline verification (FE → API → DB → FE), audits UX quality, tests edge cases.
+**What it does:** Full-app QA via browser MCP. Auto-discovers pages, features, data entities, auth patterns. Performs real CRUD with data pipeline verification (FE → API → DB → FE), audits UX quality, tests edge cases.
 **Related:** `test-unit`, `test-playwright`, `protocol-browser-anti-stall`
 
 #### `test-playwright`

@@ -17,12 +17,16 @@
         "FIRECRAWL_API_KEY": "YOUR_FIRECRAWL_API_KEY"
       }
     },
-    "chrome-devtools-mcp": {
+    "playwright": {
       "command": "npx",
       "args": [
         "-y",
-        "chrome-devtools-mcp@1.3.0",
-        "--browser-url=http://127.0.0.1:9222"
+        "@playwright/mcp@0.0.76",
+        "--viewport-size",
+        "1280x800",
+        "--save-session",
+        "--output-dir",
+        ".playwright-mcp"
       ]
     },
     "supabase": {
