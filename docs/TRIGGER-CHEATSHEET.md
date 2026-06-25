@@ -131,6 +131,18 @@ You don't have to type the skill name. Just describe the task in plain language.
 
 ---
 
+## Third-party (upstream-maintained)
+
+| Say this in chat | Skill / command |
+|:-----------------|:----------------|
+| "animation craft", "emil design", "micro-interactions", "Sonner-style" | `thirdparty-emil-design-eng` |
+| "design system generator", "ui ux pro max", "landing page palette" | `thirdparty-ui-ux-pro-max` |
+| "Vercel guidelines", "web interface guidelines", "review UI compliance" | `thirdparty-web-interface-guidelines` or `/thirdparty-web-interface-guidelines <file>` |
+
+Attribution and update policy → [THIRD-PARTY-SKILLS.md](./THIRD-PARTY-SKILLS.md)
+
+---
+
 ## Meta (skill & MCP authoring)
 
 | Say this in chat | Skill |
