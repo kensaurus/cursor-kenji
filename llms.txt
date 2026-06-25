@@ -1,6 +1,6 @@
 # cursor-kenji
 
-> Installable Cursor AI toolkit: 90 agent skills, 13 slash commands, 5 subagents, and MCP server templates for React / Next.js / Supabase. One-line install: `npx skills add kensaurus/cursor-kenji`.
+> Installable Cursor AI toolkit: 91 agent skills, 14 slash commands, 5 subagents, and MCP server templates for React / Next.js / Supabase. One-line install: `npx skills add kensaurus/cursor-kenji`.
 
 Validated against the [Agent Skills specification](https://agentskills.io/specification) on every commit. npm package: `@kensaurus/cursor-kenji`.
 

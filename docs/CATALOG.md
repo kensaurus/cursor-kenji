@@ -26,7 +26,7 @@ Every skill has a category prefix:
 
 ---
 
-## Skills (90)
+## Skills (91)
 
 ### Enhance
 
@@ -437,6 +437,11 @@ Every skill has a category prefix:
 **What it does:** PR lifecycle from creation to merge. Runs validations, security scans, creates PR with template. Monitors checks (polls status), addresses bot feedback, ensures all threads resolved.
 **Related:** `workflow-git-commit`, `audit-code-review`
 
+#### `burndown-full`
+**Triggers:** "finish the burndown", "it stopped halfway", "apply this everywhere", "complete the refactor across all files", "make sure nothing was missed", "ran out of steam", "half-migrated repo", "/burndown-full"
+**What it does:** Drive a planned change to 100% coverage when a prior agent run stopped early. Defines MATCH/DONE searchable patterns, enumerates the full repo-wide worklist (not the plan's file list), executes in small batches with persistent `.cursor/burndown-state.md`, and loops a verification gate (fresh grep → zero hits, typecheck, lint, test, build) until provably complete. Framework-agnostic — discovers project verification commands from package.json/Makefile/AGENTS.md.
+**Related:** `composer-2.5-execution`, `plan-*` skills (audit-only), `workflow-refactor`
+
 #### `workflow-housekeep`
 **Triggers:** "housekeep", "clean up repo", "update README", "update dependencies", "fix vulnerabilities", "remove dead code", "tidy up", "repo maintenance", "spring clean", "declutter"
 **What it does:** Full-cycle repository maintenance: README sync, dead file cleanup (logs, screenshots, deprecated code), dependency updates (audit, classify, update with research), config/script/env audit.
@@ -520,7 +525,7 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 
 ---
 
-## Commands (13)
+## Commands (14)
 
 Commands fall into two groups: **standalone** (full playbook in the file) and **pointer** (thin slash entry delegating to a skill).
 
@@ -537,6 +542,7 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 
 | Command | Points to | Notes |
 |---------|-----------|-------|
+| `/burndown-full` | `burndown-full` | Finish a partial refactor/migration to 100% repo coverage (MATCH/DONE + verification gate) |
 | `/commit` | `workflow-git-commit` | Pre-commit pipeline: lint, Sentry, build, scope, conventional commit, push |
 | `/debug` | `debug-error` | Hypothesis-driven debugging with runtime evidence |
 | `/pr` | `workflow-pr` | Pre-flight → commit → push → open PR |

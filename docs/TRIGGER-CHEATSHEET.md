@@ -10,6 +10,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 
 | Say this in chat | Skill |
 |:-----------------|:------|
+| "finish the burndown", "it stopped halfway", "apply this everywhere", "complete the refactor", "half-migrated", "make sure nothing was missed" | `burndown-full` |
 | "build a feature", "implement this", "add X end-to-end", "ship a new capability" | `workflow-build-feature` |
 | "fix this bug and ship it", "patch this and close the ticket", "fix and deploy" | `workflow-fix-and-ship` |
 | "is this ready to ship?", "quality gate", "pre-release checklist", "ship-readiness" | `workflow-quality-gate` |
@@ -174,6 +175,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 
 | Say this in chat | Skill |
 |:-----------------|:------|
+| "finish the burndown", "it stopped halfway", "apply this everywhere", "complete the refactor across all files", "make sure nothing was missed" | `burndown-full` |
 | "think before coding", "simplicity first", "stop overcomplicating" | `workflow-coding-discipline` |
 | "add a feature flag", "gradual rollout", "kill switch", "dark launch", "canary release" | `workflow-feature-flag` |
 | "commit my changes", "write a commit message" | `workflow-git-commit` |

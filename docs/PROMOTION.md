@@ -42,8 +42,8 @@ npx skills add kensaurus/cursor-kenji
 
 **PR copy:**
 ```markdown
-- [cursor-kenji](https://github.com/kensaurus/cursor-kenji) — 90 agent skills,
-  13 slash commands, 5 subagents, and MCP configs for React/Next.js/Supabase development.
+- [cursor-kenji](https://github.com/kensaurus/cursor-kenji) — 91 agent skills,
+  14 slash commands, 5 subagents, and MCP configs for React/Next.js/Supabase development.
   `npx skills add kensaurus/cursor-kenji`
 ```
 
@@ -87,7 +87,7 @@ Submit the GitHub repo URL; Cursor reviews manually.
 - https://enterprisedna.co/directories/submit (alternative submission form)
 
 **One-liner description:**
-> 90 Cursor agent skills for React/Next.js/Supabase — installs in one command.
+> 91 Cursor agent skills for React/Next.js/Supabase — installs in one command.
 
 **Status:** [x] Submitted via fallback form at enterprisedna.co/directories/submit (Skills directory; email draft to directories@enterprisedna.co)
 

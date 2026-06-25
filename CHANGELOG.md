@@ -6,6 +6,10 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+### Added
+
+- **`burndown-full`** skill + **`/burndown-full`** command — drive partially-executed refactors/migrations to 100% repo coverage via MATCH/DONE patterns, persistent `.cursor/burndown-state.md`, batched execution, and a verification gate (framework-agnostic; works in Cursor and Claude Code)
+
 ---
 
 ## [1.4.2] — 2026-06-24

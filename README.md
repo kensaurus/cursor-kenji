@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Agent skills, slash commands, and MCP configs for Cursor.</strong><br/>
-  90 agent skills · 13 slash commands · 16 MCP servers · 12 Cursor skills · 5 subagents
+  91 agent skills · 14 slash commands · 16 MCP servers · 12 Cursor skills · 5 subagents
 </p>
 
 <p align="center">
@@ -16,7 +16,7 @@
 
 ---
 
-**cursor-kenji** ships **90 Cursor agent skills**, 13 slash commands, and 5 subagents for React / Next.js / Supabase projects. Install once — describe a task in chat and the matching skill auto-triggers.
+**cursor-kenji** ships **91 Cursor agent skills**, 14 slash commands, and 5 subagents for React / Next.js / Supabase projects. Install once — describe a task in chat and the matching skill auto-triggers.
 
 Skills conform to the [Agent Skills specification](https://agentskills.io/specification) and pass automated validation on every commit (`npm test` — **102** installable skills including Cursor IDE tools). MCP templates pin semver versions to reduce supply-chain drift ([CSA on package hallucination / slopsquatting](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations)).
 
@@ -107,9 +107,9 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 
 | | Count | What it does |
 |:--|------:|:-------------|
-| **Skills** | 90 | Auto-triggering capabilities (audit, enhance, debug, test, build, plan) |
+| **Skills** | 91 | Auto-triggering capabilities (audit, enhance, debug, test, build, plan) |
 | **Cursor Skills** | 12 | IDE tools (canvas, hooks, rules, PR splitter) |
-| **Commands** | 13 | Slash workflows (`/commit`, `/pr`, `/research`) |
+| **Commands** | 14 | Slash workflows (`/commit`, `/pr`, `/burndown-full`) |
 | **Subagents** | 5 | Background agents (code-reviewer, debugger, db-migrator…) |
 | **MCP Servers** | 16 | Supabase · GitHub · Sentry · Playwright · AWS · Slack |
 | **Project Rules** | 6 | Drop-in `.mdc` for `.cursor/rules/` (plus 3 global, 5 RN bundle optional) |
@@ -214,10 +214,11 @@ Every skill is `<prefix>-<topic>`. Full entries with triggers → **[docs/CATALO
 
 ---
 
-## Commands (13)
+## Commands (14)
 
 | Command | When | What |
 |:--------|:-----|:-----|
+| `/burndown-full` | Partial refactor stopped early | Drive plan to 100% repo coverage via MATCH/DONE + verification gate |
 | `/plan` | Before coding | Research + approved plan |
 | `/commit` | After coding | Lint, typecheck, commit |
 | `/pr` | Ready to ship | Push + open PR |
@@ -313,9 +314,9 @@ Full definitions in [shell-aliases/cursor-helpers.sh](shell-aliases/cursor-helpe
 
 ```
 cursor-kenji/
-├── skills/           # 90 Agent Skills (SKILL.md each)
+├── skills/           # 91 Agent Skills (SKILL.md each)
 ├── skills-cursor/    # 12 Cursor-specific skills
-├── commands/         # 13 slash commands
+├── commands/         # 14 slash commands
 ├── agents/           # 5 subagents
 ├── rules/            # Global + project-starter rules
 ├── mcp/              # MCP templates

@@ -20,6 +20,7 @@ alwaysApply: true
 | Orient to a new codebase | `workflow-onboard` |
 | Close post-launch feedback loop | `iterate-post-launch` |
 | Disciplined feature-flag rollout | `workflow-feature-flag` |
+| Finish a partial burndown to 100% coverage | `burndown-full` |
 
 ## When to use a bundled workflow vs individual skill
 
