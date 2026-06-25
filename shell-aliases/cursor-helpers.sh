@@ -45,11 +45,22 @@ EOF
 
 # List all installed skills
 lsskills() {
-  echo "=== Global Skills ==="
+  echo "=== Global Skills (Kenji-curated) ==="
   ls -1 ~/.cursor/skills/ 2>/dev/null | while read d; do
+    case "$d" in thirdparty-*) continue ;; esac
     if [ -f ~/.cursor/skills/"$d"/SKILL.md ]; then
       desc=$(grep "^description:" ~/.cursor/skills/"$d"/SKILL.md | head -1 | sed 's/description: //')
-      printf "  %-25s %s\n" "$d" "${desc:0:60}"
+      printf "  %-35s %s\n" "$d" "${desc:0:60}"
+    fi
+  done
+
+  echo ""
+  echo "=== Global Skills (third-party, upstream-maintained) ==="
+  ls -1 ~/.cursor/skills/ 2>/dev/null | while read d; do
+    case "$d" in thirdparty-*) ;; *) continue ;; esac
+    if [ -f ~/.cursor/skills/"$d"/SKILL.md ]; then
+      desc=$(grep "^description:" ~/.cursor/skills/"$d"/SKILL.md | head -1 | sed 's/description: //')
+      printf "  %-35s %s\n" "$d" "${desc:0:60}"
     fi
   done
   
@@ -68,10 +79,17 @@ lsskills() {
 
 # Sync skills from cursor-kenji repo
 cursor-sync() {
-  local repo_dir="${CURSOR_KENJI_DIR:-$HOME/cursor-kenji}"
-  if [ ! -d "$repo_dir" ]; then
-    echo "cursor-kenji repo not found at $repo_dir"
-    echo "Clone it: git clone https://github.com/kensaurus/cursor-kenji.git ~/cursor-kenji"
+  local repo_dir="${CURSOR_KENJI_DIR:-}"
+  if [ -z "$repo_dir" ]; then
+    for candidate in "$HOME/cursor_kenji" "$HOME/cursor-kenji"; do
+      if [ -d "$candidate" ]; then
+        repo_dir="$candidate"
+        break
+      fi
+    done
+  fi
+  if [ -z "$repo_dir" ] || [ ! -d "$repo_dir" ]; then
+    echo "cursor_kenji repo not found. Set CURSOR_KENJI_DIR or clone to ~/cursor_kenji"
     return 1
   fi
   cd "$repo_dir" && git pull origin main && ./install.sh --quiet

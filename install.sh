@@ -93,6 +93,17 @@ for skill_dir in "$SCRIPT_DIR"/skills-cursor/*/; do
 done
 ok "Installed $SKILL_COUNT skills to $SKILLS_DIR"
 
+ok "Installed $SKILL_COUNT skills to $SKILLS_DIR"
+
+THIRDPARTY_COUNT=0
+for skill_dir in "$SCRIPT_DIR"/skills/thirdparty-*/; do
+    [ -d "$skill_dir" ] || continue
+    THIRDPARTY_COUNT=$((THIRDPARTY_COUNT + 1))
+done
+if [ "$THIRDPARTY_COUNT" -gt 0 ]; then
+    ok "Third-party skills: $THIRDPARTY_COUNT (prefixed thirdparty-*)"
+fi
+
 # ---- Cursor: sync to ~/.agents/skills/ (Cursor Skills UI reads from here) ----
 mkdir -p "$AGENTS_SKILLS_DIR"
 for skill_dir in "$SKILLS_DIR"/*/; do

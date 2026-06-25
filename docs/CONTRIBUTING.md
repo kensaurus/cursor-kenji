@@ -32,6 +32,14 @@ Naming: `<prefix>-<topic>`, lowercase, hyphens only. 13 prefixes:
 
 Examples: `audit-performance`, `backend-realtime`, `mobile-rn-screen`.
 
+**Third-party / upstream skills** use the `thirdparty-` prefix (e.g. `thirdparty-emil-design-eng`). Each must include:
+
+- `ATTRIBUTION.md` with upstream URL, license, and update policy
+- A **Source** footer in `SKILL.md` pointing to upstream
+- A callout block after the title: `> **Third-party skill** (upstream-maintained)`
+
+Do not mix Kenji "Check Existing First" sections into third-party skill bodies — keep them faithful to upstream; wrap only with attribution metadata.
+
 ### 2. Create SKILL.md
 
 Every skill needs a `SKILL.md` with YAML frontmatter:
@@ -277,3 +285,19 @@ When adding a new skill:
 1. Add to the appropriate category table in README
 2. Update the skill count in the file tree
 3. Add to "What's Inside" tree if it's a new directory
+
+Third-party skills: also update [THIRD-PARTY-SKILLS.md](./THIRD-PARTY-SKILLS.md).
+
+---
+
+## Third-Party Skills (summary)
+
+Full guide: [THIRD-PARTY-SKILLS.md](./THIRD-PARTY-SKILLS.md)
+
+| Requirement | Detail |
+|-------------|--------|
+| Directory prefix | `thirdparty-` (e.g. `thirdparty-emil-design-eng`) |
+| Frontmatter `name` | Must match directory name |
+| `ATTRIBUTION.md` | Upstream URL, license, update steps |
+| Skill body | Upstream content only — no Kenji "Check Existing First" |
+| Pipeline | Included automatically by `./install.sh` |

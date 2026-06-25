@@ -26,7 +26,7 @@ Every skill has a category prefix:
 
 ---
 
-## Skills (91)
+## Skills (94)
 
 ### Enhance
 
@@ -659,6 +659,37 @@ After approval: `backend-patterns`, `db-migrator`, `backend-observability`, prov
 
 #### Repo Maintenance
 `workflow-housekeep` → `docs-writer` + `workflow-refactor` + `audit-code-review`
+
+#### Third-Party UI Pipeline
+`thirdparty-ui-ux-pro-max` (design system) → implement → `thirdparty-emil-design-eng` (motion) → `thirdparty-web-interface-guidelines` (Vercel compliance) → `/commit`
+
+See [THIRD-PARTY-SKILLS.md](./THIRD-PARTY-SKILLS.md) for attribution and update policy.
+
+---
+
+## Third-Party Skills (Adapted)
+
+Upstream-maintained skills vendored with `thirdparty-` prefix. Each includes `ATTRIBUTION.md`. See [CONTRIBUTING.md](./CONTRIBUTING.md) for update policy.
+
+#### `thirdparty-emil-design-eng`
+**Triggers:** "animation craft", "emil design", "micro-interactions", "Sonner-style", "design engineering", "thirdparty-emil-design-eng"
+**What it does:** Emil Kowalski's design engineering philosophy — animation decision framework, component polish, performance rules, review checklist with Before/After tables.
+**Upstream:** [emilkowalski/skills](https://github.com/emilkowalski/skills)
+**Related:** `thirdparty-web-interface-guidelines`, `motion-design`, `enhance-page-ui`
+
+#### `thirdparty-ui-ux-pro-max`
+**Triggers:** "ui ux pro max", "design system generator", "landing page design", "color palette", "typography pairing", "thirdparty-ui-ux-pro-max"
+**What it does:** Generates tailored design systems via Python search scripts (`scripts/search.py`). 67 styles, palettes, typography, stack-specific guidelines.
+**Upstream:** [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill)
+**Related:** `design-system`, `design-frontend`, `thirdparty-web-interface-guidelines`
+
+#### `thirdparty-web-interface-guidelines`
+**Triggers:** "Vercel guidelines", "web interface guidelines", "review UI compliance", "thirdparty-web-interface-guidelines"
+**What it does:** Reviews UI code against Vercel Web Interface Guidelines — accessibility, focus, forms, animation, performance, navigation, copy. Terse file:line output.
+**Upstream:** [vercel-labs/web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines) · [vercel.com/design/guidelines](https://vercel.com/design/guidelines)
+**Related:** `audit-accessibility`, `audit-uiux-design-system`, `thirdparty-emil-design-eng`
+
+**Slash command:** `/thirdparty-web-interface-guidelines <file>` — installed by `./install.sh` to `~/.cursor/commands/`.
 
 ---
 

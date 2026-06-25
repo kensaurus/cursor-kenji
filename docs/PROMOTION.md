@@ -87,7 +87,7 @@ Submit the GitHub repo URL; Cursor reviews manually.
 - https://enterprisedna.co/directories/submit (alternative submission form)
 
 **One-liner description:**
-> 91 Cursor agent skills for React/Next.js/Supabase — installs in one command.
+> 94 Cursor agent skills for React/Next.js/Supabase — installs in one command.
 
 **Status:** [x] Submitted via fallback form at enterprisedna.co/directories/submit (Skills directory; email draft to directories@enterprisedna.co)
 

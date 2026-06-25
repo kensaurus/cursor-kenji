@@ -8,6 +8,7 @@ Quick map of `docs/` — start with [GETTING-STARTED.md](GETTING-STARTED.md) if 
 | [CATALOG.md](CATALOG.md) | Full skill/command reference with trigger phrases |
 | [TRIGGER-CHEATSHEET.md](TRIGGER-CHEATSHEET.md) | "Say X → skill Y" lookup table |
 | [PLAN-LOOPS.md](PLAN-LOOPS.md) | How to chain the 17 `plan-*` skills (grouped loops) |
+| [THIRD-PARTY-SKILLS.md](THIRD-PARTY-SKILLS.md) | Vendored upstream skills (`thirdparty-*`), attribution, update policy |
 | [AGENTS.template.md](AGENTS.template.md) | Project constitution template (mission / stack / roadmap / agent discipline) |
 | [examples/](examples/) | Sample `plan-*.md` audit outputs |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Skill authoring, validation, PR expectations |
@@ -18,3 +19,5 @@ Quick map of `docs/` — start with [GETTING-STARTED.md](GETTING-STARTED.md) if 
 Repo root also has [README.md](../README.md) (install + overview), [llms.txt](../llms.txt) (AI/crawler index), [SECURITY.md](../SECURITY.md) (secrets + MCP hygiene), [CONTRIBUTING.md](../CONTRIBUTING.md) (short form), and [CHANGELOG.md](../CHANGELOG.md).
 
 **Skill count:** run `npm run check:skills` — the number in README, `package.json`, and this catalog is derived from `skills/*/SKILL.md`, not hand-edited.
+
+**Third-party skills:** directories prefixed `thirdparty-*` are upstream-maintained — see [THIRD-PARTY-SKILLS.md](THIRD-PARTY-SKILLS.md) before editing.

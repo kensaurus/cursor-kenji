@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Agent skills, slash commands, and MCP configs for Cursor.</strong><br/>
-  91 agent skills · 14 slash commands · 16 MCP servers · 12 Cursor skills · 5 subagents
+  94 agent skills · 15 slash commands · 16 MCP servers · 12 Cursor skills · 5 subagents
 </p>
 
 <p align="center">
@@ -16,9 +16,9 @@
 
 ---
 
-**cursor-kenji** ships **91 Cursor agent skills**, 14 slash commands, and 5 subagents for React / Next.js / Supabase projects. Install once — describe a task in chat and the matching skill auto-triggers.
+**cursor-kenji** ships **94 Cursor agent skills**, 15 slash commands, and 5 subagents for React / Next.js / Supabase projects. Install once — describe a task in chat and the matching skill auto-triggers.
 
-Skills conform to the [Agent Skills specification](https://agentskills.io/specification) and pass automated validation on every commit (`npm test` — **102** installable skills including Cursor IDE tools). MCP templates pin semver versions to reduce supply-chain drift ([CSA on package hallucination / slopsquatting](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations)).
+Skills conform to the [Agent Skills specification](https://agentskills.io/specification) and pass automated validation on every commit (`npm test` — **106** installable skills including Cursor IDE tools). MCP templates pin semver versions to reduce supply-chain drift ([CSA on package hallucination / slopsquatting](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations)).
 
 ```bash
 npx skills add kensaurus/cursor-kenji
@@ -107,9 +107,9 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 
 | | Count | What it does |
 |:--|------:|:-------------|
-| **Skills** | 91 | Auto-triggering capabilities (audit, enhance, debug, test, build, plan) |
+| **Skills** | 94 | Auto-triggering capabilities (audit, enhance, debug, test, build, plan) |
 | **Cursor Skills** | 12 | IDE tools (canvas, hooks, rules, PR splitter) |
-| **Commands** | 14 | Slash workflows (`/commit`, `/pr`, `/burndown-full`) |
+| **Commands** | 15 | Slash workflows (`/commit`, `/pr`, `/burndown-full`, `/thirdparty-web-interface-guidelines`) |
 | **Subagents** | 5 | Background agents (code-reviewer, debugger, db-migrator…) |
 | **MCP Servers** | 16 | Supabase · GitHub · Sentry · Playwright · AWS · Slack |
 | **Project Rules** | 6 | Drop-in `.mdc` for `.cursor/rules/` (plus 3 global, 5 RN bundle optional) |
@@ -207,6 +207,9 @@ Every skill is `<prefix>-<topic>`. Full entries with triggers → **[docs/CATALO
 | `meta-` | Author skills/MCP | `meta-skill-creator`, `meta-mcp-builder` |
 | `protocol-` | Session guardrails | `protocol-browser-anti-stall` |
 | `mushi-` | Mushi Mushi integration | `mushi-health`, `mushi-integration` |
+| `thirdparty-` | Upstream-maintained (vendored) | `thirdparty-emil-design-eng`, `thirdparty-ui-ux-pro-max`, `thirdparty-web-interface-guidelines` |
+
+> **Third-party skills:** prefixed `thirdparty-*` with `ATTRIBUTION.md` — do not add Kenji-specific sections to upstream bodies. Full guide → **[docs/THIRD-PARTY-SKILLS.md](docs/THIRD-PARTY-SKILLS.md)**.
 
 > **Note:** Anthropic `file-docx/pdf/pptx/xlsx` skills are not in this public repo. Keep personal copies in `~/.cursor/skills/` if needed.
 
@@ -214,7 +217,7 @@ Every skill is `<prefix>-<topic>`. Full entries with triggers → **[docs/CATALO
 
 ---
 
-## Commands (14)
+## Commands (15)
 
 | Command | When | What |
 |:--------|:-----|:-----|
@@ -232,6 +235,7 @@ Every skill is `<prefix>-<topic>`. Full entries with triggers → **[docs/CATALO
 | `/refactor` | Long files | Modular split |
 | `/mcp` | MCP workflow | Tool reference |
 | `/uiux` | UI review | Design-system enforcement |
+| `/thirdparty-web-interface-guidelines` | Vercel UI audit | Review files against [Web Interface Guidelines](https://vercel.com/design/guidelines) |
 
 **RN monorepo bundle:** copy `commands/native-rn-monorepo/` + `rules/native-rn-monorepo/` into your project (iOS builds on CI, not locally).
 
@@ -314,9 +318,9 @@ Full definitions in [shell-aliases/cursor-helpers.sh](shell-aliases/cursor-helpe
 
 ```
 cursor-kenji/
-├── skills/           # 91 Agent Skills (SKILL.md each)
+├── skills/           # 94 Agent Skills (SKILL.md each)
 ├── skills-cursor/    # 12 Cursor-specific skills
-├── commands/         # 14 slash commands
+├── commands/         # 15 slash commands
 ├── agents/           # 5 subagents
 ├── rules/            # Global + project-starter rules
 ├── mcp/              # MCP templates
@@ -363,7 +367,7 @@ A installable toolkit of [Agent Skills](https://agentskills.io)-compatible markd
 `npx skills add kensaurus/cursor-kenji` (recommended) or `npx @kensaurus/cursor-kenji`. Restart Cursor after install.
 
 **How many skills?**  
-**90** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**102** total). Counts are derived from the filesystem and synced by `npm run check:skills`.
+**94** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**106** total). Counts are derived from the filesystem and synced by `npm run check:skills`.
 
 **How do skills trigger?**  
 Cursor matches your chat message against each skill's YAML `description` keywords. Force one with *"use \`audit-security\` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).
