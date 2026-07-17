@@ -93,7 +93,6 @@ for skill_dir in "$SCRIPT_DIR"/skills-cursor/*/; do
 done
 ok "Installed $SKILL_COUNT skills to $SKILLS_DIR"
 
-ok "Installed $SKILL_COUNT skills to $SKILLS_DIR"
 
 THIRDPARTY_COUNT=0
 for skill_dir in "$SCRIPT_DIR"/skills/thirdparty-*/; do
@@ -199,6 +198,22 @@ for skill_dir in "$SCRIPT_DIR"/skills-cursor/*/; do
     CLAUDE_SKILL_COUNT=$((CLAUDE_SKILL_COUNT + 1))
 done
 ok "Installed $CLAUDE_SKILL_COUNT skills to $CLAUDE_SKILLS_DIR"
+
+# ---- Claude Code: commands (custom slash commands) ----
+CLAUDE_COMMANDS_DIR="$CLAUDE_DIR/commands"
+if [ -d "$SCRIPT_DIR/commands" ]; then
+    mkdir -p "$CLAUDE_COMMANDS_DIR"
+    CLAUDE_COMMAND_COUNT=0
+    for cmd in "$SCRIPT_DIR"/commands/*.md "$SCRIPT_DIR"/commands/*/; do
+        [ -e "$cmd" ] || continue
+        name=$(basename "$cmd")
+        target="$CLAUDE_COMMANDS_DIR/$name"
+        rm -rf "$target"
+        cp -r "$cmd" "$target"
+        CLAUDE_COMMAND_COUNT=$((CLAUDE_COMMAND_COUNT + 1))
+    done
+    ok "Installed $CLAUDE_COMMAND_COUNT commands to $CLAUDE_COMMANDS_DIR"
+fi
 
 # ---- Claude Code: agents ----
 if [ -d "$SCRIPT_DIR/agents" ]; then

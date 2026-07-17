@@ -4,7 +4,9 @@
  *
  * Usage:
  *   npx @kensaurus/cursor-kenji                  Merge-install into ~/.cursor/ AND ~/.agents/skills/
- *   npx @kensaurus/cursor-kenji --clean          Mirror: make both paths match this repo exactly
+ *   npx @kensaurus/cursor-kenji --claude         Install for Claude Code (~/.claude/) instead
+ *   npx @kensaurus/cursor-kenji --all            Install for Cursor AND Claude Code
+ *   npx @kensaurus/cursor-kenji --clean          Mirror: make target paths match this repo exactly
  *   npx @kensaurus/cursor-kenji --only skills     Install only some groups (csv)
  *   npx @kensaurus/cursor-kenji --skill audit-ux  Install a single skill
  *   npx @kensaurus/cursor-kenji --link           Dev mode: symlink instead of copy
@@ -12,10 +14,16 @@
  *   npx @kensaurus/cursor-kenji --dry-run        Preview without changing anything
  *   npx @kensaurus/cursor-kenji --help
  *
- * Why two paths?
+ * Why two Cursor paths?
  *   ~/.cursor/skills/   — read by the Cursor agent at runtime
  *   ~/.agents/skills/   — indexed by the Cursor Skills UI panel
  *   Both must be populated for skills to appear AND work.
+ *
+ * Claude Code paths:
+ *   ~/.claude/skills/    — global skills, appear as /slash-commands
+ *   ~/.claude/commands/  — custom slash commands
+ *   ~/.claude/agents/    — subagent definitions
+ *   ~/.claude/rules/     — rules (.mdc sources installed as .md)
  */
 
 import {
@@ -47,7 +55,9 @@ cursor-kenji installer
 
 Usage:
   npx @kensaurus/cursor-kenji                   Merge-install into ~/.cursor/ + ~/.agents/skills/
-  npx @kensaurus/cursor-kenji --clean           Mirror: wipe and rebuild both paths from this repo
+  npx @kensaurus/cursor-kenji --claude          Install for Claude Code (~/.claude/) instead
+  npx @kensaurus/cursor-kenji --all             Install for Cursor AND Claude Code
+  npx @kensaurus/cursor-kenji --clean           Mirror: wipe and rebuild target paths from this repo
   npx @kensaurus/cursor-kenji --only skills      Install only some groups (skills,commands,agents,rules)
   npx @kensaurus/cursor-kenji --skill <name>     Install one skill by name
   npx @kensaurus/cursor-kenji --link            Dev mode: symlink repo into ~/.cursor (live edits)
@@ -55,21 +65,29 @@ Usage:
   npx @kensaurus/cursor-kenji --dry-run         Preview without changing anything
 
 Flags:
-  --clean, --mirror   Wipe managed dirs first so both paths exactly mirror this repo.
+  --claude            Target Claude Code (~/.claude/) instead of Cursor.
+  --all               Target both Cursor and Claude Code in one run.
+  --clean, --mirror   Wipe managed dirs first so target paths exactly mirror this repo.
   --no-backup         Skip the timestamped backup taken before a --clean wipe.
   --only <csv>        Limit to a subset of: skills, commands, agents, rules.
   --skill <name>      Install a single skill (implies --only skills).
   --link              Symlink (junction on Windows) instead of copying — for repo dev.
-  --restore [stamp]   Copy a backup under ~/.cursor/.cursor-kenji-backups/ back into place.
+  --restore [stamp]   Copy a backup under <target>/.cursor-kenji-backups/ back into place.
   --dry-run           Show what would happen; make no changes.
 
-What gets installed:
+What gets installed (Cursor):
   ~/.cursor/skills/       ← agent skills at runtime (skills/ + skills-cursor/ merged)
   ~/.agents/skills/       ← Cursor Skills UI index (same content, required for UI visibility)
   ~/.cursor/commands/     ← slash commands
   ~/.cursor/agents/       ← subagent definitions
   ~/.cursor/rules/        ← project rules starter pack
   ~/.cursor/mcp.json      ← MCP server template (only if missing; never overwritten)
+
+What gets installed (Claude Code, with --claude or --all):
+  ~/.claude/skills/       ← global skills (appear as /slash-commands)
+  ~/.claude/commands/     ← custom slash commands
+  ~/.claude/agents/       ← subagent definitions
+  ~/.claude/rules/        ← rules (.mdc installed as .md)
   `.trim());
   process.exit(0);
 }
@@ -78,9 +96,11 @@ const isDryRun = has('dry-run');
 const isClean = has('clean', 'mirror', 'force');
 const noBackup = has('no-backup');
 const useLink = has('link');
-const targetBase = join(homedir(), '.cursor');
+const wantClaude = has('claude', 'all');
+const wantCursor = !has('claude') || has('all');
+const cursorBase = join(homedir(), '.cursor');
 const agentsBase = join(homedir(), '.agents');   // Cursor Skills UI reads ~/.agents/skills/
-const backupsRoot = join(targetBase, '.cursor-kenji-backups');
+const claudeBase = join(homedir(), '.claude');
 
 const ALL_DIRS = [
   { src: 'skills',        dest: 'skills'   },
@@ -92,6 +112,8 @@ const ALL_DIRS = [
 
 // ---- restore mode ----------------------------------------------------------
 if (has('restore')) {
+  const restoreBase = wantClaude && !wantCursor ? claudeBase : cursorBase;
+  const backupsRoot = join(restoreBase, '.cursor-kenji-backups');
   const stamp = typeof opts.restore === 'string'
     ? opts.restore
     : (existsSync(backupsRoot)
@@ -104,7 +126,7 @@ if (has('restore')) {
   let restored = 0;
   for (const dest of readdirSync(snap)) {
     const from = join(snap, dest);
-    const to = join(targetBase, dest);
+    const to = join(restoreBase, dest);
     if (isDryRun) {
       console.log(`  [dry-run] restore ${from} → ${to}`);
     } else {
@@ -145,14 +167,14 @@ function place(src, dest, isDir) {
   cpSync(src, dest, { recursive: true });
 }
 
-// ---- mirror mode: back up, then wipe managed dirs --------------------------
-let wiped = 0;
-let backupRoot = null;
-if (isClean) {
+// ---- mirror mode: back up, then wipe managed dirs under a target base ------
+function backupAndWipe(base) {
+  let wiped = 0;
+  let backupRoot = null;
   const stamp = new Date().toISOString().replace(/[:.]/g, '-');
-  backupRoot = join(backupsRoot, stamp);
+  backupRoot = join(base, '.cursor-kenji-backups', stamp);
   for (const dest of managedDests) {
-    const p = join(targetBase, dest);
+    const p = join(base, dest);
     if (!existsSync(p)) continue;
     if (isDryRun) {
       console.log(`  [dry-run] backup ${p} → ${join(backupRoot, dest)}`);
@@ -163,59 +185,87 @@ if (isClean) {
     }
     wiped++;
   }
+  return { wiped, backupRoot };
 }
 
-// ---- copy / link -----------------------------------------------------------
-let copiedDirs = 0;
-let copiedFiles = 0;
-for (const { src, dest } of DIRS) {
-  const srcPath = resolve(__dir, src);
-  const destPath = join(targetBase, dest);
-  if (!existsSync(srcPath)) continue;
-  if (!isDryRun) mkdirSync(destPath, { recursive: true });
+// ---- copy / link one target base -------------------------------------------
+// renameMdc: Claude Code reads .md rules; .mdc sources are installed as .md.
+function installDirs(base, { renameMdc = false } = {}) {
+  let copiedDirs = 0;
+  let copiedFiles = 0;
+  for (const { src, dest } of DIRS) {
+    const srcPath = resolve(__dir, src);
+    const destPath = join(base, dest);
+    if (!existsSync(srcPath)) continue;
+    if (!isDryRun) mkdirSync(destPath, { recursive: true });
 
-  for (const item of readdirSync(srcPath)) {
-    if (skillName && item !== skillName) continue;
-    const itemSrc = join(srcPath, item);
-    const itemDest = join(destPath, item);
-    const isDir = statSync(itemSrc).isDirectory();
-    place(itemSrc, itemDest, isDir);
-    if (isDir) copiedDirs++; else copiedFiles++;
-  }
-}
-
-if (skillName && copiedDirs + copiedFiles === 0) {
-  console.error(`✗ Skill '${skillName}' not found in skills/ or skills-cursor/.`);
-  process.exit(1);
-}
-
-// ---- also write skills to ~/.agents/skills/ (Cursor Skills UI reads here) --
-// ~/.cursor/skills/ is used by the Cursor agent at runtime.
-// ~/.agents/skills/ is the path Cursor's Skills UI panel indexes.
-// Both must be populated or skills appear in the agent context but not the UI.
-if (!onlyGroups || onlyGroups.has('skills')) {
-  const agentsSkillsDest = join(agentsBase, 'skills');
-  const cursorSkillsSrc = join(targetBase, 'skills');
-  if (isDryRun) {
-    console.log(`  [dry-run] sync ${cursorSkillsSrc} → ${agentsSkillsDest}`);
-  } else if (existsSync(cursorSkillsSrc)) {
-    if (isClean) rmSync(agentsSkillsDest, { recursive: true, force: true });
-    mkdirSync(agentsSkillsDest, { recursive: true });
-    for (const item of readdirSync(cursorSkillsSrc)) {
+    for (const item of readdirSync(srcPath)) {
       if (skillName && item !== skillName) continue;
-      cpSync(join(cursorSkillsSrc, item), join(agentsSkillsDest, item), { recursive: true });
+      const itemSrc = join(srcPath, item);
+      const isDir = statSync(itemSrc).isDirectory();
+      let outName = item;
+      if (renameMdc && dest === 'rules' && !isDir && item.endsWith('.mdc')) {
+        outName = item.slice(0, -4) + '.md';
+      }
+      place(itemSrc, join(destPath, outName), isDir);
+      if (isDir) copiedDirs++; else copiedFiles++;
     }
   }
+  return { copiedDirs, copiedFiles };
 }
 
-// ---- MCP config template (only if missing; never overwritten) --------------
-const mcpDest = join(targetBase, 'mcp.json');
-const mcpTemplate = resolve(__dir, 'mcp', 'mcp.json.template');
-let mcpInstalled = false;
-if (!onlyGroups && existsSync(mcpTemplate) && !existsSync(mcpDest)) {
-  if (isDryRun) console.log(`  [dry-run] ${mcpTemplate} → ${mcpDest}`);
-  else { mkdirSync(targetBase, { recursive: true }); cpSync(mcpTemplate, mcpDest); }
-  mcpInstalled = true;
+const results = [];
+
+// ---- Cursor ----------------------------------------------------------------
+if (wantCursor) {
+  const clean = isClean ? backupAndWipe(cursorBase) : null;
+  const counts = installDirs(cursorBase);
+
+  if (skillName && counts.copiedDirs + counts.copiedFiles === 0) {
+    console.error(`✗ Skill '${skillName}' not found in skills/ or skills-cursor/.`);
+    process.exit(1);
+  }
+
+  // Also write skills to ~/.agents/skills/ (Cursor Skills UI reads here).
+  if (!onlyGroups || onlyGroups.has('skills')) {
+    const agentsSkillsDest = join(agentsBase, 'skills');
+    const cursorSkillsSrc = join(cursorBase, 'skills');
+    if (isDryRun) {
+      console.log(`  [dry-run] sync ${cursorSkillsSrc} → ${agentsSkillsDest}`);
+    } else if (existsSync(cursorSkillsSrc)) {
+      if (isClean) rmSync(agentsSkillsDest, { recursive: true, force: true });
+      mkdirSync(agentsSkillsDest, { recursive: true });
+      for (const item of readdirSync(cursorSkillsSrc)) {
+        if (skillName && item !== skillName) continue;
+        cpSync(join(cursorSkillsSrc, item), join(agentsSkillsDest, item), { recursive: true });
+      }
+    }
+  }
+
+  // MCP config template (only if missing; never overwritten).
+  const mcpDest = join(cursorBase, 'mcp.json');
+  const mcpTemplate = resolve(__dir, 'mcp', 'mcp.json.template');
+  let mcpInstalled = false;
+  if (!onlyGroups && existsSync(mcpTemplate) && !existsSync(mcpDest)) {
+    if (isDryRun) console.log(`  [dry-run] ${mcpTemplate} → ${mcpDest}`);
+    else { mkdirSync(cursorBase, { recursive: true }); cpSync(mcpTemplate, mcpDest); }
+    mcpInstalled = true;
+  }
+
+  results.push({ target: 'Cursor', base: cursorBase, ...counts, clean, mcpInstalled });
+}
+
+// ---- Claude Code -----------------------------------------------------------
+if (wantClaude) {
+  const clean = isClean ? backupAndWipe(claudeBase) : null;
+  const counts = installDirs(claudeBase, { renameMdc: true });
+
+  if (skillName && counts.copiedDirs + counts.copiedFiles === 0) {
+    console.error(`✗ Skill '${skillName}' not found in skills/ or skills-cursor/.`);
+    process.exit(1);
+  }
+
+  results.push({ target: 'Claude Code', base: claudeBase, ...counts, clean, mcpInstalled: false });
 }
 
 // ---- summary ---------------------------------------------------------------
@@ -223,23 +273,28 @@ const mode = `${isClean ? 'mirror' : 'merge'}${useLink ? '+link' : ''}${skillNam
 const verb = useLink ? 'linked' : 'copied';
 
 if (isDryRun) {
-  console.log(
-    `\n[dry-run] mode: ${mode}` +
-    (isClean ? ` — would back up + wipe ${wiped} managed dir(s)` : '') +
-    `\n[dry-run] Would ${useLink ? 'link' : 'copy'} ${copiedDirs} directories and ${copiedFiles} files to ${targetBase}` +
-    (mcpInstalled ? ' (plus mcp.json template)' : '')
-  );
+  for (const r of results) {
+    console.log(
+      `\n[dry-run] ${r.target} (${mode})` +
+      (r.clean ? ` — would back up + wipe ${r.clean.wiped} managed dir(s)` : '') +
+      `\n[dry-run] Would ${useLink ? 'link' : 'copy'} ${r.copiedDirs} directories and ${r.copiedFiles} files to ${r.base}` +
+      (r.mcpInstalled ? ' (plus mcp.json template)' : '')
+    );
+  }
   console.log('Run without --dry-run to apply.');
 } else {
-  if (isClean && backupRoot && !noBackup) {
-    console.log(`✓ Backed up previous ~/.cursor/{${managedDests.join(',')}} → ${backupRoot}`);
-  }
-  console.log(`\n✓ cursor-kenji installed (${mode}) — ${copiedDirs} directories and ${copiedFiles} files ${verb} to ${targetBase}`);
-  if (!onlyGroups || onlyGroups.has('skills')) {
-    const agentsCount = existsSync(join(agentsBase, 'skills')) ? readdirSync(join(agentsBase, 'skills')).length : 0;
-    console.log(`✓ Skills synced to ${join(agentsBase, 'skills')} (${agentsCount} skills — Cursor UI path)`);
+  for (const r of results) {
+    if (r.clean && r.clean.backupRoot && !noBackup && r.clean.wiped > 0) {
+      console.log(`✓ Backed up previous ${r.base}/{${managedDests.join(',')}} → ${r.clean.backupRoot}`);
+    }
+    console.log(`\n✓ cursor-kenji installed for ${r.target} (${mode}) — ${r.copiedDirs} directories and ${r.copiedFiles} files ${verb} to ${r.base}`);
+    if (r.target === 'Cursor' && (!onlyGroups || onlyGroups.has('skills'))) {
+      const agentsCount = existsSync(join(agentsBase, 'skills')) ? readdirSync(join(agentsBase, 'skills')).length : 0;
+      console.log(`✓ Skills synced to ${join(agentsBase, 'skills')} (${agentsCount} skills — Cursor UI path)`);
+    }
+    if (r.mcpInstalled) console.log(`✓ MCP template written to ${join(r.base, 'mcp.json')} — edit it to add your API keys.`);
   }
   if (linkFallbacks) console.log(`  (note: ${linkFallbacks} file(s) copied instead of linked — symlinks need elevated rights on this OS)`);
-  if (mcpInstalled) console.log(`✓ MCP template written to ${mcpDest} — edit it to add your API keys.`);
-  console.log('Restart Cursor to activate skills, commands, and agents.');
+  if (wantCursor) console.log('Restart Cursor to activate skills, commands, and agents.');
+  if (wantClaude) console.log('Restart any active claude sessions — skills appear as /slash-commands.');
 }

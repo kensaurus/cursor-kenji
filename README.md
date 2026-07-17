@@ -42,6 +42,8 @@ Restart Cursor. Done.
 
 ```bash
 npx @kensaurus/cursor-kenji            # merge — add/overwrite this repo's items
+npx @kensaurus/cursor-kenji --claude   # install for Claude Code (~/.claude/) instead
+npx @kensaurus/cursor-kenji --all      # install for Cursor AND Claude Code in one run
 npx @kensaurus/cursor-kenji --clean    # mirror ~/.cursor to match this repo (backup first)
 npx @kensaurus/cursor-kenji --dry-run  # preview
 npx @kensaurus/cursor-kenji --skill audit-ux   # single skill
@@ -60,11 +62,18 @@ npx skills add kensaurus/mushi-mushi
 
 **Authoring skills?** Each skill must pass [Agent Skills spec](https://agentskills.io/specification) validation (`npm run validate:skills`): `name` matches directory, `description` ≤ 1024 chars, body < 500 lines.
 
-### Claude Code (bash installer only)
+### Claude Code
 
-The npm and skills.sh installers target **Cursor only**. For Claude Code, clone the repo and use `install.sh`:
+One-click, no clone needed (works on Windows too):
 
-All skills, agents, and rules install to Claude Code (`~/.claude/`). Skills appear as `/slash-commands` — type `/` inside any `claude` session.
+```bash
+npx @kensaurus/cursor-kenji --claude   # Claude Code only
+npx @kensaurus/cursor-kenji --all      # Cursor + Claude Code
+```
+
+All skills, commands, agents, and rules install to Claude Code (`~/.claude/`), with `.mdc` rules installed as `.md`. Skills appear as `/slash-commands` — type `/` inside any `claude` session.
+
+From a clone, the bash installer does the same:
 
 ```bash
 # Install for Claude Code only
