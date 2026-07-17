@@ -6,10 +6,25 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.5.0] — 2026-07-18
+
 ### Added
 
+- **npm installer: Claude Code target** — `npx @kensaurus/cursor-kenji --claude` (Claude Code only) and `--all` (Cursor + Claude Code) install skills, commands, agents, and rules to `~/.claude/` with `.mdc` rules converted to `.md`. One-click on any OS, no clone needed. New `npm run install:claude` / `install:all` scripts.
+- **install.sh: Claude Code commands** — `~/.claude/commands/` now installed alongside skills/agents/rules.
+- **`docs/PLAN-SKILL-PACK-ENHANCEMENT.md`** — full prompt-engineering audit of all 94 skills + 15 commands with a phased enhancement burndown (token usage, progressive disclosure, dual-runtime portability, description standards).
 - **Third-party UI skills** (Jun 2026) — `thirdparty-emil-design-eng`, `thirdparty-ui-ux-pro-max`, `thirdparty-web-interface-guidelines` with `ATTRIBUTION.md`, `docs/THIRD-PARTY-SKILLS.md`, and `/thirdparty-web-interface-guidelines` command
 - **`burndown-full`** skill + **`/burndown-full`** command — drive partially-executed refactors/migrations to 100% repo coverage via MATCH/DONE patterns, persistent `.cursor/burndown-state.md`, batched execution, and a verification gate (framework-agnostic; works in Cursor and Claude Code)
+
+### Fixed
+
+- **Sentry MCP calls** — `naturalLanguageQuery` → `query` across 15 skill files (matches current Sentry MCP `search_issues`/`search_events` signature).
+- **`mobile-emulator-start`** — display default corrected to `1080×2400`; `1080×4000` is now opt-in for scroll-QA with a matching tall skin.
+- **`test-red-team`** — description trimmed under the Agent Skills 1024-char frontmatter limit.
+- **`design-mobile-first`** — repaired garbled self-referential description.
+- **`enhance-web-landing`** — H1 renamed to match the skill (internal codename removed).
+- **Privacy/staleness** — private project names removed from `test-qa` and `data-pipeline`; unverifiable CVE numbers and named-incident claims replaced with hedged failure-class descriptions in `plan-input-validation`, `plan-rls-audit`, `plan-data-integrity`, `plan-llm-cost-guardrails`, `plan-secrets-audit`.
+- **install.sh** — removed duplicated "Installed N skills" log line.
 
 ---
 
