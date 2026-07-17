@@ -19,10 +19,9 @@ The defects are *packaging, consistency, and always-on token cost* — not writi
    `audit-code-review:52`, `audit-fe-api:138`, `debug-error:33`,
    `debug-fe-be-integration:124`, `debug-sentry-monitor:124,132`. Current Sentry MCP
    `search_issues`/`search_events` take `query`. One find-replace pass.
-2. **`test-qa` description leaks private project names** — `66ai-user-story-testing`,
-   `sbc-qa-data-integrity-audit`, `glotit-fresh-eyes-ux-audit` hardcoded in the
-   frontmatter of a published pack. Replace with a generic "project-specific QA skills
-   take precedence" sentence.
+2. **`test-qa` description leaks private project names** — private project-skill names
+   were hardcoded in the frontmatter of a published pack. Replace with a generic
+   "project-specific QA skills take precedence" sentence.
 3. **`mobile-emulator-start` stale display default** — `1080×4000` at lines 6, 94, 97,
    267 contradicts the corrected guidance (1080×2400 on Windows/Capacitor; never
    `wm size 1080x4000` without a matching tall skin).

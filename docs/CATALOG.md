@@ -385,8 +385,8 @@ Every skill has a category prefix:
 **Related:** `enhance-capacitor-ui`, `workflow-spec-tdd`
 
 #### `mobile-emulator-start`
-**Triggers:** "start emulator", "start Metro", "restart dev loop", "fix Cannot connect to Expo", "spin up new terminal instance", "stuck bundler", "1080×4000 emulator"
-**What it does:** Boots Metro + Android emulator in the right order — kills duplicate ports, picks fresh-cache vs fast-iteration, defaults to 1080×4000 for tall QA screenshots, polls `/status` before deeplink to avoid connection races.
+**Triggers:** "start emulator", "start Metro", "restart dev loop", "fix Cannot connect to Expo", "spin up new terminal instance", "stuck bundler", "align emulator geometry"
+**What it does:** Boots Metro + Android emulator in the right order — kills duplicate ports, picks fresh-cache vs fast-iteration, defaults to a 1080×2400 display (1080×4000 opt-in for scroll-QA with a matching tall skin), polls `/status` before deeplink to avoid connection races.
 **Related:** `mobile-emulator-test`, `mobile-rn-screen`
 
 #### `mobile-emulator-test`

@@ -40,7 +40,7 @@ Track submission URLs and review status in [PROMOTION.md](PROMOTION.md).
 | Channel | Cursor | Claude Code | Commands | Agents | Rules | MCP config |
 |---------|:------:|:-------------:|:--------:|:------:|:-----:|:----------:|
 | `npx skills add kensaurus/cursor-kenji` | Yes | No | Yes | Yes | Yes | Template copy if missing |
-| `npx @kensaurus/cursor-kenji` | Yes | No | Yes | Yes | Yes | Template copy if missing |
+| `npx @kensaurus/cursor-kenji` (`--claude` / `--all`) | Yes | Yes | Yes | Yes | Yes | Template copy if missing |
 | `./install.sh` (clone) | Yes | Yes | Yes | Yes | Yes | Template copy if missing |
 | Cursor Marketplace / cursor.directory | Yes | No | Yes | Yes | Yes | `.mcp.json` at repo root |
 
@@ -49,7 +49,7 @@ The installer merges into:
 - `~/.cursor/skills/` and `~/.agents/skills/` — agent skills (runtime)
 - `~/.cursor/commands/` — slash commands
 - `~/.cursor/agents/` — subagents
-- `~/.claude/skills/`, `~/.claude/agents/`, `~/.claude/rules/` — Claude Code only (`./install.sh`)
+- `~/.claude/skills/`, `~/.claude/commands/`, `~/.claude/agents/`, `~/.claude/rules/` — Claude Code (`npx @kensaurus/cursor-kenji --claude` or `./install.sh --claude`; `.mdc` rules installed as `.md`)
 
 MCP templates live in the repo under `mcp/` — copy `mcp/mcp.json.template` to `~/.cursor/mcp.json` and fill `YOUR_*` placeholders. See [mcp/README.md](../mcp/README.md).
 
