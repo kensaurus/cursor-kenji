@@ -6,7 +6,7 @@ description: >
   "is my Supabase secure", "anyone can read my data", "check my database policies",
   "lock down my tables", "service_role key", or is hardening a Supabase backend before
   launch. Tables shipped with RLS disabled or "USING (true)" expose every row via the
-  public anon key (Moltbook, CVE-2025-48757 inverted-logic class). Audits every table
+  public anon key (the inverted-logic policy class behind repeated public data leaks). Audits every table
   for relrowsecurity, flags permissive/inverted policies, finds service_role keys
   client-side, checks auth.uid() correctness and (select auth.uid()) perf. Plan only —
   nothing altered until each phase is approved. Pairs with plan-secrets-audit,
@@ -27,9 +27,10 @@ Missing or misconfigured Row-Level Security is the most documented vibe-coding
 catastrophe of the 2025–2026 era. An audit of 50 vibe-coded apps across Lovable,
 Bolt, v0, Cursor, and Claude Code found **88% had RLS entirely disabled** — not
 misconfigured, *disabled* — meaning the database returned any row to any query.
-Moltbook leaked 1.5M API keys and 35k emails from exactly this. CVE-2025-48757
-covered 170 production apps where access control was present but **logically
-inverted** — authenticated users blocked, anonymous users granted everything.
+Public breach reports describe apps leaking millions of API keys and user emails from
+exactly this, and a disclosed vulnerability class spanning many production apps where
+access control was present but **logically inverted** — authenticated users blocked,
+anonymous users granted everything.
 
 This skill is the **audit-and-plan** half of fixing that. Execution is handed to
 `backend-patterns` / `db-migrator` / `audit-security` after you approve each phase.
@@ -73,7 +74,7 @@ security advisor). For **every** table and view:
 - **`USING (true)`** (or `WITH CHECK (true)`) on anything user-owned = the table
   is public. The agent writes this to make a "permission denied" error go away;
   it's the single most common dangerous pattern.
-- **Inverted logic** (the CVE-2025-48757 class): a policy that *looks* like it
+- **Inverted logic** (the disclosed inverted-policy class): a policy that *looks* like it
   checks auth but blocks the wrong party. Read each policy's truth table, don't
   trust its name.
 - **Missing operation coverage**: a SELECT policy with no INSERT/UPDATE/DELETE

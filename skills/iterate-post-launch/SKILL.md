@@ -54,7 +54,7 @@ Look up tool schemas under `mcps/plugin-sentry-sentry/tools/` first.
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
   "organizationSlug": "<ORG>",
-  "naturalLanguageQuery": "unresolved issues last 14 days sorted by frequency",
+  "query": "unresolved issues last 14 days sorted by frequency",
   "projectSlugOrId": "<PROJECT>",
   "regionUrl": "<REGION_URL>",
   "limit": 25

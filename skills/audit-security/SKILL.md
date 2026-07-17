@@ -75,7 +75,7 @@ If Sentry is configured, check for security-related production errors:
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
  "organizationSlug": "<ORG_SLUG>",
- "naturalLanguageQuery": "401 unauthorized OR 403 forbidden OR CORS OR CSP violation in last 30 days",
+ "query": "401 unauthorized OR 403 forbidden OR CORS OR CSP violation in last 30 days",
  "projectSlugOrId": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
  "limit": 20

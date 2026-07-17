@@ -1,6 +1,6 @@
 ---
 name: design-mobile-first
-description: Design design-mobile-first responsive interfaces with touch optimization. Use when user mentions "mobile", "responsive", "touch", "PWA", "design-mobile-first", "small screen", "tablet", "swipe", or "gesture".
+description: Designs mobile-first responsive interfaces with touch optimization — breakpoint strategy, touch targets, safe areas, and gesture handling, enhanced progressively for larger screens. Use when the user mentions "mobile", "responsive", "touch", "PWA", "small screen", "tablet", "swipe", or "gesture", or when a UI looks desktop-only on a phone viewport.
 license: MIT
 ---
 

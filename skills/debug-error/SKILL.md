@@ -30,7 +30,7 @@ If the error is from production and Sentry is configured, fetch the full context
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
  "organizationSlug": "<ORG_SLUG>",
- "naturalLanguageQuery": "<error message or description>",
+ "query": "<error message or description>",
  "projectSlugOrId": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
  "limit": 5

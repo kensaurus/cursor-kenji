@@ -36,7 +36,7 @@ Pull signals before touching code:
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
   "organizationSlug": "<ORG>",
-  "naturalLanguageQuery": "<describe the bug>",
+  "query": "<describe the bug>",
   "projectSlugOrId": "<PROJECT>",
   "regionUrl": "<REGION_URL>",
   "limit": 5

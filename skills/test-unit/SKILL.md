@@ -161,7 +161,7 @@ Use Sentry MCP to find production errors that should have been caught by tests.
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
  "organizationSlug": "<ORG_SLUG>",
- "naturalLanguageQuery": "unresolved errors from the last 30 days",
+ "query": "unresolved errors from the last 30 days",
  "projectSlugOrId": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
  "limit": 25

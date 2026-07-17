@@ -339,7 +339,7 @@ Run the Sentry MCP **before**, **during**, and **after** the walk.
 
 ```text
 search_issues(organizationSlug, regionUrl,
-  naturalLanguageQuery: "issues from <project> in the last 24 hours, sorted by most recent")
+  query: "issues from <project> in the last 24 hours, sorted by most recent")
 ```
 Note the issue IDs and event counts so post-walk drift is attributable.
 

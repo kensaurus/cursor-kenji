@@ -19,7 +19,7 @@ license: MIT
 >
 > **You are here: `enhance-web-landing`.** Native iOS/Android (SwiftUI / Compose, no web layer) is out of scope for all of these — use Apple HIG / Material directly.
 
-# tasteskill: Anti-Slop Frontend Skill
+# enhance-web-landing — Anti-Slop Landing Pages
 
 > Landing pages, portfolios, and redesigns. Not dashboards, not data tables, not multi-step product UI.
 > Every rule below is **contextual**. None of it fires automatically. First read the brief, then pull only what fits.

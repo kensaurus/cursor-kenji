@@ -6,8 +6,8 @@ description: >
   "is my app injection-safe", "check my forms", "XSS", "dangerouslySetInnerHTML",
   "my Stripe webhook", "can someone forge requests", or is hardening before launch. AI
   code has happy-path bias: missing Zod, dangerouslySetInnerHTML without DOMPurify,
-  Stripe webhook CVE-2026-41432 (empty signing secret), raw-body signature mistakes,
-  missing idempotency. Stack-aware for Supabase, Stripe, Next.js. Plan only until each
+  webhook signature gaps (empty or unchecked signing secrets), raw-body signature
+  mistakes, missing idempotency. Stack-aware for Supabase, Stripe, Next.js. Plan only until each
   phase is approved. Pairs with plan-rls-audit, plan-security-audit, audit-fe-api. Do
   NOT use for row access (plan-rls-audit) or secrets (plan-secrets-audit).
 license: MIT
@@ -25,8 +25,9 @@ code changes until each phase is approved.**
 
 AI agents write code that works on the inputs you showed them. Two signature patterns
 recur: `dangerouslySetInnerHTML` without DOMPurify (XSS), and webhook handlers without
-real signature verification — **CVE-2026-41432**, where an empty signing secret lets
-any attacker forge valid signatures and credit unlimited quota without payment.
+real signature verification — the reported empty-signing-secret bypass class, where an
+empty secret lets any attacker forge valid signatures and credit unlimited quota
+without payment.
 
 This skill is the **audit-and-plan** half. Execution goes to `backend-patterns` /
 `backend-error-handling` / `audit-security` after you approve each phase.
@@ -62,7 +63,7 @@ This skill owns the *boundary where untrusted data enters*.
 
 ### 3 · Webhooks & forged requests *(Stripe-aware)*
 - **Signature not verified** — or verified against **empty secret**
-  (CVE-2026-41432 bypass).
+  (empty-secret bypass class).
 - **Raw-body mistake** — `JSON.stringify(req.body)` instead of raw bytes.
 - **No idempotency** — Stripe at-least-once retries double-process.
 - **Cross-gateway trust** — fulfilling without checking callback source.

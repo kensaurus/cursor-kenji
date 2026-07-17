@@ -121,7 +121,7 @@ CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments
  "organizationSlug": "<ORG_SLUG>",
  "projectSlugOrId": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
- "naturalLanguageQuery": "all unresolved issues from the last 7 days",
+ "query": "all unresolved issues from the last 7 days",
  "limit": 50
 })
 
@@ -129,7 +129,7 @@ CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_events", arguments
  "organizationSlug": "<ORG_SLUG>",
  "projectSlug": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
- "naturalLanguageQuery": "count of errors grouped by error type in the last 7 days",
+ "query": "count of errors grouped by error type in the last 7 days",
  "limit": 50
 })
 ```
@@ -141,7 +141,7 @@ CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments
  "organizationSlug": "<ORG_SLUG>",
  "projectSlugOrId": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
- "naturalLanguageQuery": "regressed issues in the last 14 days",
+ "query": "regressed issues in the last 14 days",
  "limit": 20
 })
 ```

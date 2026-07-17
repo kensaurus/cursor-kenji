@@ -49,7 +49,7 @@ If the change touches error-prone code, check if related Sentry issues exist:
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
  "organizationSlug": "<ORG_SLUG>",
- "naturalLanguageQuery": "issues related to <component or function being changed>",
+ "query": "issues related to <component or function being changed>",
  "projectSlugOrId": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
  "limit": 10

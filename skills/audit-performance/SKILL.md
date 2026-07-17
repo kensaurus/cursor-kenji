@@ -25,7 +25,7 @@ CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_events", arguments
  "organizationSlug": "<ORG_SLUG>",
  "projectSlug": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
- "naturalLanguageQuery": "slowest transactions by p95 duration in last 7 days",
+ "query": "slowest transactions by p95 duration in last 7 days",
  "limit": 20
 })
 ```
@@ -35,7 +35,7 @@ CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_events", arguments
  "organizationSlug": "<ORG_SLUG>",
  "projectSlug": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
- "naturalLanguageQuery": "web vitals LCP INP CLS performance scores in last 7 days",
+ "query": "web vitals LCP INP CLS performance scores in last 7 days",
  "limit": 20
 })
 ```
@@ -47,7 +47,7 @@ CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments
  "organizationSlug": "<ORG_SLUG>",
  "projectSlugOrId": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
- "naturalLanguageQuery": "performance issues slow queries N+1 in last 30 days",
+ "query": "performance issues slow queries N+1 in last 30 days",
  "limit": 20
 })
 ```

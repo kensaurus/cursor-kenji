@@ -1,9 +1,9 @@
 ---
 name: test-qa
 description: >
-  GENERIC webapp QA fallback — use ONLY when no project-specific QA skill applies
-  (66ai-user-story-testing, sbc-qa-data-integrity-audit, glotit-fresh-eyes-ux-audit,
-  or mobile-emulator-test for native builds). For unit tests use test-unit.
+  Generic webapp QA fallback — use only when no project-specific QA skill applies
+  (project-local QA skills take precedence; use mobile-emulator-test for native
+  builds). For unit tests use test-unit.
   Drives a visible (headed) browser manually through the Playwright MCP like a real
   user — clicking and typing one action at a time, never via scripts or test runners.
   Auto-discovers pages, entities, and auth from the codebase, generates user stories,

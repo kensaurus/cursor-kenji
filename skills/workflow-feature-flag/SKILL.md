@@ -140,7 +140,7 @@ Check for errors in Sentry immediately after enabling:
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
   "organizationSlug": "<ORG>",
-  "naturalLanguageQuery": "new issues in the last 1 hour",
+  "query": "new issues in the last 1 hour",
   "projectSlugOrId": "<PROJECT>",
   "regionUrl": "<REGION_URL>",
   "limit": 10

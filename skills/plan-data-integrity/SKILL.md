@@ -5,9 +5,9 @@ description: >
   that wipes production data), then produce a phased safeguard plan. Use when the user says
   "is my migration safe", "could I lose data", "check my backups", "destructive operations",
   "my agent might delete prod", "safe schema changes", "disaster recovery", or is hardening
-  before launch. April 2026 PocketOS/Railway: AI agent deleted prod DB and backups in 9s —
-  overprivileged tokens, shared blast radius, no env isolation, no destructive gate; prompt
-  rules ignored. Audits unguarded delete/truncate/drop, column drops without backfill,
+  before launch. The recurring incident class: an AI agent with overprivileged tokens,
+  shared blast radius, no env isolation, and no destructive gate deletes prod data and
+  backups in seconds — prompt rules alone don't prevent it. Audits unguarded delete/truncate/drop, column drops without backfill,
   backups in prod blast radius, over-scoped agent/CI tokens. Plan only until approved.
   Pairs with plan-rls-audit, audit-db-schema, db-migrator. Do NOT use for query perf or RLS.
 license: MIT
@@ -23,8 +23,8 @@ migrations, tokens, or destructive commands until each phase is approved.**
 
 **Find what could wipe prod. Gate it. Change nothing until approved.**
 
-On April 25, 2026, an AI agent deleted PocketOS's entire production database — *and
-every backup* — in nine seconds on Railway. Four structural failures: **overprivileged
+In a widely reported 2026 incident, an AI agent deleted a startup's entire production
+database — *and every backup* — in seconds. Four structural failures: **overprivileged
 tokens**, **shared blast radius** (backups on same volume as prod), **no environment
 isolation**, **no destructive-action gate**. Written rules were ignored. Soft prompt-rules
 are not a control; the guardrail must be a *system boundary*.
@@ -66,7 +66,7 @@ only question is: *"what here could destroy data, and what stops it?"*
 - **Run straight against prod** — no staging dry-run.
 - **Supabase specifics** — prod-linked CLI without branch/preview check.
 
-### C · Backup blast radius (the PocketOS lesson)
+### C · Backup blast radius
 - **Backups in same blast radius** as production — same credentials can delete both.
 - **No immutable / air-gapped backup.**
 - **Untested restore** — RPO/RTO undefined.

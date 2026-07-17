@@ -23,7 +23,7 @@ only — no rotation, scrubbing, or env edits until each phase is approved.**
 
 **Find every leaked key. Decide rotate vs relocate. Change nothing until approved.**
 
-Moltbook's breach started with a hardcoded Supabase key in client JavaScript — combined
+A widely reported breach started with a hardcoded Supabase key in client JavaScript — combined
 with RLS off, the public key became an admin backdoor. **A secret committed even once
 lives in git history forever.** Moving it to `.env` later does nothing; the only real
 fix is **rotation**.

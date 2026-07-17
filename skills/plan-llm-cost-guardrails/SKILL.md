@@ -27,7 +27,7 @@ Token cost scales with **input + output tokens**, not request count — a single
 50K-token context replayed three times can exhaust a budget while staying under any
 RPM cap. Vibe-coded AI features ship with no spend cap, no per-user quota, no
 `max_tokens`, no circuit breaker — compounded by prompt-injection cost amplification
-and forged-webhook quota fraud (CVE-2026-41432 class).
+and forged-webhook quota fraud (the empty-signing-secret bypass class).
 
 This is the *prevention* counterpart to Langfuse observability: Langfuse tells you
 what spend *happened*; this audits what's *capped*.

@@ -231,7 +231,7 @@ schemas under `mcps/plugin-sentry-sentry/tools/` first, then:
 
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
- "organizationSlug": "<ORG>", "naturalLanguageQuery": "unresolved issues in the last 7 days",
+ "organizationSlug": "<ORG>", "query": "unresolved issues in the last 7 days",
  "projectSlugOrId": "<PROJECT>", "regionUrl": "<REGION_URL>", "limit": 25
 })
 ```

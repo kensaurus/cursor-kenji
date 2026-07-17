@@ -3,8 +3,9 @@ name: mobile-emulator-start
 description: >
   Boots a clean Android emulator + Metro (Expo dev-client / bare React Native) with the
   right ordering: inspect existing IDE terminals first, kill stale ports/processes, choose
-  "fresh cache wipe" vs "fast iteration" for Hot Reload, default to **1080×4000** display
-  (tall QA default — gives maximum vertical space for full-screen screenshots in chat),
+  "fresh cache wipe" vs "fast iteration" for Hot Reload, default to **1080×2400** display
+  (standard phone size; use a tall 1080×4000 display only when scroll-QA is requested
+  and a matching tall skin is applied),
   adb reverse + poll Metro /status before deeplink to avoid connection races, and
   troubleshoot adb/Expo connectivity and white-screen. Use when asked to start Metro and emulator,
   restart dev loop, fix “Cannot connect to Expo”, spin up a new terminal instance, debug
@@ -91,16 +92,16 @@ Starting Metro from the **wrong `cwd`** serves the wrong graph — always `cd` i
 
 | Goal | Resolution | Why |
 |---|---|---|
-| **Full-screen screenshot QA** (default) | **`1080×4000`** | Tall virtual display — the user can scroll the emulator window and take a single long screenshot that captures more UI in one shot, making it easier to review without asking for multiple scrolled captures. **Use this for all sessions by default.** |
-| **Standard tap / interaction QA** | `1080×2400` | Standard phone size. Slightly easier coordinate math for `adb shell input tap`. Switch to this only if the user explicitly requests it or if the emulator window is too tall for their monitor. |
+| **Standard tap / interaction QA** (default) | **`1080×2400`** | Standard phone size. Reliable on Windows/Capacitor hosts, easier coordinate math for `adb shell input tap`. **Use this by default.** |
+| **Full-screen scroll-screenshot QA** (opt-in) | `1080×4000` | Tall virtual display for single long screenshots. Only when the user explicitly asks for scroll QA — and never `wm size 1080x4000` without a matching tall skin, or the AVD skin clamps/garbles the display (see `mobile-emulator-test` Phase 0.5). |
 
-**Default: always start at `1080×4000` for maximum screenshot coverage.**
+**Default: start at `1080×2400`; switch to `1080×4000` only on explicit scroll-QA request with a matching skin.**
 
 To switch resolution without rebooting the AVD:
 
 ```bash
-adb shell wm size 1080x4000 # default (tall screenshots)
-adb shell wm size 1080x2400 # switch to standard if needed
+adb shell wm size 1080x2400 # default (standard phone)
+adb shell wm size 1080x4000 # opt-in tall screenshots (requires matching tall skin)
 adb shell wm size reset # restore to AVD default
 adb shell wm size # verify
 ```
@@ -264,7 +265,7 @@ If such a script **polls `/status`** and sets **`adb reverse`**, prefer it **aft
 - [ ] **One** Metro listening; `curl /status` = **running**
 - [ ] `adb devices` shows **`device`**, not `offline`
 - [ ] `adb reverse tcp:<PORT> tcp:<PORT>` executed for that Metro port
-- [ ] `adb shell wm size` matches expected **1080×4000** (default) or **1080×2400** (if user requested standard)
+- [ ] `adb shell wm size` matches expected **1080×2400** (default) or **1080×4000** (if scroll QA was requested with a matching skin)
 - [ ] App intent succeeds **after** `/status` OK — logcat has no immediate **`ECONNREFUSED`** to Metro
 
 ---

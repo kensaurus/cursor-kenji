@@ -121,7 +121,7 @@ CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
  "organizationSlug": "<ORG_SLUG>",
- "naturalLanguageQuery": "API integration errors 4xx 5xx validation from the last 7 days",
+ "query": "API integration errors 4xx 5xx validation from the last 7 days",
  "projectSlugOrId": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
  "limit": 25

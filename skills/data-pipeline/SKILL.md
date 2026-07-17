@@ -6,7 +6,7 @@ license: MIT
 
 # Data Pipeline Correctness
 
-> Pipelines fail silently: a retry double-counts, a partial write corrupts a table, a schema drift poisons a dashboard, and nobody notices until the numbers are wrong. This skill bakes correctness in at build time. It complements `sbc-qa-data-integrity-audit` (which *detects* these after the fact) and the Supabase plugin (DB/Edge Functions/RLS).
+> Pipelines fail silently: a retry double-counts, a partial write corrupts a table, a schema drift poisons a dashboard, and nobody notices until the numbers are wrong. This skill bakes correctness in at build time. It complements post-hoc data-integrity audit skills (which *detect* these after the fact) and the Supabase plugin (DB/Edge Functions/RLS).
 
 ## When this fires
 Any job that **moves, transforms, or aggregates** data: ingestion/ETL/ELT, scheduled aggregations, edge-function workers, `pg_cron` jobs, queue consumers, webhook processors, backfills, materialized-view refreshes.
@@ -78,4 +78,4 @@ Each layer is rebuildable from the one before it. Never transform-in-place on ra
 - `supabase-postgres-best-practices` — Postgres-level query/index tuning (official Supabase plugin).
 - `full-stack-ship-discipline` — deploy + verify functions/cron/policies on the remote.
 - `workflow-spec-workflow-spec-tdd` — spec the contract + test idempotency/edge cases before coding.
-- `sbc-qa-data-integrity-audit` — post-hoc detection of the failures this prevents.
+- Project-local data-integrity audit skills — post-hoc detection of the failures this prevents.

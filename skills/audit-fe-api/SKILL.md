@@ -135,7 +135,7 @@ Additional searches:
 ```json
 CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
  "organizationSlug": "<ORG_SLUG>",
- "naturalLanguageQuery": "API errors 4xx 5xx fetch axios network from the last 14 days",
+ "query": "API errors 4xx 5xx fetch axios network from the last 14 days",
  "projectSlugOrId": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
  "limit": 25
