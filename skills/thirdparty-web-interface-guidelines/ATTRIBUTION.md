@@ -6,7 +6,7 @@
 | **Guidelines** | [vercel.com/design/guidelines](https://vercel.com/design/guidelines) |
 | **Install script** | `curl -fsSL https://vercel.com/design/guidelines/install \| bash` |
 | **Author** | Vercel Design Engineering |
-| **License** | See upstream repository |
+| **License** | [MIT](https://github.com/vercel-labs/web-interface-guidelines/blob/main/LICENSE) — Copyright (c) 2025 Vercel Labs |
 | **Local name** | `thirdparty-web-interface-guidelines` |
 | **Curated in** | [cursor_kenji](https://github.com/kenji/cursor_kenji) |
 

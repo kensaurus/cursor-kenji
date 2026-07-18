@@ -5,7 +5,7 @@
 | **Upstream** | [emilkowalski/skills](https://github.com/emilkowalski/skills) |
 | **Upstream path** | `skills/emil-design-eng/SKILL.md` |
 | **Author** | Emil Kowalski |
-| **License** | See upstream repository |
+| **License** | [MIT](https://github.com/emilkowalski/skills/blob/main/LICENSE) — Copyright (c) 2026 Emil Kowalski |
 | **Local name** | `thirdparty-emil-design-eng` |
 | **Curated in** | [cursor_kenji](https://github.com/kenji/cursor_kenji) |
 
