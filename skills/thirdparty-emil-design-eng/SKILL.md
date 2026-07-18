@@ -10,7 +10,8 @@ description: >-
 # Design Engineering
 
 > **Third-party skill** (upstream-maintained). See [ATTRIBUTION.md](ATTRIBUTION.md).  
-> Upstream: [emilkowalski/skills](https://github.com/emilkowalski/skills) · Local name: `thirdparty-emil-design-eng`
+> Upstream: [emilkowalski/skills](https://github.com/emilkowalski/skills) · Local name: `thirdparty-emil-design-eng`  
+> Kept verbatim as a single file (over the usual 500-line body guideline) to stay diff-able against upstream — do not split into `references/`; that would cause drift on the next sync.
 
 ## Initial Response
 
