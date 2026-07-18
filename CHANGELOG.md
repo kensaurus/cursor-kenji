@@ -6,6 +6,23 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.6.0] — 2026-07-18
+
+Universal installer — cursor-kenji now installs to every supported AI coding tool, mapping to what each tool actually loads. Skills-capable tools (Cursor, Claude Code) get the full skills + commands + agents + rules set; context-file tools (Codex CLI, Gemini CLI) get the rules merged into their global instructions file plus portable command ports. Skill count held at 94.
+
+### Added
+- **`--auto` detection** — probes `~/.cursor`, `~/.claude`, `~/.codex`, `~/.gemini` and installs the right artifacts to each installed tool (falls back to Cursor if none are found).
+- **Codex CLI support (`--codex`)** — merges `rules/` into `~/.codex/AGENTS.md` (auto-loaded) and ports `plan`/`research`/`fix-issue` to `~/.codex/prompts/*.md`.
+- **Gemini CLI support (`--gemini`)** — merges `rules/` into `~/.gemini/GEMINI.md` (auto-loaded) and ports the same commands to `~/.gemini/commands/*.toml`.
+- **`commands-portable/`** — new single source of truth for the three tool-agnostic playbooks the installer transforms per tool.
+- Install smoke test now exercises the Codex/Gemini paths (merged-rules content, command ports, TOML shape, idempotency, `--auto` detection).
+
+### Changed
+- **`--all` now targets all four supported tools** (was Cursor + Claude Code). A bare `npx @kensaurus/cursor-kenji` stays Cursor-only for backward compatibility.
+- The rules merge deliberately omits the skill-routing index (`skill-workflows.mdc`) — the context-file tools have no skills loader, so it would be dead text. Skills and subagents are not written to Codex/Gemini for the same reason.
+- Generated context files are idempotent (byte-identical on re-run) and backed up (`.bak-<stamp>`) before any overwrite.
+- `install.sh` gains `--auto`/`--codex`/`--gemini`/`--all`; Codex/Gemini delegate to the Node installer so the merge/port logic has one source of truth.
+
 ## [1.5.1] — 2026-07-18
 
 Prompt-engineering quality pass from `docs/PLAN-SKILL-PACK-ENHANCEMENT.md` (Phases 3–5). No new skills; skill count held at 94. Dual-runtime (Cursor + Claude Code) portability, staleness, and licensing hygiene.

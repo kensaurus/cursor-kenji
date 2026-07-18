@@ -9,8 +9,12 @@ set -euo pipefail
 #
 # Usage:
 #   ./install.sh              # Cursor + Claude Code (default)
+#   ./install.sh --auto       # detect installed tools and install to each
 #   ./install.sh --cursor     # Cursor only
 #   ./install.sh --claude     # Claude Code only
+#   ./install.sh --codex      # Codex CLI (~/.codex/AGENTS.md + prompts, via Node)
+#   ./install.sh --gemini     # Gemini CLI (~/.gemini/GEMINI.md + commands, via Node)
+#   ./install.sh --all        # all four supported tools
 #   ./install.sh --quiet      # suppress output
 #
 # Why two Cursor skill paths?
@@ -32,17 +36,47 @@ CLAUDE_SKILLS_DIR="$CLAUDE_DIR/skills"
 CLAUDE_AGENTS_DIR="$CLAUDE_DIR/agents"
 CLAUDE_RULES_DIR="$CLAUDE_DIR/rules"
 
-INSTALL_CURSOR=true
-INSTALL_CLAUDE=true
+INSTALL_CURSOR=""
+INSTALL_CLAUDE=""
+INSTALL_CODEX=""
+INSTALL_GEMINI=""
+AUTO=false
+EXPLICIT=false
 QUIET=false
 
 for arg in "${@}"; do
   case "$arg" in
-    --cursor) INSTALL_CLAUDE=false ;;
-    --claude) INSTALL_CURSOR=false ;;
+    --cursor) INSTALL_CURSOR=true; EXPLICIT=true ;;
+    --claude) INSTALL_CLAUDE=true; EXPLICIT=true ;;
+    --codex)  INSTALL_CODEX=true;  EXPLICIT=true ;;
+    --gemini) INSTALL_GEMINI=true; EXPLICIT=true ;;
+    --all)    INSTALL_CURSOR=true; INSTALL_CLAUDE=true; INSTALL_CODEX=true; INSTALL_GEMINI=true; EXPLICIT=true ;;
+    --auto)   AUTO=true ;;
     --quiet)  QUIET=true ;;
   esac
 done
+
+# --auto: install to whatever tools are present on this machine.
+if $AUTO; then
+  [ -d "$HOME/.cursor" ] && INSTALL_CURSOR=true
+  [ -d "$HOME/.claude" ] && INSTALL_CLAUDE=true
+  [ -d "$HOME/.codex" ]  && INSTALL_CODEX=true
+  [ -d "$HOME/.gemini" ] && INSTALL_GEMINI=true
+  # Fall back to Cursor if nothing was detected.
+  if [ -z "$INSTALL_CURSOR$INSTALL_CLAUDE$INSTALL_CODEX$INSTALL_GEMINI" ]; then
+    INSTALL_CURSOR=true
+  fi
+elif ! $EXPLICIT; then
+  # Backward-compatible default: Cursor + Claude Code.
+  INSTALL_CURSOR=true
+  INSTALL_CLAUDE=true
+fi
+
+# Normalise unset targets to false.
+INSTALL_CURSOR=${INSTALL_CURSOR:-false}
+INSTALL_CLAUDE=${INSTALL_CLAUDE:-false}
+INSTALL_CODEX=${INSTALL_CODEX:-false}
+INSTALL_GEMINI=${INSTALL_GEMINI:-false}
 
 log() { $QUIET || echo "$1"; }
 warn() { echo "  [!] $1"; }
@@ -51,13 +85,12 @@ ok() { $QUIET || echo "  [+] $1"; }
 log ""
 log "======================================"
 log "  cursor-kenji installer"
-if $INSTALL_CURSOR && $INSTALL_CLAUDE; then
-  log "  targets: Cursor + Claude Code"
-elif $INSTALL_CURSOR; then
-  log "  target: Cursor"
-else
-  log "  target: Claude Code"
-fi
+TARGET_LIST=""
+$INSTALL_CURSOR && TARGET_LIST="$TARGET_LIST Cursor"
+$INSTALL_CLAUDE && TARGET_LIST="$TARGET_LIST 'Claude Code'"
+$INSTALL_CODEX  && TARGET_LIST="$TARGET_LIST 'Codex CLI'"
+$INSTALL_GEMINI && TARGET_LIST="$TARGET_LIST 'Gemini CLI'"
+log "  targets:${TARGET_LIST:- (none)}"
 log "======================================"
 log ""
 
@@ -245,6 +278,28 @@ fi
 
 fi  # end $INSTALL_CLAUDE
 
+# ============================================================
+# Codex CLI + Gemini CLI (no skills system)
+#
+# These tools read a single global context file, not a skills dir.
+# Delegate to the Node installer, which is the single source of truth for the
+# rules-merge and command-port transforms — reimplementing them in bash would
+# risk silent drift from bin/install.mjs.
+# ============================================================
+if $INSTALL_CODEX || $INSTALL_GEMINI; then
+  if command -v node >/dev/null 2>&1; then
+    NODE_FLAGS=""
+    $INSTALL_CODEX  && NODE_FLAGS="$NODE_FLAGS --codex"
+    $INSTALL_GEMINI && NODE_FLAGS="$NODE_FLAGS --gemini"
+    log ""
+    log "--- Codex / Gemini (context files) ---"
+    # shellcheck disable=SC2086
+    node "$SCRIPT_DIR/bin/install.mjs" $NODE_FLAGS
+  else
+    warn "node not found — skipped Codex/Gemini (needs Node >=18). Run: npx @kensaurus/cursor-kenji --auto"
+  fi
+fi
+
 # ---- Summary ----
 log ""
 log "======================================"
@@ -276,5 +331,17 @@ log "  Next steps (Claude Code):"
 log "  1. Restart any active 'claude' sessions to pick up new skills"
 log "  2. Skills appear as /slash-commands (type / to see all)"
 log "  3. Try: /workflow-build-feature  /debug-error  /plan-security-audit"
+log ""
+fi
+if $INSTALL_CODEX; then
+log "  Codex CLI"
+log "  Rules:   ~/.codex/AGENTS.md (auto-loaded)"
+log "  Prompts: ~/.codex/prompts/ (plan, research, fix-issue)"
+log ""
+fi
+if $INSTALL_GEMINI; then
+log "  Gemini CLI"
+log "  Rules:    ~/.gemini/GEMINI.md (auto-loaded)"
+log "  Commands: ~/.gemini/commands/ (plan, research, fix-issue)"
 log ""
 fi

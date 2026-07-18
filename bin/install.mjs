@@ -4,8 +4,11 @@
  *
  * Usage:
  *   npx @kensaurus/cursor-kenji                  Merge-install into ~/.cursor/ AND ~/.agents/skills/
+ *   npx @kensaurus/cursor-kenji --auto           Detect installed tools and install to each
  *   npx @kensaurus/cursor-kenji --claude         Install for Claude Code (~/.claude/) instead
- *   npx @kensaurus/cursor-kenji --all            Install for Cursor AND Claude Code
+ *   npx @kensaurus/cursor-kenji --codex          Install for Codex CLI (~/.codex/AGENTS.md + prompts)
+ *   npx @kensaurus/cursor-kenji --gemini         Install for Gemini CLI (~/.gemini/GEMINI.md + commands)
+ *   npx @kensaurus/cursor-kenji --all            Install for all four supported tools
  *   npx @kensaurus/cursor-kenji --clean          Mirror: make target paths match this repo exactly
  *   npx @kensaurus/cursor-kenji --only skills     Install only some groups (csv)
  *   npx @kensaurus/cursor-kenji --skill audit-ux  Install a single skill
@@ -28,8 +31,9 @@
 
 import {
   existsSync, mkdirSync, cpSync, rmSync, symlinkSync, readdirSync, statSync,
+  readFileSync, writeFileSync,
 } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { join, resolve, dirname } from 'node:path';
 import { homedir, platform } from 'node:os';
 import { fileURLToPath } from 'node:url';
 
@@ -55,8 +59,11 @@ cursor-kenji installer
 
 Usage:
   npx @kensaurus/cursor-kenji                   Merge-install into ~/.cursor/ + ~/.agents/skills/
+  npx @kensaurus/cursor-kenji --auto            Detect installed tools and install to each
   npx @kensaurus/cursor-kenji --claude          Install for Claude Code (~/.claude/) instead
-  npx @kensaurus/cursor-kenji --all             Install for Cursor AND Claude Code
+  npx @kensaurus/cursor-kenji --codex           Install for Codex CLI (~/.codex/AGENTS.md)
+  npx @kensaurus/cursor-kenji --gemini          Install for Gemini CLI (~/.gemini/GEMINI.md)
+  npx @kensaurus/cursor-kenji --all             Install for all four supported tools
   npx @kensaurus/cursor-kenji --clean           Mirror: wipe and rebuild target paths from this repo
   npx @kensaurus/cursor-kenji --only skills      Install only some groups (skills,commands,agents,rules)
   npx @kensaurus/cursor-kenji --skill <name>     Install one skill by name
@@ -65,8 +72,13 @@ Usage:
   npx @kensaurus/cursor-kenji --dry-run         Preview without changing anything
 
 Flags:
+  --auto              Detect installed tools (~/.cursor, ~/.claude, ~/.codex, ~/.gemini) and
+                      install to each; falls back to Cursor if none are found.
+  --cursor            Target Cursor explicitly (same as the bare default).
   --claude            Target Claude Code (~/.claude/) instead of Cursor.
-  --all               Target both Cursor and Claude Code in one run.
+  --codex             Target Codex CLI — merged rules → ~/.codex/AGENTS.md + prompt ports.
+  --gemini            Target Gemini CLI — merged rules → ~/.gemini/GEMINI.md + command ports.
+  --all               Target all four supported tools in one run.
   --clean, --mirror   Wipe managed dirs first so target paths exactly mirror this repo.
   --no-backup         Skip the timestamped backup taken before a --clean wipe.
   --only <csv>        Limit to a subset of: skills, commands, agents, rules.
@@ -88,6 +100,14 @@ What gets installed (Claude Code, with --claude or --all):
   ~/.claude/commands/     ← custom slash commands
   ~/.claude/agents/       ← subagent definitions
   ~/.claude/rules/        ← rules (.mdc installed as .md)
+
+What gets installed (Codex CLI / Gemini CLI — no skills system):
+  ~/.codex/AGENTS.md      ← rules merged into one context file (auto-loaded)
+  ~/.codex/prompts/       ← portable commands as custom prompts (plan, research, fix-issue)
+  ~/.gemini/GEMINI.md     ← rules merged into one context file (auto-loaded)
+  ~/.gemini/commands/     ← portable commands as TOML commands
+  These tools have no skills loader, so skills/agents are not written there.
+  Existing AGENTS.md/GEMINI.md is backed up (.bak-<stamp>) before an update.
   `.trim());
   process.exit(0);
 }
@@ -96,11 +116,39 @@ const isDryRun = has('dry-run');
 const isClean = has('clean', 'mirror', 'force');
 const noBackup = has('no-backup');
 const useLink = has('link');
-const wantClaude = has('claude', 'all');
-const wantCursor = !has('claude') || has('all');
+
+// ---- target resolution -----------------------------------------------------
+// Backward compatible: a bare invocation still installs Cursor only.
+//   --auto           detect installed tools (~/.cursor, ~/.claude, ~/.codex, ~/.gemini)
+//                    and install to each; falls back to Cursor if none are found.
+//   --all            force all four supported targets, installed or not.
+//   --cursor/--claude/--codex/--gemini   explicit target(s); combine freely.
+const codexBase = join(homedir(), '.codex');    // Codex CLI reads ~/.codex/AGENTS.md
+const geminiBase = join(homedir(), '.gemini');  // Gemini CLI reads ~/.gemini/GEMINI.md
 const cursorBase = join(homedir(), '.cursor');
 const agentsBase = join(homedir(), '.agents');   // Cursor Skills UI reads ~/.agents/skills/
 const claudeBase = join(homedir(), '.claude');
+
+const explicitTargets = ['cursor', 'claude', 'codex', 'gemini'].filter((t) => has(t));
+let targets;
+if (has('all')) {
+  targets = new Set(['cursor', 'claude', 'codex', 'gemini']);
+} else if (has('auto')) {
+  targets = detectTools();
+  if (targets.size === 0) targets = new Set(['cursor']);
+} else if (explicitTargets.length) {
+  targets = new Set(explicitTargets);
+} else {
+  targets = new Set(['cursor']); // backward-compatible default
+}
+const wantCursor = targets.has('cursor');
+const wantClaude = targets.has('claude');
+const wantCodex = targets.has('codex');
+const wantGemini = targets.has('gemini');
+
+if (has('auto')) {
+  console.log(`Auto-detected targets: ${[...targets].join(', ') || '(none — defaulting to Cursor)'}`);
+}
 
 const ALL_DIRS = [
   { src: 'skills',        dest: 'skills'   },
@@ -214,6 +262,153 @@ function installDirs(base, { renameMdc = false } = {}) {
   return { copiedDirs, copiedFiles };
 }
 
+// ============================================================================
+// Codex CLI + Gemini CLI — tools with NO skills system.
+// They read a single global context/instructions file, so we map:
+//   rules/ (minus the skill-routing index) → one merged Markdown file
+//   commands-portable/ → per-tool custom prompt/command files
+// No SKILL.md dirs are written — nothing in these tools would load them.
+// ============================================================================
+
+// Detect installed tools by their home-dir config footprint.
+function detectTools() {
+  const found = new Set();
+  if (existsSync(cursorBase)) found.add('cursor');
+  if (existsSync(claudeBase)) found.add('claude');
+  if (existsSync(codexBase)) found.add('codex');
+  if (existsSync(geminiBase)) found.add('gemini');
+  return found;
+}
+
+// Rules merged into the global context file. The skill-routing index is
+// excluded — it points at skills these tools cannot load (would be dead text).
+const RULES_EXCLUDE = new Set(['skill-workflows.mdc']);
+const RULES_ORDER = [
+  'senior-engineer.md',
+  'full-stack-ship-discipline.mdc',
+  'composer-2.5-execution.mdc',
+  'shell-first-search.md',
+];
+
+// Strip a leading `--- ... ---` YAML frontmatter block, returning the body.
+function stripFrontmatter(text) {
+  if (!text.startsWith('---')) return text;
+  const end = text.indexOf('\n---', 3);
+  if (end === -1) return text;
+  const after = text.indexOf('\n', end + 1);
+  return text.slice(after + 1).replace(/^\s+/, '');
+}
+
+// Parse `description:` out of frontmatter and return { description, body }.
+function parseFrontmatter(text) {
+  let description = '';
+  if (text.startsWith('---')) {
+    const end = text.indexOf('\n---', 3);
+    if (end !== -1) {
+      const m = text.slice(3, end).match(/description:\s*"?(.*?)"?\s*$/m);
+      if (m) description = m[1];
+    }
+  }
+  return { description, body: stripFrontmatter(text) };
+}
+
+// Concatenate top-level rule files (non-recursive — skips project-starter/ etc.)
+// into one deterministic Markdown document. No timestamp → regeneration is
+// idempotent, so re-running the installer produces byte-identical output.
+function buildMergedRules(toolLabel, loadPath) {
+  const rulesDir = resolve(__dir, 'rules');
+  const files = readdirSync(rulesDir)
+    .filter((f) => (f.endsWith('.md') || f.endsWith('.mdc'))
+      && !RULES_EXCLUDE.has(f)
+      && statSync(join(rulesDir, f)).isFile())
+    .sort((a, b) => {
+      const ia = RULES_ORDER.indexOf(a); const ib = RULES_ORDER.indexOf(b);
+      return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib) || a.localeCompare(b);
+    });
+  const header = `<!-- Generated by cursor-kenji — https://github.com/kensaurus/cursor-kenji
+     Merged from rules/. The skill-routing index is omitted (this tool has no skills loader).
+     Applies to: ${toolLabel} — loaded automatically from ${loadPath}.
+     Regenerate: npx @kensaurus/cursor-kenji --auto -->\n\n`;
+  const body = files
+    .map((f) => stripFrontmatter(readFileSync(join(rulesDir, f), 'utf8')).trim())
+    .join('\n\n---\n\n');
+  return header + body + '\n';
+}
+
+// Load the tool-agnostic portable commands (single source of truth).
+function portableCommands() {
+  const dir = resolve(__dir, 'commands-portable');
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir)
+    .filter((f) => f.endsWith('.md'))
+    .sort()
+    .map((f) => {
+      const { description, body } = parseFrontmatter(readFileSync(join(dir, f), 'utf8'));
+      return { name: f.replace(/\.md$/, ''), description, body: body.trim() };
+    });
+}
+
+// Wrap a portable command as a Gemini TOML command. Uses a literal ''' string
+// so shell backslashes/quotes pass through verbatim; fails loud if the body
+// would collide with the delimiter rather than silently corrupting output.
+function toGeminiToml({ name, description, body }) {
+  if (body.includes("'''")) {
+    throw new Error(`portable command '${name}' contains ''' — cannot wrap as a TOML literal string`);
+  }
+  const desc = String(description).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+  return `description = "${desc}"\n\nprompt = '''\n${body}\n'''\n`;
+}
+
+// Write a single managed file. Idempotent (skips identical content), backs up
+// on overwrite unless --no-backup, and honours --dry-run.
+function writeManagedFile(destPath, content) {
+  if (isDryRun) { console.log(`  [dry-run] write ${destPath}`); return 'dry-run'; }
+  mkdirSync(dirname(destPath), { recursive: true });
+  if (existsSync(destPath)) {
+    if (readFileSync(destPath, 'utf8') === content) return 'unchanged';
+    if (!noBackup) {
+      const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+      cpSync(destPath, `${destPath}.bak-${stamp}`);
+    }
+    writeFileSync(destPath, content);
+    return 'updated';
+  }
+  writeFileSync(destPath, content);
+  return 'created';
+}
+
+// Install a context-file tool (Codex / Gemini). `spec` describes its layout.
+function installContextTool(spec) {
+  const { label, base, rulesFile, rulesLoadPath, commandsDir, commandExt, render } = spec;
+  console.log(`\n${isDryRun ? '[dry-run] ' : ''}${label} → ${base}`);
+
+  // --skill / --only skills has no meaning here (no skills loader).
+  const doRules = !onlyGroups || onlyGroups.has('rules');
+  const doCommands = (!onlyGroups || onlyGroups.has('commands')) && !skillName;
+  if (!doRules && !doCommands) {
+    console.log('  (no skills loader — nothing to install for the selected groups)');
+    return;
+  }
+
+  let rulesStatus = 'skipped';
+  if (doRules) {
+    rulesStatus = writeManagedFile(join(base, rulesFile), buildMergedRules(label, rulesLoadPath));
+  }
+  let cmdCount = 0;
+  if (doCommands) {
+    for (const cmd of portableCommands()) {
+      writeManagedFile(join(base, commandsDir, `${cmd.name}${commandExt}`), render(cmd));
+      cmdCount++;
+    }
+  }
+  if (!isDryRun) {
+    const parts = [];
+    if (doRules) parts.push(`${rulesFile} ${rulesStatus}`);
+    if (doCommands) parts.push(`${cmdCount} command(s) → ${commandsDir}/`);
+    console.log(`  ✓ ${parts.join(', ')}`);
+  }
+}
+
 const results = [];
 
 // ---- Cursor ----------------------------------------------------------------
@@ -268,6 +463,32 @@ if (wantClaude) {
   results.push({ target: 'Claude Code', base: claudeBase, ...counts, clean, mcpInstalled: false });
 }
 
+// ---- Codex CLI (context file + prompt ports) -------------------------------
+if (wantCodex) {
+  installContextTool({
+    label: 'Codex CLI (OpenAI)',
+    base: codexBase,
+    rulesFile: 'AGENTS.md',
+    rulesLoadPath: '~/.codex/AGENTS.md',
+    commandsDir: 'prompts',
+    commandExt: '.md',
+    render: (cmd) => (cmd.body.endsWith('\n') ? cmd.body : cmd.body + '\n'),
+  });
+}
+
+// ---- Gemini CLI (context file + TOML command ports) ------------------------
+if (wantGemini) {
+  installContextTool({
+    label: 'Gemini CLI',
+    base: geminiBase,
+    rulesFile: 'GEMINI.md',
+    rulesLoadPath: '~/.gemini/GEMINI.md',
+    commandsDir: 'commands',
+    commandExt: '.toml',
+    render: toGeminiToml,
+  });
+}
+
 // ---- summary ---------------------------------------------------------------
 const mode = `${isClean ? 'mirror' : 'merge'}${useLink ? '+link' : ''}${skillName ? `:skill=${skillName}` : ''}`;
 const verb = useLink ? 'linked' : 'copied';
@@ -297,4 +518,6 @@ if (isDryRun) {
   if (linkFallbacks) console.log(`  (note: ${linkFallbacks} file(s) copied instead of linked — symlinks need elevated rights on this OS)`);
   if (wantCursor) console.log('Restart Cursor to activate skills, commands, and agents.');
   if (wantClaude) console.log('Restart any active claude sessions — skills appear as /slash-commands.');
+  if (wantCodex) console.log('Codex CLI loads ~/.codex/AGENTS.md automatically; prompts appear via the / picker.');
+  if (wantGemini) console.log('Gemini CLI loads ~/.gemini/GEMINI.md automatically; run /memory refresh in an active session.');
 }

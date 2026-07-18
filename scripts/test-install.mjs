@@ -8,7 +8,7 @@
  *   node scripts/test-install.mjs   # exit 0 on pass, 1 on failure
  */
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, rmSync, existsSync, readdirSync, mkdirSync } from "node:fs";
+import { mkdtempSync, rmSync, existsSync, readdirSync, mkdirSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -62,6 +62,60 @@ try {
   });
   expect(existsSync(join(sandbox2, ".cursor", "skills", "audit-ux")), "--skill did not install audit-ux");
   expect(countDir(join(sandbox2, ".cursor", "skills")) === 1, "--skill installed more than one skill");
+
+  // --- Codex + Gemini context-file tools (no skills system) ----------------
+  // A fresh sandbox auto-detects nothing, so force both paths with explicit flags.
+  const sandbox3 = join(sandbox, "context-tools");
+  mkdirSync(sandbox3, { recursive: true });
+  execFileSync(process.execPath, [installer, "--codex", "--gemini"], {
+    env: { ...process.env, HOME: sandbox3, USERPROFILE: sandbox3 },
+    stdio: "pipe",
+  });
+
+  const codexRules = join(sandbox3, ".codex", "AGENTS.md");
+  const geminiRules = join(sandbox3, ".gemini", "GEMINI.md");
+  expect(existsSync(codexRules), "missing ~/.codex/AGENTS.md");
+  expect(existsSync(geminiRules), "missing ~/.gemini/GEMINI.md");
+
+  const portableNames = readdirSync(join(repoRoot, "commands-portable"))
+    .filter((f) => f.endsWith(".md")).map((f) => f.replace(/\.md$/, ""));
+  expect(portableNames.length > 0, "commands-portable/ has no .md sources");
+  for (const name of portableNames) {
+    expect(existsSync(join(sandbox3, ".codex", "prompts", `${name}.md`)),
+      `missing ~/.codex/prompts/${name}.md`);
+    expect(existsSync(join(sandbox3, ".gemini", "commands", `${name}.toml`)),
+      `missing ~/.gemini/commands/${name}.toml`);
+  }
+
+  // Merged rules must include a real rule and exclude the skill-routing index.
+  const codexText = readFileSync(codexRules, "utf8");
+  expect(codexText.includes("Senior Engineer"), "AGENTS.md missing senior-engineer rule content");
+  expect(!codexText.includes("Skill Routing Index"),
+    "AGENTS.md leaked the skill-routing index (should be excluded)");
+  expect(!/^---\s*$/m.test(codexText.split("\n").slice(0, 3).join("\n")),
+    "AGENTS.md still has raw .mdc frontmatter at the top");
+
+  // Gemini TOML must be well-formed: description line + literal prompt block.
+  const geminiToml = readFileSync(join(sandbox3, ".gemini", "commands", `${portableNames[0]}.toml`), "utf8");
+  expect(/^description = "/.test(geminiToml), "gemini command missing description line");
+  expect(geminiToml.includes("prompt = '''"), "gemini command missing prompt literal block");
+
+  // Idempotency: a second identical run must not spawn .bak backups.
+  execFileSync(process.execPath, [installer, "--codex", "--gemini"], {
+    env: { ...process.env, HOME: sandbox3, USERPROFILE: sandbox3 },
+    stdio: "pipe",
+  });
+  const codexBaks = readdirSync(join(sandbox3, ".codex")).filter((n) => n.includes(".bak-"));
+  expect(codexBaks.length === 0, `idempotent re-run created backups: ${codexBaks.join(", ")}`);
+
+  // --auto must detect a pre-existing tool dir and install to it.
+  const sandbox4 = join(sandbox, "auto");
+  mkdirSync(join(sandbox4, ".codex"), { recursive: true });
+  execFileSync(process.execPath, [installer, "--auto"], {
+    env: { ...process.env, HOME: sandbox4, USERPROFILE: sandbox4 },
+    stdio: "pipe",
+  });
+  expect(existsSync(join(sandbox4, ".codex", "AGENTS.md")), "--auto did not install to detected ~/.codex");
 } catch (err) {
   fail.push("installer threw: " + (err.stderr?.toString() || err.message));
 } finally {

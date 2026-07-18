@@ -41,14 +41,19 @@ Restart Cursor. Done.
 **npm installer modes:**
 
 ```bash
-npx @kensaurus/cursor-kenji            # merge — add/overwrite this repo's items
+npx @kensaurus/cursor-kenji            # merge — add/overwrite this repo's items (Cursor)
+npx @kensaurus/cursor-kenji --auto     # detect installed tools and install to each
 npx @kensaurus/cursor-kenji --claude   # install for Claude Code (~/.claude/) instead
-npx @kensaurus/cursor-kenji --all      # install for Cursor AND Claude Code in one run
+npx @kensaurus/cursor-kenji --codex    # install for Codex CLI (~/.codex/AGENTS.md + prompts)
+npx @kensaurus/cursor-kenji --gemini   # install for Gemini CLI (~/.gemini/GEMINI.md + commands)
+npx @kensaurus/cursor-kenji --all      # install for all four supported tools in one run
 npx @kensaurus/cursor-kenji --clean    # mirror ~/.cursor to match this repo (backup first)
 npx @kensaurus/cursor-kenji --dry-run  # preview
 npx @kensaurus/cursor-kenji --skill audit-ux   # single skill
 npx @kensaurus/cursor-kenji --link     # dev: symlink for live skill authoring
 ```
+
+**`--auto` is the easiest way to cover everything you use** — it probes `~/.cursor`, `~/.claude`, `~/.codex`, and `~/.gemini` and installs the right artifacts to each installed tool. A bare invocation stays Cursor-only for backward compatibility.
 
 From a clone: `npm run install:cursor` · `npm test` validates skills + count + install smoke test.
 
@@ -68,7 +73,7 @@ One-click, no clone needed (works on Windows too):
 
 ```bash
 npx @kensaurus/cursor-kenji --claude   # Claude Code only
-npx @kensaurus/cursor-kenji --all      # Cursor + Claude Code
+npx @kensaurus/cursor-kenji --all      # all four supported tools
 ```
 
 All skills, commands, agents, and rules install to Claude Code (`~/.claude/`), with `.mdc` rules installed as `.md`. Skills appear as `/slash-commands` — type `/` inside any `claude` session.
@@ -92,6 +97,24 @@ From a clone, the bash installer does the same:
 ```
 
 Skills are read from `~/.claude/skills/<name>/SKILL.md`. No restart required when you re-run the installer — Claude Code picks up file changes at the start of each new session.
+
+### Codex CLI & Gemini CLI
+
+Codex CLI (OpenAI) and Gemini CLI have **no skills system** — they each read a single global context file. cursor-kenji maps to what they actually load:
+
+```bash
+npx @kensaurus/cursor-kenji --codex    # Codex CLI
+npx @kensaurus/cursor-kenji --gemini   # Gemini CLI
+```
+
+| | Codex CLI | Gemini CLI |
+|:--|:--|:--|
+| **Rules → context file** | `~/.codex/AGENTS.md` | `~/.gemini/GEMINI.md` |
+| **Portable commands** | `~/.codex/prompts/*.md` | `~/.gemini/commands/*.toml` |
+
+The rules are merged from `rules/` into one auto-loaded Markdown file (the skill-routing index is omitted — nothing in these tools would load it). Three self-contained playbooks — `plan`, `research`, `fix-issue` — ship as native custom prompts/commands. Skills and subagents are **not** written there, because neither tool has a loader for them (writing them would be dead files). An existing `AGENTS.md`/`GEMINI.md` is backed up (`.bak-<stamp>`) before an update, and regeneration is idempotent.
+
+> The bash `install.sh --codex`/`--gemini` delegates to the Node installer (needs Node ≥ 18) so the merge/port logic has a single source of truth.
 
 ### Manual install
 
