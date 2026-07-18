@@ -1,3 +1,7 @@
+---
+description: "Reference for the MCP toolset (Context7, Firecrawl, Playwright, Supabase, Sequential Thinking) and when to reach for each"
+---
+
 # MCP-Powered Development
 
 ## Tools

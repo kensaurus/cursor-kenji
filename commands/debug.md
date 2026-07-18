@@ -1,3 +1,8 @@
+---
+description: "Hypothesis-driven debugging with runtime evidence — Sentry, Firecrawl, and Sequential Thinking, not guessing"
+argument-hint: "[error or symptom]"
+---
+
 # /debug
 
 > Hypothesis-driven debugging with runtime evidence — not guessing.

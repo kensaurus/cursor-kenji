@@ -1,3 +1,8 @@
+---
+description: "Pre-flight checks → commit → push → open a PR with title and description"
+argument-hint: "[title]"
+---
+
 # /pr
 
 > Pre-flight checks → commit → push → open PR with title and description.

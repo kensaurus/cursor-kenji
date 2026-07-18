@@ -1,3 +1,8 @@
+---
+description: "Agent review pass plus manual checklist for correctness, security, performance, and accessibility"
+argument-hint: "[path or PR]"
+---
+
 # /review
 
 > Agent review pass plus manual checklist for correctness, security, performance, and accessibility.

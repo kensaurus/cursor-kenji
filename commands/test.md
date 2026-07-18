@@ -1,3 +1,8 @@
+---
+description: "Route to the right test skill: unit, manual headed Playwright, full-app QA, or mobile emulator"
+argument-hint: "[target or flow]"
+---
+
 # /test
 
 > Type check → lint → unit → integration → E2E → coverage. Verify quality before committing.

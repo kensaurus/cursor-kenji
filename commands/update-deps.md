@@ -1,3 +1,8 @@
+---
+description: "Audit outdated dependencies, research breaking changes, update one at a time, verify each, commit separately"
+argument-hint: "[package]"
+---
+
 # /update-deps
 
 > Audit outdated dependencies, research breaking changes, update one at a time, verify each, commit separately.

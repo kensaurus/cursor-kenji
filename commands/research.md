@@ -1,3 +1,8 @@
+---
+description: "Research current best practices with Context7, Firecrawl, and built-in search before implementing anything non-trivial"
+argument-hint: "[topic or question]"
+---
+
 # research
 
 # Production Research Protocol

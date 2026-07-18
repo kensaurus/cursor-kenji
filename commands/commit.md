@@ -1,3 +1,8 @@
+---
+description: "Smart pre-commit pipeline: lint, Sentry pre-check, build verify, auto-detect scope, conventional commit, push"
+argument-hint: "[message]"
+---
+
 # /commit
 
 > Smart pre-commit pipeline: lint, Sentry pre-check, build verify, auto-detect scope, conventional commit, push.

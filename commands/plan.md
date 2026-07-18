@@ -1,3 +1,8 @@
+---
+description: "Research, clarify requirements, and produce an approved implementation plan before writing code (Cursor Plan Mode)"
+argument-hint: "[task or feature]"
+---
+
 # Plan Before Coding
 
 ## Purpose

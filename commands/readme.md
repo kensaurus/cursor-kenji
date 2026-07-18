@@ -1,3 +1,7 @@
+---
+description: "End-of-session README sync — detect convention, smart change detection, stale-reference cleanup, visual showcase"
+---
+
 # /readme
 
 > End-of-session doc sync — detect convention, smart change detection, stale-reference cleanup.

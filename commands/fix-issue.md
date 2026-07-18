@@ -1,3 +1,8 @@
+---
+description: "Fetch a GitHub issue, find the relevant code, implement the fix, verify, and open a PR"
+argument-hint: <issue number or url>
+---
+
 # fix-issue
 
 # Fix GitHub Issue

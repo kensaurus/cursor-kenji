@@ -1,3 +1,8 @@
+---
+description: "Drive a partially-executed plan to 100% coverage across the whole repo — enumerate, batch-execute, prove completeness"
+argument-hint: "[plan file]"
+---
+
 # Burndown Full
 
 Drive a partially-executed plan to **100% coverage** across the entire codebase. Use this when a refactor / migration / rename / rule-application was planned and started but stopped before it was actually complete everywhere.

@@ -1,3 +1,8 @@
+---
+description: "Route to the right UI/UX skill: design-system audit, UX heuristics, cosmetic polish, or semantic-data rewrite"
+argument-hint: "[route, component, or symptom]"
+---
+
 # /uiux
 
 > Discover existing system → detect rogue implementations → fix → validate.

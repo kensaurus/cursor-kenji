@@ -1,3 +1,8 @@
+---
+description: "Systematic refactoring: analyze → split → extract → verify behavior, with no truncation or omitted lines"
+argument-hint: "[file or module]"
+---
+
 # /refactor
 
 > Systematic refactoring: analyze → split → extract → verify behavior. No truncation, no omitted lines.
