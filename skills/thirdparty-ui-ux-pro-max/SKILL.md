@@ -1,7 +1,7 @@
 ---
 name: thirdparty-ui-ux-pro-max
 description: >-
-  Third-party skill — design intelligence for professional UI/UX (67 styles, palettes,
+  Third-party skill — design intelligence for professional UI/UX (the full style catalog, palettes,
   typography, UX guidelines). Generates tailored design systems via Python search scripts.
   Use when building, designing, or reviewing UI/UX, or when the user mentions ui-ux-pro-max
   or thirdparty-ui-ux-pro-max.
@@ -12,7 +12,7 @@ description: >-
 > **Third-party skill** (upstream-maintained). See [ATTRIBUTION.md](ATTRIBUTION.md).  
 > Upstream: [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) · Local name: `thirdparty-ui-ux-pro-max`
 
-Comprehensive design guide for web and mobile applications. Contains 67 styles, 96 color palettes, 57 font pairings, 99 UX guidelines, and 25 chart types across 13 technology stacks. Searchable database with priority-based recommendations.
+Comprehensive design guide for web and mobile applications. Contains the full style catalog, 96 color palettes, 57 font pairings, 99 UX guidelines, and 25 chart types across 13 technology stacks. Searchable database with priority-based recommendations.
 
 ## Prerequisites
 

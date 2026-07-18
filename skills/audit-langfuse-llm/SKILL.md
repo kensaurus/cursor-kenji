@@ -18,7 +18,7 @@ Works with **any project** — auto-detects Langfuse setup from the codebase.
 
 > **Verify live, not just statically.** Trigger AI features via Playwright and confirm traces land in Langfuse — static code analysis alone misses runtime issues.
 
-> **Use concrete numbers.** "Costs seem high" is not an audit finding. "GPT-4o used for intent classification at $0.03/call when GPT-4o-mini at $0.001/call achieves equivalent accuracy" is.
+> **Use concrete numbers.** "Costs seem high" is not an audit finding. "gpt-4.1 used for intent classification at $0.02/call when gpt-4.1-mini at $0.002/call achieves equivalent accuracy" is.
 
 > **Always use the `browser-anti-stall` protocol** when using Playwright browser MCP tools.
 
@@ -56,7 +56,7 @@ Grep(pattern: "langchain|LangChain|@langchain|vercel/ai|ai/core|createOpenAI|cre
 Record:
 - LLM providers (OpenAI, Anthropic, Google, etc.)
 - LLM frameworks (LangChain, Vercel AI SDK, direct API calls, etc.)
-- Model names used (grep for model name strings like `gpt-4o`, `claude-3`, `gemini-pro`)
+- Model names used (grep for model name strings like `gpt-4.1`, `claude-opus-4-8`, `gemini-2.5-pro`)
 
 ### 0c. Map AI Features
 
@@ -67,7 +67,7 @@ SemanticSearch(query: "Where are LLM/AI features called in the codebase?", targe
 Build a feature map:
 | Feature | File(s) | Provider | Model | Traced? |
 |---------|---------|----------|-------|---------|
-| _e.g. Chat_ | `app/api/chat/route.ts` | OpenAI | gpt-4o | Yes |
+| _e.g. Chat_ | `app/api/chat/route.ts` | OpenAI | gpt-4.1 | Yes |
 
 ### 0d. Detect Eval and Prompt Management Setup
 
@@ -227,7 +227,7 @@ Build a cost table:
 |---------|-------|------------------|-------------------|-------------|----------------|
 
 **Red flags:**
-- Expensive model (GPT-4o, Claude 3.5 Sonnet) used for simple classification/extraction → **recommend cheaper model**
+- Expensive model (gpt-4.1, claude-opus-4-8) used for simple classification/extraction → **recommend cheaper model** (e.g. gpt-4.1-mini, claude-haiku-4-5)
 - High input token counts → **check for unnecessary context stuffing**
 - Output tokens much larger than needed → **add max_tokens or response format constraints**
 - High latency on user-facing features → **consider streaming, caching, or smaller model**
