@@ -8,6 +8,10 @@ license: MIT
 
 Implement live, collaborative features using WebSockets, Supabase Realtime, and Server-Sent Events.
 
+> Code examples assume a **Next.js App Router + Supabase** stack
+> (`@/lib/supabase/client`, `'use client'`). Adapt import paths and row types to
+> the detected stack.
+
 ## CRITICAL: Check Existing First
 
 **Before implementing ANY real-time feature, verify:**
@@ -35,67 +39,10 @@ cat .env* | grep -i SUPABASE
 ## Supabase Realtime
 
 ### Subscribe to Database Changes
-```tsx
-'use client'
-import { useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 
-export function useRealtimeMessages(roomId: string) {
- const [messages, setMessages] = useState<Message[]>([])
- const supabase = createClient()
-
- useEffect(() => {
- // Initial fetch
- const fetchMessages = async () => {
- const { data } = await supabase
- .from('messages')
- .select('*')
- .eq('room_id', roomId)
- .order('created_at', { ascending: true })
-
- if (data) setMessages(data)
- }
- fetchMessages()
-
- // Subscribe to changes
- const channel = supabase
- .channel(`room:${roomId}`)
- .on(
- 'postgres_changes',
- {
- event: 'INSERT',
- schema: 'public',
- table: 'messages',
- filter: `room_id=eq.${roomId}`,
- },
- (payload) => {
- setMessages((prev) => [...prev, payload.new as Message])
- }
- )
- .on(
- 'postgres_changes',
- {
- event: 'DELETE',
- schema: 'public',
- table: 'messages',
- filter: `room_id=eq.${roomId}`,
- },
- (payload) => {
- setMessages((prev) =>
- prev.filter((m) => m.id !== payload.old.id)
- )
- }
- )
- .subscribe()
-
- return () => {
- supabase.removeChannel(channel)
- }
- }, [roomId, supabase])
-
- return messages
-}
-```
+The canonical `useRealtimeMessages` hook (initial fetch + INSERT/DELETE
+subscription with unmount cleanup) is in
+[`references/patterns.md`](references/patterns.md).
 
 ### Presence (Online Users)
 ```tsx
