@@ -19,7 +19,7 @@ license: MIT
 **Task:** Profile the app, find performance issues across layers, plan fixes. **Measure, don't
 guess. Audit & plan only — do not optimize in this pass.**
 
-## vs neighbors
+## This skill vs neighbors
 
 | Skill | Does |
 |-------|------|

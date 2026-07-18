@@ -19,7 +19,7 @@ license: MIT
 plan corrections. README, CONTRIBUTING, setup/onboarding, API docs, JSDoc/docstrings,
 architecture notes, `.env.example`, CLI `--help`, changelogs. **Audit & plan only.**
 
-## vs neighbors
+## This skill vs neighbors
 
 | Skill | Does |
 |-------|------|

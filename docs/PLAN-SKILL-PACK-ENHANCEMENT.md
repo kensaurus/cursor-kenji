@@ -176,6 +176,44 @@ Follow-up (out of P1.1 scope, non-blocking): the `enhance-web-ui` body has a few
 that now resolve into `references/details.md` rather than "below" — minor
 correctness nits from the original split, worth a future cross-ref pass.
 
+### Phase 4 · P2.5 — cross-skill deduplication: verified null-action
+Checked 2026-07-18. All three identified dedup targets fail to justify extraction:
+
+1. **meta-skill-creator vs create-skill** — span separate packs (`skills/` main vs
+   `skills-cursor/` Cursor-only). They are intentionally distinct flavors for two
+   different runtimes, not duplicates.
+2. **enhance-web-ui / enhance-web-ux "41 identical lines"** — the shared lines are
+   structural markers (YAML `---` delimiters, code fences ` ``` `, `>` blockquote
+   prefixes, the shared surface-router table, and the "Further reading" heading), not
+   factored prose. No prose extraction is warranted.
+3. **"Check Existing First" block ×11** — each instance adapts the header to its own
+   domain vocabulary. Extracting a shared file would require 11 `references/` dirs with
+   single-file contents, adding indirection for near-zero savings.
+
+Body-level duplication has negligible session token cost (bodies load only on-demand,
+one at a time). Per anti-deletion discipline, all content left intact.
+
+### Phase 4 · P2.1 — converge two plan-* template families
+Executed 2026-07-18. Plan said "extract preservation contract to a shared `references/`
+file (currently restated near-verbatim in 11 files)." Verification showed the claim is
+overstated:
+
+- The **references-family** preservation contracts (plan-uiux-unification,
+  plan-stub-checker, plan-docs-sync) are all **domain-specific** (UI/design audit
+  buckets; stub detection taxonomy; docs-drift taxonomy). No single shared contract
+  exists to extract.
+- The **inline-family** `## Guardrails` sections are **domain-adapted** (6 unique
+  bullets per skill). Extracting them would destroy the domain-specific guardrails.
+  The only cross-skill invariant is a 1-line tagline (`_Audit-only._`) already in each
+  report template — too small to justify extraction overhead.
+
+Per anti-deletion discipline, the domain-adapted Guardrails are left intact and noted
+for review rather than forced into a lossy shared file.
+
+**Change executed:** Standardized the neighbor-table heading across all 6 references-
+family plan-* skills → `## This skill vs neighbors` (was `## vs neighbors` in
+plan-security-audit, plan-perf-audit, plan-docs-sync, plan-test-coverage).
+
 ### Phase 4 · P2.3 — dual-runtime paths
 All 44 `~/.cursor/skills/<name>/SKILL.md` references in the 4 workflow bundles and
 the commands now refer to skills by bare name (`Read the \`X\` skill and follow it`),

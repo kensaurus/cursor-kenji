@@ -18,7 +18,7 @@ license: MIT
 mapped to OWASP Top 10, then remediation plan. **Audit & plan only — no code changes, no
 destructive testing.**
 
-## vs neighbors
+## This skill vs neighbors
 
 | Skill | Does |
 |-------|------|

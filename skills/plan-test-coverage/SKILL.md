@@ -19,7 +19,7 @@ license: MIT
 Find untested, weakly tested, and fake-green tests. Build traceability matrix + burndown.
 **Audit & plan only — do not write tests in this pass.**
 
-## vs neighbors
+## This skill vs neighbors
 
 | Skill | Does |
 |-------|------|
