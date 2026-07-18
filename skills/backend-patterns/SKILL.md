@@ -1,6 +1,12 @@
 ---
 name: backend-patterns
-description: Design solid backend architectures with modern patterns. Use when user wants "API design", "database schema", "authentication", "caching", "queues", "background jobs", "microservices", "serverless", or "backend architecture".
+description: >
+  Apply modern backend patterns — auth middleware, caching strategies, background queues,
+  rate limiting, and serverless/edge function design — to Next.js, Node, and Supabase
+  stacks. Use when the user says "backend architecture", "queue jobs", "caching layer",
+  "rate limiting", "server actions", "edge function", "microservices", or "authentication
+  pattern". Pairs with design-api, audit-security, backend-realtime. Do NOT use for
+  database schema design (audit-db-schema) or pure frontend work.
 license: MIT
 ---
 

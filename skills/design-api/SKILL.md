@@ -1,6 +1,11 @@
 ---
 name: design-api
-description: Design RESTful and GraphQL APIs following best practices. Use when designing APIs, creating endpoints, structuring responses, or planning API architecture.
+description: >
+  Design RESTful and GraphQL APIs following current best practices for naming, versioning,
+  error shapes, and auth patterns. Use when the user says "design an API", "create
+  endpoints", "structure my API responses", "plan API architecture", "REST vs GraphQL", or
+  "API contract". Covers OpenAPI spec, pagination, rate limiting, and backwards-compatible
+  evolution. Pairs with backend-patterns, audit-security.
 license: MIT
 ---
 

@@ -2,16 +2,12 @@
 name: plan-rls-audit
 description: >
   Audit a Supabase/Postgres project for Row-Level Security and access-control gaps, then
-  produce a phased remediation plan. Use when the user mentions "RLS", "row level security",
-  "is my Supabase secure", "anyone can read my data", "check my database policies",
-  "lock down my tables", "service_role key", or is hardening a Supabase backend before
-  launch. Tables shipped with RLS disabled or "USING (true)" expose every row via the
-  public anon key (the inverted-logic policy class behind repeated public data leaks). Audits every table
-  for relrowsecurity, flags permissive/inverted policies, finds service_role keys
-  client-side, checks auth.uid() correctness and (select auth.uid()) perf. Plan only —
-  nothing altered until each phase is approved. Pairs with plan-secrets-audit,
-  plan-security-audit, audit-db-schema. Do NOT use for query performance alone
-  (backend-db-performance), schema design (audit-db-schema), or non-Postgres backends.
+  produce a phased remediation plan. Use when the user says "RLS", "is my Supabase secure",
+  "anyone can read my data", "lock down my tables", "service_role key", or is hardening
+  before launch. Audits every table for relrowsecurity, permissive/inverted policies,
+  client-side service_role keys, and auth.uid() correctness. Plan only — nothing altered
+  until approved. Pairs with plan-secrets-audit, plan-security-audit, audit-db-schema. Do
+  NOT use for query performance (backend-db-performance) or non-Postgres backends.
 license: MIT
 ---
 

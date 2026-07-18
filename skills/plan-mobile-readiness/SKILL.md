@@ -1,16 +1,13 @@
 ---
 name: plan-mobile-readiness
 description: >
-  Audit a Capacitor/React Native app for App Store + Google Play submission readiness,
+  Audit a Capacitor/React Native app for App Store and Google Play submission readiness,
   then produce a phased pre-submission plan. Use when the user says "is my app ready for
   the App Store", "will Google Play reject this", "pre-submission check", "privacy manifest",
-  "data safety form", "app store rejection", or is preparing a mobile launch. ~25% of App
-  Store submissions rejected first pass — missing PrivacyInfo.xcprivacy, Data Safety
-  mismatches, no demo account, placeholder UI, stale target API; Apple blocks thin web-view
-  apps under Guideline 2.5.2. Audits privacy manifests, permission/Data-Safety match, IAP via
-  store billing, target API, demo creds, placeholder UI. Plan only until approved. Pairs
-  with mobile-capacitor-platform, enhance-capacitor-ui, plan-stub-checker. Do NOT use for
-  perf tuning or screen polish.
+  "data safety form", or is preparing a mobile launch. Audits PrivacyInfo.xcprivacy,
+  permission/Data-Safety match, IAP via store billing, target API level, demo creds, and
+  placeholder UI. Plan only until approved. Pairs with mobile-capacitor-platform,
+  enhance-capacitor-ui, plan-stub-checker. Do NOT use for perf tuning or screen polish.
 license: MIT
 ---
 

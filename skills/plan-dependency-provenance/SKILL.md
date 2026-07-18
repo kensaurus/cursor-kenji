@@ -1,16 +1,13 @@
 ---
 name: plan-dependency-provenance
 description: >
-  Audit dependencies for hallucinated/slopsquatted packages, supply-chain risk, and
+  Audit dependencies for hallucinated or slopsquatted packages, supply-chain risk, and
   licensing/provenance gaps, then produce a phased remediation plan. Use when the user
-  says "check my dependencies", "is this package real", "slopsquatting", "are my npm/pip
-  packages safe", "audit my supply chain", "license check", "SBOM", "did the AI hallucinate
-  a package", or is hardening before launch or open-sourcing. AI agents hallucinate
-  non-existent package names ~20% of the time; 43% recur predictably (CSA 2026) — attackers
-  pre-register on npm/PyPI. Audits existence/age/popularity, lockfile integrity, typo names,
-  transitive bloat, license + provenance. Plan only until approved. Pairs with
-  plan-secrets-audit, create-hook, workflow-housekeep. Do NOT use for version bumps
-  (/update-deps) or bundle size (audit-bundle-size).
+  says "check my dependencies", "is this package real", "slopsquatting", "audit my supply
+  chain", "license check", "SBOM", or "did the AI hallucinate a package". Audits package
+  existence/age/popularity, lockfile integrity, typo-squatted names, transitive bloat, and
+  license provenance. Plan only until approved. Pairs with plan-secrets-audit,
+  workflow-housekeep. Do NOT use for version bumps or bundle size (audit-bundle-size).
 license: MIT
 ---
 

@@ -1,6 +1,12 @@
 ---
 name: design-motion
-description: Create delightful animations and micro-interactions using Framer Motion, CSS animations, and GSAP. Use when user mentions "animation", "transition", "micro-interaction", "motion", "animate", "hover effect", "scroll animation", "page transition", or "make it interactive".
+description: >
+  Design and implement purposeful motion — micro-interactions, page transitions, scroll
+  animations, and hover effects — using Framer Motion, CSS animations, and GSAP. Use when
+  the user says "add animation", "make it feel alive", "micro-interaction", "page
+  transition", "scroll animation", "hover effect", or "motion design". Outputs
+  performance-safe, reduced-motion-aware animation code. Pairs with design-frontend,
+  enhance-web-ui. Do NOT use for layout, typography, or purely functional UI work.
 license: MIT
 ---
 

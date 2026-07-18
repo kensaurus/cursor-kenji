@@ -1,18 +1,12 @@
 ---
 name: plan-antislop
 description: >
-  Audit a codebase, UI, or copy for "AI slop" — the tells that mark output as
-  machine-generated — and produce a phased burndown to remove it. Use when the user says
-  a page/app/README "feels AI-generated", "looks like AI slop", "reads like ChatGPT",
-  "feels generic/templated/soulless", "every component looks the same", or wants a
-  de-slop / authenticity / voice pass before launch. Covers four surfaces: prose (filler
-  vocab, hedging, "it's not just X, it's Y" cadence, em-dash tics), visual/UI (default
-  shadcn-violet, identical card grids, centered-everything, emoji bullets), code (TODO
-  stubs, placeholder naming, over-abstraction, comment slop), and structure/IA
-  (listicle-brain, symmetrical scaffolding, no hierarchy). Plan only — nothing rewritten
-  until each phase is approved. Pairs with enhance-web-ux, enhance-web-landing,
-  design-frontend, audit-i18n. Do NOT use for functional bugs (debug-*), security
-  (plan-security-audit), or net-new design (design-frontend).
+  Audit a codebase, UI, or copy for machine-generated tells across prose, visual/UI, code,
+  and structure/IA, then produce a phased de-slop burndown. Use when the user says "feels
+  AI-generated", "looks like AI slop", "reads like ChatGPT", "feels generic/soulless", or
+  wants an authenticity/voice pass before launch. Plan only — nothing rewritten until each
+  phase is approved. Pairs with enhance-web-ux, enhance-web-landing, design-frontend. Do
+  NOT use for functional bugs (debug-*), security (plan-security-audit), or net-new design.
 license: MIT
 ---
 

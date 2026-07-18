@@ -1,16 +1,13 @@
 ---
 name: plan-aeo-readiness
 description: >
-  Audit a site for answer-engine / generative-engine visibility (citation by ChatGPT,
-  Claude, Perplexity, Google AI Overviews), then produce a phased plan to improve AI
-  citation probability. Use when the user says "do AI engines cite my site", "AEO", "GEO",
-  "answer engine optimization", "show up in ChatGPT/Perplexity", "AI search visibility",
-  "llms.txt", "am I blocking AI crawlers", or wants discoverability beyond classic Google
-  ranking. Google-link/AI-citation overlap has dropped below 20%. Audits AI-crawler access
-  (robots.txt, Cloudflare AI-bot defaults), SSR vs JS-hidden content, llms.txt, FAQ/HowTo/
-  Speakable schema, direct-answer-first structure, Princeton citation levers (quotes, stats,
-  inline citations). Plan only until approved. Pairs with enhance-web-seo, docs-writer,
-  plan-antislop. Do NOT use for Google ranking / Core Web Vitals alone (enhance-web-seo).
+  Audit a site for answer-engine and generative-engine visibility (citation by ChatGPT,
+  Claude, Perplexity, AI Overviews), then produce a phased improvement plan. Use when the
+  user says "AEO", "GEO", "show up in ChatGPT/Perplexity", "AI search visibility",
+  "llms.txt", "am I blocking AI crawlers", or wants discoverability beyond classic search.
+  Audits AI-crawler access, SSR vs JS-hidden content, llms.txt, structured schema, and
+  direct-answer-first structure. Plan only until approved. Pairs with enhance-web-seo,
+  docs-writer, plan-antislop. Do NOT use for Core Web Vitals alone (enhance-web-seo).
 license: MIT
 ---
 

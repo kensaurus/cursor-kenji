@@ -2,14 +2,12 @@
 name: plan-uiux-unification
 description: >
   Exhaustive, non-destructive UI/UX and design-system audit that produces a burndown and
-  unification plan — no code changes in this pass. IA-first (hierarchy before layout),
-  preservation contract (no feature removal, no fabricated content), full surface inventory,
-  per-surface violation log, prioritized burndown with risk column, phased enhancement roadmap,
-  and guardrails. Enhances the existing design system; does not replace it. Uses codebase
-  reads + optional browser MCP for visual verification; Firecrawl for current-year best
-  practices. Use when asked to "UI/UX unification plan", "design system audit plan", "UI
-  burndown", "unify the design system", "plan UI overhaul", "design system consolidation",
-  "IA audit before redesign", "audit UI without fixing", or "UI/UX unification".
+  unification plan — no code changes until each phase is approved. Covers IA hierarchy,
+  surface inventory, per-surface violation log, prioritized burndown with risk column, and
+  phased enhancement roadmap. Enhances the existing design system; does not replace it.
+  Use when asked to "audit UI without fixing", "UI burndown", "unify the design system",
+  "design system consolidation", "IA audit before redesign", or "UI/UX unification plan".
+  Pairs with audit-uiux-design-system. Do NOT use for live UI fixes (audit-uiux-design-system).
 license: MIT
 ---
 

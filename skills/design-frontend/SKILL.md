@@ -1,6 +1,11 @@
 ---
 name: design-frontend
-description: Create distinctive, production-grade frontend interfaces. Use when building web components, pages, dashboards, or beautifying UI. Avoids generic AI aesthetics.
+description: >
+  Create distinctive, production-grade frontend interfaces that avoid generic AI aesthetics.
+  Use when the user says "build this UI", "design this page", "make it look good",
+  "dashboard layout", "beautify this", or "make the UI feel premium". Produces accessible,
+  responsive components with intentional typography, color, and spacing. Pairs with
+  design-system, enhance-web-ui. Do NOT use for pure logic or API work.
 license: MIT
 ---
 
