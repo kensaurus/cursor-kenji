@@ -13,10 +13,10 @@ Intuit Content Design principles, and Google HEART metrics.
 **Before ANY browser interaction, read the `browser-anti-stall` skill and apply its rules
 to every step.** That skill is `protocol-browser-anti-stall`.
 
-## CRITICAL: Context-First, Human-Centric Approach
+## Context-First, Human-Centric Approach
 
 UX recommendations that don't understand the WHY behind the product are surface-level
-checkbox audits. Before evaluating ANY heuristic or pattern, you MUST deeply understand:
+checkbox audits. Before evaluating any heuristic or pattern, deeply understand:
 
 1. **Who is the human?** Not "users" — real people with frustrations, time pressure,
  emotional states, and goals beyond the screen. A tired parent filing taxes at 11pm
@@ -31,7 +31,7 @@ checkbox audits. Before evaluating ANY heuristic or pattern, you MUST deeply und
  confusion → understanding → action → confirmation → satisfaction (or frustration).
  Map where the product currently creates anxiety, confusion, or dead ends.
 
-Do NOT skip Step 0. A shallow understanding produces shallow recommendations.
+Step 0 grounds every subsequent finding — shallow context produces shallow recommendations.
 
 ---
 
@@ -51,13 +51,9 @@ Read README, landing page, marketing copy, and any onboarding flows to answer:
 
 Trace how data flows through the system from the human's perspective:
 
-```
-Glob: **/api/** → API routes
-Glob: **/actions/** → Server actions
-Glob: **/hooks/use* → Data-fetching hooks
-Glob: **/lib/** → Core business logic
-Grep: "fetch|axios|ky|useSWR|useQuery|trpc" glob "*.{ts,tsx}" output_mode "count"
-```
+Search for data-flow entry points: `api/` for API routes, `actions/` for server actions,
+`hooks/use*` for data-fetching hooks, `lib/` for core business logic. Count occurrences
+of `fetch|axios|ky|useSWR|useQuery|trpc` in `*.{ts,tsx}` to map integration points.
 
 Map the pipeline for each core task:
 
@@ -79,12 +75,9 @@ Trust-sensitive points: [where wrong data erodes confidence]
 
 ### 0c. Map Routes and Information Architecture
 
-```
-Glob: **/app/**/page.tsx → Next.js App Router pages
-Glob: **/pages/**/*.tsx → Next.js Pages Router
-Glob: **/src/routes/** → SvelteKit / Remix routes
-Glob: **/router.* → Vue Router / React Router config
-```
+Discover routes by framework: `app/**/page.tsx` (Next.js App Router), `pages/**/*.tsx`
+(Next.js Pages Router), `src/routes/` (SvelteKit / Remix), `router.*` (Vue Router /
+React Router config).
 
 Build the information architecture mental model:
 
@@ -189,11 +182,9 @@ The system should keep users informed through timely feedback.
 
 **What to find in code:**
 
-```
-Grep: "loading|isLoading|isPending|skeleton|Skeleton|spinner|Spinner" glob "*.tsx" output_mode "count"
-Grep: "progress|Progress|step.*of|currentStep" glob "*.tsx" output_mode "count"
-Grep: "toast|Toast|notification|Notification|snackbar" glob "*.tsx" output_mode "count"
-```
+Search `*.tsx` for feedback patterns: `loading|isLoading|isPending|skeleton|Skeleton|spinner|Spinner`
+(loading states); `progress|Progress|step.*of|currentStep` (multi-step progress);
+`toast|Toast|notification|Notification|snackbar` (user notifications).
 
 **What to verify in browser:**
 
@@ -211,9 +202,7 @@ Use language and concepts familiar to users, not internal jargon.
 
 **What to find in code:**
 
-```
-Grep: "TODO.*wording|TODO.*copy|TODO.*label|TODO.*text" glob "*.tsx" -i
-```
+Search `*.tsx` for copy-quality TODOs: `TODO.*wording|TODO.*copy|TODO.*label|TODO.*text` (case-insensitive).
 
 **What to verify in browser:**
 
@@ -231,11 +220,9 @@ Emergency exits, undo, cancel — users make mistakes.
 
 **What to find in code:**
 
-```
-Grep: "onCancel|handleCancel|onClose|handleClose|onDismiss" glob "*.tsx" output_mode "count"
-Grep: "undo|Undo|revert|Revert" glob "*.tsx" output_mode "count"
-Grep: "confirm.*delete|confirm.*remove|AlertDialog|ConfirmDialog" glob "*.tsx" output_mode "count"
-```
+Search `*.tsx` for emergency-exit patterns: `onCancel|handleCancel|onClose|handleClose|onDismiss`
+(cancel/close handlers); `undo|Undo|revert|Revert` (undo actions);
+`confirm.*delete|confirm.*remove|AlertDialog|ConfirmDialog` (destructive-action guards).
 
 **What to verify in browser:**
 
@@ -267,11 +254,9 @@ Prevent problems before they happen.
 
 **What to find in code:**
 
-```
-Grep: "disabled.*(!|=.*false)|isDisabled|isInvalid" glob "*.tsx" output_mode "count"
-Grep: "required|min.*length|max.*length|pattern=" glob "*.tsx" output_mode "count"
-Grep: "zod|yup|joi|superstruct|valibot" glob "package.json"
-```
+Search `*.tsx` for prevention patterns: `disabled.*(!|=.*false)|isDisabled|isInvalid`
+(disabled/invalid states); `required|min.*length|max.*length|pattern=` (input constraints).
+Check `package.json` for validation libraries: `zod|yup|joi|superstruct|valibot`.
 
 **What to verify in browser:**
 
@@ -303,10 +288,8 @@ Accelerators for experts, simplicity for novices.
 
 **What to find in code:**
 
-```
-Grep: "keyboard|shortcut|hotkey|useHotkeys|Cmd\+|Ctrl\+" glob "*.tsx" output_mode "count"
-Grep: "bulk|batch|selectAll|multiSelect" glob "*.tsx" output_mode "count"
-```
+Search `*.tsx` for efficiency patterns: `keyboard|shortcut|hotkey|useHotkeys|Cmd\+|Ctrl\+`
+(keyboard accelerators); `bulk|batch|selectAll|multiSelect` (bulk operations).
 
 **What to verify in browser:**
 
@@ -338,11 +321,9 @@ Error messages in plain language, with solutions.
 
 **What to find in code:**
 
-```
-Grep: "error.*message|errorMessage|Error.*:.*'" glob "*.tsx" output_mode "count"
-Grep: "try.*catch|\.catch\(|onError" glob "*.tsx" output_mode "count"
-Grep: "fallback|ErrorBoundary|error\.tsx" glob "*.tsx" output_mode "files_with_matches"
-```
+Search `*.tsx` for error-handling patterns: `error.*message|errorMessage|Error.*:.*'` (error
+message strings); `try.*catch|\.catch\(|onError` (catch sites); `fallback|ErrorBoundary|error\.tsx`
+(fallback components — list files with matches, not just count).
 
 **What to verify in browser:**
 
@@ -360,10 +341,8 @@ Easy to search, task-focused, concise.
 
 **What to find in code:**
 
-```
-Grep: "Tooltip|tooltip|HelpCircle|InfoIcon|help.*text|aria-describedby" glob "*.tsx" output_mode "count"
-Grep: "onboarding|tour|walkthrough|guide|Onboarding" glob "*.tsx" output_mode "count"
-```
+Search `*.tsx` for in-app help: `Tooltip|tooltip|HelpCircle|InfoIcon|help.*text|aria-describedby`
+(contextual help); `onboarding|tour|walkthrough|guide|Onboarding` (guided flows).
 
 **What to verify in browser:**
 
@@ -442,11 +421,7 @@ Evaluate all user-facing text against Intuit's content design standards.
 | Text expansion | UI handles 40% longer translated text | Layout breaks with longer strings |
 | RTL readiness | Logical properties (`margin-inline-start`) | Physical properties (`margin-left`) |
 
-**Find violations:**
-
-```
-Grep: ">([\w\s]{3,})<" glob "*.tsx" — hardcoded visible text (potential i18n miss)
-```
+**Find violations:** search `*.tsx` for `>([\w\s]{3,})<` to surface hardcoded visible text strings that may be i18n misses.
 
 ---
 

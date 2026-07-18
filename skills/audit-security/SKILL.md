@@ -234,13 +234,11 @@ res.json({ id, name, email, avatar });
 
 ### Scan for Hardcoded Secrets
 
-Search the codebase for potential leaked secrets:
+Search the codebase for potential leaked secrets. Patterns to look for:
 
-```
-Grep for: api_key, apiKey, secret, password, token, credentials, private_key
-Grep for: sk-, pk-, ghp_, gho_, xox[bpsa]-, AKIA
-Grep for: -----BEGIN (RSA|EC|OPENSSH) PRIVATE KEY-----
-```
+- Generic secret names: `api_key`, `apiKey`, `secret`, `password`, `token`, `credentials`, `private_key`
+- Key prefixes: `sk-`, `pk-`, `ghp_`, `gho_`, `xox[bpsa]-`, `AKIA`
+- Private key headers: `-----BEGIN (RSA|EC|OPENSSH) PRIVATE KEY-----`
 
 ### Verify .gitignore
 
