@@ -149,6 +149,33 @@ The defects are *packaging, consistency, and always-on token cost* — not writi
 Each phase is independently shippable. Phase 3 should be one skill per commit so
 `git diff --stat` proves nothing was dropped (content relocated ≠ removed).
 
+## Execution log
+
+### Phase 3 · P1.1 — five giant entry bodies: verified already-split, left intact
+Checked 2026-07-18. The five skills (`enhance-web-landing`, `enhance-web-ux`,
+`enhance-web-ui`, `mobile-rn-screen`, `enhance-capacitor-ui`) are **already
+progressively split**: each `SKILL.md` ends in a `## Further reading` pointer and
+the heavy reference material (extended failure modes, pattern libraries, research
+anchors, long examples) lives only in `references/details.md`. Heading-level
+intersection between each body and its `details.md` is **empty** — there is no
+duplicated content to remove, and all five bodies are already under the 500-line
+validator cap.
+
+The residual body size (20–42 KB) is the skill's **operating core**: the
+when-to-fire router, Critical Rules, Workflow Checklist, and numbered step
+procedure — exactly the material Anthropic guidance keeps in the always-loaded
+body. Reaching the aspirational "~5–8 KB body" would require relocating this
+non-duplicated, load-bearing procedure into refs, forcing a second read to
+execute the skill and risking reliability. Per anti-deletion discipline ("if
+something seems removable, leave it and note it"), these five are left intact.
+P1.3/P1.4/P1.5 (genuine duplication / oversized inline blocks) were already
+completed in earlier Phase 3 commits.
+
+Follow-up (out of P1.1 scope, non-blocking): the `enhance-web-ui` body has a few
+`see *Primitive-First Patch Rule* below` / `Composition Move 4` cross-references
+that now resolve into `references/details.md` rather than "below" — minor
+correctness nits from the original split, worth a future cross-ref pass.
+
 ## Sources
 
 - [Skill authoring best practices — Claude Platform Docs](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
