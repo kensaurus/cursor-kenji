@@ -38,8 +38,8 @@ package.json → framework, Sentry SDK, Supabase client version
 README        → any known issues the team is tracking
 ```
 
-Confirm available MCPs: `plugin-sentry-sentry`, `plugin-supabase-supabase`,
-`user-firecrawl`, `user-playwright`.
+Confirm available MCPs: `sentry`, `supabase`,
+`firecrawl`, `playwright`.
 
 ---
 
@@ -49,25 +49,27 @@ Run all signal sources in parallel, then synthesise.
 
 ### 1a. Sentry — errors and performance
 
-Look up tool schemas under `mcps/plugin-sentry-sentry/tools/` first.
+Look up the tool schemas first.
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+sentry:search_issues
+{
   "organizationSlug": "<ORG>",
   "query": "unresolved issues last 14 days sorted by frequency",
   "projectSlugOrId": "<PROJECT>",
   "regionUrl": "<REGION_URL>",
   "limit": 25
-})
+}
 ```
 
 For each top-5 issue, get root-cause analysis:
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "analyze_issue_with_seer", arguments: {
+sentry:analyze_issue_with_seer
+{
   "organizationSlug": "<ORG>",
   "issueId": "<ISSUE_ID>",
   "regionUrl": "<REGION_URL>"
-})
+}
 ```
 
 Record per issue: title, frequency (events/users), first/last seen, component.
@@ -75,23 +77,26 @@ Record per issue: title, frequency (events/users), first/last seen, component.
 ### 1b. Supabase — query performance and API failures
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "get_logs", arguments: {
+supabase:get_logs
+{
   "project_id": "<PROJECT_ID>",
   "service": "api"
-})
+}
 ```
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "get_logs", arguments: {
+supabase:get_logs
+{
   "project_id": "<PROJECT_ID>",
   "service": "postgres"
-})
+}
 ```
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "get_advisors", arguments: {
+supabase:get_advisors
+{
   "project_id": "<PROJECT_ID>"
-})
+}
 ```
 
 Flag:
@@ -117,11 +122,12 @@ browser_take_screenshot → visual evidence per page
 
 For each signal category that surfaced issues:
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
   "query": "<framework> <issue-type> fix best practices 2026",
   "limit": 3,
   "sources": [{ "type": "web" }]
-})
+}
 ```
 
 ---
@@ -198,12 +204,13 @@ the performance improvement or policy correction.
 For Sentry issues: mark as resolved only after live verification confirms the
 fix, not before:
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "update_issue", arguments: {
+sentry:update_issue
+{
   "organizationSlug": "<ORG>",
   "issueId": "<ISSUE_ID>",
   "status": "resolved",
   "regionUrl": "<REGION_URL>"
-})
+}
 ```
 
 ---

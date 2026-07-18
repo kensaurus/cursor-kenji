@@ -35,21 +35,23 @@ Check what IS and IS NOT being monitored:
 Search for the latest Sentry recommendations for the detected framework:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
   "query": "<FRAMEWORK> sentry best practices configuration <current year>",
   "limit": 5,
   "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Scrape the Sentry official docs for the framework:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
+firecrawl:firecrawl_scrape
+{
   "url": "https://docs.sentry.io/platforms/<platform>/",
   "formats": ["markdown"],
   "onlyMainContent": true
-})
+}
 ```
 
 Platform paths: `javascript/nextjs`, `javascript/react`, `javascript/vue`, `python/django`, `python/flask`, `node`, `go`, `java/spring-boot`, `ruby/rails`.

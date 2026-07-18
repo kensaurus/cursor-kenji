@@ -204,15 +204,15 @@ Pick the app's primary mutation surface (FAB → "New X", or the equivalent).
 ### 3b. Verify in the DB via Supabase MCP
 
 ```text
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "execute_sql",
-  arguments: {
+supabase:execute_sql
+{
     "project_id": "<ref>",
     "query": "select id, amount, currency, posted_at, notes
               from <main_table>
               where workspace_id = '<ws>'
                 and (notes ilike '%QA%' or amount = -12345)
               order by created_at desc limit 5;"
-  })
+  }
 ```
 
 A row with the exact amount and the `QA-TEST-` payee/note must exist. If

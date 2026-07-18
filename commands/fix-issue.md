@@ -85,11 +85,12 @@ npx vitest run <path/to/related.test.ts>
 Search for related Sentry issues in the changed module:
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+sentry:search_issues
+{
   "organizationSlug": "<ORG_SLUG>",
   "projectSlug": "<PROJECT_SLUG>",
   "query": "is:unresolved <module_keyword>"
-})
+}
 ```
 
 ---

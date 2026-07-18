@@ -126,11 +126,12 @@ For each chunk or entry point, record:
 
 For the largest offenders, check current alternatives:
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
   "query": "replace <package-name> smaller alternative bundle size 2026",
   "limit": 3,
   "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Common swaps (research to confirm current state):

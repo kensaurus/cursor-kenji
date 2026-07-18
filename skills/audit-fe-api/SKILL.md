@@ -92,17 +92,19 @@ API LAYER DISCOVERY:
 Fetch docs for the detected data-fetching library:
 
 ```json
-CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
+context7:resolve-library-id
+{
  "libraryName": "<DETECTED_LIBRARY>",
  "query": "caching deduplication error handling best practices"
-})
+}
 ```
 
 ```json
-CallMcpTool(server: "context7", toolName: "query-docs", arguments: {
+context7:query-docs
+{
  "libraryId": "<RESOLVED_ID>",
  "query": "staleTime cacheTime retry error handling optimistic updates"
-})
+}
 ```
 
 Run for each major dependency (e.g., `@tanstack/react-query`, `axios`, `zod`).
@@ -110,11 +112,12 @@ Run for each major dependency (e.g., `@tanstack/react-query`, `axios`, `zod`).
 ### 1b. Firecrawl — Current API Patterns
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "<FRAMEWORK> API integration best practices [current year]",
  "limit": 5,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Additional searches:
@@ -133,26 +136,28 @@ Additional searches:
 ### 2a. Find API-Related Production Errors
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+sentry:search_issues
+{
  "organizationSlug": "<ORG_SLUG>",
  "query": "API errors 4xx 5xx fetch axios network from the last 14 days",
  "projectSlugOrId": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
  "limit": 25
-})
+}
 ```
 
 ### 2b. Find Slowest API Calls
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_events", arguments: {
+sentry:search_events
+{
  "organizationSlug": "<ORG_SLUG>",
  "projectSlugOrId": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
  "query": "transaction.op:http.client",
  "sort": "-duration",
  "limit": 15
-})
+}
 ```
 
 ### 2c. Cross-Reference with Frontend Code
@@ -213,10 +218,11 @@ If using Next.js App Router, check that `app/api/<path>/route.ts` exists.
 If the backend reads from Supabase, verify the DB schema matches what the frontend expects:
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "execute_sql", arguments: {
+supabase:execute_sql
+{
  "project_id": "<PROJECT_ID>",
  "query": "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name = '<TABLE>' ORDER BY ordinal_position"
-})
+}
 ```
 
 Compare column names and types against frontend TypeScript interfaces.

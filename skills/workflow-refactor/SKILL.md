@@ -45,21 +45,23 @@ List every file that will be affected by the change. If the blast radius is larg
 If the refactoring introduces a new pattern, verify it's current best practice:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "<framework> <pattern> best practice <current year>",
  "limit": 5,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Scrape the most authoritative result:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
+firecrawl:firecrawl_scrape
+{
  "url": "<best-result-url>",
  "formats": ["markdown"],
  "onlyMainContent": true
-})
+}
 ```
 
 This prevents refactoring FROM one outdated pattern TO another outdated pattern.

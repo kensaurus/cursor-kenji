@@ -65,9 +65,10 @@ Identify:
 
 Fetch library docs:
 ```json
-CallMcpTool(server: "plugin-context7-plugin-context7", toolName: "resolve-library-id", arguments: {
+context7:resolve-library-id
+{
   "libraryName": "react-i18next"
-})
+}
 ```
 
 ---

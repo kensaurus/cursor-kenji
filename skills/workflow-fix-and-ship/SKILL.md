@@ -34,21 +34,23 @@ Triage → fix → verify → ship. Every step leaves evidence.
 Pull signals before touching code:
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+sentry:search_issues
+{
   "organizationSlug": "<ORG>",
   "query": "<describe the bug>",
   "projectSlugOrId": "<PROJECT>",
   "regionUrl": "<REGION_URL>",
   "limit": 5
-})
+}
 ```
 
 Then pull Supabase logs if the bug may be data-related:
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "get_logs", arguments: {
+supabase:get_logs
+{
   "project_id": "<PROJECT_ID>",
   "service": "api"
-})
+}
 ```
 
 **Reproduce locally before any code change.** State the exact repro steps.

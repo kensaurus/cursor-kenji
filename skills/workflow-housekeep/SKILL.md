@@ -320,11 +320,12 @@ npm install # install updated versions
 For each major version bump available:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "<package-name> v<new-major> migration guide changelog breaking changes",
  "limit": 3,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Only apply major updates if:
@@ -354,11 +355,12 @@ npm test # if tests exist
 Research the recommended `.gitignore` for the detected ecosystem:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "<framework> gitignore best practices <current year>",
  "limit": 3,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Cross-check with https://github.com/github/gitignore templates.

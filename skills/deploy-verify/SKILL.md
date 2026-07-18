@@ -68,7 +68,8 @@ Grep(pattern: "SUPABASE_URL|NEXT_PUBLIC_SUPABASE_URL|SUPABASE_SERVICE_ROLE_KEY|S
 To get the project ID for MCP calls:
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "list_projects", arguments: {})
+supabase:list_projects
+{}
 ```
 
 Match the detected URL to a project to get `project_id`.
@@ -110,7 +111,8 @@ Record all detected values:
 ### 1a. Find Organization and Project
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "find_organizations", arguments: {})
+sentry:find_organizations
+{}
 ```
 
 Use the detected org slug and project slug from Phase 0c.
@@ -118,10 +120,11 @@ Use the detected org slug and project slug from Phase 0c.
 ### 1b. Check Recent Releases
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "find_releases", arguments: {
+sentry:find_releases
+{
  "organizationSlug": "<ORG_SLUG>",
  "projectSlug": "<PROJECT_SLUG>"
-})
+}
 ```
 
 Verify:
@@ -131,23 +134,25 @@ Verify:
 ### 1c. Search for New Issues Since Deploy
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+sentry:search_issues
+{
  "organizationSlug": "<ORG_SLUG>",
  "projectSlug": "<PROJECT_SLUG>",
  "query": "is:unresolved firstSeen:>1h",
  "sortBy": "freq"
-})
+}
 ```
 
 Also check for regressions (previously resolved issues that re-opened):
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+sentry:search_issues
+{
  "organizationSlug": "<ORG_SLUG>",
  "projectSlug": "<PROJECT_SLUG>",
  "query": "is:regressed",
  "sortBy": "freq"
-})
+}
 ```
 
 ### 1d. Seer Analysis on P0 Issues
@@ -155,10 +160,11 @@ CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments
 For any new issue with high event count or critical severity, run Sentry's AI root-cause analysis:
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "analyze_issue_with_seer", arguments: {
+sentry:analyze_issue_with_seer
+{
  "organizationSlug": "<ORG_SLUG>",
  "issueId": "<ISSUE_ID>"
-})
+}
 ```
 
 This provides:
@@ -181,9 +187,10 @@ Skip this phase if no Supabase integration detected.
 ### 2a. Migration Health
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "list_migrations", arguments: {
+supabase:list_migrations
+{
  "project_id": "<PROJECT_ID>"
-})
+}
 ```
 
 Verify:
@@ -193,10 +200,11 @@ Verify:
 ### 2b. API Logs (last 30 minutes)
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "get_logs", arguments: {
+supabase:get_logs
+{
  "project_id": "<PROJECT_ID>",
  "service": "api"
-})
+}
 ```
 
 Check for:
@@ -207,10 +215,11 @@ Check for:
 ### 2c. Edge Function Logs
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "get_logs", arguments: {
+supabase:get_logs
+{
  "project_id": "<PROJECT_ID>",
  "service": "edge-function"
-})
+}
 ```
 
 Check for:
@@ -221,10 +230,11 @@ Check for:
 ### 2d. Auth Logs
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "get_logs", arguments: {
+supabase:get_logs
+{
  "project_id": "<PROJECT_ID>",
  "service": "auth"
-})
+}
 ```
 
 Check for:
@@ -235,17 +245,19 @@ Check for:
 ### 2e. Security and Performance Advisors
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "get_advisors", arguments: {
+supabase:get_advisors
+{
  "project_id": "<PROJECT_ID>",
  "type": "security"
-})
+}
 ```
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "get_advisors", arguments: {
+supabase:get_advisors
+{
  "project_id": "<PROJECT_ID>",
  "type": "performance"
-})
+}
 ```
 
 Flag any new warnings that weren't present before the deploy.
@@ -255,10 +267,11 @@ Flag any new warnings that weren't present before the deploy.
 Run a quick data integrity check on the most important tables:
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "execute_sql", arguments: {
+supabase:execute_sql
+{
  "project_id": "<PROJECT_ID>",
  "query": "SELECT schemaname, relname, n_dead_tup, last_autovacuum FROM pg_stat_user_tables WHERE n_dead_tup > 10000 ORDER BY n_dead_tup DESC LIMIT 5"
-})
+}
 ```
 
 **Decision criteria:**
@@ -310,9 +323,10 @@ Confirm that active prompt versions match what the deploy should be using (check
 ### 4a. Navigate to Production
 
 ```json
-CallMcpTool(server: "user-playwright", toolName: "browser_navigate", arguments: {
+playwright:browser_navigate
+{
  "url": "<PRODUCTION_URL>"
-})
+}
 ```
 
 **Important**: Apply the `browser-anti-stall` protocol:
@@ -329,13 +343,15 @@ For each critical path identified in Phase 0f:
 3. **Check console** for errors:
 
 ```json
-CallMcpTool(server: "user-playwright", toolName: "browser_console_messages", arguments: {})
+playwright:browser_console_messages
+{}
 ```
 
 4. **Check network** for failed requests:
 
 ```json
-CallMcpTool(server: "user-playwright", toolName: "browser_network_requests", arguments: {})
+playwright:browser_network_requests
+{}
 ```
 
 ### 4c. Test Authentication (if applicable)
@@ -356,7 +372,8 @@ Navigate to the primary feature and perform one basic interaction:
 ### 4e. Take Evidence Screenshot
 
 ```json
-CallMcpTool(server: "user-playwright", toolName: "browser_take_screenshot", arguments: {})
+playwright:browser_take_screenshot
+{}
 ```
 
 **Decision criteria:**

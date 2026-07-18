@@ -86,11 +86,12 @@ PROJECT CONTEXT:
 When the user describes a feature, research how others have solved it:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "<FEATURE_TYPE> UX patterns best practices [current year]",
  "limit": 5,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Additional searches based on feature type:
@@ -109,11 +110,12 @@ Additional searches based on feature type:
 Scrape the most relevant result for detailed patterns:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
+firecrawl:firecrawl_scrape
+{
  "url": "<BEST_RESULT_URL>",
  "formats": ["markdown"],
  "onlyMainContent": true
-})
+}
 ```
 
 ### 1b. Technical Feasibility (Context7)
@@ -121,17 +123,19 @@ CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
 Check if the framework supports what the feature needs:
 
 ```json
-CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
+context7:resolve-library-id
+{
  "libraryName": "<FRAMEWORK>",
  "query": "<FEATURE_CAPABILITY> support"
-})
+}
 ```
 
 ```json
-CallMcpTool(server: "context7", toolName: "query-docs", arguments: {
+context7:query-docs
+{
  "libraryId": "<RESOLVED_ID>",
  "query": "<FEATURE_CAPABILITY> implementation guide"
-})
+}
 ```
 
 ### 1c. Data Model Feasibility (Supabase MCP)
@@ -139,20 +143,22 @@ CallMcpTool(server: "context7", toolName: "query-docs", arguments: {
 If the feature involves data, check the existing schema:
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "list_tables", arguments: {
+supabase:list_tables
+{
  "project_id": "<PROJECT_ID>",
  "schemas": ["public"],
  "verbose": true
-})
+}
 ```
 
 Or for specific tables:
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "execute_sql", arguments: {
+supabase:execute_sql
+{
  "project_id": "<PROJECT_ID>",
  "query": "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name = '<RELEVANT_TABLE>' ORDER BY ordinal_position"
-})
+}
 ```
 
 Determine:

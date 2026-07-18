@@ -72,18 +72,20 @@ If templates already exist, walk through each one and check:
 ## Phase 2: Research best practices
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
   "query": "transactional email design best practices 2026 React Email",
   "limit": 3,
   "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Fetch React Email docs if using it:
 ```json
-CallMcpTool(server: "plugin-context7-plugin-context7", toolName: "resolve-library-id", arguments: {
+context7:resolve-library-id
+{
   "libraryName": "react-email"
-})
+}
 ```
 
 ---
@@ -289,11 +291,12 @@ supabase functions deploy send-welcome-email --no-verify-jwt
 ## Phase 6: Deliverability checks
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
   "query": "email deliverability SPF DKIM DMARC setup 2026",
   "limit": 3,
   "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Checklist:

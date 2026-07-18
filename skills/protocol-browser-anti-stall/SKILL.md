@@ -24,7 +24,7 @@ license: MIT
 You are driving a **real, visible browser** to feel what a user feels. A green
 script proves nothing about UX — so *see the screen* and *watch the logs*.
 
-1. **Headed, visible.** The `user-playwright` MCP runs **headed by default** — never
+1. **Headed, visible.** The `playwright` MCP runs **headed by default** — never
    pass `--headless`. Drive the on-screen window; if you can't see it, say so.
 2. **One real action at a time.** Click, type, and submit with the individual tools
    (`browser_click`, `browser_type`, `browser_fill_form`, `browser_select_option`,
@@ -146,7 +146,7 @@ before the next interaction. Old refs are invalid after state changes.
 
 ## 9. Tab discipline (shared Playwright MCP)
 
-The `user-playwright` server exposes **one browser** for all agents in this Cursor
+The `playwright` server exposes **one browser** for all agents in this Cursor
 instance. There is no lock/unlock API on this server — coordinate with tabs instead.
 
 ```

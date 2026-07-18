@@ -118,10 +118,11 @@ DESIGN SYSTEM DISCOVERY:
 ### 1a. Context7 — Component Library Docs
 
 ```json
-CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
+context7:resolve-library-id
+{
  "libraryName": "<DETECTED_COMPONENT_LIBRARY>",
  "query": "component variants accessibility patterns"
-})
+}
 ```
 
 Then fetch docs with the resolved ID. Also fetch CSS framework docs.
@@ -129,11 +130,12 @@ Then fetch docs with the resolved ID. Also fetch CSS framework docs.
 ### 1b. Firecrawl — Design System Standards
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "<COMPONENT_LIBRARY> design system audit token compliance best practices [current year]",
  "limit": 5,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Additional queries:
@@ -151,19 +153,21 @@ Scrape the best result for detailed guidance.
 Research real products in the same domain to establish a visual benchmark:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "<PRODUCT_TYPE> website design award Awwwards Muzli [current year]",
  "limit": 5,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "<PRODUCT_TYPE> SaaS UI design inspiration unique not generic [current year]",
  "limit": 5,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Scrape 2-3 standout sites. Extract:

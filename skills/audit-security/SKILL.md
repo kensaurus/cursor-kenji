@@ -39,31 +39,34 @@ Before auditing, discover the tech stack and attack surface:
 Fetch current OWASP and security best practices for the detected stack:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "<framework> security best practices OWASP <current year>",
  "limit": 5,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Scrape the OWASP Top 10 for the relevant platform:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
+firecrawl:firecrawl_scrape
+{
  "url": "https://owasp.org/Top10/",
  "formats": ["markdown"],
  "onlyMainContent": true
-})
+}
 ```
 
 Also check for known CVEs in dependencies:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "<package-name> CVE vulnerability <current year>",
  "limit": 5,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 ---
@@ -73,13 +76,14 @@ CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
 If Sentry is configured, check for security-related production errors:
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+sentry:search_issues
+{
  "organizationSlug": "<ORG_SLUG>",
  "query": "401 unauthorized OR 403 forbidden OR CORS OR CSP violation in last 30 days",
  "projectSlugOrId": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
  "limit": 20
-})
+}
 ```
 
 Patterns that indicate security issues:

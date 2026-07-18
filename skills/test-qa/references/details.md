@@ -181,13 +181,14 @@ If the project has Sentry configured (detected in Phase 0), check for production
 related to tested features:
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+sentry:search_issues
+{
   "organizationSlug": "<ORG_SLUG>",
   "query": "unresolved issues from the last 7 days",
   "projectSlugOrId": "<PROJECT_SLUG>",
   "regionUrl": "<REGION_URL>",
   "limit": 30
-})
+}
 ```
 
 Cross-reference Sentry issues with pages tested. If a page you tested has known production

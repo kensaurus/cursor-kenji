@@ -138,13 +138,14 @@ Verify the feature works end-to-end for the team.
 
 Check for errors in Sentry immediately after enabling:
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+sentry:search_issues
+{
   "organizationSlug": "<ORG>",
   "query": "new issues in the last 1 hour",
   "projectSlugOrId": "<PROJECT>",
   "regionUrl": "<REGION_URL>",
   "limit": 10
-})
+}
 ```
 
 ### Step 2: 5% rollout
@@ -158,10 +159,11 @@ Define the health gates before enabling:
 
 Check Supabase logs for unexpected errors:
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "get_logs", arguments: {
+supabase:get_logs
+{
   "project_id": "<PROJECT_ID>",
   "service": "api"
-})
+}
 ```
 
 ### Step 3: 25% → 50% → 100%
@@ -178,11 +180,12 @@ If any health gate fails at any stage:
 1. Set the flag to 0% immediately (no deploy needed — this is the whole point)
 2. Capture the Sentry issue IDs and root-cause analysis:
    ```json
-   CallMcpTool(server: "plugin-sentry-sentry", toolName: "analyze_issue_with_seer", arguments: {
+   sentry:analyze_issue_with_seer
+{
      "organizationSlug": "<ORG>",
      "issueId": "<ISSUE_ID>",
      "regionUrl": "<REGION_URL>"
-   })
+   }
    ```
 3. Fix the root cause (do not re-enable until fixed and re-tested internally)
 4. Document what happened in the flag's description

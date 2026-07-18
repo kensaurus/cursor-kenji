@@ -16,7 +16,7 @@ license: MIT
 
 Automated Sentry issue triage, root cause analysis, fix, architecture audit, and monitoring enhancement workflow.
 Works with **any project** — auto-detects configuration from the codebase.
-Uses the `plugin-sentry-sentry` MCP server for all Sentry API operations.
+Uses the `sentry` MCP server for all Sentry API operations.
 
 ## Critical Rules
 
@@ -53,16 +53,17 @@ First, try to detect from local config files. Search for these (in order):
 If local detection fails, use the MCP to discover:
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "find_organizations")
+sentry:find_organizations
 ```
 
 Then for the target org:
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "find_projects", arguments: {
+sentry:find_projects
+{
  "organizationSlug": "<ORG_SLUG>",
  "regionUrl": "<REGION_URL>"
-})
+}
 ```
 
 ### 0b. Detect Framework and Platform
@@ -117,33 +118,36 @@ If any critical values cannot be detected, ask the user.
 Run these two MCP calls in parallel:
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+sentry:search_issues
+{
  "organizationSlug": "<ORG_SLUG>",
  "projectSlugOrId": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
  "query": "all unresolved issues from the last 7 days",
  "limit": 50
-})
+}
 
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_events", arguments: {
+sentry:search_events
+{
  "organizationSlug": "<ORG_SLUG>",
  "projectSlug": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
  "query": "count of errors grouped by error type in the last 7 days",
  "limit": 50
-})
+}
 ```
 
 Also check for regressions (issues that were resolved but re-opened):
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+sentry:search_issues
+{
  "organizationSlug": "<ORG_SLUG>",
  "projectSlugOrId": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
  "query": "regressed issues in the last 14 days",
  "limit": 20
-})
+}
 ```
 
 If no issues are found, report "No unresolved issues in the last 7 days" and proceed to the Architecture Audit (Step 8).
@@ -155,11 +159,12 @@ If no issues are found, report "No unresolved issues in the last 7 days" and pro
 For each issue with >1 event or >0 users impacted:
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "get_sentry_resource", arguments: {
+sentry:get_sentry_resource
+{
  "organizationSlug": "<ORG_SLUG>",
  "resourceType": "issue",
  "resourceId": "<ISSUE_ID>"
-})
+}
 ```
 
 Batch up to 4 calls in parallel per round.
@@ -167,32 +172,35 @@ Batch up to 4 calls in parallel per round.
 For hard-to-diagnose issues, also fetch breadcrumbs:
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "get_sentry_resource", arguments: {
+sentry:get_sentry_resource
+{
  "organizationSlug": "<ORG_SLUG>",
  "resourceType": "breadcrumbs",
  "resourceId": "<ISSUE_ID>"
-})
+}
 ```
 
 And optionally use Seer for AI-assisted root cause analysis:
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "analyze_issue_with_seer", arguments: {
+sentry:analyze_issue_with_seer
+{
  "organizationSlug": "<ORG_SLUG>",
  "regionUrl": "<REGION_URL>",
  "issueId": "<ISSUE_ID>"
-})
+}
 ```
 
 For understanding issue distribution, check tag values:
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "get_issue_tag_values", arguments: {
+sentry:get_issue_tag_values
+{
  "organizationSlug": "<ORG_SLUG>",
  "regionUrl": "<REGION_URL>",
  "issueId": "<ISSUE_ID>",
  "tagKey": "browser"
-})
+}
 ```
 
 Common tag keys: `url`, `browser`, `browser.name`, `os`, `environment`, `release`, `device`, `user`.
@@ -223,10 +231,11 @@ For any issue classified as **Code Bug**, **Data Bug**, or **Regression** that m
 Run Sentry's AI root-cause analysis before manual investigation:
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "analyze_issue_with_seer", arguments: {
+sentry:analyze_issue_with_seer
+{
  "organizationSlug": "<ORG_SLUG>",
  "issueId": "<ISSUE_ID>"
-})
+}
 ```
 
 Seer provides:
@@ -260,11 +269,12 @@ From the Sentry issue details, extract:
 ### 4b. Check Release Correlation
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "find_releases", arguments: {
+sentry:find_releases
+{
  "organizationSlug": "<ORG_SLUG>",
  "regionUrl": "<REGION_URL>",
  "projectSlug": "<PROJECT_SLUG>"
-})
+}
 ```
 
 If the issue started after a specific release, check what changed in that release:
@@ -288,21 +298,23 @@ git log --oneline <previous-release-tag>..<current-release-tag>
 For non-trivial bugs, research the correct fix pattern:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "<framework> <error-type> best practice fix <current year>",
  "limit": 5,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Then scrape the most authoritative result:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
+firecrawl:firecrawl_scrape
+{
  "url": "<best-result-url>",
  "formats": ["markdown"],
  "onlyMainContent": true
-})
+}
 ```
 
 ### 4e. Formulate the Root Cause
@@ -428,12 +440,13 @@ If any checkbox fails, leave the issue **unresolved** and add it to "Requires Ma
 For each verified fix:
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "update_issue", arguments: {
+sentry:update_issue
+{
  "organizationSlug": "<ORG_SLUG>",
  "regionUrl": "<REGION_URL>",
  "issueId": "<ISSUE_ID>",
  "status": "resolved"
-})
+}
 ```
 
 Batch up to 4 calls in parallel. Do NOT resolve performance issues.

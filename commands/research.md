@@ -62,10 +62,11 @@ Fetch current docs for the libraries involved. Use the Context7 MCP (if availabl
 ### Resolve Library ID
 
 ```json
-CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
+context7:resolve-library-id
+{
   "libraryName": "<library-name>",
   "query": "<your specific question>"
-})
+}
 ```
 
 ### Fetch Documentation
@@ -73,10 +74,11 @@ CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
 Pick the best match from the resolution results, then:
 
 ```json
-CallMcpTool(server: "context7", toolName: "query-docs", arguments: {
+context7:query-docs
+{
   "libraryId": "<selected-id>",
   "query": "<your specific question>"
-})
+}
 ```
 
 Run Context7 for each major library involved. Prefer version-specific IDs when available.
@@ -87,18 +89,19 @@ Run Context7 for each major library involved. Prefer version-specific IDs when a
 
 ## Step 3: Firecrawl — Three-Phase Deep Research
 
-Use the `user-firecrawl` MCP server. The research happens in three phases: broad search, deep scrape, then discovery.
+Use the `firecrawl` MCP server. The research happens in three phases: broad search, deep scrape, then discovery.
 
 ### Phase 1: Broad Search (find what's out there)
 
 Search without scraping first — get URLs and snippets to evaluate:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
   "query": "[library] [topic] best practices [current year]",
   "limit": 5,
   "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Run 2-3 search queries with different angles:
@@ -123,17 +126,19 @@ Use search operators for precision:
 From Phase 1 results, pick the 2-3 most authoritative URLs (official docs, maintainer blogs, engineering blogs). Scrape each for full content:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
+firecrawl:firecrawl_scrape
+{
   "url": "<authoritative-url>",
   "formats": ["markdown"],
   "onlyMainContent": true
-})
+}
 ```
 
 For extracting specific data points (config options, API parameters, migration steps):
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
+firecrawl:firecrawl_scrape
+{
   "url": "<docs-url>",
   "formats": ["json"],
   "jsonOptions": {
@@ -155,17 +160,18 @@ CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
       }
     }
   }
-})
+}
 ```
 
 If a documentation site is large and you're not sure which page has the answer, use `firecrawl_map` first to discover the right page:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_map", arguments: {
+firecrawl:firecrawl_map
+{
   "url": "https://docs.example.com",
   "search": "[your topic]",
   "limit": 20
-})
+}
 ```
 
 Then scrape the specific page(s) found.
@@ -175,11 +181,12 @@ Then scrape the specific page(s) found.
 Search for real-world codebases that solved the same problem:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
   "query": "[tech] [topic] example implementation github",
   "limit": 5,
   "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Also try:
@@ -279,12 +286,13 @@ When two authoritative sources recommend different approaches:
 For complex changes that touch multiple files or have architectural implications, use the Sequential Thinking MCP to reason through the implementation step by step:
 
 ```json
-CallMcpTool(server: "user-sequential-thinking", toolName: "sequentialthinking", arguments: {
+sequential-thinking:sequentialthinking
+{
   "thought": "Step 1: The research recommends [pattern]. The project currently uses [old pattern] in [files]. The migration path is...",
   "nextThoughtNeeded": true,
   "thoughtNumber": 1,
   "totalThoughts": 5
-})
+}
 ```
 
 Use Sequential Thinking when:

@@ -21,35 +21,38 @@ Before optimizing, measure. Collect data from multiple sources.
 If Sentry performance monitoring is enabled, fetch real production metrics:
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_events", arguments: {
+sentry:search_events
+{
  "organizationSlug": "<ORG_SLUG>",
  "projectSlug": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
  "query": "slowest transactions by p95 duration in last 7 days",
  "limit": 20
-})
+}
 ```
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_events", arguments: {
+sentry:search_events
+{
  "organizationSlug": "<ORG_SLUG>",
  "projectSlug": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
  "query": "web vitals LCP INP CLS performance scores in last 7 days",
  "limit": 20
-})
+}
 ```
 
 Check for performance-related issues:
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+sentry:search_issues
+{
  "organizationSlug": "<ORG_SLUG>",
  "projectSlugOrId": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
  "query": "performance issues slow queries N+1 in last 30 days",
  "limit": 20
-})
+}
 ```
 
 ### Research Current Benchmarks
@@ -57,11 +60,12 @@ CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments
 Fetch current performance targets:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "web vitals thresholds good score <current year>",
  "limit": 3,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 ---
@@ -196,30 +200,33 @@ EXPLAIN ANALYZE SELECT * FROM orders WHERE user_id = '123';
 For specific performance bottlenecks, research current solutions:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "<framework> <specific bottleneck> performance optimization <current year>",
  "limit": 5,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Then deep-read the best result:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
+firecrawl:firecrawl_scrape
+{
  "url": "<best-result-url>",
  "formats": ["markdown"],
  "onlyMainContent": true
-})
+}
 ```
 
 Check official framework docs via Context7:
 
 ```json
-CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
+context7:resolve-library-id
+{
  "libraryName": "<framework>",
  "query": "performance optimization"
-})
+}
 ```
 
 ---

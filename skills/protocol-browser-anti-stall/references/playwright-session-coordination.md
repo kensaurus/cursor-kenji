@@ -1,6 +1,6 @@
 # Playwright session coordination (shared browser, persisted auth)
 
-The Playwright MCP (`user-playwright`) exposes **one browser process** per Cursor
+The Playwright MCP (`playwright`) exposes **one browser process** per Cursor
 instance. Every agent, chat, and skill shares it. Follow this protocol so parallel
 work does not hijack tabs, lose Google/OAuth sign-in, or fight over navigation.
 
@@ -90,9 +90,10 @@ Only when running `--isolated`: if `.playwright-mcp/auth/<host>.json` exists, in
 before navigating (this is the one sanctioned non-driving use of `browser_run_code_unsafe`):
 
 ```json
-CallMcpTool(server: "user-playwright", toolName: "browser_run_code_unsafe", arguments: {
+playwright:browser_run_code_unsafe
+{
   "code": "async (page) => {\n  const fs = require('fs');\n  const path = require('path');\n  const statePath = path.resolve('.playwright-mcp/auth/localhost-3000.json');\n  if (!fs.existsSync(statePath)) return { restored: false };\n  const state = JSON.parse(fs.readFileSync(statePath, 'utf8'));\n  if (state.cookies?.length) await page.context().addCookies(state.cookies);\n  if (state.origins?.length) {\n    for (const o of state.origins) {\n      await page.goto(o.origin);\n      for (const item of o.localStorage || []) {\n        await page.evaluate(([k, v]) => localStorage.setItem(k, v), [item.name, item.value]);\n      }\n    }\n  }\n  return { restored: true };\n}"
-})
+}
 ```
 
 Replace `localhost-3000.json` with your host file. Navigate to protected route again — if still logged out, continue to Step 3.
@@ -108,9 +109,10 @@ Log in **by hand in the visible window**, exactly as a user would:
 3. Only under `--isolated`, **save storage state** so Step 2 can restore it next time:
 
 ```json
-CallMcpTool(server: "user-playwright", toolName: "browser_run_code_unsafe", arguments: {
+playwright:browser_run_code_unsafe
+{
   "code": "async (page) => {\n  const fs = require('fs');\n  const path = require('path');\n  const dir = path.resolve('.playwright-mcp/auth');\n  fs.mkdirSync(dir, { recursive: true });\n  const statePath = path.join(dir, 'localhost-3000.json');\n  await page.context().storageState({ path: statePath });\n  return { saved: statePath };\n}"
-})
+}
 ```
 
 4. Write `session.json` with current tab index and `storageStatePath`.

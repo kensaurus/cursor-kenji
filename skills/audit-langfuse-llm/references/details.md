@@ -52,10 +52,11 @@ For each flagged prompt, create an improved version based on the audit findings.
 **Step 1: Research the specific improvement needed**
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
   "query": "<WEAKNESS_TYPE> prompt engineering best practices [current year]",
   "limit": 5
-})
+}
 ```
 
 Example queries by weakness type:
@@ -67,11 +68,12 @@ Example queries by weakness type:
 Scrape the top 1-2 results for concrete patterns:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
+firecrawl:firecrawl_scrape
+{
   "url": "<BEST_RESULT_URL>",
   "formats": ["markdown"],
   "onlyMainContent": true
-})
+}
 ```
 
 **Step 2: Draft the improved prompt**
@@ -107,9 +109,10 @@ If prompts are hardcoded in source code:
 **Step 1: Trigger the AI feature**
 
 ```json
-CallMcpTool(server: "user-playwright", toolName: "browser_navigate", arguments: {
+playwright:browser_navigate
+{
   "url": "<APP_URL>"
-})
+}
 ```
 
 Navigate to the feature that uses this prompt. Interact with it (fill form, click button, send message).

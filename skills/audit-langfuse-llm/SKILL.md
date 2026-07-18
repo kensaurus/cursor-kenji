@@ -90,33 +90,37 @@ Before auditing, establish the current state of the art so findings are grounded
 ### 1a. Firecrawl Research
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "LLM observability best practices production monitoring [current year]",
  "limit": 5
-})
+}
 ```
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "prompt engineering evaluation scoring hallucination detection [current year]",
  "limit": 5
-})
+}
 ```
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "LLM cost optimization token usage model selection production [current year]",
  "limit": 5
-})
+}
 ```
 
 Scrape the top 2-3 most relevant results for detailed guidance:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
+firecrawl:firecrawl_scrape
+{
  "url": "<BEST_RESULT_URL>",
  "formats": ["markdown"]
-})
+}
 ```
 
 ### 1b. Langfuse Documentation
@@ -124,10 +128,11 @@ CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
 Research Langfuse-specific features relevant to the detected setup:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "site:langfuse.com docs tracing prompts evaluation scores",
  "limit": 5
-})
+}
 ```
 
 If the project uses a specific LLM framework (LangChain, Vercel AI SDK, etc.), also fetch its Langfuse integration docs.
@@ -137,18 +142,20 @@ If the project uses a specific LLM framework (LangChain, Vercel AI SDK, etc.), a
 If detected in Phase 0b, fetch the framework-specific documentation:
 
 ```json
-CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
+context7:resolve-library-id
+{
  "libraryName": "<DETECTED_FRAMEWORK e.g. langchain or vercel-ai>"
-})
+}
 ```
 
 Then query for integration patterns:
 
 ```json
-CallMcpTool(server: "context7", toolName: "query-docs", arguments: {
+context7:query-docs
+{
  "libraryId": "<RESOLVED_ID>",
  "query": "Langfuse integration tracing observability"
-})
+}
 ```
 
 ---
@@ -279,9 +286,10 @@ For each AI feature identified in Phase 0c, use browser MCP tools to trigger it 
 **Important**: Apply the `browser-anti-stall` protocol — set 15-second timeouts, skip `browser_wait_for` on navigation, use `browser_snapshot` to detect ready state.
 
 ```json
-CallMcpTool(server: "user-playwright", toolName: "browser_navigate", arguments: {
+playwright:browser_navigate
+{
  "url": "<APP_URL>"
-})
+}
 ```
 
 Navigate to the feature, interact with it (fill form, click button, send message), and capture:
@@ -308,11 +316,12 @@ If a trace is missing after triggering a feature → **pipeline break** (critica
 ### 3c. Cross-Check with Sentry
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+sentry:search_issues
+{
  "organizationSlug": "<ORG_SLUG>",
  "projectSlug": "<PROJECT_SLUG>",
  "query": "is:unresolved ai OR llm OR openai OR anthropic OR langfuse OR completion OR embedding"
-})
+}
 ```
 
 Check for:
@@ -327,18 +336,20 @@ Check for:
 If the project stores AI outputs in the database:
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "list_tables", arguments: {
+supabase:list_tables
+{
  "project_id": "<PROJECT_ID>"
-})
+}
 ```
 
 Find tables that store AI outputs and verify data landed:
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "execute_sql", arguments: {
+supabase:execute_sql
+{
  "project_id": "<PROJECT_ID>",
  "query": "SELECT id, created_at, <ai_output_column> FROM <table> ORDER BY created_at DESC LIMIT 5"
-})
+}
 ```
 
 ### 3e. Grounding / Hallucination Check

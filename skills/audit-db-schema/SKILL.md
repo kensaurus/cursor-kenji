@@ -43,7 +43,8 @@ Read the dependency manifest and configuration files:
 If Supabase is detected, discover the project ID:
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "list_projects", arguments: {})
+supabase:list_projects
+{}
 ```
 
 Match the project by name or URL from `.env`, `.env.local`, or `supabase/config.toml`.
@@ -81,17 +82,19 @@ DATABASE ENVIRONMENT:
 If using Prisma:
 
 ```json
-CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
+context7:resolve-library-id
+{
  "libraryName": "prisma",
  "query": "schema best practices indexes relations"
-})
+}
 ```
 
 ```json
-CallMcpTool(server: "context7", toolName: "query-docs", arguments: {
+context7:query-docs
+{
  "libraryId": "<RESOLVED_ID>",
  "query": "schema best practices naming conventions indexes onDelete"
-})
+}
 ```
 
 If using Drizzle, resolve `drizzle-orm` instead.
@@ -99,11 +102,12 @@ If using Drizzle, resolve `drizzle-orm` instead.
 ### 1b. Firecrawl — Current Database Patterns
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "PostgreSQL schema design best practices [current year]",
  "limit": 5,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Additional searches based on detected stack:
@@ -118,11 +122,12 @@ Additional searches based on detected stack:
 Scrape the most authoritative result:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
+firecrawl:firecrawl_scrape
+{
  "url": "<BEST_RESULT_URL>",
  "formats": ["markdown"],
  "onlyMainContent": true
-})
+}
 ```
 
 ### 1c. Supabase Docs Search
@@ -130,9 +135,10 @@ CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
 If Supabase is detected, also search their docs:
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "search_docs", arguments: {
+supabase:search_docs
+{
  "query": "RLS policy performance best practices"
-})
+}
 ```
 
 ---
@@ -142,11 +148,12 @@ CallMcpTool(server: "plugin-supabase-supabase", toolName: "search_docs", argumen
 ### 2a. List All Tables (Supabase MCP)
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "list_tables", arguments: {
+supabase:list_tables
+{
  "project_id": "<PROJECT_ID>",
  "schemas": ["public"],
  "verbose": true
-})
+}
 ```
 
 This returns column details, primary keys, and foreign key constraints for every table.
@@ -154,58 +161,65 @@ This returns column details, primary keys, and foreign key constraints for every
 ### 2b. Run Detailed Audit Queries
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "execute_sql", arguments: {
+supabase:execute_sql
+{
  "project_id": "<PROJECT_ID>",
  "query": "SELECT table_name, column_name, data_type, is_nullable, column_default FROM information_schema.columns WHERE table_schema = 'public' ORDER BY table_name, ordinal_position"
-})
+}
 ```
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "execute_sql", arguments: {
+supabase:execute_sql
+{
  "project_id": "<PROJECT_ID>",
  "query": "SELECT tc.table_name, tc.constraint_name, tc.constraint_type, kcu.column_name, ccu.table_name AS foreign_table FROM information_schema.table_constraints tc JOIN information_schema.key_column_usage kcu ON tc.constraint_name = kcu.constraint_name LEFT JOIN information_schema.constraint_column_usage ccu ON tc.constraint_name = ccu.constraint_name WHERE tc.table_schema = 'public'"
-})
+}
 ```
 
 ### 2c. Gather Indexes
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "execute_sql", arguments: {
+supabase:execute_sql
+{
  "project_id": "<PROJECT_ID>",
  "query": "SELECT tablename, indexname, indexdef FROM pg_indexes WHERE schemaname = 'public' ORDER BY tablename"
-})
+}
 ```
 
 ### 2d. Gather RLS Status and Policies
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "execute_sql", arguments: {
+supabase:execute_sql
+{
  "project_id": "<PROJECT_ID>",
  "query": "SELECT tablename, rowsecurity FROM pg_tables WHERE schemaname = 'public' ORDER BY tablename"
-})
+}
 ```
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "execute_sql", arguments: {
+supabase:execute_sql
+{
  "project_id": "<PROJECT_ID>",
  "query": "SELECT schemaname, tablename, policyname, permissive, roles, cmd, qual, with_check FROM pg_policies WHERE schemaname = 'public' ORDER BY tablename"
-})
+}
 ```
 
 ### 2e. Run Supabase Advisors
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "get_advisors", arguments: {
+supabase:get_advisors
+{
  "project_id": "<PROJECT_ID>",
  "type": "security"
-})
+}
 ```
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "get_advisors", arguments: {
+supabase:get_advisors
+{
  "project_id": "<PROJECT_ID>",
  "type": "performance"
-})
+}
 ```
 
 Include remediation URLs from advisor results in the final report as clickable links.
@@ -452,10 +466,11 @@ WHERE table_schema = 'public' ORDER BY grantee, table_name;
 Run this full health check via Supabase MCP:
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "execute_sql", arguments: {
+supabase:execute_sql
+{
  "project_id": "<PROJECT_ID>",
  "query": "WITH table_info AS (SELECT t.table_name, EXISTS(SELECT 1 FROM information_schema.columns c WHERE c.table_name = t.table_name AND c.column_name = 'id') AS has_id, EXISTS(SELECT 1 FROM information_schema.columns c WHERE c.table_name = t.table_name AND c.column_name = 'created_at') AS has_created_at, EXISTS(SELECT 1 FROM information_schema.columns c WHERE c.table_name = t.table_name AND c.column_name = 'updated_at') AS has_updated_at, (SELECT rowsecurity FROM pg_tables pt WHERE pt.tablename = t.table_name AND pt.schemaname = 'public') AS rls_enabled, (SELECT COUNT(*) FROM pg_policies p WHERE p.tablename = t.table_name AND p.schemaname = 'public') AS policy_count, (SELECT COUNT(*) FROM pg_indexes i WHERE i.tablename = t.table_name AND i.schemaname = 'public') AS index_count FROM information_schema.tables t WHERE t.table_schema = 'public' AND t.table_type = 'BASE TABLE') SELECT table_name, CASE WHEN has_id THEN 'Y' ELSE 'N' END AS id, CASE WHEN has_created_at THEN 'Y' ELSE 'N' END AS created_at, CASE WHEN has_updated_at THEN 'Y' ELSE 'N' END AS updated_at, CASE WHEN rls_enabled THEN 'Y' ELSE 'N' END AS rls, policy_count AS policies, index_count AS indexes FROM table_info ORDER BY table_name"
-})
+}
 ```
 
 ---

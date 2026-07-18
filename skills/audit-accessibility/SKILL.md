@@ -81,34 +81,38 @@ Record:
 ### 1a. Firecrawl Research
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "WCAG 2.2 success criteria checklist web accessibility 2026",
  "limit": 5
-})
+}
 ```
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "axe-core automated accessibility testing best practices common false positives",
  "limit": 5
-})
+}
 ```
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "<CSS_FRAMEWORK> <COMPONENT_LIB> accessibility best practices common issues",
  "limit": 5
-})
+}
 ```
 
 Scrape the 2-3 most authoritative results:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
+firecrawl:firecrawl_scrape
+{
  "url": "<BEST_RESULT_URL>",
  "formats": ["markdown"],
  "onlyMainContent": true
-})
+}
 ```
 
 ### 1b. Framework-Specific a11y Docs (Context7)
@@ -116,16 +120,18 @@ CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
 If the project uses a component library, fetch its accessibility documentation:
 
 ```json
-CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
+context7:resolve-library-id
+{
  "libraryName": "<COMPONENT_LIB e.g. radix-ui or chakra-ui>"
-})
+}
 ```
 
 ```json
-CallMcpTool(server: "context7", toolName: "query-docs", arguments: {
+context7:query-docs
+{
  "libraryId": "<RESOLVED_ID>",
  "query": "accessibility ARIA keyboard navigation focus management"
-})
+}
 ```
 
 ---
@@ -137,9 +143,10 @@ CallMcpTool(server: "context7", toolName: "query-docs", arguments: {
 For each page discovered in Phase 0a:
 
 ```json
-CallMcpTool(server: "user-playwright", toolName: "browser_navigate", arguments: {
+playwright:browser_navigate
+{
  "url": "<APP_URL><ROUTE>"
-})
+}
 ```
 
 Apply the `browser-anti-stall` protocol: wait 2s, snapshot, verify page loaded.
@@ -149,9 +156,10 @@ Apply the `browser-anti-stall` protocol: wait 2s, snapshot, verify page loaded.
 Use `browser_evaluate` to inject axe-core from CDN and run a full scan:
 
 ```json
-CallMcpTool(server: "user-playwright", toolName: "browser_evaluate", arguments: {
+playwright:browser_evaluate
+{
  "javascript": "await new Promise((resolve, reject) => { const script = document.createElement('script'); script.src = 'https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.10.2/axe.min.js'; script.onload = resolve; script.onerror = reject; document.head.appendChild(script); }); const results = await axe.run(); return JSON.stringify({ violations: results.violations.map(v => ({ id: v.id, impact: v.impact, description: v.description, help: v.help, helpUrl: v.helpUrl, nodes: v.nodes.length, targets: v.nodes.slice(0, 3).map(n => n.target[0]) })), passes: results.passes.length, incomplete: results.incomplete.length, inapplicable: results.inapplicable.length });"
-})
+}
 ```
 
 For each violation returned, record:
@@ -168,9 +176,10 @@ axe-core cannot catch everything. For each page, also check:
 **Heading Hierarchy (WCAG 1.3.1):**
 
 ```json
-CallMcpTool(server: "user-playwright", toolName: "browser_evaluate", arguments: {
+playwright:browser_evaluate
+{
  "javascript": "return JSON.stringify(Array.from(document.querySelectorAll('h1,h2,h3,h4,h5,h6')).map(h => ({ tag: h.tagName, text: h.textContent.trim().substring(0, 50) })));"
-})
+}
 ```
 
 Verify: only one `h1`, headings don't skip levels (h1 -> h3 without h2).
@@ -178,9 +187,10 @@ Verify: only one `h1`, headings don't skip levels (h1 -> h3 without h2).
 **Image Alt Text (WCAG 1.1.1):**
 
 ```json
-CallMcpTool(server: "user-playwright", toolName: "browser_evaluate", arguments: {
+playwright:browser_evaluate
+{
  "javascript": "return JSON.stringify(Array.from(document.querySelectorAll('img')).map(img => ({ src: img.src.substring(img.src.lastIndexOf('/') + 1), alt: img.alt, hasAlt: img.hasAttribute('alt'), decorative: img.getAttribute('role') === 'presentation' || img.alt === '' })));"
-})
+}
 ```
 
 Verify: all informative images have descriptive alt text, decorative images have `alt=""` or `role="presentation"`.
@@ -188,9 +198,10 @@ Verify: all informative images have descriptive alt text, decorative images have
 **Link Text (WCAG 2.4.4):**
 
 ```json
-CallMcpTool(server: "user-playwright", toolName: "browser_evaluate", arguments: {
+playwright:browser_evaluate
+{
  "javascript": "return JSON.stringify(Array.from(document.querySelectorAll('a')).filter(a => { const text = (a.textContent || '').trim().toLowerCase(); return text === 'click here' || text === 'here' || text === 'read more' || text === 'learn more' || text === '' || text === 'link'; }).map(a => ({ href: a.href, text: (a.textContent || '').trim(), ariaLabel: a.getAttribute('aria-label') })));"
-})
+}
 ```
 
 Flag generic link text ("click here", "read more", empty links without aria-label).
@@ -198,9 +209,10 @@ Flag generic link text ("click here", "read more", empty links without aria-labe
 **Form Labels (WCAG 1.3.1, 4.1.2):**
 
 ```json
-CallMcpTool(server: "user-playwright", toolName: "browser_evaluate", arguments: {
+playwright:browser_evaluate
+{
  "javascript": "return JSON.stringify(Array.from(document.querySelectorAll('input,select,textarea')).map(el => ({ type: el.type, name: el.name, id: el.id, hasLabel: !!document.querySelector('label[for=\"' + el.id + '\"]'), ariaLabel: el.getAttribute('aria-label'), ariaLabelledBy: el.getAttribute('aria-labelledby'), placeholder: el.placeholder })));"
-})
+}
 ```
 
 Verify: every form control has an associated `<label>`, `aria-label`, or `aria-labelledby`.
@@ -208,9 +220,10 @@ Verify: every form control has an associated `<label>`, `aria-label`, or `aria-l
 **Language Attribute (WCAG 3.1.1):**
 
 ```json
-CallMcpTool(server: "user-playwright", toolName: "browser_evaluate", arguments: {
+playwright:browser_evaluate
+{
  "javascript": "return JSON.stringify({ htmlLang: document.documentElement.lang, htmlDir: document.documentElement.dir });"
-})
+}
 ```
 
 Verify: `<html>` has a valid `lang` attribute.
@@ -220,7 +233,8 @@ Verify: `<html>` has a valid `lang` attribute.
 For each page, capture a screenshot as visual evidence:
 
 ```json
-CallMcpTool(server: "user-playwright", toolName: "browser_take_screenshot", arguments: {})
+playwright:browser_take_screenshot
+{}
 ```
 
 ---
@@ -232,21 +246,24 @@ CallMcpTool(server: "user-playwright", toolName: "browser_take_screenshot", argu
 For each page, test that all interactive elements are reachable via Tab key:
 
 ```json
-CallMcpTool(server: "user-playwright", toolName: "browser_navigate", arguments: {
+playwright:browser_navigate
+{
  "url": "<APP_URL><ROUTE>"
-})
+}
 ```
 
 Press Tab repeatedly and snapshot after each press to track focus movement:
 
 ```json
-CallMcpTool(server: "user-playwright", toolName: "browser_press_key", arguments: {
+playwright:browser_press_key
+{
  "key": "Tab"
-})
+}
 ```
 
 ```json
-CallMcpTool(server: "user-playwright", toolName: "browser_snapshot", arguments: {})
+playwright:browser_snapshot
+{}
 ```
 
 After each Tab, check:
@@ -269,9 +286,10 @@ For each interactive component (dropdowns, modals, tabs, accordions):
 **Escape to close (WCAG 2.1.1 for modals/dialogs):**
 
 ```json
-CallMcpTool(server: "user-playwright", toolName: "browser_press_key", arguments: {
+playwright:browser_press_key
+{
  "key": "Escape"
-})
+}
 ```
 
 Verify: modals/dropdowns close, focus returns to the trigger element.
@@ -279,9 +297,10 @@ Verify: modals/dropdowns close, focus returns to the trigger element.
 **Arrow key navigation (for tab panels, menus, listboxes):**
 
 ```json
-CallMcpTool(server: "user-playwright", toolName: "browser_press_key", arguments: {
+playwright:browser_press_key
+{
  "key": "ArrowDown"
-})
+}
 ```
 
 ### 3c. Focus Management After State Changes
@@ -299,21 +318,23 @@ Test that focus is managed correctly after dynamic updates:
 ### 4a. Search for Assistive Technology Errors
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+sentry:search_issues
+{
  "organizationSlug": "<ORG_SLUG>",
  "projectSlug": "<PROJECT_SLUG>",
  "query": "is:unresolved aria OR screenreader OR voiceover OR talkback OR nvda OR jaws OR focus OR tabindex OR keyboard"
-})
+}
 ```
 
 ### 4b. Check for JavaScript Errors on Keyboard Interaction
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+sentry:search_issues
+{
  "organizationSlug": "<ORG_SLUG>",
  "projectSlug": "<PROJECT_SLUG>",
  "query": "is:unresolved keydown OR keyup OR keypress OR focusin OR focusout"
-})
+}
 ```
 
 ### 4c. Browser/Device Breakdown
@@ -321,11 +342,12 @@ CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments
 Check if errors disproportionately affect specific browsers or devices that assistive technology users favor:
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "get_issue_tag_values", arguments: {
+sentry:get_issue_tag_values
+{
  "organizationSlug": "<ORG_SLUG>",
  "issueId": "<ISSUE_ID>",
  "tagKey": "browser"
-})
+}
 ```
 
 ---

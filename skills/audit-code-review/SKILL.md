@@ -47,13 +47,14 @@ Use `Grep` and `SemanticSearch` to verify:
 If the change touches error-prone code, check if related Sentry issues exist:
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+sentry:search_issues
+{
  "organizationSlug": "<ORG_SLUG>",
  "query": "issues related to <component or function being changed>",
  "projectSlugOrId": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
  "limit": 10
-})
+}
 ```
 
 This reveals: does the code being changed have known production issues? Does this change fix or risk introducing them?
@@ -63,11 +64,12 @@ This reveals: does the code being changed have known production issues? Does thi
 If the code uses a pattern you want to verify:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "<framework> <pattern> best practice <current year>",
  "limit": 5,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 ---

@@ -79,14 +79,14 @@ Record:
 - **Dev URL / port** (`scripts.dev`, default 3000 / 5173 / 8081)
 - **Auth pattern** (Supabase Auth, NextAuth, Clerk, custom JWT)
 - **Test credentials** (`.env.local`, `.env.test`, README)
-- **Backend MCPs available**: Supabase (`plugin-supabase-supabase`), Sentry
-  (`plugin-sentry-sentry`), Firecrawl (`user-firecrawl`)
+- **Backend MCPs available**: Supabase (`supabase`), Sentry
+  (`sentry`), Firecrawl (`firecrawl`)
 
 ### 0b. Pick the automation driver
 
 | Target | Driver |
 |--------|--------|
-| Web / PWA / Next.js / SvelteKit / Remix | Playwright browser MCP (`user-playwright`) |
+| Web / PWA / Next.js / SvelteKit / Remix | Playwright browser MCP (`playwright`) |
 | Capacitor WebView on Android emulator | Playwright `_android` WebView attach over ADB (see Phase 0c) |
 | Native chrome: system dialogs, bottom sheets, permission prompts | `adb shell input tap` walk (see `mobile-emulator-test` skill) |
 | Pure-native iOS/Android (Swift/Kotlin UI) | **Out of scope** — needs Appium; document as limitation |
@@ -227,25 +227,28 @@ Every mutation surface (create / update / delete / upload) gets attacked here.
 
 Look up the tool schema first:
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "list_tables", arguments: {
+supabase:list_tables
+{
   "project_id": "<PROJECT_ID>"
-})
+}
 ```
 
 Then verify the mutation:
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "execute_sql", arguments: {
+supabase:execute_sql
+{
   "project_id": "<PROJECT_ID>",
   "query": "SELECT * FROM <table> WHERE <col> LIKE 'RT-TEST-%' ORDER BY created_at DESC LIMIT 10"
-})
+}
 ```
 
 RLS role verification (confirm what the client can actually read/write):
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "execute_sql", arguments: {
+supabase:execute_sql
+{
   "project_id": "<PROJECT_ID>",
   "query": "SET ROLE authenticated; SELECT * FROM <table> WHERE user_id != auth.uid() LIMIT 5"
-})
+}
 ```
 
 ### Attack patterns
@@ -266,10 +269,11 @@ CallMcpTool(server: "plugin-supabase-supabase", toolName: "execute_sql", argumen
 
 After running attack patterns, pull API + postgres logs:
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "get_logs", arguments: {
+supabase:get_logs
+{
   "project_id": "<PROJECT_ID>",
   "service": "api"
-})
+}
 ```
 
 Flag any unexpected 5xx, unhandled exceptions, or RLS deny events.
@@ -277,9 +281,10 @@ Flag any unexpected 5xx, unhandled exceptions, or RLS deny events.
 ### Supabase advisors
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "get_advisors", arguments: {
+supabase:get_advisors
+{
   "project_id": "<PROJECT_ID>"
-})
+}
 ```
 
 New ERROR-level advisors count as pipeline defects.
@@ -340,9 +345,10 @@ On Capacitor/Android, use `adb shell tc qdisc add dev wlan0 root netem delay 300
 ### Supabase query performance
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "get_advisors", arguments: {
+supabase:get_advisors
+{
   "project_id": "<PROJECT_ID>"
-})
+}
 ```
 
 Advisors flag missing indexes, sequential scans on large tables, and bloated

@@ -48,18 +48,20 @@ const pwaReady = {
 ## Phase 1: Research framework-specific PWA tooling
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
   "query": "<framework> PWA service worker offline 2026 vite-plugin-pwa",
   "limit": 3,
   "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Fetch the official docs for the relevant PWA plugin via Context7:
 ```json
-CallMcpTool(server: "plugin-context7-plugin-context7", toolName: "resolve-library-id", arguments: {
+context7:resolve-library-id
+{
   "libraryName": "vite-plugin-pwa"
-})
+}
 ```
 
 ---

@@ -132,21 +132,23 @@ PRODUCT CONTEXT:
 ### 1a. NN/g — Usability Heuristics and Methods
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "site:nngroup.com heuristic evaluation checklist [current year]",
  "limit": 5,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 ### 1b. Intuit Content Design — Microcopy Principles
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "site:contentdesign.intuit.com UX writing principles",
  "limit": 5,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Scrape the most relevant result for detailed writing guidelines.
@@ -154,21 +156,23 @@ Scrape the most relevant result for detailed writing guidelines.
 ### 1c. Laws of UX — Interaction Psychology
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
+firecrawl:firecrawl_scrape
+{
  "url": "https://lawsofux.com",
  "formats": ["markdown"],
  "onlyMainContent": true
-})
+}
 ```
 
 ### 1d. Domain-Specific UX Research
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "<PRODUCT_TYPE> UX best practices usability patterns [current year]",
  "limit": 5,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Scrape the best result for domain-specific UX patterns.

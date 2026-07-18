@@ -28,23 +28,25 @@ docs/ (system documentation)
 If the error is from production and Sentry is configured, fetch the full context:
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+sentry:search_issues
+{
  "organizationSlug": "<ORG_SLUG>",
  "query": "<error message or description>",
  "projectSlugOrId": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
  "limit": 5
-})
+}
 ```
 
 Then get details for the matching issue:
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "get_sentry_resource", arguments: {
+sentry:get_sentry_resource
+{
  "organizationSlug": "<ORG_SLUG>",
  "resourceType": "issue",
  "resourceId": "<ISSUE_ID>"
-})
+}
 ```
 
 Extract: stacktrace, breadcrumbs, tags (browser, OS, URL, release), event frequency.
@@ -138,30 +140,33 @@ Identify where the data goes wrong by checking each boundary.
 For non-trivial errors, research the correct fix before implementing:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "<framework> <exact error message> fix best practice",
  "limit": 5,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Then scrape the most relevant result:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
+firecrawl:firecrawl_scrape
+{
  "url": "<best-result-url>",
  "formats": ["markdown"],
  "onlyMainContent": true
-})
+}
 ```
 
 Also check official docs via Context7 if the error relates to a library:
 
 ```json
-CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
+context7:resolve-library-id
+{
  "libraryName": "<library>",
  "query": "<error description>"
-})
+}
 ```
 
 **Trust hierarchy**: Official docs > maintainer posts > engineering blogs > Stack Overflow (current year, high votes).

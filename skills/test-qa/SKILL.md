@@ -429,10 +429,11 @@ After each mutation (create/update/delete):
 5. **DB check** (if Supabase MCP or DB access available):
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "execute_sql", arguments: {
+supabase:execute_sql
+{
  "project_id": "<PROJECT_ID>",
  "query": "SELECT * FROM <table> WHERE <identifying_column> LIKE 'QA-TEST-%' ORDER BY created_at DESC LIMIT 5"
-})
+}
 ```
 
 **Pipeline failures to detect:**

@@ -88,11 +88,12 @@ STACK DISCOVERY:
 ### 1a. Firecrawl — Integration Debugging
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "<FE_FRAMEWORK> <BE_FRAMEWORK> API integration debugging best practices [current year]",
  "limit": 5,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Additional targeted searches:
@@ -106,10 +107,11 @@ Additional targeted searches:
 ### 1b. Context7 — Framework Docs
 
 ```json
-CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
+context7:resolve-library-id
+{
  "libraryName": "<VALIDATION_LIB>",
  "query": "error handling error messages custom errors"
-})
+}
 ```
 
 ---
@@ -119,13 +121,14 @@ CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
 ### 2a. Check Sentry for Production Errors
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+sentry:search_issues
+{
  "organizationSlug": "<ORG_SLUG>",
  "query": "API integration errors 4xx 5xx validation from the last 7 days",
  "projectSlugOrId": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
  "limit": 25
-})
+}
 ```
 
 If the project has separate FE and BE Sentry projects, check both:
@@ -201,10 +204,11 @@ For each error, read the complete request chain:
 If the error might be data-related:
 
 ```json
-CallMcpTool(server: "plugin-supabase-supabase", toolName: "execute_sql", arguments: {
+supabase:execute_sql
+{
  "project_id": "<PROJECT_ID>",
  "query": "SELECT * FROM <TABLE> WHERE <CONDITION> LIMIT 5"
-})
+}
 ```
 
 Check:

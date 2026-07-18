@@ -145,20 +145,22 @@ Validate each JSON-LD block found in Phase 1a:
 ## Phase 3: Research current best practices
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
   "query": "Google SEO best practices Core Web Vitals ranking 2026",
   "limit": 3,
   "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Also check for framework-specific SEO guidance:
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
   "query": "<framework> SEO metadata structured data 2026",
   "limit": 3,
   "sources": [{ "type": "web" }]
-})
+}
 ```
 
 ---

@@ -104,19 +104,21 @@ Before writing tests, research current best practices for the detected framework
 Fetch docs for the detected test framework:
 
 ```json
-CallMcpTool(server: "context7", toolName: "resolve-library-id", arguments: {
+context7:resolve-library-id
+{
  "libraryName": "<DETECTED_FRAMEWORK>",
  "query": "unit testing best practices"
-})
+}
 ```
 
 Then fetch specific guidance:
 
 ```json
-CallMcpTool(server: "context7", toolName: "query-docs", arguments: {
+context7:query-docs
+{
  "libraryId": "<RESOLVED_ID>",
  "query": "testing patterns mocking setup teardown"
-})
+}
 ```
 
 Do this for each major testing dependency (e.g., `vitest`, `@testing-library/react`, `msw`).
@@ -124,11 +126,12 @@ Do this for each major testing dependency (e.g., `vitest`, `@testing-library/rea
 ### 1b. Firecrawl — Current Testing Patterns
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "<FRAMEWORK> unit testing best practices [current year]",
  "limit": 5,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Run 2-3 searches targeting different aspects:
@@ -143,11 +146,12 @@ Run 2-3 searches targeting different aspects:
 Scrape the 1-2 most authoritative results for implementation details:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_scrape", arguments: {
+firecrawl:firecrawl_scrape
+{
  "url": "<AUTHORITATIVE_URL>",
  "formats": ["markdown"],
  "onlyMainContent": true
-})
+}
 ```
 
 ---
@@ -159,13 +163,14 @@ Use Sentry MCP to find production errors that should have been caught by tests.
 ### 2a. Find Unresolved Production Errors
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+sentry:search_issues
+{
  "organizationSlug": "<ORG_SLUG>",
  "query": "unresolved errors from the last 30 days",
  "projectSlugOrId": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
  "limit": 25
-})
+}
 ```
 
 ### 2b. Cross-Reference with Test Coverage

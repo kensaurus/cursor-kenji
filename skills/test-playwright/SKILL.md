@@ -107,8 +107,8 @@ git diff HEAD --name-only
  - Framework + dev port from `package.json` `scripts.dev` (3000 / 5173 / etc.).
  - Auth method + test credentials (`.env.local`, `.env.test`, README). If none,
  ask the user once.
- - Backend MCPs available this session: Supabase (`plugin-supabase-supabase`),
- Sentry (`plugin-sentry-sentry`), Firecrawl (`user-firecrawl`).
+ - Backend MCPs available this session: Supabase (`supabase`),
+ Sentry (`sentry`), Firecrawl (`firecrawl`).
 
 4. **Write the test plan** before opening the browser:
 
@@ -227,13 +227,14 @@ FIX LOG:
 Don't trust the UI alone. Confirm against the systems of record using enabled MCPs.
 
 **Sentry** — did your session introduce or relate to production errors? Look up tool
-schemas under `mcps/plugin-sentry-sentry/tools/` first, then:
+schemas first, then:
 
 ```json
-CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments: {
+sentry:search_issues
+{
  "organizationSlug": "<ORG>", "query": "unresolved issues in the last 7 days",
  "projectSlugOrId": "<PROJECT>", "regionUrl": "<REGION_URL>", "limit": 25
-})
+}
 ```
 
  Cross-reference issues with the surfaces you touched. Use `analyze_issue_with_seer`
@@ -241,7 +242,7 @@ CallMcpTool(server: "plugin-sentry-sentry", toolName: "search_issues", arguments
  AFTER a verified fix.
 
 **Supabase** — verify schema, data, and logs for the paths you touched. Check tool
-schemas under `mcps/plugin-supabase-supabase/tools/` first, then use `list_tables`,
+schemas first, then use `list_tables`,
 `execute_sql`, `get_logs(service: 'api'|'postgres')`, and `get_advisors`. Treat new
 ERROR-level advisors from your change as part of your work. Confirm any migration you
 deployed actually exists on the remote (`information_schema` / `pg_proc` / `pg_policies`).
@@ -266,14 +267,15 @@ impress. For the changed surfaces, push hard:
 - **Question the design:** Does it match the rest of the app's patterns and tokens, or
  did this change introduce drift?
 - **Research when unsure:** if you're not certain what "good" looks like for this
- feature/pattern, use Firecrawl (`user-firecrawl`) to check current best practices,
+ feature/pattern, use Firecrawl (`firecrawl`) to check current best practices,
  then map findings back to concrete changes:
 
 ```json
-CallMcpTool(server: "user-firecrawl", toolName: "firecrawl_search", arguments: {
+firecrawl:firecrawl_search
+{
  "query": "[pattern/feature] best practices [current year]", "limit": 5,
  "sources": [{ "type": "web" }]
-})
+}
 ```
 
 Capture **enhancement ideas** — concrete, not vague. For each: what to add/change, why
@@ -329,7 +331,7 @@ Console clean: [Y/N] · All flows green on re-test: [Y/N] · Test data cleaned: 
 
 ---
 
-## Playwright MCP tools (server: `user-playwright`)
+## Playwright MCP tools (server: `playwright`)
 
 Headed by default; snapshot/ref-based (accessibility tree), no lock/unlock — just
 snapshot freshly after each change.
