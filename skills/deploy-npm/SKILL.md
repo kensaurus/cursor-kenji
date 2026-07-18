@@ -12,7 +12,7 @@ license: MIT
 
 # deploy-npm — Full release workflow
 
-This skill captures the **exact** workflow used to ship `mushi-mushi` v0.7.3 on 2026-05-27. It is opinionated for repos that use:
+This skill is opinionated for repos that use:
 
 - `pnpm` + `turbo` monorepo
 - `@changesets/cli` + `@changesets/action` for versioning and changelog generation
@@ -105,7 +105,7 @@ Run `pnpm changeset status` (or `npx changeset status`) to preview the version g
 
 ## Phase 2 — Green the feature PR
 
-Push the branch, open the PR, then iterate on CI until every required check is green. The pattern that worked for mushi-mushi:
+Push the branch, open the PR, then iterate on CI until every required check is green:
 
 ```bash
 git push -u origin <branch>
@@ -375,4 +375,4 @@ When in doubt, prefer the workflow-dispatch path (Phase 6) over re-merging or re
 
 ---
 
-> **Reference implementation:** This skill was designed for the [Mushi Mushi](https://github.com/kensaurus/mushi-mushi) monorepo release workflow (Changesets + OIDC + per-package GitHub Releases). See it in action at [npmjs.com/package/mushi-mushi](https://www.npmjs.com/package/mushi-mushi).
+> **Reference implementation:** For an annotated example of this workflow applied to a real monorepo (Changesets + OIDC + per-package GitHub Releases), see [`references/example-mushi-mushi.md`](references/example-mushi-mushi.md).
