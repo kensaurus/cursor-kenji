@@ -29,7 +29,7 @@ finds the gaps before real users do.
 > to fix after the report is delivered; ask which defects to prioritize.
 
 **Before ANY browser action, read `protocol-browser-anti-stall`
-(`~/.cursor/skills/protocol-browser-anti-stall/SKILL.md`) and apply every rule —
+and apply every rule —
 especially Rule 0 (manual & headed, never scripted).** Also read
 `references/playwright-session-coordination.md` — shared browser, tab discipline,
 persisted auth.

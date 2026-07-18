@@ -20,7 +20,7 @@ Visual design system coherency audit: tokens, components, visual consistency, da
 animations, and WCAG visual compliance.
 
 **Before ANY browser interaction, read the `browser-anti-stall` skill and apply its rules
-to every step.** That skill lives at `~/.cursor/skills/protocol-browser-anti-stall/SKILL.md`.
+to every step.** That skill is `protocol-browser-anti-stall`.
 
 ## CRITICAL: Anti-Template, Anti-AI-Generated Design
 

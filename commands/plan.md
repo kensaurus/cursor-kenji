@@ -8,6 +8,11 @@ argument-hint: "[task or feature]"
 ## Purpose
 Use Plan Mode to research, clarify requirements, and produce an approved implementation plan before writing a single line of code.
 
+> **Runtime note:** `Shift+Tab` toggles plan mode in **both** Cursor and Claude Code.
+> The "Save to workspace → `.cursor/plans/`" step and the mode-selector dropdown are
+> Cursor-specific. In Claude Code, approve the plan through the plan-mode prompt
+> (ExitPlanMode); there is no `.cursor/plans/` file.
+
 ## Process
 
 ### 1. Activate Plan Mode

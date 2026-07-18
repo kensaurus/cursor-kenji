@@ -59,7 +59,7 @@ supabase:get_logs
 
 ## Phase 2: Root cause (read debug-error)
 
-> Read `~/.cursor/skills/debug-error/SKILL.md` and follow it.
+> Read the `debug-error` skill and follow it.
 
 Required output: one-sentence root cause statement — "The bug is X because Y."
 
@@ -76,7 +76,7 @@ Rules:
 
 ## Phase 4: Verify (read test-playwright)
 
-> Read `~/.cursor/skills/test-playwright/SKILL.md` and follow it.
+> Read the `test-playwright` skill and follow it.
 
 Drive the live app through the exact repro scenario. Confirm the fix resolves it. Check that nearby flows still work (regression scope = files touched ± 1 level).
 
@@ -84,7 +84,7 @@ Drive the live app through the exact repro scenario. Confirm the fix resolves it
 
 ## Phase 5: PR (read workflow-pr)
 
-> Read `~/.cursor/skills/workflow-pr/SKILL.md` and follow it.
+> Read the `workflow-pr` skill and follow it.
 
 PR description must include:
 - Root cause (one sentence)
@@ -95,7 +95,7 @@ PR description must include:
 
 ## Phase 6: Post-deploy smoke (optional — read deploy-verify)
 
-If deploying immediately after merge, read `~/.cursor/skills/deploy-verify/SKILL.md`.
+If deploying immediately after merge, read the `deploy-verify` skill.
 
 Resolve the Sentry issue after confirming the fix is live in production.
 

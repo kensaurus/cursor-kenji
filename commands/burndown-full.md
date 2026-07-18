@@ -19,6 +19,6 @@ Follow the **burndown-full skill** end to end. Do not improvise a shortcut versi
 
 The plan is a hypothesis about scope, never its limit. The repo is bigger than the plan and bigger than your context window; the state file is your memory and the fresh grep is your source of truth.
 
-The full playbook lives in the **`burndown-full`** skill at `~/.cursor/skills/burndown-full/SKILL.md` (Cursor) or `~/.claude/skills/burndown-full/SKILL.md` (Claude Code).
+The full playbook lives in the **`burndown-full`** skill.
 
 Related: `composer-2.5-execution` rule for approved-plan execution, `plan-*` skills for audit-only burndowns before changes.

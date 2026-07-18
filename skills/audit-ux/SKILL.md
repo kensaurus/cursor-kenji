@@ -11,7 +11,7 @@ Research-driven user experience evaluation grounded in NN/g heuristics, Laws of 
 Intuit Content Design principles, and Google HEART metrics.
 
 **Before ANY browser interaction, read the `browser-anti-stall` skill and apply its rules
-to every step.** That skill lives at `~/.cursor/skills/protocol-browser-anti-stall/SKILL.md`.
+to every step.** That skill is `protocol-browser-anti-stall`.
 
 ## CRITICAL: Context-First, Human-Centric Approach
 

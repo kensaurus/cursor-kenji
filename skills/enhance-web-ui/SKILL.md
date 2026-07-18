@@ -31,8 +31,8 @@ rearranges, subtracts, and stages information before adding decoration.
 > "incoherent height") almost always points to a `Hidden Failure Mode` from §X
 > below — start there, not at the surface decoration the user named.**
 
-> If browser automation is used, first follow
-> `~/.cursor/skills/protocol-browser-anti-stall/SKILL.md` when present.
+> If browser automation is used, first follow the
+> `protocol-browser-anti-stall` skill when present.
 
 ---
 

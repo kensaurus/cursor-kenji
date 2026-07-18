@@ -176,6 +176,18 @@ Follow-up (out of P1.1 scope, non-blocking): the `enhance-web-ui` body has a few
 that now resolve into `references/details.md` rather than "below" — minor
 correctness nits from the original split, worth a future cross-ref pass.
 
+### Phase 4 · P2.3 — dual-runtime paths
+All 44 `~/.cursor/skills/<name>/SKILL.md` references in the 4 workflow bundles and
+the commands now refer to skills by bare name (`Read the \`X\` skill and follow it`),
+which resolves in any runtime; the redundant `(path)` parentheticals were dropped.
+`commands/plan.md` gained a runtime note (Shift+Tab works in both Cursor and Claude
+Code; `.cursor/plans/` is Cursor-only). **Left intentionally:** script-execution
+paths (`thirdparty-ui-ux-pro-max/scripts/search.py`, `enhance-readme/scripts/*.mjs`)
+and the `ATTRIBUTION.md` install-path docs — these are real per-runtime file paths,
+not skill references, and the ui-ux-pro-max ATTRIBUTION explicitly asks to preserve
+its script paths. A future dual-runtime pass could show both `~/.cursor/` and
+`~/.claude/` forms for those scripts.
+
 ## Sources
 
 - [Skill authoring best practices — Claude Platform Docs](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)

@@ -26,8 +26,8 @@ A generative companion to the audit skills. **Audits diagnose; this skill enhanc
 takes a single route or screen and produces a concrete, design-system-compliant set of
 code changes that make the page feel hand-crafted — not template-generated.
 
-> **Before any browser interaction, follow the rules in
-> `~/.cursor/skills/protocol-browser-anti-stall/SKILL.md`.**
+> **Before any browser interaction, follow the rules in the
+> `protocol-browser-anti-stall` skill.**
 
 ---
 

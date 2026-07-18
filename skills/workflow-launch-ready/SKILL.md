@@ -35,7 +35,7 @@ Skip steps 2 (PWA) and 4 (i18n) if not applicable — note the skip in the check
 
 ## Step 1: SEO (read enhance-web-seo)
 
-> Read `~/.cursor/skills/enhance-web-seo/SKILL.md` and follow it.
+> Read the `enhance-web-seo` skill and follow it.
 
 Every public page needs: `<title>`, `meta description`, OG tags, canonical URL,
 structured data (JSON-LD), and a sitemap entry.
@@ -44,7 +44,7 @@ structured data (JSON-LD), and a sitemap entry.
 
 ## Step 2: PWA (read enhance-pwa)
 
-> Read `~/.cursor/skills/enhance-pwa/SKILL.md` and follow it.
+> Read the `enhance-pwa` skill and follow it.
 
 Required: Web App Manifest + service worker with offline fallback. Lighthouse
 PWA score ≥ 90 before launch.
@@ -53,7 +53,7 @@ PWA score ≥ 90 before launch.
 
 ## Step 3: Bundle size (read audit-bundle-size)
 
-> Read `~/.cursor/skills/audit-bundle-size/SKILL.md` and follow it.
+> Read the `audit-bundle-size` skill and follow it.
 
 Target: first-load JS ≤ 200 KB gzip. All routes lazy-loaded.
 
@@ -61,7 +61,7 @@ Target: first-load JS ≤ 200 KB gzip. All routes lazy-loaded.
 
 ## Step 4: i18n (read audit-i18n — skip if single locale)
 
-> Read `~/.cursor/skills/audit-i18n/SKILL.md` and follow it.
+> Read the `audit-i18n` skill and follow it.
 
 Priority: no hardcoded user-facing strings, natural copy in all supported
 locales, correct date/number/currency formatting.
@@ -70,7 +70,7 @@ locales, correct date/number/currency formatting.
 
 ## Step 5: Quality gate (read workflow-quality-gate)
 
-> Read `~/.cursor/skills/workflow-quality-gate/SKILL.md` and follow it.
+> Read the `workflow-quality-gate` skill and follow it.
 
 This step runs test-red-team, audit-security, audit-performance, and test-unit
 internally. A NO-GO verdict from this step blocks launch.
@@ -79,7 +79,7 @@ internally. A NO-GO verdict from this step blocks launch.
 
 ## Step 6: Deploy & smoke (read deploy-verify)
 
-> Read `~/.cursor/skills/deploy-verify/SKILL.md` and follow it.
+> Read the `deploy-verify` skill and follow it.
 
 Run immediately after the production deploy. Confirm no new Sentry errors,
 schema is healthy, and critical flows work.
@@ -88,7 +88,7 @@ schema is healthy, and critical flows work.
 
 ## Step 7: Day-1 iteration loop (read iterate-post-launch)
 
-> Read `~/.cursor/skills/iterate-post-launch/SKILL.md` and follow it.
+> Read the `iterate-post-launch` skill and follow it.
 
 Schedule this 24–48 hours after launch. Pull first real-user signals and
 prioritize the first fix pass.

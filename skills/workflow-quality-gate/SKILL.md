@@ -33,7 +33,7 @@ redundant or change their scope.
 
 ## Gate 1: Red team (read test-red-team)
 
-> Read `~/.cursor/skills/test-red-team/SKILL.md` and follow it.
+> Read the `test-red-team` skill and follow it.
 
 Output: coverage matrix + severity-ranked defect list.
 
@@ -45,7 +45,7 @@ Critical defects must be resolved before the verdict can be GO.
 
 ## Gate 2: Security audit (read audit-security)
 
-> Read `~/.cursor/skills/audit-security/SKILL.md` and follow it.
+> Read the `audit-security` skill and follow it.
 
 Focus on static code patterns missed by the live red team:
 - Secrets hardcoded in source
@@ -57,7 +57,7 @@ Focus on static code patterns missed by the live red team:
 
 ## Gate 3: Bundle size (read audit-bundle-size)
 
-> Read `~/.cursor/skills/audit-bundle-size/SKILL.md` and follow it.
+> Read the `audit-bundle-size` skill and follow it.
 
 Threshold: first-load JS > 200 KB (gzip) is a Medium defect; > 400 KB is High.
 
@@ -65,7 +65,7 @@ Threshold: first-load JS > 200 KB (gzip) is a Medium defect; > 400 KB is High.
 
 ## Gate 4: Performance (read audit-performance)
 
-> Read `~/.cursor/skills/audit-performance/SKILL.md` and follow it.
+> Read the `audit-performance` skill and follow it.
 
 Thresholds (Lighthouse mobile, simulated 4G):
 - LCP > 4 s → High
@@ -76,7 +76,7 @@ Thresholds (Lighthouse mobile, simulated 4G):
 
 ## Gate 5: Unit tests (read test-unit)
 
-> Read `~/.cursor/skills/test-unit/SKILL.md` and follow it.
+> Read the `test-unit` skill and follow it.
 
 Check: does the existing test suite pass? Are there obvious coverage gaps in
 the code path that was changed for this release?

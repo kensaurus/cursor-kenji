@@ -29,7 +29,7 @@ phases of PDCA. You will not skip them.
 > **Act** = fix every pain point and error you find, in the same turn.
 
 **Before ANY browser action, read `protocol-browser-anti-stall`
-(`~/.cursor/skills/protocol-browser-anti-stall/SKILL.md`) and apply every rule** —
+and apply every rule** —
 especially **Rule 0 (manual & headed, never scripted)**, plus the navigation guard,
 ≤3s waits, fresh `browser_snapshot` after every state change, max-4-attempts-per-goal,
 timeout budgets, tab discipline, and persisted auth

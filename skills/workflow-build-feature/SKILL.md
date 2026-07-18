@@ -31,7 +31,7 @@ catches a class of defects the next phase can't.
 
 ## Phase 1: Spec (read workflow-spec-tdd)
 
-> Read `~/.cursor/skills/workflow-spec-tdd/SKILL.md` and follow it.
+> Read the `workflow-spec-tdd` skill and follow it.
 
 Key outputs:
 - Written spec (what it does, what it doesn't do, acceptance criteria)
@@ -53,7 +53,7 @@ Implement against the spec. Rules:
 
 ## Phase 3: Unit tests (read test-unit)
 
-> Read `~/.cursor/skills/test-unit/SKILL.md` and follow it.
+> Read the `test-unit` skill and follow it.
 
 Focus on:
 - The new code's happy path, error paths, and edge cases
@@ -63,7 +63,7 @@ Focus on:
 
 ## Phase 4: Smoke test (read test-playwright)
 
-> Read `~/.cursor/skills/test-playwright/SKILL.md` and follow it.
+> Read the `test-playwright` skill and follow it.
 
 Drive the live app through the new feature as a real user. Fix pain points inline (full-stack: UI + API + DB). Capture screenshots as evidence.
 
@@ -73,7 +73,7 @@ Before any browser action, apply `protocol-browser-anti-stall` rules.
 
 ## Phase 5: PR (read workflow-pr)
 
-> Read `~/.cursor/skills/workflow-pr/SKILL.md` and follow it.
+> Read the `workflow-pr` skill and follow it.
 
 Include in the PR description:
 - Link to the spec / acceptance criteria

@@ -36,8 +36,8 @@ predictable, reviewable change instead of a regression.
 > to answer three different questions. Start at the architecture, not at
 > the broken page.**
 
-> If browser/native automation is used, first follow
-> `~/.cursor/skills/protocol-browser-anti-stall/SKILL.md` when present.
+> If browser/native automation is used, first follow the
+> `protocol-browser-anti-stall` skill when present.
 
 ---
 
