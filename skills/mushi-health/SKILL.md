@@ -5,15 +5,6 @@ description: >-
   credentials, API reachability, edge functions, BYOK key pool, QA cron.
   Use when "is mushi working", "mushi health check", "check mushi pipeline",
   "mushi deploy check", "pipeline not responding", or right after setup.
-triggers:
-  - "is mushi working"
-  - "mushi health check"
-  - "check mushi pipeline"
-  - "mushi deploy check"
-  - "pipeline not responding"
-  - "mushi status check"
-  - "verify mushi running"
-  - "mushi health"
 license: MIT
 ---
 

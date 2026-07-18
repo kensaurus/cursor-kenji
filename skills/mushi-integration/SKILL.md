@@ -5,15 +5,6 @@ description: >-
   → story mapping → TDD test generation → approval → execution → PDCA cycle.
   Use when "test mushi integration", "verify full pipeline", "mushi e2e check",
   "does mushi work end-to-end", "smoke test mushi", or after deploying changes.
-triggers:
-  - "test mushi integration"
-  - "mushi e2e"
-  - "verify full pipeline"
-  - "mushi integration test"
-  - "mushi smoke test"
-  - "does mushi work end-to-end"
-  - "full mushi pipeline check"
-  - "mushi integration"
 license: MIT
 ---
 
