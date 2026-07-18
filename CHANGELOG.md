@@ -6,6 +6,21 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.5.1] — 2026-07-18
+
+Prompt-engineering quality pass from `docs/PLAN-SKILL-PACK-ENHANCEMENT.md` (Phases 3–5). No new skills; skill count held at 94. Dual-runtime (Cursor + Claude Code) portability, staleness, and licensing hygiene.
+
+### Changed
+- **Dual-runtime portability** — skills now refer to each other by bare name (no path assumptions), and MCP calls use portable `ServerName:tool_name` prose instead of runtime-specific fenced tool blocks.
+- **Command frontmatter** — added `description` + `argument-hint` to 14 slash commands for discoverability.
+- **Progressive disclosure** — relocated bulk inline content to `references/` in `workflow-housekeep`, `backend-realtime`, and `deploy-npm` (`references/example-mushi-mushi.md`); trimmed oversized `plan-*` descriptions and rewrote thin ones to the house standard.
+- **Descriptive prose over pseudo-tools** — `audit-ux` and `audit-security` reframe `Glob`/`Grep` fenced blocks (which read as executable calls) as plain guidance.
+
+### Fixed
+- **Stale model IDs** — refreshed illustrative model references in `audit-langfuse-llm` to current-generation IDs.
+- **Hardcoded counts** — decoupled the style-catalog count from the always-on `thirdparty-ui-ux-pro-max` description.
+- **License attribution** — pinned verified upstream MIT licenses (with copyright holders) in `thirdparty-emil-design-eng` and `thirdparty-web-interface-guidelines` `ATTRIBUTION.md`, replacing "See upstream repository" placeholders.
+
 ## [1.5.0] — 2026-07-18
 
 ### Added
