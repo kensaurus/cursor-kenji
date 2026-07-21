@@ -4,7 +4,29 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
-## [Unreleased]
+## [1.7.0] — 2026-07-21
+
+Completion-loop release — close the gaps where agents stop early, declare false "done", or leave documented capabilities unwired. Adds an enforcement layer (evidence rule + independent judge + opt-in continuation hook), five closure/ops workflow skills, and repairs every known broken internal reference. Skills 95 → 100, commands 16 → 36, subagents held at 6.
+
+### Added
+
+- **`complete-everything`** skill + **`/complete-everything`** command — close unfinished plan intent and connected work previously parked as out of scope/follow-up/optional, persist observable acceptance evidence in `.cursor/complete-everything-state.md`, and loop the applicable typecheck/lint/test/API/build/browser gates until complete
+- **`completion-judge` subagent** — independently reconciles the approved outcome, durable state, full diff, baseline, and fresh evidence before returning `PASS`, `CONTINUE`, or `BLOCKED`
+- **`verification-before-completion` rule** — defines evidence-backed completion levels from implemented through observed-stable and forbids claims above the proven level
+- **Opt-in Cursor completion hook** — continues only actionable unchecked `complete-everything`/`burndown-full` state; safely merges into existing user hooks and remains inert for completed, errored, or human-gate-only runs
+- **Closure-loop workflow skills + commands** — `workflow-green-repo` (`/green-repo`) drives the whole repository to a verified-green baseline; `workflow-ship-and-observe` (`/ship-and-observe`) takes merged code to a monitored production release with a live-revision check and rollback tail; `workflow-feedback-to-closure` (`/feedback-to-closure`) turns raw feedback into deduplicated durable tickets driven to production-verified closure
+- **`workflow-environment-ready`** skill — preflights the toolchain, services, and config before a long autonomous run so it does not fail at the finish line on a missing dependency or credential
+- **`iterate-agent-harness`** skill — converts an agent failure (premature stop, false done, reward-hacked check, broken handoff) into a durable harness guard plus a regression check that fails before the fix
+- **17 `plan-*` pointer commands** — `/uiux-plan`, `/security-plan`, `/rls-plan`, `/secrets-plan`, `/validation-plan`, `/integrity-plan`, `/error-plan`, `/deps-plan`, `/cost-plan`, `/aeo-plan`, `/mobile-plan`, `/capacitor-plan`, `/stub-plan`, `/perf-plan`, `/docs-plan`, `/test-plan`, `/slop-plan` — thin audit-and-plan entries the docs previously referenced but shipped no file for
+
+### Changed
+
+- **Composer execution precedence** — normal plan runs still stop at phase boundaries; explicit closure modes persist the checkpoint and continue. Approved non-destructive schema work on a confirmed target now follows full-stack deployment discipline without a contradictory permission stop.
+- **Count synchronization** — skill, command, and subagent totals are all derived from the filesystem.
+
+### Fixed
+
+- **Broken internal skill references** — repaired a doubled `workflow-spec-workflow-spec-tdd` link in four skills, a wrong `references/` path in `workflow-spec-tdd`, dead `mushi-debug` links in `mushi-health`/`mushi-integration` (now the mushi MCP `diagnose_setup` tool), and non-existent `../start-emulator`/`../test-emulator` links in `mobile-rn-screen`. A from-scratch relative-link scan now resolves clean.
 
 ## [1.6.0] — 2026-07-18
 

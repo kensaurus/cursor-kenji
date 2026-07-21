@@ -1,0 +1,44 @@
+---
+description: Require fresh, scope-appropriate evidence before any completion claim. Distinguishes implemented, locally verified, repository-green, PR-green, deployed, and observed-stable states.
+globs:
+alwaysApply: true
+---
+
+# Verification Before Completion
+
+Completion is a claim about observed state, not effort or confidence.
+
+## Evidence rules
+
+- Discover the repository's real verification commands from manifests, CI, and project instructions. Do not invent generic commands when the repo defines its own.
+- Establish a baseline before substantive edits when practical. Separate pre-existing failures from regressions introduced by the change.
+- Run fresh, applicable checks after the final relevant edit. Changed-file diagnostics alone do not prove project behavior.
+- Later edits invalidate earlier evidence for affected gates. Re-run every invalidated check.
+- A failing check is work to diagnose and repair, not a warning to mention after claiming success.
+- Never delete, skip, narrow, mock away, blanket-update, or silence the behavior under test to obtain green output.
+- If a check is unavailable, report `not run` and the concrete reason. Never translate missing evidence into a pass.
+
+## Completion levels
+
+Use the highest level actually proven:
+
+1. **Implemented** — files changed; no verification claim.
+2. **Scoped verified** — changed files and affected tests/checks pass.
+3. **Repository green** — every configured local gate passes from the required scope.
+4. **PR green** — remote CI is complete and successful; required review threads are resolved.
+5. **Deployed verified** — the intended source revision is live on the confirmed target and production smoke checks pass.
+6. **Observed stable** — the defined monitoring window elapsed without crossing rollback/hotfix thresholds.
+
+Do not call a task "done," "shipped," "green," or "stable" at a higher level than the evidence supports.
+
+## Required final gate
+
+Before the final response:
+
+1. Reconcile the request/plan against the full diff and durable task state.
+2. Confirm no applicable checklist items remain open.
+3. Run the applicable verification ladder with fresh output.
+4. For approved plans, wide changes, or explicit closure mode, invoke the `completion-judge` subagent. A `CONTINUE` verdict returns to implementation; `BLOCKED` is not success.
+5. Report exact commands, outcomes, skipped gates, baseline failures, and real human blockers.
+
+Forbidden unsupported phrases: "should work," "probably fixed," "looks good," "tests should pass," or "done" based only on code inspection.

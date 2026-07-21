@@ -65,7 +65,7 @@ Usage:
   npx @kensaurus/cursor-kenji --gemini          Install for Gemini CLI (~/.gemini/GEMINI.md)
   npx @kensaurus/cursor-kenji --all             Install for all four supported tools
   npx @kensaurus/cursor-kenji --clean           Mirror: wipe and rebuild target paths from this repo
-  npx @kensaurus/cursor-kenji --only skills      Install only some groups (skills,commands,agents,rules)
+  npx @kensaurus/cursor-kenji --only skills      Install only some groups (skills,commands,agents,rules,hooks)
   npx @kensaurus/cursor-kenji --skill <name>     Install one skill by name
   npx @kensaurus/cursor-kenji --link            Dev mode: symlink repo into ~/.cursor (live edits)
   npx @kensaurus/cursor-kenji --restore [stamp]  Restore a previous --clean backup (latest if omitted)
@@ -81,7 +81,7 @@ Flags:
   --all               Target all four supported tools in one run.
   --clean, --mirror   Wipe managed dirs first so target paths exactly mirror this repo.
   --no-backup         Skip the timestamped backup taken before a --clean wipe.
-  --only <csv>        Limit to a subset of: skills, commands, agents, rules.
+  --only <csv>        Limit to a subset of: skills, commands, agents, rules, hooks.
   --skill <name>      Install a single skill (implies --only skills).
   --link              Symlink (junction on Windows) instead of copying — for repo dev.
   --restore [stamp]   Copy a backup under <target>/.cursor-kenji-backups/ back into place.
@@ -93,6 +93,7 @@ What gets installed (Cursor):
   ~/.cursor/commands/     ← slash commands
   ~/.cursor/agents/       ← subagent definitions
   ~/.cursor/rules/        ← project rules starter pack
+  ~/.cursor/hooks.json    ← merged completion stop hook (preserves existing hooks)
   ~/.cursor/mcp.json      ← MCP server template (only if missing; never overwritten)
 
 What gets installed (Claude Code, with --claude or --all):
@@ -377,6 +378,58 @@ function writeManagedFile(destPath, content) {
   return 'created';
 }
 
+// Install the opt-in completion gate as a user hook. The hook itself is inert
+// unless the active workspace has an unfinished durable closure-state file.
+// Existing user hooks are preserved and this managed entry is replaced
+// idempotently on upgrades.
+function installCursorCompletionHook() {
+  const sourceScript = resolve(__dir, 'hooks', 'completion-gate.mjs');
+  const hookDir = join(cursorBase, 'cursor-kenji-hooks');
+  const destScript = join(hookDir, 'completion-gate.mjs');
+  const configPath = join(cursorBase, 'hooks.json');
+  if (!existsSync(sourceScript)) return 'source-missing';
+
+  if (isDryRun) {
+    console.log(`  [dry-run] ${sourceScript} → ${destScript}`);
+  } else {
+    mkdirSync(hookDir, { recursive: true });
+    place(sourceScript, destScript, false);
+  }
+
+  let config = { version: 1, hooks: {} };
+  if (existsSync(configPath)) {
+    try {
+      config = JSON.parse(readFileSync(configPath, 'utf8'));
+    } catch {
+      console.warn(`  [!] Skipped completion hook: ${configPath} is not valid JSON.`);
+      return 'skipped-invalid-config';
+    }
+  }
+
+  if (!config || typeof config !== 'object' || Array.isArray(config)) config = {};
+  if (!config.hooks || typeof config.hooks !== 'object' || Array.isArray(config.hooks)) {
+    config.hooks = {};
+  }
+  if (!('version' in config)) config.version = 1;
+
+  const existing = Array.isArray(config.hooks.stop) ? config.hooks.stop : [];
+  const managedMarker = /cursor-kenji-hooks[\\/]completion-gate\.mjs/;
+  const preserved = existing.filter(
+    (entry) => !managedMarker.test(String(entry?.command ?? '')),
+  );
+  config.hooks.stop = [
+    ...preserved,
+    {
+      command: 'node cursor-kenji-hooks/completion-gate.mjs',
+      timeout: 5,
+      loop_limit: 12,
+      failClosed: false,
+    },
+  ];
+
+  return writeManagedFile(configPath, JSON.stringify(config, null, 2) + '\n');
+}
+
 // Install a context-file tool (Codex / Gemini). `spec` describes its layout.
 function installContextTool(spec) {
   const { label, base, rulesFile, rulesLoadPath, commandsDir, commandExt, render } = spec;
@@ -415,6 +468,10 @@ const results = [];
 if (wantCursor) {
   const clean = isClean ? backupAndWipe(cursorBase) : null;
   const counts = installDirs(cursorBase);
+  const hookStatus =
+    !onlyGroups || onlyGroups.has('hooks')
+      ? installCursorCompletionHook()
+      : 'skipped';
 
   if (skillName && counts.copiedDirs + counts.copiedFiles === 0) {
     console.error(`✗ Skill '${skillName}' not found in skills/ or skills-cursor/.`);
@@ -447,7 +504,7 @@ if (wantCursor) {
     mcpInstalled = true;
   }
 
-  results.push({ target: 'Cursor', base: cursorBase, ...counts, clean, mcpInstalled });
+  results.push({ target: 'Cursor', base: cursorBase, ...counts, clean, mcpInstalled, hookStatus });
 }
 
 // ---- Claude Code -----------------------------------------------------------
@@ -514,6 +571,9 @@ if (isDryRun) {
       console.log(`✓ Skills synced to ${join(agentsBase, 'skills')} (${agentsCount} skills — Cursor UI path)`);
     }
     if (r.mcpInstalled) console.log(`✓ MCP template written to ${join(r.base, 'mcp.json')} — edit it to add your API keys.`);
+    if (r.target === 'Cursor' && r.hookStatus && !r.hookStatus.startsWith('skip')) {
+      console.log(`✓ Opt-in completion gate ${r.hookStatus} in ${join(r.base, 'hooks.json')}.`);
+    }
   }
   if (linkFallbacks) console.log(`  (note: ${linkFallbacks} file(s) copied instead of linked — symlinks need elevated rights on this OS)`);
   if (wantCursor) console.log('Restart Cursor to activate skills, commands, and agents.');

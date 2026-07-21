@@ -58,4 +58,4 @@ A prod incident is only debuggable if you can pivot **error ↔ trace ↔ log �
 - Langfuse plugin (`langfuse`) + `audit-langfuse-llm` — LLM trace capture + quality audit.
 - `debug-sentry-monitor` / `debug-error` — post-hoc triage of what this instrumentation surfaces.
 - `data-pipeline` — per-run pipeline metrics use these same correlation + logging rules.
-- `workflow-spec-workflow-spec-tdd` — make "observable" part of the spec's "done when", not an afterthought.
+- `workflow-spec-tdd` — make "observable" part of the spec's "done when", not an afterthought.

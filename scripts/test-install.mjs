@@ -8,7 +8,15 @@
  *   node scripts/test-install.mjs   # exit 0 on pass, 1 on failure
  */
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, rmSync, existsSync, readdirSync, mkdirSync, readFileSync } from "node:fs";
+import {
+  mkdtempSync,
+  rmSync,
+  existsSync,
+  readdirSync,
+  mkdirSync,
+  readFileSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -49,6 +57,30 @@ try {
   expect(existsSync(join(cur, "agents", "code-reviewer.md")), "missing agents/code-reviewer.md");
   expect(existsSync(join(cur, "commands", "commit.md")), "missing commands/commit.md");
   expect(existsSync(join(cur, "rules", "senior-engineer.md")), "missing rules/senior-engineer.md");
+  expect(existsSync(join(cur, "cursor-kenji-hooks", "completion-gate.mjs")),
+    "missing completion hook script");
+
+  const hooksPath = join(cur, "hooks.json");
+  expect(existsSync(hooksPath), "missing Cursor hooks.json");
+  const hooksConfig = JSON.parse(readFileSync(hooksPath, "utf8"));
+  const stopHooks = hooksConfig.hooks?.stop ?? [];
+  expect(stopHooks.some((entry) => entry.command?.includes("completion-gate.mjs")),
+    "completion stop hook was not registered");
+
+  // Reinstall must preserve unrelated user hooks and replace our entry once.
+  stopHooks.unshift({ command: "node user-owned-hook.mjs" });
+  writeFileSync(hooksPath, JSON.stringify(hooksConfig, null, 2) + "\n");
+  execFileSync(process.execPath, [installer], {
+    env: { ...process.env, HOME: sandbox, USERPROFILE: sandbox },
+    stdio: "pipe",
+  });
+  const reinstalledHooks = JSON.parse(readFileSync(hooksPath, "utf8")).hooks.stop;
+  expect(reinstalledHooks.some((entry) => entry.command === "node user-owned-hook.mjs"),
+    "installer removed an unrelated user hook");
+  expect(
+    reinstalledHooks.filter((entry) => entry.command?.includes("completion-gate.mjs")).length === 1,
+    "installer duplicated the completion hook",
+  );
 
   // MCP template should be written when none exists.
   expect(existsSync(join(cur, "mcp.json")), "missing mcp.json template");

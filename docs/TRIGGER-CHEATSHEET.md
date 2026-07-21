@@ -10,6 +10,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 
 | Say this in chat | Skill |
 |:-----------------|:------|
+| "complete everything", "don't defer", "fix out of scope too", "finish the whole plan", "close every TODO" | `complete-everything` |
 | "finish the burndown", "it stopped halfway", "apply this everywhere", "complete the refactor", "half-migrated", "make sure nothing was missed" | `burndown-full` |
 | "build a feature", "implement this", "add X end-to-end", "ship a new capability" | `workflow-build-feature` |
 | "fix this bug and ship it", "patch this and close the ticket", "fix and deploy" | `workflow-fix-and-ship` |
@@ -68,7 +69,9 @@ You don't have to type the skill name. Just describe the task in plain language.
 |:-----------------|:------|
 | "publish to npm", "release", "cut a release", "ship a new version" | `deploy-npm` |
 | "verify deploy", "post-deploy check", "smoke test production", "ship or rollback" | `deploy-verify` |
+| "ship it", "deploy to production", "go live", "roll this out", "promote to prod", "release this" | `workflow-ship-and-observe` |
 | "post-launch polish", "what should I fix next", "iterate on prod feedback", "make it better based on real usage" | `iterate-post-launch` |
+| "triage this feedback", "turn these reports into tickets", "process the bug backlog", "close the loop on QA findings" | `workflow-feedback-to-closure` |
 
 ---
 
@@ -187,7 +190,11 @@ Attribution and update policy → [THIRD-PARTY-SKILLS.md](./THIRD-PARTY-SKILLS.m
 
 | Say this in chat | Skill |
 |:-----------------|:------|
+| "complete everything", "don't defer", "fix out of scope too", "finish the whole plan", "close every TODO" | `complete-everything` |
 | "finish the burndown", "it stopped halfway", "apply this everywhere", "complete the refactor across all files", "make sure nothing was missed" | `burndown-full` |
+| "make the repo green", "get CI passing", "fix all the failing tests", "clear the typecheck errors", "make the build pass" | `workflow-green-repo` |
+| "is this ready to run", "set up the environment", "preflight the repo", "before we start the big task", "why won't the tests run" | `workflow-environment-ready` |
+| "the agent stopped early again", "it said done but wasn't", "it gamed the test", "add a guard so this doesn't recur" | `iterate-agent-harness` |
 | "think before coding", "simplicity first", "stop overcomplicating" | `workflow-coding-discipline` |
 | "add a feature flag", "gradual rollout", "kill switch", "dark launch", "canary release" | `workflow-feature-flag` |
 | "commit my changes", "write a commit message" | `workflow-git-commit` |

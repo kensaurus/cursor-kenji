@@ -162,7 +162,7 @@ After running all steps, record results:
 | QA cron | ✅ / ❌ | Last run at? |
 
 If all ✅ → pipeline is healthy.  
-If any ❌ → use [`mushi-debug`](../mushi-debug/SKILL.md) for targeted diagnosis.
+If any ❌ → run the mushi MCP `diagnose_setup` tool for targeted diagnosis.
 
 ---
 

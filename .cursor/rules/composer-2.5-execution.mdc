@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Composer 2.5 Execution Adapter
 
-You are executing an **already-approved plan** (a `plan-*.md` audit/burndown authored and reviewed with a stronger reasoning model). Your job is faithful, verifiable *implementation* — not re-planning, not improving scope. These rules are tuned to Composer 2.5's known failure modes and are binding for every change.
+You are executing an **already-approved plan** (a `plan-*.md` audit/burndown authored and reviewed with a stronger reasoning model). Your job is faithful, verifiable *implementation* — not re-planning or inventing unrelated scope. When `complete-everything` is explicitly active, its connected closure set (planned + previously parked + discovered blast-radius work) is part of the approved scope. When `burndown-full` is active, repo-wide search determines mechanical scope. These rules are tuned to Composer 2.5's known failure modes and are binding for every change.
 
 ## 1. Anti-reward-hacking (highest priority)
 Satisfy the **intent**, never just the check. Forbidden:
@@ -24,7 +24,9 @@ A green suite is necessary, not sufficient. In your trace, state why the change 
 
 ## 3. Small, checkpointed units
 - Implement one burndown item (or one tight group) at a time. Do not execute the whole plan in a single unattended rollout.
-- After each unit: run the relevant tests / typecheck / lint, confirm green, and stop at the plan's phase boundaries for review. Do not auto-advance to the next phase.
+- After each unit: run the relevant tests / typecheck / lint and confirm green.
+- **Default mode:** stop at the plan's phase boundaries for review; do not auto-advance.
+- **Explicit closure mode:** when the user invokes `complete-everything` or `burndown-full`, a phase boundary is an audit checkpoint, not a permission stop. Persist state, report meaningful progress, and auto-advance until the closure set is empty or a real human gate below is reached.
 - If a tool call fails or a step dead-ends, fix that step before continuing — never paper over it and push on.
 
 ## 4. Context discipline (200k window)
@@ -33,6 +35,7 @@ A green suite is necessary, not sufficient. In your trace, state why the change 
 
 ## 5. Terminal caution
 - Re-read any shell command before running. For anything destructive (migrations, `rm`, force-push, prod-pointed scripts, DB writes), prefer a dry-run/preview and pause for confirmation. Never run a state-mutating command unless it is in the approved plan.
+- Schema DDL, RPCs, edge functions, policies, or buckets explicitly required by the approved plan are not optional follow-ups. With the target environment confirmed, deploy and verify them under `full-stack-ship-discipline`; do not pause solely because the implementation uses a migration.
 
 ## 6. Verify-before-trust
 - Before each change, state in one line: what behavior must stay identical here — then confirm it does.
@@ -45,7 +48,8 @@ A green suite is necessary, not sufficient. In your trace, state why the change 
 ## STOP and ask the human if:
 - A real data/contract/endpoint/target is unknown (don't fabricate a substitute).
 - A fix would change public behavior/API/output not covered by the approved plan.
-- A change touches auth, RLS, secrets, payments, migrations, or data mutation (consider routing these to a stronger model rather than executing directly).
+- A change touches auth behavior, RLS semantics, secrets/rotation, payments, destructive production-data mutation, or an unconfirmed migration target (consider routing these to a stronger model rather than executing directly).
+- Do **not** stop merely because an approved feature requires non-destructive schema DDL on a confirmed target; deploy and verify it under `full-stack-ship-discipline`.
 - The only way to pass is a shortcut that doesn't satisfy the real intent.
 - Tests would need to be deleted, skipped, or weakened to pass.
 

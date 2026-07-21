@@ -99,7 +99,7 @@ Run this checklist. If any box fails, you are not done:
 
 ## References
 
-- [TDD patterns & test examples by type](references/workflow-spec-tdd-patterns.md)
+- [TDD patterns & test examples by type](references/tdd-patterns.md)
 - [Spec template & writing principles](references/spec-template.md)
 
 ## Composes with

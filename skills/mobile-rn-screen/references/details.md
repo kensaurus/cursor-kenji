@@ -705,19 +705,19 @@ function AnimatedChip({ active }) {
 
 ## Companion Skills
 
-- [`mobile-emulator-start`](../start-emulator/SKILL.md) — bring up the Android emulator
+- [`mobile-emulator-start`](../../mobile-emulator-start/SKILL.md) — bring up the Android emulator
   dev loop cleanly; run this first before taking screenshots.
-- [`mobile-emulator-test`](../test-emulator/SKILL.md) — full QA walk on the emulator;
+- [`mobile-emulator-test`](../../mobile-emulator-test/SKILL.md) — full QA walk on the emulator;
   use after this skill to verify the enhanced screen end-to-end.
-- [`enhance-web-ui`](../enhance-web-ui/SKILL.md) — web companion for the same
+- [`enhance-web-ui`](../../enhance-web-ui/SKILL.md) — web companion for the same
   composition and colour-tier principles. The H1–H16 hidden failure modes there
   catalogue *web-specific* bugs; many of the underlying principles (active-state
   mass, brand-color budget, monochromatic tier mismatch, information duplication,
   left-anchored stacks) apply to RN with adapted detection probes.
-- [`enhance-web-ux`](../enhance-web-ux/SKILL.md) — web companion for heuristic-
+- [`enhance-web-ux`](../../enhance-web-ux/SKILL.md) — web companion for heuristic-
   driven task-flow improvements. The NN/g heuristic framework and content-rank
   methodology apply identically to RN screens.
-- [`enhance-capacitor-ui`](../enhance-capacitor-ui/SKILL.md) — prerequisite for
+- [`enhance-capacitor-ui`](../../enhance-capacitor-ui/SKILL.md) — prerequisite for
   hybrid apps (Capacitor / Ionic / RN-Web) that ship both a web PWA and a native
   shell from the same codebase. Establishes the three-axis architecture (form
   factor / platform / pointer) before per-surface polish.

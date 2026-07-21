@@ -676,17 +676,17 @@ adoption checklist.
 
 ## Companion / Sibling Skills
 
-- [`enhance-web-ui`](../enhance-web-ui/SKILL.md) — single-surface
+- [`enhance-web-ui`](../../enhance-web-ui/SKILL.md) — single-surface
   artistic / composition skill. Read after this one when you're polishing
   *one cell* of the matrix; the H1–H16 hidden failure modes there
   catalogue *within-surface* bugs (active-state mass, chrome tautology,
   brand-color competition, wrapper-collapsed tiles, etc.) that this
   skill assumes are handled separately per surface.
-- [`enhance-web-ux`](../enhance-web-ux/SKILL.md) — task-flow / data-
+- [`enhance-web-ux`](../../enhance-web-ux/SKILL.md) — task-flow / data-
   correctness companion. Use *before* this skill to fix the *what*
   (pain → heuristic → primitive); use *this* skill to make the *how*
   (per surface) safe.
-- [`audit-uiux-design-system`](../audit-uiux-design-system/SKILL.md) —
+- [`audit-uiux-design-system`](../../audit-uiux-design-system/SKILL.md) —
   pure-audit companion. Run after the six-step rollout to verify
   no design-token drift was introduced.
 

@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Agent skills, slash commands, and MCP configs for Cursor.</strong><br/>
-  94 agent skills · 15 slash commands · 16 MCP servers · 12 Cursor skills · 5 subagents
+  100 agent skills · 36 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents
 </p>
 
 <p align="center">
@@ -16,9 +16,9 @@
 
 ---
 
-**cursor-kenji** ships **94 Cursor agent skills**, 15 slash commands, and 5 subagents for React / Next.js / Supabase projects. Install once — describe a task in chat and the matching skill auto-triggers.
+**cursor-kenji** ships **100 Cursor agent skills**, 36 slash commands, and 6 subagents for React / Next.js / Supabase projects. Install once — describe a task in chat and the matching skill auto-triggers.
 
-Skills conform to the [Agent Skills specification](https://agentskills.io/specification) and pass automated validation on every commit (`npm test` — **106** installable skills including Cursor IDE tools). MCP templates pin semver versions to reduce supply-chain drift ([CSA on package hallucination / slopsquatting](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations)).
+Skills conform to the [Agent Skills specification](https://agentskills.io/specification) and pass automated validation on every commit (`npm test` — **112** installable skills including Cursor IDE tools). MCP templates pin semver versions to reduce supply-chain drift ([CSA on package hallucination / slopsquatting](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations)).
 
 ```bash
 npx skills add kensaurus/cursor-kenji
@@ -139,10 +139,11 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 
 | | Count | What it does |
 |:--|------:|:-------------|
-| **Skills** | 94 | Auto-triggering capabilities (audit, enhance, debug, test, build, plan) |
+| **Skills** | 100 | Auto-triggering capabilities (audit, enhance, debug, test, build, plan) |
 | **Cursor Skills** | 12 | IDE tools (canvas, hooks, rules, PR splitter) |
-| **Commands** | 15 | Slash workflows (`/commit`, `/pr`, `/burndown-full`, `/thirdparty-web-interface-guidelines`) |
-| **Subagents** | 5 | Background agents (code-reviewer, debugger, db-migrator…) |
+| **Commands** | 36 | Slash workflows (`/commit`, `/pr`, `/burndown-full`, `/thirdparty-web-interface-guidelines`) |
+| **Subagents** | 6 | Background agents (code-reviewer, debugger, db-migrator…) |
+| **Completion hook** | 1 | Opt-in stop gate: continues only unfinished durable closure state |
 | **MCP Servers** | 16 | Supabase · GitHub · Sentry · Playwright · AWS · Slack |
 | **Project Rules** | 6 | Drop-in `.mdc` for `.cursor/rules/` (plus 3 global, 5 RN bundle optional) |
 | **Notepads** | 2 | Context templates (architecture, design tokens) |
@@ -176,6 +177,10 @@ flowchart LR
 
 | Say this | Bundle | What runs |
 |----------|--------|-----------|
+| "complete everything" | `complete-everything` | recover parked work → implement all → full verification → independent judge |
+| "make the repo green" | `workflow-green-repo` | discover gates → enumerate failures → batch fix → prove green |
+| "ship it / go live" | `workflow-ship-and-observe` | preflight → deploy → verify live revision → observe → stable/rollback |
+| "triage this feedback" | `workflow-feedback-to-closure` | gather → dedupe → tickets → fix → verify live → close |
 | "build a feature" | `workflow-build-feature` | spec → TDD → unit → smoke → PR |
 | "fix this and ship" | `workflow-fix-and-ship` | debug → fix → regression → PR → deploy |
 | "is this ready?" | `workflow-quality-gate` | red-team → security → bundle → perf → unit |
@@ -249,11 +254,15 @@ Every skill is `<prefix>-<topic>`. Full entries with triggers → **[docs/CATALO
 
 ---
 
-## Commands (15)
+## Commands (36)
 
 | Command | When | What |
 |:--------|:-----|:-----|
 | `/burndown-full` | Partial refactor stopped early | Drive plan to 100% repo coverage via MATCH/DONE + verification gate |
+| `/complete-everything` | Plan marked done with deferrals | Close planned, parked, and discovered work; run the full applicable test ladder |
+| `/green-repo` | Whole-repo debt cleanup (authorized) | Drive typecheck/lint/test/build to green from a fresh run |
+| `/ship-and-observe` | Deploy to production | Verify the live revision, observe the stability window, roll back if needed |
+| `/feedback-to-closure` | Incoming reports/QA/Sentry | Dedupe into durable tickets → fix → production-verified closure |
 | `/plan` | Before coding | Research + approved plan |
 | `/commit` | After coding | Lint, typecheck, commit |
 | `/pr` | Ready to ship | Push + open PR |
@@ -268,12 +277,13 @@ Every skill is `<prefix>-<topic>`. Full entries with triggers → **[docs/CATALO
 | `/mcp` | MCP workflow | Tool reference |
 | `/uiux` | UI review | Design-system enforcement |
 | `/thirdparty-web-interface-guidelines` | Vercel UI audit | Review files against [Web Interface Guidelines](https://vercel.com/design/guidelines) |
+| `/*-plan` (17 aliases) | Audit before changing | Thin pointers to the `plan-*` skills (`/uiux-plan`, `/security-plan`, …) — audit + plan only. See [CATALOG](docs/CATALOG.md#pointer-delegates-to-skill) |
 
 **RN monorepo bundle:** copy `commands/native-rn-monorepo/` + `rules/native-rn-monorepo/` into your project (iOS builds on CI, not locally).
 
 ---
 
-## Subagents (5)
+## Subagents (6)
 
 | Agent | Triggers on | Output |
 |:------|:------------|:-------|
@@ -282,6 +292,13 @@ Every skill is `<prefix>-<topic>`. Full entries with triggers → **[docs/CATALO
 | `db-migrator` | "migration", "new table" | SQL, RLS, indexes |
 | `deploy-checker` | "deploy", "ship it" | Pre-deploy validation |
 | `perf-monitor` | "slow", "optimize" | Perf audit |
+| `completion-judge` | Plan/burndown closure claim | PASS / CONTINUE / BLOCKED against plan, state, diff, and fresh evidence |
+
+`complete-everything` uses two enforcement layers beyond prompt text: the
+packaged Cursor stop hook auto-continues unfinished actionable state files, and
+`completion-judge` independently rejects stale or incomplete closure claims.
+Claude Code 2.1.139+ users can launch the same run with `/goal` as documented in
+the skill.
 
 ---
 
@@ -350,10 +367,11 @@ Full definitions in [shell-aliases/cursor-helpers.sh](shell-aliases/cursor-helpe
 
 ```
 cursor-kenji/
-├── skills/           # 94 Agent Skills (SKILL.md each)
+├── skills/           # 100 Agent Skills (SKILL.md each)
 ├── skills-cursor/    # 12 Cursor-specific skills
-├── commands/         # 15 slash commands
-├── agents/           # 5 subagents
+├── commands/         # 36 slash commands
+├── agents/           # 6 subagents
+├── hooks/            # opt-in completion stop gate
 ├── rules/            # Global + project-starter rules
 ├── mcp/              # MCP templates
 ├── docs/             # CATALOG, PLAN-LOOPS, GETTING-STARTED, …
@@ -399,7 +417,7 @@ A installable toolkit of [Agent Skills](https://agentskills.io)-compatible markd
 `npx skills add kensaurus/cursor-kenji` (recommended) or `npx @kensaurus/cursor-kenji`. Restart Cursor after install.
 
 **How many skills?**  
-**94** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**106** total). Counts are derived from the filesystem and synced by `npm run check:skills`.
+**100** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**112** total). Counts are derived from the filesystem and synced by `npm run check:skills`.
 
 **How do skills trigger?**  
 Cursor matches your chat message against each skill's YAML `description` keywords. Force one with *"use \`audit-security\` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).

@@ -62,6 +62,6 @@ license: MIT
 
 ## Composes with
 - `enhance-capacitor-ui` — form-factor / platform / pointer layout architecture.
-- `workflow-spec-workflow-spec-tdd` — spec + TDD spine for the feature itself.
+- `workflow-spec-tdd` — spec + TDD spine for the feature itself.
 - `full-stack-ship-discipline` — backend deps deployed + verified.
 - `enhance-web-*` — the underlying web UI the Capacitor shell renders.

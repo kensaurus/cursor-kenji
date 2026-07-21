@@ -37,19 +37,26 @@ Track submission URLs and review status in [PROMOTION.md](PROMOTION.md).
 
 ### By install channel
 
-| Channel | Cursor | Claude Code | Commands | Agents | Rules | MCP config |
-|---------|:------:|:-------------:|:--------:|:------:|:-----:|:----------:|
-| `npx skills add kensaurus/cursor-kenji` | Yes | No | Yes | Yes | Yes | Template copy if missing |
-| `npx @kensaurus/cursor-kenji` (`--claude` / `--all`) | Yes | Yes | Yes | Yes | Yes | Template copy if missing |
-| `./install.sh` (clone) | Yes | Yes | Yes | Yes | Yes | Template copy if missing |
-| Cursor Marketplace / cursor.directory | Yes | No | Yes | Yes | Yes | `.mcp.json` at repo root |
+| Channel | Cursor | Claude Code | Commands | Agents | Rules | Completion hook | MCP config |
+|---------|:------:|:-----------:|:--------:|:------:|:-----:|:---------------:|:----------:|
+| `npx skills add kensaurus/cursor-kenji` | Yes | No | Yes | Yes | Yes | Plugin stop hook | Template copy if missing |
+| `npx @kensaurus/cursor-kenji` (`--claude` / `--all`) | Yes | Yes | Yes | Yes | Yes | Cursor only | Template copy if missing |
+| `./install.sh` (clone) | Yes | Yes | Yes | Yes | Yes | Cursor only | Template copy if missing |
+| Cursor Marketplace / cursor.directory | Yes | No | Yes | Yes | Yes | Plugin stop hook | `.mcp.json` at repo root |
 
 The installer merges into:
 
 - `~/.cursor/skills/` and `~/.agents/skills/` — agent skills (runtime)
 - `~/.cursor/commands/` — slash commands
 - `~/.cursor/agents/` — subagents
+- `~/.cursor/hooks.json` + `~/.cursor/cursor-kenji-hooks/` — safely merged
+  opt-in completion gate; inert unless a closure state file has actionable
+  unchecked items
 - `~/.claude/skills/`, `~/.claude/commands/`, `~/.claude/agents/`, `~/.claude/rules/` — Claude Code (`npx @kensaurus/cursor-kenji --claude` or `./install.sh --claude`; `.mdc` rules installed as `.md`)
+
+Claude Code 2.1.139+ provides the equivalent independent continuation evaluator
+through `/goal`; the `complete-everything` skill includes the recommended goal
+condition.
 
 MCP templates live in the repo under `mcp/` — copy `mcp/mcp.json.template` to `~/.cursor/mcp.json` and fill `YOUR_*` placeholders. See [mcp/README.md](../mcp/README.md).
 

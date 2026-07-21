@@ -31,3 +31,6 @@ mcp.json
 
 # Local plan-* audit outputs at repo root (committed samples live under docs/examples/plan-audits/)
 /plan-*.md
+
+# Closure-loop durable state files (per-run scratch — audit trail, not source)
+.cursor/*-state.md

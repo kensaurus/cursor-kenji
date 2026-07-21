@@ -21,6 +21,19 @@ alwaysApply: true
 | Close post-launch feedback loop | `iterate-post-launch` |
 | Disciplined feature-flag rollout | `workflow-feature-flag` |
 | Finish a partial burndown to 100% coverage | `burndown-full` |
+| Close a plan with no connected deferrals | `complete-everything` |
+| Green the whole repository (authorized debt cleanup) | `workflow-green-repo` |
+| Deploy to production and watch it | `workflow-ship-and-observe` |
+| Turn feedback into tracked, verified-closed tickets | `workflow-feedback-to-closure` |
+| Preflight the environment before a long run | `workflow-environment-ready` |
+| Turn an agent failure into a durable guard | `iterate-agent-harness` |
+
+`complete-everything` and `burndown-full` are explicit closure modes: persist
+their state files and continue through phase checkpoints. Before either claims
+completion, apply `verification-before-completion` and invoke the
+`completion-judge` subagent. The packaged Cursor stop hook continues only
+actionable unchecked state; Claude Code 2.1.139+ can enforce the same condition
+with `/goal`.
 
 ## When to use a bundled workflow vs individual skill
 
@@ -91,11 +104,16 @@ Optional: **pre-launch hardening** · **observability & spend** · **launch gate
 
 **Launch gates:** `plan-capacitor-hardening` → `plan-mobile-readiness` · `plan-aeo-readiness`
 
-### Deploy
+### Deploy & operate
 | Task | Skill |
 |------|-------|
 | Post-deploy smoke test | `deploy-verify` |
 | npm package release | `deploy-npm` |
+| Deploy an app, verify the live revision, observe, roll back | `workflow-ship-and-observe` |
+| Drive the whole repo to green (typecheck/lint/test/build) | `workflow-green-repo` |
+| Feedback → deduped tickets → verified closure | `workflow-feedback-to-closure` |
+| Prove the environment can build/test/reach services first | `workflow-environment-ready` |
+| Convert an agent failure into a regression guard | `iterate-agent-harness` |
 
 ### Debug
 | Task | Skill |
@@ -122,6 +140,18 @@ workflow-launch-ready
 
 iterate-post-launch
   └─ debug-sentry-monitor → deploy-verify → test-playwright
+
+complete-everything
+ └─ durable closure set → conditional specialist skills → full verification
+ → completion-judge
+
+workflow-ship-and-observe
+ └─ preflight (green) → deploy → verify live revision → observe window
+ → stable OR rollback/hotfix
+
+workflow-feedback-to-closure
+ └─ gather → dedupe → durable tickets → fix (workflow-fix-and-ship /
+ complete-everything) → verify live → close
 ```
 
 ## Rules vs Skills

@@ -332,7 +332,7 @@ For complete before/after enhancement examples, read `examples.md`.
 - [`HEURISTICS.md`](HEURISTICS.md) — NN/g 10 + Laws of UX, condensed
 - [`PATTERNS.md`](PATTERNS.md) — anti-pattern → replacement library
 - [`examples.md`](examples.md) — complete before / after enhancement walkthroughs
-- [`enhance-web-ui` SKILL.md](../enhance-web-ui/SKILL.md) — companion
+- [`enhance-web-ui` SKILL.md](../../enhance-web-ui/SKILL.md) — companion
   artistic/composition skill. The §"Hidden Failure Modes" section there
   enumerates H1–H12 with detection probes and fix shapes that this skill's
   S11–S18 reference. Read both together when feedback is vague-but-visceral
