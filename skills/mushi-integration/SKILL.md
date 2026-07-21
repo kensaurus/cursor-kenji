@@ -219,7 +219,7 @@ Look for:
 | 6. PDCA improve | `pdca-runner` → `qa_stories (source=pdca)` | ✅ / ❌ | |
 
 All ✅ → Mushi is fully operational end-to-end.  
-Any ❌ → the relevant edge function failed. Use [`mushi-debug`](../mushi-debug/SKILL.md) for targeted diagnosis.
+Any ❌ → the relevant edge function failed. Run the mushi MCP `diagnose_setup` tool for targeted diagnosis.
 
 ---
 

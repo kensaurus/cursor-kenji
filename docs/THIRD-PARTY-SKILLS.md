@@ -28,9 +28,9 @@ Companion slash command (installed by `./install.sh`):
 `./install.sh` copies all `skills/*/` to `~/.cursor/skills/` and reports:
 
 ```text
-[+] Installed 106 skills to ~/.cursor/skills
+[+] Installed 112 skills to ~/.cursor/skills
 [+] Third-party skills: 3 (prefixed thirdparty-*)
-[+] Installed 15 commands to ~/.cursor/commands
+[+] Installed 36 commands to ~/.cursor/commands
 ```
 
 Third-party skills ship in the same pipeline as Kenji-curated skills — no separate install step.

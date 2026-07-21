@@ -77,5 +77,5 @@ Each layer is rebuildable from the one before it. Never transform-in-place on ra
 - `audit-db-schema` — the schema/constraints the pipeline writes into.
 - `supabase-postgres-best-practices` — Postgres-level query/index tuning (official Supabase plugin).
 - `full-stack-ship-discipline` — deploy + verify functions/cron/policies on the remote.
-- `workflow-spec-workflow-spec-tdd` — spec the contract + test idempotency/edge cases before coding.
+- `workflow-spec-tdd` — spec the contract + test idempotency/edge cases before coding.
 - Project-local data-integrity audit skills — post-hoc detection of the failures this prevents.

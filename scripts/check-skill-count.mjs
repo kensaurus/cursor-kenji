@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
- * Single source of truth for the skill count across README, CATALOG, PROMOTION,
- * and package.json. Plan-* count tokens in README are also derived.
+ * Single source of truth for skill and top-level command counts across README,
+ * CATALOG, PROMOTION, and package.json. Plan-* count tokens in README are also
+ * derived.
  *
  * Derived from filesystem: `skills/<name>/SKILL.md` directories.
  *
@@ -14,15 +15,30 @@ import { dirname, join } from "node:path";
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const skillsDir = join(repoRoot, "skills");
+const cursorSkillsDir = join(repoRoot, "skills-cursor");
+const commandsDir = join(repoRoot, "commands");
+const agentsDir = join(repoRoot, "agents");
 const readmePath = join(repoRoot, "README.md");
 const catalogPath = join(repoRoot, "docs", "CATALOG.md");
 const promotionPath = join(repoRoot, "docs", "PROMOTION.md");
 const packagePath = join(repoRoot, "package.json");
+const pluginPath = join(repoRoot, ".cursor-plugin", "plugin.json");
+const llmsPath = join(repoRoot, "llms.txt");
 const fix = process.argv.includes("--fix");
 
 const count = readdirSync(skillsDir, { withFileTypes: true })
   .filter((d) => d.isDirectory() && existsSync(join(skillsDir, d.name, "SKILL.md")))
   .length;
+
+const cursorSkillCount = readdirSync(cursorSkillsDir, { withFileTypes: true })
+  .filter(
+    (entry) =>
+      entry.isDirectory() &&
+      existsSync(join(cursorSkillsDir, entry.name, "SKILL.md")),
+  )
+  .length;
+
+const totalSkillCount = count + cursorSkillCount;
 
 const planCount = readdirSync(skillsDir, { withFileTypes: true })
   .filter(
@@ -31,6 +47,14 @@ const planCount = readdirSync(skillsDir, { withFileTypes: true })
       d.name.startsWith("plan-") &&
       existsSync(join(skillsDir, d.name, "SKILL.md")),
   ).length;
+
+const commandCount = readdirSync(commandsDir, { withFileTypes: true })
+  .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
+  .length;
+
+const agentCount = readdirSync(agentsDir, { withFileTypes: true })
+  .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
+  .length;
 
 /** @param {string} src */
 function applyReadmeRules(src) {
@@ -60,6 +84,26 @@ function applyReadmeRules(src) {
       to: `toolkit of ${count} Cursor agent skills`,
     },
     {
+      name: "installable skill total",
+      re: /\*\*\d+\*\* installable skills/g,
+      to: `**${totalSkillCount}** installable skills`,
+    },
+    {
+      name: "faq primary skill count",
+      re: /\*\*\d+\*\* agent skills in `skills\/`/g,
+      to: `**${count}** agent skills in \`skills/\``,
+    },
+    {
+      name: "faq cursor skill count",
+      re: /plus \*\*\d+\*\* Cursor-specific skills/g,
+      to: `plus **${cursorSkillCount}** Cursor-specific skills`,
+    },
+    {
+      name: "faq total skill count",
+      re: /\(\*\*\d+\*\* total\)/g,
+      to: `(**${totalSkillCount}** total)`,
+    },
+    {
       name: "intro picks",
       re: /agent now has \d+ skills it picks/g,
       to: `agent now has ${count} skills it picks`,
@@ -68,6 +112,46 @@ function applyReadmeRules(src) {
       name: "whats inside table",
       re: /\| \*\*Skills\*\* \| \d+ \|/g,
       to: `| **Skills** | ${count} |`,
+    },
+    {
+      name: "command tagline",
+      re: /\d+ slash commands/g,
+      to: `${commandCount} slash commands`,
+    },
+    {
+      name: "whats inside commands",
+      re: /\| \*\*Commands\*\* \| \d+ \|/g,
+      to: `| **Commands** | ${commandCount} |`,
+    },
+    {
+      name: "command section heading",
+      re: /^## Commands \(\d+\)/gm,
+      to: `## Commands (${commandCount})`,
+    },
+    {
+      name: "command tree comment",
+      re: /# \d+ slash commands/g,
+      to: `# ${commandCount} slash commands`,
+    },
+    {
+      name: "subagent tagline",
+      re: /\d+ subagents/g,
+      to: `${agentCount} subagents`,
+    },
+    {
+      name: "subagent section heading",
+      re: /^## Subagents \(\d+\)/gm,
+      to: `## Subagents (${agentCount})`,
+    },
+    {
+      name: "whats inside subagents",
+      re: /\| \*\*Subagents\*\* \| \d+ \|/g,
+      to: `| **Subagents** | ${agentCount} |`,
+    },
+    {
+      name: "subagent tree comment",
+      re: /# \d+ subagents/g,
+      to: `# ${agentCount} subagents`,
     },
     {
       name: "tree comment",
@@ -119,6 +203,11 @@ const readmeResult = applyReadmeRules(readFileSync(readmePath, "utf8"));
 
 const catalogResult = applyFileRules(catalogPath, "docs/CATALOG.md", [
   { name: "catalog heading", re: /^## Skills \(\d+\)/m, to: `## Skills (${count})` },
+  {
+    name: "catalog command heading",
+    re: /^## Commands \(\d+\)/m,
+    to: `## Commands (${commandCount})`,
+  },
 ]);
 
 const promotionResult = applyFileRules(promotionPath, "docs/PROMOTION.md", [
@@ -132,12 +221,32 @@ const promotionResult = applyFileRules(promotionPath, "docs/PROMOTION.md", [
     re: /\d+ production-ready agent skills/g,
     to: `${count} production-ready agent skills`,
   },
+  {
+    name: "promotion generic skill count",
+    re: /\d+ agent skills,/g,
+    to: `${count} agent skills,`,
+  },
+  {
+    name: "promotion slash commands",
+    re: /\d+ slash commands/g,
+    to: `${commandCount} slash commands`,
+  },
+  {
+    name: "promotion inventory",
+    re: /cursor-kenji \(\d+ skills, \d+ commands, \d+ subagents\)/g,
+    to: `cursor-kenji (${count} skills, ${commandCount} commands, ${agentCount} subagents)`,
+  },
+  {
+    name: "promotion subagents",
+    re: /\d+ subagents/g,
+    to: `${agentCount} subagents`,
+  },
 ]);
 
 let packageResult = { src: "", mismatches: [] };
 if (existsSync(packagePath)) {
   const pkg = JSON.parse(readFileSync(packagePath, "utf8"));
-  const nextDesc = `${count} Cursor AI agent skills, 13 slash commands, 5 subagents, and MCP configs for React/Next.js/Supabase development.`;
+  const nextDesc = `${count} Cursor AI agent skills, ${commandCount} slash commands, ${agentCount} subagents, and MCP configs for React/Next.js/Supabase development.`;
   if (pkg.description !== nextDesc) {
     packageResult.mismatches.push({
       file: "package.json",
@@ -150,11 +259,29 @@ if (existsSync(packagePath)) {
   }
 }
 
+const pluginResult = applyFileRules(pluginPath, ".cursor-plugin/plugin.json", [
+  {
+    name: "plugin description",
+    re: /\d+ Cursor agent skills, \d+ slash commands, \d+ subagents/g,
+    to: `${count} Cursor agent skills, ${commandCount} slash commands, ${agentCount} subagents`,
+  },
+]);
+
+const llmsResult = applyFileRules(llmsPath, "llms.txt", [
+  {
+    name: "llms inventory",
+    re: /\d+ agent skills, \d+ slash commands, \d+ subagents/g,
+    to: `${count} agent skills, ${commandCount} slash commands, ${agentCount} subagents`,
+  },
+]);
+
 const allMismatches = [
   ...readmeResult.mismatches,
   ...catalogResult.mismatches,
   ...promotionResult.mismatches,
   ...packageResult.mismatches,
+  ...pluginResult.mismatches,
+  ...llmsResult.mismatches,
 ];
 
 if (fix) {
@@ -162,7 +289,11 @@ if (fix) {
   if (catalogResult.src) writeFileSync(catalogPath, catalogResult.src);
   if (promotionResult.src) writeFileSync(promotionPath, promotionResult.src);
   if (packageResult.src) writeFileSync(packagePath, packageResult.src);
-  console.log(`✓ Normalized to ${count} skills (${planCount} plan-*).`);
+  if (pluginResult.src) writeFileSync(pluginPath, pluginResult.src);
+  if (llmsResult.src) writeFileSync(llmsPath, llmsResult.src);
+  console.log(
+    `✓ Normalized to ${count} skills (${planCount} plan-*), ${commandCount} commands, and ${agentCount} subagents.`,
+  );
   process.exit(0);
 }
 
@@ -175,4 +306,6 @@ if (allMismatches.length) {
   process.exit(1);
 }
 
-console.log(`✓ Skill count matches filesystem (${count} skills, ${planCount} plan-*).`);
+console.log(
+  `✓ Counts match filesystem (${count} skills, ${planCount} plan-*, ${commandCount} commands, ${agentCount} subagents).`,
+);

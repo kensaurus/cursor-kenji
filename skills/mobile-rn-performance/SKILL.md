@@ -70,5 +70,5 @@ Never optimize blind. Identify the symptom, then apply the matching category. Me
 ## Composes with
 - `mobile-rn-screen` — layout, safe-area, touch-target, native feel.
 - `mobile-emulator-start` / `mobile-emulator-test` — boot + on-device verification.
-- `workflow-spec-workflow-spec-tdd` — spec + test the perf fix so it doesn't regress.
+- `workflow-spec-tdd` — spec + test the perf fix so it doesn't regress.
 - `enhance-capacitor-ui` — if the app is hybrid rather than bare RN, the axis architecture differs.

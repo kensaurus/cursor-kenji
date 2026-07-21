@@ -1,0 +1,105 @@
+---
+name: workflow-environment-ready
+description: >-
+  Prove the working environment is actually runnable before starting a long or
+  autonomous task, so a multi-hour run does not fail at the finish line on a
+  missing tool, dependency, service, or credential. Detect the stack, verify
+  runtimes and package installs, confirm required services and env vars are
+  reachable (without printing secrets), and confirm the real verification
+  commands execute. Use when "set up the environment", "is this ready to run",
+  "before we start the big task", "preflight the repo", "why won't the tests
+  run", or at the start of any burndown / complete-everything / long agent run.
+license: MIT
+---
+
+# workflow-environment-ready — Preflight the Working Environment
+
+Long autonomous runs fail most expensively at the end — the work is done, then
+the build won't run, a service is down, or a key is missing. This skill front-
+loads that risk: prove the environment can build, test, and reach its
+dependencies **before** implementation starts.
+
+> **Verify the environment can run the task, don't assume it.** Every check is
+> an executed command with observed output, not an inference from a config file.
+
+## Phase 0 — Detect the stack and requirements
+
+Read, don't guess:
+
+- **Runtimes/managers:** `package.json` (`engines`, `packageManager`),
+  `.nvmrc`, `.tool-versions`, `pyproject.toml`/`requirements.txt`, `go.mod`,
+  `Gemfile`, `Cargo.toml`.
+- **Verification commands:** scripts in `package.json`/`Makefile`/`justfile`,
+  CI workflows, `AGENTS.md`/`CLAUDE.md`, README.
+- **Services:** `docker-compose.yml`, `supabase/config.toml`, DB URLs, Redis,
+  queues, external APIs.
+- **Config contract:** `.env.example` / `.env.sample` — the list of required
+  variables (names only).
+
+Produce a requirements checklist before running anything.
+
+## Phase 1 — Verify toolchain and dependencies
+
+1. Confirm each required runtime is present at the required version
+   (`node -v`, `python --version`, etc.). A mismatch is a blocker to surface
+   now, not at hour three.
+2. Confirm dependencies are installed and consistent with the lockfile
+   (`npm ci` / `pnpm install --frozen-lockfile` / `pip install -r` / etc.).
+   Prefer the reproducible/frozen install. Report, don't hide, install errors.
+3. Confirm the package manager matches the repo (`packageManager` field / lock
+   file) — do not switch managers.
+
+## Phase 2 — Verify services and configuration
+
+1. For each required service, confirm reachability with a real check (DB
+   connect/ping, `supabase status`, an HTTP health request, container up).
+   A required service that is down is a blocker with a precise remedy.
+2. Confirm every variable in `.env.example` is present in the environment.
+   **Report only presence/absence — never print, log, or echo secret values.**
+   Per project rules, `.env*` may be read to understand config but never
+   transmitted.
+3. Note any variable that is present but obviously placeholder (`YOUR_*`,
+   empty) so it fails now rather than mid-run.
+
+## Phase 3 — Prove the verification commands execute
+
+Run the cheapest form of each gate to confirm it actually starts and the
+harness is wired — not to make it fully green (that is `workflow-green-repo`):
+
+- typecheck: does it run and resolve config? (compile errors are fine to note)
+- lint: does the linter start and find the config?
+- tests: does the runner discover and start the suite? Run a fast subset.
+- build/dev server: does it boot far enough to prove the pipeline works?
+
+Distinguish "the command cannot run" (environment blocker) from "the command
+runs and reports code issues" (normal work for the task ahead).
+
+## Phase 4 — Readiness report
+
+```md
+## Environment Readiness — <repo> — <date>
+### Verdict: READY | READY WITH NOTES | BLOCKED
+### Toolchain
+- <runtime>: required <x>, found <y> — ok/mismatch
+- dependencies: <install command> → ok/failed
+### Services
+- <service>: reachable? <how checked> → ok/down
+### Configuration
+- env vars: <n>/<n> present (names only) — missing: <names or none>
+### Verification commands
+- typecheck/lint/test/build: runs? <yes/no + note>
+### Blockers (must resolve before the long run)
+- none | <blocker + one precise ask/remedy>
+```
+
+Only declare **READY** when the toolchain installs, required services are
+reachable, all config names are present, and each gate command executes. A
+missing credential, unreachable service, or absent tool is a genuine blocker —
+ask one precise question immediately rather than starting a run that will fail.
+
+## Related
+
+- `workflow-green-repo` — after the environment runs, make every gate pass
+- `complete-everything` / `burndown-full` — run this first for long closures
+- `workflow-onboard` — orient to an unfamiliar codebase
+- `debug-error` — diagnose a command that cannot start

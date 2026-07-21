@@ -191,6 +191,17 @@ if [ -d "$SCRIPT_DIR/rules" ]; then
     ok "Installed $RULE_COUNT rules to $CURSOR_RULES_DIR"
 fi
 
+# ---- Cursor: opt-in completion stop hook (safe merge via Node installer) ----
+if command -v node >/dev/null 2>&1; then
+    if $QUIET; then
+        node "$SCRIPT_DIR/bin/install.mjs" --cursor --only hooks >/dev/null
+    else
+        node "$SCRIPT_DIR/bin/install.mjs" --cursor --only hooks
+    fi
+else
+    warn "Node.js not found; skipped the optional completion stop hook"
+fi
+
 # ---- Cursor: MCP config (only if missing; never overwritten) ----
 if [ ! -f "$MCP_CONFIG" ]; then
     if [ -f "$SCRIPT_DIR/mcp/mcp.json.template" ]; then

@@ -26,7 +26,7 @@ Every skill has a category prefix:
 
 ---
 
-## Skills (94)
+## Skills (100)
 
 ### Enhance
 
@@ -413,6 +413,11 @@ Every skill has a category prefix:
 **What it does:** End-to-end release workflow for a Changesets + GitHub Actions + npm Trusted Publisher (OIDC) monorepo with per-package GitHub Releases.
 **Related:** `deploy-verify`, `workflow-pr`
 
+#### `workflow-ship-and-observe`
+**Triggers:** "ship it", "deploy to production", "release this", "go live", "roll this out", "promote to prod", "cut a release", "/ship-and-observe"
+**What it does:** Take merged, green code to a verified, monitored production release for any app stack. Confirms the target and exact source revision, deploys the intended revision (with backend dependencies), proves the deployed build equals that revision (not just a 200), smoke-tests critical flows against production, watches error/latency signals through a defined stability window, then confirms stable or executes an explicit rollback/hotfix. Completion is `deployed-verified` after the live check and `observed-stable` only after the window passes.
+**Related:** `deploy-verify`, `deploy-npm`, `full-stack-ship-discipline`, `iterate-post-launch`, `workflow-feedback-to-closure`, `verification-before-completion`
+
 ---
 
 ### Workflow
@@ -440,7 +445,32 @@ Every skill has a category prefix:
 #### `burndown-full`
 **Triggers:** "finish the burndown", "it stopped halfway", "apply this everywhere", "complete the refactor across all files", "make sure nothing was missed", "ran out of steam", "half-migrated repo", "/burndown-full"
 **What it does:** Drive a planned change to 100% coverage when a prior agent run stopped early. Defines MATCH/DONE searchable patterns, enumerates the full repo-wide worklist (not the plan's file list), executes in small batches with persistent `.cursor/burndown-state.md`, and loops a verification gate (fresh grep → zero hits, typecheck, lint, test, build) until provably complete. Framework-agnostic — discovers project verification commands from package.json/Makefile/AGENTS.md.
-**Related:** `composer-2.5-execution`, `plan-*` skills (audit-only), `workflow-refactor`
+**Related:** `complete-everything`, `composer-2.5-execution`, `plan-*` skills (audit-only), `workflow-refactor`
+
+#### `complete-everything`
+**Triggers:** "complete everything", "don't defer", "fix out of scope too", "finish the whole plan", "close every TODO", "finish all follow-ups", "no deferrals", "/complete-everything"
+**What it does:** Close an approved plan's intent, behavior, and verification gaps. Recovers unfinished plan items plus connected work parked as out of scope/follow-up/optional, writes observable acceptance criteria and durable progress to `.cursor/complete-everything-state.md`, implements in independently verifiable milestones, routes API/FE-BE/performance/UI work to the matching skills, and loops the full applicable verification ladder until every closure item has fresh evidence. The packaged Cursor stop hook continues actionable unchecked state; Claude Code 2.1.139+ can use `/goal`. Final closure requires an independent `completion-judge` PASS at the claimed evidence level.
+**Related:** `completion-judge`, `verification-before-completion`, `burndown-full`, `test-unit`, `audit-fe-api`, `debug-fe-be-integration`, `audit-performance`, `test-playwright`
+
+#### `workflow-green-repo`
+**Triggers:** "make the repo green", "get CI passing", "fix all the failing tests", "clear the typecheck errors", "zero lint errors", "make the build pass", "clean up the baseline", "/green-repo"
+**What it does:** Drive an entire repository to a verified-green baseline — typecheck, lint, tests, and build all passing from a clean run — when fixing pre-existing debt is explicitly authorized. Discovers the real gate commands, captures the baseline, enumerates every failure into `.cursor/green-repo-state.md`, fixes root causes in batches (never skip/`.only`/`@ts-ignore`/blanket-snapshot to force green), and proves green with a fresh from-scratch run. Distinct from `complete-everything` (one plan's scope) and `burndown-full` (one searchable pattern).
+**Related:** `complete-everything`, `burndown-full`, `verification-before-completion`, `completion-judge`, `debug-error`
+
+#### `workflow-feedback-to-closure`
+**Triggers:** "triage this feedback", "turn these reports into tickets", "process the bug backlog", "handle these review comments", "close the loop on QA findings", "manage incoming issues", "/feedback-to-closure"
+**What it does:** Turn raw feedback — bug reports, complaints, review comments, Sentry issues, QA/audit findings — into deduplicated, durable, trackable tickets and drive each to production-verified closure. Normalizes and clusters signals, dedupes against existing issues, writes reproducible tickets to `.cursor/feedback-closure-state.md` (and the tracker), prioritizes by impact, fixes via the right skill with a regression test, and closes only after the fix is verified where the user hit it — not when a PR merges.
+**Related:** `workflow-fix-and-ship`, `complete-everything`, `iterate-post-launch`, `workflow-ship-and-observe`, `debug-sentry-monitor`, `verification-before-completion`
+
+#### `workflow-environment-ready`
+**Triggers:** "set up the environment", "is this ready to run", "before we start the big task", "preflight the repo", "why won't the tests run", start of any long/autonomous run
+**What it does:** Prove the working environment is actually runnable before a long or autonomous task, so a multi-hour run doesn't fail at the finish line on a missing tool, dependency, service, or credential. Detects the stack, verifies runtimes and reproducible installs, confirms required services are reachable and every `.env.example` variable is present (names only — never printing secrets), and confirms each verification command executes. Emits a READY / READY WITH NOTES / BLOCKED verdict.
+**Related:** `workflow-green-repo`, `complete-everything`, `burndown-full`, `workflow-onboard`, `debug-error`
+
+#### `iterate-agent-harness`
+**Triggers:** "the agent stopped early again", "it said done but wasn't", "it gamed the test", "improve the skills so this doesn't recur", "add a guard for this", "close the loop on that failure"
+**What it does:** Turn an agent's own failure — premature stop, false "done", reward-hacked check, missed file, broken handoff — into a durable improvement to the harness (skills, rules, hooks, subagents, verification scripts) plus a regression check that would have caught it. Classifies the failure mode, locates the harness gap, adds a guard that fails before the fix, makes the smallest durable fix, validates, and records the lesson. Operates on this toolkit itself.
+**Related:** `verification-before-completion`, `completion-judge`, `complete-everything`, `burndown-full`, `create-skill`, `create-rule`, `create-hook`, `meta-skill-creator`
 
 #### `workflow-housekeep`
 **Triggers:** "housekeep", "clean up repo", "update README", "update dependencies", "fix vulnerabilities", "remove dead code", "tidy up", "repo maintenance", "spring clean", "declutter"
@@ -525,7 +555,20 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 
 ---
 
-## Commands (14)
+## Subagents (6)
+
+| Agent | Trigger | Output |
+|-------|---------|--------|
+| `code-reviewer` | Code changes, review request | Severity-ranked quality/security/type findings |
+| `completion-judge` | Approved-plan, burndown, or wide-change completion claim | `PASS`, `CONTINUE`, or `BLOCKED` after reconciling outcome, state, diff, and fresh evidence |
+| `db-migrator` | Migration, schema, new table | SQL/RLS/index guidance |
+| `debugger` | Error, exception, unexpected behavior | Root cause and verified fix |
+| `deploy-checker` | Deploy, ship, production | Pre-deploy readiness verdict |
+| `perf-monitor` | Slow, laggy, optimize | Performance findings and priorities |
+
+---
+
+## Commands (36)
 
 Commands fall into two groups: **standalone** (full playbook in the file) and **pointer** (thin slash entry delegating to a skill).
 
@@ -543,6 +586,10 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | Command | Points to | Notes |
 |---------|-----------|-------|
 | `/burndown-full` | `burndown-full` | Finish a partial refactor/migration to 100% repo coverage (MATCH/DONE + verification gate) |
+| `/complete-everything` | `complete-everything` | Close connected deferrals and prove the whole approved outcome with fresh tests |
+| `/green-repo` | `workflow-green-repo` | Drive the whole repo to green (typecheck/lint/test/build) — authorized debt cleanup |
+| `/ship-and-observe` | `workflow-ship-and-observe` | Deploy, verify the live revision, observe the stability window, roll back if needed |
+| `/feedback-to-closure` | `workflow-feedback-to-closure` | Feedback → deduped durable tickets → fix → production-verified closure |
 | `/commit` | `workflow-git-commit` | Pre-commit pipeline: lint, Sentry, build, scope, conventional commit, push |
 | `/debug` | `debug-error` | Hypothesis-driven debugging with runtime evidence |
 | `/pr` | `workflow-pr` | Pre-flight → commit → push → open PR |
@@ -580,10 +627,14 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 
 | Intent | Bundled skill | What it chains |
 |--------|--------------|----------------|
+| Close a plan with no connected deferrals | `complete-everything` | durable closure set → conditional specialists → full verification → completion judge |
 | Build a feature end-to-end | `workflow-build-feature` | spec → TDD → unit tests → smoke → PR |
 | Fix a bug and ship it | `workflow-fix-and-ship` | debug → fix → smoke → PR → deploy |
 | Pre-release quality check | `workflow-quality-gate` | red-team → security → bundle → perf → unit tests |
 | Full launch preparation | `workflow-launch-ready` | SEO + PWA + bundle + i18n + quality gate + deploy + iterate |
+| Green the whole repository (authorized) | `workflow-green-repo` | discover gates → enumerate failures → batch fix → prove green from scratch |
+| Deploy to production and observe | `workflow-ship-and-observe` | preflight → deploy → verify live revision → observe → stable/rollback |
+| Feedback → tracked → verified closed | `workflow-feedback-to-closure` | gather → dedupe → tickets → fix → verify live → close |
 
 ### Chaining diagram
 
@@ -600,6 +651,14 @@ workflow-quality-gate
 workflow-launch-ready
   └─ enhance-web-seo → enhance-pwa → audit-bundle-size → audit-i18n
      → workflow-quality-gate → deploy-verify → iterate-post-launch
+
+workflow-ship-and-observe
+  └─ preflight (green) → deploy → verify live revision → observe window
+     → stable OR rollback/hotfix
+
+workflow-feedback-to-closure
+  └─ gather → dedupe → durable tickets → fix (workflow-fix-and-ship /
+     complete-everything) → verify live → close
 ```
 
 ### Specialist compositions (individual skills)
