@@ -26,7 +26,7 @@ Every skill has a category prefix:
 
 ---
 
-## Skills (100)
+## Skills (106)
 
 ### Enhance
 
@@ -74,6 +74,26 @@ Every skill has a category prefix:
 **Triggers:** "make it a PWA", "offline support", "install prompt", "push notifications", "service worker", "add to home screen", "background sync", "Lighthouse PWA score", "app-like experience", "installable", "works offline"
 **What it does:** Adds or upgrades PWA features: Web App Manifest, Workbox service worker with per-asset caching strategies (CacheFirst / NetworkFirst / StaleWhileRevalidate), install prompt, push notifications, offline page. Capacitor-compatible. Lighthouse PWA audit before and after.
 **Related:** `enhance-capacitor-ui`, `mobile-capacitor-platform`, `audit-performance`
+
+#### `enhance-motion`
+**Triggers:** "add motion", "animate the app", "make it feel alive", "motion pass", "add micro-interactions across the app", "enhance-motion"
+**What it does:** Audits the existing design system + current motion, then applies coherent, reduced-motion-safe, 60fps motion using the right-sized 2026 stack — CSS/tw-animate-css for utility transitions, Auto-Animate for zero-config list/layout changes, Motion (motion.dev) for component transitions/gestures/presence, GSAP only for complex timelines. Defines a motion-token SSOT (durations/easings). Distinct from `design-motion` (from-scratch cookbook). Applies changes and verifies via browser MCP.
+**Related:** `design-motion`, `audit-uiux-design-system`, `audit-performance`, `audit-accessibility`, `housekeep-design`
+
+#### `housekeep-design`
+**Triggers:** "clean up the design system", "resolve design conflicts", "our UI is inconsistent across pages", "consolidate tokens/components", "streamline the design system", "keep the design SSOT", "housekeep-design"
+**What it does:** Consolidates a design system that has drifted across many sessions/devs into one source of truth. Detects competing tokens, duplicate components, naming drift, mixed icon libraries, and arbitrary values; reconciles each conflict to a best-of-both canonical form; migrates all usages via mechanical codemod; and installs lint guardrails so drift can't recur. Establishes a 3-layer W3C token taxonomy. The execution arm of `plan-uiux-unification`; the design counterpart of `workflow-housekeep`.
+**Related:** `plan-uiux-unification`, `audit-uiux-design-system`, `enhance-agent-guardrails`, `burndown-full`, `enhance-motion`, `design-system`
+
+#### `enhance-web-forms`
+**Triggers:** "improve this form", "form validation", "accessible form", "multi-step form", "form error handling", "the form UX is bad", "enhance-web-forms"
+**What it does:** Builds/upgrades web forms to production quality: accessible structure (labels, fieldsets, autocomplete, input types), schema-driven validation with client↔server parity, screen-reader-associated inline errors, complete interaction states (loading/disabled/success/error/empty), multi-step flows, unsaved-changes guards, and optimistic submit feedback. Auto-detects the form + validation stack. Applies changes and verifies via browser MCP.
+**Related:** `audit-accessibility`, `audit-ux`, `audit-fe-api`, `backend-error-handling`, `design-motion`, `enhance-web-ux`
+
+#### `enhance-agent-guardrails`
+**Triggers:** "set up guardrails", "stop vibe-coding regressions", "add pre-commit security checks", "protect the repo from AI mistakes", "add CI security gates", "governance for AI code", "enhance-agent-guardrails"
+**What it does:** Installs guardrails-as-code so AI/vibe-coding can't keep reintroducing the same problem classes (leaked secrets, injection, off-system styles, untested code, vulnerable deps, destructive ops). Audits existing protection, then sets up agent policy files (`.cursor/rules` + `AGENTS.md`), a pre-commit hook (secret scan + SAST + lint/typecheck), a CI gate that treats agent output as untrusted, and lint-as-policy rules. Verifies the guards actually block a planted bad pattern; flags merge-blocking CI changes for human review.
+**Related:** `audit-security`, `plan-security-audit`, `plan-secrets-audit`, `plan-dependency-provenance`, `plan-data-integrity`, `housekeep-design`
 
 ---
 
@@ -291,6 +311,16 @@ Every skill has a category prefix:
 **Triggers:** "API audit", "frontend API", "API mismatch", "request optimization", "API contract", "network requests"
 **What it does:** Audit frontend API calls against backend implementation. Validates endpoints exist, parameters match, types align, caching configured, error handling present. Uses Sentry MCP for production API errors.
 **Related:** `debug-fe-be-integration`, `design-api`
+
+#### `audit-realworld`
+**Triggers:** "audit against realworld", "compare my app to realworld", "conduit conformance", "is my full-stack app complete", "full-stack gap check", "what's missing to reach production"
+**What it does:** Audits a full-stack app against the RealWorld ("Conduit") reference — its formal API spec, shared Bruno/Hurl E2E suite, and closest-stack reference implementation. Auto-detects strict spec conformance (repo is a RealWorld build) vs benchmarking the repo's own domain against RealWorld's production-relevant patterns, and bows out on non-CRUD/non-web repos. Read-only: produces a prioritized Implemented/Partial/Missing/Diverges gap report across FE/BE/data, then delegates real production hardening to `audit-security` / `plan-*`. RealWorld is a completeness/pattern reference, not a production bar.
+**Related:** `audit-fe-api`, `debug-fe-be-integration`, `audit-security`, `plan-perf-audit`, `plan-rls-audit`, `complete-everything`, `full-stack-ship-discipline`
+
+#### `audit-resilience`
+**Triggers:** "is this production-ready", "resilience audit", "will this survive real traffic", "audit retries/timeouts/idempotency", "reliability review", "the 80% problem"
+**What it does:** Read-only audit for the non-functional "20%" agents skip: timeouts, retries with backoff+jitter, circuit breakers, idempotency keys, rate limiting, graceful degradation, cancellation, audit logging, and PII handling in logs. Inventories every external call, mutation, webhook, and payment path and marks each concern Implemented/Partial/Missing with `file:line`, severity, and the exact fix skill. Delegates remediation to backend-* and plan-* skills.
+**Related:** `backend-error-handling`, `backend-patterns`, `backend-observability`, `plan-llm-cost-guardrails`, `plan-input-validation`, `complete-everything`
 
 #### `audit-langfuse-llm`
 **Triggers:** "audit LLM", "check Langfuse", "audit prompts", "check AI quality", "LLM PDCA", "audit AI costs", "check traces", "audit eval scores", "check hallucination"
