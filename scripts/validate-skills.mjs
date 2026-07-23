@@ -100,6 +100,34 @@ for (const group of groups) {
   }
 }
 
+// ---- Command-name collisions with Claude Code built-ins / bundled skills ----
+// Claude Code merges commands into skills: commands/<x>.md creates /<x>. If <x>
+// matches a built-in command, Claude shows a duplicate; if it matches a bundled
+// skill, our file silently overrides Claude's. Reserve both sets so a colliding
+// command name fails CI instead of shipping (see 1.8.3 /mcp,/review,/debug fix).
+const CLAUDE_RESERVED = new Set([
+  // built-in commands
+  "add-dir", "agents", "bug", "clear", "compact", "config", "cost", "doctor", "exit",
+  "export", "help", "hooks", "ide", "init", "install-github-app", "login", "logout",
+  "mcp", "memory", "migrate-installer", "model", "output-style", "permissions",
+  "pr-comments", "release-notes", "resume", "review", "security-review", "status",
+  "terminal-setup", "todos", "usage", "vim",
+  // bundled skills
+  "code-review", "batch", "debug", "loop", "claude-api", "run", "verify", "run-skill-generator",
+]);
+const cmdDir = join(repoRoot, "commands");
+if (existsSync(cmdDir)) {
+  for (const f of readdirSync(cmdDir)) {
+    if (!f.endsWith(".md")) continue;
+    const cmd = f.slice(0, -3);
+    if (CLAUDE_RESERVED.has(cmd)) {
+      errors.push(
+        `commands/${f}: '/${cmd}' collides with a Claude Code built-in/bundled command — rename it (e.g. /${cmd}-guide)`,
+      );
+    }
+  }
+}
+
 if (asJson) {
   console.log(JSON.stringify({ total, errors, warnings }, null, 2));
 } else {

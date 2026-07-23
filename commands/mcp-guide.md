@@ -4,6 +4,8 @@ description: "Reference for the MCP toolset (Context7, Firecrawl, Playwright, Su
 
 # MCP-Powered Development
 
+> **Named `/mcp-guide` (not `/mcp`)** to avoid colliding with Claude Code's built-in `/mcp` command (the MCP server manager). This is a reference for which MCP toolset to reach for and when.
+
 ## Tools
 
 ### Context7 - Live Documentation

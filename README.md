@@ -313,14 +313,14 @@ Every skill carries two tags: a **family** (`<prefix>-<topic>`) and a **lifecycl
 | `/commit` | After coding | Lint, typecheck, commit |
 | `/pr` | Ready to ship | Push + open PR |
 | `/fix-issue [#]` | Bug reports | Issue → fix → PR |
-| `/debug` | Tricky bugs | Instrumented debugging |
-| `/review` | Before merge | Agent + manual review |
+| `/debug-issue` | Tricky bugs | Instrumented debugging |
+| `/review-code` | Before merge | Agent + manual review |
 | `/test` | Before commit | Test suite + coverage |
 | `/update-deps` | Maintenance | Safe dep updates |
 | `/research` | Before coding | Firecrawl doc research |
 | `/readme` | End of session | Sync READMEs |
 | `/refactor` | Long files | Modular split |
-| `/mcp` | MCP workflow | Tool reference |
+| `/mcp-guide` | MCP workflow | Tool reference (renamed to avoid Claude Code's built-in `/mcp`) |
 | `/uiux` | UI review | Design-system enforcement |
 | `/thirdparty-web-interface-guidelines` | Vercel UI audit | Review files against [Web Interface Guidelines](https://vercel.com/design/guidelines) |
 | `/*-plan` (17 aliases) | Audit before changing | Thin pointers to the `plan-*` skills (`/uiux-plan`, `/security-plan`, …) — audit + plan only. See [CATALOG](docs/CATALOG.md#pointer-delegates-to-skill) |

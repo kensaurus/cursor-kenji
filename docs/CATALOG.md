@@ -616,7 +616,7 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/plan` | `plan.md` | Plan Mode — research codebase, clarify, produce approved plan before coding |
 | `/research` | `research.md` | Three-phase Firecrawl deep research → gap analysis → implementation plan |
 | `/fix-issue` | `fix-issue.md` | Fetch GitHub issue → find code → implement fix → open PR |
-| `/mcp` | `mcp.md` | MCP-powered dev workflow reference |
+| `/mcp-guide` | `mcp-guide.md` | MCP-powered dev workflow reference (renamed from `/mcp` to avoid Claude Code's built-in `/mcp`) |
 
 ### Pointer (delegates to skill)
 
@@ -628,11 +628,11 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/ship-and-observe` | `workflow-ship-and-observe` | Deploy, verify the live revision, observe the stability window, roll back if needed |
 | `/feedback-to-closure` | `workflow-feedback-to-closure` | Feedback → deduped durable tickets → fix → production-verified closure |
 | `/commit` | `workflow-git-commit` | Pre-commit pipeline: lint, Sentry, build, scope, conventional commit, push |
-| `/debug` | `debug-error` | Hypothesis-driven debugging with runtime evidence |
+| `/debug-issue` | `debug-error` | Hypothesis-driven debugging with runtime evidence (renamed from `/debug` to avoid Claude Code's bundled `/debug`) |
 | `/pr` | `workflow-pr` | Pre-flight → commit → push → open PR |
 | `/readme` | `enhance-readme`, `docs-writer` | Visual showcase + content sync |
 | `/refactor` | `workflow-refactor` | Analyze → split → extract → verify behavior |
-| `/review` | `audit-code-review` | Agent review + manual checklist |
+| `/review-code` | `audit-code-review` | Agent review + manual checklist (renamed from `/review` to avoid Claude Code's built-in `/review`) |
 | `/test` | `test-unit`, `test-qa`, `mobile-emulator-test` | Type check → unit → integration → E2E |
 | `/uiux` | `audit-uiux-design-system`, `audit-ux`, `enhance-web-ui`, `enhance-web-ux` | Audit + enhance UI/UX |
 | `/uiux-plan` | `plan-uiux-unification` | Full UI/UX unification plan (audit only, no fixes) |
