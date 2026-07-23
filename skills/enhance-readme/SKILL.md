@@ -35,6 +35,20 @@ license: MIT
 
 Add a theme-aware hero image and a tour grid to a project's README so the repo advertises itself visually instead of being a wall of text.
 
+## The words matter as much as the pixels
+
+A gorgeous hero on top of a jargon wall still loses the reader. This skill owns the **visual** layer; for the **copy**, follow `docs-writer`'s core principle — *write for the reader's mental model first* (answer **what / why / who / how** in plain language before reference detail). Don't ship a beautiful README whose first paragraph a newcomer can't parse.
+
+The finished top of the README should read, in this order:
+
+1. **Name + one plain-English tagline** — what it does, no jargon
+2. **Visual hero** (`<picture>`, theme-aware) — the screenshot or GIF
+3. **Why it exists / who it's for** — one line each, so a wrong-fit visitor leaves early
+4. **Shortest path to a first win** — install → one command → result
+5. Reference depth (features, config, API) below the fold
+
+If the project is novel or leans on 3+ domain terms, add `docs-writer`'s plain-language **building-blocks glossary** just under the hero — it's the decoder ring for everything below.
+
 ## Critical Rules
 
 > **Use the live production URL when one exists.** It shows real data, no dev banners, and matches what visitors will see if they click through.
@@ -186,10 +200,13 @@ Paste the HERO block **directly under the badges**, replacing any existing tagli
 
 ![badges...]
 
-**A one-line tagline that nails what this is.**
+**A one-line tagline that nails what this is — in plain English, no jargon.**
 A second-line elaboration with the most distinctive features (3–5 keywords).
 
 [HERO BLOCK FROM SCRIPT GOES HERE]
+
+<!-- Under the hero, add one line each (see docs-writer): -->
+<!-- **Why it exists** — the problem it solves. **Who it's for** — audience + stack. -->
 
 </div>
 
@@ -469,6 +486,7 @@ A quick look at the rooms inside. Click any panel to land on it in the live demo
 
 The skill is done when:
 
+- The README's first screen answers **what / why / who** in plain language — not just a pretty picture (see `docs-writer`)
 - A theme-aware hero renders at the top of the README on github.com in both dark and light viewer themes
 - The Tour grid has at least 2 cells (ideally 4) with concrete captions
 - All screenshots are committed under `docs/screenshots/`, total < 10 MB

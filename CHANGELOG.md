@@ -4,6 +4,20 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.8.2] — 2026-07-23
+
+Documentation-skill release — teach the skills to write the way the 1.8.1 README now reads. Bakes the reader-first, plain-language 5W1H approach into the documentation-authoring skills themselves, so every doc they produce orients a newcomer before diving into reference detail. No other skill, command, rule, or hook behavior changes.
+
+### Changed
+
+- **`docs-writer`** — new **"Core principle — write for the reader's mental model first"** section with a 5W1H table (what/why/who/how/when·where → how to answer each) and the rules that follow (lead with the goal not the implementation, progressive disclosure, beat the curse of knowledge, show-don't-tell). Adds a **"Newcomer on-ramp"** section demonstrating the 3-column plain-language building-blocks glossary, a **"Kill the Jargon"** guideline (plain-first, precise-second), an upgraded README template (plain tagline + why/who + glossary hint), and two new README-checklist items (first-screen what/why/who; jargon defined or glossed).
+- **`enhance-readme`** — previously visual-only; adds **"The words matter as much as the pixels"** coupling the hero/screenshot work to `docs-writer`'s principle, defines the ideal first-screen order (name+tagline → hero → why/who → first-win → depth), adds why/who to the hero template, and adds a stop-condition that the first screen must answer what/why/who in plain language.
+- **`docs-coauthor`** — adds a guiding-principle line: orient the reader (what/why/who) from the first sentence, not just at the Reader-Testing stage; points to the canonical `docs-writer` rule.
+
+Kept DRY: the full principle lives in `docs-writer`; the other two reference it. `plan-docs-sync` (a drift *audit*, not an authoring skill) intentionally unchanged.
+
+---
+
 ## [1.8.1] — 2026-07-23
 
 Documentation-clarity release — same skills, friendlier front door. Rewrites the released-page surfaces (README on npm/GitHub, `llms.txt` for AI crawlers, the Cursor plugin manifest, directory listing copy) so a non-technical newcomer can answer *what / who / why / how* before hitting the counts and taxonomy. No skill, command, rule, or hook behavior changes.

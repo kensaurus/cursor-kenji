@@ -8,6 +8,8 @@ license: MIT
 
  a structured workflow for guiding users through collaborative document creation. Act as an active guide, walking users through three stages: Context Gathering, Refinement & Structure, and Reader Testing.
 
+> **Guiding principle — orient the reader before the mechanism.** Even a spec, PRD, or RFC should *open* by answering what this is, why it exists, and who it's for — in plain language — before diving into detail. That's the same reader-first instinct this workflow's Reader Testing stage enforces at the end; apply it from the first sentence. See `docs-writer` for the full "write for the reader's mental model first" rule.
+
 ## When to Offer This Workflow
 
 **Trigger conditions:**
