@@ -42,7 +42,7 @@ npx skills add kensaurus/cursor-kenji
 
 **PR copy:**
 ```markdown
-- [cursor-kenji](https://github.com/kensaurus/cursor-kenji) — 106 agent skills,
+- [cursor-kenji](https://github.com/kensaurus/cursor-kenji) — ready-made AI playbooks your editor auto-triggers: 106 agent skills,
   36 slash commands, 6 subagents, and MCP configs for React/Next.js/Supabase development.
   `npx skills add kensaurus/cursor-kenji`
 ```
