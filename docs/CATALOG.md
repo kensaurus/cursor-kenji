@@ -6,23 +6,25 @@ Skill and command index with trigger phrases.
 
 ## Skill Taxonomy
 
-Every skill has a category prefix:
+Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage** (when in a project you reach for it). New here? The [Getting Started guide](GETTING-STARTED.md) explains skills in plain language first.
 
-| Prefix | Purpose |
-|:-------|:--------|
-| `audit-` | Read-only assessment that produces a structured report |
-| `debug-` | Diagnose & fix a specific failure |
-| `test-` | Write/run tests & QA |
-| `design-` | Create something new (UI, system, API, spec, art) |
-| `enhance-` | Improve existing web UI/UX |
-| `backend-` | Server / data-layer engineering patterns |
-| `data-` | Data visualization & pipeline correctness |
-| `deploy-` | Release & post-deploy verification |
-| `workflow-` | Dev process (git, PR, refactor, spec-TDD, housekeep) |
-| `docs-` | Documentation authoring |
-| `mobile-` | Native / React Native / emulator / Capacitor |
-| `meta-` | Authoring skills & MCP servers |
-| `protocol-` | Session-level protocols used by other skills |
+| Prefix | Stage | Purpose |
+|:-------|:------|:--------|
+| `audit-` | Assess | Read-only assessment that produces a structured report |
+| `plan-` | Assess | Audit + phased burndown you approve **before** any code changes |
+| `enhance-` | Change | Improve existing web UI/UX, motion, forms, SEO, PWA |
+| `design-` | Change | Create something new (UI, system, API, spec, art) |
+| `backend-` | Change | Server / data-layer engineering patterns |
+| `mobile-` | Change | Native / React Native / emulator / Capacitor |
+| `data-` | Change | Data visualization & pipeline correctness |
+| `docs-` | Change | Documentation authoring |
+| `housekeep-` | Change | Consolidate a drifted design system to one source of truth |
+| `test-` | Prove | Write/run tests & QA |
+| `deploy-` | Ship | Release & post-deploy verification |
+| `debug-` | Operate | Diagnose & fix a specific failure |
+| `workflow-` | Spans stages | Dev process (git, PR, refactor, spec-TDD, housekeep) |
+| `meta-` | Author | Authoring skills & MCP servers |
+| `protocol-` | Guardrail | Session-level protocols used by other skills |
 
 ---
 

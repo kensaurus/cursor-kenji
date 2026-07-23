@@ -6,7 +6,8 @@
 
 <p align="center">
   <strong>Agent skills, slash commands, and MCP configs for Cursor.</strong><br/>
-  106 agent skills · 36 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents
+  106 agent skills · 36 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
+  <em>Tell your AI editor what you want in plain English — the matching expert playbook runs automatically. No prompt-engineering.</em>
 </p>
 
 <p align="center">
@@ -17,6 +18,20 @@
 ---
 
 **cursor-kenji** ships **106 Cursor agent skills**, 36 slash commands, and 6 subagents for React / Next.js / Supabase projects. Install once — describe a task in chat and the matching skill auto-triggers.
+
+> **New to AI skills?** cursor-kenji is a library of ready-made **playbooks** your AI code editor follows automatically. You describe a task in plain English — *"audit my security"*, *"make this form accessible"*, *"clean up the design system"* — and the matching playbook kicks in, so the AI runs a proven, step-by-step process instead of improvising. No prompt-engineering, no memorizing names.
+
+**Who it's for** — anyone using [Cursor](https://cursor.com) or [Claude Code](https://www.anthropic.com/claude-code) (Codex & Gemini CLI too). Tuned for React / Next.js / Supabase, useful on any stack. Brand new to Cursor? Start with the **[plain-language guide →](docs/GETTING-STARTED.md)**
+
+**The five building blocks** — what the numbers above actually mean:
+
+| Building block | In plain English | You trigger it by… |
+|:--|:--|:--|
+| **Skill** | An auto-triggering playbook for one job (audit, build, fix, enhance) | describing the task in chat |
+| **Command** | A `/shortcut` for a frequent action | typing `/commit`, `/pr`, `/plan` |
+| **Subagent** | A background helper that runs a focused sub-task | mentioning it — *"review this PR"* |
+| **Rule** | An always-on convention the AI must obey | dropping a `.mdc` file in your project |
+| **MCP server** | A live connection to an outside tool (database, GitHub, browser) | copying an MCP template + your keys |
 
 Skills conform to the [Agent Skills specification](https://agentskills.io/specification) and pass automated validation on every commit (`npm test` — **118** installable skills including Cursor IDE tools). MCP templates pin semver versions to reduce supply-chain drift ([CSA on package hallucination / slopsquatting](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations)).
 

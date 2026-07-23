@@ -4,6 +4,21 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.8.1] — 2026-07-23
+
+Documentation-clarity release — same skills, friendlier front door. Rewrites the released-page surfaces (README on npm/GitHub, `llms.txt` for AI crawlers, the Cursor plugin manifest, directory listing copy) so a non-technical newcomer can answer *what / who / why / how* before hitting the counts and taxonomy. No skill, command, rule, or hook behavior changes.
+
+### Changed
+
+- **README newcomer on-ramp** — adds a plain-English hero line, a "New to AI skills?" primer, a "Who it's for" callout, and a five-row **building-blocks glossary** (Skill / Command / Subagent / Rule / MCP server → plain meaning + how you trigger each) directly under the intro, while preserving the full developer depth below.
+- **`llms.txt`** — leads with the plain value proposition (ready-made playbooks your editor auto-triggers) before the inventory, improving how AI answer-engines and directory crawlers summarize the project.
+- **`.cursor-plugin/plugin.json`** — benefit-first description for the Cursor marketplace / directory listings.
+- **`docs/CATALOG.md`** — skill-taxonomy table gains a lifecycle **Stage** column and a `plan-`/`housekeep-` row, with a newcomer pointer to the Getting Started guide.
+- **`docs/GETTING-STARTED.md`** — plain-language example rows for the v1.8.0 skills (motion, forms, design consolidation, guardrails, resilience).
+- **`docs/TRIGGER-CHEATSHEET.md`** & **`docs/PROMOTION.md`** — first-time-reader pointer and benefit-first listing copy.
+
+---
+
 ## [1.8.0] — 2026-07-23
 
 Design, motion, forms, and anti-vibe-coding release. Adds six skills that fill the loop's remaining gaps — full-stack parity (`audit-realworld`), production resilience (`audit-resilience`), coherent motion on an existing system (`enhance-motion`), design-system consolidation to one SSOT (`housekeep-design`), production-quality forms (`enhance-web-forms`), and guardrails-as-code against AI regressions (`enhance-agent-guardrails`). README gains a "mental model" section teaching how the families chain against each other, a by-use-case entry table, and lifecycle-stage tags. Skills 100 → 106.

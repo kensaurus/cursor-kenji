@@ -79,6 +79,11 @@ These chain multiple skills into a single tracked loop:
 | `deploy my npm package` | Walks through Changesets → CI → publish, step by step |
 | `write a PR` | Creates the pull request with a proper title and description |
 | `red team this app` | Adversarial sweep — UX, data pipeline, security, performance |
+| `make the app feel alive with motion` | Adds coherent, accessible animations that match your design system |
+| `improve this form` | Accessible labels, real validation, error/success states, multi-step flows |
+| `clean up our design system` | Consolidates drifted colors/components into one source of truth |
+| `set up guardrails so AI doesn't break things` | Installs pre-commit + CI checks against secrets, bugs, and risky ops |
+| `is my app production-ready?` | Checks timeouts, retries, idempotency — the reliability the happy path skips |
 
 The AI picks the right skill automatically based on what you typed.
 
