@@ -4,6 +4,25 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.8.3] — 2026-07-23
+
+Command-collision fix — three of our slash commands shared names with Claude Code's own commands. Because Claude Code 2.x **merges `commands/` into the skill namespace**, a file at `commands/<x>.md` creates `/<x>`: when `<x>` matches a built-in it shows a **duplicate**, and when it matches a bundled skill our file **silently overrides** Claude's. Renamed all three and added a CI guard so it can't regress. No other skill, command, rule, or hook behavior changes; command **counts are unchanged**.
+
+### Changed
+
+- **`/mcp` → `/mcp-guide`** — was duplicating Claude Code's built-in `/mcp` (the MCP server manager). Renamed `commands/mcp.md` → `commands/mcp-guide.md`.
+- **`/review` → `/review-code`** — was duplicating Claude Code's built-in `/review`. Renamed `commands/review.md` → `commands/review-code.md` (still delegates to `audit-code-review`).
+- **`/debug` → `/debug-issue`** — was overriding Claude Code's bundled `/debug`. Renamed `commands/debug.md` → `commands/debug-issue.md` (still delegates to `debug-error`).
+- **`README.md` + `docs/CATALOG.md`** — command tables updated to the new names with a note on why each was renamed.
+
+### Added
+
+- **CI guard** in `scripts/validate-skills.mjs` — fails `npm test` if any `commands/*.md` name collides with a known Claude Code built-in command or bundled skill, so future commands can't reintroduce a duplicate/override.
+
+> **Upgrade note:** the natural-language triggers are unchanged (say "debug this", "review my PR", etc. and the underlying skill still fires). Only the explicit slash aliases changed: use `/mcp-guide`, `/review-code`, `/debug-issue`. After updating, **restart Claude Code** — it live-watches skill directories but not `commands/`, so newly added or renamed command files only register on the next session start.
+
+---
+
 ## [1.8.2] — 2026-07-23
 
 Documentation-skill release — teach the skills to write the way the 1.8.1 README now reads. Bakes the reader-first, plain-language 5W1H approach into the documentation-authoring skills themselves, so every doc they produce orients a newcomer before diving into reference detail. No other skill, command, rule, or hook behavior changes.
