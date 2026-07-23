@@ -33,9 +33,12 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "audit i18n", "fix translations", "the Japanese feels like Google Translate", "hardcoded strings" | `audit-i18n` |
 | "audit LLM", "check Langfuse", "audit prompts", "check AI quality", "check traces" | `audit-langfuse-llm` |
 | "performance audit", "optimize performance", "slow page", "Web Vitals" | `audit-performance` |
+| "audit against realworld", "compare to realworld", "conduit conformance", "full-stack gap check", "what's missing to reach production" | `audit-realworld` |
+| "resilience audit", "is this production-ready", "will it survive real traffic", "retries/timeouts/idempotency", "the 80% problem" | `audit-resilience` |
 | "audit security", "check for vulnerabilities", "OWASP", "security review" | `audit-security` |
 | "audit design system", "check token compliance", "design consistency" | `audit-uiux-design-system` |
 | "UX audit", "usability review", "heuristic evaluation", "UX quality" | `audit-ux` |
+| "set up guardrails", "stop vibe-coding regressions", "pre-commit security checks", "CI security gates", "governance for AI code" | `enhance-agent-guardrails` |
 
 ---
 
@@ -131,6 +134,9 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "make this page nicer", "better layout", "improve spacing", "polish UI" | `enhance-web-ui` |
 | "improve UX", "this page feels bad", "fix user flow", "better information density" | `enhance-web-ux` |
 | "add 3D", "WebGL hero", "Three.js scene", "cinematic scroll", "GSAP animation" | `enhance-web-web3d` |
+| "add motion", "animate the app", "make it feel alive", "motion pass", "micro-interactions across the app" | `enhance-motion` |
+| "clean up the design system", "resolve design conflicts", "consolidate tokens", "inconsistent UI across pages", "keep the design SSOT" | `housekeep-design` |
+| "improve this form", "form validation", "accessible form", "multi-step form", "form error handling" | `enhance-web-forms` |
 
 ---
 

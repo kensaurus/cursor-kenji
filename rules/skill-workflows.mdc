@@ -62,6 +62,8 @@ with `/goal`.
 | UX heuristics audit | `audit-ux` |
 | Accessibility (WCAG 2.2) | `audit-accessibility` |
 | Design system compliance | `audit-uiux-design-system` |
+| Full-stack parity/conformance vs the RealWorld reference | `audit-realworld` |
+| Production resilience — timeouts/retries/idempotency/rate limits/PII (the "80%" NFRs) | `audit-resilience` |
 
 ### Enhancement
 | Task | Skill |
@@ -71,6 +73,10 @@ with `/goal`.
 | UI polish & layout | `enhance-web-ui` |
 | UX & information architecture | `enhance-web-ux` |
 | Cross-surface (web + mobile) consistency | `enhance-capacitor-ui` |
+| Coherent motion on an existing design system (2026 stack) | `enhance-motion` |
+| Consolidate a drifted design system into one token SSOT | `housekeep-design` |
+| Production-quality forms (a11y, validation, states, multi-step) | `enhance-web-forms` |
+| Install agent guardrails-as-code (rules, hooks, CI gates, lint) | `enhance-agent-guardrails` |
 
 ### Plan (audit → approve → execute)
 | Task | Skill |

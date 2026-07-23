@@ -4,6 +4,27 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.8.0] — 2026-07-23
+
+Design, motion, forms, and anti-vibe-coding release. Adds six skills that fill the loop's remaining gaps — full-stack parity (`audit-realworld`), production resilience (`audit-resilience`), coherent motion on an existing system (`enhance-motion`), design-system consolidation to one SSOT (`housekeep-design`), production-quality forms (`enhance-web-forms`), and guardrails-as-code against AI regressions (`enhance-agent-guardrails`). README gains a "mental model" section teaching how the families chain against each other, a by-use-case entry table, and lifecycle-stage tags. Skills 100 → 106.
+
+### Added
+
+- **`audit-realworld` skill** — read-only full-stack gap audit that benchmarks a repo against the [RealWorld](https://github.com/realworld-apps/realworld) ("Conduit") reference: its formal API spec, shared Bruno/Hurl E2E contract suite, and closest-stack reference implementation. Auto-detects strict spec **Conformance** (repo is a RealWorld build) vs **Benchmark** (maps RealWorld's production-relevant patterns onto the repo's own domain), and bows out cleanly on non-CRUD/non-web repos. Reports Implemented/Partial/Missing/Diverges across frontend, backend, and data layer with `file:line` evidence, then delegates real production hardening to `audit-security` / `plan-security-audit` / `plan-perf-audit` / `plan-rls-audit` / `full-stack-ship-discipline` — RealWorld is treated as a completeness/pattern reference, never a production bar. Wired into the Audits routing table, `docs/CATALOG.md`, and `docs/TRIGGER-CHEATSHEET.md`. Skills 100 → 101.
+- **`enhance-motion` skill** — audits an existing app's design system and current motion, then applies coherent, `prefers-reduced-motion`-safe, 60fps motion using a right-sized 2026 stack (tw-animate-css for CSS utility transitions, Auto-Animate for zero-config list/layout changes, Motion/motion.dev for component transitions·gestures·presence, GSAP only for complex timelines), with Kinetics as a pattern source. Defines a motion-token SSOT so timing/easing stops fragmenting. Distinct from `design-motion` (from-scratch cookbook); applies changes and verifies via browser MCP.
+- **`housekeep-design` skill** — consolidates a design system that has drifted across many vibe-coding sessions and dev handoffs into one source of truth. Detects competing tokens, duplicate components, naming drift, mixed icon libraries, and arbitrary values; reconciles each conflict to a best-of-both canonical form; migrates usages via mechanical codemod (pairs with `burndown-full`); and installs lint guardrails so drift can't recur. Establishes a 3-layer W3C token taxonomy (primitive → semantic → component). The execution arm of `plan-uiux-unification`; the design counterpart of `workflow-housekeep`.
+- **`enhance-web-forms` skill** — builds/upgrades web forms to production quality: accessible structure (labels, fieldsets, autocomplete, input types), schema-driven validation with client↔server parity, screen-reader-associated inline errors, complete interaction states (loading/disabled/success/error/empty), multi-step flows, unsaved-changes guards, and optimistic submit feedback. Auto-detects the form + validation stack; applies changes and verifies via browser MCP.
+- **`enhance-agent-guardrails` skill** — installs guardrails-as-code so AI/vibe-coding can't keep reintroducing the same problem classes (leaked secrets, injection, off-system styles, untested code, vulnerable deps, destructive ops). Audits existing protection, then sets up agent policy files (`.cursor/rules` + `AGENTS.md`), a pre-commit hook (secret scan + SAST + lint/typecheck), a CI gate that treats agent output as untrusted, and lint-as-policy rules. Verifies the guards block a planted bad pattern; flags merge-blocking CI changes for human review. Grounded in 2026 research on AI-generated-code security debt.
+- **`audit-resilience` skill** — read-only audit for the non-functional "20%" agents systematically skip (the "80% problem"): timeouts, retries with backoff+jitter, circuit breakers, idempotency keys, rate limiting, graceful degradation, cancellation, audit logging, and PII handling in logs. Inventories every external call, mutation, webhook, and payment path and marks each concern Implemented/Partial/Missing with `file:line`, severity, and the exact fix skill; delegates remediation to `backend-error-handling` / `backend-patterns` / `backend-observability` / `plan-*`.
+
+All six new skills wired into both `skill-workflows.mdc` routing copies, `docs/CATALOG.md`, and `docs/TRIGGER-CHEATSHEET.md`. Skills 100 → 106.
+
+### Changed
+
+- **README mental-model rewrite** — the Workflows section now opens with a "how the families work against each other" lifecycle diagram (Orient → Assess → Change → Prove → Ship & operate, with always-on Guardrails), a "Start here — by use case" entry table that chains the new skills, and lifecycle-**stage** tags added to the skill-taxonomy table (Assess / Change / Prove / Ship / Operate / Guardrail). Teaches composition, not just the flat skill list.
+
+---
+
 ## [1.7.0] — 2026-07-21
 
 Completion-loop release — close the gaps where agents stop early, declare false "done", or leave documented capabilities unwired. Adds an enforcement layer (evidence rule + independent judge + opt-in continuation hook), five closure/ops workflow skills, and repairs every known broken internal reference. Skills 95 → 100, commands 16 → 36, subagents held at 6.

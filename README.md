@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Agent skills, slash commands, and MCP configs for Cursor.</strong><br/>
-  100 agent skills · 36 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents
+  106 agent skills · 36 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents
 </p>
 
 <p align="center">
@@ -16,9 +16,9 @@
 
 ---
 
-**cursor-kenji** ships **100 Cursor agent skills**, 36 slash commands, and 6 subagents for React / Next.js / Supabase projects. Install once — describe a task in chat and the matching skill auto-triggers.
+**cursor-kenji** ships **106 Cursor agent skills**, 36 slash commands, and 6 subagents for React / Next.js / Supabase projects. Install once — describe a task in chat and the matching skill auto-triggers.
 
-Skills conform to the [Agent Skills specification](https://agentskills.io/specification) and pass automated validation on every commit (`npm test` — **112** installable skills including Cursor IDE tools). MCP templates pin semver versions to reduce supply-chain drift ([CSA on package hallucination / slopsquatting](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations)).
+Skills conform to the [Agent Skills specification](https://agentskills.io/specification) and pass automated validation on every commit (`npm test` — **118** installable skills including Cursor IDE tools). MCP templates pin semver versions to reduce supply-chain drift ([CSA on package hallucination / slopsquatting](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations)).
 
 ```bash
 npx skills add kensaurus/cursor-kenji
@@ -139,7 +139,7 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 
 | | Count | What it does |
 |:--|------:|:-------------|
-| **Skills** | 100 | Auto-triggering capabilities (audit, enhance, debug, test, build, plan) |
+| **Skills** | 106 | Auto-triggering capabilities (audit, enhance, debug, test, build, plan) |
 | **Cursor Skills** | 12 | IDE tools (canvas, hooks, rules, PR splitter) |
 | **Commands** | 36 | Slash workflows (`/commit`, `/pr`, `/burndown-full`, `/thirdparty-web-interface-guidelines`) |
 | **Subagents** | 6 | Background agents (code-reviewer, debugger, db-migrator…) |
@@ -155,23 +155,52 @@ Full skill list + trigger phrases → **[docs/CATALOG.md](docs/CATALOG.md)** · 
 
 ## Workflows
 
-Skills chain bundled workflows from onboarding through ship; `plan-*` skills audit first — you approve each phase before anything changes.
+You rarely run one skill alone — you **chain** them around a build loop. Each family owns a stage; guardrails run across every stage so a fast (vibe-coding) session can't silently regress. The rule of thumb: **assess before you change, prove before you ship, and never let a session skip a stage.**
+
+### The mental model — how the families work against each other
 
 ```mermaid
 flowchart LR
-  U["Understand<br/>workflow-onboard · /research"] --> C["Clean<br/>workflow-housekeep"]
-  C --> M["Measure<br/>audit-*"]
-  M --> P["Plan<br/>plan-* · /plan"]
-  P --> CH["Change<br/>workflow-spec-tdd"]
-  CH --> V["Verify<br/>test-playwright · test-unit"]
-  V --> S["Ship<br/>/commit · /pr"]
-  S -.-> M
+  O["🧭 Orient<br/>workflow-onboard · /research"]
+  A["🔍 Assess — read-only<br/>audit-* · plan-*<br/>audit-realworld · audit-resilience"]
+  C["🛠️ Change<br/>design-* · enhance-*<br/>housekeep-design · build / fix"]
+  P["✅ Prove<br/>test-* · complete-everything<br/>completion-judge"]
+  S["🚀 Ship & operate<br/>ship-and-observe · feedback-to-closure"]
+  G["🛡️ Guardrails — always on<br/>rules · completion hook · enhance-agent-guardrails"]
 
-  style U fill:#064e3b,stroke:#10b981,color:#d1fae5
-  style M fill:#3b0764,stroke:#a78bfa,color:#ede9fe
-  style P fill:#064e3b,stroke:#10b981,color:#d1fae5
+  O --> A --> C --> P --> S
+  S -. "new findings loop back" .-> A
+  G -.-> A
+  G -.-> C
+  G -.-> P
+
+  style O fill:#064e3b,stroke:#10b981,color:#d1fae5
+  style A fill:#3b0764,stroke:#a78bfa,color:#ede9fe
+  style C fill:#1e3a5f,stroke:#60a5fa,color:#dbeafe
+  style P fill:#3b0764,stroke:#a78bfa,color:#ede9fe
   style S fill:#1e3a5f,stroke:#60a5fa,color:#dbeafe
+  style G fill:#4a044e,stroke:#f0abfc,color:#fae8ff
 ```
+
+- **Orient** — understand the repo before touching it.
+- **Assess** — measure, don't guess. `audit-*` may fix inline; `plan-*` only plans until you approve. `audit-realworld` checks full-stack feature parity; `audit-resilience` checks the non-functional "80%" (timeouts, retries, idempotency, PII).
+- **Change** — `design-*` builds new, `enhance-*` improves what exists (motion, forms, UI, UX, SEO), `housekeep-design` consolidates a drifted design system into one SSOT.
+- **Prove** — `test-*` plus the no-false-done trio: `verification-before-completion` → `completion-judge` → `complete-everything`.
+- **Ship & operate** — release, watch, and feed findings back into Assess.
+- **Guardrails** — `enhance-agent-guardrails` installs the rules + hooks + CI gates that keep the loop from regressing between sessions.
+
+### Start here — by use case
+
+| Your situation | Chain (→ hands off to) |
+|:---------------|:-----------------------|
+| New to this repo | `workflow-onboard` → `/research` |
+| Inherited a messy / drifted design system | `audit-uiux-design-system` → `plan-uiux-unification` → **`housekeep-design`** |
+| Make the app feel alive | **`enhance-motion`** (existing app) · `design-motion` (from scratch) |
+| Forms are clunky or inaccessible | **`enhance-web-forms`** → `audit-accessibility` |
+| "Is it production-ready?" | **`audit-resilience`** + **`audit-realworld`** → `workflow-quality-gate` |
+| Stop AI / vibe-coding regressions | **`enhance-agent-guardrails`** → `plan-security-audit` |
+| Close everything, zero deferrals | **`complete-everything`** → `completion-judge` |
+| Ship it and watch it | `workflow-ship-and-observe` → `debug-sentry-monitor` → `workflow-feedback-to-closure` |
 
 ### Bundled workflows
 
@@ -226,25 +255,27 @@ More copy-paste recipes (adopt repo, de-slop a page, pre-launch sweep, split PRs
 
 ## Skill taxonomy
 
-Every skill is `<prefix>-<topic>`. Full entries with triggers → **[docs/CATALOG.md](docs/CATALOG.md)**.
+Every skill carries two tags: a **family** (`<prefix>-<topic>`) and a **lifecycle stage** (from the loop above). Read the table as "which stage does this family live in". Full entries with triggers → **[docs/CATALOG.md](docs/CATALOG.md)**.
 
-| Prefix | Purpose | Examples |
-|:-------|:--------|:---------|
-| `audit-` | Read-only assessments | `audit-security`, `audit-performance`, `audit-langfuse-llm` |
-| `plan-` | Audit-and-plan burndowns (17 skills) | `plan-stub-checker`, `plan-capacitor-hardening`, `plan-rls-audit` |
-| `enhance-` | Improve existing UI/UX/SEO/PWA | `enhance-web-ux`, `enhance-web-ui`, `enhance-pwa` |
-| `workflow-` | Process bundles | `workflow-spec-tdd`, `workflow-build-feature`, `workflow-housekeep` |
-| `test-` | QA and unit tests | `test-playwright`, `test-red-team`, `test-unit` |
-| `debug-` | Failures and integration | `debug-error`, `debug-fe-be-integration` |
-| `backend-` | Server patterns | `backend-patterns`, `backend-observability` |
-| `mobile-` | RN / Capacitor / emulator | `mobile-rn-screen`, `mobile-capacitor-platform` |
-| `design-` | New surfaces | `design-frontend`, `design-prd`, `design-system` |
-| `deploy-` | Release verify | `deploy-verify`, `deploy-npm` |
-| `docs-` | Documentation | `docs-writer`, `docs-coauthor` |
-| `meta-` | Author skills/MCP | `meta-skill-creator`, `meta-mcp-builder` |
-| `protocol-` | Session guardrails | `protocol-browser-anti-stall` |
-| `mushi-` | Mushi Mushi integration | `mushi-health`, `mushi-integration` |
-| `thirdparty-` | Upstream-maintained (vendored) | `thirdparty-emil-design-eng`, `thirdparty-ui-ux-pro-max`, `thirdparty-web-interface-guidelines` |
+| Prefix | Stage | Purpose | Examples |
+|:-------|:------|:--------|:---------|
+| `audit-` | 🔍 Assess | Read-only assessments (may fix inline) | `audit-security`, `audit-resilience`, `audit-realworld` |
+| `plan-` | 🔍 Assess | Audit-and-plan burndowns — approve before execute (17) | `plan-stub-checker`, `plan-rls-audit`, `plan-security-audit` |
+| `enhance-` | 🛠️ Change | Improve existing UI/UX/motion/forms/SEO/PWA | `enhance-motion`, `enhance-web-forms`, `enhance-web-ux` |
+| `design-` | 🛠️ Change | New surfaces from scratch | `design-frontend`, `design-motion`, `design-system` |
+| `backend-` | 🛠️ Change | Server patterns & resilience | `backend-patterns`, `backend-observability` |
+| `mobile-` | 🛠️ Change | RN / Capacitor / emulator | `mobile-rn-screen`, `mobile-capacitor-platform` |
+| `docs-` | 🛠️ Change | Documentation | `docs-writer`, `docs-coauthor` |
+| `workflow-` | ♻️ Spans | Multi-phase process bundles | `workflow-build-feature`, `workflow-spec-tdd`, `workflow-housekeep` |
+| `test-` | ✅ Prove | QA and unit tests | `test-playwright`, `test-red-team`, `test-unit` |
+| `deploy-` | 🚀 Ship | Release verify | `deploy-verify`, `deploy-npm` |
+| `debug-` | 🚀 Operate | Failures and integration | `debug-error`, `debug-sentry-monitor` |
+| `mushi-` | 🚀 Operate | Mushi Mushi integration | `mushi-health`, `mushi-integration` |
+| `protocol-` | 🛡️ Guardrail | Session guardrails | `protocol-browser-anti-stall` |
+| `meta-` | ✍️ Author | Author skills/MCP | `meta-skill-creator`, `meta-mcp-builder` |
+| `thirdparty-` | Varies | Upstream-maintained (vendored) | `thirdparty-emil-design-eng`, `thirdparty-ui-ux-pro-max`, `thirdparty-web-interface-guidelines` |
+
+> `housekeep-design` (design-system consolidation) is the execution arm of `plan-uiux-unification`; it lives in the 🛠️ Change stage alongside `enhance-*`.
 
 > **Third-party skills:** prefixed `thirdparty-*` with `ATTRIBUTION.md` — do not add Kenji-specific sections to upstream bodies. Full guide → **[docs/THIRD-PARTY-SKILLS.md](docs/THIRD-PARTY-SKILLS.md)**.
 
@@ -367,7 +398,7 @@ Full definitions in [shell-aliases/cursor-helpers.sh](shell-aliases/cursor-helpe
 
 ```
 cursor-kenji/
-├── skills/           # 100 Agent Skills (SKILL.md each)
+├── skills/           # 106 Agent Skills (SKILL.md each)
 ├── skills-cursor/    # 12 Cursor-specific skills
 ├── commands/         # 36 slash commands
 ├── agents/           # 6 subagents
@@ -417,7 +448,7 @@ A installable toolkit of [Agent Skills](https://agentskills.io)-compatible markd
 `npx skills add kensaurus/cursor-kenji` (recommended) or `npx @kensaurus/cursor-kenji`. Restart Cursor after install.
 
 **How many skills?**  
-**100** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**112** total). Counts are derived from the filesystem and synced by `npm run check:skills`.
+**106** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**118** total). Counts are derived from the filesystem and synced by `npm run check:skills`.
 
 **How do skills trigger?**  
 Cursor matches your chat message against each skill's YAML `description` keywords. Force one with *"use \`audit-security\` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).
