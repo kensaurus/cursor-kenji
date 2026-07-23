@@ -32,6 +32,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "code review", "review this PR", "review this function" | `audit-code-review` |
 | "audit database schema", "check my DB design", "naming conventions in DB" | `audit-db-schema` |
 | "audit my API calls", "check frontend API", "FE-BE contract" | `audit-fe-api` |
+| "CI/CD cost", "GitHub Actions bill", "Actions minutes", "runner cost", "workflow cost", "slow CI", "audit my workflows" | `audit-cicd` |
 | "audit i18n", "fix translations", "the Japanese feels like Google Translate", "hardcoded strings" | `audit-i18n` |
 | "audit LLM", "check Langfuse", "audit prompts", "check AI quality", "check traces" | `audit-langfuse-llm` |
 | "performance audit", "optimize performance", "slow page", "Web Vitals" | `audit-performance` |

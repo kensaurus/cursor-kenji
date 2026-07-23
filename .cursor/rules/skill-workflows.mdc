@@ -55,6 +55,7 @@ with `/goal`.
 | Task | Skill |
 |------|-------|
 | Static security review (OWASP) | `audit-security` |
+| CI/CD cost, speed & safety (GitHub Actions bill) | `audit-cicd` |
 | JS bundle analysis & reduction | `audit-bundle-size` |
 | Core Web Vitals & performance | `audit-performance` |
 | Database schema health | `audit-db-schema` |

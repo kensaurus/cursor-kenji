@@ -28,7 +28,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (106)
+## Skills (107)
 
 ### Enhance
 
@@ -288,6 +288,11 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Triggers:** "code review", "review this PR", "review this code", "review changes"
 **What it does:** Thorough code review — correctness, security, performance, a11y, maintainability. Uses Sentry MCP for production error context, Firecrawl for current best practices.
 **Related:** `audit-code-quality`, `workflow-pr`
+
+#### `audit-cicd`
+**Triggers:** "CI/CD cost", "GitHub Actions bill", "Actions minutes", "runner cost", "workflow cost", "CI is expensive", "slow CI", "audit my workflows", "artifact/cache storage", "reduce Actions spend"
+**What it does:** Audits GitHub Actions workflows for cost, speed, and safety via the `gh` CLI (live billing, run volume, runner types, artifact/cache storage). Flags double-billing triggers, missing concurrency, macOS/large runners on push, missing path filters, doomed jobs, and long artifact retention — then proposes fixes (concurrency, dispatch-gated runners, retention limits, caching, storage cleanup) that never delete tests or break deploys. Includes account-level backstops (retention default, spending budget).
+**Related:** `audit-security`, `deploy-verify`, `workflow-pr`, `create-hook`
 
 #### `audit-performance`
 **Triggers:** "slow", "performance", "LCP", "INP", "CLS", "bundle size", "loading time", "optimize", "Web Vitals", "lighthouse score"
