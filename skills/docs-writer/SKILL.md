@@ -14,6 +14,28 @@ license: MIT
 
 Create clear, useful documentation for developers.
 
+## Core principle — write for the reader's mental model first
+
+Documentation rarely fails because it's *incomplete*. It fails because the reader can't build a mental model fast enough to care. So before any reference detail, answer the questions the reader is silently asking — in their words, in this order:
+
+| The reader is silently asking… | Answer it with… |
+|:--|:--|
+| **What** is this? | One plain-English sentence — what it *does*, not how it's built |
+| **Why** should I care? | The problem it solves / the pain it removes |
+| **Who** is it for? | The audience + stack, so a wrong-fit reader can leave early |
+| **How** do I start? | The shortest path to a first win: install → one command → result |
+| **When / where** do I use it? | The situations it fits — and its boundaries (what it's *not*) |
+
+Rules that follow from this:
+
+- **Lead with the goal, not the implementation.** *"Turn a CSV into a chart"* beats *"A streaming transform pipeline built on X."*
+- **Progressive disclosure.** Newcomer on-ramp first (plain language + one example), reference depth below. A pro scrolls past the primer in two seconds; a newcomer can't skip *to* it if it was never written.
+- **Beat the curse of knowledge.** You know the jargon; the reader may not. Define a term on first use, or add a plain-language glossary when the project leans on 3+ domain terms (pattern below).
+- **Show, don't just tell.** Every abstract capability gets a concrete, copy-pasteable example.
+- **Write the sentence you'd say out loud** to a smart colleague who's never seen the project. If it reads like a brochure or a spec dump, rewrite it until it sounds human.
+
+Everything else in this skill (templates, API docs, comments) serves this principle — structure and polish never substitute for orienting the reader first.
+
 ## MANDATORY: Pre-Documentation Checks
 
 **BEFORE writing any documentation, you MUST:**
@@ -54,7 +76,16 @@ Before writing docs, state:
 ```markdown
 # Project Name
 
-Brief description of what this project does.
+> One plain-English sentence: what it does and who it's for — no jargon.
+
+**Why it exists** — the problem it solves, in one line.
+**Who it's for** — the audience + stack, so a wrong-fit reader leaves early.
+
+<!--
+Newcomer on-ramp: if the project is novel or uses 3+ domain-specific terms,
+add a plain-language glossary here (see "Newcomer on-ramp" pattern below) so the
+features and options that follow aren't cryptic. Omit it when the domain is common.
+-->
 
 ## Features
 
@@ -124,6 +155,28 @@ See [Contributing Guide](./CONTRIBUTING.md)
 
 MIT
 ```
+
+---
+
+## Newcomer on-ramp (novel or jargon-heavy projects)
+
+When a project introduces its own concepts, the reader can't parse the feature list until they know the vocabulary. Add a compact **building-blocks glossary** high in the README — plain meaning + how the reader actually uses each thing. This is the single highest-leverage block for making docs land with non-experts:
+
+```markdown
+**The building blocks** — what the terms below actually mean:
+
+| Building block | In plain English | You use it by… |
+|:--|:--|:--|
+| **Widget** | A self-contained unit that does one job | dropping it into a page |
+| **Pipeline** | The path your data takes from input to output | pointing it at a source |
+| **Adapter** | A connector to an outside service | adding its key to config |
+```
+
+Guidelines:
+
+- **Three columns beat prose.** Term → plain meaning → how you trigger/use it. Use concrete verbs ("drop in", "point at", "add a key"), not dictionary definitions.
+- Put it *above* the counts, options, or API — it's the decoder ring for everything below it.
+- **Drop it when the domain is already familiar.** Don't gloss `useState` for a React audience; do gloss a term you invented.
 
 ---
 
@@ -305,16 +358,31 @@ a .env file with your configuration, then run the migrations...
  \`\`\`
 ```
 
+### Kill the Jargon (beat the curse of knowledge)
+
+```markdown
+# ❌ Assumes the reader shares your context
+Configure the RLS policy on the tenant-scoped RPC before hydrating the store.
+
+# ✅ Plain first, precise second
+Set who's allowed to read each row (a "policy") before the app loads its data.
+(Supabase calls row rules "RLS"; loading data into the app is "hydrating the store.")
+```
+
+Lead with the plain-language version; put the precise term in parentheses or right after it. Never make a newcomer look up three words just to parse one sentence.
+
 ---
 
 ## Documentation Checklist
 
 ### README
+- [ ] Opens by answering **what / why / who** in the first screen (plain language)
 - [ ] Clear project description
 - [ ] Quick start (< 5 steps)
 - [ ] Prerequisites listed
 - [ ] Installation instructions
 - [ ] Basic usage example
+- [ ] Jargon defined on first use, or a glossary added for 3+ domain terms
 - [ ] Link to detailed docs
 
 ### API Docs
