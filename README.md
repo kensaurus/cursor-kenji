@@ -168,153 +168,7 @@ The whole kit, at a glance:
 | **Notepads** | 2 | Context templates (architecture, design tokens) |
 | **Shell Aliases** | 8 | `newskill`, `cursor-sync`, `gc`, `gp` |
 
-Want every skill spelled out? They're all listed with a one-line summary in **[Every skill, in plain English](#every-skill-in-plain-english)** below. For the exact trigger phrases, see **[docs/CATALOG.md](docs/CATALOG.md)**, or the quick lookup in **[docs/TRIGGER-CHEATSHEET.md](docs/TRIGGER-CHEATSHEET.md)**.
-
----
-
-## Workflows
-
-You rarely run just one skill. You **chain** them around a simple build loop: each family owns a stage, and guardrails run across all of them so a fast, vibe-coding session can't quietly break things. The rule of thumb is easy to remember — **assess before you change, prove before you ship, and never skip a stage.**
-
-### The mental model
-
-Here's how the families hand off to each other:
-
-```mermaid
-flowchart LR
-  O["🧭 Orient<br/>workflow-onboard · /research"]
-  A["🔍 Assess — read-only<br/>audit-* · plan-*<br/>audit-realworld · audit-resilience"]
-  C["🛠️ Change<br/>design-* · enhance-*<br/>housekeep-design · build / fix"]
-  P["✅ Prove<br/>test-* · complete-everything<br/>completion-judge"]
-  S["🚀 Ship & operate<br/>ship-and-observe · feedback-to-closure"]
-  G["🛡️ Guardrails — always on<br/>rules · completion hook · enhance-agent-guardrails"]
-
-  O --> A --> C --> P --> S
-  S -. "new findings loop back" .-> A
-  G -.-> A
-  G -.-> C
-  G -.-> P
-
-  style O fill:#064e3b,stroke:#10b981,color:#d1fae5
-  style A fill:#3b0764,stroke:#a78bfa,color:#ede9fe
-  style C fill:#1e3a5f,stroke:#60a5fa,color:#dbeafe
-  style P fill:#3b0764,stroke:#a78bfa,color:#ede9fe
-  style S fill:#1e3a5f,stroke:#60a5fa,color:#dbeafe
-  style G fill:#4a044e,stroke:#f0abfc,color:#fae8ff
-```
-
-- **Orient** — get to know the repo before you touch it.
-- **Assess** — measure, don't guess. `audit-*` skills can fix things inline; `plan-*` skills only plan until you approve. A few specialists go deep:
-  - `audit-realworld` — checks full-stack feature parity.
-  - `audit-resilience` — covers the non-functional work most agents skip: timeouts, retries, idempotency, PII.
-  - `audit-backend-architecture` — reviews distributed-systems patterns (gateway, BFF, outbox, saga, cache-aside, and friends) and tells you which to adopt next versus skip as over-engineering.
-  - `audit-payment-system` — checks money-movement correctness: double-charge protection, ledgers, webhooks, reconciliation, PCI.
-- **Change** — `design-*` builds something new, `enhance-*` improves what's already there (motion, forms, UI, UX, SEO), and `housekeep-design` merges a drifted design system back into one source of truth.
-- **Prove** — `test-*` skills, plus the no-false-done trio: `verification-before-completion` → `completion-judge` → `complete-everything`.
-- **Ship & operate** — release it, watch it, and feed anything you learn back into Assess.
-- **Guardrails** — `enhance-agent-guardrails` installs the rules, hooks, and CI gates that stop the loop from regressing between sessions.
-
-### Start here, by situation
-
-Find the row that sounds like your day, then follow the chain:
-
-| Your situation | Chain (→ hands off to) |
-|:---------------|:-----------------------|
-| New to this repo | `workflow-onboard` → `/research` |
-| Inherited a messy / drifted design system | `audit-uiux-design-system` → `plan-uiux-unification` → **`housekeep-design`** |
-| Make the app feel alive | **`enhance-motion`** (existing app) · `design-motion` (from scratch) |
-| Forms are clunky or inaccessible | **`enhance-web-forms`** → `audit-accessibility` |
-| "Is it production-ready?" | **`audit-resilience`** + **`audit-realworld`** → `workflow-quality-gate` |
-| Backend architecture — which pattern to use / am I over-engineering? | **`audit-backend-architecture`** → `backend-patterns` |
-| Payment flow — double-charge, ledger, webhook, PCI safe? | **`audit-payment-system`** → `audit-security` / `audit-resilience` |
-| Stop AI / vibe-coding regressions | **`enhance-agent-guardrails`** → `plan-security-audit` |
-| Close everything, zero deferrals | **`complete-everything`** → `completion-judge` |
-| Ship it and watch it | `workflow-ship-and-observe` → `debug-sentry-monitor` → `workflow-feedback-to-closure` |
-
-### Bundled workflows
-
-Say the phrase, and the whole sequence runs for you:
-
-| Say this | Bundle | What runs |
-|----------|--------|-----------|
-| "complete everything" | `complete-everything` | recover parked work → implement all → full verification → independent judge |
-| "make the repo green" | `workflow-green-repo` | discover gates → enumerate failures → batch fix → prove green |
-| "ship it / go live" | `workflow-ship-and-observe` | preflight → deploy → verify live revision → observe → stable/rollback |
-| "triage this feedback" | `workflow-feedback-to-closure` | gather → dedupe → tickets → fix → verify live → close |
-| "build a feature" | `workflow-build-feature` | spec → TDD → unit → smoke → PR |
-| "fix this and ship" | `workflow-fix-and-ship` | debug → fix → regression → PR → deploy |
-| "is this ready?" | `workflow-quality-gate` | red-team → security → bundle → perf → unit |
-| "prepare for launch" | `workflow-launch-ready` | SEO + PWA + bundle + i18n + quality gate |
-| "orient me" | `workflow-onboard` | codebase briefing in ~5 min |
-
-### Plan loops (audit only — approve before execution)
-
-These **17 `plan-*` skills** come in grouped loops. Each one audits, then hands you a plan — nothing changes until you approve it. See **[docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md)** for diagrams, slash aliases (`/uiux-plan`, `/capacitor-plan`, …), and how each maps to execution.
-
-| Loop | Skills | When |
-|------|--------|------|
-| Six-skill | uiux → stub → test-coverage → perf ∥ security → docs-sync | Inherited codebase / UI hardening |
-| Pre-launch hardening | input-validation → secrets → RLS → data-integrity → dependency-provenance | Supabase/Stripe, pre-open-source |
-| Observability & spend | error-handling + llm-cost-guardrails | LLM features, Sentry/Langfuse gaps |
-| Mobile gate | capacitor-hardening → mobile-readiness | Capacitor/hybrid pre-store |
-| Growth gate | aeo-readiness | AI citation visibility |
-
-**One-shot (six-skill plan only):**
-
-```
-Run the six-skill plan loop — no changes until I approve each phase:
-plan-uiux-unification → plan-stub-checker → plan-test-coverage →
-plan-perf-audit + plan-security-audit (parallel) → plan-docs-sync.
-```
-
-More copy-paste recipes (adopt repo, de-slop a page, pre-launch sweep, split PRs) → **[docs/CATALOG.md#skill-composition-patterns](docs/CATALOG.md#skill-composition-patterns)** · New to Cursor? → **[docs/GETTING-STARTED.md](docs/GETTING-STARTED.md)**
-
----
-
-## How to Use
-
-Four kinds of building blocks, four ways to reach them:
-
-| Primitive | Invoke | Example |
-|:----------|:-------|:--------|
-| **Skill** | Describe the task | "audit my security" → `audit-security` |
-| **Command** | `/name` in chat | `/commit`, `/research`, `/pr` |
-| **Subagent** | Mention trigger keyword | "review this PR" → `code-reviewer` |
-| **Rule** | Copy `.mdc` into project | Always-on conventions |
-
-**Force a skill:** *"use `enhance-web-ux` on `/dashboard`"*
-
----
-
-## Skill taxonomy
-
-Every skill has two labels: a **family** (its `<prefix>-<topic>` name) and a **lifecycle stage** (from the loop above). The table below shows which stage each family lives in. For the full entries with trigger phrases, see **[docs/CATALOG.md](docs/CATALOG.md)**.
-
-| Prefix | Stage | Purpose | Examples |
-|:-------|:------|:--------|:---------|
-| `audit-` | 🔍 Assess | Read-only assessments (may fix inline) | `audit-security`, `audit-resilience`, `audit-realworld` |
-| `plan-` | 🔍 Assess | Audit-and-plan burndowns — approve before execute (17) | `plan-stub-checker`, `plan-rls-audit`, `plan-security-audit` |
-| `enhance-` | 🛠️ Change | Improve existing UI/UX/motion/forms/SEO/PWA | `enhance-motion`, `enhance-web-forms`, `enhance-web-ux` |
-| `design-` | 🛠️ Change | New surfaces from scratch | `design-frontend`, `design-motion`, `design-system` |
-| `backend-` | 🛠️ Change | Server patterns & resilience | `backend-patterns`, `backend-observability` |
-| `mobile-` | 🛠️ Change | RN / Capacitor / emulator | `mobile-rn-screen`, `mobile-capacitor-platform` |
-| `docs-` | 🛠️ Change | Documentation | `docs-writer`, `docs-coauthor` |
-| `workflow-` | ♻️ Spans | Multi-phase process bundles | `workflow-build-feature`, `workflow-spec-tdd`, `workflow-housekeep` |
-| `test-` | ✅ Prove | QA and unit tests | `test-playwright`, `test-red-team`, `test-unit` |
-| `deploy-` | 🚀 Ship | Release verify | `deploy-verify`, `deploy-npm` |
-| `debug-` | 🚀 Operate | Failures and integration | `debug-error`, `debug-sentry-monitor` |
-| `mushi-` | 🚀 Operate | Mushi Mushi integration | `mushi-health`, `mushi-integration` |
-| `protocol-` | 🛡️ Guardrail | Session guardrails | `protocol-browser-anti-stall` |
-| `meta-` | ✍️ Author | Author skills/MCP | `meta-skill-creator`, `meta-mcp-builder` |
-| `thirdparty-` | Varies | Upstream-maintained (vendored) | `thirdparty-emil-design-eng`, `thirdparty-ui-ux-pro-max`, `thirdparty-web-interface-guidelines` |
-
-> `housekeep-design` (design-system consolidation) is the execution arm of `plan-uiux-unification`; it lives in the 🛠️ Change stage alongside `enhance-*`.
-
-> **Third-party skills:** prefixed `thirdparty-*` with `ATTRIBUTION.md` — do not add Kenji-specific sections to upstream bodies. Full guide → **[docs/THIRD-PARTY-SKILLS.md](docs/THIRD-PARTY-SKILLS.md)**.
-
-> **Note:** Anthropic `file-docx/pdf/pptx/xlsx` skills are not in this public repo. Keep personal copies in `~/.cursor/skills/` if needed.
-
-**Cursor-specific skills (12):** `babysit`, `canvas`, `create-hook`, `create-rule`, `create-skill`, `split-to-prs`, … — see [CATALOG.md](docs/CATALOG.md).
+Want every skill spelled out? Expand the groups below — or jump to **[Every skill, in plain English](#every-skill-in-plain-english)**. Trigger phrases live in **[docs/CATALOG.md](docs/CATALOG.md)** · quick lookup in **[docs/TRIGGER-CHEATSHEET.md](docs/TRIGGER-CHEATSHEET.md)**.
 
 ---
 
@@ -562,6 +416,152 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 </details>
 
 <!-- SKILL-INDEX:END -->
+
+---
+
+## Workflows
+
+You rarely run just one skill. You **chain** them around a simple build loop: each family owns a stage, and guardrails run across all of them so a fast, vibe-coding session can't quietly break things. The rule of thumb is easy to remember — **assess before you change, prove before you ship, and never skip a stage.**
+
+### The mental model
+
+Here's how the families hand off to each other:
+
+```mermaid
+flowchart LR
+  O["🧭 Orient<br/>workflow-onboard · /research"]
+  A["🔍 Assess — read-only<br/>audit-* · plan-*<br/>audit-realworld · audit-resilience"]
+  C["🛠️ Change<br/>design-* · enhance-*<br/>housekeep-design · build / fix"]
+  P["✅ Prove<br/>test-* · complete-everything<br/>completion-judge"]
+  S["🚀 Ship & operate<br/>ship-and-observe · feedback-to-closure"]
+  G["🛡️ Guardrails — always on<br/>rules · completion hook · enhance-agent-guardrails"]
+
+  O --> A --> C --> P --> S
+  S -. "new findings loop back" .-> A
+  G -.-> A
+  G -.-> C
+  G -.-> P
+
+  style O fill:#064e3b,stroke:#10b981,color:#d1fae5
+  style A fill:#3b0764,stroke:#a78bfa,color:#ede9fe
+  style C fill:#1e3a5f,stroke:#60a5fa,color:#dbeafe
+  style P fill:#3b0764,stroke:#a78bfa,color:#ede9fe
+  style S fill:#1e3a5f,stroke:#60a5fa,color:#dbeafe
+  style G fill:#4a044e,stroke:#f0abfc,color:#fae8ff
+```
+
+- **Orient** — get to know the repo before you touch it.
+- **Assess** — measure, don't guess. `audit-*` skills can fix things inline; `plan-*` skills only plan until you approve. A few specialists go deep:
+  - `audit-realworld` — checks full-stack feature parity.
+  - `audit-resilience` — covers the non-functional work most agents skip: timeouts, retries, idempotency, PII.
+  - `audit-backend-architecture` — reviews distributed-systems patterns (gateway, BFF, outbox, saga, cache-aside, and friends) and tells you which to adopt next versus skip as over-engineering.
+  - `audit-payment-system` — checks money-movement correctness: double-charge protection, ledgers, webhooks, reconciliation, PCI.
+- **Change** — `design-*` builds something new, `enhance-*` improves what's already there (motion, forms, UI, UX, SEO), and `housekeep-design` merges a drifted design system back into one source of truth.
+- **Prove** — `test-*` skills, plus the no-false-done trio: `verification-before-completion` → `completion-judge` → `complete-everything`.
+- **Ship & operate** — release it, watch it, and feed anything you learn back into Assess.
+- **Guardrails** — `enhance-agent-guardrails` installs the rules, hooks, and CI gates that stop the loop from regressing between sessions.
+
+### Start here, by situation
+
+Find the row that sounds like your day, then follow the chain:
+
+| Your situation | Chain (→ hands off to) |
+|:---------------|:-----------------------|
+| New to this repo | `workflow-onboard` → `/research` |
+| Inherited a messy / drifted design system | `audit-uiux-design-system` → `plan-uiux-unification` → **`housekeep-design`** |
+| Make the app feel alive | **`enhance-motion`** (existing app) · `design-motion` (from scratch) |
+| Forms are clunky or inaccessible | **`enhance-web-forms`** → `audit-accessibility` |
+| "Is it production-ready?" | **`audit-resilience`** + **`audit-realworld`** → `workflow-quality-gate` |
+| Backend architecture — which pattern to use / am I over-engineering? | **`audit-backend-architecture`** → `backend-patterns` |
+| Payment flow — double-charge, ledger, webhook, PCI safe? | **`audit-payment-system`** → `audit-security` / `audit-resilience` |
+| Stop AI / vibe-coding regressions | **`enhance-agent-guardrails`** → `plan-security-audit` |
+| Close everything, zero deferrals | **`complete-everything`** → `completion-judge` |
+| Ship it and watch it | `workflow-ship-and-observe` → `debug-sentry-monitor` → `workflow-feedback-to-closure` |
+
+### Bundled workflows
+
+Say the phrase, and the whole sequence runs for you:
+
+| Say this | Bundle | What runs |
+|----------|--------|-----------|
+| "complete everything" | `complete-everything` | recover parked work → implement all → full verification → independent judge |
+| "make the repo green" | `workflow-green-repo` | discover gates → enumerate failures → batch fix → prove green |
+| "ship it / go live" | `workflow-ship-and-observe` | preflight → deploy → verify live revision → observe → stable/rollback |
+| "triage this feedback" | `workflow-feedback-to-closure` | gather → dedupe → tickets → fix → verify live → close |
+| "build a feature" | `workflow-build-feature` | spec → TDD → unit → smoke → PR |
+| "fix this and ship" | `workflow-fix-and-ship` | debug → fix → regression → PR → deploy |
+| "is this ready?" | `workflow-quality-gate` | red-team → security → bundle → perf → unit |
+| "prepare for launch" | `workflow-launch-ready` | SEO + PWA + bundle + i18n + quality gate |
+| "orient me" | `workflow-onboard` | codebase briefing in ~5 min |
+
+### Plan loops (audit only — approve before execution)
+
+These **17 `plan-*` skills** come in grouped loops. Each one audits, then hands you a plan — nothing changes until you approve it. See **[docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md)** for diagrams, slash aliases (`/uiux-plan`, `/capacitor-plan`, …), and how each maps to execution.
+
+| Loop | Skills | When |
+|------|--------|------|
+| Six-skill | uiux → stub → test-coverage → perf ∥ security → docs-sync | Inherited codebase / UI hardening |
+| Pre-launch hardening | input-validation → secrets → RLS → data-integrity → dependency-provenance | Supabase/Stripe, pre-open-source |
+| Observability & spend | error-handling + llm-cost-guardrails | LLM features, Sentry/Langfuse gaps |
+| Mobile gate | capacitor-hardening → mobile-readiness | Capacitor/hybrid pre-store |
+| Growth gate | aeo-readiness | AI citation visibility |
+
+**One-shot (six-skill plan only):**
+
+```
+Run the six-skill plan loop — no changes until I approve each phase:
+plan-uiux-unification → plan-stub-checker → plan-test-coverage →
+plan-perf-audit + plan-security-audit (parallel) → plan-docs-sync.
+```
+
+More copy-paste recipes (adopt repo, de-slop a page, pre-launch sweep, split PRs) → **[docs/CATALOG.md#skill-composition-patterns](docs/CATALOG.md#skill-composition-patterns)** · New to Cursor? → **[docs/GETTING-STARTED.md](docs/GETTING-STARTED.md)**
+
+---
+
+## How to Use
+
+Four kinds of building blocks, four ways to reach them:
+
+| Primitive | Invoke | Example |
+|:----------|:-------|:--------|
+| **Skill** | Describe the task | "audit my security" → `audit-security` |
+| **Command** | `/name` in chat | `/commit`, `/research`, `/pr` |
+| **Subagent** | Mention trigger keyword | "review this PR" → `code-reviewer` |
+| **Rule** | Copy `.mdc` into project | Always-on conventions |
+
+**Force a skill:** *"use `enhance-web-ux` on `/dashboard`"*
+
+---
+
+## Skill taxonomy
+
+Every skill has two labels: a **family** (its `<prefix>-<topic>` name) and a **lifecycle stage** (from the loop above). The table below shows which stage each family lives in. For the full entries with trigger phrases, see **[docs/CATALOG.md](docs/CATALOG.md)**.
+
+| Prefix | Stage | Purpose | Examples |
+|:-------|:------|:--------|:---------|
+| `audit-` | 🔍 Assess | Read-only assessments (may fix inline) | `audit-security`, `audit-resilience`, `audit-realworld` |
+| `plan-` | 🔍 Assess | Audit-and-plan burndowns — approve before execute (17) | `plan-stub-checker`, `plan-rls-audit`, `plan-security-audit` |
+| `enhance-` | 🛠️ Change | Improve existing UI/UX/motion/forms/SEO/PWA | `enhance-motion`, `enhance-web-forms`, `enhance-web-ux` |
+| `design-` | 🛠️ Change | New surfaces from scratch | `design-frontend`, `design-motion`, `design-system` |
+| `backend-` | 🛠️ Change | Server patterns & resilience | `backend-patterns`, `backend-observability` |
+| `mobile-` | 🛠️ Change | RN / Capacitor / emulator | `mobile-rn-screen`, `mobile-capacitor-platform` |
+| `docs-` | 🛠️ Change | Documentation | `docs-writer`, `docs-coauthor` |
+| `workflow-` | ♻️ Spans | Multi-phase process bundles | `workflow-build-feature`, `workflow-spec-tdd`, `workflow-housekeep` |
+| `test-` | ✅ Prove | QA and unit tests | `test-playwright`, `test-red-team`, `test-unit` |
+| `deploy-` | 🚀 Ship | Release verify | `deploy-verify`, `deploy-npm` |
+| `debug-` | 🚀 Operate | Failures and integration | `debug-error`, `debug-sentry-monitor` |
+| `mushi-` | 🚀 Operate | Mushi Mushi integration | `mushi-health`, `mushi-integration` |
+| `protocol-` | 🛡️ Guardrail | Session guardrails | `protocol-browser-anti-stall` |
+| `meta-` | ✍️ Author | Author skills/MCP | `meta-skill-creator`, `meta-mcp-builder` |
+| `thirdparty-` | Varies | Upstream-maintained (vendored) | `thirdparty-emil-design-eng`, `thirdparty-ui-ux-pro-max`, `thirdparty-web-interface-guidelines` |
+
+> `housekeep-design` (design-system consolidation) is the execution arm of `plan-uiux-unification`; it lives in the 🛠️ Change stage alongside `enhance-*`.
+
+> **Third-party skills:** prefixed `thirdparty-*` with `ATTRIBUTION.md` — do not add Kenji-specific sections to upstream bodies. Full guide → **[docs/THIRD-PARTY-SKILLS.md](docs/THIRD-PARTY-SKILLS.md)**.
+
+> **Note:** Anthropic `file-docx/pdf/pptx/xlsx` skills are not in this public repo. Keep personal copies in `~/.cursor/skills/` if needed.
+
+**Cursor-specific skills (12):** `babysit`, `canvas`, `create-hook`, `create-rule`, `create-skill`, `split-to-prs`, … — see [CATALOG.md](docs/CATALOG.md).
 
 ---
 
