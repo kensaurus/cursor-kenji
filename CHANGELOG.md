@@ -4,6 +4,24 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.12.0] — 2026-07-24
+
+README discoverability overhaul — ELI5 intro, always-visible skill lists with family counts, npm-safe workflow diagram (no mermaid), and a playful Tsumagoi Work&Camp invite. No skill/command behavior changes; counts unchanged.
+
+### Added
+
+- **"Explain it like I'm five"** opener with a use-case table (*you say… → what kicks in*) and an ASCII workflow loop that renders on npm (replaces the mermaid block that showed as raw code).
+- **Skill families at a glance** table (counts + one-line blurb per family) plus a full always-visible skill table per family — no collapsed `<details>` you have to click open.
+- **Wanna code in the mountains?** — playful ad for [Tsumagoi Work&Camp](https://tsumagoi.kensaur.us) (1,444 m coworking camp) with live-site link + screenshot.
+
+### Changed
+
+- README section order: inventory + full skill list sit **above** the long Quick Start installer details.
+- `scripts/generate-skill-index.mjs` emits markdown tables instead of collapsed details; warmer family headings.
+- Workflows section simplified to a stage cheat-sheet that points at the top loop diagram.
+
+---
+
 ## [1.11.2] — 2026-07-24
 
 Move the auto-generated skill index up so npm/GitHub visitors see every skill right after the inventory table — no 12-screen scroll past Workflows. No skill behavior changes.

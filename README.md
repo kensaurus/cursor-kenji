@@ -5,9 +5,9 @@
 <h1 align="center">cursor-kenji</h1>
 
 <p align="center">
-  <strong>Agent skills, slash commands, and MCP configs for Cursor.</strong><br/>
+  <strong>Ready-made playbooks for your AI coding editor.</strong><br/>
   109 agent skills · 36 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
-  <em>Tell your AI editor what you want in plain English — the matching expert playbook runs automatically. No prompt-engineering.</em>
+  <em>You talk in plain English. The matching expert recipe runs itself.</em>
 </p>
 
 <p align="center">
@@ -17,23 +17,21 @@
 
 ---
 
-**cursor-kenji** gives your AI editor a library of expert playbooks, so instead of improvising it follows a proven, repeatable process. It ships **109 Cursor agent skills**, 36 slash commands, and 6 subagents, tuned for React / Next.js / Supabase but useful on any stack. Install once, then just tell the editor what you want. The matching skill runs itself.
+## Explain it like I'm five
 
-> **New to AI skills?** Think of each skill as a ready-made playbook your editor opens on its own. You say what you want in plain English, like *"audit my security"*, *"make this form accessible"*, or *"clean up the design system"*, and the right playbook takes over. No prompt-engineering. No names to memorize.
+Your AI editor is smart, but without a recipe it **guesses**. Sometimes that guess is great. Sometimes it invents a half-broken button and calls it done.
 
-**Who's it for?** Anyone using [Cursor](https://cursor.com) or [Claude Code](https://www.anthropic.com/claude-code), plus Codex and Gemini CLI. Brand new to Cursor? Start with the **[plain-language guide →](docs/GETTING-STARTED.md)**.
+**cursor-kenji** is a big box of **recipes** (we call them *skills*). Install once. After that:
 
-**The five building blocks.** Here's what those numbers actually mean:
+1. You type something normal — *"check my security"*, *"make this form nicer"*, *"ship this feature"*.
+2. Cursor picks the matching recipe.
+3. The AI follows that recipe step by step, instead of freestyling.
 
-| Building block | In plain English | You trigger it by… |
-|:--|:--|:--|
-| **Skill** | An auto-triggering playbook for one job (audit, build, fix, enhance) | describing the task in chat |
-| **Command** | A `/shortcut` for a frequent action | typing `/commit`, `/pr`, `/plan` |
-| **Subagent** | A background helper that runs a focused sub-task | mentioning it — *"review this PR"* |
-| **Rule** | An always-on convention the AI must obey | dropping a `.mdc` file in your project |
-| **MCP server** | A live connection to an outside tool (database, GitHub, browser) | copying an MCP template + your keys |
+You do **not** need to memorize skill names. Talking like a human is enough.
 
-Everything here follows the [Agent Skills spec](https://agentskills.io/specification) and is validated on every commit, so nothing ships broken (`npm test` covers all **121** installable skills, Cursor IDE tools included). MCP templates pin exact versions to keep you safe from [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
+It ships **109 Cursor agent skills**, 36 slash commands, and 6 subagents — tuned for React / Next.js / Supabase, useful on almost any stack. Works in [Cursor](https://cursor.com), [Claude Code](https://www.anthropic.com/claude-code), and (with a lighter install) Codex + Gemini CLI. Brand new? Read the **[plain-language guide →](docs/GETTING-STARTED.md)**.
+
+### Install (30 seconds)
 
 ```bash
 npx skills add kensaurus/cursor-kenji
@@ -41,7 +39,336 @@ npx skills add kensaurus/cursor-kenji
 
 Restart Cursor. Done.
 
-> No Cursor? **[Download Cursor](https://cursor.com)** · No `skills` CLI? `npm install -g skills` first, or use [manual install](#manual-install) below.
+> No Cursor yet? **[Download it](https://cursor.com)**. No `skills` CLI? `npm install -g skills`, or see [manual install](#manual-install).
+
+### What should I say? (use cases)
+
+| You say… | What kicks in | What you get |
+|:---------|:--------------|:-------------|
+| *"orient me"* / *"what's in this repo?"* | `workflow-onboard` | A short tour of the codebase |
+| *"build this feature"* | `workflow-build-feature` | Spec → tests → code → smoke → PR |
+| *"fix this bug and ship it"* | `workflow-fix-and-ship` | Debug → fix → verify → PR → deploy |
+| *"audit my security"* | `audit-security` | OWASP-style findings with file:line |
+| *"is this production-ready?"* | `audit-resilience` + `audit-realworld` | Timeouts, retries, parity checks |
+| *"make this page less AI-looking"* | `enhance-web-ui` / `enhance-web-ux` | Cleaner layout, real content hierarchy |
+| *"make the forms accessible"* | `enhance-web-forms` | Labels, validation, keyboard-friendly |
+| *"plan a security hardening pass"* | `plan-security-audit` | A burndown **you** approve before edits |
+| *"complete everything"* | `complete-everything` | No parked leftovers — judge verifies "done" |
+| *"ship it and watch it"* | `workflow-ship-and-observe` | Deploy → verify live → observe / rollback |
+
+Full menu with every skill name → **[Every skill](#every-skill-in-plain-english)** below.
+
+### The five toys in the box
+
+| Thing | Kid explanation | How you use it |
+|:------|:----------------|:---------------|
+| **Skill** | A recipe for one job | Just describe the job in chat |
+| **Command** | A shortcut button | Type `/commit`, `/pr`, `/plan` |
+| **Subagent** | A helper who peels off to do one task | Say *"review this PR"* |
+| **Rule** | A house rule the AI always obeys | Drop a `.mdc` into your project |
+| **MCP server** | A phone line to your database / GitHub / browser | Copy a template + paste your keys |
+
+Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **121** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
+
+### How the recipes fit together (the loop)
+
+You almost never run one skill alone. Think of a simple loop — **look → change → prove → ship** — with seatbelts on the whole time:
+
+```text
+   Orient          Assess           Change           Prove            Ship
+(get to know) → (measure first) → (build/fix) → (test for real) → (go live)
+      │                                                                      │
+      └──────────────────── findings loop back ←─────────────────────────────┘
+                              ▲
+                     Guardrails always on
+              (rules · hooks · "are we actually done?")
+```
+
+| Stage | Kid version | Skill families |
+|:------|:------------|:---------------|
+| **Orient** | Walk around the house before rearranging furniture | `workflow-onboard`, `/research` |
+| **Assess** | Look carefully — maybe take notes, don't smash walls yet | `audit-*`, `plan-*` |
+| **Change** | Build new things or improve old ones | `design-*`, `enhance-*`, `backend-*`, `housekeep-design` |
+| **Prove** | Kick the tires. Don't say "done" unless it really is | `test-*`, `complete-everything`, `completion-judge` |
+| **Ship** | Put it in the world and watch it | `workflow-ship-and-observe`, `deploy-*`, `debug-*` |
+| **Guardrails** | Seatbelts that stay on between sessions | rules, completion hook, `enhance-agent-guardrails` |
+
+Rule of thumb: **assess before you change, prove before you ship, never skip a stage.**
+
+---
+
+## What's Inside
+
+The whole kit, at a glance:
+
+| | Count | What it does |
+|:--|------:|:-------------|
+| **Skills** | 109 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
+| **Cursor Skills** | 12 | IDE tools (canvas, hooks, rules, PR splitter) |
+| **Commands** | 36 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
+| **Subagents** | 6 | Background helpers (code-reviewer, debugger, db-migrator…) |
+| **Completion hook** | 1 | Opt-in stop gate: continues only unfinished durable closure state |
+| **MCP Servers** | 16 | Supabase · GitHub · Sentry · Playwright · AWS · Slack |
+| **Project Rules** | 6 | Drop-in `.mdc` for `.cursor/rules/` (plus 3 global, 5 RN bundle optional) |
+| **Notepads** | 2 | Context templates (architecture, design tokens) |
+| **Shell Aliases** | 8 | `newskill`, `cursor-sync`, `gc`, `gp` |
+
+**Every skill is listed below** — first a family count table, then the full name + one-line summary for each. Trigger phrases → **[docs/CATALOG.md](docs/CATALOG.md)** · quick lookup → **[docs/TRIGGER-CHEATSHEET.md](docs/TRIGGER-CHEATSHEET.md)**.
+
+---
+
+## Every skill, in plain English
+
+Scroll the **family counts**, then the **full list**. You don't memorize names — describe the job in chat and Cursor matches. Want exact trigger phrases? **[docs/CATALOG.md](docs/CATALOG.md)**.
+
+<!-- SKILL-INDEX:START -->
+
+_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **121 skills** listed below._
+
+#### Skill families at a glance
+
+| Family | Count | In one sentence |
+|:-------|------:|:----------------|
+| 🔍 Audit — look before you change | **17** | Check the codebase — security, UX, performance, payments… |
+| 📋 Plan — audit first, change only after you approve | **17** | Write a fix plan you approve before any code changes |
+| 🎨 Enhance — improve what already exists | **12** | Polish UI, forms, motion, SEO, PWA on an existing app |
+| ✨ Design — build something new | **10** | Create new UI, APIs, emails, themes from scratch |
+| 🧱 Backend — server & data patterns | **5** | Auth, caching, queues, realtime, observability |
+| 📱 Mobile — React Native / Capacitor | **5** | RN screens, emulators, Capacitor, App Store prep |
+| 📊 Data — charts & pipelines | **2** | Charts, dashboards, ETL / cron jobs |
+| 📚 Docs — write it down clearly | **2** | READMEs, PRDs, RFCs with a reader-first voice |
+| 🧹 Housekeeping — clean up design drift | **1** | Merge a drifted design system into one source of truth |
+| 🔗 Workflows — multi-step recipes | **17** | End-to-end recipes (build, fix, ship, green the repo) |
+| ✅ Test & QA — prove it works | **4** | Unit, Playwright, red-team, QA |
+| 🚀 Deploy — ship & verify | **2** | npm release + post-deploy smoke tests |
+| 🐛 Debug — find & fix what's broken | **3** | Errors, Sentry, frontend↔backend mismatches |
+| 🦟 Mushi Mushi — bug triage helpers | **2** | Integrate the Mushi Mushi bug-report pipeline |
+| 🛡️ Protocols — session guardrails | **1** | Keep browser automation from freezing |
+| ✍️ Authoring — build skills & MCP | **2** | Author new skills or MCP servers |
+| 🤝 Third-party (upstream-maintained) | **3** | Vendored upstream skills (Emil, UI/UX Pro Max, Vercel WIG) |
+| 🧩 Core & cross-cutting | **4** | Close everything, burndown, post-launch loops |
+| 🖱️ Cursor IDE skills | **12** | Canvas, hooks, rules, PR splitter, CLI helpers |
+| **Total** | **121** | |
+
+#### Full list (every skill)
+
+### 🔍 Audit — look before you change (17)
+
+| Skill | What it does |
+|:------|:-------------|
+| `audit-accessibility` | Automated WCAG 2.2 accessibility audit using Playwright browser MCP to crawl every page, inject axe-core via browser_evaluate, test… |
+| `audit-backend-architecture` | Read-only audit AND decision advisor for backend/distributed-systems architecture, topology-gated so a Next.js/Supabase monolith and a… |
+| `audit-bundle-size` | Analyse and shrink JavaScript bundle size for any web app |
+| `audit-cicd` | Audit CI/CD pipelines (GitHub Actions) for cost, speed, and safety |
+| `audit-code-quality` | Detect and fix code anti-patterns, and audit codebase consistency |
+| `audit-code-review` | Review code for quality, security, and maintainability following best practices |
+| `audit-db-schema` | Audit database schema for consistency, validation, and industry standards |
+| `audit-fe-api` | Audit frontend API calls against backend implementation for any project |
+| `audit-i18n` | Audit and fix internationalisation for any web or mobile app |
+| `audit-langfuse-llm` | Run a PDCA quality audit on LLM/AI features: traces, prompts, costs, evals, grounding, hallucination |
+| `audit-payment-system` | Read-only audit for payment/money-movement systems, scope-gated so a simple Stripe-Checkout site and an in-house ledger/gateway each see… |
+| `audit-performance` | Audit and optimize application performance |
+| `audit-realworld` | Audit a full-stack app against the RealWorld ("Conduit") reference — its formal API spec, shared Bruno/Hurl E2E suite, and closest-stack… |
+| `audit-resilience` | Read-only audit for the non-functional "20%" AI agents systematically skip: timeouts, retries with backoff+jitter, circuit breakers,… |
+| `audit-security` | Audit code for security vulnerabilities and best practices |
+| `audit-uiux-design-system` | Audit visual UI coherency, design token compliance, and component modularity against a design system for any project |
+| `audit-ux` | Audit user experience quality using research-backed frameworks: Nielsen Norman Group's 10 usability heuristics, Intuit Content Design… |
+
+### 📋 Plan — audit first, change only after you approve (17)
+
+| Skill | What it does |
+|:------|:-------------|
+| `plan-aeo-readiness` | Audit a site for answer-engine and generative-engine visibility (citation by ChatGPT, Claude, Perplexity, AI Overviews), then produce a… |
+| `plan-antislop` | Audit a codebase, UI, or copy for machine-generated tells across prose, visual/UI, code, and structure/IA, then produce a phased de-slop… |
+| `plan-capacitor-hardening` | Audit a Capacitor/Ionic hybrid app for native-layer security gaps, then produce a phased hardening plan |
+| `plan-data-integrity` | Audit a project for destructive-operation and migration safety gaps, then produce a phased safeguard plan |
+| `plan-dependency-provenance` | Audit dependencies for hallucinated or slopsquatted packages, supply-chain risk, and licensing/provenance gaps, then produce a phased… |
+| `plan-docs-sync` | Audit documentation against actual code behavior and plan corrections — no rewrites in this pass |
+| `plan-error-handling` | Audit a codebase for silent failures, swallowed exceptions, and observability gaps across Sentry and Langfuse, then produce a phased fix… |
+| `plan-input-validation` | Audit every trust boundary for unvalidated input, injection, and forged-request gaps, then produce a phased hardening plan |
+| `plan-llm-cost-guardrails` | Audit an LLM-powered app for runaway-cost and quota-abuse exposure, then produce a phased guardrail plan |
+| `plan-mobile-readiness` | Audit a Capacitor/React Native app for App Store and Google Play submission readiness, then produce a phased pre-submission plan |
+| `plan-perf-audit` | Measure-don't-guess performance audit across web, mobile, backend, and data layers — produces burndown and optimization plan with no fixes… |
+| `plan-rls-audit` | Audit a Supabase/Postgres project for Row-Level Security and access-control gaps, then produce a phased remediation plan |
+| `plan-secrets-audit` | Audit a codebase and git history for exposed credentials and mis-scoped keys, then produce a phased rotation-and-remediation plan |
+| `plan-security-audit` | OWASP Top 10 security audit with Supabase-first methodology — RLS pass, bundle/secret scan, auth-path tracing, dependency CVEs |
+| `plan-stub-checker` | Exhaustive audit for stubs, dead buttons, fake/placeholder components, unwired handlers, dead links, orphans, and severed integrations —… |
+| `plan-test-coverage` | User-story-driven test coverage audit and plan — no test writing in this pass |
+| `plan-uiux-unification` | Exhaustive, non-destructive UI/UX and design-system audit that produces a burndown and unification plan — no code changes until each phase… |
+
+### 🎨 Enhance — improve what already exists (12)
+
+| Skill | What it does |
+|:------|:-------------|
+| `enhance-agent-guardrails` | Install guardrails-as-code into a repo so AI/vibe-coding can't keep reintroducing the same classes of problems (leaked secrets, injection,… |
+| `enhance-capacitor-ui` | Cross-surface UIUX separation skill for hybrid web apps that ship as PWA + iOS + Android via Capacitor (or Tauri / Expo Web / Ionic /… |
+| `enhance-motion` | Audit an existing app's design system and current motion, then apply coherent, performant, accessible motion using the right-sized 2026… |
+| `enhance-pwa` | Add or upgrade PWA features to any web app: service worker, offline mode, install prompt, push notifications, and background sync |
+| `enhance-readme` | Turn a plain-text README into a visually rich showcase with a theme-aware hero image, a feature tour grid, an optional animated guided-tour… |
+| `enhance-web-forms` | Build or upgrade web forms to production quality: accessible structure (labels, fieldsets, autocomplete, correct input types),… |
+| `enhance-web-landing` | Build landing pages, portfolios, and marketing sites that don't look AI-generated |
+| `enhance-web-redesign` | Upgrades existing websites and apps to premium quality |
+| `enhance-web-seo` | Audit and fix SEO for any web app. Checks meta tags, Open Graph and Twitter Card tags, JSON-LD structured data, robots.txt, sitemap.xml,… |
+| `enhance-web-ui` | Artistic, research-grounded UI enhancement skill for making an existing page feel intentional, spacious, and human-crafted |
+| `enhance-web-ux` | Generative, NN/g-grounded page enhancement skill |
+| `enhance-web-web3d` | Add 3D and scroll-driven motion to an existing website or web app — Three.js / React Three Fiber for the scene, GSAP ScrollTrigger for… |
+
+### ✨ Design — build something new (10)
+
+| Skill | What it does |
+|:------|:-------------|
+| `design-api` | Design RESTful and GraphQL APIs following current best practices for naming, versioning, error shapes, and auth patterns |
+| `design-canvas` | Create museum-quality visual art in .png and .pdf formats using design philosophy |
+| `design-email` | Design and implement transactional and marketing email templates |
+| `design-frontend` | Create distinctive, production-grade frontend interfaces that avoid generic AI aesthetics |
+| `design-generative-art` | Create algorithmic art using p5.js, Canvas API, or SVG with seeded randomness and interactive parameters |
+| `design-mobile-first` | Designs mobile-first responsive interfaces with touch optimization — breakpoint strategy, touch targets, safe areas, and gesture handling,… |
+| `design-motion` | Design and implement purposeful motion — micro-interactions, page transitions, scroll animations, and hover effects — using Framer Motion,… |
+| `design-prd` | Generate Product Requirements Documents through structured conversation for any project |
+| `design-system` | Build and maintain cohesive design systems and component libraries with tokens, theming, and documented variants |
+| `design-theme` | Apply cohesive visual themes to artifacts (slides, docs, landing pages) |
+
+### 🧱 Backend — server & data patterns (5)
+
+| Skill | What it does |
+|:------|:-------------|
+| `backend-db-performance` | Optimize database queries, schemas, and performance |
+| `backend-error-handling` | Implement solid error handling patterns |
+| `backend-observability` | Instrument features so errors, traces, and logs are correlated from the first line |
+| `backend-patterns` | Apply modern backend patterns — auth middleware, caching strategies, background queues, rate limiting, and serverless/edge function design… |
+| `backend-realtime` | Implement real-time features using WebSockets, Supabase Realtime, Server-Sent Events, and live data |
+
+### 📱 Mobile — React Native / Capacitor (5)
+
+| Skill | What it does |
+|:------|:-------------|
+| `mobile-capacitor-platform` | Handle Capacitor platform depth beyond UI: plugins, OTA, deep links, push, offline, native CI/CD, App Store / Play Store submission, Apple… |
+| `mobile-emulator-start` | Boots a clean Android emulator + Metro (Expo dev-client / bare React Native) with the right ordering: inspect existing IDE terminals first,… |
+| `mobile-emulator-test` | QA a native Android build end-to-end on the emulator |
+| `mobile-rn-performance` | Fix React Native / Expo performance, build, and upgrade issues |
+| `mobile-rn-screen` | Polish an existing React Native screen to feel intentional, native, and human-crafted |
+
+### 📊 Data — charts & pipelines (2)
+
+| Skill | What it does |
+|:------|:-------------|
+| `data-pipeline` | Wire ETL, ingestion, cron, edge-function, and queue jobs correctly |
+| `data-visualization` | Build interactive, accessible charts, graphs, and data dashboards using Recharts, D3, or Victory |
+
+### 📚 Docs — write it down clearly (2)
+
+| Skill | What it does |
+|:------|:-------------|
+| `docs-coauthor` | Co-author structured documents (specs, PRDs, RFCs, ADRs) through a 3-stage workflow: context gathering, drafting, and reader testing |
+| `docs-writer` | Write clear, developer-friendly documentation — READMEs, API references, code comments, and changelog entries — tailored to the audience… |
+
+### 🧹 Housekeeping — clean up design drift (1)
+
+| Skill | What it does |
+|:------|:-------------|
+| `housekeep-design` | Consolidate a design system that has drifted across many vibe-coding sessions and developer handoffs into one single source of truth |
+
+### 🔗 Workflows — multi-step recipes (17)
+
+| Skill | What it does |
+|:------|:-------------|
+| `workflow-build-feature` | End-to-end feature build workflow: spec → TDD → implement → smoke test → PR |
+| `workflow-coding-discipline` | Apply behavioral guardrails when writing, editing, refactoring, or debugging code |
+| `workflow-environment-ready` | Prove the working environment is actually runnable before starting a long or autonomous task, so a multi-hour run does not fail at the… |
+| `workflow-feature-flag` | Plan and execute a disciplined feature-flag rollout for any app |
+| `workflow-feedback-to-closure` | Turn raw feedback — bug reports, user complaints, review comments, Sentry issues, QA findings, audit/red-team output — into deduplicated,… |
+| `workflow-fix-and-ship` | Complete bug-fix lifecycle in one sweep: triage production signals (Sentry / logs) → reproduce → fix (debug-error) → verify full-stack… |
+| `workflow-git-commit` | Generate clear, descriptive commit messages following conventional commits format |
+| `workflow-green-repo` | Drive an entire repository to a fully green baseline — typecheck, lint, tests, and build all passing from a clean checkout — when the user… |
+| `workflow-housekeep` | Repo housekeeping: sync READMEs to match current architecture, remove dead files (logs, screenshots, deprecated code, build artifacts),… |
+| `workflow-launch-ready` | Full launch preparation sweep for a new app or major release |
+| `workflow-onboard` | First-contact orientation for an unfamiliar codebase |
+| `workflow-parallel-agents` | Run multiple agents in parallel via git worktrees, cloud agents, or multi-model comparison |
+| `workflow-pr` | Manage the full PR lifecycle — create, review, address bot feedback, resolve conflicts, and merge |
+| `workflow-quality-gate` | Pre-release quality gate that sequences test-red-team, audit-security, audit-bundle-size, audit-performance, and test-unit into a single… |
+| `workflow-refactor` | Guide for refactoring code to improve quality without changing behavior |
+| `workflow-ship-and-observe` | Take merged, repository-green code all the way to a verified, monitored production release for any app stack |
+| `workflow-spec-tdd` | Stop vibe-coding with a spec → plan → TDD loop before writing a line |
+
+### ✅ Test & QA — prove it works (4)
+
+| Skill | What it does |
+|:------|:-------------|
+| `test-playwright` | Close the PDCA loop on the work you just did |
+| `test-qa` | Generic webapp QA fallback — use only when no project-specific QA skill applies (project-local QA skills take precedence; use… |
+| `test-red-team` | Adversarial red-team of a running web, React Native, or Capacitor hybrid app |
+| `test-unit` | Write effective unit tests with best practices for any project |
+
+### 🚀 Deploy — ship & verify (2)
+
+| Skill | What it does |
+|:------|:-------------|
+| `deploy-npm` | Release npm packages end-to-end: Changesets version bump, CHANGELOG update, GitHub Actions OIDC publish, and post-release verification |
+| `deploy-verify` | Post-deploy smoke test combining all 5 MCPs (Sentry + Supabase + Langfuse CLI + Playwright + Firecrawl) into one workflow |
+
+### 🐛 Debug — find & fix what's broken (3)
+
+| Skill | What it does |
+|:------|:-------------|
+| `debug-error` | Systematic debugging workflow for errors and bugs |
+| `debug-fe-be-integration` | Debug frontend-backend integration issues for any project by analyzing backend logs, identifying incorrect API calls, and fixing both sides |
+| `debug-sentry-monitor` | Monitor, triage, fix, and proactively enhance Sentry error monitoring for any project |
+
+### 🦟 Mushi Mushi — bug triage helpers (2)
+
+| Skill | What it does |
+|:------|:-------------|
+| `mushi-health` | Pass/fail health check across every Mushi Mushi pipeline component — CLI credentials, API reachability, edge functions, BYOK key pool, QA… |
+| `mushi-integration` | Full end-to-end Mushi Mushi integration smoke test: bug capture → AI triage → story mapping → TDD test generation → approval → execution →… |
+
+### 🛡️ Protocols — session guardrails (1)
+
+| Skill | What it does |
+|:------|:-------------|
+| `protocol-browser-anti-stall` | Prevent browser automation from freezing, getting stuck, or waiting excessively during page navigation and interaction, and enforce manual,… |
+
+### ✍️ Authoring — build skills & MCP (2)
+
+| Skill | What it does |
+|:------|:-------------|
+| `meta-mcp-builder` | Scaffold and implement Model Context Protocol (MCP) servers that expose external services, APIs, and data sources as typed tools and… |
+| `meta-skill-creator` | Create or update Cursor agent skills (SKILL.md) |
+
+### 🤝 Third-party (upstream-maintained) (3)
+
+| Skill | What it does |
+|:------|:-------------|
+| `thirdparty-emil-design-eng` | Third-party skill — Emil Kowalski's design engineering philosophy (UI polish, component design, animation craft) |
+| `thirdparty-ui-ux-pro-max` | Third-party skill — design intelligence for professional UI/UX (the full style catalog, palettes, typography, UX guidelines) |
+| `thirdparty-web-interface-guidelines` | Third-party skill — reviews UI code for Vercel Web Interface Guidelines compliance (accessibility, focus, forms, animation, performance,… |
+
+### 🧩 Core & cross-cutting (4)
+
+| Skill | What it does |
+|:------|:-------------|
+| `burndown-full` | Drive a planned change to 100% coverage across an entire codebase when a prior agent run stopped early |
+| `complete-everything` | Close an approved plan with zero plan-related deferrals: implement every unfinished item, absorb every connected… |
+| `iterate-agent-harness` | Turn an agent's own failure — a premature stop, a false "done", a reward- hacked check, a missed file, a broken handoff — into a durable… |
+| `iterate-post-launch` | Close the post-launch improvement loop for any shipped app |
+
+### 🖱️ Cursor IDE skills (12)
+
+| Skill | What it does |
+|:------|:-------------|
+| `babysit` | Keep a PR merge-ready by triaging comments, resolving clear conflicts, and fixing CI in a loop |
+| `canvas` | A Cursor Canvas is a live React app the user opens beside the chat |
+| `create-hook` | Create Cursor hooks |
+| `create-rule` | Create Cursor rules for persistent AI guidance |
+| `create-skill` | Guide users through creating effective Agent Skills for Cursor |
+| `create-subagent` | Create custom subagents for specialized AI tasks |
+| `migrate-to-skills` | Convert 'Applied intelligently' Cursor rules (.cursor/rules/*.mdc) and slash commands (.cursor/commands/*.md) to Agent Skills format… |
+| `shell` | Run the rest of a /shell request as a literal shell command |
+| `split-to-prs` | Split current work into small reviewable PRs |
+| `statusline` | Configure a custom status line in the CLI |
+| `update-cli-config` | View and modify Cursor CLI configuration in ~/.cursor/cli-config.json |
+| `update-cursor-settings` | Modify Cursor/VSCode user settings in settings.json |
+
+<!-- SKILL-INDEX:END -->
 
 ---
 
@@ -152,314 +479,27 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 
 ---
 
-## What's Inside
-
-The whole kit, at a glance:
-
-| | Count | What it does |
-|:--|------:|:-------------|
-| **Skills** | 109 | Auto-triggering capabilities (audit, enhance, debug, test, build, plan) |
-| **Cursor Skills** | 12 | IDE tools (canvas, hooks, rules, PR splitter) |
-| **Commands** | 36 | Slash workflows (`/commit`, `/pr`, `/burndown-full`, `/thirdparty-web-interface-guidelines`) |
-| **Subagents** | 6 | Background agents (code-reviewer, debugger, db-migrator…) |
-| **Completion hook** | 1 | Opt-in stop gate: continues only unfinished durable closure state |
-| **MCP Servers** | 16 | Supabase · GitHub · Sentry · Playwright · AWS · Slack |
-| **Project Rules** | 6 | Drop-in `.mdc` for `.cursor/rules/` (plus 3 global, 5 RN bundle optional) |
-| **Notepads** | 2 | Context templates (architecture, design tokens) |
-| **Shell Aliases** | 8 | `newskill`, `cursor-sync`, `gc`, `gp` |
-
-Want every skill spelled out? Expand the groups below — or jump to **[Every skill, in plain English](#every-skill-in-plain-english)**. Trigger phrases live in **[docs/CATALOG.md](docs/CATALOG.md)** · quick lookup in **[docs/TRIGGER-CHEATSHEET.md](docs/TRIGGER-CHEATSHEET.md)**.
-
----
-
-## Every skill, in plain English
-
-Here's the whole library — grouped by the families above, each with a one-line summary. You don't memorize these; you just describe your task and Cursor matches the right one. Want the trigger phrases too? They live in **[docs/CATALOG.md](docs/CATALOG.md)**.
-
-<!-- SKILL-INDEX:START -->
-
-_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. Click any group to expand._
-
-<details>
-<summary><strong>🔍 Audit — read-only assessments</strong> (17)</summary>
-
-- `audit-accessibility` — Automated WCAG 2.2 accessibility audit using Playwright browser MCP to crawl every page, inject axe-core via browser_evaluate, test keyboard navigation,…
-- `audit-backend-architecture` — Read-only audit AND decision advisor for backend/distributed-systems architecture, topology-gated so a Next.js/Supabase monolith and a Kubernetes fleet…
-- `audit-bundle-size` — Analyse and shrink JavaScript bundle size for any web app
-- `audit-cicd` — Audit CI/CD pipelines (GitHub Actions) for cost, speed, and safety
-- `audit-code-quality` — Detect and fix code anti-patterns, and audit codebase consistency
-- `audit-code-review` — Review code for quality, security, and maintainability following best practices
-- `audit-db-schema` — Audit database schema for consistency, validation, and industry standards
-- `audit-fe-api` — Audit frontend API calls against backend implementation for any project
-- `audit-i18n` — Audit and fix internationalisation for any web or mobile app
-- `audit-langfuse-llm` — Run a PDCA quality audit on LLM/AI features: traces, prompts, costs, evals, grounding, hallucination
-- `audit-payment-system` — Read-only audit for payment/money-movement systems, scope-gated so a simple Stripe-Checkout site and an in-house ledger/gateway each see only relevant…
-- `audit-performance` — Audit and optimize application performance
-- `audit-realworld` — Audit a full-stack app against the RealWorld ("Conduit") reference — its formal API spec, shared Bruno/Hurl E2E suite, and closest-stack reference…
-- `audit-resilience` — Read-only audit for the non-functional "20%" AI agents systematically skip: timeouts, retries with backoff+jitter, circuit breakers, idempotency keys,…
-- `audit-security` — Audit code for security vulnerabilities and best practices
-- `audit-uiux-design-system` — Audit visual UI coherency, design token compliance, and component modularity against a design system for any project
-- `audit-ux` — Audit user experience quality using research-backed frameworks: Nielsen Norman Group's 10 usability heuristics, Intuit Content Design System for…
-
-</details>
-
-<details>
-<summary><strong>📋 Plan — audit + approve before executing</strong> (17)</summary>
-
-- `plan-aeo-readiness` — Audit a site for answer-engine and generative-engine visibility (citation by ChatGPT, Claude, Perplexity, AI Overviews), then produce a phased improvement…
-- `plan-antislop` — Audit a codebase, UI, or copy for machine-generated tells across prose, visual/UI, code, and structure/IA, then produce a phased de-slop burndown
-- `plan-capacitor-hardening` — Audit a Capacitor/Ionic hybrid app for native-layer security gaps, then produce a phased hardening plan
-- `plan-data-integrity` — Audit a project for destructive-operation and migration safety gaps, then produce a phased safeguard plan
-- `plan-dependency-provenance` — Audit dependencies for hallucinated or slopsquatted packages, supply-chain risk, and licensing/provenance gaps, then produce a phased remediation plan
-- `plan-docs-sync` — Audit documentation against actual code behavior and plan corrections — no rewrites in this pass
-- `plan-error-handling` — Audit a codebase for silent failures, swallowed exceptions, and observability gaps across Sentry and Langfuse, then produce a phased fix plan
-- `plan-input-validation` — Audit every trust boundary for unvalidated input, injection, and forged-request gaps, then produce a phased hardening plan
-- `plan-llm-cost-guardrails` — Audit an LLM-powered app for runaway-cost and quota-abuse exposure, then produce a phased guardrail plan
-- `plan-mobile-readiness` — Audit a Capacitor/React Native app for App Store and Google Play submission readiness, then produce a phased pre-submission plan
-- `plan-perf-audit` — Measure-don't-guess performance audit across web, mobile, backend, and data layers — produces burndown and optimization plan with no fixes in this pass
-- `plan-rls-audit` — Audit a Supabase/Postgres project for Row-Level Security and access-control gaps, then produce a phased remediation plan
-- `plan-secrets-audit` — Audit a codebase and git history for exposed credentials and mis-scoped keys, then produce a phased rotation-and-remediation plan
-- `plan-security-audit` — OWASP Top 10 security audit with Supabase-first methodology — RLS pass, bundle/secret scan, auth-path tracing, dependency CVEs
-- `plan-stub-checker` — Exhaustive audit for stubs, dead buttons, fake/placeholder components, unwired handlers, dead links, orphans, and severed integrations — produces a…
-- `plan-test-coverage` — User-story-driven test coverage audit and plan — no test writing in this pass
-- `plan-uiux-unification` — Exhaustive, non-destructive UI/UX and design-system audit that produces a burndown and unification plan — no code changes until each phase is approved
-
-</details>
-
-<details>
-<summary><strong>🎨 Enhance — improve what already exists</strong> (12)</summary>
-
-- `enhance-agent-guardrails` — Install guardrails-as-code into a repo so AI/vibe-coding can't keep reintroducing the same classes of problems (leaked secrets, injection, off-system…
-- `enhance-capacitor-ui` — Cross-surface UIUX separation skill for hybrid web apps that ship as PWA + iOS + Android via Capacitor (or Tauri / Expo Web / Ionic / RN-Web)
-- `enhance-motion` — Audit an existing app's design system and current motion, then apply coherent, performant, accessible motion using the right-sized 2026 stack —…
-- `enhance-pwa` — Add or upgrade PWA features to any web app: service worker, offline mode, install prompt, push notifications, and background sync
-- `enhance-readme` — Turn a plain-text README into a visually rich showcase with a theme-aware hero image, a feature tour grid, an optional animated guided-tour GIF, and…
-- `enhance-web-forms` — Build or upgrade web forms to production quality: accessible structure (labels, fieldsets, autocomplete, correct input types), schema-driven validation…
-- `enhance-web-landing` — Build landing pages, portfolios, and marketing sites that don't look AI-generated
-- `enhance-web-redesign` — Upgrades existing websites and apps to premium quality
-- `enhance-web-seo` — Audit and fix SEO for any web app. Checks meta tags, Open Graph and Twitter Card tags, JSON-LD structured data, robots.txt, sitemap.xml, canonical URLs,…
-- `enhance-web-ui` — Artistic, research-grounded UI enhancement skill for making an existing page feel intentional, spacious, and human-crafted
-- `enhance-web-ux` — Generative, NN/g-grounded page enhancement skill
-- `enhance-web-web3d` — Add 3D and scroll-driven motion to an existing website or web app — Three.js / React Three Fiber for the scene, GSAP ScrollTrigger for scroll-driven…
-
-</details>
-
-<details>
-<summary><strong>✨ Design — build new surfaces</strong> (10)</summary>
-
-- `design-api` — Design RESTful and GraphQL APIs following current best practices for naming, versioning, error shapes, and auth patterns
-- `design-canvas` — Create museum-quality visual art in .png and .pdf formats using design philosophy
-- `design-email` — Design and implement transactional and marketing email templates
-- `design-frontend` — Create distinctive, production-grade frontend interfaces that avoid generic AI aesthetics
-- `design-generative-art` — Create algorithmic art using p5.js, Canvas API, or SVG with seeded randomness and interactive parameters
-- `design-mobile-first` — Designs mobile-first responsive interfaces with touch optimization — breakpoint strategy, touch targets, safe areas, and gesture handling, enhanced…
-- `design-motion` — Design and implement purposeful motion — micro-interactions, page transitions, scroll animations, and hover effects — using Framer Motion, CSS animations,…
-- `design-prd` — Generate Product Requirements Documents through structured conversation for any project
-- `design-system` — Build and maintain cohesive design systems and component libraries with tokens, theming, and documented variants
-- `design-theme` — Apply cohesive visual themes to artifacts (slides, docs, landing pages)
-
-</details>
-
-<details>
-<summary><strong>🧱 Backend — server & data-layer patterns</strong> (5)</summary>
-
-- `backend-db-performance` — Optimize database queries, schemas, and performance
-- `backend-error-handling` — Implement solid error handling patterns
-- `backend-observability` — Instrument features so errors, traces, and logs are correlated from the first line
-- `backend-patterns` — Apply modern backend patterns — auth middleware, caching strategies, background queues, rate limiting, and serverless/edge function design — across stacks…
-- `backend-realtime` — Implement real-time features using WebSockets, Supabase Realtime, Server-Sent Events, and live data
-
-</details>
-
-<details>
-<summary><strong>📱 Mobile — React Native / Capacitor</strong> (5)</summary>
-
-- `mobile-capacitor-platform` — Handle Capacitor platform depth beyond UI: plugins, OTA, deep links, push, offline, native CI/CD, App Store / Play Store submission, Apple preflight,…
-- `mobile-emulator-start` — Boots a clean Android emulator + Metro (Expo dev-client / bare React Native) with the right ordering: inspect existing IDE terminals first, kill stale…
-- `mobile-emulator-test` — QA a native Android build end-to-end on the emulator
-- `mobile-rn-performance` — Fix React Native / Expo performance, build, and upgrade issues
-- `mobile-rn-screen` — Polish an existing React Native screen to feel intentional, native, and human-crafted
-
-</details>
-
-<details>
-<summary><strong>📊 Data — visualization & pipelines</strong> (2)</summary>
-
-- `data-pipeline` — Wire ETL, ingestion, cron, edge-function, and queue jobs correctly
-- `data-visualization` — Build interactive, accessible charts, graphs, and data dashboards using Recharts, D3, or Victory
-
-</details>
-
-<details>
-<summary><strong>📚 Docs — documentation</strong> (2)</summary>
-
-- `docs-coauthor` — Co-author structured documents (specs, PRDs, RFCs, ADRs) through a 3-stage workflow: context gathering, drafting, and reader testing
-- `docs-writer` — Write clear, developer-friendly documentation — READMEs, API references, code comments, and changelog entries — tailored to the audience and the project's…
-
-</details>
-
-<details>
-<summary><strong>🧹 Housekeeping — consolidate drift</strong> (1)</summary>
-
-- `housekeep-design` — Consolidate a design system that has drifted across many vibe-coding sessions and developer handoffs into one single source of truth
-
-</details>
-
-<details>
-<summary><strong>🔗 Workflows — multi-step bundles</strong> (17)</summary>
-
-- `workflow-build-feature` — End-to-end feature build workflow: spec → TDD → implement → smoke test → PR
-- `workflow-coding-discipline` — Apply behavioral guardrails when writing, editing, refactoring, or debugging code
-- `workflow-environment-ready` — Prove the working environment is actually runnable before starting a long or autonomous task, so a multi-hour run does not fail at the finish line on a…
-- `workflow-feature-flag` — Plan and execute a disciplined feature-flag rollout for any app
-- `workflow-feedback-to-closure` — Turn raw feedback — bug reports, user complaints, review comments, Sentry issues, QA findings, audit/red-team output — into deduplicated, durable,…
-- `workflow-fix-and-ship` — Complete bug-fix lifecycle in one sweep: triage production signals (Sentry / logs) → reproduce → fix (debug-error) → verify full-stack (test-playwright) →…
-- `workflow-git-commit` — Generate clear, descriptive commit messages following conventional commits format
-- `workflow-green-repo` — Drive an entire repository to a fully green baseline — typecheck, lint, tests, and build all passing from a clean checkout — when the user has explicitly…
-- `workflow-housekeep` — Repo housekeeping: sync READMEs to match current architecture, remove dead files (logs, screenshots, deprecated code, build artifacts), update…
-- `workflow-launch-ready` — Full launch preparation sweep for a new app or major release
-- `workflow-onboard` — First-contact orientation for an unfamiliar codebase
-- `workflow-parallel-agents` — Run multiple agents in parallel via git worktrees, cloud agents, or multi-model comparison
-- `workflow-pr` — Manage the full PR lifecycle — create, review, address bot feedback, resolve conflicts, and merge
-- `workflow-quality-gate` — Pre-release quality gate that sequences test-red-team, audit-security, audit-bundle-size, audit-performance, and test-unit into a single sweep
-- `workflow-refactor` — Guide for refactoring code to improve quality without changing behavior
-- `workflow-ship-and-observe` — Take merged, repository-green code all the way to a verified, monitored production release for any app stack
-- `workflow-spec-tdd` — Stop vibe-coding with a spec → plan → TDD loop before writing a line
-
-</details>
-
-<details>
-<summary><strong>✅ Test & QA</strong> (4)</summary>
-
-- `test-playwright` — Close the PDCA loop on the work you just did
-- `test-qa` — Generic webapp QA fallback — use only when no project-specific QA skill applies (project-local QA skills take precedence; use mobile-emulator-test for…
-- `test-red-team` — Adversarial red-team of a running web, React Native, or Capacitor hybrid app
-- `test-unit` — Write effective unit tests with best practices for any project
-
-</details>
-
-<details>
-<summary><strong>🚀 Deploy — release & verify</strong> (2)</summary>
-
-- `deploy-npm` — Release npm packages end-to-end: Changesets version bump, CHANGELOG update, GitHub Actions OIDC publish, and post-release verification
-- `deploy-verify` — Post-deploy smoke test combining all 5 MCPs (Sentry + Supabase + Langfuse CLI + Playwright + Firecrawl) into one workflow
-
-</details>
-
-<details>
-<summary><strong>🐛 Debug & operate</strong> (3)</summary>
-
-- `debug-error` — Systematic debugging workflow for errors and bugs
-- `debug-fe-be-integration` — Debug frontend-backend integration issues for any project by analyzing backend logs, identifying incorrect API calls, and fixing both sides
-- `debug-sentry-monitor` — Monitor, triage, fix, and proactively enhance Sentry error monitoring for any project
-
-</details>
-
-<details>
-<summary><strong>🦟 Mushi Mushi integration</strong> (2)</summary>
-
-- `mushi-health` — Pass/fail health check across every Mushi Mushi pipeline component — CLI credentials, API reachability, edge functions, BYOK key pool, QA cron
-- `mushi-integration` — Full end-to-end Mushi Mushi integration smoke test: bug capture → AI triage → story mapping → TDD test generation → approval → execution → PDCA cycle
-
-</details>
-
-<details>
-<summary><strong>🛡️ Protocols — session guardrails</strong> (1)</summary>
-
-- `protocol-browser-anti-stall` — Prevent browser automation from freezing, getting stuck, or waiting excessively during page navigation and interaction, and enforce manual, headed,…
-
-</details>
-
-<details>
-<summary><strong>✍️ Authoring — build skills & MCP</strong> (2)</summary>
-
-- `meta-mcp-builder` — Scaffold and implement Model Context Protocol (MCP) servers that expose external services, APIs, and data sources as typed tools and resources for LLM…
-- `meta-skill-creator` — Create or update Cursor agent skills (SKILL.md)
-
-</details>
-
-<details>
-<summary><strong>🤝 Third-party (vendored, upstream-maintained)</strong> (3)</summary>
-
-- `thirdparty-emil-design-eng` — Third-party skill — Emil Kowalski's design engineering philosophy (UI polish, component design, animation craft)
-- `thirdparty-ui-ux-pro-max` — Third-party skill — design intelligence for professional UI/UX (the full style catalog, palettes, typography, UX guidelines)
-- `thirdparty-web-interface-guidelines` — Third-party skill — reviews UI code for Vercel Web Interface Guidelines compliance (accessibility, focus, forms, animation, performance, copy)
-
-</details>
-
-<details>
-<summary><strong>🧩 Core & cross-cutting</strong> (4)</summary>
-
-- `burndown-full` — Drive a planned change to 100% coverage across an entire codebase when a prior agent run stopped early
-- `complete-everything` — Close an approved plan with zero plan-related deferrals: implement every unfinished item, absorb every connected out-of-scope/follow-up/nice-to-have item…
-- `iterate-agent-harness` — Turn an agent's own failure — a premature stop, a false "done", a reward- hacked check, a missed file, a broken handoff — into a durable improvement to…
-- `iterate-post-launch` — Close the post-launch improvement loop for any shipped app
-
-</details>
-
-<details>
-<summary><strong>🖱️ Cursor IDE skills</strong> (12)</summary>
-
-- `babysit` — Keep a PR merge-ready by triaging comments, resolving clear conflicts, and fixing CI in a loop
-- `canvas` — A Cursor Canvas is a live React app the user opens beside the chat
-- `create-hook` — Create Cursor hooks
-- `create-rule` — Create Cursor rules for persistent AI guidance
-- `create-skill` — Guide users through creating effective Agent Skills for Cursor
-- `create-subagent` — Create custom subagents for specialized AI tasks
-- `migrate-to-skills` — Convert 'Applied intelligently' Cursor rules (.cursor/rules/*.mdc) and slash commands (.cursor/commands/*.md) to Agent Skills format (.cursor/skills/)
-- `shell` — Run the rest of a /shell request as a literal shell command
-- `split-to-prs` — Split current work into small reviewable PRs
-- `statusline` — Configure a custom status line in the CLI
-- `update-cli-config` — View and modify Cursor CLI configuration in ~/.cursor/cli-config.json
-- `update-cursor-settings` — Modify Cursor/VSCode user settings in settings.json
-
-</details>
-
-<!-- SKILL-INDEX:END -->
-
----
-
 ## Workflows
 
-You rarely run just one skill. You **chain** them around a simple build loop: each family owns a stage, and guardrails run across all of them so a fast, vibe-coding session can't quietly break things. The rule of thumb is easy to remember — **assess before you change, prove before you ship, and never skip a stage.**
+You rarely run just one skill. You **chain** them. The picture at the top ([How the recipes fit together](#how-the-recipes-fit-together-the-loop)) is the whole idea — this section is the same loop with more detail.
 
-### The mental model
+### Stage cheat-sheet
 
-Here's how the families hand off to each other:
+| Stage | What you do | Skill families |
+|:------|:------------|:---------------|
+| **Orient** | Get to know the repo before you touch it | `workflow-onboard`, `/research` |
+| **Assess** | Measure, don't guess. `audit-*` may fix inline; `plan-*` only plans until you approve | `audit-*`, `plan-*` |
+| **Change** | Build new (`design-*`) or improve existing (`enhance-*`); merge design drift with `housekeep-design` | `design-*`, `enhance-*`, `backend-*`, `mobile-*` |
+| **Prove** | Tests + the no-false-done trio | `test-*`, `verification-before-completion` → `completion-judge` → `complete-everything` |
+| **Ship & operate** | Release, watch, feed findings back into Assess | `deploy-*`, `debug-*`, `workflow-ship-and-observe` |
+| **Guardrails** | Seatbelts between sessions | rules, completion hook, `enhance-agent-guardrails` |
 
-```mermaid
-flowchart LR
-  O["🧭 Orient<br/>workflow-onboard · /research"]
-  A["🔍 Assess — read-only<br/>audit-* · plan-*<br/>audit-realworld · audit-resilience"]
-  C["🛠️ Change<br/>design-* · enhance-*<br/>housekeep-design · build / fix"]
-  P["✅ Prove<br/>test-* · complete-everything<br/>completion-judge"]
-  S["🚀 Ship & operate<br/>ship-and-observe · feedback-to-closure"]
-  G["🛡️ Guardrails — always on<br/>rules · completion hook · enhance-agent-guardrails"]
+Specialist audits worth knowing:
 
-  O --> A --> C --> P --> S
-  S -. "new findings loop back" .-> A
-  G -.-> A
-  G -.-> C
-  G -.-> P
-
-  style O fill:#064e3b,stroke:#10b981,color:#d1fae5
-  style A fill:#3b0764,stroke:#a78bfa,color:#ede9fe
-  style C fill:#1e3a5f,stroke:#60a5fa,color:#dbeafe
-  style P fill:#3b0764,stroke:#a78bfa,color:#ede9fe
-  style S fill:#1e3a5f,stroke:#60a5fa,color:#dbeafe
-  style G fill:#4a044e,stroke:#f0abfc,color:#fae8ff
-```
-
-- **Orient** — get to know the repo before you touch it.
-- **Assess** — measure, don't guess. `audit-*` skills can fix things inline; `plan-*` skills only plan until you approve. A few specialists go deep:
-  - `audit-realworld` — checks full-stack feature parity.
-  - `audit-resilience` — covers the non-functional work most agents skip: timeouts, retries, idempotency, PII.
-  - `audit-backend-architecture` — reviews distributed-systems patterns (gateway, BFF, outbox, saga, cache-aside, and friends) and tells you which to adopt next versus skip as over-engineering.
-  - `audit-payment-system` — checks money-movement correctness: double-charge protection, ledgers, webhooks, reconciliation, PCI.
-- **Change** — `design-*` builds something new, `enhance-*` improves what's already there (motion, forms, UI, UX, SEO), and `housekeep-design` merges a drifted design system back into one source of truth.
-- **Prove** — `test-*` skills, plus the no-false-done trio: `verification-before-completion` → `completion-judge` → `complete-everything`.
-- **Ship & operate** — release it, watch it, and feed anything you learn back into Assess.
-- **Guardrails** — `enhance-agent-guardrails` installs the rules, hooks, and CI gates that stop the loop from regressing between sessions.
+- `audit-realworld` — full-stack feature parity
+- `audit-resilience` — timeouts, retries, idempotency, PII (the stuff agents skip)
+- `audit-backend-architecture` — which distributed pattern to adopt vs skip as over-engineering
+- `audit-payment-system` — double-charge, ledgers, webhooks, PCI
 
 ### Start here, by situation
 
@@ -734,19 +774,19 @@ See [CONTRIBUTING.md](CONTRIBUTING.md), [docs/README.md](docs/README.md), [docs/
 ## FAQ
 
 **What is cursor-kenji?**  
-It's an installable toolkit of [Agent Skills](https://agentskills.io)-compatible skills, slash commands, subagents, and MCP templates for [Cursor](https://cursor.com). One command drops everything into `~/.cursor/` and `~/.agents/skills/`.
+A box of ready-made recipes for your AI editor ([Agent Skills](https://agentskills.io) format) — plus slash commands, subagents, and MCP templates for [Cursor](https://cursor.com). One command installs them into `~/.cursor/` and `~/.agents/skills/`.
 
 **How do I install?**  
 `npx skills add kensaurus/cursor-kenji` (recommended) or `npx @kensaurus/cursor-kenji`. Restart Cursor after install.
 
 **How many skills?**  
-**109** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**121** total). Counts are derived from the filesystem and synced by `npm run check:skills`.
+**109** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**121** total). Counts come from the filesystem and stay synced via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
 
 **How do skills trigger?**  
-Cursor matches your chat message against each skill's YAML `description` keywords. Force one with *"use \`audit-security\` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).
+You talk normally. Cursor matches your words to each skill's YAML `description`. To force one: *"use \`audit-security\` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).
 
 **What's the difference between `audit-*` and `plan-*`?**  
-`audit-*` skills assess and may fix inline. `plan-*` skills produce a `plan-{name}.md` burndown only — you approve each phase before any code changes. See [docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md).
+`audit-*` looks around and may fix things. `plan-*` only writes a `plan-{name}.md` burndown — **you** approve each phase before any code changes. See [docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md).
 
 **Where do MCP API keys go?**  
 Copy `mcp/mcp.json.template` to `~/.cursor/mcp.json` and fill `YOUR_*` placeholders — never commit real keys. See [SECURITY.md](SECURITY.md) and [mcp/README.md](mcp/README.md).
@@ -769,12 +809,32 @@ cursor-kenji ships executable skills, MCP configs, commands, and subagents in on
 
 ---
 
+## Wanna code in the mountains?
+
+Tired of the same desk, same coffee shop, same fluorescent lights?
+
+**[Tsumagoi Work&Camp](https://tsumagoi.kensaur.us)** is a coworking camp at **1,444 m** in Gunma, Japan — real fiber internet, ten camp sites, an open lounge, starlit campfires, and onsen towns (Kusatsu / Manza / Shima) down the road. Bring your laptop. Ship features from a highland ranch. Go for a walk when the build finishes.
+
+<p align="center">
+  <a href="https://tsumagoi.kensaur.us">
+    <img src="https://raw.githubusercontent.com/kensaurus/tsumagoi/main/docs/screenshots/dashboard-v20260719-light.png" alt="Tsumagoi Work&Camp — mountain coworking camp homepage" width="720" />
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://tsumagoi.kensaur.us"><strong>→ Visit tsumagoi.kensaur.us — peek at the live ranch, sensors, and booking</strong></a><br/>
+  <sub>Built with a stack a lot like what these skills are tuned for. Come say hi.</sub>
+</p>
+
+---
+
 ## Also by @kensaurus
 
 **[Mushi Mushi](https://kensaur.us/mushi-mushi)** — shake-to-report bugs, AI triage, optional draft PR. `npx mushi-mushi` · pairs with `mushi-health`, `debug-sentry-monitor`, `test-playwright`.
 
 | App | Links |
 |:----|:------|
+| [Tsumagoi Work&Camp](https://tsumagoi.kensaur.us) | Mountain coworking camp · [live site](https://tsumagoi.kensaur.us) · [repo](https://github.com/kensaurus/tsumagoi) |
 | [glot.it — Learn Thai](https://kensaur.us/glot-it/) | [iOS](https://apps.apple.com/us/app/glot-it/id6761582648) · [Android](https://play.google.com/store/apps/details?id=com.glotit.app) |
 | [yen-yen — Expense Tracker](https://kensaur.us/yen-yen/) | [iOS](https://apps.apple.com/app/id6764548441) · [Android](https://play.google.com/store/apps/details?id=app.yenyen) |
 | [Help Her Take Photo](https://kensaur.us/help-her-take-photo/) | [iOS](https://apps.apple.com/app/help-her-take-photo/id6762513666) · [Android](https://play.google.com/store/apps/details?id=com.kensaurus.helphertakephoto) |
