@@ -4,6 +4,21 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.11.0] — 2026-07-24
+
+Payment system audit — a new read-only skill for the code that fails differently from normal CRUD: a retried charge is a **double-charge**, a lost ledger write is **vanished money**, a logged PAN is **PCI liability**, an unverified webhook is a **spoofed "payment succeeded"**. Grounded in the 2026 consensus (idempotency + double-entry ledger + reconciliation, with PCI DSS v4.0.1 as the floor and webhooks as the source of truth). Scope-gated so a Stripe-Checkout shop and an in-house gateway each see only relevant findings, and wired to the Stripe MCP for version-anchored provider checks.
+
+### Added
+
+- **`audit-payment-system`** — read-only, scope-gated audit (**Skill 109**). Phase 0 detects the payment surfaces + provider and classifies the repo (**P0 merchant integrator / P1 platform-marketplace / P2 gateway-PSP-fintech**) so an in-house-ledger control is `N/A` (not "Missing") on a shop that offloads it to Stripe. Phase 2 marks each in-scope control **Implemented/Partial/Missing/N-A** with `file:line` across seven groups: **A** money-movement correctness (idempotency on every mutation + DB unique constraint, dedup/payload-guard, payment state machine / no double-capture, integer minor units, multi-currency+FX), **B** ledger & data integrity (double-entry balanced/sum-zero, append-only immutable, derived balance snapshots, auditability, date partitioning), **C** async & webhooks (sync-auth vs async-everything, HMAC verify, event-id dedup + 200-then-process, atomic state+ledger+outbox, pull-based recovery for stuck payments, refund/dispute/payout saga), **D** reconciliation & settlement (daily 3-way match ledger↔PSP↔bank, break report, discrepancy handling, halt-on-unreconciled brake), **E** fraud/risk/SCA (velocity/geo/device + rules/ML score, 3DS2/SCA + exemptions, fraud-service fail policy, chargeback/VAMP monitoring, AML), **F** PCI DSS v4.0.1 (never store/log PAN or CVV, tokens-only scope reduction, key rotation, access audit), **G** resilience (PSP/bank timeout + breaker, bulkhead, partial-write safety, graceful degradation). Detailed per-control detection in `skills/audit-payment-system/references/checklist.md`.
+- **Stripe MCP wiring** — when the PSP is Stripe, Phase 1 uses `search_stripe_documentation` for concepts/best-practice and `stripe_api_search` + `stripe_api_details` for exact API params, anchoring findings to the current API (PaymentIntents, not the legacy Charges API). Non-Stripe providers use `/research` against official docs.
+
+### Changed
+
+- No severity below **Critical** for a double-charge, lost-money, or PAN-exposure finding. Read-only: payment code is a STOP-and-confirm surface, so findings feed a human-reviewed remediation rather than an unattended edit. Delegates without overlap — per-call resilience → `audit-resilience`, PCI/secrets → `audit-security`, ledger schema → `audit-db-schema`, outbox/saga structure → `audit-backend-architecture`. CATALOG, TRIGGER-CHEATSHEET, README, and `skill-workflows.mdc` updated; skill count 108 → 109.
+
+---
+
 ## [1.10.0] — 2026-07-24
 
 Decision lens for `audit-backend-architecture` — v1.9.0 answered *"is pattern X present?"* (conformance). This turns it into a **decision advisor** that answers *"which pattern should this codebase adopt next, and which would be over-engineering right now?"* — grounded in the 2026 "start simple, earn every pattern / modular-monolith-first" consensus. No new skill; the existing audit gets a second lens plus three patterns it was missing.
