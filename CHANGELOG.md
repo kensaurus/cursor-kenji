@@ -4,6 +4,16 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.11.2] — 2026-07-24
+
+Move the auto-generated skill index up so npm/GitHub visitors see every skill right after the inventory table — no 12-screen scroll past Workflows. No skill behavior changes.
+
+### Changed
+
+- **README section order** — `Every skill, in plain English` now sits immediately after `What's Inside` (before `Workflows`), so the skill list is discoverable on the npm Readme tab without deep scrolling.
+
+---
+
 ## [1.11.1] — 2026-07-24
 
 README rewrite — the npm/GitHub landing page now lists every skill with a one-line summary, and the prose is warmer throughout. No skill, command, rule, or hook behavior changes; counts unchanged.
