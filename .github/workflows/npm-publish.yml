@@ -27,6 +27,9 @@ jobs:
       - name: Verify skill count
         run: node scripts/check-skill-count.mjs
 
+      - name: Verify README skill index is in sync
+        run: node scripts/generate-skill-index.mjs --check
+
       - name: Validate skills against the Agent Skills spec
         run: node scripts/validate-skills.mjs
 

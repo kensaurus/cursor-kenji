@@ -1,6 +1,6 @@
 {
   "name": "@kensaurus/cursor-kenji",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "description": "109 Cursor AI agent skills, 36 slash commands, 6 subagents, and MCP configs for React/Next.js/Supabase development.",
   "type": "module",
   "bin": {
@@ -20,12 +20,14 @@
     "install:cursor:restore": "node bin/install.mjs --restore",
     "check:skills": "node scripts/check-skill-count.mjs",
     "fix:skills": "node scripts/check-skill-count.mjs --fix",
+    "gen:skill-index": "node scripts/generate-skill-index.mjs --write",
+    "check:skill-index": "node scripts/generate-skill-index.mjs --check",
     "validate:skills": "node scripts/validate-skills.mjs",
     "scan:secrets": "node scripts/scan-secrets.mjs --self-test",
     "check:mcp-pins": "node scripts/check-mcp-pins.mjs",
     "test:install": "node scripts/test-install.mjs",
     "test:completion-gate": "node scripts/test-completion-gate.mjs",
-    "test": "node scripts/validate-skills.mjs && node scripts/check-skill-count.mjs && node scripts/scan-secrets.mjs --self-test && node scripts/check-mcp-pins.mjs && node scripts/test-completion-gate.mjs && node scripts/test-install.mjs"
+    "test": "node scripts/validate-skills.mjs && node scripts/check-skill-count.mjs && node scripts/generate-skill-index.mjs --check && node scripts/scan-secrets.mjs --self-test && node scripts/check-mcp-pins.mjs && node scripts/test-completion-gate.mjs && node scripts/test-install.mjs"
   },
   "keywords": [
     "cursor",
