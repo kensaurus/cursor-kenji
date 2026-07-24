@@ -65,6 +65,7 @@ with `/goal`.
 | Design system compliance | `audit-uiux-design-system` |
 | Full-stack parity/conformance vs the RealWorld reference | `audit-realworld` |
 | Production resilience — timeouts/retries/idempotency/rate limits/PII (the "80%" NFRs) | `audit-resilience` |
+| Backend/distributed-systems architecture — gateway, BFF, outbox, saga, bulkhead, hexagonal, mesh (topology-gated) | `audit-backend-architecture` |
 
 ### Enhancement
 | Task | Skill |

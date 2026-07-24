@@ -28,7 +28,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (107)
+## Skills (108)
 
 ### Enhance
 
@@ -328,6 +328,11 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Triggers:** "is this production-ready", "resilience audit", "will this survive real traffic", "audit retries/timeouts/idempotency", "reliability review", "the 80% problem"
 **What it does:** Read-only audit for the non-functional "20%" agents skip: timeouts, retries with backoff+jitter, circuit breakers, idempotency keys, rate limiting, graceful degradation, cancellation, audit logging, and PII handling in logs. Inventories every external call, mutation, webhook, and payment path and marks each concern Implemented/Partial/Missing with `file:line`, severity, and the exact fix skill. Delegates remediation to backend-* and plan-* skills.
 **Related:** `backend-error-handling`, `backend-patterns`, `backend-observability`, `plan-llm-cost-guardrails`, `plan-input-validation`, `complete-everything`
+
+#### `audit-backend-architecture`
+**Triggers:** "audit backend architecture", "is my backend production-grade", "check gateway/BFF/outbox/circuit-breaker/bulkhead/hexagonal/saga", "microservices resilience review", "lift the backend to production"
+**What it does:** Read-only, topology-gated audit of backend/distributed-systems architecture patterns — API gateway (auth, rate-limit, CORS, transform, logging, monitoring, caching), BFF / API composition / GraphQL federation, circuit breaker, bulkhead, backpressure/load-shedding, outbox + CDC, saga (orchestration/choreography + compensation + saga-pivot), CQRS + event sourcing, hexagonal / ports-and-adapters, anti-corruption layer, strangler-fig migration, sidecar / service mesh (incl. ambient/sidecarless), cell-based architecture, zero-trust/mTLS, distributed tracing + SLOs, and contract testing. Detects the topology tier first (serverless/monolith → containers → k8s/microservices) so each repo only sees relevant findings, then marks each pattern Implemented/Partial/Missing/N-A with `file:line`. Defers per-call runtime resilience to `audit-resilience` (no overlap); delegates fixes to `backend-patterns` (see its `references/architecture-patterns.md`).
+**Related:** `audit-resilience`, `backend-patterns`, `design-api`, `audit-security`, `backend-observability`, `audit-db-schema`, `workflow-refactor`, `complete-everything`
 
 #### `audit-langfuse-llm`
 **Triggers:** "audit LLM", "check Langfuse", "audit prompts", "check AI quality", "LLM PDCA", "audit AI costs", "check traces", "audit eval scores", "check hallucination"

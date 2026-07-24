@@ -4,6 +4,23 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.9.0] — 2026-07-24
+
+Backend architecture audit — a new read-only skill that checks a repo's **distributed-systems architecture** (not just per-call resilience), plus an implementation reference so the fixes it delegates actually exist. Answers "is my backend production-grade?" for the patterns agents systematically skip: API gateway, BFF, outbox, saga, bulkhead, hexagonal, service mesh, and more. Topology-gated so a Next.js/Supabase monolith and a Kubernetes fleet each see only relevant findings.
+
+### Added
+
+- **`audit-backend-architecture`** — read-only, topology-gated audit (**Skill 108**). Phase 0 classifies the repo into a tier (T1 serverless/monolith → T2 containers → T3 k8s/microservices/event-driven), then marks each in-scope pattern **Implemented/Partial/Missing/N-A** with `file:line`: **API gateway** (auth, rate-limit, CORS, transform, logging, monitoring, caching), **BFF / API composition / GraphQL federation**, **circuit breaker**, **bulkhead**, **backpressure/load-shedding**, **outbox + CDC** (the dual-write fix), **saga** (orchestration/choreography + compensation + saga-pivot), **CQRS + event sourcing**, **hexagonal / ports-and-adapters**, **anti-corruption layer**, **strangler-fig migration**, **sidecar / service mesh** (incl. ambient/sidecarless), **cell-based architecture**, **zero-trust/mTLS**, **distributed tracing + SLOs**, and **contract testing**. Detailed per-pattern detection lives in `skills/audit-backend-architecture/references/patterns.md`.
+- **`skills/backend-patterns/references/architecture-patterns.md`** — implementation guidance + code for the patterns the audit flags (gateway centralization, BFF, bulkhead, circuit-breaker placement, outbox+relay/CDC, saga with the saga-pivot rule, hexagonal/ports-and-adapters, anti-corruption layer, strangler-fig), plus a "when NOT to reach for these" section.
+
+### Changed
+
+- **`audit-resilience` boundary kept clean** — the new architecture audit checks whether *patterns* exist (structural); per-call runtime tuning (timeouts, retry backoff+jitter, idempotency keys, cancellation) still belongs to `audit-resilience`, which the new skill explicitly defers to instead of duplicating.
+- **`backend-patterns`** — description gains triggers ("circuit breaker", "outbox pattern", "saga", "bulkhead", "hexagonal architecture", "API gateway", "BFF") and a new "Architecture patterns (distributed systems)" section pointing to the reference; pairs with `audit-backend-architecture`.
+- **Routing/docs** — added to `skill-workflows.mdc` (repo + `.cursor`), `docs/CATALOG.md`, `docs/TRIGGER-CHEATSHEET.md`, and `README.md` (Assess stage, use-case table). Counts synced to **108 skills**.
+
+---
+
 ## [1.8.3] — 2026-07-23
 
 Command-collision fix — three of our slash commands shared names with Claude Code's own commands. Because Claude Code 2.x **merges `commands/` into the skill namespace**, a file at `commands/<x>.md` creates `/<x>`: when `<x>` matches a built-in it shows a **duplicate**, and when it matches a bundled skill our file **silently overrides** Claude's. Renamed all three and added a CI guard so it can't regress. No other skill, command, rule, or hook behavior changes; command **counts are unchanged**.
