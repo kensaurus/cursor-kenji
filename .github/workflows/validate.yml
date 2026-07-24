@@ -35,6 +35,8 @@ jobs:
         run: node scripts/validate-skills.mjs
       - name: Skill count sync check
         run: node scripts/check-skill-count.mjs
+      - name: README skill index sync check
+        run: node scripts/generate-skill-index.mjs --check
       - name: Secret scanner self-test
         run: node scripts/scan-secrets.mjs --self-test
       - name: MCP pin check

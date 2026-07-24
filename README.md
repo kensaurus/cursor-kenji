@@ -17,13 +17,13 @@
 
 ---
 
-**cursor-kenji** ships **109 Cursor agent skills**, 36 slash commands, and 6 subagents for React / Next.js / Supabase projects. Install once — describe a task in chat and the matching skill auto-triggers.
+**cursor-kenji** gives your AI editor a library of expert playbooks, so instead of improvising it follows a proven, repeatable process. It ships **109 Cursor agent skills**, 36 slash commands, and 6 subagents, tuned for React / Next.js / Supabase but useful on any stack. Install once, then just tell the editor what you want. The matching skill runs itself.
 
-> **New to AI skills?** cursor-kenji is a library of ready-made **playbooks** your AI code editor follows automatically. You describe a task in plain English — *"audit my security"*, *"make this form accessible"*, *"clean up the design system"* — and the matching playbook kicks in, so the AI runs a proven, step-by-step process instead of improvising. No prompt-engineering, no memorizing names.
+> **New to AI skills?** Think of each skill as a ready-made playbook your editor opens on its own. You say what you want in plain English, like *"audit my security"*, *"make this form accessible"*, or *"clean up the design system"*, and the right playbook takes over. No prompt-engineering. No names to memorize.
 
-**Who it's for** — anyone using [Cursor](https://cursor.com) or [Claude Code](https://www.anthropic.com/claude-code) (Codex & Gemini CLI too). Tuned for React / Next.js / Supabase, useful on any stack. Brand new to Cursor? Start with the **[plain-language guide →](docs/GETTING-STARTED.md)**
+**Who's it for?** Anyone using [Cursor](https://cursor.com) or [Claude Code](https://www.anthropic.com/claude-code), plus Codex and Gemini CLI. Brand new to Cursor? Start with the **[plain-language guide →](docs/GETTING-STARTED.md)**.
 
-**The five building blocks** — what the numbers above actually mean:
+**The five building blocks.** Here's what those numbers actually mean:
 
 | Building block | In plain English | You trigger it by… |
 |:--|:--|:--|
@@ -33,7 +33,7 @@
 | **Rule** | An always-on convention the AI must obey | dropping a `.mdc` file in your project |
 | **MCP server** | A live connection to an outside tool (database, GitHub, browser) | copying an MCP template + your keys |
 
-Skills conform to the [Agent Skills specification](https://agentskills.io/specification) and pass automated validation on every commit (`npm test` — **121** installable skills including Cursor IDE tools). MCP templates pin semver versions to reduce supply-chain drift ([CSA on package hallucination / slopsquatting](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations)).
+Everything here follows the [Agent Skills spec](https://agentskills.io/specification) and is validated on every commit, so nothing ships broken (`npm test` covers all **121** installable skills, Cursor IDE tools included). MCP templates pin exact versions to keep you safe from [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
 
 ```bash
 npx skills add kensaurus/cursor-kenji
@@ -46,6 +46,8 @@ Restart Cursor. Done.
 ---
 
 ## Quick Start
+
+Pick whichever fits how you work. The first one covers most people.
 
 | Method | Command |
 |:-------|:--------|
@@ -68,7 +70,7 @@ npx @kensaurus/cursor-kenji --skill audit-ux   # single skill
 npx @kensaurus/cursor-kenji --link     # dev: symlink for live skill authoring
 ```
 
-**`--auto` is the easiest way to cover everything you use** — it probes `~/.cursor`, `~/.claude`, `~/.codex`, and `~/.gemini` and installs the right artifacts to each installed tool. A bare invocation stays Cursor-only for backward compatibility.
+**Use more than one AI tool? Reach for `--auto`.** It checks `~/.cursor`, `~/.claude`, `~/.codex`, and `~/.gemini`, then installs the right files to each one it finds. Running the bare command stays Cursor-only, so nothing changes for existing setups.
 
 From a clone: `npm run install:cursor` · `npm test` validates skills + count + install smoke test.
 
@@ -115,7 +117,7 @@ Skills are read from `~/.claude/skills/<name>/SKILL.md`. No restart required whe
 
 ### Codex CLI & Gemini CLI
 
-Codex CLI (OpenAI) and Gemini CLI have **no skills system** — they each read a single global context file. cursor-kenji maps to what they actually load:
+Codex CLI and Gemini CLI don't have a skills system yet. Each reads a single global context file instead, so cursor-kenji maps to exactly what they load:
 
 ```bash
 npx @kensaurus/cursor-kenji --codex    # Codex CLI
@@ -127,7 +129,7 @@ npx @kensaurus/cursor-kenji --gemini   # Gemini CLI
 | **Rules → context file** | `~/.codex/AGENTS.md` | `~/.gemini/GEMINI.md` |
 | **Portable commands** | `~/.codex/prompts/*.md` | `~/.gemini/commands/*.toml` |
 
-The rules are merged from `rules/` into one auto-loaded Markdown file (the skill-routing index is omitted — nothing in these tools would load it). Three self-contained playbooks — `plan`, `research`, `fix-issue` — ship as native custom prompts/commands. Skills and subagents are **not** written there, because neither tool has a loader for them (writing them would be dead files). An existing `AGENTS.md`/`GEMINI.md` is backed up (`.bak-<stamp>`) before an update, and regeneration is idempotent.
+Your `rules/` get merged into that one auto-loaded file (the skill-routing index is skipped, since nothing here would load it). Three standalone playbooks — `plan`, `research`, and `fix-issue` — ship as native prompts/commands. Skills and subagents aren't written out, because neither tool can load them, so they'd only be dead files. Any existing `AGENTS.md` or `GEMINI.md` is backed up as `.bak-<stamp>` first, and re-running the installer is always safe.
 
 > The bash `install.sh --codex`/`--gemini` delegates to the Node installer (needs Node ≥ 18) so the merge/port logic has a single source of truth.
 
@@ -152,6 +154,8 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 
 ## What's Inside
 
+The whole kit, at a glance:
+
 | | Count | What it does |
 |:--|------:|:-------------|
 | **Skills** | 109 | Auto-triggering capabilities (audit, enhance, debug, test, build, plan) |
@@ -164,15 +168,17 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 | **Notepads** | 2 | Context templates (architecture, design tokens) |
 | **Shell Aliases** | 8 | `newskill`, `cursor-sync`, `gc`, `gp` |
 
-Full skill list + trigger phrases → **[docs/CATALOG.md](docs/CATALOG.md)** · Plain lookup → **[docs/TRIGGER-CHEATSHEET.md](docs/TRIGGER-CHEATSHEET.md)**
+Want every skill spelled out? They're all listed with a one-line summary in **[Every skill, in plain English](#every-skill-in-plain-english)** below. For the exact trigger phrases, see **[docs/CATALOG.md](docs/CATALOG.md)**, or the quick lookup in **[docs/TRIGGER-CHEATSHEET.md](docs/TRIGGER-CHEATSHEET.md)**.
 
 ---
 
 ## Workflows
 
-You rarely run one skill alone — you **chain** them around a build loop. Each family owns a stage; guardrails run across every stage so a fast (vibe-coding) session can't silently regress. The rule of thumb: **assess before you change, prove before you ship, and never let a session skip a stage.**
+You rarely run just one skill. You **chain** them around a simple build loop: each family owns a stage, and guardrails run across all of them so a fast, vibe-coding session can't quietly break things. The rule of thumb is easy to remember — **assess before you change, prove before you ship, and never skip a stage.**
 
-### The mental model — how the families work against each other
+### The mental model
+
+Here's how the families hand off to each other:
 
 ```mermaid
 flowchart LR
@@ -197,14 +203,20 @@ flowchart LR
   style G fill:#4a044e,stroke:#f0abfc,color:#fae8ff
 ```
 
-- **Orient** — understand the repo before touching it.
-- **Assess** — measure, don't guess. `audit-*` may fix inline; `plan-*` only plans until you approve. `audit-realworld` checks full-stack feature parity; `audit-resilience` checks the non-functional "80%" (timeouts, retries, idempotency, PII); `audit-backend-architecture` both checks the distributed-systems patterns (gateway, BFF, outbox, saga, cache-aside, db-per-service, sync-vs-event-driven) *and* decides which to adopt next vs. defer as over-engineering — topology-gated, start-simple; `audit-payment-system` checks money-movement correctness (idempotency/double-charge, double-entry ledger, webhooks, reconciliation, 3DS/PCI) — scope-gated from a Stripe-Checkout shop to an in-house gateway.
-- **Change** — `design-*` builds new, `enhance-*` improves what exists (motion, forms, UI, UX, SEO), `housekeep-design` consolidates a drifted design system into one SSOT.
-- **Prove** — `test-*` plus the no-false-done trio: `verification-before-completion` → `completion-judge` → `complete-everything`.
-- **Ship & operate** — release, watch, and feed findings back into Assess.
-- **Guardrails** — `enhance-agent-guardrails` installs the rules + hooks + CI gates that keep the loop from regressing between sessions.
+- **Orient** — get to know the repo before you touch it.
+- **Assess** — measure, don't guess. `audit-*` skills can fix things inline; `plan-*` skills only plan until you approve. A few specialists go deep:
+  - `audit-realworld` — checks full-stack feature parity.
+  - `audit-resilience` — covers the non-functional work most agents skip: timeouts, retries, idempotency, PII.
+  - `audit-backend-architecture` — reviews distributed-systems patterns (gateway, BFF, outbox, saga, cache-aside, and friends) and tells you which to adopt next versus skip as over-engineering.
+  - `audit-payment-system` — checks money-movement correctness: double-charge protection, ledgers, webhooks, reconciliation, PCI.
+- **Change** — `design-*` builds something new, `enhance-*` improves what's already there (motion, forms, UI, UX, SEO), and `housekeep-design` merges a drifted design system back into one source of truth.
+- **Prove** — `test-*` skills, plus the no-false-done trio: `verification-before-completion` → `completion-judge` → `complete-everything`.
+- **Ship & operate** — release it, watch it, and feed anything you learn back into Assess.
+- **Guardrails** — `enhance-agent-guardrails` installs the rules, hooks, and CI gates that stop the loop from regressing between sessions.
 
-### Start here — by use case
+### Start here, by situation
+
+Find the row that sounds like your day, then follow the chain:
 
 | Your situation | Chain (→ hands off to) |
 |:---------------|:-----------------------|
@@ -221,6 +233,8 @@ flowchart LR
 
 ### Bundled workflows
 
+Say the phrase, and the whole sequence runs for you:
+
 | Say this | Bundle | What runs |
 |----------|--------|-----------|
 | "complete everything" | `complete-everything` | recover parked work → implement all → full verification → independent judge |
@@ -235,7 +249,7 @@ flowchart LR
 
 ### Plan loops (audit only — approve before execution)
 
-**17 `plan-*` skills** in grouped loops — see **[docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md)** for diagrams, slash aliases (`/uiux-plan`, `/capacitor-plan`, …), and execution mapping.
+These **17 `plan-*` skills** come in grouped loops. Each one audits, then hands you a plan — nothing changes until you approve it. See **[docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md)** for diagrams, slash aliases (`/uiux-plan`, `/capacitor-plan`, …), and how each maps to execution.
 
 | Loop | Skills | When |
 |------|--------|------|
@@ -259,6 +273,8 @@ More copy-paste recipes (adopt repo, de-slop a page, pre-launch sweep, split PRs
 
 ## How to Use
 
+Four kinds of building blocks, four ways to reach them:
+
 | Primitive | Invoke | Example |
 |:----------|:-------|:--------|
 | **Skill** | Describe the task | "audit my security" → `audit-security` |
@@ -272,7 +288,7 @@ More copy-paste recipes (adopt repo, de-slop a page, pre-launch sweep, split PRs
 
 ## Skill taxonomy
 
-Every skill carries two tags: a **family** (`<prefix>-<topic>`) and a **lifecycle stage** (from the loop above). Read the table as "which stage does this family live in". Full entries with triggers → **[docs/CATALOG.md](docs/CATALOG.md)**.
+Every skill has two labels: a **family** (its `<prefix>-<topic>` name) and a **lifecycle stage** (from the loop above). The table below shows which stage each family lives in. For the full entries with trigger phrases, see **[docs/CATALOG.md](docs/CATALOG.md)**.
 
 | Prefix | Stage | Purpose | Examples |
 |:-------|:------|:--------|:---------|
@@ -302,7 +318,256 @@ Every skill carries two tags: a **family** (`<prefix>-<topic>`) and a **lifecycl
 
 ---
 
+## Every skill, in plain English
+
+Here's the whole library — grouped by the families above, each with a one-line summary. You don't memorize these; you just describe your task and Cursor matches the right one. Want the trigger phrases too? They live in **[docs/CATALOG.md](docs/CATALOG.md)**.
+
+<!-- SKILL-INDEX:START -->
+
+_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. Click any group to expand._
+
+<details>
+<summary><strong>🔍 Audit — read-only assessments</strong> (17)</summary>
+
+- `audit-accessibility` — Automated WCAG 2.2 accessibility audit using Playwright browser MCP to crawl every page, inject axe-core via browser_evaluate, test keyboard navigation,…
+- `audit-backend-architecture` — Read-only audit AND decision advisor for backend/distributed-systems architecture, topology-gated so a Next.js/Supabase monolith and a Kubernetes fleet…
+- `audit-bundle-size` — Analyse and shrink JavaScript bundle size for any web app
+- `audit-cicd` — Audit CI/CD pipelines (GitHub Actions) for cost, speed, and safety
+- `audit-code-quality` — Detect and fix code anti-patterns, and audit codebase consistency
+- `audit-code-review` — Review code for quality, security, and maintainability following best practices
+- `audit-db-schema` — Audit database schema for consistency, validation, and industry standards
+- `audit-fe-api` — Audit frontend API calls against backend implementation for any project
+- `audit-i18n` — Audit and fix internationalisation for any web or mobile app
+- `audit-langfuse-llm` — Run a PDCA quality audit on LLM/AI features: traces, prompts, costs, evals, grounding, hallucination
+- `audit-payment-system` — Read-only audit for payment/money-movement systems, scope-gated so a simple Stripe-Checkout site and an in-house ledger/gateway each see only relevant…
+- `audit-performance` — Audit and optimize application performance
+- `audit-realworld` — Audit a full-stack app against the RealWorld ("Conduit") reference — its formal API spec, shared Bruno/Hurl E2E suite, and closest-stack reference…
+- `audit-resilience` — Read-only audit for the non-functional "20%" AI agents systematically skip: timeouts, retries with backoff+jitter, circuit breakers, idempotency keys,…
+- `audit-security` — Audit code for security vulnerabilities and best practices
+- `audit-uiux-design-system` — Audit visual UI coherency, design token compliance, and component modularity against a design system for any project
+- `audit-ux` — Audit user experience quality using research-backed frameworks: Nielsen Norman Group's 10 usability heuristics, Intuit Content Design System for…
+
+</details>
+
+<details>
+<summary><strong>📋 Plan — audit + approve before executing</strong> (17)</summary>
+
+- `plan-aeo-readiness` — Audit a site for answer-engine and generative-engine visibility (citation by ChatGPT, Claude, Perplexity, AI Overviews), then produce a phased improvement…
+- `plan-antislop` — Audit a codebase, UI, or copy for machine-generated tells across prose, visual/UI, code, and structure/IA, then produce a phased de-slop burndown
+- `plan-capacitor-hardening` — Audit a Capacitor/Ionic hybrid app for native-layer security gaps, then produce a phased hardening plan
+- `plan-data-integrity` — Audit a project for destructive-operation and migration safety gaps, then produce a phased safeguard plan
+- `plan-dependency-provenance` — Audit dependencies for hallucinated or slopsquatted packages, supply-chain risk, and licensing/provenance gaps, then produce a phased remediation plan
+- `plan-docs-sync` — Audit documentation against actual code behavior and plan corrections — no rewrites in this pass
+- `plan-error-handling` — Audit a codebase for silent failures, swallowed exceptions, and observability gaps across Sentry and Langfuse, then produce a phased fix plan
+- `plan-input-validation` — Audit every trust boundary for unvalidated input, injection, and forged-request gaps, then produce a phased hardening plan
+- `plan-llm-cost-guardrails` — Audit an LLM-powered app for runaway-cost and quota-abuse exposure, then produce a phased guardrail plan
+- `plan-mobile-readiness` — Audit a Capacitor/React Native app for App Store and Google Play submission readiness, then produce a phased pre-submission plan
+- `plan-perf-audit` — Measure-don't-guess performance audit across web, mobile, backend, and data layers — produces burndown and optimization plan with no fixes in this pass
+- `plan-rls-audit` — Audit a Supabase/Postgres project for Row-Level Security and access-control gaps, then produce a phased remediation plan
+- `plan-secrets-audit` — Audit a codebase and git history for exposed credentials and mis-scoped keys, then produce a phased rotation-and-remediation plan
+- `plan-security-audit` — OWASP Top 10 security audit with Supabase-first methodology — RLS pass, bundle/secret scan, auth-path tracing, dependency CVEs
+- `plan-stub-checker` — Exhaustive audit for stubs, dead buttons, fake/placeholder components, unwired handlers, dead links, orphans, and severed integrations — produces a…
+- `plan-test-coverage` — User-story-driven test coverage audit and plan — no test writing in this pass
+- `plan-uiux-unification` — Exhaustive, non-destructive UI/UX and design-system audit that produces a burndown and unification plan — no code changes until each phase is approved
+
+</details>
+
+<details>
+<summary><strong>🎨 Enhance — improve what already exists</strong> (12)</summary>
+
+- `enhance-agent-guardrails` — Install guardrails-as-code into a repo so AI/vibe-coding can't keep reintroducing the same classes of problems (leaked secrets, injection, off-system…
+- `enhance-capacitor-ui` — Cross-surface UIUX separation skill for hybrid web apps that ship as PWA + iOS + Android via Capacitor (or Tauri / Expo Web / Ionic / RN-Web)
+- `enhance-motion` — Audit an existing app's design system and current motion, then apply coherent, performant, accessible motion using the right-sized 2026 stack —…
+- `enhance-pwa` — Add or upgrade PWA features to any web app: service worker, offline mode, install prompt, push notifications, and background sync
+- `enhance-readme` — Turn a plain-text README into a visually rich showcase with a theme-aware hero image, a feature tour grid, an optional animated guided-tour GIF, and…
+- `enhance-web-forms` — Build or upgrade web forms to production quality: accessible structure (labels, fieldsets, autocomplete, correct input types), schema-driven validation…
+- `enhance-web-landing` — Build landing pages, portfolios, and marketing sites that don't look AI-generated
+- `enhance-web-redesign` — Upgrades existing websites and apps to premium quality
+- `enhance-web-seo` — Audit and fix SEO for any web app. Checks meta tags, Open Graph and Twitter Card tags, JSON-LD structured data, robots.txt, sitemap.xml, canonical URLs,…
+- `enhance-web-ui` — Artistic, research-grounded UI enhancement skill for making an existing page feel intentional, spacious, and human-crafted
+- `enhance-web-ux` — Generative, NN/g-grounded page enhancement skill
+- `enhance-web-web3d` — Add 3D and scroll-driven motion to an existing website or web app — Three.js / React Three Fiber for the scene, GSAP ScrollTrigger for scroll-driven…
+
+</details>
+
+<details>
+<summary><strong>✨ Design — build new surfaces</strong> (10)</summary>
+
+- `design-api` — Design RESTful and GraphQL APIs following current best practices for naming, versioning, error shapes, and auth patterns
+- `design-canvas` — Create museum-quality visual art in .png and .pdf formats using design philosophy
+- `design-email` — Design and implement transactional and marketing email templates
+- `design-frontend` — Create distinctive, production-grade frontend interfaces that avoid generic AI aesthetics
+- `design-generative-art` — Create algorithmic art using p5.js, Canvas API, or SVG with seeded randomness and interactive parameters
+- `design-mobile-first` — Designs mobile-first responsive interfaces with touch optimization — breakpoint strategy, touch targets, safe areas, and gesture handling, enhanced…
+- `design-motion` — Design and implement purposeful motion — micro-interactions, page transitions, scroll animations, and hover effects — using Framer Motion, CSS animations,…
+- `design-prd` — Generate Product Requirements Documents through structured conversation for any project
+- `design-system` — Build and maintain cohesive design systems and component libraries with tokens, theming, and documented variants
+- `design-theme` — Apply cohesive visual themes to artifacts (slides, docs, landing pages)
+
+</details>
+
+<details>
+<summary><strong>🧱 Backend — server & data-layer patterns</strong> (5)</summary>
+
+- `backend-db-performance` — Optimize database queries, schemas, and performance
+- `backend-error-handling` — Implement solid error handling patterns
+- `backend-observability` — Instrument features so errors, traces, and logs are correlated from the first line
+- `backend-patterns` — Apply modern backend patterns — auth middleware, caching strategies, background queues, rate limiting, and serverless/edge function design — across stacks…
+- `backend-realtime` — Implement real-time features using WebSockets, Supabase Realtime, Server-Sent Events, and live data
+
+</details>
+
+<details>
+<summary><strong>📱 Mobile — React Native / Capacitor</strong> (5)</summary>
+
+- `mobile-capacitor-platform` — Handle Capacitor platform depth beyond UI: plugins, OTA, deep links, push, offline, native CI/CD, App Store / Play Store submission, Apple preflight,…
+- `mobile-emulator-start` — Boots a clean Android emulator + Metro (Expo dev-client / bare React Native) with the right ordering: inspect existing IDE terminals first, kill stale…
+- `mobile-emulator-test` — QA a native Android build end-to-end on the emulator
+- `mobile-rn-performance` — Fix React Native / Expo performance, build, and upgrade issues
+- `mobile-rn-screen` — Polish an existing React Native screen to feel intentional, native, and human-crafted
+
+</details>
+
+<details>
+<summary><strong>📊 Data — visualization & pipelines</strong> (2)</summary>
+
+- `data-pipeline` — Wire ETL, ingestion, cron, edge-function, and queue jobs correctly
+- `data-visualization` — Build interactive, accessible charts, graphs, and data dashboards using Recharts, D3, or Victory
+
+</details>
+
+<details>
+<summary><strong>📚 Docs — documentation</strong> (2)</summary>
+
+- `docs-coauthor` — Co-author structured documents (specs, PRDs, RFCs, ADRs) through a 3-stage workflow: context gathering, drafting, and reader testing
+- `docs-writer` — Write clear, developer-friendly documentation — READMEs, API references, code comments, and changelog entries — tailored to the audience and the project's…
+
+</details>
+
+<details>
+<summary><strong>🧹 Housekeeping — consolidate drift</strong> (1)</summary>
+
+- `housekeep-design` — Consolidate a design system that has drifted across many vibe-coding sessions and developer handoffs into one single source of truth
+
+</details>
+
+<details>
+<summary><strong>🔗 Workflows — multi-step bundles</strong> (17)</summary>
+
+- `workflow-build-feature` — End-to-end feature build workflow: spec → TDD → implement → smoke test → PR
+- `workflow-coding-discipline` — Apply behavioral guardrails when writing, editing, refactoring, or debugging code
+- `workflow-environment-ready` — Prove the working environment is actually runnable before starting a long or autonomous task, so a multi-hour run does not fail at the finish line on a…
+- `workflow-feature-flag` — Plan and execute a disciplined feature-flag rollout for any app
+- `workflow-feedback-to-closure` — Turn raw feedback — bug reports, user complaints, review comments, Sentry issues, QA findings, audit/red-team output — into deduplicated, durable,…
+- `workflow-fix-and-ship` — Complete bug-fix lifecycle in one sweep: triage production signals (Sentry / logs) → reproduce → fix (debug-error) → verify full-stack (test-playwright) →…
+- `workflow-git-commit` — Generate clear, descriptive commit messages following conventional commits format
+- `workflow-green-repo` — Drive an entire repository to a fully green baseline — typecheck, lint, tests, and build all passing from a clean checkout — when the user has explicitly…
+- `workflow-housekeep` — Repo housekeeping: sync READMEs to match current architecture, remove dead files (logs, screenshots, deprecated code, build artifacts), update…
+- `workflow-launch-ready` — Full launch preparation sweep for a new app or major release
+- `workflow-onboard` — First-contact orientation for an unfamiliar codebase
+- `workflow-parallel-agents` — Run multiple agents in parallel via git worktrees, cloud agents, or multi-model comparison
+- `workflow-pr` — Manage the full PR lifecycle — create, review, address bot feedback, resolve conflicts, and merge
+- `workflow-quality-gate` — Pre-release quality gate that sequences test-red-team, audit-security, audit-bundle-size, audit-performance, and test-unit into a single sweep
+- `workflow-refactor` — Guide for refactoring code to improve quality without changing behavior
+- `workflow-ship-and-observe` — Take merged, repository-green code all the way to a verified, monitored production release for any app stack
+- `workflow-spec-tdd` — Stop vibe-coding with a spec → plan → TDD loop before writing a line
+
+</details>
+
+<details>
+<summary><strong>✅ Test & QA</strong> (4)</summary>
+
+- `test-playwright` — Close the PDCA loop on the work you just did
+- `test-qa` — Generic webapp QA fallback — use only when no project-specific QA skill applies (project-local QA skills take precedence; use mobile-emulator-test for…
+- `test-red-team` — Adversarial red-team of a running web, React Native, or Capacitor hybrid app
+- `test-unit` — Write effective unit tests with best practices for any project
+
+</details>
+
+<details>
+<summary><strong>🚀 Deploy — release & verify</strong> (2)</summary>
+
+- `deploy-npm` — Release npm packages end-to-end: Changesets version bump, CHANGELOG update, GitHub Actions OIDC publish, and post-release verification
+- `deploy-verify` — Post-deploy smoke test combining all 5 MCPs (Sentry + Supabase + Langfuse CLI + Playwright + Firecrawl) into one workflow
+
+</details>
+
+<details>
+<summary><strong>🐛 Debug & operate</strong> (3)</summary>
+
+- `debug-error` — Systematic debugging workflow for errors and bugs
+- `debug-fe-be-integration` — Debug frontend-backend integration issues for any project by analyzing backend logs, identifying incorrect API calls, and fixing both sides
+- `debug-sentry-monitor` — Monitor, triage, fix, and proactively enhance Sentry error monitoring for any project
+
+</details>
+
+<details>
+<summary><strong>🦟 Mushi Mushi integration</strong> (2)</summary>
+
+- `mushi-health` — Pass/fail health check across every Mushi Mushi pipeline component — CLI credentials, API reachability, edge functions, BYOK key pool, QA cron
+- `mushi-integration` — Full end-to-end Mushi Mushi integration smoke test: bug capture → AI triage → story mapping → TDD test generation → approval → execution → PDCA cycle
+
+</details>
+
+<details>
+<summary><strong>🛡️ Protocols — session guardrails</strong> (1)</summary>
+
+- `protocol-browser-anti-stall` — Prevent browser automation from freezing, getting stuck, or waiting excessively during page navigation and interaction, and enforce manual, headed,…
+
+</details>
+
+<details>
+<summary><strong>✍️ Authoring — build skills & MCP</strong> (2)</summary>
+
+- `meta-mcp-builder` — Scaffold and implement Model Context Protocol (MCP) servers that expose external services, APIs, and data sources as typed tools and resources for LLM…
+- `meta-skill-creator` — Create or update Cursor agent skills (SKILL.md)
+
+</details>
+
+<details>
+<summary><strong>🤝 Third-party (vendored, upstream-maintained)</strong> (3)</summary>
+
+- `thirdparty-emil-design-eng` — Third-party skill — Emil Kowalski's design engineering philosophy (UI polish, component design, animation craft)
+- `thirdparty-ui-ux-pro-max` — Third-party skill — design intelligence for professional UI/UX (the full style catalog, palettes, typography, UX guidelines)
+- `thirdparty-web-interface-guidelines` — Third-party skill — reviews UI code for Vercel Web Interface Guidelines compliance (accessibility, focus, forms, animation, performance, copy)
+
+</details>
+
+<details>
+<summary><strong>🧩 Core & cross-cutting</strong> (4)</summary>
+
+- `burndown-full` — Drive a planned change to 100% coverage across an entire codebase when a prior agent run stopped early
+- `complete-everything` — Close an approved plan with zero plan-related deferrals: implement every unfinished item, absorb every connected out-of-scope/follow-up/nice-to-have item…
+- `iterate-agent-harness` — Turn an agent's own failure — a premature stop, a false "done", a reward- hacked check, a missed file, a broken handoff — into a durable improvement to…
+- `iterate-post-launch` — Close the post-launch improvement loop for any shipped app
+
+</details>
+
+<details>
+<summary><strong>🖱️ Cursor IDE skills</strong> (12)</summary>
+
+- `babysit` — Keep a PR merge-ready by triaging comments, resolving clear conflicts, and fixing CI in a loop
+- `canvas` — A Cursor Canvas is a live React app the user opens beside the chat
+- `create-hook` — Create Cursor hooks
+- `create-rule` — Create Cursor rules for persistent AI guidance
+- `create-skill` — Guide users through creating effective Agent Skills for Cursor
+- `create-subagent` — Create custom subagents for specialized AI tasks
+- `migrate-to-skills` — Convert 'Applied intelligently' Cursor rules (.cursor/rules/*.mdc) and slash commands (.cursor/commands/*.md) to Agent Skills format (.cursor/skills/)
+- `shell` — Run the rest of a /shell request as a literal shell command
+- `split-to-prs` — Split current work into small reviewable PRs
+- `statusline` — Configure a custom status line in the CLI
+- `update-cli-config` — View and modify Cursor CLI configuration in ~/.cursor/cli-config.json
+- `update-cursor-settings` — Modify Cursor/VSCode user settings in settings.json
+
+</details>
+
+<!-- SKILL-INDEX:END -->
+
+---
+
 ## Commands (36)
+
+Commands are shortcuts for the things you do constantly. Type `/` in chat to see them all.
 
 | Command | When | What |
 |:--------|:-----|:-----|
@@ -333,6 +598,8 @@ Every skill carries two tags: a **family** (`<prefix>-<topic>`) and a **lifecycl
 
 ## Subagents (6)
 
+Subagents are focused helpers that peel off to handle one job and report back. Just mention what you need and the right one steps in.
+
 | Agent | Triggers on | Output |
 |:------|:------------|:-------|
 | `code-reviewer` | "review", code changes | Quality, security, types |
@@ -342,15 +609,13 @@ Every skill carries two tags: a **family** (`<prefix>-<topic>`) and a **lifecycl
 | `perf-monitor` | "slow", "optimize" | Perf audit |
 | `completion-judge` | Plan/burndown closure claim | PASS / CONTINUE / BLOCKED against plan, state, diff, and fresh evidence |
 
-`complete-everything` uses two enforcement layers beyond prompt text: the
-packaged Cursor stop hook auto-continues unfinished actionable state files, and
-`completion-judge` independently rejects stale or incomplete closure claims.
-Claude Code 2.1.139+ users can launch the same run with `/goal` as documented in
-the skill.
+Beyond the prompt itself, `complete-everything` leans on two safety nets: a packaged Cursor stop hook that auto-continues any unfinished work, and `completion-judge`, which independently rejects stale or premature "done" claims. On Claude Code 2.1.139+ you can kick off the same run with `/goal` (see the skill for details).
 
 ---
 
 ## MCP servers (16)
+
+MCP servers connect your editor to the outside world — your database, GitHub, a browser, and more. Copy a template and drop in your keys:
 
 ```bash
 cp ~/cursor-kenji/mcp/mcp.json.template ~/.cursor/mcp.json      # essential 5
@@ -369,6 +634,8 @@ Replace `YOUR_*` placeholders with real keys. Setup details → **[mcp/README.md
 ---
 
 ## Project rules
+
+Rules are always-on conventions your editor follows inside a project. Copy the starters into any repo:
 
 ```bash
 cp ~/cursor-kenji/rules/project-starter/*.mdc your-project/.cursor/rules/
@@ -392,6 +659,8 @@ Global rules in this repo: `full-stack-ship-discipline.mdc`, `composer-2.5-execu
 
 ## Shell helpers
 
+If you live in the terminal, these bash aliases speed up authoring and syncing:
+
 ```bash
 source ~/cursor-kenji/shell-aliases/cursor-helpers.sh
 ```
@@ -413,6 +682,8 @@ Full definitions in [shell-aliases/cursor-helpers.sh](shell-aliases/cursor-helpe
 
 ## Repository layout
 
+Where everything lives:
+
 ```
 cursor-kenji/
 ├── skills/           # 109 Agent Skills (SKILL.md each)
@@ -433,6 +704,8 @@ cursor-kenji/
 
 ## Design principles
 
+A few opinions this project keeps coming back to — and what keeps them honest:
+
 | # | Principle | Enforced by |
 |---|:----------|:------------|
 | 1 | Check existing first | `workflow-housekeep`, `plan-stub-checker` |
@@ -447,6 +720,8 @@ cursor-kenji/
 
 ## Contributing
 
+Adding your own skill is two steps — write it, then let the checks confirm it's valid:
+
 ```bash
 mkdir -p skills/my-skill && vim skills/my-skill/SKILL.md
 npm run test   # validate + count + install smoke
@@ -459,7 +734,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md), [docs/README.md](docs/README.md), [docs/
 ## FAQ
 
 **What is cursor-kenji?**  
-A installable toolkit of [Agent Skills](https://agentskills.io)-compatible markdown skills, slash commands, subagents, and MCP templates for [Cursor](https://cursor.com). One command installs everything into `~/.cursor/` and `~/.agents/skills/`.
+It's an installable toolkit of [Agent Skills](https://agentskills.io)-compatible skills, slash commands, subagents, and MCP templates for [Cursor](https://cursor.com). One command drops everything into `~/.cursor/` and `~/.agents/skills/`.
 
 **How do I install?**  
 `npx skills add kensaurus/cursor-kenji` (recommended) or `npx @kensaurus/cursor-kenji`. Restart Cursor after install.
@@ -482,6 +757,8 @@ Yes — [llms.txt](llms.txt) at the repo root links to canonical docs surfaces.
 ---
 
 ## Alternatives
+
+Not quite what you're after? A few good neighbors:
 
 - [awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) — curated rules collections
 - [skills.sh](https://skills.sh) — skills registry (`npx skills add kensaurus/cursor-kenji`)

@@ -4,6 +4,21 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.11.1] — 2026-07-24
+
+README rewrite — the npm/GitHub landing page now lists every skill with a one-line summary, and the prose is warmer throughout. No skill, command, rule, or hook behavior changes; counts unchanged.
+
+### Added
+
+- **Auto-generated skill index in README** — new "Every skill, in plain English" section lists all **121** installable skills (109 agent + 12 Cursor) grouped by family, each with a one-line summary pulled from that skill's `SKILL.md` frontmatter. Collapsed `<details>` groups keep the page scannable.
+- **`scripts/generate-skill-index.mjs`** — regenerates the README block between `<!-- SKILL-INDEX:START -->` / `END` markers. `npm run gen:skill-index` writes; `npm run check:skill-index` (wired into `npm test`) fails if the block drifts from the filesystem.
+
+### Changed
+
+- **README tone** — benefit-first intro, shorter sentences, plain-English lead-ins before dense tables, and the giant Workflows "Assess" paragraph broken into scannable sub-bullets. FAQ grammar fix ("A installable" → "It's an installable").
+
+---
+
 ## [1.11.0] — 2026-07-24
 
 Payment system audit — a new read-only skill for the code that fails differently from normal CRUD: a retried charge is a **double-charge**, a lost ledger write is **vanished money**, a logged PAN is **PCI liability**, an unverified webhook is a **spoofed "payment succeeded"**. Grounded in the 2026 consensus (idempotency + double-entry ledger + reconciliation, with PCI DSS v4.0.1 as the floor and webhooks as the source of truth). Scope-gated so a Stripe-Checkout shop and an in-house gateway each see only relevant findings, and wired to the Stripe MCP for version-anchored provider checks.
