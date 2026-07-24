@@ -39,6 +39,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "audit against realworld", "compare to realworld", "conduit conformance", "full-stack gap check", "what's missing to reach production" | `audit-realworld` |
 | "resilience audit", "is this production-ready", "will it survive real traffic", "retries/timeouts/idempotency", "the 80% problem" | `audit-resilience` |
 | "audit backend architecture", "which pattern should I use", "is my backend production-grade", "am I over-engineering", "sync vs event-driven", "cache-aside/CQRS/saga/db-per-service", "microservices resilience review" | `audit-backend-architecture` |
+| "audit payment system", "payment gateway audit", "double charge / idempotency", "double-entry ledger", "reconciliation / settlement", "webhook signature / 3DS / SCA", "PCI DSS", "is my payment flow safe" | `audit-payment-system` |
 | "audit security", "check for vulnerabilities", "OWASP", "security review" | `audit-security` |
 | "audit design system", "check token compliance", "design consistency" | `audit-uiux-design-system` |
 | "UX audit", "usability review", "heuristic evaluation", "UX quality" | `audit-ux` |

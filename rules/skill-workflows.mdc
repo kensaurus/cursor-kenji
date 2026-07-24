@@ -66,6 +66,7 @@ with `/goal`.
 | Full-stack parity/conformance vs the RealWorld reference | `audit-realworld` |
 | Production resilience — timeouts/retries/idempotency/rate limits/PII (the "80%" NFRs) | `audit-resilience` |
 | Backend architecture — audit + decide which pattern to adopt (gateway, BFF, outbox, saga, cache-aside, db-per-service, sync/async; start-simple, topology-gated) | `audit-backend-architecture` |
+| Payment/money-movement correctness — idempotency, double-entry ledger, webhooks, reconciliation, 3DS/PCI (scope-gated P0/P1/P2) | `audit-payment-system` |
 
 ### Enhancement
 | Task | Skill |

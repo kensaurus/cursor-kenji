@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Agent skills, slash commands, and MCP configs for Cursor.</strong><br/>
-  108 agent skills · 36 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
+  109 agent skills · 36 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
   <em>Tell your AI editor what you want in plain English — the matching expert playbook runs automatically. No prompt-engineering.</em>
 </p>
 
@@ -17,7 +17,7 @@
 
 ---
 
-**cursor-kenji** ships **108 Cursor agent skills**, 36 slash commands, and 6 subagents for React / Next.js / Supabase projects. Install once — describe a task in chat and the matching skill auto-triggers.
+**cursor-kenji** ships **109 Cursor agent skills**, 36 slash commands, and 6 subagents for React / Next.js / Supabase projects. Install once — describe a task in chat and the matching skill auto-triggers.
 
 > **New to AI skills?** cursor-kenji is a library of ready-made **playbooks** your AI code editor follows automatically. You describe a task in plain English — *"audit my security"*, *"make this form accessible"*, *"clean up the design system"* — and the matching playbook kicks in, so the AI runs a proven, step-by-step process instead of improvising. No prompt-engineering, no memorizing names.
 
@@ -33,7 +33,7 @@
 | **Rule** | An always-on convention the AI must obey | dropping a `.mdc` file in your project |
 | **MCP server** | A live connection to an outside tool (database, GitHub, browser) | copying an MCP template + your keys |
 
-Skills conform to the [Agent Skills specification](https://agentskills.io/specification) and pass automated validation on every commit (`npm test` — **120** installable skills including Cursor IDE tools). MCP templates pin semver versions to reduce supply-chain drift ([CSA on package hallucination / slopsquatting](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations)).
+Skills conform to the [Agent Skills specification](https://agentskills.io/specification) and pass automated validation on every commit (`npm test` — **121** installable skills including Cursor IDE tools). MCP templates pin semver versions to reduce supply-chain drift ([CSA on package hallucination / slopsquatting](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations)).
 
 ```bash
 npx skills add kensaurus/cursor-kenji
@@ -154,7 +154,7 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 
 | | Count | What it does |
 |:--|------:|:-------------|
-| **Skills** | 108 | Auto-triggering capabilities (audit, enhance, debug, test, build, plan) |
+| **Skills** | 109 | Auto-triggering capabilities (audit, enhance, debug, test, build, plan) |
 | **Cursor Skills** | 12 | IDE tools (canvas, hooks, rules, PR splitter) |
 | **Commands** | 36 | Slash workflows (`/commit`, `/pr`, `/burndown-full`, `/thirdparty-web-interface-guidelines`) |
 | **Subagents** | 6 | Background agents (code-reviewer, debugger, db-migrator…) |
@@ -198,7 +198,7 @@ flowchart LR
 ```
 
 - **Orient** — understand the repo before touching it.
-- **Assess** — measure, don't guess. `audit-*` may fix inline; `plan-*` only plans until you approve. `audit-realworld` checks full-stack feature parity; `audit-resilience` checks the non-functional "80%" (timeouts, retries, idempotency, PII); `audit-backend-architecture` both checks the distributed-systems patterns (gateway, BFF, outbox, saga, cache-aside, db-per-service, sync-vs-event-driven) *and* decides which to adopt next vs. defer as over-engineering — topology-gated, start-simple.
+- **Assess** — measure, don't guess. `audit-*` may fix inline; `plan-*` only plans until you approve. `audit-realworld` checks full-stack feature parity; `audit-resilience` checks the non-functional "80%" (timeouts, retries, idempotency, PII); `audit-backend-architecture` both checks the distributed-systems patterns (gateway, BFF, outbox, saga, cache-aside, db-per-service, sync-vs-event-driven) *and* decides which to adopt next vs. defer as over-engineering — topology-gated, start-simple; `audit-payment-system` checks money-movement correctness (idempotency/double-charge, double-entry ledger, webhooks, reconciliation, 3DS/PCI) — scope-gated from a Stripe-Checkout shop to an in-house gateway.
 - **Change** — `design-*` builds new, `enhance-*` improves what exists (motion, forms, UI, UX, SEO), `housekeep-design` consolidates a drifted design system into one SSOT.
 - **Prove** — `test-*` plus the no-false-done trio: `verification-before-completion` → `completion-judge` → `complete-everything`.
 - **Ship & operate** — release, watch, and feed findings back into Assess.
@@ -214,6 +214,7 @@ flowchart LR
 | Forms are clunky or inaccessible | **`enhance-web-forms`** → `audit-accessibility` |
 | "Is it production-ready?" | **`audit-resilience`** + **`audit-realworld`** → `workflow-quality-gate` |
 | Backend architecture — which pattern to use / am I over-engineering? | **`audit-backend-architecture`** → `backend-patterns` |
+| Payment flow — double-charge, ledger, webhook, PCI safe? | **`audit-payment-system`** → `audit-security` / `audit-resilience` |
 | Stop AI / vibe-coding regressions | **`enhance-agent-guardrails`** → `plan-security-audit` |
 | Close everything, zero deferrals | **`complete-everything`** → `completion-judge` |
 | Ship it and watch it | `workflow-ship-and-observe` → `debug-sentry-monitor` → `workflow-feedback-to-closure` |
@@ -414,7 +415,7 @@ Full definitions in [shell-aliases/cursor-helpers.sh](shell-aliases/cursor-helpe
 
 ```
 cursor-kenji/
-├── skills/           # 108 Agent Skills (SKILL.md each)
+├── skills/           # 109 Agent Skills (SKILL.md each)
 ├── skills-cursor/    # 12 Cursor-specific skills
 ├── commands/         # 36 slash commands
 ├── agents/           # 6 subagents
@@ -464,7 +465,7 @@ A installable toolkit of [Agent Skills](https://agentskills.io)-compatible markd
 `npx skills add kensaurus/cursor-kenji` (recommended) or `npx @kensaurus/cursor-kenji`. Restart Cursor after install.
 
 **How many skills?**  
-**108** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**120** total). Counts are derived from the filesystem and synced by `npm run check:skills`.
+**109** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**121** total). Counts are derived from the filesystem and synced by `npm run check:skills`.
 
 **How do skills trigger?**  
 Cursor matches your chat message against each skill's YAML `description` keywords. Force one with *"use \`audit-security\` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).

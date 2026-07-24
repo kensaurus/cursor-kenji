@@ -5,7 +5,7 @@ description: >
   rate limiting, and serverless/edge function design — across stacks (examples use
   Next.js, Node, and Supabase; adapts to your detected ecosystem). Use when the user says
   "backend architecture", "queue jobs", "caching layer",
-  "  rate limiting", "server actions", "edge function", "microservices", "authentication
+  "rate limiting", "server actions", "edge function", "microservices", "authentication
   pattern", "circuit breaker", "outbox pattern", "saga", "bulkhead", "hexagonal architecture",
   "API gateway", or "BFF" (see references/architecture-patterns.md for the distributed-systems
   patterns). Pairs with design-api, audit-security, backend-realtime, and audit-backend-architecture
