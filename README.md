@@ -817,7 +817,7 @@ Tired of the same desk, same coffee shop, same fluorescent lights?
 
 <p align="center">
   <a href="https://tsumagoi.kensaur.us">
-    <img src="https://raw.githubusercontent.com/kensaurus/tsumagoi/main/docs/screenshots/dashboard-v20260719-light.png" alt="Tsumagoi Work&Camp — mountain coworking camp homepage" width="720" />
+    <img src="https://tsumagoi.kensaur.us/og-image.png" alt="Tsumagoi Work&Camp — mountain coworking camp" width="720" />
   </a>
 </p>
 
@@ -834,7 +834,7 @@ Tired of the same desk, same coffee shop, same fluorescent lights?
 
 | App | Links |
 |:----|:------|
-| [Tsumagoi Work&Camp](https://tsumagoi.kensaur.us) | Mountain coworking camp · [live site](https://tsumagoi.kensaur.us) · [repo](https://github.com/kensaurus/tsumagoi) |
+| [Tsumagoi Work&Camp](https://tsumagoi.kensaur.us) | Mountain coworking camp · [tsumagoi.kensaur.us](https://tsumagoi.kensaur.us) |
 | [glot.it — Learn Thai](https://kensaur.us/glot-it/) | [iOS](https://apps.apple.com/us/app/glot-it/id6761582648) · [Android](https://play.google.com/store/apps/details?id=com.glotit.app) |
 | [yen-yen — Expense Tracker](https://kensaur.us/yen-yen/) | [iOS](https://apps.apple.com/app/id6764548441) · [Android](https://play.google.com/store/apps/details?id=app.yenyen) |
 | [Help Her Take Photo](https://kensaur.us/help-her-take-photo/) | [iOS](https://apps.apple.com/app/help-her-take-photo/id6762513666) · [Android](https://play.google.com/store/apps/details?id=com.kensaurus.helphertakephoto) |

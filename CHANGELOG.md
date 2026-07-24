@@ -4,6 +4,17 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.12.1] — 2026-07-24
+
+Fix broken Tsumagoi image on the npm README (private-repo raw GitHub URL 404'd). Point at the public live-site OG image and drop the private repo link.
+
+### Fixed
+
+- **Tsumagoi ad image** — `src` now `https://tsumagoi.kensaur.us/og-image.png` (public) instead of `raw.githubusercontent.com/...` (404 on the private repo).
+- **Also by table** — Tsumagoi row links only to the live site; no GitHub repo link.
+
+---
+
 ## [1.12.0] — 2026-07-24
 
 README discoverability overhaul — ELI5 intro, always-visible skill lists with family counts, npm-safe workflow diagram (no mermaid), and a playful Tsumagoi Work&Camp invite. No skill/command behavior changes; counts unchanged.
