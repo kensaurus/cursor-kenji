@@ -4,6 +4,23 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.10.0] — 2026-07-24
+
+Decision lens for `audit-backend-architecture` — v1.9.0 answered *"is pattern X present?"* (conformance). This turns it into a **decision advisor** that answers *"which pattern should this codebase adopt next, and which would be over-engineering right now?"* — grounded in the 2026 "start simple, earn every pattern / modular-monolith-first" consensus. No new skill; the existing audit gets a second lens plus three patterns it was missing.
+
+### Added
+
+- **Fit/decision lens (Phase 3)** in `audit-backend-architecture` — for each pattern, classify **Adopt now / Adopt when [trigger] / Defer (premature)** from detected symptoms, with a **maturity ladder** (Stage 0 modular monolith → cache-aside/outbox → async/BFF/CQRS → db-per-service/saga → mesh/cell-based, each gated by a trigger) and a **symptom→pattern decision table**. Over-engineering is now a first-class finding (CQRS without read/write divergence, mesh/microservices below the size threshold, distributed monolith).
+- **Core principle — "start simple, earn every pattern"** — modular-monolith-first default; a pattern is only "Missing" when a measurable trigger justifies its cost; decide sync-vs-async **per interaction**; distributed monolith flagged as worse than a monolith.
+- **Three patterns added** (audit rows #17–19 + detection in `references/patterns.md`): **communication style** (sync request/response vs async event-driven, per interaction, with a signal table), **cache-aside** (TTL + invalidation + stampede guard), **database-per-service / data ownership** (+ distributed-monolith anti-pattern).
+- **`backend-patterns/references/architecture-patterns.md`** — implementation for the three: sync-vs-async decision tree + hybrid/outbox example, cache-aside read+invalidate, and data-ownership (owned schemas at T1, split only under real pressure).
+
+### Changed
+
+- Report template gains **Adopt now / Adopt when / Defer** sections (renumbered to Phase 4). `audit-backend-architecture` description, CATALOG, TRIGGER-CHEATSHEET, README, and `skill-workflows.mdc` now surface the decision lens ("which pattern should I use", "am I over-engineering", "sync vs event-driven"). Skill/command/agent **counts unchanged** (enhancement, not a new skill).
+
+---
+
 ## [1.9.0] — 2026-07-24
 
 Backend architecture audit — a new read-only skill that checks a repo's **distributed-systems architecture** (not just per-call resilience), plus an implementation reference so the fixes it delegates actually exist. Answers "is my backend production-grade?" for the patterns agents systematically skip: API gateway, BFF, outbox, saga, bulkhead, hexagonal, service mesh, and more. Topology-gated so a Next.js/Supabase monolith and a Kubernetes fleet each see only relevant findings.

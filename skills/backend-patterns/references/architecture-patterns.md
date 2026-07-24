@@ -211,6 +211,83 @@ one router until every slice is migrated, then decommission.
 
 ---
 
+## Communication style — sync request/response vs async event-driven
+
+Choose **per interaction**, not per system. Decision tree:
+
+```
+Is the caller waiting for the answer?
+  ├── Yes → SYNC
+  │        ├── internal, high-throughput → gRPC
+  │        ├── external / simple / cacheable → REST
+  │        └── client picks fields / many sources → GraphQL
+  └── No  → ASYNC
+           ├── one consumer, do-this-work → message queue (SQS/RabbitMQ/BullMQ)
+           ├── many reactors, this-happened → event stream (Kafka/NATS/EventBridge)
+           └── multi-service transaction → saga (+ outbox)
+```
+
+```ts
+// Hybrid in one endpoint: sync at the edge, async for side effects (bridged by the outbox).
+export async function placeOrder(req) {
+  const order = await db.transaction(async (tx) => {
+    const o = await tx.order.create({ data: req });        // sync: caller needs the orderId now
+    await tx.outbox.create({ data: { type: "OrderPlaced", payload: { id: o.id } } });
+    return o;
+  });
+  return { orderId: order.id };                            // respond immediately
+  // email, inventory, analytics react to OrderPlaced asynchronously — caller doesn't wait
+}
+```
+- Always give async flows a **dead-letter queue**; give sync calls a **timeout + circuit breaker**.
+- Symptom to fix: one handler making 5 blocking downstream calls — parallelize (`Promise.all`) or move
+  non-critical hops to events.
+
+## Cache-aside (lazy loading)
+
+```ts
+async function getProduct(id: string): Promise<Product> {
+  const key = `product:${id}`;
+  const hit = await redis.get<Product>(key);
+  if (hit) return hit;                                     // ~10ms
+  const product = await db.product.findUnique({ where: { id } }); // ~100ms on miss
+  if (product) await redis.set(key, product, { ex: 300 }); // TTL is mandatory
+  return product;
+}
+// Invalidate on write — the hard part. Delete (or rewrite) the key when the row changes:
+async function updateProduct(id: string, data: Partial<Product>) {
+  const p = await db.product.update({ where: { id }, data });
+  await redis.del(`product:${id}`);                        // or set the fresh value
+  return p;
+}
+```
+- **TTL + explicit invalidation** on every cached entity — never cache-forever.
+- Guard hot keys against **stampede/thundering-herd** (single-flight lock or jittered TTL).
+- Never cache private/user-scoped data under a shared key; write to cache **after** the DB commit.
+- Good fit: product details, profiles, config, read-heavy reference data. Bad fit: strongly-consistent
+  balances, anything that must never be stale.
+
+## Database-per-service / data ownership
+
+The rule that makes independent deploy/scale real: **one owner per table**; others use its API/events.
+
+```ts
+// ❌ distributed monolith — billing reaches into orders' tables
+const orders = await billingDb.$queryRaw`SELECT * FROM orders WHERE ...`;
+
+// ✅ ownership respected — ask the owner (sync) or react to its events (async)
+const orders = await orderServiceClient.listOrders(userId);   // sync API
+// or subscribe to OrderPlaced / OrderPaid events and keep a local read model
+```
+- **Modular monolith (T1):** enforce ownership *logically* — separate schemas, interface-only access
+  between modules (ArchUnit / Spring Modulith / Packwerk / lint boundaries). Physical single DB is fine.
+- **Split a service only when** a module has a genuine independent deploy/scale/regulatory need — and
+  fix data ownership **before** splitting, or you get a distributed monolith (shared DB + coupled
+  deploys = worst of both worlds).
+- Cross-service reporting/joins move to a read model fed by events, not cross-service SQL joins.
+
+---
+
 ## When NOT to reach for these
 
 - **CQRS / event sourcing:** only where read and write loads genuinely diverge. Otherwise it's

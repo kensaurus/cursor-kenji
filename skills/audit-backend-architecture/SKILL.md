@@ -1,17 +1,17 @@
 ---
 name: audit-backend-architecture
 description: >-
-  Read-only, topology-gated audit of backend/distributed-systems architecture patterns — so a
-  Next.js/Supabase monolith and a Kubernetes fleet each see only relevant findings. Covers API
-  gateway (auth, rate-limit, CORS, transform, logging, caching), BFF / API composition, circuit
-  breaker, bulkhead, backpressure, outbox + CDC, saga (compensation + saga-pivot), CQRS / event
-  sourcing, hexagonal / ports-and-adapters, anti-corruption layer, strangler-fig, sidecar / service
-  mesh, cell-based, zero-trust/mTLS, distributed tracing + SLOs, and contract testing. Produces a
-  per-pattern maturity matrix (Implemented/Partial/Missing/N-A) with file:line and the fix skill. Use
-  when "audit backend architecture", "is my backend production-grade", "check
-  gateway/BFF/outbox/circuit-breaker/bulkhead/hexagonal/saga", "microservices resilience review", or
-  "audit-backend-architecture". Read-only — defers per-call resilience to audit-resilience and
-  delegates fixes to backend-patterns.
+  Read-only audit AND decision advisor for backend/distributed-systems architecture, topology-gated so
+  a Next.js/Supabase monolith and a Kubernetes fleet each see only relevant findings. Reports which
+  patterns are present (maturity matrix, file:line), then — following "start simple, earn every
+  pattern" — recommends which to adopt now, adopt-when-[trigger], or defer as premature, flagging
+  over-engineering and the distributed-monolith anti-pattern. Covers sync request/response vs
+  event-driven, cache-aside, database-per-service, API gateway, BFF, circuit breaker, bulkhead,
+  outbox + CDC, saga, CQRS, hexagonal, strangler-fig, service mesh, cell-based, mTLS, tracing + SLOs,
+  contract testing. Use when "audit backend architecture", "which pattern should I use", "am I
+  over-engineering", "sync vs event-driven", "cache-aside/CQRS/saga/db-per-service",
+  "microservices resilience review", or "audit-backend-architecture". Defers per-call resilience to
+  audit-resilience; fixes via backend-patterns.
 license: MIT
 ---
 
@@ -21,13 +21,39 @@ Agents ship the happy-path CRUD and call it done. What decides whether a backend
 the **architecture**: is there one place that enforces auth/rate-limit/CORS, or is it copy-pasted per
 route? Does a payment write and its event commit atomically, or can one succeed while the other fails
 (the dual-write problem)? Does a slow dependency trip a breaker and stay in its own resource pool, or
-does it exhaust the shared thread/connection pool and take everything down? This audit inventories
-those structural decisions and marks each **Implemented / Partial / Missing / N/A** with evidence.
+does it exhaust the shared thread/connection pool and take everything down?
 
-> **Read-only.** This skill assesses architecture and hands each gap to the right fix skill. It does
-> not change code. For the *runtime* resilience knobs on individual calls (per-call timeouts, retry
-> backoff+jitter, idempotency keys, cancellation), defer to **`audit-resilience`** — this skill checks
-> whether the *patterns* exist, not per-call tuning, and explicitly avoids duplicating it.
+This skill works in two lenses:
+
+1. **Conformance** (Phase 2) — which patterns are present, marked **Implemented / Partial / Missing /
+   N/A** with `file:line`.
+2. **Fit / decision** (Phase 3) — for each pattern, **Adopt now / Adopt when [trigger] / Defer
+   (premature)** given the codebase's actual stage and pains. The most valuable output is often
+   *"don't build this yet"* — the audit is as much a guard against over-engineering as a gap report.
+
+> **Read-only.** This skill assesses and recommends; it does not change code. For the *runtime*
+> resilience knobs on individual calls (per-call timeouts, retry backoff+jitter, idempotency keys,
+> cancellation), defer to **`audit-resilience`** — this skill checks whether the *patterns* exist and
+> whether they *fit*, not per-call tuning, and explicitly avoids duplicating it.
+
+---
+
+## Core principle — start simple, earn every pattern
+
+Each pattern solves a *specific* problem and carries a *specific* cost. The 2026 consensus is
+**modular-monolith-first**: >90% of systems are well served by a well-structured monolith, and
+**premature decomposition is the #1 failure mode**. A pattern is only "Missing" if the codebase has
+the **measurable trigger** that justifies it — otherwise adopting it is *over-engineering*, which this
+audit flags just as loudly as a real gap.
+
+- **Fit beats presence.** "No service mesh / no CQRS" is a finding *only* when a trigger is present.
+  Never recommend a pattern the stage doesn't warrant.
+- **Decide per interaction, not per system.** Sync vs. event-driven is chosen for *each* call that
+  crosses a boundary, not adopted wholesale (see references/patterns.md → Communication style).
+- **Distributed monolith is worse than a monolith.** Services that share a database and must deploy
+  together pay the distributed tax with none of the independence — call it out explicitly.
+- **Reversible steps.** Prefer changes that keep boundaries adjustable (modular monolith, façade,
+  outbox) over irreversible bets (premature service split, event-sourcing everywhere).
 
 ---
 
@@ -101,6 +127,17 @@ load it and work through the applicable rows.
 | 15 | **Distributed tracing + SLOs** | T1+ | OpenTelemetry trace/correlation IDs across hops; RED/USE metrics; SLOs/error budgets | `backend-observability` |
 | 16 | **Contract testing** | T2+ | Consumer-driven contracts (Pact/OpenAPI) between clients↔BFF and service↔service | `test-unit`, `audit-fe-api` |
 
+### Communication & data-flow choices (decide per interaction, not per system)
+
+These are *selection* decisions, not "missing features" — the answer depends on each interaction and
+the stage. Detection + trade-offs in references/patterns.md.
+
+| # | Pattern | Tier | This audit checks | Fix via |
+|---|---|---|---|---|
+| 17 | **Communication style** (sync request/response vs async event-driven) | T1+ | Each cross-boundary call fits the interaction: sync for "need the answer now / strong consistency / query"; async for "multiple reactors / independent scaling / background". Symptom to flag: one request making 5 blocking downstream calls | `backend-patterns` |
+| 18 | **Cache-aside** | T1+ | Hot read-heavy paths (product/profile/config) check cache→DB-on-miss with a TTL/invalidation story; no stale-forever or thundering-herd | `backend-patterns`, `backend-db-performance` |
+| 19 | **Database-per-service / data ownership** | T2+ (owned schemas at T1) | Each service/module owns its data; no cross-service table reads. **Anti-pattern:** shared DB + coupled deploys = distributed monolith | `backend-patterns`, `audit-db-schema` |
+
 Rules:
 - **Evidence or it didn't happen** — every verdict cites `file:line` or "searched, none found".
 - **N/A is a first-class verdict** — record *why* (topology tier), don't silently drop a row.
@@ -108,12 +145,68 @@ Rules:
 
 ---
 
-## Phase 3 — Prioritized report (read-only)
+## Phase 3 — Decide: fit, not just presence
+
+A pattern being "Missing" is only actionable if the codebase has the **trigger** that justifies it.
+For every candidate pattern, classify it into one of three buckets from the detected symptoms:
+
+- **Adopt now** — a real, present pain maps to this pattern (evidence: `file:line` + the symptom).
+- **Adopt when [trigger]** — not yet, but name the concrete signal that should flip it on.
+- **Defer (premature)** — no trigger present; adopting now is over-engineering. Say so plainly.
+
+### Maturity ladder (climb only when the rung's trigger fires)
+
+| Stage | Shape | Add these when the trigger appears |
+|---|---|---|
+| **0. Modular monolith** | one deploy, clean module boundaries, owned schemas | this is the correct default for most systems |
+| **1. Fast & reliable monolith** | + **cache-aside** (read latency/DB load), **outbox** (dual-write), sync request/response with timeouts + a breaker | reads are hot / an event must not be lost |
+| **2. Decoupled** | + **async event-driven** for side effects, **BFF** per client, **CQRS** on the *one* read/write-divergent area | a request fans out to many blocking calls; reads & writes scale differently |
+| **3. Distributed** | + **database-per-service**, **saga** for multi-step transactions, **backpressure** | a module needs independent deploy/scale; a workflow spans services |
+| **4. Fleet** | + **service mesh** (ambient), **cell-based**, full orchestration | 10+ services, ~50+ engineers, blast-radius/residency needs |
+
+### Symptom → pattern (the decision table)
+
+| Observed symptom | Likely pattern | Not this (yet) |
+|---|---|---|
+| Repeated 100ms DB hits on hot read paths | **cache-aside** | CQRS, read replicas |
+| DB write + broker publish as two steps | **outbox (+CDC)** | 2PC, event sourcing |
+| One request makes 5 blocking downstream calls | **async event-driven** for non-critical hops | full EDA rewrite |
+| Reads and writes scale/optimize very differently | **CQRS** on that slice | event sourcing everywhere |
+| Multi-step transaction across services can half-complete | **saga + compensation** | distributed 2PC |
+| Modernizing a legacy system with risk | **strangler-fig** behind a façade | big-bang rewrite |
+| Two teams blocked on one deploy cadence | **database-per-service** split | service-per-noun |
+| Services share tables and deploy together | **fix the distributed monolith** (own schemas first) | more services |
+
+**Over-engineering guardrails (flag these as findings too):**
+- CQRS / event sourcing where reads and writes don't actually diverge → remove complexity.
+- Microservices / mesh / cell-based below the size + differential-scaling threshold → stay modular monolith.
+- Wholesale event-driven for simple two-party interactions → a single durable queue (or a sync call) is enough.
+- A split that produces a distributed monolith (shared DB, coupled deploys) → worse than the monolith.
+
+---
+
+## Phase 4 — Prioritized report + decision (read-only)
 
 ```markdown
 ## Backend Architecture Audit — [repo] — [date]
 **Topology:** [tier + evidence: N services · broker? · k8s? · transport]
-**In scope:** [patterns for this tier]  ·  **N/A (out of tier):** [list + why]
+**Stage on the ladder:** [0–4]  ·  **In scope:** [patterns]  ·  **N/A (out of tier):** [list + why]
+
+### Adopt now (present pain → pattern, with evidence)
+| Pattern | Symptom (file:line) | Payoff | Fix via |
+|---|---|---|---|
+| Cache-aside | product page: 100ms DB read per request, no cache (api/products.ts:40) | ~10ms cached reads, DB load ↓ | backend-patterns |
+
+### Adopt when (named trigger, not yet)
+| Pattern | Trigger to watch for |
+|---|---|
+| Database-per-service | orders + billing need independent deploy cadence / separate teams |
+
+### Defer — would be over-engineering now
+| Pattern | Why premature |
+|---|---|
+| CQRS / event sourcing | reads and writes don't diverge; a repository is simpler |
+| Service mesh / cell-based | single modular deploy; no 10+-service fleet |
 
 ### Critical (data loss / cascading outage / silent inconsistency)
 | Gap | Pattern | file:line | Why it bites in prod | Fix via |
@@ -139,7 +232,9 @@ Rules:
 **Forbidden:** declaring "production-grade" from passing tests alone; flagging T3-only patterns
 (mesh, cell-based, CQRS) against a T1 monolith; re-auditing per-call timeouts/retries that
 `audit-resilience` owns; recommending a saga without compensation logic; recommending CQRS/event
-sourcing where read and write loads don't actually diverge (it adds complexity, not value).
+sourcing where read and write loads don't actually diverge; **recommending any pattern without naming
+its trigger** (fit before presence — a "Missing" with no trigger is over-engineering, not a gap);
+recommending a service split that yields a **distributed monolith** (shared DB + coupled deploys).
 
 ---
 
@@ -150,6 +245,7 @@ sourcing where read and write loads don't actually diverge (it adds complexity, 
 - `design-api` — API contract, versioning, error shapes, pagination
 - `audit-security` — auth, CORS, rate-limit-as-abuse-control, mTLS/zero-trust, injection
 - `backend-observability` — tracing, correlation IDs, RED/USE metrics, SLOs, PII redaction
-- `audit-db-schema` — the data-model side of CQRS / event sourcing / outbox tables
-- `workflow-refactor` — hexagonal restructure and strangler-fig migration
+- `audit-db-schema` — the data-model side of CQRS / event sourcing / outbox tables / db-per-service
+- `backend-db-performance` — cache-aside, query optimization, read replicas for hot paths
+- `workflow-refactor` — hexagonal restructure and strangler-fig migration; modular-monolith boundaries
 - `complete-everything` — close the audited gaps to done with verification

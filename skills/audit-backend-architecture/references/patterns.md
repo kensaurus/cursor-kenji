@@ -288,3 +288,99 @@ caught before release.
 **Red flags.** Integration relies on manual testing; "it worked in staging"; no schema/contract
 between producer and consumer.
 **Fix via** `test-unit` (write/verify), `audit-fe-api` (FE↔BE contract drift).
+
+---
+
+## 17. Communication style — sync request/response vs async event-driven  · Applies: T1+
+
+**Purpose.** Choose the model **per interaction that crosses a boundary**, not for the whole system.
+Sync (REST/gRPC) trades loose coupling for immediate certainty; async (queue/pub-sub) trades certainty
+for decoupling and independent scaling. Mature systems are hybrid: sync at the edge, async for side
+effects, bridged by the outbox (#6).
+**Decide** — signals that point each way:
+
+| Signal | Leans |
+|---|---|
+| Caller needs an immediate success/failure answer | **sync** request/response |
+| Strong consistency is a hard business requirement | **sync** |
+| The interaction is a simple, well-known two-party contract; it's a query | **sync** (REST for edge/cacheable, gRPC for internal high-throughput) |
+| Multiple unrelated services must react to the same fact | **async** event-driven (pub/sub) |
+| Producer and consumer scale / fail independently; work is background | **async** (queue for one consumer, event stream for many) |
+| New consumers should be addable without changing the producer | **async** |
+
+**Detect**
+```bash
+rg -n "fetch\(|axios|got\(|httpx|HttpClient|grpc|\.rpc\(" -g '*.{ts,js,py,go}' -c        # sync calls
+rg -n "publish|emit\(|producer\.send|queue|kafka|rabbitmq|sqs|sns|nats|pubsub|EventBridge" -c  # async
+# Anti-pattern heuristic: many blocking downstream calls inside one handler
+rg -n "await .*(fetch|axios|rpc|client\.)" -g '*.{ts,js}' -C1
+```
+**Good.** Each cross-boundary call matches the interaction; a durable queue/DLQ for async; sync calls
+have timeouts + a breaker (see `audit-resilience`).
+**Red flags.** One request making 5+ blocking downstream calls (should be async/parallel); wholesale
+EDA for a simple two-party call (needless complexity); async with no dead-letter queue (silent loss);
+"everything sync" (cascading failure) or "everything async" (eventual consistency + debugging pain
+everywhere).
+**Fix via** `backend-patterns` (see references/architecture-patterns.md → sync-vs-async).
+
+---
+
+## 18. Cache-aside (lazy loading)  · Applies: T1+
+
+**Purpose.** For hot, read-heavy, tolerably-stale data (product details, user profile, config), check
+the cache first; on a miss, read the DB and populate the cache. Turns ~100ms DB reads into ~10ms cache
+reads and sheds DB load. The correctness lives in **invalidation**, not the read.
+**Detect**
+```bash
+rg -n "redis|memcached|upstash|unstable_cache|revalidate|cache\.(get|set)|lru|node-cache" -g '*.{ts,js,py,go}' -l
+# Red-flag heuristic: hot read straight to the DB with no cache
+rg -n "findUnique|findFirst|SELECT .* WHERE id" -g '*.{ts,js,py,sql}' -C2
+```
+**Good.** Read-through on hot paths with an explicit TTL; a clear invalidation path on write
+(delete/update the key, or tag-based revalidate); protection against stampede/thundering-herd on
+popular keys (single-flight / jittered TTL).
+**Red flags.** Every read hitting the DB on a hot path; caches with no TTL and no invalidation (stale
+forever); caching user-specific/private data under a shared key; cache write *before* the DB commit.
+**Fix via** `backend-patterns`, `backend-db-performance`.
+
+---
+
+## 19. Database-per-service / data ownership  · Applies: T2+ (owned schemas already matter at T1)
+
+**Purpose.** Each service (or, in a modular monolith, each module) **owns its data**; others reach it
+only through its API/events, never by reading its tables. This is what makes independent deployment
+and scaling real. At T1 the same discipline applies logically (separate schemas / clear ownership)
+even on one physical database.
+**Detect**
+```bash
+rg -n "JOIN .*\." -g '*.{sql,ts,js,py}' -l                 # cross-domain joins (ownership leak?)
+rg -n "schema|search_path|DATABASE_URL|datasource" -g '*.{ts,js,py,prisma,toml,env}' -l
+```
+**Good.** One writer per table/aggregate; cross-service data via API/events (or an outbox); modular
+monolith with separated schemas and interface-only access between modules.
+**Red flags — the distributed monolith:** multiple services reading/writing the same tables; services
+that *must* deploy together; shared ORM models across service boundaries. This is **worse** than a
+monolith — the distributed tax with none of the independence. Fix ownership *before* splitting further.
+**Fix via** `backend-patterns`, `audit-db-schema`.
+
+---
+
+## Decision framework — fit before presence (used in Phase 3)
+
+A pattern is only "Missing" (actionable) when the codebase shows the **trigger** that justifies its
+cost. Otherwise adopting it is over-engineering — flag *that* instead.
+
+**Maturity ladder** (climb a rung only when its trigger fires):
+
+| Stage | Default shape | Trigger to add the next patterns |
+|---|---|---|
+| 0 | Modular monolith, owned schemas, sync + timeouts | *(correct default for >90% of systems)* |
+| 1 | + cache-aside, + outbox | hot read paths hit the DB repeatedly; an event must not be lost on crash |
+| 2 | + async event-driven side effects, + BFF, + CQRS (one slice) | a request fans out to many blocking calls; reads & writes scale/optimize differently |
+| 3 | + database-per-service, + saga, + backpressure | a module needs independent deploy/scale; a workflow spans services and can half-complete |
+| 4 | + service mesh (ambient), + cell-based, + orchestration | 10+ services, ~50+ engineers, blast-radius / data-residency needs |
+
+**Anti-over-engineering (each is a finding):** CQRS/event-sourcing without read/write divergence;
+microservices/mesh/cell-based below the size + differential-scaling threshold; wholesale EDA for
+two-party interactions; any split that yields a distributed monolith. When in doubt, **stay on the
+lower rung** — reversible, cheaper, and almost always sufficient.
