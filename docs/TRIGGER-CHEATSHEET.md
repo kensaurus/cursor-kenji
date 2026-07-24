@@ -38,7 +38,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "performance audit", "optimize performance", "slow page", "Web Vitals" | `audit-performance` |
 | "audit against realworld", "compare to realworld", "conduit conformance", "full-stack gap check", "what's missing to reach production" | `audit-realworld` |
 | "resilience audit", "is this production-ready", "will it survive real traffic", "retries/timeouts/idempotency", "the 80% problem" | `audit-resilience` |
-| "audit backend architecture", "is my backend production-grade", "check gateway/BFF/outbox/circuit-breaker/bulkhead/hexagonal/saga", "microservices resilience review" | `audit-backend-architecture` |
+| "audit backend architecture", "which pattern should I use", "is my backend production-grade", "am I over-engineering", "sync vs event-driven", "cache-aside/CQRS/saga/db-per-service", "microservices resilience review" | `audit-backend-architecture` |
 | "audit security", "check for vulnerabilities", "OWASP", "security review" | `audit-security` |
 | "audit design system", "check token compliance", "design consistency" | `audit-uiux-design-system` |
 | "UX audit", "usability review", "heuristic evaluation", "UX quality" | `audit-ux` |

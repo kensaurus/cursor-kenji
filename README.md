@@ -198,7 +198,7 @@ flowchart LR
 ```
 
 - **Orient** — understand the repo before touching it.
-- **Assess** — measure, don't guess. `audit-*` may fix inline; `plan-*` only plans until you approve. `audit-realworld` checks full-stack feature parity; `audit-resilience` checks the non-functional "80%" (timeouts, retries, idempotency, PII); `audit-backend-architecture` checks the distributed-systems patterns (gateway, BFF, outbox, saga, bulkhead, hexagonal), topology-gated.
+- **Assess** — measure, don't guess. `audit-*` may fix inline; `plan-*` only plans until you approve. `audit-realworld` checks full-stack feature parity; `audit-resilience` checks the non-functional "80%" (timeouts, retries, idempotency, PII); `audit-backend-architecture` both checks the distributed-systems patterns (gateway, BFF, outbox, saga, cache-aside, db-per-service, sync-vs-event-driven) *and* decides which to adopt next vs. defer as over-engineering — topology-gated, start-simple.
 - **Change** — `design-*` builds new, `enhance-*` improves what exists (motion, forms, UI, UX, SEO), `housekeep-design` consolidates a drifted design system into one SSOT.
 - **Prove** — `test-*` plus the no-false-done trio: `verification-before-completion` → `completion-judge` → `complete-everything`.
 - **Ship & operate** — release, watch, and feed findings back into Assess.
@@ -213,7 +213,7 @@ flowchart LR
 | Make the app feel alive | **`enhance-motion`** (existing app) · `design-motion` (from scratch) |
 | Forms are clunky or inaccessible | **`enhance-web-forms`** → `audit-accessibility` |
 | "Is it production-ready?" | **`audit-resilience`** + **`audit-realworld`** → `workflow-quality-gate` |
-| Backend architecture (gateway, BFF, outbox, saga, bulkhead, hexagonal) | **`audit-backend-architecture`** → `backend-patterns` |
+| Backend architecture — which pattern to use / am I over-engineering? | **`audit-backend-architecture`** → `backend-patterns` |
 | Stop AI / vibe-coding regressions | **`enhance-agent-guardrails`** → `plan-security-audit` |
 | Close everything, zero deferrals | **`complete-everything`** → `completion-judge` |
 | Ship it and watch it | `workflow-ship-and-observe` → `debug-sentry-monitor` → `workflow-feedback-to-closure` |
