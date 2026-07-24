@@ -5,9 +5,12 @@ description: >
   rate limiting, and serverless/edge function design — across stacks (examples use
   Next.js, Node, and Supabase; adapts to your detected ecosystem). Use when the user says
   "backend architecture", "queue jobs", "caching layer",
-  "rate limiting", "server actions", "edge function", "microservices", or "authentication
-  pattern". Pairs with design-api, audit-security, backend-realtime. Do NOT use for
-  database schema design (audit-db-schema) or pure frontend work.
+  "  rate limiting", "server actions", "edge function", "microservices", "authentication
+  pattern", "circuit breaker", "outbox pattern", "saga", "bulkhead", "hexagonal architecture",
+  "API gateway", or "BFF" (see references/architecture-patterns.md for the distributed-systems
+  patterns). Pairs with design-api, audit-security, backend-realtime, and audit-backend-architecture
+  (the read-only gap report). Do NOT use for database schema design (audit-db-schema) or pure
+  frontend work.
 license: MIT
 ---
 
@@ -464,6 +467,20 @@ export async function rateLimitedAction(userId: string) {
  // Proceed with action...
 }
 ```
+
+## Architecture patterns (distributed systems)
+
+For the structural/distributed-systems patterns — **API gateway** (centralized cross-cutting
+concerns), **BFF / API composition**, **bulkhead** (resource-pool isolation), **circuit breaker**
+placement, **outbox + CDC** (the dual-write fix), **saga** (compensation + saga-pivot), **hexagonal /
+ports-and-adapters**, **anti-corruption layer**, and **strangler-fig migration** — see
+[references/architecture-patterns.md](references/architecture-patterns.md) for implementation guidance
+and code.
+
+Implement the pattern that fits the topology tier (don't add a mesh to a monolith or CQRS where reads
+and writes don't diverge). Runtime resilience tuning (per-call timeouts, retry backoff+jitter,
+idempotency keys, cancellation) lives in `audit-resilience`; a structural gap report comes from
+`audit-backend-architecture`.
 
 ## Validation
 
