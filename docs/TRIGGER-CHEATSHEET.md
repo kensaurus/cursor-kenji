@@ -43,6 +43,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "audit security", "check for vulnerabilities", "OWASP", "security review" | `audit-security` |
 | "audit design system", "check token compliance", "design consistency" | `audit-uiux-design-system` |
 | "UX audit", "usability review", "heuristic evaluation", "UX quality" | `audit-ux` |
+| "audit user flows", "user story audit", "information architecture / IA audit", "can users find X", "users get lost", "navigation audit", "funnel drop-off", "task completion" | `audit-ux-journeys` |
 | "set up guardrails", "stop vibe-coding regressions", "pre-commit security checks", "CI security gates", "governance for AI code" | `enhance-agent-guardrails` |
 
 ---

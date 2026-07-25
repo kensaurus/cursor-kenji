@@ -28,7 +28,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (109)
+## Skills (110)
 
 ### Enhance
 
@@ -351,8 +351,13 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 #### `audit-ux`
 **Triggers:** "UX audit", "usability review", "heuristic evaluation", "content audit", "interaction design review", "user flow analysis", "UX quality", "check cognitive load", "audit microcopy"
-**What it does:** Research-driven UX audit — Nielsen Norman Group's 10 heuristics, Laws of UX, Intuit Content Design, Google HEART metrics. Browser MCP for live walkthrough, Firecrawl for research, Sequential Thinking for complex flow analysis.
-**Related:** `audit-uiux-design-system`, `audit-accessibility`, `enhance-web-ux`
+**What it does:** Research-driven UX audit — Nielsen Norman Group's 10 heuristics, Laws of UX, Intuit Content Design, Google HEART metrics. Browser MCP for live walkthrough, Firecrawl for research, Sequential Thinking for complex flow analysis. Per-page experience lens — for cross-page journeys, user-story completion, and IA structure use `audit-ux-journeys`.
+**Related:** `audit-ux-journeys`, `audit-uiux-design-system`, `audit-accessibility`, `enhance-web-ux`
+
+#### `audit-ux-journeys`
+**Triggers:** "audit user flows", "user story audit", "information architecture audit", "IA audit", "can users find X", "users get lost", "navigation audit", "funnel drop-off", "task completion", "audit-ux-journeys"
+**What it does:** Cross-page UX audit for **user stories, task completion, and information architecture** — the layer `audit-ux` (per-page heuristics) doesn't cover. A site can pass every per-page heuristic and still fail because users can't *find* the feature or *finish* the story. **Phase 0** derives 5–10 real user stories from routes/nav/CTAs (reusing `design-prd` / `plan-test-coverage` inventories — never invented personas) and scopes depth by audit trigger (KPIs dropping → targeted funnel; complaints → thematic; redesign → comprehensive; pre-launch → qualitative walkthroughs labeled as assumptions). **Phase 1** audits IA structurally: click depth per story target (money pages ≤2–3), orphan pages, dead ends, label consistency (nav ≈ title ≈ H1, one concept = one word), grouping vs user mental model (not DB schema), first-click logic, wayfinding (breadcrumbs, `aria-current`), search/filter presence, URL sanity. **Phase 2** walks every story end-to-end in a headed browser (desktop + 390px mobile) producing a task-completion matrix: steps-to-goal, friction log (hesitation/mislabel/backtrack/surprise/stall), error-recovery probes (invalid input, Back, refresh mid-flow), success-moment clarity — a BLOCKED story is automatically a Blocker finding. **Phase 3** enforces evidence discipline: every finding tagged `[data]` (analytics/funnels/drop-offs from GA4/PostHog/Clarity/etc.), `[observed]` (reproduced), or `[judgment]` (assumption to validate) — never presents taste as data; with no analytics, recommends minimal funnel instrumentation as a roadmap item. **Phase 4** reports impact×effort: quick wins vs roadmap vs deprioritized, neutral behavior-grounded language, always names what works. Delegates per-page fixes to `enhance-web-ux`, forms to `enhance-web-forms`, WCAG to `audit-accessibility`, heuristics depth to `audit-ux`.
+**Related:** `audit-ux`, `enhance-web-ux`, `enhance-web-forms`, `audit-accessibility`, `audit-performance`, `audit-realworld`, `plan-test-coverage`, `design-prd`, `test-playwright`
 
 #### `audit-bundle-size`
 **Triggers:** "reduce bundle size", "analyse bundle", "tree shaking", "lazy loading", "code splitting", "slow initial load", "large JS", "chunk size", "why is the bundle so big", "first load JS too large", "LCP caused by JS"
