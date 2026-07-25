@@ -61,6 +61,7 @@ with `/goal`.
 | Database schema health | `audit-db-schema` |
 | Translation quality & hardcoded strings | `audit-i18n` |
 | UX heuristics audit | `audit-ux` |
+| User-story completion, IA & navigation, cross-page journeys | `audit-ux-journeys` |
 | Accessibility (WCAG 2.2) | `audit-accessibility` |
 | Design system compliance | `audit-uiux-design-system` |
 | Full-stack parity/conformance vs the RealWorld reference | `audit-realworld` |

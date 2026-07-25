@@ -4,6 +4,20 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.13.0] — 2026-07-25
+
+UX journeys audit — a new cross-page skill for the layer `audit-ux` (per-page heuristics) doesn't cover: **can users actually find things and finish their stories?** A site can pass every per-page heuristic and still fail because the feature is buried four clicks deep, the nav mirrors the DB schema, or the checkout dead-ends on mobile. Grounded in the 2026 practitioner consensus: a UX audit derives from user stories, audits IA against mental models, walks the real journeys, and grounds findings in behavioral evidence — never taste presented as data.
+
+### Added
+
+- **`audit-ux-journeys`** — cross-page user-story, task-completion & IA audit (**Skill 110**). **Phase 0** derives 5–10 real stories from routes/nav/CTAs (reuses `design-prd`/`plan-test-coverage` inventories, never invented personas) and scopes depth by audit trigger (KPIs dropping / complaints / redesign / pre-launch-no-data → qualitative, labeled as assumptions). **Phase 1** audits IA structurally (IA1–IA9): click depth per story target, orphan pages, dead ends, label consistency (nav ≈ title ≈ H1), grouping vs mental model, first-click logic, wayfinding, search/filter, URL sanity. **Phase 2** walks every story end-to-end in a headed browser (desktop + 390px mobile) → task-completion matrix with friction logs (hesitation/mislabel/backtrack/surprise/stall) and error-recovery probes (invalid input, Back, refresh mid-flow); a BLOCKED story is automatically a Blocker. **Phase 3** evidence discipline — every finding tagged `[data]` / `[observed]` / `[judgment]`; validates against GA4/PostHog/Clarity/Amplitude funnels when present, otherwise recommends minimal instrumentation so the next audit has evidence. **Phase 4** impact×effort report: quick wins vs roadmap vs deprioritized, neutral language, always names what works. Detailed methods in `skills/audit-ux-journeys/references/checklist.md`.
+
+### Changed
+
+- **`audit-ux`** — description and Step 0c now scope it explicitly to the **per-page experience lens** and hand cross-page journeys/IA to `audit-ux-journeys` (its 0c IA map is context-building, not a structural audit). CATALOG, TRIGGER-CHEATSHEET, README (family table 17→18, full list, Assess bullets, "Start here" row), and `skill-workflows.mdc` updated; skill count 109 → 110.
+
+---
+
 ## [1.12.1] — 2026-07-24
 
 Fix broken Tsumagoi image on the npm README (private-repo raw GitHub URL 404'd). Point at the public live-site OG image and drop the private repo link.

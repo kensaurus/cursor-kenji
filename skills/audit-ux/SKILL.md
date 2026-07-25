@@ -1,7 +1,7 @@
 ---
 name: audit-ux
 description: >
-  Audit user experience quality using research-backed frameworks: Nielsen Norman Group's 10 usability heuristics, Intuit Content Design System for microcopy, Google's HEART metrics, and Laws of UX (Fitts's, Hick's, Miller's, Jakob's, cognitive load). Evaluates information architecture, user flows, error recovery, onboarding, content clarity, and interaction patterns. Uses browser MCP for live walkthrough, Firecrawl for current NN/g research, and Sequential Thinking for complex flows. Generic — works with any webapp. Use when evaluating usability, reviewing user flows, auditing microcopy, checking UX heuristics, assessing cognitive load, reviewing onboarding, or when the user mentions UX audit, usability review, heuristic evaluation, content audit, interaction design review, or user flow analysis. Focuses on EXPERIENCE — for visual design-system compliance (tokens, components, dark mode), use audit-uiux-design-system instead.
+  Audit user experience quality using research-backed frameworks: Nielsen Norman Group's 10 usability heuristics, Intuit Content Design System for microcopy, Google's HEART metrics, and Laws of UX (Fitts's, Hick's, Miller's, Jakob's, cognitive load). Evaluates information architecture, user flows, error recovery, onboarding, content clarity, and interaction patterns. Uses browser MCP for live walkthrough, Firecrawl for current NN/g research, and Sequential Thinking for complex flows. Generic — works with any webapp. Use when evaluating usability, reviewing user flows, auditing microcopy, checking UX heuristics, assessing cognitive load, reviewing onboarding, or when the user mentions UX audit, usability review, heuristic evaluation, content audit, interaction design review, or user flow analysis. Focuses on per-page EXPERIENCE — for visual design-system compliance (tokens, components, dark mode) use audit-uiux-design-system; for cross-page user-story/IA/journey audits use audit-ux-journeys.
 license: MIT
 ---
 
@@ -78,6 +78,10 @@ Trust-sensitive points: [where wrong data erodes confidence]
 Discover routes by framework: `app/**/page.tsx` (Next.js App Router), `pages/**/*.tsx`
 (Next.js Pages Router), `src/routes/` (SvelteKit / Remix), `router.*` (Vue Router /
 React Router config).
+
+> This step builds *context* only. For a full structural IA audit (click depth, orphan pages,
+> label consistency, findability) and end-to-end user-story walkthroughs, use **`audit-ux-journeys`**
+> — this skill stays on the per-page experience lens.
 
 Build the information architecture mental model:
 

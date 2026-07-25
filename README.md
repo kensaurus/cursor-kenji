@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Ready-made playbooks for your AI coding editor.</strong><br/>
-  109 agent skills · 36 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
+  110 agent skills · 36 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
   <em>You talk in plain English. The matching expert recipe runs itself.</em>
 </p>
 
@@ -29,7 +29,7 @@ Your AI editor is smart, but without a recipe it **guesses**. Sometimes that gue
 
 You do **not** need to memorize skill names. Talking like a human is enough.
 
-It ships **109 Cursor agent skills**, 36 slash commands, and 6 subagents — tuned for React / Next.js / Supabase, useful on almost any stack. Works in [Cursor](https://cursor.com), [Claude Code](https://www.anthropic.com/claude-code), and (with a lighter install) Codex + Gemini CLI. Brand new? Read the **[plain-language guide →](docs/GETTING-STARTED.md)**.
+It ships **110 Cursor agent skills**, 36 slash commands, and 6 subagents — tuned for React / Next.js / Supabase, useful on almost any stack. Works in [Cursor](https://cursor.com), [Claude Code](https://www.anthropic.com/claude-code), and (with a lighter install) Codex + Gemini CLI. Brand new? Read the **[plain-language guide →](docs/GETTING-STARTED.md)**.
 
 ### Install (30 seconds)
 
@@ -68,7 +68,7 @@ Full menu with every skill name → **[Every skill](#every-skill-in-plain-englis
 | **Rule** | A house rule the AI always obeys | Drop a `.mdc` into your project |
 | **MCP server** | A phone line to your database / GitHub / browser | Copy a template + paste your keys |
 
-Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **121** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
+Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **122** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
 
 ### How the recipes fit together (the loop)
 
@@ -103,7 +103,7 @@ The whole kit, at a glance:
 
 | | Count | What it does |
 |:--|------:|:-------------|
-| **Skills** | 109 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
+| **Skills** | 110 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
 | **Cursor Skills** | 12 | IDE tools (canvas, hooks, rules, PR splitter) |
 | **Commands** | 36 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
 | **Subagents** | 6 | Background helpers (code-reviewer, debugger, db-migrator…) |
@@ -123,13 +123,13 @@ Scroll the **family counts**, then the **full list**. You don't memorize names �
 
 <!-- SKILL-INDEX:START -->
 
-_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **121 skills** listed below._
+_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **122 skills** listed below._
 
 #### Skill families at a glance
 
 | Family | Count | In one sentence |
 |:-------|------:|:----------------|
-| 🔍 Audit — look before you change | **17** | Check the codebase — security, UX, performance, payments… |
+| 🔍 Audit — look before you change | **18** | Check the codebase — security, UX, performance, payments… |
 | 📋 Plan — audit first, change only after you approve | **17** | Write a fix plan you approve before any code changes |
 | 🎨 Enhance — improve what already exists | **12** | Polish UI, forms, motion, SEO, PWA on an existing app |
 | ✨ Design — build something new | **10** | Create new UI, APIs, emails, themes from scratch |
@@ -148,11 +148,11 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | 🤝 Third-party (upstream-maintained) | **3** | Vendored upstream skills (Emil, UI/UX Pro Max, Vercel WIG) |
 | 🧩 Core & cross-cutting | **4** | Close everything, burndown, post-launch loops |
 | 🖱️ Cursor IDE skills | **12** | Canvas, hooks, rules, PR splitter, CLI helpers |
-| **Total** | **121** | |
+| **Total** | **122** | |
 
 #### Full list (every skill)
 
-### 🔍 Audit — look before you change (17)
+### 🔍 Audit — look before you change (18)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -173,6 +173,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `audit-security` | Audit code for security vulnerabilities and best practices |
 | `audit-uiux-design-system` | Audit visual UI coherency, design token compliance, and component modularity against a design system for any project |
 | `audit-ux` | Audit user experience quality using research-backed frameworks: Nielsen Norman Group's 10 usability heuristics, Intuit Content Design… |
+| `audit-ux-journeys` | Cross-page UX audit for user stories, task completion, and information architecture — the layer audit-ux (per-page heuristics) doesn't cover |
 
 ### 📋 Plan — audit first, change only after you approve (17)
 
@@ -500,6 +501,7 @@ Specialist audits worth knowing:
 - `audit-resilience` — timeouts, retries, idempotency, PII (the stuff agents skip)
 - `audit-backend-architecture` — which distributed pattern to adopt vs skip as over-engineering
 - `audit-payment-system` — double-charge, ledgers, webhooks, PCI
+- `audit-ux-journeys` — can users actually find things and finish their stories? (IA + task completion)
 
 ### Start here, by situation
 
@@ -514,6 +516,7 @@ Find the row that sounds like your day, then follow the chain:
 | "Is it production-ready?" | **`audit-resilience`** + **`audit-realworld`** → `workflow-quality-gate` |
 | Backend architecture — which pattern to use / am I over-engineering? | **`audit-backend-architecture`** → `backend-patterns` |
 | Payment flow — double-charge, ledger, webhook, PCI safe? | **`audit-payment-system`** → `audit-security` / `audit-resilience` |
+| Users get lost / can't finish a flow / nav feels wrong | **`audit-ux-journeys`** → `enhance-web-ux` / `audit-ux` |
 | Stop AI / vibe-coding regressions | **`enhance-agent-guardrails`** → `plan-security-audit` |
 | Close everything, zero deferrals | **`complete-everything`** → `completion-judge` |
 | Ship it and watch it | `workflow-ship-and-observe` → `debug-sentry-monitor` → `workflow-feedback-to-closure` |
@@ -726,7 +729,7 @@ Where everything lives:
 
 ```
 cursor-kenji/
-├── skills/           # 109 Agent Skills (SKILL.md each)
+├── skills/           # 110 Agent Skills (SKILL.md each)
 ├── skills-cursor/    # 12 Cursor-specific skills
 ├── commands/         # 36 slash commands
 ├── agents/           # 6 subagents
@@ -780,7 +783,7 @@ A box of ready-made recipes for your AI editor ([Agent Skills](https://agentskil
 `npx skills add kensaurus/cursor-kenji` (recommended) or `npx @kensaurus/cursor-kenji`. Restart Cursor after install.
 
 **How many skills?**  
-**109** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**121** total). Counts come from the filesystem and stay synced via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
+**110** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**122** total). Counts come from the filesystem and stay synced via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
 
 **How do skills trigger?**  
 You talk normally. Cursor matches your words to each skill's YAML `description`. To force one: *"use \`audit-security\` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).
