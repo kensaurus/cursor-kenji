@@ -14,8 +14,9 @@ This command is a thin entry point. Pick the right skill for the target:
 - **`test-qa`** — full-app webapp QA, dynamic user stories, CRUD verification.
 - **`mobile-emulator-test`** — native mobile builds (RN/Expo/Capacitor/Flutter) on Android emulator.
 
-> **All browser QA is manual and headed.** Drive a **visible** browser through the Playwright
-> MCP one real user action at a time — never `*.spec.ts`, `npx playwright test`, or driving the
+> **All browser QA is manual and headed.** Drive a **visible** browser through playwright-cli
+> (`npx --yes @playwright/cli@latest -s=<session> …`, with `--headed` on `open`) one real user
+> action at a time — never `*.spec.ts`, `npx playwright test`, or driving the
 > UI through `eval`/`run-code`. First read the
 > `protocol-browser-anti-stall` skill (Rule 0).
 

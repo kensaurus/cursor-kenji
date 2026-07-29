@@ -285,11 +285,9 @@ For each AI feature identified in Phase 0c, use playwright-cli to trigger it liv
 
 **Important**: Apply the `protocol-browser-anti-stall` protocol — set 15-second timeouts, use the incremental `sleep 2` → `snapshot` cycle rather than one long block, and use `snapshot` to detect ready state.
 
-```json
-goto
-{
- "url": "<APP_URL>"
-}
+```bash
+PW="npx --yes @playwright/cli@latest"
+$PW -s=langfuse-audit open --headed "<APP_URL>"
 ```
 
 Navigate to the feature, interact with it (fill form, click button, send message), and capture:
