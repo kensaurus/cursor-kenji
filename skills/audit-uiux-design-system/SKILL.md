@@ -19,7 +19,7 @@ license: MIT
 Visual design system coherency audit: tokens, components, visual consistency, dark mode,
 animations, and WCAG visual compliance.
 
-**Before ANY browser interaction, read the `browser-anti-stall` skill and apply its rules
+**Before ANY browser interaction, read the `protocol-browser-anti-stall` skill and apply its rules
 to every step.** That skill is `protocol-browser-anti-stall`.
 
 ## CRITICAL: Anti-Template, Anti-AI-Generated Design

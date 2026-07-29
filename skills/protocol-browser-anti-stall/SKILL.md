@@ -28,7 +28,7 @@ first command — session naming, persistent logins (incl. the Google/CDP block)
 
 ---
 
-## 0. Invocation — always this form
+## Invocation — always this form
 
 ```bash
 PW="npx --yes @playwright/cli@latest"     # portable; survives fnm/nvm version switches
@@ -41,7 +41,7 @@ $PW -s=<session> <command> [args]
   per-shell and disappears; `npx` always resolves.
 - `--json` / `--raw` are available when you need machine-readable output.
 
-## 1. Manual & headed — never scripted (read first)
+## 0. Manual & headed — never scripted (read first)
 
 You are driving a **real, visible browser** to feel what a user feels. A green script proves
 nothing about UX — *see the screen* and *watch the logs*.
@@ -58,7 +58,7 @@ nothing about UX — *see the screen* and *watch the logs*.
 5. **Look after every action.** Fresh `snapshot` + `screenshot` + `console` + `requests`, plus the
    dev-server terminal. Real pain surfaces on screen and in logs, not in an assertion.
 
-## 2. Session lifecycle
+## 1. Session lifecycle
 
 ```bash
 $PW -s=qa-checkout open --headed http://localhost:3000    # start (once)
@@ -76,17 +76,17 @@ $PW kill-all                                              # last resort: stale/z
 - Add `--browser chrome|firefox|webkit|msedge`, `--device "iphone 15"`, or `--mobile` on `open`
   when the task calls for it.
 
-## 3. Navigation guard
+## 2. Navigation guard
 
 After every `open` / `goto` / `reload`:
 
 1. `snapshot` — confirm the URL changed and the page has content.
 2. If blank or unchanged → `sleep 2` → `snapshot` again.
-3. **Max 3 cycles (~6s).** Still not loaded → report a blocker (§9) and move on.
+3. **Max 3 cycles (~6s).** Still not loaded → report a blocker (§8) and move on.
 
 Never assume navigation succeeded without a snapshot to confirm it.
 
-## 4. Waiting — there is no `wait` command
+## 3. Waiting — there is no `wait` command
 
 Playwright **auto-waits** for actionability on `click`/`fill`/`select`, so most explicit waits are
 unnecessary. When you genuinely must wait:
@@ -110,14 +110,14 @@ STOP → report blocker with evidence
 
 This handles cold starts, SPA hydration, and slow APIs without ever blocking blindly.
 
-## 5. SPA-specific rules
+## 4. SPA-specific rules
 
 SPAs (React, Next.js, Vue) fire `load` before hydration completes — never trust load events.
 
 - Wait for a **specific UI landmark** that proves the app rendered (`run-code` + `waitFor`, or `find`).
 - If a spinner is showing, wait for it to reach `state: 'hidden'` rather than sleeping.
 
-## 6. Anti-loop: max 4 attempts per goal
+## 5. Anti-loop: max 4 attempts per goal
 
 | Attempt | Action |
 |---|---|
@@ -132,7 +132,7 @@ Never repeat the exact same failing action without new evidence.
 navigate/click/fill/hover/key press. Re-`snapshot` before the next interaction. `click` also accepts
 a unique CSS selector, which survives state changes better than a ref.
 
-## 7. Evidence before retry
+## 6. Evidence before retry
 
 When something is not working, gather evidence FIRST, then form a hypothesis:
 
@@ -143,7 +143,7 @@ When something is not working, gather evidence FIRST, then form a hypothesis:
 
 Only retry once you have a new hypothesis grounded in that evidence.
 
-## 8. Timeout budget
+## 7. Timeout budget
 
 | Scope | Max time |
 |---|---|
@@ -154,7 +154,7 @@ Only retry once you have a new hypothesis grounded in that evidence.
 
 Exceeded? **Skip it** and log `[TIMEOUT] skipped: <step>`. One stuck step must not kill the session.
 
-## 9. Blocker reporting format
+## 8. Blocker reporting format
 
 ```
 BLOCKER:
@@ -168,7 +168,7 @@ BLOCKER:
 
 Actionable information beats a silent freeze.
 
-## 10. Artifacts
+## 9. Artifacts
 
 - Screenshots, snapshots, and logs go under **`.playwright-mcp/`** (gitignored):
   `screenshot --filename .playwright-mcp/home-390.png`. Name by route + viewport/step.
@@ -176,7 +176,7 @@ Actionable information beats a silent freeze.
   also gitignored, never committed.
 - Sweep any stray root-level `*.png` / `*.log` into `.playwright-mcp/` before ending the session.
 
-## 11. Parallel agents
+## 10. Parallel agents
 
 Session isolation replaces the old tab-sharing etiquette — each agent gets its own browser:
 

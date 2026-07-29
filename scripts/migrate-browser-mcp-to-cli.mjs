@@ -11,7 +11,20 @@
  *   are migrated by hand.
  *
  * USAGE:
- *   node scripts/migrate-browser-mcp-to-cli.mjs [--dry]
+ *   node scripts/migrate-browser-mcp-to-cli.mjs --dry      (preview — default)
+ *   node scripts/migrate-browser-mcp-to-cli.mjs --force    (actually write)
+ *
+ * ⚠ ONE-SHOT, TOKEN-ONLY — DO NOT RE-RUN CASUALLY.
+ * This renames tool *tokens*; it does not understand structure. It cannot repair
+ * an already-migrated tree, and on MCP-shaped prose it produces invalid output
+ * that must be fixed by hand. Known lossy maps:
+ *   - `browser_wait_for` → `sleep`          yields `sleep { time: 2 }`; real text
+ *                                           waits need `run-code` + `waitFor`
+ *   - `browser_tabs` → `tab-list`           yields `` `tab-list` list ``
+ *   - `browser_navigate` → `goto`           drops the first-call `open --headed`
+ *   - `browser_handle_dialog` → `dialog-accept`  loses the dismiss variant
+ *   - `browser_lock` → `close`              wrong semantics (locking no longer exists)
+ * Always run `--dry` first and hand-review the resulting diff.
  *
  * NOTES:
  * - `mcp-to-cli-map.md` and `CHANGELOG.md` are excluded: they legitimately
@@ -24,7 +37,8 @@
 import { readFileSync, writeFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
-const DRY = process.argv.includes("--dry");
+// Write only on an explicit --force; every other invocation previews.
+const DRY = !process.argv.includes("--force");
 
 // Order matters: longest / most specific first.
 const MAP = [
@@ -75,6 +89,10 @@ const EXCLUDE = [
   "skills/protocol-browser-anti-stall/SKILL.md",
   "skills/protocol-browser-anti-stall/references/mcp-to-cli-map.md",
   "skills/protocol-browser-anti-stall/references/playwright-session-coordination.md",
+  // Intentionally describe the MCP: the catalog entry explains what changed, and
+  // mcp/README documents the --isolated fallback.
+  "docs/CATALOG.md",
+  "mcp/README.md",
   "CHANGELOG.md",
 ];
 

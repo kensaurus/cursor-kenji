@@ -70,7 +70,8 @@ SELECT * FROM <table> WHERE <name_column> LIKE 'QA-TEST-%';
 -- Should return 0 rows
 ```
 
-4. **Keep auth session** — do not log out; leave auth tab + storage state for the next
+4. **Keep auth session** — do not log out; leave the session's `--profile` directory (or
+   `state-save` file) intact for the next
    agent/skill unless you were testing logout explicitly.
 
 ---
@@ -256,7 +257,7 @@ If any step exceeds its budget, log `[TIMEOUT]` and move on.
 
 1. **Read the codebase first.** Never test blindly. Phase 0 is mandatory.
 2. **Use playwright-cli** for all browser interaction: `goto`, `snapshot`, `screenshot`, `click`, `fill`, `type`, `press`, `console`, `requests`, `close`, `find`.
-3. **Apply anti-stall protocol** to every interaction. Read `browser-anti-stall` skill first.
+3. **Apply anti-stall protocol** to every interaction. Read `protocol-browser-anti-stall` skill first.
 4. **Screenshot every test step.** Every pass and fail needs visual evidence.
 5. **Check console and network** after every page load and every mutation.
 6. **Clean up test data.** Delete everything prefixed with `QA-TEST-` at the end.

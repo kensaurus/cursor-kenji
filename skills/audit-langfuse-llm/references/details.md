@@ -104,7 +104,7 @@ If prompts are hardcoded in source code:
 
 ### 5c. CHECK: Trigger and Verify via Playwright
 
-**Important**: Apply the `browser-anti-stall` protocol for all browser interactions.
+**Important**: Apply the `protocol-browser-anti-stall` protocol for all browser interactions.
 
 **Step 1: Trigger the AI feature**
 

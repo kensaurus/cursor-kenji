@@ -232,10 +232,11 @@ Saved:  Z KB (N%)
 For each route (Next.js build output shows this), confirm the numbers improved.
 Run a quick Playwright check to confirm the app still works:
 
-```
-goto → key routes
-snapshot → no blank screen or error
-console → no new errors
+```bash
+PW="npx --yes @playwright/cli@latest"
+$PW -s=bundle-check open --headed "<app-url>"    # then `goto` each key route
+$PW -s=bundle-check snapshot                      # no blank screen or error
+$PW -s=bundle-check console                       # no new errors
 ```
 
 ---

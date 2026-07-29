@@ -10,7 +10,7 @@ license: MIT
 Research-driven user experience evaluation grounded in NN/g heuristics, Laws of UX,
 Intuit Content Design principles, and Google HEART metrics.
 
-**Before ANY browser interaction, read the `browser-anti-stall` skill and apply its rules
+**Before ANY browser interaction, read the `protocol-browser-anti-stall` skill and apply its rules
 to every step.** That skill is `protocol-browser-anti-stall`.
 
 ## Context-First, Human-Centric Approach

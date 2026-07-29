@@ -21,7 +21,7 @@ Works with **any project** — auto-detects pages from the codebase route struct
 
 ## Critical Rules
 
-> **Always use the `browser-anti-stall` protocol** when using playwright-cli.
+> **Always use the `protocol-browser-anti-stall` protocol** when using playwright-cli.
 
 > **Test every publicly reachable page.** Accessibility bugs on obscure pages still affect real users.
 
@@ -147,7 +147,7 @@ PW="npx --yes @playwright/cli@latest"
 $PW -s=a11y open --headed "<APP_URL><ROUTE>"    # first page; use `goto` for subsequent ones
 ```
 
-Apply the `browser-anti-stall` protocol: wait 2s, snapshot, verify page loaded.
+Apply the `protocol-browser-anti-stall` protocol: wait 2s, snapshot, verify page loaded.
 
 ### 2b. Inject and Run axe-core
 

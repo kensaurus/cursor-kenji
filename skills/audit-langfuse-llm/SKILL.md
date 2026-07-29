@@ -20,7 +20,7 @@ Works with **any project** — auto-detects Langfuse setup from the codebase.
 
 > **Use concrete numbers.** "Costs seem high" is not an audit finding. "gpt-4.1 used for intent classification at $0.02/call when gpt-4.1-mini at $0.002/call achieves equivalent accuracy" is.
 
-> **Always use the `browser-anti-stall` protocol** when using playwright-cli.
+> **Always use the `protocol-browser-anti-stall` protocol** when using playwright-cli.
 
 ---
 
@@ -283,7 +283,7 @@ Evaluate:
 
 For each AI feature identified in Phase 0c, use playwright-cli to trigger it live.
 
-**Important**: Apply the `browser-anti-stall` protocol — set 15-second timeouts, skip `sleep` on navigation, use `snapshot` to detect ready state.
+**Important**: Apply the `protocol-browser-anti-stall` protocol — set 15-second timeouts, use the incremental `sleep 2` → `snapshot` cycle rather than one long block, and use `snapshot` to detect ready state.
 
 ```json
 goto

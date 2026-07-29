@@ -99,48 +99,46 @@ Confirm credentials if the app has auth. Most demos use `admin/demo`, `test/test
 
 Use playwright-cli. **Always read the `protocol-browser-anti-stall` skill first** if the user has it — never block the browser for more than 3 seconds at a time.
 
-### 2a. Set viewport for hero quality
+### 2a. Open the browser at hero quality
 
-```
-resize { width: 1600, height: 1000 }
+```bash
+PW="npx --yes @playwright/cli@latest"
+$PW -s=readme open --headed "<demo-url>"
+$PW -s=readme resize 1600 1000
 ```
 
-### 2b. Navigate, log in, capture each page in dark mode
+### 2b. Log in, then capture each page in dark mode
 
-```
-goto { url: <demo-url> }
-sleep { time: 2 }
-snapshot # find login refs
-fill # username + password
-click # log in
-sleep { time: 2 }
-screenshot { filename: "<page>-dark.png" }
+```bash
+sleep 2
+$PW -s=readme snapshot                       # find login refs
+$PW -s=readme fill <username-ref> "<user>"
+$PW -s=readme fill <password-ref> "<pass>"
+$PW -s=readme click <login-button-ref>
+sleep 2
+$PW -s=readme goto "<demo-url>/<page>"
+$PW -s=readme screenshot --filename ".playwright-mcp/<page>-dark.png"
 ```
 
 Repeat for each feature page you want in the tour (analytics, settings, list views, etc.). Aim for **1 hero page + 3 tour pages = 4 cells**.
 
 ### 2c. Toggle to light mode via direct DOM manipulation (faster than UI hunting)
 
-```
-eval {
- function: "() => { document.documentElement.classList.remove('dark');
- document.documentElement.classList.add('light');
- localStorage.setItem('theme', 'light');
- return 'ok'; }"
-}
-sleep { time: 2 }
-screenshot { filename: "<page>-light.png" }
+```bash
+$PW -s=readme eval '() => { document.documentElement.classList.remove("dark"); document.documentElement.classList.add("light"); localStorage.setItem("theme", "light"); return "ok"; }'
+sleep 2
+$PW -s=readme screenshot --filename ".playwright-mcp/<page>-light.png"
 ```
 
 Adjust the JS if the app uses `data-theme` or a different localStorage key (detected in Step 1).
 
 ### 2d. Move screenshots to `docs/screenshots/`
 
-Playwright saves to the working directory. Move them:
+Screenshots land in `.playwright-mcp/` (gitignored scratch). Promote the keepers:
 
 ```bash
 mkdir -p docs/screenshots
-mv *-dark.png *-light.png docs/screenshots/
+mv .playwright-mcp/*-dark.png .playwright-mcp/*-light.png docs/screenshots/
 ```
 
 ### 2e. Naming convention
@@ -271,6 +269,7 @@ Add to `.gitignore` (create if missing):
 ```
 # playwright-cli browser session artifacts
 .playwright-mcp/
+.playwright-cli/
 ```
 
 Commit with a conventional-commits message:

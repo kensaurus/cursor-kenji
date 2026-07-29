@@ -1,8 +1,8 @@
 ---
 name: deploy-verify
 description: >
-  Post-deploy smoke test combining all 5 MCPs (Sentry + Supabase + Langfuse CLI +
-  Playwright + Firecrawl) into one workflow. Auto-detects deployment context, checks
+  Post-deploy smoke test combining all 5 tools (Sentry + Supabase + Firecrawl MCPs,
+  plus the Langfuse and Playwright CLIs) into one workflow. Auto-detects deployment context, checks
   Sentry for new errors (with Seer AI root-cause on P0s), verifies Supabase migration
   health and logs, confirms Langfuse trace pipeline, runs Playwright smoke test on
   critical paths, and produces a ship-or-rollback verdict. Works with any project.
@@ -27,7 +27,7 @@ regressions before users do. Works with **any project** — auto-detects configu
 
 > **Evidence over opinion.** Every check produces a PASS/FAIL with specific data. Never say "looks fine."
 
-> **Always use the `browser-anti-stall` protocol** when using playwright-cli.
+> **Always use the `protocol-browser-anti-stall` protocol** when using playwright-cli.
 
 ---
 
@@ -327,9 +327,9 @@ PW="npx --yes @playwright/cli@latest"
 $PW -s=deploy-verify open --headed "<PRODUCTION_URL>"
 ```
 
-**Important**: Apply the `browser-anti-stall` protocol:
+**Important**: Apply the `protocol-browser-anti-stall` protocol:
 - Set 15-second timeout expectations
-- Skip `sleep` on navigation
+- Never block in one long sleep — use the incremental `sleep 2` → `snapshot` cycle (max 3)
 - Use `snapshot` to detect ready state
 
 ### 4b. Test Critical Paths

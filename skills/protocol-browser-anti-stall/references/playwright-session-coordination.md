@@ -152,4 +152,4 @@ $PW kill-all            # stale/zombie processes that `close` will not clear
 4. Zombie processes after a crash → `kill-all`, then reopen.
 
 **If auth is unexpectedly lost:** confirm you passed the same `--profile` path (a typo silently
-creates a fresh in-memory session), then re-run the Step 3 login once.
+creates a fresh in-memory session), then re-run the §4 interactive login (step 2) once.

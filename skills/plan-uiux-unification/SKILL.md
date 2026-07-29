@@ -199,6 +199,6 @@ unless the user explicitly approves execution in a follow-up.
 | MCP | Use |
 |-----|-----|
 | Firecrawl | Phase 6 research, anti-AI-slop patterns, WCAG/token governance |
-| Playwright browser | Optional Phase 3 visual evidence; shared session per `protocol-browser-anti-stall` |
+| Playwright browser | Optional Phase 3 visual evidence; own named session (`-s=…`) per `protocol-browser-anti-stall` |
 | Context7 | Component library / Tailwind docs when naming canonical primitives |
 | Sequential Thinking | Complex IA maps or multi-system collision analysis |

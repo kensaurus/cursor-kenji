@@ -86,7 +86,7 @@ Record:
 
 | Target | Driver |
 |--------|--------|
-| Web / PWA / Next.js / SvelteKit / Remix | playwright-cli (`playwright`) |
+| Web / PWA / Next.js / SvelteKit / Remix | playwright-cli (`npx --yes @playwright/cli@latest`) |
 | Capacitor WebView on Android emulator | Playwright `_android` WebView attach over ADB (see Phase 0c) |
 | Native chrome: system dialogs, bottom sheets, permission prompts | `adb shell input tap` walk (see `mobile-emulator-test` skill) |
 | Pure-native iOS/Android (Swift/Kotlin UI) | **Out of scope** — needs Appium; document as limitation |
@@ -103,7 +103,8 @@ const [device] = await _android.devices();
 // requires: ADB device online, Chrome ≥ 87, WebView debuggable flag
 const webview = await device.webView({ pkg: 'com.your.app.id' });
 const page = await webview.page();
-// page is a standard Playwright Page — all playwright-cli methods apply
+// page is a standard Playwright Page — use the Playwright API (page.click, page.fill),
+// not playwright-cli verbs; this attach path is the one place the CLI can't reach
 ```
 
 For native chrome outside the WebView, fall back to `adb shell input tap`
@@ -120,10 +121,19 @@ with coordinates from `adb shell uiautomator dump`.
 
 Read `protocol-browser-anti-stall/references/playwright-session-coordination.md`.
 
-1. `tab-list` list → claim auth tab or open `new` tab for your sweep.
-2. Reuse Google/OAuth/email session via storage state — sign in once, save to
-   `.playwright-mcp/auth/<host>.json` via `state-save` (or keep using the `--profile` dir).
-3. Work only in your tab; never close tabs another agent may be using.
+1. Open your **own** session — never share or claim another agent's:
+
+```bash
+PW="npx --yes @playwright/cli@latest"
+$PW -s=rt-<app> open --headed --persistent \
+    --profile "$HOME/.playwright-cli-profiles/<app>" "<app-url>"
+```
+
+2. Reuse the signed-in session — the `--profile` directory keeps you logged in across
+   turns. Lighter alternative: sign in once, then `state-save .playwright-mcp/auth/<host>.json`
+   and `state-load` it on later runs. Google accounts need the one-time real-Chrome login
+   described in the coordination reference.
+3. Never `close-all` / `kill-all`; close only `-s=rt-<app>` when the sweep ends.
 4. Do not log out between attack phases unless testing logout/session fixation.
 
 ---

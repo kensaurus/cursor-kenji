@@ -305,7 +305,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | Skill | What it does |
 |:------|:-------------|
 | `deploy-npm` | Release npm packages end-to-end: Changesets version bump, CHANGELOG update, GitHub Actions OIDC publish, and post-release verification |
-| `deploy-verify` | Post-deploy smoke test combining all 5 MCPs (Sentry + Supabase + Langfuse CLI + Playwright + Firecrawl) into one workflow |
+| `deploy-verify` | Post-deploy smoke test combining all 5 tools (Sentry + Supabase + Firecrawl MCPs, plus the Langfuse and Playwright CLIs) into one workflow |
 
 ### 🐛 Debug — find & fix what's broken (3)
 

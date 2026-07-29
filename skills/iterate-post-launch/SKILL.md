@@ -111,11 +111,12 @@ Navigate the app's 3–5 most-used flows as a real user. Look for:
 - Empty/error states that have no message
 - Console errors and network failures during normal use
 
-```
-goto → primary pages
-console → capture errors
-requests → capture 4xx/5xx
-screenshot → visual evidence per page
+```bash
+PW="npx --yes @playwright/cli@latest"
+$PW -s=post-launch open --headed "<app-url>"     # then `goto` each primary page
+$PW -s=post-launch console                        # capture errors
+$PW -s=post-launch requests                       # capture 4xx/5xx
+$PW -s=post-launch screenshot --filename ".playwright-mcp/post-launch-<page>.png"
 ```
 
 ### 1d. Research best practices for flagged areas
@@ -189,13 +190,13 @@ Work through the approved list one by one, following
 
 After each fix, drive the specific flow that was broken:
 
-```
-goto → affected page
-snapshot → confirm page renders correctly
-[reproduce the original scenario]
-console → green (no new errors)
-requests → 2xx where it was failing
-screenshot → evidence of fixed state
+```bash
+$PW -s=post-launch goto "<affected-page>"
+$PW -s=post-launch snapshot                       # confirm page renders correctly
+# … reproduce the original scenario as a real user …
+$PW -s=post-launch console                        # green (no new errors)
+$PW -s=post-launch requests                       # 2xx where it was failing
+$PW -s=post-launch screenshot --filename ".playwright-mcp/fixed-<flow>.png"
 ```
 
 For Supabase fixes, re-run the failing query with `execute_sql` and confirm
