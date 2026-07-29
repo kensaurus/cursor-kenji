@@ -3,8 +3,8 @@ name: audit-uiux-design-system
 description: >
   Audit visual UI coherency, design token compliance, and component modularity against a design
   system for any project. Auto-detects CSS framework (Tailwind v3/v4, CSS Modules, Styled
-  Components), component library (shadcn, Radix, MUI, Chakra), and icon library. Uses browser
-  MCP tools for live visual verification, Firecrawl for current design system best practices,
+  Components), component library (shadcn, Radix, MUI, Chakra), and icon library. Uses
+  playwright-cli for live visual verification, Firecrawl for current design system best practices,
   and Context7 for component library documentation. Use when reviewing design consistency,
   checking component modularity, auditing color/typography/spacing tokens, checking dark mode
   compliance, or when the user mentions design drift, UI inconsistency, design system compliance,

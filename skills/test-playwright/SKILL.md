@@ -162,17 +162,20 @@ For each user journey from the Phase 1 plan, live it step by step.
 
 Per step, follow this cycle (anti-stall applies throughout):
 
+```bash
+S="-s=qa-<feature>"                                  # your session, every call
+$PW $S goto "<url>"                                  # 1. if moving pages
+sleep 2 && $PW $S snapshot                           # 2. confirm the feature rendered
+$PW $S screenshot --filename ".playwright-mcp/<step>.png"   # 3. visual evidence
+$PW $S click <ref>                                   # 4. interact like a user —
+                                                     #    click / type / fill / select /
+                                                     #    hover / press / drag, one at a time
+$PW $S snapshot                                      # 5. FRESH refs after every interaction
+$PW $S console                                       # 6. any NEW error vs baseline?
+$PW $S requests                                      # 7. any 4xx/5xx, CORS, timeout, missing call?
 ```
-1. goto (if moving pages)
-2. wait 2s → snapshot → confirm the page/feature rendered
-3. screenshot → visual evidence
-4. Interact like a user: click / type / fill /
- select / hover / press / drag
-5. snapshot (FRESH refs) after every interaction
-6. console → any NEW error vs baseline?
-7. requests → any 4xx/5xx, CORS, timeout, or missing call?
+
 8. Judge it: does it WORK and does it feel GOOD? PASS or PAIN POINT.
-```
 
 What to hunt for on every changed surface:
 
@@ -188,7 +191,7 @@ What to hunt for on every changed surface:
 
 **Mutations must be verified end-to-end:** after create/update/delete, confirm (a)
 the network call returned 2xx, (b) the UI reflects it, (c) it survives a hard
-`goto` reload, and (d) — if Supabase MCP is available — the row actually
+`reload`, and (d) — if Supabase MCP is available — the row actually
 changed in the DB. Prefix any test data with `QA-TEST-` and clean it up at the end.
 
 ---

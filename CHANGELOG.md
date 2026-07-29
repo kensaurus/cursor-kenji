@@ -4,6 +4,29 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.14.1] — 2026-07-29
+
+Follow-up audit of every browser-touching file after the 1.14.0 migration. Two classes of leftover slipped through: the prose pass used single-line regexes, so any "Playwright MCP" that wrapped across a line break survived; and the token pass renamed `browser_*` verbs without being able to tell that a block of bare verb names was meant to be *runnable*. All 26 files that reference `playwright-cli` or the anti-stall protocol were re-read by hand.
+
+### Fixed
+
+- **`test-playwright`** — Phase 3, the skill's core per-step interaction loop, was still bare pseudo-code carrying the pre-migration "wait 2s" phrasing. Rewritten as a runnable `$PW $S …` sequence. A stale "hard `goto` reload" also became `reload`.
+- **`test-qa/references/details.md`** — the equivalent execution-cycle block, same fix.
+- **`audit-langfuse-llm`** — a leftover MCP-shaped ` ```json ` block (`goto` plus a `{ "url": … }` object) is now a real `open --headed` invocation.
+- **`audit-uiux-design-system`** — the skill **description** still advertised "browser MCP tools", line-split across the YAML fold. Description text feeds skill triggering, so this was stale metadata, not just prose.
+- **`commands/test.md`** — "drive a visible browser through the Playwright / MCP" spanned a line break; now names playwright-cli with the `-s=` and `--headed` form inline.
+- **`audit-ux/references/details.md`** — bare arrow-stub keyboard-navigation block converted to real commands.
+
+### Changed
+
+- **`enhance-web-ux`** — the three-viewport pass instructed "always with viewport set BEFORE navigate", written for the MCP. Verified against `@playwright/cli@0.1.17` that `resize` persists across `goto` (a 1024×700 viewport survived navigation intact), so the ordering is sound; the stub is now a runnable loop over the three widths with a comparison table for what each one exposes.
+
+### Notes
+
+Skills showing no `$PW` invocations are intentional, not gaps. Spokes such as `enhance-motion` and `enhance-web-forms` reference commands by name and defer to `protocol-browser-anti-stall` for the invocation form — only the hub carries the `PW=` boilerplate.
+
+---
+
 ## [1.14.0] — 2026-07-29
 
 Browser automation moves off the **Playwright MCP** and onto **`playwright-cli`**. The MCP serves one browser per server, and a persistent Chrome profile can only be locked by one process at a time — so several agents on the same repo either contend for the profile lock or fight over each other's tabs. The CLI gives every agent its own isolated browser through `-s=<session>`, runs natively in parallel shells, and costs far fewer tokens (no tool schemas or verbose accessibility trees loaded into context). Verified end-to-end against `@playwright/cli@0.1.17`.

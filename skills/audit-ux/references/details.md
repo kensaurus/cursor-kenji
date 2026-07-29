@@ -89,10 +89,11 @@ This step evaluates the *experience* of accessibility, not just technical compli
 
 **Verify via browser:**
 
-```
-snapshot → check tab order
-click → tab through interactive elements
-snapshot → verify focus indicator visible
+```bash
+PW="npx --yes @playwright/cli@latest"
+$PW -s=ux-audit snapshot            # check tab order
+$PW -s=ux-audit press Tab           # step through interactive elements
+$PW -s=ux-audit snapshot            # verify focus indicator visible
 ```
 
 ---

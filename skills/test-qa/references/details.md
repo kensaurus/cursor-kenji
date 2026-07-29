@@ -230,18 +230,19 @@ When generating test data for CRUD operations:
 
 For each test step, follow this cycle:
 
+```bash
+PW="npx --yes @playwright/cli@latest"; S="-s=qa-<app>"
+$PW $S goto "<url>"                                   # 1. if moving pages
+sleep 2 && $PW $S snapshot                            # 2. anti-stall: verify loaded + get refs
+$PW $S click <ref>                                    # 3. interact (click / fill / type / press)
+$PW $S snapshot                                       # 4. fresh refs after interaction
+$PW $S console                                        # 5. check for errors
+$PW $S requests                                       # 6. check for failures
+$PW $S screenshot --filename ".playwright-mcp/<step>.png"   # 7. evidence
 ```
-1. goto (if needed)
-2. Apply anti-stall: sleep 2 → snapshot → verify loaded
-3. snapshot to get current refs
-4. Interact (click, fill, type, press)
-5. snapshot after interaction (fresh refs)
-6. console (check for errors)
-7. requests (check for failures)
-8. screenshot --filename .playwright-mcp/<step>.png (evidence)
-9. Evaluate: PASS or FAIL with evidence
-10. close your session when the run is done
-```
+
+8. Evaluate: PASS or FAIL with evidence.
+9. `$PW $S close` when the run is done.
 
 **Timeout budget:**
 - Single interaction: 15 seconds max

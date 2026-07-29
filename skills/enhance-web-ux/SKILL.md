@@ -220,15 +220,26 @@ A common find: a primitive that documents "do NOT use bg-X with text-X" — resp
 
 ### 2a. Three-viewport screenshot pass
 
-Use playwright-cli. Always in this order, always with viewport set BEFORE navigate:
+Use playwright-cli. Always `resize` **before** navigating to the route you are judging, so
+the page lays out at the target width from first paint:
 
-```
-1440 × 900 — desktop, full data density
-1024 × 700 — tablet / split-screen — first place buttons & badges break
- 800 × 700 — narrow — first place column truncation & wrap appear
-```
+| Viewport | What it exposes |
+|---|---|
+| 1440 × 900 | desktop, full data density |
+| 1024 × 700 | tablet / split-screen — first place buttons & badges break |
+| 800 × 700 | narrow — first place column truncation & wrap appear |
 
-For each viewport: navigate → wait → snapshot → screenshot → console messages.
+```bash
+PW="npx --yes @playwright/cli@latest"; S="-s=ux-<route>"
+$PW $S open --headed "<app-url>"
+for wh in "1440 900" "1024 700" "800 700"; do
+  $PW $S resize $wh
+  $PW $S goto "<route>"                     # navigate AFTER resize
+  sleep 2 && $PW $S snapshot
+  $PW $S screenshot --filename ".playwright-mcp/ux-<route>-${wh// /x}.png"
+  $PW $S console
+done
+```
 
 ### 2b. Click into representative items
 
