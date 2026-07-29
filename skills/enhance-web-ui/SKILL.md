@@ -293,7 +293,7 @@ silently collapsing children to content width.
 For each repeated group, query rendered rects and assert uniformity:
 
 ```js
-// Browser MCP / Playwright / DevTools console — generic, framework-free
+// playwright-cli / Playwright / DevTools console — generic, framework-free
 const rects = [...document.querySelectorAll('<your-tile-selector>')]
  .map(el => el.getBoundingClientRect());
 const widths = rects.map(r => Math.round(r.width));

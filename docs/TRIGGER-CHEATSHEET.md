@@ -184,6 +184,7 @@ Attribution and update policy → [THIRD-PARTY-SKILLS.md](./THIRD-PARTY-SKILLS.m
 | Say this in chat | Skill |
 |:-----------------|:------|
 | "browser automation", "Playwright", "page navigation" (as pre-session setup) | `protocol-browser-anti-stall` |
+| "parallel browser agents", "playwright session", "browser keeps stalling", "stay logged in for browser tests" | `protocol-browser-anti-stall` |
 
 ---
 

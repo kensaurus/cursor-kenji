@@ -16,7 +16,7 @@ This command is a thin entry point. Pick the right skill for the target:
 
 > **All browser QA is manual and headed.** Drive a **visible** browser through the Playwright
 > MCP one real user action at a time — never `*.spec.ts`, `npx playwright test`, or driving the
-> UI through `browser_evaluate`/`browser_run_code_unsafe`. First read the
+> UI through `eval`/`run-code`. First read the
 > `protocol-browser-anti-stall` skill (Rule 0).
 
 Use `/test` to explicitly trigger testing. Otherwise, say "test this", "test my changes with playwright", "write tests", "QA the app", or "smoke-test on emulator" and the appropriate skill auto-fires.

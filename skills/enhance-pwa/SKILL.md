@@ -35,7 +35,7 @@ package.json    → workbox-*, vite-plugin-pwa, next-pwa, @vite-pwa/nuxt
 
 Also check the current Lighthouse PWA score via:
 ```javascript
-// browser_evaluate after browser_navigate
+// eval after goto
 const pwaReady = {
   manifest: !!document.querySelector('link[rel="manifest"]'),
   sw: 'serviceWorker' in navigator,
@@ -255,7 +255,7 @@ For the backend, use `web-push` (Node.js) or your platform's push service.
 ## Phase 7: Verify with Lighthouse (Playwright)
 
 ```javascript
-// Run Lighthouse via browser_evaluate
+// Run Lighthouse via eval
 // (Playwright does not run Lighthouse natively — use Chrome DevTools Protocol)
 const { lhr } = await page.evaluate(() => {
   return new Promise((resolve) => {

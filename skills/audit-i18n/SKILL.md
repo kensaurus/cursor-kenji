@@ -208,7 +208,7 @@ For each active locale:
 ```javascript
 // Set locale via URL or cookie depending on the app
 await page.goto('http://localhost:3000/ja'); // or set cookie
-await browser_snapshot(); // capture the state
+await snapshot(); // capture the state
 ```
 
 Look for:

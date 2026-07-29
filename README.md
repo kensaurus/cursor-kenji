@@ -156,7 +156,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 
 | Skill | What it does |
 |:------|:-------------|
-| `audit-accessibility` | Automated WCAG 2.2 accessibility audit using Playwright browser MCP to crawl every page, inject axe-core via browser_evaluate, test… |
+| `audit-accessibility` | Automated WCAG 2.2 accessibility audit using playwright-cli to crawl every page, inject axe-core via eval, test keyboard navigation, check… |
 | `audit-backend-architecture` | Read-only audit AND decision advisor for backend/distributed-systems architecture, topology-gated so a Next.js/Supabase monolith and a… |
 | `audit-bundle-size` | Analyse and shrink JavaScript bundle size for any web app |
 | `audit-cicd` | Audit CI/CD pipelines (GitHub Actions) for cost, speed, and safety |
@@ -305,7 +305,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | Skill | What it does |
 |:------|:-------------|
 | `deploy-npm` | Release npm packages end-to-end: Changesets version bump, CHANGELOG update, GitHub Actions OIDC publish, and post-release verification |
-| `deploy-verify` | Post-deploy smoke test combining all 5 MCPs (Sentry + Supabase + Langfuse CLI + Playwright + Firecrawl) into one workflow |
+| `deploy-verify` | Post-deploy smoke test combining all 5 tools (Sentry + Supabase + Firecrawl MCPs, plus the Langfuse and Playwright CLIs) into one workflow |
 
 ### 🐛 Debug — find & fix what's broken (3)
 
@@ -326,7 +326,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 
 | Skill | What it does |
 |:------|:-------------|
-| `protocol-browser-anti-stall` | Prevent browser automation from freezing, getting stuck, or waiting excessively during page navigation and interaction, and enforce manual,… |
+| `protocol-browser-anti-stall` | Prevent browser automation from freezing, stalling, or colliding between parallel agents, and enforce manual, headed, real-user driving… |
 
 ### ✍️ Authoring — build skills & MCP (2)
 

@@ -58,7 +58,7 @@ Log violations per surface:
 | Conflicting/deprecated | competing systems, deprecated components/APIs/deps |
 | Tech debt | dead code, `!important`, inline escapes, copy-paste drift, TODO/HACK |
 
-Optional live pass: read `protocol-browser-anti-stall` + `playwright-session-coordination` before browser MCP.
+Optional live pass: read `protocol-browser-anti-stall` + `playwright-session-coordination` before playwright-cli.
 
 ## Phase 4 — Burndown
 

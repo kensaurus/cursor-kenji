@@ -19,7 +19,7 @@ license: MIT
 Visual design system coherency audit: tokens, components, visual consistency, dark mode,
 animations, and WCAG visual compliance.
 
-**Before ANY browser interaction, read the `browser-anti-stall` skill and apply its rules
+**Before ANY browser interaction, read the `protocol-browser-anti-stall` skill and apply its rules
 to every step.** That skill is `protocol-browser-anti-stall`.
 
 ## CRITICAL: Anti-Template, Anti-AI-Generated Design
@@ -277,16 +277,17 @@ Multiple icon libraries = inconsistency. Flag it.
 
 ---
 
-## Step 4: Live Visual Verification (Browser MCP)
+## Step 4: Live Visual Verification (playwright-cli)
 
 ### 4a. Navigate and Capture
 
-```
-browser_navigate → http://localhost:<PORT>/<ROUTE>
-browser_wait_for → { time: 2 }
-browser_snapshot → verify content rendered
-browser_take_screenshot → visual evidence
-browser_console_messages → check for errors
+```bash
+PW="npx --yes @playwright/cli@latest"
+$PW -s=ds-audit open --headed "http://localhost:<PORT>/<ROUTE>"
+sleep 2
+$PW -s=ds-audit snapshot                                              # verify content rendered
+$PW -s=ds-audit screenshot --filename ".playwright-mcp/ds-<route>.png"  # visual evidence
+$PW -s=ds-audit console                                               # check for errors
 ```
 
 ### 4b. Per-Page Checks
@@ -295,7 +296,7 @@ browser_console_messages → check for errors
 |-------|-----|
 | Token compliance | Screenshot — inconsistent colors, spacing |
 | Component reuse | Snapshot — shared primitives used? |
-| Console errors | `browser_console_messages` — hydration, missing CSS vars |
+| Console errors | `console` — hydration, missing CSS vars |
 | Layout shift | Snapshot before/after interaction |
 | Dark mode | Toggle dark mode, re-screenshot, compare |
 

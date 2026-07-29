@@ -2,7 +2,7 @@
 name: test-red-team
 description: >-
   Adversarial red-team of a running web, React Native, or Capacitor hybrid app.
-  Drives a visible (headed) browser by hand — Playwright browser MCP (web/PWA),
+  Drives a visible (headed) browser by hand — playwright-cli (web/PWA),
   Android WebView attach (Capacitor), or adb tap-walk (native) — never scripted
   test files. Attacks every feature across 4 dimensions: UI/UX, data pipeline,
   security (OWASP-mapped), and performance. Cross-references Sentry telemetry,
@@ -31,11 +31,11 @@ finds the gaps before real users do.
 **Before ANY browser action, read `protocol-browser-anti-stall`
 and apply every rule —
 especially Rule 0 (manual & headed, never scripted).** Also read
-`references/playwright-session-coordination.md` — shared browser, tab discipline,
+`references/playwright-session-coordination.md` — named sessions, persistent auth profiles,
 persisted auth.
 
 > **Attack through the visible UI, by hand.** Drive a headed browser one real action at
-> a time. Code execution (`browser_evaluate` / CDP / WebView attach) is allowed ONLY to
+> a time. Code execution (`eval` / CDP / WebView attach) is allowed ONLY to
 > *set a condition* (throttle network, kill a request, emulate a device) or *inspect*
 > state — never to perform the click/type/submit you're attacking. The defect must be
 > reachable the way a real attacker or user reaches it.
@@ -86,7 +86,7 @@ Record:
 
 | Target | Driver |
 |--------|--------|
-| Web / PWA / Next.js / SvelteKit / Remix | Playwright browser MCP (`playwright`) |
+| Web / PWA / Next.js / SvelteKit / Remix | playwright-cli (`npx --yes @playwright/cli@latest`) |
 | Capacitor WebView on Android emulator | Playwright `_android` WebView attach over ADB (see Phase 0c) |
 | Native chrome: system dialogs, bottom sheets, permission prompts | `adb shell input tap` walk (see `mobile-emulator-test` skill) |
 | Pure-native iOS/Android (Swift/Kotlin UI) | **Out of scope** — needs Appium; document as limitation |
@@ -103,7 +103,8 @@ const [device] = await _android.devices();
 // requires: ADB device online, Chrome ≥ 87, WebView debuggable flag
 const webview = await device.webView({ pkg: 'com.your.app.id' });
 const page = await webview.page();
-// page is a standard Playwright Page — all browser MCP methods apply
+// page is a standard Playwright Page — use the Playwright API (page.click, page.fill),
+// not playwright-cli verbs; this attach path is the one place the CLI can't reach
 ```
 
 For native chrome outside the WebView, fall back to `adb shell input tap`
@@ -120,10 +121,19 @@ with coordinates from `adb shell uiautomator dump`.
 
 Read `protocol-browser-anti-stall/references/playwright-session-coordination.md`.
 
-1. `browser_tabs` list → claim auth tab or open `new` tab for your sweep.
-2. Reuse Google/OAuth/email session via storage state — sign in once, save to
-   `.playwright-mcp/auth/<host>.json`, update `session.json`.
-3. Work only in your tab; never close tabs another agent may be using.
+1. Open your **own** session — never share or claim another agent's:
+
+```bash
+PW="npx --yes @playwright/cli@latest"
+$PW -s=rt-<app> open --headed --persistent \
+    --profile "$HOME/.playwright-cli-profiles/<app>" "<app-url>"
+```
+
+2. Reuse the signed-in session — the `--profile` directory keeps you logged in across
+   turns. Lighter alternative: sign in once, then `state-save .playwright-mcp/auth/<host>.json`
+   and `state-load` it on later runs. Google accounts need the one-time real-Chrome login
+   described in the coordination reference.
+3. Never `close-all` / `kill-all`; close only `-s=rt-<app>` when the sweep ends.
 4. Do not log out between attack phases unless testing logout/session fixation.
 
 ---
@@ -192,9 +202,9 @@ Fill each cell with ✅ PASS / ❌ DEFECT(#N) / — N-A as you work through Phas
 
 For each cell, navigate to the surface, reach the component state, and attack.
 
-**Driver**: Playwright browser MCP tools — `browser_navigate`, `browser_snapshot`,
-`browser_take_screenshot`, `browser_click`, `browser_type`, `browser_fill_form`,
-`browser_console_messages`, `browser_network_requests`, `browser_resize`.
+**Driver**: playwright-cli — `goto`, `snapshot`,
+`screenshot`, `click`, `type`, `fill`,
+`console`, `requests`, `resize`.
 
 Per cell checklist:
 
@@ -203,16 +213,16 @@ Per cell checklist:
 | 3-second clarity | Navigate cold. Can a new user understand the purpose in 3 s? |
 | Primary action | Is the CTA obvious, above the fold, reachable in 1 tap/click? |
 | Empty state | Remove all data (or use a fresh account). Is there a helpful empty-state message? |
-| Loading state | Throttle network (`browser_evaluate` to `navigator.serviceWorker` or DevTools API). Does a skeleton/spinner appear? |
+| Loading state | Throttle network (`eval` to `navigator.serviceWorker` or DevTools API). Does a skeleton/spinner appear? |
 | Error state | Trigger a backend error (kill the API, bad payload). Is the error message human-readable? |
 | Dead buttons | Click every button and link. Does each one produce a visible response? |
 | Form labels | Every `<input>` has a visible label or `aria-label`. |
-| Responsive | `browser_resize` to 1280×800, 768×1024, 375×812. Layout must not break. |
+| Responsive | `resize` to 1280×800, 768×1024, 375×812. Layout must not break. |
 | Dark mode | Toggle if supported. No white flash, no invisible text. |
 | Role variant | Test the same surface as each role. Different roles must see different data/controls. |
 | Overflow | Long strings (200 chars), numbers with many digits. No clipping without ellipsis. |
 
-Capture a `browser_take_screenshot` as evidence for every DEFECT. Note the
+Capture a `screenshot` as evidence for every DEFECT. Note the
 component file path if identifiable from the DOM or source tree.
 
 ---
@@ -260,7 +270,7 @@ supabase:execute_sql
 | Stale cache | Mutate in one tab / session, reload the other. Does it refresh? |
 | Ghost delete | Delete an item, reload the page. Does it reappear? |
 | Race condition | Submit two conflicting mutations in quick succession. Which wins? Any partial writes? |
-| Partial write | Kill the network mid-request (`browser_evaluate` `fetch` override). Is the record consistent? |
+| Partial write | Kill the network mid-request (`eval` `fetch` override). Is the record consistent? |
 | Idempotency | Retry the same request (Replay in DevTools or Playwright network intercept). Is it safe? |
 | Relationship integrity | Delete a parent record. Are orphaned children cleaned up or guarded? |
 | Pagination consistency | Create a record while on page 2. Does it appear in the right position? |
@@ -337,7 +347,7 @@ On Capacitor/Android, use `adb shell tc qdisc add dev wlan0 root netem delay 300
 | Cold load (hard refresh) | Time-to-interactive > 3 s on simulated 3G? Visible content flash / layout shift? |
 | Large list (50+ items) | Scroll jank? Does it virtualize or render all DOM nodes? |
 | Pagination / infinite scroll | Duplicate items on page boundary? Missing items? |
-| Payload size | `browser_network_requests` → any response > 500 KB for a list endpoint? |
+| Payload size | `requests` → any response > 500 KB for a list endpoint? |
 | Memory growth | Load a large list, scroll to bottom, back to top × 5. JS heap grows without bound? |
 | Simultaneous requests | Rapid navigation between pages. Race conditions in loading states? |
 | Supabase N+1 | Check `get_logs(service: 'postgres')` after exercising a feature. Repeated identical queries = N+1. |

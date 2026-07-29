@@ -137,15 +137,36 @@ pip install uvx  # or use pipx
 
 ---
 
-### Playwright MCP Server
+### Playwright — use the CLI, not the MCP
 
-Zero config — just add and go:
+> **The skills in this repo drive browsers with `playwright-cli`, not the Playwright MCP.**
+> The MCP serves one browser per server and a persistent profile can only be locked by one
+> process at a time, so parallel agents collide over tabs and profile locks. The CLI gives every
+> agent an isolated browser via `-s=<session>` and costs far fewer tokens (no tool schemas or
+> accessibility trees loaded into context).
+
+No MCP entry required. Install nothing globally — the skills invoke it through `npx`:
+
+```bash
+PW="npx --yes @playwright/cli@latest"
+$PW -s=agent1 open --headed http://localhost:3000
+$PW -s=agent2 open --headed https://example.com   # separate browser, zero conflict
+$PW list                                          # see every session
+$PW close-all                                     # tear down
+```
+
+See `skills/protocol-browser-anti-stall/` for the full protocol, the
+[MCP→CLI command map](../skills/protocol-browser-anti-stall/references/mcp-to-cli-map.md), and
+persistent-login setup (including the Google sign-in workaround).
+
+**Optional fallback** — if you specifically need the MCP, run it isolated so parallel servers
+don't fight over one profile (you lose saved logins):
 
 ```json
 {
   "playwright": {
     "command": "npx",
-    "args": ["-y", "@playwright/mcp@0.0.76"]
+    "args": ["-y", "@playwright/mcp@0.0.76", "--isolated"]
   }
 }
 ```

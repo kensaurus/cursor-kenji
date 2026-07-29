@@ -17,6 +17,7 @@ mcp.json
 
 # Playwright / browser MCP scratch (logs, screenshots, page snapshots)
 .playwright-mcp/
+.playwright-cli/
 .qa-screenshots/
 
 # Backups

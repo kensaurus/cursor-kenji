@@ -1,8 +1,8 @@
 ---
 name: deploy-verify
 description: >
-  Post-deploy smoke test combining all 5 MCPs (Sentry + Supabase + Langfuse CLI +
-  Playwright + Firecrawl) into one workflow. Auto-detects deployment context, checks
+  Post-deploy smoke test combining all 5 tools (Sentry + Supabase + Firecrawl MCPs,
+  plus the Langfuse and Playwright CLIs) into one workflow. Auto-detects deployment context, checks
   Sentry for new errors (with Seer AI root-cause on P0s), verifies Supabase migration
   health and logs, confirms Langfuse trace pipeline, runs Playwright smoke test on
   critical paths, and produces a ship-or-rollback verdict. Works with any project.
@@ -27,7 +27,7 @@ regressions before users do. Works with **any project** — auto-detects configu
 
 > **Evidence over opinion.** Every check produces a PASS/FAIL with specific data. Never say "looks fine."
 
-> **Always use the `browser-anti-stall` protocol** when using Playwright browser MCP tools.
+> **Always use the `protocol-browser-anti-stall` protocol** when using playwright-cli.
 
 ---
 
@@ -322,17 +322,15 @@ Confirm that active prompt versions match what the deploy should be using (check
 
 ### 4a. Navigate to Production
 
-```json
-playwright:browser_navigate
-{
- "url": "<PRODUCTION_URL>"
-}
+```bash
+PW="npx --yes @playwright/cli@latest"
+$PW -s=deploy-verify open --headed "<PRODUCTION_URL>"
 ```
 
-**Important**: Apply the `browser-anti-stall` protocol:
+**Important**: Apply the `protocol-browser-anti-stall` protocol:
 - Set 15-second timeout expectations
-- Skip `browser_wait_for` on navigation
-- Use `browser_snapshot` to detect ready state
+- Never block in one long sleep — use the incremental `sleep 2` → `snapshot` cycle (max 3)
+- Use `snapshot` to detect ready state
 
 ### 4b. Test Critical Paths
 
@@ -342,16 +340,14 @@ For each critical path identified in Phase 0f:
 2. **Snapshot** to verify it loaded (not a blank page or error screen)
 3. **Check console** for errors:
 
-```json
-playwright:browser_console_messages
-{}
+```bash
+$PW -s=deploy-verify console
 ```
 
 4. **Check network** for failed requests:
 
-```json
-playwright:browser_network_requests
-{}
+```bash
+$PW -s=deploy-verify requests
 ```
 
 ### 4c. Test Authentication (if applicable)
@@ -371,9 +367,8 @@ Navigate to the primary feature and perform one basic interaction:
 
 ### 4e. Take Evidence Screenshot
 
-```json
-playwright:browser_take_screenshot
-{}
+```bash
+$PW -s=deploy-verify screenshot --filename ".playwright-mcp/deploy-verify-home.png"
 ```
 
 **Decision criteria:**

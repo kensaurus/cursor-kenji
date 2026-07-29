@@ -267,7 +267,7 @@ specific tweaks not chrome visibility.
 ### 3b. Runtime axes probe (in the browser console, in each shell)
 
 ```js
-// Generic, framework-free; works in DevTools console / browser MCP / native WebView
+// Generic, framework-free; works in DevTools console / playwright-cli / native WebView
 const html = document.documentElement;
 console.table({
  formFactor: html.dataset.formFactor || '(not set)',

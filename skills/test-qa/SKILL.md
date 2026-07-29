@@ -4,7 +4,7 @@ description: >
   Generic webapp QA fallback — use only when no project-specific QA skill applies
   (project-local QA skills take precedence; use mobile-emulator-test for native
   builds). For unit tests use test-unit.
-  Drives a visible (headed) browser manually through the Playwright MCP like a real
+  Drives a visible (headed) browser manually through playwright-cli like a real
   user — clicking and typing one action at a time, never via scripts or test runners.
   Auto-discovers pages, entities, and auth from the codebase, generates user stories,
   performs real CRUD with data-pipeline verification (FE -> API -> DB -> FE), audits
@@ -17,7 +17,7 @@ license: MIT
 
 # QA Testing Skill
 
-Perform full QA testing of any webapp through browser MCP tools, adopting the
+Perform full QA testing of any webapp through playwright-cli, adopting the
 mindset of a senior QA engineer preparing an app for production release. This is NOT a
 simple page-navigation monkey test — it is controlled, intelligent, user-story-driven
 testing that covers CRUD operations, data pipeline integrity, UX quality, and edge cases.
@@ -25,14 +25,14 @@ testing that covers CRUD operations, data pipeline integrity, UX quality, and ed
 **Before ANY browser interaction, read the `protocol-browser-anti-stall` skill and apply its
 rules to every step — especially Rule 0 (manual & headed, never scripted).** That skill lives
 at `~/.cursor/skills/protocol-browser-anti-stall/SKILL.md`. Also read
-`references/playwright-session-coordination.md` in that folder — shared browser, tab claiming,
+`references/playwright-session-coordination.md` in that folder — named sessions, auth profiles,
 persisted login.
 
 ## Critical Rules
 
 > **Manual & headed, never scripted.**
-> Drive a visible browser one real action at a time with the individual `browser_*` tools.
-> `browser_evaluate` / `browser_run_code_unsafe` are inspection-only — never use them to click,
+> Drive a visible browser one real action at a time with individual `playwright-cli` commands.
+> `eval` / `run-code` are inspection-only — never use them to click,
 > type, or navigate. Do not write `*.spec.ts` or run `npx playwright test`; experience the app,
 > don't automate past it.
 
@@ -160,20 +160,19 @@ Check the terminals folder for active dev server processes:
 - Read terminal files to find running `npm run dev`, `pnpm dev`, `next dev`, etc.
 - If no dev server found, inform the user and stop.
 
-### 1b. Load the app (shared browser — claim a tab first)
+### 1b. Load the app (own your session)
 
-1. `browser_tabs` → `list`; read `.playwright-mcp/session.json` if present.
-2. `select` the auth tab from `session.json`, or `new` with the dev URL — do not hijack
-   another agent's tab.
-3. In **your tab only**:
+1. Pick a session name for this run (`-s=qa-<app>`); never reuse another agent's name.
+2. Open your own isolated browser — add `--persistent --profile` if the app needs a login:
 
-```
-browser_navigate → root URL (e.g., http://localhost:3000)
-browser_wait_for → 2s
-browser_snapshot → verify content rendered
-browser_take_screenshot → baseline screenshot
-browser_console_messages → capture any startup errors
-browser_network_requests → capture initial API calls
+```bash
+PW="npx --yes @playwright/cli@latest"
+$PW -s=qa-<app> open --headed http://localhost:3000
+sleep 2
+$PW -s=qa-<app> snapshot        # verify content rendered
+$PW -s=qa-<app> screenshot --filename .playwright-mcp/qa-baseline.png
+$PW -s=qa-<app> console         # capture any startup errors
+$PW -s=qa-<app> requests        # capture initial API calls
 ```
 
 If the page is blank after 3 incremental wait cycles (6s total), report a blocker.
@@ -183,11 +182,14 @@ If the page is blank after 3 incremental wait cycles (6s total), report a blocke
 Follow `protocol-browser-anti-stall/references/playwright-session-coordination.md`.
 
 1. Navigate to a **protected route** — if already signed in, skip to 1d.
-2. Restore `.playwright-mcp/auth/<host>.json` via `browser_run_code_unsafe` if it exists.
+2. `state-load .playwright-mcp/auth/<host>.json` if that file exists (or reuse the
+   `--persistent --profile` directory, which keeps you signed in automatically).
 3. If still logged out:
    - Email/password: use test credentials from `.env.test` / README (never paste secrets in chat).
-   - **Google / OAuth / SSO**: complete sign-in in the browser (user may need to approve);
-     wait with incremental snapshots; then **save storage state** + `session.json`.
+   - **OAuth / SSO**: complete sign-in in the visible window; wait with incremental
+     snapshots; then `state-save .playwright-mcp/auth/<host>.json`.
+   - **Google accounts** cannot be signed into from a Playwright-launched browser — use the
+     one-time real-Chrome profile login in the coordination reference.
 4. Verify auth (avatar, dashboard, protected pages load).
 5. **Do not log out** at cleanup unless explicitly testing the logout flow.
 
@@ -214,11 +216,11 @@ For EVERY route discovered in Phase 0b, do the following:
 
 ### 2a. Navigate and Capture
 
-1. `browser_navigate` to the page
+1. `goto` to the page
 2. Apply anti-stall protocol (2s wait → snapshot → verify)
-3. `browser_take_screenshot` for visual evidence
-4. `browser_console_messages` — record errors and warnings
-5. `browser_network_requests` — record API calls, failures, timing
+3. `screenshot` for visual evidence
+4. `console` — record errors and warnings
+5. `requests` — record API calls, failures, timing
 
 ### 2b. Classify the Page
 
@@ -365,46 +367,46 @@ For each CRUD-capable entity, execute the lifecycle test.
 ### 4a. Create
 
 1. Navigate to the creation page/form
-2. Identify all form fields via `browser_snapshot`
+2. Identify all form fields via `snapshot`
 3. Fill each field with realistic test data:
  - Text fields: `QA-TEST-[field]-[timestamp]`
  - Numbers: reasonable values for the domain
  - Dates: today or near-future
  - Selects: pick a valid option
  - Toggles: set to non-default
-4. `browser_take_screenshot` before submitting (evidence of input)
+4. `screenshot` before submitting (evidence of input)
 5. Submit the form
-6. `browser_network_requests` — verify the API call succeeded (2xx response)
-7. `browser_snapshot` — verify success feedback (toast, redirect, confirmation)
-8. `browser_take_screenshot` — evidence of success state
+6. `requests` — verify the API call succeeded (2xx response)
+7. `snapshot` — verify success feedback (toast, redirect, confirmation)
+8. `screenshot` — evidence of success state
 
 **Record the created item's identifying info** (ID, name, URL) for subsequent steps.
 
 ### 4b. Read
 
 1. Navigate to the list view containing the entity
-2. `browser_snapshot` — find the created item in the list
+2. `snapshot` — find the created item in the list
 3. Verify all displayed fields match what was entered
 4. Click into the detail view (if available)
 5. Verify detail fields match
-6. `browser_take_screenshot` — evidence
+6. `screenshot` — evidence
 
 ### 4c. Update
 
 1. Navigate to the edit form for the created item
 2. Change 1-2 fields to new values
-3. `browser_take_screenshot` — evidence of changes before save
+3. `screenshot` — evidence of changes before save
 4. Save the changes
-5. `browser_network_requests` — verify the update API call succeeded
+5. `requests` — verify the update API call succeeded
 6. Verify the UI reflects the updated values
-7. Hard-refresh the page (`browser_navigate` to same URL) and verify changes persisted
+7. Hard-refresh the page (`goto` to same URL) and verify changes persisted
 
 ### 4d. Delete
 
 1. Find the delete action for the item
-2. `browser_take_screenshot` — evidence before deletion
+2. `screenshot` — evidence before deletion
 3. Trigger deletion (click delete button, confirm dialog if present)
-4. `browser_network_requests` — verify the delete API call succeeded
+4. `requests` — verify the delete API call succeeded
 5. Verify the item is gone from the list view
 6. If the item had a detail URL, navigate to it and verify 404 or redirect
 
@@ -422,10 +424,10 @@ For each form, also test:
 
 After each mutation (create/update/delete):
 
-1. **Network check**: `browser_network_requests` — was the API call made? What status code?
+1. **Network check**: `requests` — was the API call made? What status code?
 2. **Response check**: Did the response body contain the expected data?
 3. **UI check**: Does the UI reflect the mutation without manual refresh?
-4. **Refresh check**: After `browser_navigate` to the same page, is the mutation still visible?
+4. **Refresh check**: After `goto` to the same page, is the mutation still visible?
 5. **DB check** (if Supabase MCP or DB access available):
 
 ```json

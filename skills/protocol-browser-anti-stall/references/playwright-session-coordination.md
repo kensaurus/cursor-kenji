@@ -1,138 +1,155 @@
-# Playwright session coordination (shared browser, persisted auth)
+# playwright-cli sessions, parallel agents & persisted logins
 
-The Playwright MCP (`playwright`) exposes **one browser process** per Cursor
-instance. Every agent, chat, and skill shares it. Follow this protocol so parallel
-work does not hijack tabs, lose Google/OAuth sign-in, or fight over navigation.
+How to run many agents against browsers at once without collisions, and how to stay signed in
+across turns — including the Google sign-in wall that blocks every Playwright-launched browser.
 
-All artifacts live under `.playwright-mcp/` (gitignored).
+```bash
+PW="npx --yes @playwright/cli@latest"
+```
 
 ---
 
-## File layout
+## 1. One session per agent
 
-```
-.playwright-mcp/
-├── session.json              # Which tab holds auth; last writer wins metadata only
-└── auth/
-    └── localhost-3000.json   # Playwright storageState (cookies + localStorage)
+`-s=<name>` is the whole parallelism story. Each name gets its own browser process and its own
+storage, so two agents never share tabs, cookies, or a profile lock.
+
+```bash
+# agent A                                     # agent B — simultaneously, zero conflict
+$PW -s=audit-ux-home open --headed …          $PW -s=qa-checkout open --headed …
 ```
 
-`<host>.json` naming: hostname + port, e.g. `localhost-3000.json`, `app-example-com.json`.
+**Naming:** use the task or branch (`qa-checkout`, `audit-ux-home`, `feat-login-fix`). Never a
+generic name like `test` or `default` — that is how two agents collide.
+
+**Rules**
+
+- Never issue commands against a session name you did not open.
+- Never `close-all` / `kill-all` while another agent may be working — close only your own session.
+- `$PW list` shows every session with status, `user-data-dir`, and headed flag. Check it before
+  assuming a session exists.
+- `$PW show` opens a dashboard to watch/control live sessions — useful when agents run in the
+  background.
+
+**Defaults worth knowing** (verified on `@playwright/cli@0.1.17`):
+
+| Default | Value | Implication |
+|---|---|---|
+| `user-data-dir` | `<in-memory>` | Nothing persists unless you pass `--persistent --profile` |
+| headed | `false` | Pass `--headed` — this repo's protocol requires a visible browser |
+| browser | detected Chrome | Override with `--browser chrome\|firefox\|webkit\|msedge` |
 
 ---
 
-## Multi-agent / multi-tab etiquette
+## 2. Persistent profiles = persisted logins
 
-**Before the first browser action in your turn:**
+Sessions are ephemeral by default. To stay signed in across turns and restarts, give the session a
+profile directory on disk:
 
-1. `browser_tabs` → `action: "list"` — see every open tab and its URL.
-2. Read `.playwright-mcp/session.json` if it exists (see schema below).
-3. **Claim a tab** — do not blindly `browser_navigate` on tab 0.
-
-| Situation | Action |
-|-----------|--------|
-| `session.json` points to an auth tab still on the app origin | `browser_tabs` → `select` that index → verify logged-in via snapshot |
-| No auth tab, but a tab is already on the app and logged in | `select` it → update `session.json` → reuse |
-| Need a isolated surface (different route, no nav conflict) | `browser_tabs` → `new` with target URL → work only in that tab |
-| Another tab is mid-flow on unrelated work | **Do not** navigate or close it — pick a different tab |
-
-**During your turn:**
-
-- Interact only in **your selected tab** unless explicitly switching with `select`.
-- Take a fresh `browser_snapshot` after every state change (refs go stale).
-- Never `browser_close` tabs you did not create **unless** the user asked to reset the browser.
-- Never `browser_close` with no index if other agents may still be testing.
-
-**End of turn:**
-
-- If you established or refreshed auth, **save storage state** (below) and update `session.json`.
-- Leave the auth tab open for the next agent — do **not** log out unless the test is explicitly the logout flow.
-
-### `session.json` schema
-
-```json
-{
-  "authTabIndex": 0,
-  "appOrigin": "http://localhost:3000",
-  "storageStatePath": ".playwright-mcp/auth/localhost-3000.json",
-  "updatedAt": "2026-06-12T00:00:00.000Z",
-  "hint": "test-playwright — dashboard flow"
-}
+```bash
+$PW -s=work open --headed --browser chrome \
+    --persistent --profile "$HOME/.playwright-cli-profiles/<account>" \
+    https://app.example.com
 ```
 
-`authTabIndex` is advisory — always confirm with `browser_tabs` list before selecting.
+Everything a real browser stores (cookies, localStorage, device trust) survives `close` and
+reopening with the same `--profile`.
+
+**Convention:** one directory per account/environment under
+`~/.playwright-cli-profiles/<account-or-env>`. Keep profiles **outside the repo** so every project
+reuses one login, and so session cookies never land near version control.
+
+**Never point `--profile` at your everyday Chrome profile**
+(`%LOCALAPPDATA%\Google\Chrome\User Data`) — it causes lock conflicts, crashes, and policy errors.
+Always use a dedicated automation directory.
+
+### Storage-state files (lighter alternative)
+
+For simple cookie/localStorage auth, skip profiles and use state files:
+
+```bash
+$PW -s=qa state-save .playwright-mcp/auth/localhost-3000.json   # after logging in
+$PW -s=qa state-load .playwright-mcp/auth/localhost-3000.json   # next run
+```
+
+Good for local/staging app logins. Weaker than a profile against modern anti-bot checks, and it
+does not carry device-trust signals. Treat these files as secrets — `.playwright-mcp/` is gitignored.
 
 ---
 
-## Auth persistence (Google OAuth, magic link, email/password)
+## 3. Google sign-in: the one case that needs real Chrome
 
-Goal: **sign in once, by hand**, reuse across skills (`test-playwright`, `test-qa`,
-`test-red-team`) and across agent turns.
+**You cannot log into a Google account from a Playwright-launched browser.** Google detects that
+the browser is driven over the Chrome DevTools Protocol and returns:
 
-> **Default = persistent profile.** The Playwright MCP stores all logged-in state in a
-> persistent profile on disk, so a one-time **manual** login survives turns and restarts.
-> Just do Step 1, then log in like a user if needed — you almost never touch storage
-> state. Steps 2–3 (the `browser_run_code_unsafe` storage-state scripts) are a fallback
-> ONLY when the server runs `--isolated` (profile kept in memory, not saved).
+> This browser or app may not be secure.
 
-### Step 1 — Check existing session
+There is no user-agent, header, stealth plugin, or flag that gets past it. Do not waste attempts.
 
-1. Select auth tab (or `new` → navigate to app origin).
-2. Navigate to a **protected route** (e.g. `/dashboard`, not `/login`).
-3. Snapshot:
-   - **Logged in** (dashboard, avatar, app shell) → skip login; optionally refresh storage state file.
-   - **Redirect to login** → continue to Step 2.
+### The working sequence (one time per account)
 
-### Step 2 — Restore saved storage state (`--isolated` mode only)
+**Step 1 — log in with real Chrome, no automation, no CDP flags:**
 
-Skip this with the default persistent profile — go straight to Step 3 and log in by hand.
-Only when running `--isolated`: if `.playwright-mcp/auth/<host>.json` exists, inject it
-before navigating (this is the one sanctioned non-driving use of `browser_run_code_unsafe`):
-
-```json
-playwright:browser_run_code_unsafe
-{
-  "code": "async (page) => {\n  const fs = require('fs');\n  const path = require('path');\n  const statePath = path.resolve('.playwright-mcp/auth/localhost-3000.json');\n  if (!fs.existsSync(statePath)) return { restored: false };\n  const state = JSON.parse(fs.readFileSync(statePath, 'utf8'));\n  if (state.cookies?.length) await page.context().addCookies(state.cookies);\n  if (state.origins?.length) {\n    for (const o of state.origins) {\n      await page.goto(o.origin);\n      for (const item of o.localStorage || []) {\n        await page.evaluate(([k, v]) => localStorage.setItem(k, v), [item.name, item.value]);\n      }\n    }\n  }\n  return { restored: true };\n}"
-}
+```bash
+"/c/Program Files/Google/Chrome/Application/chrome.exe" \
+  --user-data-dir="C:\Users\<you>\.playwright-cli-profiles\<account>" \
+  --no-first-run --no-default-browser-check \
+  "https://accounts.google.com/"
 ```
 
-Replace `localhost-3000.json` with your host file. Navigate to protected route again — if still logged out, continue to Step 3.
+The **user** signs in by hand, including 2FA. Never ask for or type their password — hand them the
+window. Then close Chrome completely so the profile is unlocked and flushed to disk.
 
-### Step 3 — Interactive login (the normal path — once per environment)
+**Step 2 — reuse that profile from playwright-cli forever after:**
 
-Log in **by hand in the visible window**, exactly as a user would:
-
-1. Navigate to login; complete auth in the browser:
-   - **Google / OAuth / SSO**: approve in the browser window — wait up to 60s with incremental snapshots (2s waits, anti-stall rules still apply).
-   - **Email/password**: type the test credentials from `.env.test` / README into the form — never paste secrets into chat.
-2. Verify protected route loads. With the persistent profile, you're done — it sticks.
-3. Only under `--isolated`, **save storage state** so Step 2 can restore it next time:
-
-```json
-playwright:browser_run_code_unsafe
-{
-  "code": "async (page) => {\n  const fs = require('fs');\n  const path = require('path');\n  const dir = path.resolve('.playwright-mcp/auth');\n  fs.mkdirSync(dir, { recursive: true });\n  const statePath = path.join(dir, 'localhost-3000.json');\n  await page.context().storageState({ path: statePath });\n  return { saved: statePath };\n}"
-}
+```bash
+$PW -s=gmail open --headed --browser chrome \
+    --persistent --profile "$HOME/.playwright-cli-profiles/<account>" \
+    https://mail.google.com
+$PW -s=gmail snapshot        # already signed in
 ```
-
-4. Write `session.json` with current tab index and `storageStatePath`.
 
 ### Rules
 
-- **Do not log out** at end of QA/red-team/PDCA unless testing logout.
-- **Do not** open a second OAuth flow if storage state or an existing tab is already authenticated.
-- **Production URLs**: ask before saving auth state to disk; default to localhost/staging only.
-- Storage files contain session cookies — treat as secrets; never commit (`.playwright-mcp/` is gitignored).
+- Omit `--remote-debugging-port` during Step 1 — an active CDP endpoint is the thing Google detects.
+- Chrome must be **fully closed** before Step 2; two processes cannot hold one profile.
+- Re-run Step 1 only if the session actually expires (rare — it persists for months).
+- Same pattern works for any provider with aggressive bot detection, not just Google.
 
 ---
 
-## Conflict recovery
+## 4. Reusing an app login (non-Google)
 
-If navigation lands on the wrong page or auth is lost:
+Goal: sign in once, by hand, and reuse it across `test-playwright`, `test-qa`, `test-red-team`, and
+audit skills.
 
-1. `browser_tabs` list — identify tabs; do not close unknown tabs.
-2. Try `select` auth tab from `session.json`.
-3. Re-inject storage state (Step 2).
-4. If still broken, report blocker and ask user to re-auth once — then save state again.
+1. **Check first.** Open the session on a **protected route** (`/dashboard`, not `/login`) and
+   `snapshot`. Already signed in? Skip the rest.
+2. **Log in like a user** in the headed window — click, type, submit. Credentials come from
+   `.env.test` / README; never paste secrets into chat.
+3. **Persist it** — with `--persistent --profile` you are already done. Otherwise `state-save` to
+   `.playwright-mcp/auth/<host>.json`.
+4. **Do not log out** at the end of a QA/audit run unless logout is the flow under test.
 
-If two agents must test **different apps** simultaneously, use **separate tabs** with separate `auth/<host>.json` files — never share one tab across origins.
+**Production URLs:** ask before saving auth state to disk; default to localhost/staging.
+
+---
+
+## 5. Cleanup & recovery
+
+```bash
+$PW -s=<mine> close     # end of your turn — always
+$PW list                # what is still running?
+$PW close-all           # only if you own every session
+$PW kill-all            # stale/zombie processes that `close` will not clear
+```
+
+**If a session misbehaves:**
+
+1. `$PW list` — confirm it exists and check `user-data-dir` / headed flag.
+2. `snapshot` — see the real state before assuming.
+3. Still wedged → `close` that one session and reopen it (cheap, since profiles persist).
+4. Zombie processes after a crash → `kill-all`, then reopen.
+
+**If auth is unexpectedly lost:** confirm you passed the same `--profile` path (a typo silently
+creates a fresh in-memory session), then re-run the §4 interactive login (step 2) once.

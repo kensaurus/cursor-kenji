@@ -320,11 +320,12 @@ npx email dev --dir emails --port 3001
 ```
 
 Then check with Playwright:
-```
-browser_navigate → http://localhost:3001
-browser_snapshot → verify each template renders
-browser_resize → 375×812 (mobile) — check font size, tap targets
-browser_take_screenshot → capture for review
+```bash
+PW="npx --yes @playwright/cli@latest"
+$PW -s=email-preview open --headed http://localhost:3001
+$PW -s=email-preview snapshot                                  # verify each template renders
+$PW -s=email-preview resize 375 812                            # mobile — font size, tap targets
+$PW -s=email-preview screenshot --filename ".playwright-mcp/email-mobile.png"
 ```
 
 For cross-client testing, use Litmus or Email on Acid. Key clients to test:

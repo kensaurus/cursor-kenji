@@ -106,7 +106,7 @@ Taxonomy: `references/detection-taxonomy.md`
 
 **Be aggressive in finding, conservative in deleting.** Keep **Confirmed** vs **Review required** separate.
 
-Optional live click pass: `protocol-browser-anti-stall` + shared session before Playwright MCP.
+Optional live click pass: `protocol-browser-anti-stall` + your own named session (`-s=…`) before playwright-cli.
 
 ---
 

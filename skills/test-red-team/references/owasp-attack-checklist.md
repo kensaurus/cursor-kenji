@@ -181,7 +181,7 @@ file:///etc/passwd
 
 Measure LCP/CLS with:
 ```javascript
-// browser_evaluate
+// eval
 const entries = performance.getEntriesByType('paint');
 const lcp = await new Promise(resolve => {
   new PerformanceObserver(list => resolve(list.getEntries().at(-1)?.startTime))

@@ -4,6 +4,26 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.14.0] — 2026-07-29
+
+Browser automation moves off the **Playwright MCP** and onto **`playwright-cli`**. The MCP serves one browser per server, and a persistent Chrome profile can only be locked by one process at a time — so several agents on the same repo either contend for the profile lock or fight over each other's tabs. The CLI gives every agent its own isolated browser through `-s=<session>`, runs natively in parallel shells, and costs far fewer tokens (no tool schemas or verbose accessibility trees loaded into context). Verified end-to-end against `@playwright/cli@0.1.17`.
+
+### Changed
+
+- **`protocol-browser-anti-stall`** — rewritten around `playwright-cli`. Mandatory `-s=<session>` naming, `npx --yes @playwright/cli@latest` invocation (a global `npm i -g` is unreliable under `fnm`/`nvm`, whose global prefix is per-shell), and **explicit `--headed`** because the CLI is headless by default where the MCP was headed. Adds a session-lifecycle section (`open`/`goto`/`close`/`list`/`close-all`/`kill-all`), a parallel-agents section replacing the old tab-claiming etiquette, and artifact rules covering both `.playwright-mcp/` (screenshots via `--filename`) and the CLI's auto-written `.playwright-cli/` snapshots. All anti-stall guarantees are preserved: navigation guard, ≤3s waits, max 4 attempts per goal, evidence-before-retry, timeout budget, blocker format.
+- **Waiting model** — there is no `wait` command in the CLI. Playwright auto-waits for actionability on `click`/`fill`/`select`; explicit waits become `sleep N` (≤3s) or `run-code` with `waitFor({ timeout })`. Documented in the protocol and the command map.
+- **22 skills + `commands/test.md` + README migrated** — 191 tool-token replacements plus 52 prose updates across `test-playwright`, `test-qa`, `test-red-team`, `audit-accessibility`, `audit-uiux-design-system`, `audit-ux`, `audit-langfuse-llm`, `audit-bundle-size`, `audit-i18n`, `audit-realworld`, `deploy-verify`, `iterate-post-launch`, `enhance-readme`, `enhance-web-ux`, `enhance-web-ui`, `enhance-web-forms`, `enhance-web-seo`, `enhance-motion`, `enhance-pwa`, `enhance-capacitor-ui`, `design-email`, `housekeep-design`, `plan-perf-audit`, `plan-stub-checker`, `plan-uiux-unification`. The 19 structural `playwright:browser_*` JSON call sites (axe-core injection, keyboard walks, deploy smoke checks) were rewritten by hand into real shell invocations.
+- **`mcp/README.md`** — the Playwright entry now documents the CLI as the supported path, keeping the MCP only as an `--isolated` fallback (which loses saved logins). The pin in `mcp/VERSIONS.md` is retained for that fallback.
+- **`.gitignore`** — added `.playwright-cli/` alongside `.playwright-mcp/`.
+
+### Added
+
+- **`references/mcp-to-cli-map.md`** — complete `browser_*` → CLI command map (actions, waiting, evidence, tabs, storage, session management), plus the concepts that no longer apply (`browser_lock`, tab claiming, `session.json`, `--isolated` storage-state injection) and the gotchas that bite in practice.
+- **Google sign-in workaround** — `references/playwright-session-coordination.md` documents the one case that needs care: Google detects CDP and blocks sign-in from any Playwright-launched browser with "This browser or app may not be secure." The working sequence is a one-time manual login in **real Chrome** against a dedicated `--user-data-dir` (no `--remote-debugging-port`), then reuse via `open --persistent --profile <dir>`. Verified: Gmail loads straight into the inbox, and the session survives `close` → reopen.
+- **`scripts/migrate-browser-mcp-to-cli.mjs`** — the reviewed migration script, kept in-tree as an audit trail of how the rewrite was performed.
+
+---
+
 ## [1.13.0] — 2026-07-25
 
 UX journeys audit — a new cross-page skill for the layer `audit-ux` (per-page heuristics) doesn't cover: **can users actually find things and finish their stories?** A site can pass every per-page heuristic and still fail because the feature is buried four clicks deep, the nav mirrors the DB schema, or the checkout dead-ends on mobile. Grounded in the 2026 practitioner consensus: a UX audit derives from user stories, audits IA against mental models, walks the real journeys, and grounds findings in behavioral evidence — never taste presented as data.

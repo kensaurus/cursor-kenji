@@ -1,7 +1,7 @@
 ---
 name: audit-ux
 description: >
-  Audit user experience quality using research-backed frameworks: Nielsen Norman Group's 10 usability heuristics, Intuit Content Design System for microcopy, Google's HEART metrics, and Laws of UX (Fitts's, Hick's, Miller's, Jakob's, cognitive load). Evaluates information architecture, user flows, error recovery, onboarding, content clarity, and interaction patterns. Uses browser MCP for live walkthrough, Firecrawl for current NN/g research, and Sequential Thinking for complex flows. Generic — works with any webapp. Use when evaluating usability, reviewing user flows, auditing microcopy, checking UX heuristics, assessing cognitive load, reviewing onboarding, or when the user mentions UX audit, usability review, heuristic evaluation, content audit, interaction design review, or user flow analysis. Focuses on per-page EXPERIENCE — for visual design-system compliance (tokens, components, dark mode) use audit-uiux-design-system; for cross-page user-story/IA/journey audits use audit-ux-journeys.
+  Audit user experience quality using research-backed frameworks: Nielsen Norman Group's 10 usability heuristics, Intuit Content Design System for microcopy, Google's HEART metrics, and Laws of UX (Fitts's, Hick's, Miller's, Jakob's, cognitive load). Evaluates information architecture, user flows, error recovery, onboarding, content clarity, and interaction patterns. Uses playwright-cli for live walkthrough, Firecrawl for current NN/g research, and Sequential Thinking for complex flows. Generic — works with any webapp. Use when evaluating usability, reviewing user flows, auditing microcopy, checking UX heuristics, assessing cognitive load, reviewing onboarding, or when the user mentions UX audit, usability review, heuristic evaluation, content audit, interaction design review, or user flow analysis. Focuses on per-page EXPERIENCE — for visual design-system compliance (tokens, components, dark mode) use audit-uiux-design-system; for cross-page user-story/IA/journey audits use audit-ux-journeys.
 license: MIT
 ---
 
@@ -10,7 +10,7 @@ license: MIT
 Research-driven user experience evaluation grounded in NN/g heuristics, Laws of UX,
 Intuit Content Design principles, and Google HEART metrics.
 
-**Before ANY browser interaction, read the `browser-anti-stall` skill and apply its rules
+**Before ANY browser interaction, read the `protocol-browser-anti-stall` skill and apply its rules
 to every step.** That skill is `protocol-browser-anti-stall`.
 
 ## Context-First, Human-Centric Approach

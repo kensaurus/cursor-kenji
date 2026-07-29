@@ -107,9 +107,9 @@ Also handle:
 
 ## Phase 5 — Verify and report
 
-- **Browser MCP:** walk each form — tab through it, submit empty (see the error summary +
+- **playwright-cli:** walk each form — tab through it, submit empty (see the error summary +
   focus moves to first error), submit invalid, submit valid, force a server error. Check
-  `browser_console_messages`. Confirm screen-reader names via the accessibility snapshot.
+  `console`. Confirm screen-reader names via the accessibility snapshot.
   Screenshots to `.playwright-mcp/`.
 - **Build/typecheck/lint:** run the repo's commands.
 

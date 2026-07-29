@@ -1,7 +1,7 @@
 ---
 name: enhance-web-ux
 description: >
-  Generative, NN/g-grounded page enhancement skill. Given a route, screen, or component, it produces concrete, design-system-compliant code changes that replace generic, AI-templated, or "stacked" UI with intelligent, context-aware layouts. Inventories the page's data domain and primitives FIRST, maps each pain point to a Nielsen Norman heuristic, then proposes the smallest change using an existing primitive (Badge, Button, Card, Tooltip, semantic token). Replaces empty cells with semantic data, fixes label-wrap/overflow at the helper level, and verifies live across viewports via the browser MCP. Use when the user says "enhance this page", "make /xxx better", "this page feels AI-generated", "fix UX of /xxx", "improve information density", "icons all look the same", or asks for any non-trivial UX improvement on a screen. Generic across stacks. For visual-token compliance use audit-uiux-design-system; for a heuristic report use audit-ux.
+  Generative, NN/g-grounded page enhancement skill. Given a route, screen, or component, it produces concrete, design-system-compliant code changes that replace generic, AI-templated, or "stacked" UI with intelligent, context-aware layouts. Inventories the page's data domain and primitives FIRST, maps each pain point to a Nielsen Norman heuristic, then proposes the smallest change using an existing primitive (Badge, Button, Card, Tooltip, semantic token). Replaces empty cells with semantic data, fixes label-wrap/overflow at the helper level, and verifies live across viewports via playwright-cli. Use when the user says "enhance this page", "make /xxx better", "this page feels AI-generated", "fix UX of /xxx", "improve information density", "icons all look the same", or asks for any non-trivial UX improvement on a screen. Generic across stacks. For visual-token compliance use audit-uiux-design-system; for a heuristic report use audit-ux.
 license: MIT
 ---
 
@@ -125,7 +125,7 @@ ENHANCE /<route>
 - [ ] 0. PRODUCT TIER: domain class → colour-tier (A vibrant / B expressive /
  C productive / D restrained) — see enhance-web-ui §1.5
 - [ ] 1. RECON: route, components, data shape, primitives, tokens, wrappers
-- [ ] 2. LIVE: browser MCP at 1440 / 1024 / 800, screenshots, console
+- [ ] 2. LIVE: playwright-cli at 1440 / 1024 / 800, screenshots, console
 - [ ] 2.5 DOM FORENSICS: rect widths/heights for repeated tiles, conditional
  slot zero-state, dup-datum scan per fold (see Step 2.5)
 - [ ] 3. PAIN INVENTORY: user-reported + silent issues + DOM forensics, with
@@ -220,7 +220,7 @@ A common find: a primitive that documents "do NOT use bg-X with text-X" — resp
 
 ### 2a. Three-viewport screenshot pass
 
-Use the browser MCP. Always in this order, always with viewport set BEFORE navigate:
+Use playwright-cli. Always in this order, always with viewport set BEFORE navigate:
 
 ```
 1440 × 900 — desktop, full data density
@@ -264,7 +264,7 @@ are usually symptoms of one of the four silent bugs below.
 
 For every group that *should* render with uniform widths/heights — grid
 tiles, segmented-control segments, table columns, sidebar nav rows, form
-fields, stat cards — measure them. Run this in the browser MCP / console
+fields, stat cards — measure them. Run this in playwright-cli / console
 / Playwright `evaluate`:
 
 ```js

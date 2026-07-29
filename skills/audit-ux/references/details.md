@@ -90,9 +90,9 @@ This step evaluates the *experience* of accessibility, not just technical compli
 **Verify via browser:**
 
 ```
-browser_snapshot → check tab order
-browser_click → tab through interactive elements
-browser_snapshot → verify focus indicator visible
+snapshot → check tab order
+click → tab through interactive elements
+snapshot → verify focus indicator visible
 ```
 
 ---
