@@ -127,7 +127,7 @@ Grep: "className=.*\\b(p|m|gap|text|rounded)-\\[" glob "*.{tsx,jsx}" output_mode
 ```
 
 Optional visual verification: read `protocol-browser-anti-stall` and
-`references/playwright-session-coordination.md` in that skill before browser MCP.
+`references/playwright-session-coordination.md` in that skill before playwright-cli.
 Plan-only — screenshots for evidence, not fixes.
 
 ---

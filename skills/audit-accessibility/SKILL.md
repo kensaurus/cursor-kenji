@@ -1,8 +1,8 @@
 ---
 name: audit-accessibility
 description: >
-  Automated WCAG 2.2 accessibility audit using Playwright browser MCP to crawl every page,
-  inject axe-core via browser_evaluate, test keyboard navigation, check color contrast,
+  Automated WCAG 2.2 accessibility audit using playwright-cli to crawl every page,
+  inject axe-core via eval, test keyboard navigation, check color contrast,
   ARIA labels, heading hierarchy, form labels, and focus management. Cross-references
   Sentry for assistive-technology-related errors, researches current WCAG guidelines via
   Firecrawl, and produces a structured PASS/FAIL compliance report per criterion.
@@ -21,7 +21,7 @@ Works with **any project** — auto-detects pages from the codebase route struct
 
 ## Critical Rules
 
-> **Always use the `browser-anti-stall` protocol** when using Playwright browser MCP tools.
+> **Always use the `browser-anti-stall` protocol** when using playwright-cli.
 
 > **Test every publicly reachable page.** Accessibility bugs on obscure pages still affect real users.
 
@@ -142,24 +142,19 @@ context7:query-docs
 
 For each page discovered in Phase 0a:
 
-```json
-playwright:browser_navigate
-{
- "url": "<APP_URL><ROUTE>"
-}
+```bash
+PW="npx --yes @playwright/cli@latest"
+$PW -s=a11y open --headed "<APP_URL><ROUTE>"    # first page; use `goto` for subsequent ones
 ```
 
 Apply the `browser-anti-stall` protocol: wait 2s, snapshot, verify page loaded.
 
 ### 2b. Inject and Run axe-core
 
-Use `browser_evaluate` to inject axe-core from CDN and run a full scan:
+Use `run-code` to inject axe-core from CDN and run a full scan:
 
-```json
-playwright:browser_evaluate
-{
- "javascript": "await new Promise((resolve, reject) => { const script = document.createElement('script'); script.src = 'https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.10.2/axe.min.js'; script.onload = resolve; script.onerror = reject; document.head.appendChild(script); }); const results = await axe.run(); return JSON.stringify({ violations: results.violations.map(v => ({ id: v.id, impact: v.impact, description: v.description, help: v.help, helpUrl: v.helpUrl, nodes: v.nodes.length, targets: v.nodes.slice(0, 3).map(n => n.target[0]) })), passes: results.passes.length, incomplete: results.incomplete.length, inapplicable: results.inapplicable.length });"
-}
+```bash
+$PW -s=a11y run-code 'async (page) => { await page.addScriptTag({ url: "https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.10.2/axe.min.js" }); return await page.evaluate(async () => { const r = await axe.run(); return { violations: r.violations.map(v => ({ id: v.id, impact: v.impact, description: v.description, help: v.help, helpUrl: v.helpUrl, nodes: v.nodes.length, targets: v.nodes.slice(0, 3).map(n => n.target[0]) })), passes: r.passes.length, incomplete: r.incomplete.length, inapplicable: r.inapplicable.length }; }); }'
 ```
 
 For each violation returned, record:
@@ -175,55 +170,40 @@ axe-core cannot catch everything. For each page, also check:
 
 **Heading Hierarchy (WCAG 1.3.1):**
 
-```json
-playwright:browser_evaluate
-{
- "javascript": "return JSON.stringify(Array.from(document.querySelectorAll('h1,h2,h3,h4,h5,h6')).map(h => ({ tag: h.tagName, text: h.textContent.trim().substring(0, 50) })));"
-}
+```bash
+$PW -s=a11y eval '() => Array.from(document.querySelectorAll("h1,h2,h3,h4,h5,h6")).map(h => ({ tag: h.tagName, text: h.textContent.trim().substring(0, 50) }))'
 ```
 
 Verify: only one `h1`, headings don't skip levels (h1 -> h3 without h2).
 
 **Image Alt Text (WCAG 1.1.1):**
 
-```json
-playwright:browser_evaluate
-{
- "javascript": "return JSON.stringify(Array.from(document.querySelectorAll('img')).map(img => ({ src: img.src.substring(img.src.lastIndexOf('/') + 1), alt: img.alt, hasAlt: img.hasAttribute('alt'), decorative: img.getAttribute('role') === 'presentation' || img.alt === '' })));"
-}
+```bash
+$PW -s=a11y eval '() => Array.from(document.querySelectorAll("img")).map(img => ({ src: img.src.split("/").pop(), alt: img.alt, hasAlt: img.hasAttribute("alt"), decorative: img.getAttribute("role") === "presentation" || img.alt === "" }))'
 ```
 
 Verify: all informative images have descriptive alt text, decorative images have `alt=""` or `role="presentation"`.
 
 **Link Text (WCAG 2.4.4):**
 
-```json
-playwright:browser_evaluate
-{
- "javascript": "return JSON.stringify(Array.from(document.querySelectorAll('a')).filter(a => { const text = (a.textContent || '').trim().toLowerCase(); return text === 'click here' || text === 'here' || text === 'read more' || text === 'learn more' || text === '' || text === 'link'; }).map(a => ({ href: a.href, text: (a.textContent || '').trim(), ariaLabel: a.getAttribute('aria-label') })));"
-}
+```bash
+$PW -s=a11y eval '() => Array.from(document.querySelectorAll("a")).filter(a => ["click here", "here", "read more", "learn more", "", "link"].includes((a.textContent || "").trim().toLowerCase())).map(a => ({ href: a.href, text: (a.textContent || "").trim(), ariaLabel: a.getAttribute("aria-label") }))'
 ```
 
 Flag generic link text ("click here", "read more", empty links without aria-label).
 
 **Form Labels (WCAG 1.3.1, 4.1.2):**
 
-```json
-playwright:browser_evaluate
-{
- "javascript": "return JSON.stringify(Array.from(document.querySelectorAll('input,select,textarea')).map(el => ({ type: el.type, name: el.name, id: el.id, hasLabel: !!document.querySelector('label[for=\"' + el.id + '\"]'), ariaLabel: el.getAttribute('aria-label'), ariaLabelledBy: el.getAttribute('aria-labelledby'), placeholder: el.placeholder })));"
-}
+```bash
+$PW -s=a11y eval '() => Array.from(document.querySelectorAll("input,select,textarea")).map(el => ({ type: el.type, name: el.name, id: el.id, hasLabel: !!el.id && !!document.querySelector(`label[for="${el.id}"]`), ariaLabel: el.getAttribute("aria-label"), ariaLabelledBy: el.getAttribute("aria-labelledby"), placeholder: el.placeholder }))'
 ```
 
 Verify: every form control has an associated `<label>`, `aria-label`, or `aria-labelledby`.
 
 **Language Attribute (WCAG 3.1.1):**
 
-```json
-playwright:browser_evaluate
-{
- "javascript": "return JSON.stringify({ htmlLang: document.documentElement.lang, htmlDir: document.documentElement.dir });"
-}
+```bash
+$PW -s=a11y eval '() => ({ htmlLang: document.documentElement.lang, htmlDir: document.documentElement.dir })'
 ```
 
 Verify: `<html>` has a valid `lang` attribute.
@@ -232,9 +212,8 @@ Verify: `<html>` has a valid `lang` attribute.
 
 For each page, capture a screenshot as visual evidence:
 
-```json
-playwright:browser_take_screenshot
-{}
+```bash
+$PW -s=a11y screenshot --filename ".playwright-mcp/a11y-<route>.png"
 ```
 
 ---
@@ -245,25 +224,16 @@ playwright:browser_take_screenshot
 
 For each page, test that all interactive elements are reachable via Tab key:
 
-```json
-playwright:browser_navigate
-{
- "url": "<APP_URL><ROUTE>"
-}
+```bash
+PW="npx --yes @playwright/cli@latest"
+$PW -s=a11y open --headed "<APP_URL><ROUTE>"    # first page; use `goto` for subsequent ones
 ```
 
 Press Tab repeatedly and snapshot after each press to track focus movement:
 
-```json
-playwright:browser_press_key
-{
- "key": "Tab"
-}
-```
-
-```json
-playwright:browser_snapshot
-{}
+```bash
+$PW -s=a11y press Tab
+$PW -s=a11y snapshot
 ```
 
 After each Tab, check:
@@ -285,22 +255,16 @@ For each interactive component (dropdowns, modals, tabs, accordions):
 
 **Escape to close (WCAG 2.1.1 for modals/dialogs):**
 
-```json
-playwright:browser_press_key
-{
- "key": "Escape"
-}
+```bash
+$PW -s=a11y press Escape
 ```
 
 Verify: modals/dropdowns close, focus returns to the trigger element.
 
 **Arrow key navigation (for tab panels, menus, listboxes):**
 
-```json
-playwright:browser_press_key
-{
- "key": "ArrowDown"
-}
+```bash
+$PW -s=a11y press ArrowDown
 ```
 
 ### 3c. Focus Management After State Changes

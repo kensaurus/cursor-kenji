@@ -3,7 +3,7 @@ name: enhance-readme
 description: >-
   Turn a plain-text README into a visually rich showcase with a theme-aware hero
   image, a feature tour grid, an optional animated guided-tour GIF, and updated
-  tech badges. Captures live screenshots via Playwright MCP in both dark and
+  tech badges. Captures live screenshots via playwright-cli in both dark and
   light mode at hero-quality 1600x1000, pairs them with `<picture>` for auto
   theme-swap, and inlines them into the README using GitHub-supported HTML.
   Optionally records a guided-tour `.gif` (autoplays inline on github.com via
@@ -69,7 +69,7 @@ Copy and track:
 
 ```
 - [ ] Step 1: Detect demo URL, login flow, theme toggle mechanism
-- [ ] Step 2: Capture screenshots (Playwright MCP, 1600x1000 viewport)
+- [ ] Step 2: Capture screenshots (playwright-cli, 1600x1000 viewport)
 - [ ] Step 3: Generate hero + tour markdown (run scripts/generate-readme-blocks.mjs)
 - [ ] Step 4: Refine captions and weave into README
 - [ ] Step 5: Update tech badges + Tech Stack table to current versions
@@ -97,24 +97,24 @@ Confirm credentials if the app has auth. Most demos use `admin/demo`, `test/test
 
 ## Step 2: Capture Screenshots
 
-Use the Playwright MCP. **Always read the `protocol-browser-anti-stall` skill first** if the user has it — never block the browser for more than 3 seconds at a time.
+Use playwright-cli. **Always read the `protocol-browser-anti-stall` skill first** if the user has it — never block the browser for more than 3 seconds at a time.
 
 ### 2a. Set viewport for hero quality
 
 ```
-browser_resize { width: 1600, height: 1000 }
+resize { width: 1600, height: 1000 }
 ```
 
 ### 2b. Navigate, log in, capture each page in dark mode
 
 ```
-browser_navigate { url: <demo-url> }
-browser_wait_for { time: 2 }
-browser_snapshot # find login refs
-browser_fill_form # username + password
-browser_click # log in
-browser_wait_for { time: 2 }
-browser_take_screenshot { filename: "<page>-dark.png" }
+goto { url: <demo-url> }
+sleep { time: 2 }
+snapshot # find login refs
+fill # username + password
+click # log in
+sleep { time: 2 }
+screenshot { filename: "<page>-dark.png" }
 ```
 
 Repeat for each feature page you want in the tour (analytics, settings, list views, etc.). Aim for **1 hero page + 3 tour pages = 4 cells**.
@@ -122,14 +122,14 @@ Repeat for each feature page you want in the tour (analytics, settings, list vie
 ### 2c. Toggle to light mode via direct DOM manipulation (faster than UI hunting)
 
 ```
-browser_evaluate {
+eval {
  function: "() => { document.documentElement.classList.remove('dark');
  document.documentElement.classList.add('light');
  localStorage.setItem('theme', 'light');
  return 'ok'; }"
 }
-browser_wait_for { time: 2 }
-browser_take_screenshot { filename: "<page>-light.png" }
+sleep { time: 2 }
+screenshot { filename: "<page>-light.png" }
 ```
 
 Adjust the JS if the app uses `data-theme` or a different localStorage key (detected in Step 1).
@@ -269,7 +269,7 @@ Use shields.io URLs:
 Add to `.gitignore` (create if missing):
 
 ```
-# Playwright MCP browser session artifacts
+# playwright-cli browser session artifacts
 .playwright-mcp/
 ```
 
@@ -380,7 +380,7 @@ GitHub content width is ~870 px for desktop. Images at `width="100%"` look good 
 
 2. **First navigation may show empty charts** — Recharts and similar libs render after data fetches resolve. Wait 2–3 seconds after navigation, then take the screenshot. Re-shoot if the snapshot shows a chart placeholder instead of bars/lines.
 
-3. **Theme toggle button is hidden in a settings panel** — skip the UI hunt. `browser_evaluate` with `document.documentElement.classList.toggle('dark')` is one tool call versus four.
+3. **Theme toggle button is hidden in a settings panel** — skip the UI hunt. `eval` with `document.documentElement.classList.toggle('dark')` is one tool call versus four.
 
 4. **Screenshot filename collisions** — Playwright overwrites silently. After each capture, immediately move the file to `docs/screenshots/` with the final name.
 
@@ -388,7 +388,7 @@ GitHub content width is ~870 px for desktop. Images at `width="100%"` look good 
 
 6. **Local file:// previews can't load adjacent images** due to cross-origin restrictions. To preview the hero locally, run `vite preview` / `npx serve` and visit via `http://localhost:...`.
 
-7. **First-time login may persist a session** — if Playwright shows the dashboard already on `browser_navigate` to the login page, the session was preserved from a prior run. Use it; no need to re-log-in.
+7. **First-time login may persist a session** — if Playwright shows the dashboard already on `goto` to the login page, the session was preserved from a prior run. Use it; no need to re-log-in.
 
 8. **GitHub Camo caches images by URL hash, not by content** — `camo.githubusercontent.com` (the proxy that serves every README image) keys its cache off the source URL. **Overwriting an existing file with new bytes will NOT update the rendered image on github.com** — Camo will keep serving the cached pre-overwrite version for hours, sometimes days. If you re-record `tour.gif` and the github.com README still shows the old one, **rename the file** (e.g. `tour.gif` → `tour-v2.gif` or something self-documenting like `tour-pdca-loop.gif`) and update the `<img src>` — the new URL hashes fresh and Camo refetches immediately. This applies to ALL images in the README, not just GIFs. The raw.githubusercontent.com endpoint is NOT cached this way, so always verify file contents there before assuming the file is wrong.
 

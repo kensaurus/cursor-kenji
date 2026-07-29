@@ -62,7 +62,7 @@ Read `references/preservation-contract.md`. Acknowledge in output #1.
 7. Research citations
 ```
 
-Optional browser: Lighthouse via Playwright MCP. Read `protocol-browser-anti-stall` first.
+Optional browser: Lighthouse via playwright-cli. Read `protocol-browser-anti-stall` first.
 
 ---
 

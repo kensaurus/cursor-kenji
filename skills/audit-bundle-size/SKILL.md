@@ -233,9 +233,9 @@ For each route (Next.js build output shows this), confirm the numbers improved.
 Run a quick Playwright check to confirm the app still works:
 
 ```
-browser_navigate → key routes
-browser_snapshot → no blank screen or error
-browser_console_messages → no new errors
+goto → key routes
+snapshot → no blank screen or error
+console → no new errors
 ```
 
 ---

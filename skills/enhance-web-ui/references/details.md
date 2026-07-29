@@ -146,7 +146,7 @@ template should not produce.
 **Detection:** Programmatic, not visual — screenshots can hide this:
 
 ```js
-// In the browser console / Playwright evaluate / browser MCP
+// In the browser console / Playwright evaluate / playwright-cli
 const tiles = [...document.querySelectorAll('<your-tile-selector>')]
   .map(el => Math.round(el.getBoundingClientRect().width));
 const span = Math.max(...tiles) - Math.min(...tiles);

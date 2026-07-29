@@ -190,7 +190,7 @@ If a server is running or the E2E suite is present, run the objective proof:
   credentials) rather than guessing conformance from code alone.
 
 A passing contract suite is stronger evidence than any static reading. Save any
-run artifacts under `.playwright-mcp/` if using the browser MCP.
+run artifacts under `.playwright-mcp/` if using playwright-cli.
 
 ---
 

@@ -112,10 +112,10 @@ Navigate the app's 3–5 most-used flows as a real user. Look for:
 - Console errors and network failures during normal use
 
 ```
-browser_navigate → primary pages
-browser_console_messages → capture errors
-browser_network_requests → capture 4xx/5xx
-browser_take_screenshot → visual evidence per page
+goto → primary pages
+console → capture errors
+requests → capture 4xx/5xx
+screenshot → visual evidence per page
 ```
 
 ### 1d. Research best practices for flagged areas
@@ -190,12 +190,12 @@ Work through the approved list one by one, following
 After each fix, drive the specific flow that was broken:
 
 ```
-browser_navigate → affected page
-browser_snapshot → confirm page renders correctly
+goto → affected page
+snapshot → confirm page renders correctly
 [reproduce the original scenario]
-browser_console_messages → green (no new errors)
-browser_network_requests → 2xx where it was failing
-browser_take_screenshot → evidence of fixed state
+console → green (no new errors)
+requests → 2xx where it was failing
+screenshot → evidence of fixed state
 ```
 
 For Supabase fixes, re-run the failing query with `execute_sql` and confirm

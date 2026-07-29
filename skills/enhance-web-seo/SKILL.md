@@ -46,7 +46,7 @@ For every public-facing route, run the following:
 ### 1a. Navigate and capture head
 
 ```javascript
-// browser_evaluate after browser_navigate
+// eval after goto
 const seo = await page.evaluate(() => ({
   title: document.title,
   description: document.querySelector('meta[name="description"]')?.content,
@@ -111,7 +111,7 @@ Thresholds: LCP < 2.5 s ✅ / 2.5–4 s ⚠ / > 4 s ❌. CLS < 0.1 ✅ / 0.1–0
 
 ### 2a. robots.txt
 
-`browser_navigate` to `/robots.txt`. Check:
+`goto` to `/robots.txt`. Check:
 - File exists and returns 200 (not 404)
 - No `Disallow: /` unless intentional (private app)
 - Sitemap URL referenced: `Sitemap: https://yourdomain.com/sitemap.xml`

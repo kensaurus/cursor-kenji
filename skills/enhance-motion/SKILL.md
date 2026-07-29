@@ -148,8 +148,8 @@ rg -n "prefers-reduced-motion|useReducedMotion|motion-reduce" -g "*.{tsx,css}"  
 
 ## Phase 4 — Verify and report
 
-- **Browser MCP:** navigate touched routes, capture before/after screenshots to
-  `.playwright-mcp/`, check `browser_console_messages` for errors, confirm animations run
+- **playwright-cli:** navigate touched routes, capture before/after screenshots to
+  `.playwright-mcp/`, check `console` for errors, confirm animations run
   and reduced-motion drops them (toggle emulation).
 - **60fps:** spot-check in DevTools Performance for any Tier 3/4 animation.
 - **Build/typecheck:** run the repo's commands; fix anything introduced.

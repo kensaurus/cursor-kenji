@@ -108,20 +108,18 @@ If prompts are hardcoded in source code:
 
 **Step 1: Trigger the AI feature**
 
-```json
-playwright:browser_navigate
-{
-  "url": "<APP_URL>"
-}
+```bash
+PW="npx --yes @playwright/cli@latest"
+$PW -s=langfuse-audit open --headed "<APP_URL>"
 ```
 
 Navigate to the feature that uses this prompt. Interact with it (fill form, click button, send message).
 
 Capture:
-- AI-generated response via `browser_snapshot`
-- Console errors via `browser_console_messages`
-- Network requests via `browser_network_requests`
-- Screenshot via `browser_take_screenshot` (visual evidence for the report)
+- AI-generated response via `snapshot`
+- Console errors via `console`
+- Network requests via `requests`
+- Screenshot via `screenshot` (visual evidence for the report)
 
 **Step 2: Repeat N=3 times minimum**
 

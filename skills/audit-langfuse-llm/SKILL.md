@@ -20,7 +20,7 @@ Works with **any project** — auto-detects Langfuse setup from the codebase.
 
 > **Use concrete numbers.** "Costs seem high" is not an audit finding. "gpt-4.1 used for intent classification at $0.02/call when gpt-4.1-mini at $0.002/call achieves equivalent accuracy" is.
 
-> **Always use the `browser-anti-stall` protocol** when using Playwright browser MCP tools.
+> **Always use the `browser-anti-stall` protocol** when using playwright-cli.
 
 ---
 
@@ -281,21 +281,21 @@ Evaluate:
 
 ### 3a. Trigger AI Features via Playwright
 
-For each AI feature identified in Phase 0c, use browser MCP tools to trigger it live.
+For each AI feature identified in Phase 0c, use playwright-cli to trigger it live.
 
-**Important**: Apply the `browser-anti-stall` protocol — set 15-second timeouts, skip `browser_wait_for` on navigation, use `browser_snapshot` to detect ready state.
+**Important**: Apply the `browser-anti-stall` protocol — set 15-second timeouts, skip `sleep` on navigation, use `snapshot` to detect ready state.
 
 ```json
-playwright:browser_navigate
+goto
 {
  "url": "<APP_URL>"
 }
 ```
 
 Navigate to the feature, interact with it (fill form, click button, send message), and capture:
-- The AI-generated response (via `browser_snapshot`)
-- Console messages (via `browser_console_messages`) — look for errors
-- Network requests (via `browser_network_requests`) — look for failed API calls
+- The AI-generated response (via `snapshot`)
+- Console messages (via `console`) — look for errors
+- Network requests (via `requests`) — look for failed API calls
 
 ### 3b. Verify Trace Pipeline
 

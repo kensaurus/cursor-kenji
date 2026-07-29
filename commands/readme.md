@@ -8,7 +8,7 @@ description: "End-of-session README sync — detect convention, smart change det
 
 This command is a thin entry point. Two skills cover the README workflow:
 
-- **`enhance-readme`** — visual showcase: hero image, feature tour grid, optional GIF, theme-aware screenshots via Playwright MCP.
+- **`enhance-readme`** — visual showcase: hero image, feature tour grid, optional GIF, theme-aware screenshots via playwright-cli.
 - **`docs-writer`** — text content, structure, accuracy.
 
 Use `/readme` to explicitly trigger doc sync. Otherwise, say "update the README", "enhance README", or "make README prettier" and the appropriate skill auto-fires.

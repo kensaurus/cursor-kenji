@@ -158,7 +158,7 @@ For a deeper guardrail install (hooks + CI gates), hand off to `enhance-agent-gu
 
 - **Fresh search:** `rg` for every deprecated form → **zero** hits (except logged
   exceptions). Any hit → back to Phase 4.
-- **Visual equivalence:** browser MCP before/after screenshots of key pages in light + dark;
+- **Visual equivalence:** playwright-cli before/after screenshots of key pages in light + dark;
   confirm no unintended visual change. Save to `.playwright-mcp/`.
 - **Build/typecheck/lint:** run the repo's commands; the new lint rules must pass.
 

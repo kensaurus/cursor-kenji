@@ -1,190 +1,193 @@
 ---
 name: protocol-browser-anti-stall
 description: >-
-  Prevent browser automation from freezing, getting stuck, or waiting
-  excessively during page navigation and interaction, and enforce manual,
-  headed, real-user driving (never scripted). Use BEFORE any browser
-  automation session — when testing webapps, running user-story tests,
-  QA audits, UX audits, or any task that calls Playwright/cursor-ide-browser
-  MCP tools (browser_navigate, browser_snapshot, browser_click, etc.).
+  Prevent browser automation from freezing, stalling, or colliding between parallel agents, and
+  enforce manual, headed, real-user driving (never scripted). Standardizes on the playwright-cli
+  (`npx --yes @playwright/cli@latest`) with named sessions (`-s=<name>`) so multiple agents each get
+  their own isolated browser — replacing the single-instance Playwright MCP, where one shared
+  profile could only be locked by one process at a time. Covers session naming, headed mode,
+  persistent auth profiles, the wait/anti-loop budget, evidence-before-retry, artifact paths, and
+  cleanup. Use BEFORE any browser automation — testing webapps, user-story walkthroughs, QA/UX
+  audits, visual verification, or any task that drives a browser.
 license: MIT
 ---
 
-# Browser Anti-Stall Protocol
+# Browser Anti-Stall Protocol (playwright-cli)
 
-**Apply these rules to EVERY browser automation action. No exceptions.**
+**Apply these rules to EVERY browser action. No exceptions.**
 
-**Also read `references/playwright-session-coordination.md`** before the first
-`browser_*` call — shared Playwright instance, tab ownership, persisted login.
+This repo drives browsers with **`playwright-cli`**, not the Playwright MCP. The MCP exposes one
+browser per server and a persistent profile can only be locked by one process at a time, so
+parallel agents on the same repo fight over tabs and profile locks. The CLI gives every agent its
+own isolated browser via `-s=<session>`, costs far fewer tokens (no tool schemas or verbose trees
+loaded into context), and runs natively in parallel shells.
 
----
-
-## 0. Manual & headed — never scripted (read first)
-
-You are driving a **real, visible browser** to feel what a user feels. A green
-script proves nothing about UX — so *see the screen* and *watch the logs*.
-
-1. **Headed, visible.** The `playwright` MCP runs **headed by default** — never
-   pass `--headless`. Drive the on-screen window; if you can't see it, say so.
-2. **One real action at a time.** Click, type, and submit with the individual tools
-   (`browser_click`, `browser_type`, `browser_fill_form`, `browser_select_option`,
-   `browser_hover`, `browser_press_key`, `browser_drag`) exactly as a user would.
-   Never chain a whole flow into one code snippet.
-3. **`browser_evaluate` / `browser_run_code_unsafe` are inspection-only.** Use them
-   ONLY to *read* state (DOM, computed styles, storage, perf) or restore auth in
-   `--isolated` mode — never to click, type, navigate, or submit. Driving the UI
-   through code bypasses the real events and hides the bug you're hunting.
-4. **No scripts, no runner.** Do not write `*.spec.ts`, run `npx playwright test`, or
-   use codegen. You are here to *experience* the flow, not automate past it.
-5. **Look after every action.** Fresh `browser_snapshot` + `browser_take_screenshot`
-   (graphics) + `browser_console_messages` (logs) + `browser_network_requests` + the
-   dev-server terminal. Real pain points surface on the screen and in the logs, not
-   in an assertion.
+**Read `references/mcp-to-cli-map.md`** if you encounter old `browser_*` MCP tool calls — it maps
+every tool to its CLI command. **Read `references/playwright-session-coordination.md`** before your
+first command — session naming, persistent logins (incl. the Google/CDP block), and cleanup.
 
 ---
 
-## 1. Navigation Guard
+## 0. Invocation — always this form
 
-After every `browser_navigate`:
+```bash
+PW="npx --yes @playwright/cli@latest"     # portable; survives fnm/nvm version switches
+$PW -s=<session> <command> [args]
+```
 
-1. `browser_wait_for({ time: 2 })` — short initial wait (2 seconds)
-2. `browser_snapshot` — verify URL changed and page has content
-3. If page is blank or URL unchanged → `browser_wait_for({ time: 2 })` + `browser_snapshot` again
-4. **Max 3 cycles (6s total).** If still not loaded → report blocker and move on.
+- **`-s=<session>` is mandatory on every call.** Name it after your task or branch
+  (`-s=qa-checkout`, `-s=audit-ux-home`). Two agents must never share a session name.
+- **Do not rely on a global `npm i -g` install.** Under `fnm`/`nvm` the global prefix is
+  per-shell and disappears; `npx` always resolves.
+- `--json` / `--raw` are available when you need machine-readable output.
+
+## 1. Manual & headed — never scripted (read first)
+
+You are driving a **real, visible browser** to feel what a user feels. A green script proves
+nothing about UX — *see the screen* and *watch the logs*.
+
+1. **Headed, always.** The CLI defaults to **headless** — you MUST pass `--headed` on `open`.
+   If you cannot see the window, say so rather than proceeding blind.
+2. **One real action at a time.** `click`, `type`, `fill`, `select`, `hover`, `press`, `drag`
+   exactly as a user would. Never chain a whole flow into one code snippet.
+3. **`eval` / `run-code` are inspection-only.** Use them ONLY to *read* state (DOM, computed
+   styles, storage, perf) or to wait for an element — never to click, type, navigate, or submit.
+   Driving the UI through code bypasses real events and hides the bug you are hunting.
+4. **No test files, no runner.** Do not write `*.spec.ts`, run `npx playwright test`, or use
+   codegen. You are here to *experience* the flow, not automate past it.
+5. **Look after every action.** Fresh `snapshot` + `screenshot` + `console` + `requests`, plus the
+   dev-server terminal. Real pain surfaces on screen and in logs, not in an assertion.
+
+## 2. Session lifecycle
+
+```bash
+$PW -s=qa-checkout open --headed http://localhost:3000    # start (once)
+$PW -s=qa-checkout goto http://localhost:3000/cart        # navigate within the session
+$PW -s=qa-checkout snapshot                               # get refs
+$PW -s=qa-checkout close                                  # end YOUR session when done
+$PW list                                                  # see all sessions (status, profile, headed)
+$PW close-all                                             # only when you own every session
+$PW kill-all                                              # last resort: stale/zombie processes
+```
+
+- `open` starts a browser; `goto` navigates an already-open one. Calling `open` twice on the same
+  session is wasteful — use `goto`.
+- **Close only your own session.** Never `close-all` while another agent may be mid-test.
+- Add `--browser chrome|firefox|webkit|msedge`, `--device "iphone 15"`, or `--mobile` on `open`
+  when the task calls for it.
+
+## 3. Navigation guard
+
+After every `open` / `goto` / `reload`:
+
+1. `snapshot` — confirm the URL changed and the page has content.
+2. If blank or unchanged → `sleep 2` → `snapshot` again.
+3. **Max 3 cycles (~6s).** Still not loaded → report a blocker (§9) and move on.
 
 Never assume navigation succeeded without a snapshot to confirm it.
 
----
+## 4. Waiting — there is no `wait` command
 
-## 2. Never Block More Than 3 Seconds
+Playwright **auto-waits** for actionability on `click`/`fill`/`select`, so most explicit waits are
+unnecessary. When you genuinely must wait:
 
-- `browser_wait_for({ time: N })` → **N must be ≤ 3**
-- `browser_wait_for({ text: "...", timeout: 5000 })` → always set explicit `timeout` (default is 30000ms which is way too long)
-- `browser_wait_for({ textGone: "...", timeout: 5000 })` → same rule
+| Need | Do this |
+|---|---|
+| Fixed short pause | `sleep 2` in the shell — **never more than 3s per pause** |
+| Wait for text/element | `run-code "async (page) => { await page.getByText('Dashboard').first().waitFor({ timeout: 5000 }); return 'ready'; }"` |
+| Wait for something to disappear | `...waitFor({ state: 'hidden', timeout: 5000 })` |
+| Poll for content | `find "<text>"` → if no match, `sleep 2` → retry (max 3) |
 
-**Unit reminder:** `time` is in SECONDS, `timeout` is in MILLISECONDS.
-
----
-
-## 3. Incremental Wait Pattern (replaces all long waits)
+**Always set an explicit `timeout`** (milliseconds) in `waitFor` — the default 30s is far too long.
+Use the incremental pattern instead of one long block:
 
 ```
-wait 2s → snapshot → check condition
- ↓ not ready
-wait 2s → snapshot → check condition
- ↓ not ready
-wait 2s → snapshot → check condition
- ↓ still not ready
+sleep 2 → snapshot → check ↓ not ready
+sleep 2 → snapshot → check ↓ not ready
+sleep 2 → snapshot → check ↓ still not ready
 STOP → report blocker with evidence
 ```
 
-This handles Vercel cold starts (5-15s), SPA hydration, and slow APIs
-without ever blocking blindly.
+This handles cold starts, SPA hydration, and slow APIs without ever blocking blindly.
 
----
+## 5. SPA-specific rules
 
-## 4. Anti-Loop: Max 4 Attempts Per Goal
+SPAs (React, Next.js, Vue) fire `load` before hydration completes — never trust load events.
 
-Track attempts for each interaction goal (e.g. "click login button"):
+- Wait for a **specific UI landmark** that proves the app rendered (`run-code` + `waitFor`, or `find`).
+- If a spinner is showing, wait for it to reach `state: 'hidden'` rather than sleeping.
 
-| Attempts | Action |
-|----------|--------|
+## 6. Anti-loop: max 4 attempts per goal
+
+| Attempt | Action |
+|---|---|
 | 1 | Try the action normally |
-| 2 | If same result, try alternative (different ref, scroll into view, `browser_search`) |
-| 3 | Gather evidence: `browser_console_messages` + `browser_network_requests` |
-| 4 | **STOP.** Report what blocked progress with evidence. |
+| 2 | Alternative approach — re-`snapshot` for a fresh ref, try a CSS selector instead, scroll into view, or `find` the element |
+| 3 | Gather evidence: `console` + `requests` |
+| 4 | **STOP.** Report what blocked progress, with evidence. |
 
 Never repeat the exact same failing action without new evidence.
 
----
+**Fresh refs after every state change.** Refs from a stale `snapshot` are invalid after any
+navigate/click/fill/hover/key press. Re-`snapshot` before the next interaction. `click` also accepts
+a unique CSS selector, which survives state changes better than a ref.
 
-## 5. Evidence Before Retry
+## 7. Evidence before retry
 
-When something isn't working, gather evidence FIRST — then form a hypothesis:
+When something is not working, gather evidence FIRST, then form a hypothesis:
 
-1. `browser_console_messages` — JS errors, failed assertions
-2. `browser_network_requests` — pending/failed API calls, CORS errors
-3. `browser_snapshot` — actual DOM state (not what you assume)
-4. `browser_take_screenshot` — visual state for layout/rendering issues
+1. `console` — JS errors, warnings (`console error` to filter by level)
+2. `requests` — pending/failed calls; `request <n>` / `response-body <n>` for detail
+3. `snapshot` — the actual DOM state, not what you assume
+4. `screenshot --filename .playwright-mcp/<name>.png` — visual state
 
-Only retry after you have a new hypothesis based on this evidence.
+Only retry once you have a new hypothesis grounded in that evidence.
 
----
-
-## 6. Timeout Budget
+## 8. Timeout budget
 
 | Scope | Max time |
-|-------|----------|
-| Single page interaction (click, fill, select) | 15 seconds |
-| Page navigation + verification | 30 seconds |
-| Multi-page test flow | 5 minutes |
-| Full test suite | 15 minutes |
+|---|---|
+| Single interaction (click, fill, select) | 15 seconds |
+| Navigation + verification | 30 seconds |
+| Multi-page flow | 5 minutes |
+| Full session | 15 minutes |
 
-If a step exceeds its budget, **skip it** and log `[TIMEOUT] skipped: <step>`.
-Do not let one stuck step kill the entire session.
+Exceeded? **Skip it** and log `[TIMEOUT] skipped: <step>`. One stuck step must not kill the session.
 
----
-
-## 7. SPA-Specific Rules
-
-SPAs (React, Next.js, Vue) fire `load` before hydration completes.
-Do NOT rely on page load events. Instead:
-
-- Wait for a **specific UI element** (text, button, heading) that proves the app rendered
-- Use `browser_wait_for({ text: "Dashboard", timeout: 8000 })` for key landmarks
-- If the page shows a loading spinner, use `browser_wait_for({ textGone: "Loading", timeout: 8000 })`
-
----
-
-## 8. Fresh Refs After Every State Change
-
-After ANY action that could change the page (navigate, click, fill, select,
-hover, press key, wait, dialog response), take a **fresh `browser_snapshot`**
-before the next interaction. Old refs are invalid after state changes.
-
----
-
-## 9. Tab discipline (shared Playwright MCP)
-
-The `playwright` server exposes **one browser** for all agents in this Cursor
-instance. There is no lock/unlock API on this server — coordinate with tabs instead.
-
-```
-browser_tabs list → read .playwright-mcp/session.json → select auth tab OR new tab
-→ work only in your tab → save storage state → update session.json
-```
-
-- **Never** `browser_navigate` blindly on the default tab — another agent may be mid-test.
-- **Never** `browser_close` tabs you did not open.
-- **Reuse** signed-in sessions — see `references/playwright-session-coordination.md`.
-- For cursor-ide-browser MCP (has `browser_lock`), use lock/unlock there; this skill's
-  tab rules still apply when sharing tabs across chats.
-
----
-
-## 10. Lock/Unlock (cursor-ide-browser MCP only)
-
-```
-browser_navigate → browser_lock({ action: "lock" }) → interactions → browser_lock({ action: "unlock" })
-```
-
-- Lock REQUIRES an existing tab — never call lock before navigate
-- Unlock ONLY when completely done with ALL browser operations for the turn
-- If a tab already exists (check `browser_tabs list`), lock FIRST before interacting
-
----
-
-## 11. Blocker Reporting Format
-
-When you must stop, report exactly:
+## 9. Blocker reporting format
 
 ```
 BLOCKER:
+- Session: [-s= name]
 - Page: [current URL]
 - Goal: [what I was trying to do]
 - Blocked by: [what prevented it]
-- Evidence: [console errors / network failures / screenshot observation]
+- Evidence: [console errors / failed requests / screenshot observation]
 - Suggestion: [most likely next step or manual action needed]
 ```
 
-This gives the user actionable information instead of a silent freeze.
+Actionable information beats a silent freeze.
+
+## 10. Artifacts
+
+- Screenshots, snapshots, and logs go under **`.playwright-mcp/`** (gitignored):
+  `screenshot --filename .playwright-mcp/home-390.png`. Name by route + viewport/step.
+- The CLI also auto-writes snapshot `.yml` files to `.playwright-cli/` in the working directory —
+  also gitignored, never committed.
+- Sweep any stray root-level `*.png` / `*.log` into `.playwright-mcp/` before ending the session.
+
+## 11. Parallel agents
+
+Session isolation replaces the old tab-sharing etiquette — each agent gets its own browser:
+
+```bash
+# agent A                                  # agent B (simultaneously, no conflict)
+$PW -s=audit-ux open --headed …            $PW -s=qa-checkout open --headed …
+```
+
+- Never reuse another agent's session name; never `close`/`kill-all` sessions you did not open.
+- `list` shows every session with its status, profile, and headed flag — check it before assuming.
+- Within one session, multiple tabs are still available (`tab-list`, `tab-new`, `tab-select`,
+  `tab-close`); the fresh-refs rule applies after every tab switch.
+- Signed-in state is shared through **persistent profiles**, not shared tabs — see
+  `references/playwright-session-coordination.md`.

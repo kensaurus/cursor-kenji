@@ -321,10 +321,10 @@ npx email dev --dir emails --port 3001
 
 Then check with Playwright:
 ```
-browser_navigate → http://localhost:3001
-browser_snapshot → verify each template renders
-browser_resize → 375×812 (mobile) — check font size, tap targets
-browser_take_screenshot → capture for review
+goto → http://localhost:3001
+snapshot → verify each template renders
+resize → 375×812 (mobile) — check font size, tap targets
+screenshot → capture for review
 ```
 
 For cross-client testing, use Litmus or Email on Acid. Key clients to test:

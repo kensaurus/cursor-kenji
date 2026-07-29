@@ -2,7 +2,7 @@
 name: test-playwright
 description: >-
   Close the PDCA loop on the work you just did. After implementing changes, drive
-  the LIVE app on localhost through the Playwright browser MCP like a real end user —
+  the LIVE app on localhost through the playwright-cli like a real end user —
   manually, in a visible (headed) browser, clicking and typing one action at a time,
   NEVER through scripts or test runners — exercising every page, component, and flow
   the current session touched. Reproduce real user journeys, hunt for pain points, and
@@ -31,7 +31,7 @@ phases of PDCA. You will not skip them.
 **Before ANY browser action, read `protocol-browser-anti-stall`
 and apply every rule** —
 especially **Rule 0 (manual & headed, never scripted)**, plus the navigation guard,
-≤3s waits, fresh `browser_snapshot` after every state change, max-4-attempts-per-goal,
+≤3s waits, fresh `snapshot` after every state change, max-4-attempts-per-goal,
 timeout budgets, tab discipline, and persisted auth
 (`references/playwright-session-coordination.md`).
 
@@ -41,8 +41,8 @@ timeout budgets, tab discipline, and persisted auth
 
 > **Drive a visible browser by hand, never a script.**
 > Headed (never `--headless`). Click, type, scroll, read, react — one real action at a
-> time, as someone discovering the feature for the first time. `browser_evaluate` /
-> `browser_run_code_unsafe` are inspection-only; never write `*.spec.ts` or run
+> time, as someone discovering the feature for the first time. `eval` /
+> `run-code` are inspection-only; never write `*.spec.ts` or run
 > `npx playwright test`. You're here to *feel* the pain points, not pass a green check.
 
 > **Test only what this session changed — plus its blast radius.**
@@ -127,28 +127,32 @@ SESSION SCOPE:
 ## Phase 2: Environment verification
 
 **Read `protocol-browser-anti-stall/references/playwright-session-coordination.md`
-before opening the browser** — shared Playwright instance, tab claiming, Google/OAuth
-session reuse.
+before opening the browser** — session naming, persistent auth profiles, Google/OAuth reuse.
+
+```bash
+PW="npx --yes @playwright/cli@latest"
+```
 
 1. Check the `terminals/` folder for a running dev server (`npm run dev`, `next dev`,
  `vite`, etc.). If none is running, start it (`block_until_ms` sized to startup) and
  wait until it serves, or tell the user and stop.
-2. `browser_tabs` → `list` — note open tabs; read `.playwright-mcp/session.json` if present.
-3. **Claim or create your tab** — `select` the auth tab from `session.json`, or `new` with
- the dev URL. Do not hijack another agent's tab.
-4. `browser_navigate` (in your tab only) → anti-stall (wait 2s → `browser_snapshot` →
- verify content).
-5. `browser_console_messages` + `browser_network_requests` → baseline before touching the
- changed feature.
+2. **Name your session** after the task or branch (`-s=qa-<feature>`). Never reuse another
+ agent's session name — each session is its own isolated browser, so there is nothing to claim.
+3. `$PW -s=qa-<feature> open --headed <dev-url>` — add
+ `--persistent --profile "$HOME/.playwright-cli-profiles/<app>"` when the flow needs a login.
+4. Anti-stall: `sleep 2` → `snapshot` → verify content rendered.
+5. `console` + `requests` → baseline before touching the changed feature.
 6. **Auth (log in once, by hand — it persists):**
-   - Hit a protected route → if already signed in, continue. The Playwright MCP uses a
-     **persistent profile by default**, so a one-time manual login survives across turns
-     and sessions — you rarely re-login.
-   - Else complete login **manually in the visible window** like a user (Google/OAuth may
-     need you to approve in the browser). Then verify a protected route loads.
-   - Only restore `.playwright-mcp/auth/<host>.json` via `browser_run_code_unsafe` if the
-     server runs `--isolated` (no persistent profile) — see coordination reference.
-   - Do **not** log out at end unless testing logout. Leave the tab open for the next agent.
+   - Hit a protected route → if already signed in, continue. With
+     `--persistent --profile`, a one-time manual login survives across turns and restarts.
+   - Else complete login **manually in the visible window** like a user. Then verify a
+     protected route loads.
+   - **Google accounts cannot be signed into from a Playwright-launched browser** — do the
+     one-time real-Chrome login described in the coordination reference.
+   - Lightweight alternative to a profile: `state-save` / `state-load` with
+     `.playwright-mcp/auth/<host>.json`.
+   - Do **not** log out at the end unless testing logout.
+7. `$PW -s=qa-<feature> close` when the run is done.
 
 ---
 
@@ -159,14 +163,14 @@ For each user journey from the Phase 1 plan, live it step by step.
 Per step, follow this cycle (anti-stall applies throughout):
 
 ```
-1. browser_navigate (if moving pages)
-2. wait 2s → browser_snapshot → confirm the page/feature rendered
-3. browser_take_screenshot → visual evidence
-4. Interact like a user: browser_click / browser_type / browser_fill_form /
- browser_select_option / browser_hover / browser_press_key / browser_drag
-5. browser_snapshot (FRESH refs) after every interaction
-6. browser_console_messages → any NEW error vs baseline?
-7. browser_network_requests → any 4xx/5xx, CORS, timeout, or missing call?
+1. goto (if moving pages)
+2. wait 2s → snapshot → confirm the page/feature rendered
+3. screenshot → visual evidence
+4. Interact like a user: click / type / fill /
+ select / hover / press / drag
+5. snapshot (FRESH refs) after every interaction
+6. console → any NEW error vs baseline?
+7. requests → any 4xx/5xx, CORS, timeout, or missing call?
 8. Judge it: does it WORK and does it feel GOOD? PASS or PAIN POINT.
 ```
 
@@ -184,7 +188,7 @@ What to hunt for on every changed surface:
 
 **Mutations must be verified end-to-end:** after create/update/delete, confirm (a)
 the network call returned 2xx, (b) the UI reflects it, (c) it survives a hard
-`browser_navigate` reload, and (d) — if Supabase MCP is available — the row actually
+`goto` reload, and (d) — if Supabase MCP is available — the row actually
 changed in the DB. Prefix any test data with `QA-TEST-` and clean it up at the end.
 
 ---
@@ -331,34 +335,39 @@ Console clean: [Y/N] · All flows green on re-test: [Y/N] · Test data cleaned: 
 
 ---
 
-## Playwright MCP tools (server: `playwright`)
+## playwright-cli commands
 
-Headed by default; snapshot/ref-based (accessibility tree), no lock/unlock — just
-snapshot freshly after each change.
+`PW="npx --yes @playwright/cli@latest"`, then `$PW -s=<session> <command>`.
+Snapshot/ref-based (accessibility tree); no locking — sessions are isolated, so just
+re-`snapshot` after each state change. **Headless by default — pass `--headed` on `open`.**
 
-**Drive with these (real user actions):** `browser_navigate`, `browser_navigate_back`,
-`browser_click`, `browser_type`, `browser_fill_form`, `browser_select_option`,
-`browser_hover`, `browser_drag`, `browser_drop`, `browser_press_key`,
-`browser_file_upload`, `browser_handle_dialog`, `browser_resize`, `browser_tabs`.
+**Drive with these (real user actions):** `open --headed`, `goto`, `go-back`,
+`click`, `type`, `fill`, `select`, `check`, `uncheck`,
+`hover`, `drag`, `drop`, `press`, `upload`, `dialog-accept`, `resize`.
 
-**Observe with these:** `browser_snapshot`, `browser_take_screenshot`, `browser_wait_for`,
-`browser_console_messages`, `browser_network_requests`, `browser_network_request`.
+**Observe with these:** `snapshot`, `find`, `screenshot --filename .playwright-mcp/<name>.png`,
+`console`, `requests`, `request <n>`.
 
-**Inspection-only (never to drive the UI):** `browser_evaluate`, `browser_run_code_unsafe`.
+**Wait with these:** `sleep N` (shell, ≤3s) or
+`run-code "async (page) => { await page.getByText('X').first().waitFor({ timeout: 5000 }); }"`.
+
+**Inspection-only (never to drive the UI):** `eval`, `run-code`.
+
+Full mapping from the old MCP tools: `protocol-browser-anti-stall/references/mcp-to-cli-map.md`.
 
 ---
 
 ## Guardrails
 
 1. **Manual & headed, never scripted** — visible browser, one real user action at a
- time; `browser_evaluate` / `browser_run_code_unsafe` for inspection only; no
+ time; `eval` / `run-code` for inspection only; no
  `*.spec.ts`, no `npx playwright test`. See anti-stall Rule 0.
 2. **Scope discipline** — test session changes + blast radius, not the entire app. For
  a full-app sweep use `test-qa`.
-3. **Shared browser** — one Playwright MCP per Cursor; `browser_tabs` list before every
- turn; work in your tab only; never close tabs you didn't open.
-4. **Auth reuse** — log in once by hand; the persistent profile keeps you signed in;
- don't log out unless testing logout.
+3. **Own your session** — every command carries `-s=<task>`; never reuse another agent's
+ session name, and never `close-all` / `kill-all` sessions you didn't open.
+4. **Auth reuse** — log in once by hand into a `--persistent --profile` directory; it keeps
+ you signed in across turns; don't log out unless testing logout.
 5. **Anti-stall always** — never block >3s; incremental wait → snapshot → check; max 4
  attempts per goal; skip a stuck step (`[TIMEOUT]`) rather than freeze the session.
 6. **Fix the root cause, full-stack** — UI, API, DB, config; re-test live after each fix.

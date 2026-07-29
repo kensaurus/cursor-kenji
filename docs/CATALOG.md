@@ -39,7 +39,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 #### `enhance-web-ux`
 **Triggers:** "enhance this page", "make /xxx better", "this page feels AI-generated", "fix UX of /xxx", "improve information density", "icons all look the same", "buttons wrap to 2 lines", "empty columns"
-**What it does:** Replaces generic / "stacked" UI with semantic data wired to real backend state. Maps every pain point to an NN/g heuristic, fixes at the helper / token level. Verified live at multiple viewports via browser MCP.
+**What it does:** Replaces generic / "stacked" UI with semantic data wired to real backend state. Maps every pain point to an NN/g heuristic, fixes at the helper / token level. Verified live at multiple viewports via playwright-cli.
 **Related:** `enhance-web-ui`, `audit-ux`, `audit-uiux-design-system`
 
 #### `enhance-web-landing`
@@ -64,7 +64,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 #### `enhance-readme`
 **Triggers:** "enhance README", "make README prettier", "add screenshots to README", "add hero image", "make README more fun", "add animated demo to README", "record a tour GIF"
-**What it does:** Theme-aware hero + tour grid + optional autoplay GIF via Playwright MCP. Captures live screenshots at 1600×1000 in dark and light mode with `<picture>` auto theme-swap.
+**What it does:** Theme-aware hero + tour grid + optional autoplay GIF via playwright-cli. Captures live screenshots at 1600×1000 in dark and light mode with `<picture>` auto theme-swap.
 **Related:** `docs-writer`, `test-playwright`
 
 #### `enhance-web-seo`
@@ -79,7 +79,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 #### `enhance-motion`
 **Triggers:** "add motion", "animate the app", "make it feel alive", "motion pass", "add micro-interactions across the app", "enhance-motion"
-**What it does:** Audits the existing design system + current motion, then applies coherent, reduced-motion-safe, 60fps motion using the right-sized 2026 stack — CSS/tw-animate-css for utility transitions, Auto-Animate for zero-config list/layout changes, Motion (motion.dev) for component transitions/gestures/presence, GSAP only for complex timelines. Defines a motion-token SSOT (durations/easings). Distinct from `design-motion` (from-scratch cookbook). Applies changes and verifies via browser MCP.
+**What it does:** Audits the existing design system + current motion, then applies coherent, reduced-motion-safe, 60fps motion using the right-sized 2026 stack — CSS/tw-animate-css for utility transitions, Auto-Animate for zero-config list/layout changes, Motion (motion.dev) for component transitions/gestures/presence, GSAP only for complex timelines. Defines a motion-token SSOT (durations/easings). Distinct from `design-motion` (from-scratch cookbook). Applies changes and verifies via playwright-cli.
 **Related:** `design-motion`, `audit-uiux-design-system`, `audit-performance`, `audit-accessibility`, `housekeep-design`
 
 #### `housekeep-design`
@@ -89,7 +89,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 #### `enhance-web-forms`
 **Triggers:** "improve this form", "form validation", "accessible form", "multi-step form", "form error handling", "the form UX is bad", "enhance-web-forms"
-**What it does:** Builds/upgrades web forms to production quality: accessible structure (labels, fieldsets, autocomplete, input types), schema-driven validation with client↔server parity, screen-reader-associated inline errors, complete interaction states (loading/disabled/success/error/empty), multi-step flows, unsaved-changes guards, and optimistic submit feedback. Auto-detects the form + validation stack. Applies changes and verifies via browser MCP.
+**What it does:** Builds/upgrades web forms to production quality: accessible structure (labels, fieldsets, autocomplete, input types), schema-driven validation with client↔server parity, screen-reader-associated inline errors, complete interaction states (loading/disabled/success/error/empty), multi-step flows, unsaved-changes guards, and optimistic submit feedback. Auto-detects the form + validation stack. Applies changes and verifies via playwright-cli.
 **Related:** `audit-accessibility`, `audit-ux`, `audit-fe-api`, `backend-error-handling`, `design-motion`, `enhance-web-ux`
 
 #### `enhance-agent-guardrails`
@@ -123,7 +123,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 #### `plan-uiux-unification`
 **Triggers:** "UI/UX unification plan", "design system audit plan", "UI burndown", "unify the design system", "plan UI overhaul", "design system consolidation", "IA audit before redesign", "audit UI without fixing", "UI/UX unification"
-**What it does:** Exhaustive, non-destructive UI/UX + design-system audit that produces a burndown and unification plan — **no code changes in this pass**. IA-first (hierarchy before layout), preservation contract, full surface inventory, violation log, prioritized burndown with risk column, phased roadmap, guardrails. Enhances existing DS; does not replace it. Optional browser MCP for evidence; Firecrawl for current-year best practices.
+**What it does:** Exhaustive, non-destructive UI/UX + design-system audit that produces a burndown and unification plan — **no code changes in this pass**. IA-first (hierarchy before layout), preservation contract, full surface inventory, violation log, prioritized burndown with risk column, phased roadmap, guardrails. Enhances existing DS; does not replace it. Optional playwright-cli for evidence; Firecrawl for current-year best practices.
 **Related:** `audit-uiux-design-system`, `audit-ux`, `enhance-web-ux`, `enhance-web-ui`, `design-system`
 
 #### `plan-antislop`
@@ -346,12 +346,12 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 #### `audit-uiux-design-system`
 **Triggers:** "design system audit", "UI consistency", "token compliance", "design drift", "component audit", "visual coherency"
-**What it does:** Audit UI/UX coherency against design system. Auto-detects CSS framework, component library, icon library. Checks token compliance, component modularity, live visual verification via browser MCP, Nielsen's 10 heuristics.
+**What it does:** Audit UI/UX coherency against design system. Auto-detects CSS framework, component library, icon library. Checks token compliance, component modularity, live visual verification via playwright-cli, Nielsen's 10 heuristics.
 **Related:** `design-system`, `audit-accessibility`, `audit-ux`
 
 #### `audit-ux`
 **Triggers:** "UX audit", "usability review", "heuristic evaluation", "content audit", "interaction design review", "user flow analysis", "UX quality", "check cognitive load", "audit microcopy"
-**What it does:** Research-driven UX audit — Nielsen Norman Group's 10 heuristics, Laws of UX, Intuit Content Design, Google HEART metrics. Browser MCP for live walkthrough, Firecrawl for research, Sequential Thinking for complex flow analysis. Per-page experience lens — for cross-page journeys, user-story completion, and IA structure use `audit-ux-journeys`.
+**What it does:** Research-driven UX audit — Nielsen Norman Group's 10 heuristics, Laws of UX, Intuit Content Design, Google HEART metrics. playwright-cli for live walkthrough, Firecrawl for research, Sequential Thinking for complex flow analysis. Per-page experience lens — for cross-page journeys, user-story completion, and IA structure use `audit-ux-journeys`.
 **Related:** `audit-ux-journeys`, `audit-uiux-design-system`, `audit-accessibility`, `enhance-web-ux`
 
 #### `audit-ux-journeys`
@@ -399,22 +399,22 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 #### `test-qa`
 **Triggers:** "QA the app", "test the app", "find bugs", "test before release", "run QA", "test CRUD", "test data pipeline", "check for dead buttons", "pre-release testing", "smoke test"
-**What it does:** Full-app QA via browser MCP. Auto-discovers pages, features, data entities, auth patterns. Performs real CRUD with data pipeline verification (FE → API → DB → FE), audits UX quality, tests edge cases.
+**What it does:** Full-app QA via playwright-cli. Auto-discovers pages, features, data entities, auth patterns. Performs real CRUD with data pipeline verification (FE → API → DB → FE), audits UX quality, tests edge cases.
 **Related:** `test-unit`, `test-playwright`, `protocol-browser-anti-stall`
 
 #### `test-playwright`
 **Triggers:** "test this with playwright", "test my changes", "test on localhost like a user", "PDCA this", "did you actually test it", "red-team this feature", "verify the work end-to-end"
-**What it does:** Closes the PDCA loop after an implementation. Scopes to the current session's diff, drives the live localhost app through the Playwright MCP manually like a real user, and **fixes** pain points — full-stack (UI/UX + API + DB).
+**What it does:** Closes the PDCA loop after an implementation. Scopes to the current session's diff, drives the live localhost app through playwright-cli manually like a real user, and **fixes** pain points — full-stack (UI/UX + API + DB).
 **Related:** `test-qa`, `protocol-browser-anti-stall`, `debug-fe-be-integration`
 
 #### `test-red-team`
 **Triggers:** "red team this app", "attack my app", "break it", "find all the defects", "adversarial test", "pre-launch hardening", "pentest the app", "full app QA", "security + perf + UX sweep", "try to break it"
-**What it does:** Adversarial full-app sweep driven by a **feature-first coverage matrix**: each feature decomposed to surfaces, sub-pages, components, and states, attacked across 4 dimensions — UI/UX, data pipeline, security (OWASP Top 10 + MASVS), and performance. Drives Playwright browser MCP (web), Playwright Android WebView attach (Capacitor), or adb tap-walk (native chrome). Cross-references Sentry + Supabase + Firecrawl. Produces a severity-ranked defect list with repro evidence and a launch-readiness verdict.
+**What it does:** Adversarial full-app sweep driven by a **feature-first coverage matrix**: each feature decomposed to surfaces, sub-pages, components, and states, attacked across 4 dimensions — UI/UX, data pipeline, security (OWASP Top 10 + MASVS), and performance. Drives playwright-cli (web), Playwright Android WebView attach (Capacitor), or adb tap-walk (native chrome). Cross-references Sentry + Supabase + Firecrawl. Produces a severity-ranked defect list with repro evidence and a launch-readiness verdict.
 **Related:** `test-playwright`, `test-qa`, `audit-security`, `iterate-post-launch`
 
 #### `protocol-browser-anti-stall`
-**Triggers:** (protocol — used by other skills before browser automation sessions)
-**What it does:** Prevent browser automation freezing. Navigation guards with snapshot verification, max 3-second waits, incremental wait pattern, max 4 attempts per goal, SPA-specific rules, fresh refs after state changes.
+**Triggers:** (protocol — used by other skills before browser automation sessions); also "parallel browser agents", "playwright session", "browser keeps stalling"
+**What it does:** Standardizes browser work on `playwright-cli` (`npx --yes @playwright/cli@latest`) with named sessions (`-s=<name>`) so parallel agents each get an isolated browser instead of fighting over the single-instance Playwright MCP. Prevents freezing: navigation guards with snapshot verification, max 3-second waits, incremental wait pattern, max 4 attempts per goal, SPA rules, fresh refs after state changes. Ships an MCP→CLI command map and persistent-login setup (including the Google/CDP sign-in workaround).
 **Related:** `test-qa`, `test-playwright`, `deploy-verify`
 
 ---

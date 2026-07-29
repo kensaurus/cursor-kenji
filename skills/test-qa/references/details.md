@@ -230,17 +230,16 @@ When generating test data for CRUD operations:
 For each test step, follow this cycle:
 
 ```
-1. browser_navigate (if needed)
-2. Apply anti-stall: wait 2s → snapshot → verify loaded
-3. browser_lock before any interaction sequence
-4. browser_snapshot to get current refs
-5. Interact (click, fill, type, scroll)
-6. browser_snapshot after interaction (fresh refs)
-7. browser_console_messages (check for errors)
-8. browser_network_requests (check for failures)
-9. browser_take_screenshot (evidence)
-10. Evaluate: PASS or FAIL with evidence
-11. browser_lock({ action: "unlock" }) when done
+1. goto (if needed)
+2. Apply anti-stall: sleep 2 → snapshot → verify loaded
+3. snapshot to get current refs
+4. Interact (click, fill, type, press)
+5. snapshot after interaction (fresh refs)
+6. console (check for errors)
+7. requests (check for failures)
+8. screenshot --filename .playwright-mcp/<step>.png (evidence)
+9. Evaluate: PASS or FAIL with evidence
+10. close your session when the run is done
 ```
 
 **Timeout budget:**
@@ -256,7 +255,7 @@ If any step exceeds its budget, log `[TIMEOUT]` and move on.
 ## Important Rules
 
 1. **Read the codebase first.** Never test blindly. Phase 0 is mandatory.
-2. **Use browser MCP tools** for all browser interaction: `browser_navigate`, `browser_snapshot`, `browser_take_screenshot`, `browser_click`, `browser_fill`, `browser_type`, `browser_scroll`, `browser_console_messages`, `browser_network_requests`, `browser_lock`, `browser_search`.
+2. **Use playwright-cli** for all browser interaction: `goto`, `snapshot`, `screenshot`, `click`, `fill`, `type`, `press`, `console`, `requests`, `close`, `find`.
 3. **Apply anti-stall protocol** to every interaction. Read `browser-anti-stall` skill first.
 4. **Screenshot every test step.** Every pass and fail needs visual evidence.
 5. **Check console and network** after every page load and every mutation.
