@@ -159,6 +159,11 @@ const ALL_DIRS = [
   { src: 'rules',         dest: 'rules'    },
 ];
 
+// Per-project rule bundles: copied into a specific repo's .cursor/rules by the
+// user (see each bundle's README), never into global ~/.cursor/rules or
+// ~/.claude/rules where their always/glob rules would fire in every project.
+const PROJECT_RULE_BUNDLES = new Set(['native-rn-monorepo', 'project-starter']);
+
 // ---- restore mode ----------------------------------------------------------
 if (has('restore')) {
   const restoreBase = wantClaude && !wantCursor ? claudeBase : cursorBase;
@@ -252,6 +257,7 @@ function installDirs(base, { renameMdc = false } = {}) {
       if (skillName && item !== skillName) continue;
       const itemSrc = join(srcPath, item);
       const isDir = statSync(itemSrc).isDirectory();
+      if (dest === 'rules' && isDir && PROJECT_RULE_BUNDLES.has(item)) continue;
       let outName = item;
       if (renameMdc && dest === 'rules' && !isDir && item.endsWith('.mdc')) {
         outName = item.slice(0, -4) + '.md';
@@ -285,7 +291,7 @@ function detectTools() {
 // excluded — it points at skills these tools cannot load (would be dead text).
 const RULES_EXCLUDE = new Set(['skill-workflows.mdc']);
 const RULES_ORDER = [
-  'senior-engineer.md',
+  'senior-engineer.mdc',
   'full-stack-ship-discipline.mdc',
   'composer-2.5-execution.mdc',
   'shell-first-search.md',

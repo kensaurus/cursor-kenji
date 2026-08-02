@@ -1,7 +1,10 @@
 ---
-description: Execution-time guardrails for Composer 2.5 when implementing an approved plan-*.md (anti-reward-hacking, anti-feature-deletion, checkpointing, context + terminal discipline). Plans are authored/reviewed by a stronger model (e.g. Opus 4.8); this governs the Composer execution run.
+description: Execution-time guardrails for implementing an already-approved plan-*.md audit/burndown (anti-reward-hacking, anti-feature-deletion, checkpointing, context + terminal discipline). Attach whenever executing an approved plan, burndown, complete-everything, or burndown-full run — tuned to Composer 2.5 but binding for any implementation model.
 globs:
-alwaysApply: true
+alwaysApply: false
+paths:
+  - "**/plan-*.md"
+  - "**/plans/**"
 ---
 
 # Composer 2.5 Execution Adapter

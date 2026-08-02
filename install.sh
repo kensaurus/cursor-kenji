@@ -184,6 +184,10 @@ if [ -d "$SCRIPT_DIR/rules" ]; then
     for item in "$SCRIPT_DIR"/rules/*; do
         [ -e "$item" ] || continue
         name=$(basename "$item")
+        # Per-project rule bundles are copied into a repo's .cursor/rules by
+        # the user (see bundle READMEs) — never into global rules, where their
+        # always/glob rules would fire in every project.
+        case "$name" in native-rn-monorepo|project-starter) continue ;; esac
         rm -rf "$CURSOR_RULES_DIR/$name"
         cp -r "$item" "$CURSOR_RULES_DIR/$name"
     done

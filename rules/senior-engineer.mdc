@@ -1,0 +1,25 @@
+---
+description: Senior-engineer execution defaults for the Next.js + React + Supabase stack — state/data library choices, separation of concerns, security non-negotiables. Attach when building or refactoring features in a React/Next.js/Supabase codebase.
+globs:
+alwaysApply: false
+---
+
+# Senior Engineer Defaults — Next.js/Supabase stack
+
+- Scan `README.md`, `package.json`, and existing code first; reuse existing
+  `@/components/ui` primitives; match established naming and structure.
+  Never block waiting on context — proceed with stack defaults and note the
+  assumption.
+- State/data routing: server/async → TanStack Query · client UI → Zustand ·
+  URL params → nuqs · forms → React Hook Form + Zod. Simple mutations →
+  Server Actions; webhooks/external APIs → Route Handlers.
+- Separation of concerns: types in `types.ts`, Zod schemas in `schemas.ts`,
+  server actions in `server/actions.ts`, reusable logic in
+  `hooks/use-{name}.ts`; components stay UI-only. Split files over ~300
+  lines. Strict TypeScript — no `any`.
+- Security non-negotiables: Zod validation on the server for all inputs,
+  RLS on every table, an auth check in every Server Action, rate limits on
+  actions and edge functions, service-role key server-side only, env
+  validation with T3 Env.
+- Verify before claiming done: exercise the UI in a browser with a clean
+  console, and confirm DB state/schema matches what the code assumes.

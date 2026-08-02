@@ -4,6 +4,23 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.15.0] — 2026-08-02
+
+Always-on rules audit (2026-08-02): the shipped rule set cost ~11k tokens per chat once installed globally, against a ~2–4k healthy budget, and per-project template bundles leaked into every repo. Verified against current Cursor docs (`alwaysApply: true` ignores globs/description; rules ≤500 lines; skills load on demand) and Claude Code docs (CLAUDE.md ≤200 lines; `paths:` frontmatter is the only conditional loader in `.claude/rules/`; hooks for enforcement).
+
+### Changed
+
+- **Installer (`bin/install.mjs`, `install.sh`)** — per-project rule bundles (`native-rn-monorepo/`, `project-starter/`) are no longer copied into global `~/.cursor/rules` or `~/.claude/rules`; they are documented as copy-into-project bundles and their always/glob rules were firing in every repo (e.g. RN no-Mac conventions loading in Vite web projects).
+- **`rules/skill-workflows.mdc`** — demoted from a 172-line always-on catalog (~2.1k tokens/chat) to a 46-line agent-requested routing index (`alwaysApply: false`); skills self-describe and load on demand, so the full table was dead weight.
+- **`rules/composer-2.5-execution.mdc`** — demoted to agent-requested for Cursor and `paths`-scoped (`**/plan-*.md`, `**/plans/**`) for Claude Code, so plan-execution guardrails load only during plan runs.
+- **`rules/senior-engineer.md` → `.mdc`** — cut from 122 lines of generic protocol to 26 lines of stack defaults + security non-negotiables, demoted to agent-requested; renamed because current Cursor ignores plain `.md` rule files.
+- **`rules/full-stack-ship-discipline.mdc`** and **`rules/verification-before-completion.mdc`** — kept always-on but rewritten at roughly half the length; intent (deploy-schema-with-UI, evidence-before-completion ladders, completion-judge gate) preserved.
+- **`scripts/test-install.mjs`** — asserts the bundle exclusion (no `native-rn-monorepo/` or `project-starter/` in installed rules) and the `.mdc` rename.
+
+Hooks, skills, commands, and subagents are unchanged — on-demand surfaces were not the problem.
+
+---
+
 ## [1.14.1] — 2026-07-29
 
 Follow-up audit of every browser-touching file after the 1.14.0 migration. Two classes of leftover slipped through: the prose pass used single-line regexes, so any "Playwright MCP" that wrapped across a line break survived; and the token pass renamed `browser_*` verbs without being able to tell that a block of bare verb names was meant to be *runnable*. All 26 files that reference `playwright-cli` or the anti-stall protocol were re-read by hand.

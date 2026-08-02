@@ -1,171 +1,46 @@
 ---
 description: >-
-  Capabilities catalog for cursor-kenji skills. Routes requests to the right
-  skill or bundled workflow. Always-on routing index — the agent consults this
-  to pick between individual skills and bundled workflows.
+  Skill routing index for cursor-kenji. Consult when choosing between an
+  individual skill and a bundled workflow, when a request spans multiple
+  phases (spec + build + test, launch + verify + iterate), or when entering
+  a closure mode (complete-everything, burndown-full).
 globs:
-alwaysApply: true
+alwaysApply: false
 ---
 
-# Skill Routing Index
+# Skill Routing
 
-## Bundled workflows (use these first — they chain multiple skills)
+Skills load on demand and self-describe — never inline skill content into a
+rule. Full catalog: each skill's own description, plus `docs/PLAN-LOOPS.md`
+for the plan-loop sequences.
 
-| Intent | Workflow skill |
-|--------|----------------|
-| Build a new feature end-to-end | `workflow-build-feature` |
-| Fix a bug and ship it | `workflow-fix-and-ship` |
-| Pre-release quality check | `workflow-quality-gate` |
-| Full launch preparation | `workflow-launch-ready` |
-| Orient to a new codebase | `workflow-onboard` |
-| Close post-launch feedback loop | `iterate-post-launch` |
-| Disciplined feature-flag rollout | `workflow-feature-flag` |
-| Finish a partial burndown to 100% coverage | `burndown-full` |
-| Close a plan with no connected deferrals | `complete-everything` |
-| Green the whole repository (authorized debt cleanup) | `workflow-green-repo` |
-| Deploy to production and watch it | `workflow-ship-and-observe` |
-| Turn feedback into tracked, verified-closed tickets | `workflow-feedback-to-closure` |
-| Preflight the environment before a long run | `workflow-environment-ready` |
-| Turn an agent failure into a durable guard | `iterate-agent-harness` |
+## Use a bundled workflow when the request spans phases
 
-`complete-everything` and `burndown-full` are explicit closure modes: persist
-their state files and continue through phase checkpoints. Before either claims
-completion, apply `verification-before-completion` and invoke the
-`completion-judge` subagent. The packaged Cursor stop hook continues only
-actionable unchecked state; Claude Code 2.1.139+ can enforce the same condition
-with `/goal`.
+- Build a feature end-to-end → `workflow-build-feature`
+- Fix a bug and ship it → `workflow-fix-and-ship`
+- Pre-release quality check → `workflow-quality-gate`
+- Full launch preparation → `workflow-launch-ready`
+- Orient to a new codebase → `workflow-onboard`
+- Post-launch feedback loop → `iterate-post-launch`
+- Deploy and observe / roll back → `workflow-ship-and-observe`
+- Drive the whole repo to green → `workflow-green-repo`
+- Finish a partial burndown to 100% → `burndown-full`
+- Close a plan with zero deferrals → `complete-everything`
 
-## When to use a bundled workflow vs individual skill
+## Use an individual skill when scoped to one phase
 
-- **Use a bundle** when the user's request spans multiple phases (spec + build + test, or launch + verify + iterate)
-- **Use an individual skill** when the request is scoped to one phase ("just run the security audit", "just write tests", "just write the PR")
-- **Bundles call individual skills** — they never duplicate instructions; they sequence them
+Names are predictable: `audit-*` (read-only findings), `plan-*` (audit →
+approved burndown, no fixes), `enhance-*` (apply improvements), `test-*`,
+`debug-*`, `deploy-*`, `design-*`, `backend-*`, `mobile-*`. State the task;
+the matching skill self-selects by description.
 
-## Individual skill quick-reference
+## Closure modes
 
-### Testing & quality
-| Task | Skill |
-|------|-------|
-| Adversarial full-app sweep | `test-red-team` |
-| Drive app as real user, fix inline | `test-playwright` |
-| Comprehensive QA with CRUD verification | `test-qa` |
-| Write unit/integration tests | `test-unit` |
+`complete-everything` and `burndown-full` persist their state files and
+continue through phase checkpoints. Before either claims completion, apply
+`verification-before-completion` and invoke the `completion-judge` subagent.
 
-### Audits
-| Task | Skill |
-|------|-------|
-| Static security review (OWASP) | `audit-security` |
-| CI/CD cost, speed & safety (GitHub Actions bill) | `audit-cicd` |
-| JS bundle analysis & reduction | `audit-bundle-size` |
-| Core Web Vitals & performance | `audit-performance` |
-| Database schema health | `audit-db-schema` |
-| Translation quality & hardcoded strings | `audit-i18n` |
-| UX heuristics audit | `audit-ux` |
-| User-story completion, IA & navigation, cross-page journeys | `audit-ux-journeys` |
-| Accessibility (WCAG 2.2) | `audit-accessibility` |
-| Design system compliance | `audit-uiux-design-system` |
-| Full-stack parity/conformance vs the RealWorld reference | `audit-realworld` |
-| Production resilience — timeouts/retries/idempotency/rate limits/PII (the "80%" NFRs) | `audit-resilience` |
-| Backend architecture — audit + decide which pattern to adopt (gateway, BFF, outbox, saga, cache-aside, db-per-service, sync/async; start-simple, topology-gated) | `audit-backend-architecture` |
-| Payment/money-movement correctness — idempotency, double-entry ledger, webhooks, reconciliation, 3DS/PCI (scope-gated P0/P1/P2) | `audit-payment-system` |
+## Rules vs skills
 
-### Enhancement
-| Task | Skill |
-|------|-------|
-| SEO (meta, OG, JSON-LD, sitemap) | `enhance-web-seo` |
-| PWA (manifest, service worker, offline) | `enhance-pwa` |
-| UI polish & layout | `enhance-web-ui` |
-| UX & information architecture | `enhance-web-ux` |
-| Cross-surface (web + mobile) consistency | `enhance-capacitor-ui` |
-| Coherent motion on an existing design system (2026 stack) | `enhance-motion` |
-| Consolidate a drifted design system into one token SSOT | `housekeep-design` |
-| Production-quality forms (a11y, validation, states, multi-step) | `enhance-web-forms` |
-| Install agent guardrails-as-code (rules, hooks, CI gates, lint) | `enhance-agent-guardrails` |
-
-### Plan (audit → approve → execute)
-| Task | Skill |
-|------|-------|
-| UI/UX + design-system unification plan (no fixes) | `plan-uiux-unification` |
-| Stub/dead-link/fake-component audit + wiring plan (no fixes) | `plan-stub-checker` |
-| Performance audit + optimization plan (no fixes) | `plan-perf-audit` |
-| Security/OWASP/RLS audit + hardening plan (no fixes) | `plan-security-audit` |
-| Docs drift audit + sync plan (no rewrites) | `plan-docs-sync` |
-| User-story test coverage plan (no tests written) | `plan-test-coverage` |
-| AI slop / authenticity / voice audit + de-slop burndown (no rewrites) | `plan-antislop` |
-| RLS & Supabase access-control audit + remediation plan (no SQL) | `plan-rls-audit` |
-| Error-handling & observability audit (Sentry + Langfuse, no fixes) | `plan-error-handling` |
-| Input-validation & trust-boundary audit (no hardening) | `plan-input-validation` |
-| Secrets & key-scope audit (rotate vs relocate, no rotation) | `plan-secrets-audit` |
-| Data-integrity & destructive-op audit (no migrations/tokens) | `plan-data-integrity` |
-| Dependency provenance & slopsquatting audit (no install) | `plan-dependency-provenance` |
-| LLM cost guardrails & quota-abuse audit (no limits added) | `plan-llm-cost-guardrails` |
-| Answer-engine / AEO citation readiness audit (no edits) | `plan-aeo-readiness` |
-| App Store / Play submission readiness audit (no manifest edits) | `plan-mobile-readiness` |
-| Capacitor native-layer security audit (no config edits) | `plan-capacitor-hardening` |
-
-**Six-skill plan loop:** see `docs/PLAN-LOOPS.md` —  
-`plan-uiux-unification` → `plan-stub-checker` → `plan-test-coverage` → `plan-perf-audit` / `plan-security-audit` → `plan-docs-sync`  
-Optional: **pre-launch hardening** · **observability & spend** · **launch gates** · `plan-antislop` — see `docs/PLAN-LOOPS.md`
-
-**Pre-launch hardening (layered):**  
-`plan-input-validation` → `plan-secrets-audit` → `plan-rls-audit` → `plan-data-integrity` → `plan-dependency-provenance`
-
-**Observability & spend:** `plan-error-handling` + `plan-llm-cost-guardrails`
-
-**Launch gates:** `plan-capacitor-hardening` → `plan-mobile-readiness` · `plan-aeo-readiness`
-
-### Deploy & operate
-| Task | Skill |
-|------|-------|
-| Post-deploy smoke test | `deploy-verify` |
-| npm package release | `deploy-npm` |
-| Deploy an app, verify the live revision, observe, roll back | `workflow-ship-and-observe` |
-| Drive the whole repo to green (typecheck/lint/test/build) | `workflow-green-repo` |
-| Feedback → deduped tickets → verified closure | `workflow-feedback-to-closure` |
-| Prove the environment can build/test/reach services first | `workflow-environment-ready` |
-| Convert an agent failure into a regression guard | `iterate-agent-harness` |
-
-### Debug
-| Task | Skill |
-|------|-------|
-| Debug any error | `debug-error` |
-| Triage & fix Sentry issues | `debug-sentry-monitor` |
-| FE-BE integration mismatches | `debug-fe-be-integration` |
-
-## Skill chaining diagram
-
-```
-workflow-build-feature
-  └─ workflow-spec-tdd → test-unit → test-playwright → workflow-pr
-
-workflow-fix-and-ship
-  └─ debug-error → test-playwright → workflow-pr → deploy-verify
-
-workflow-quality-gate
-  └─ test-red-team → audit-security → audit-bundle-size → audit-performance → test-unit
-
-workflow-launch-ready
-  └─ enhance-web-seo → enhance-pwa → audit-bundle-size → audit-i18n
-     → workflow-quality-gate → deploy-verify → iterate-post-launch
-
-iterate-post-launch
-  └─ debug-sentry-monitor → deploy-verify → test-playwright
-
-complete-everything
- └─ durable closure set → conditional specialist skills → full verification
- → completion-judge
-
-workflow-ship-and-observe
- └─ preflight (green) → deploy → verify live revision → observe window
- → stable OR rollback/hotfix
-
-workflow-feedback-to-closure
- └─ gather → dedupe → durable tickets → fix (workflow-fix-and-ship /
- complete-everything) → verify live → close
-```
-
-## Rules vs Skills
-
-- **Rules** (this file, `full-stack-ship-discipline.mdc`, etc.) = always-on policies, guardrails, routing
-- **Skills** = activated on demand when a task matches the description
-- Never put task-specific workflows in rules — they waste context on unrelated tasks
+Rules are always-on policy and routing only; skills are on-demand
+procedures. Never promote a skill's workflow into an always-on rule.
