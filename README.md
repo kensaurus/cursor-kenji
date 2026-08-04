@@ -88,11 +88,11 @@ You almost never run one skill alone. Think of a simple loop — **look → chan
 | Stage | Kid version | Skill families |
 |:------|:------------|:---------------|
 | **Orient** | Walk around the house before rearranging furniture | `workflow-onboard`, `/research` |
-| **Assess** | Look carefully — maybe take notes, don't smash walls yet | `audit-*`, `plan-*` |
+| **Assess** | Look carefully — maybe take notes, don't smash walls yet | `audit-*`, `plan-*`, `/grill-me` (the AI interviews *you* until aligned) |
 | **Change** | Build new things or improve old ones | `design-*`, `enhance-*`, `backend-*`, `housekeep-design` |
 | **Prove** | Kick the tires. Don't say "done" unless it really is | `test-*`, `complete-everything`, `completion-judge` |
 | **Ship** | Put it in the world and watch it | `workflow-ship-and-observe`, `deploy-*`, `debug-*` |
-| **Guardrails** | Seatbelts that stay on between sessions | rules, completion hook, `enhance-agent-guardrails` |
+| **Guardrails** | Seatbelts that stay on between sessions | rules, completion hook, `enhance-agent-guardrails`, `/handoff` (carry state to the next session) |
 
 Rule of thumb: **assess before you change, prove before you ship, never skip a stage.**
 
