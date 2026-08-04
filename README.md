@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Ready-made playbooks for your AI coding editor.</strong><br/>
-  110 agent skills · 36 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
+  114 agent skills · 38 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
   <em>You talk in plain English. The matching expert recipe runs itself.</em>
 </p>
 
@@ -29,7 +29,7 @@ Your AI editor is smart, but without a recipe it **guesses**. Sometimes that gue
 
 You do **not** need to memorize skill names. Talking like a human is enough.
 
-It ships **110 Cursor agent skills**, 36 slash commands, and 6 subagents — tuned for React / Next.js / Supabase, useful on almost any stack. Works in [Cursor](https://cursor.com), [Claude Code](https://www.anthropic.com/claude-code), and (with a lighter install) Codex + Gemini CLI. Brand new? Read the **[plain-language guide →](docs/GETTING-STARTED.md)**.
+It ships **114 Cursor agent skills**, 38 slash commands, and 6 subagents — tuned for React / Next.js / Supabase, useful on almost any stack. Works in [Cursor](https://cursor.com), [Claude Code](https://www.anthropic.com/claude-code), and (with a lighter install) Codex + Gemini CLI. Brand new? Read the **[plain-language guide →](docs/GETTING-STARTED.md)**.
 
 ### Install (30 seconds)
 
@@ -46,6 +46,7 @@ Restart Cursor. Done.
 | You say… | What kicks in | What you get |
 |:---------|:--------------|:-------------|
 | *"orient me"* / *"what's in this repo?"* | `workflow-onboard` | A short tour of the codebase |
+| *"grill me before I build"* | `grilling` | One question at a time until you're truly aligned |
 | *"build this feature"* | `workflow-build-feature` | Spec → tests → code → smoke → PR |
 | *"fix this bug and ship it"* | `workflow-fix-and-ship` | Debug → fix → verify → PR → deploy |
 | *"audit my security"* | `audit-security` | OWASP-style findings with file:line |
@@ -68,7 +69,7 @@ Full menu with every skill name → **[Every skill](#every-skill-in-plain-englis
 | **Rule** | A house rule the AI always obeys | Drop a `.mdc` into your project |
 | **MCP server** | A phone line to your database / GitHub / browser | Copy a template + paste your keys |
 
-Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **122** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
+Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **126** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
 
 ### How the recipes fit together (the loop)
 
@@ -103,9 +104,9 @@ The whole kit, at a glance:
 
 | | Count | What it does |
 |:--|------:|:-------------|
-| **Skills** | 110 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
+| **Skills** | 114 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
 | **Cursor Skills** | 12 | IDE tools (canvas, hooks, rules, PR splitter) |
-| **Commands** | 36 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
+| **Commands** | 38 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
 | **Subagents** | 6 | Background helpers (code-reviewer, debugger, db-migrator…) |
 | **Completion hook** | 1 | Opt-in stop gate: continues only unfinished durable closure state |
 | **MCP Servers** | 16 | Supabase · GitHub · Sentry · Playwright · AWS · Slack |
@@ -123,7 +124,7 @@ Scroll the **family counts**, then the **full list**. You don't memorize names �
 
 <!-- SKILL-INDEX:START -->
 
-_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **122 skills** listed below._
+_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **126 skills** listed below._
 
 #### Skill families at a glance
 
@@ -138,7 +139,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | 📊 Data — charts & pipelines | **2** | Charts, dashboards, ETL / cron jobs |
 | 📚 Docs — write it down clearly | **2** | READMEs, PRDs, RFCs with a reader-first voice |
 | 🧹 Housekeeping — clean up design drift | **1** | Merge a drifted design system into one source of truth |
-| 🔗 Workflows — multi-step recipes | **17** | End-to-end recipes (build, fix, ship, green the repo) |
+| 🔗 Workflows — multi-step recipes | **18** | End-to-end recipes (build, fix, ship, green the repo) |
 | ✅ Test & QA — prove it works | **4** | Unit, Playwright, red-team, QA |
 | 🚀 Deploy — ship & verify | **2** | npm release + post-deploy smoke tests |
 | 🐛 Debug — find & fix what's broken | **3** | Errors, Sentry, frontend↔backend mismatches |
@@ -146,9 +147,9 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | 🛡️ Protocols — session guardrails | **1** | Keep browser automation from freezing |
 | ✍️ Authoring — build skills & MCP | **2** | Author new skills or MCP servers |
 | 🤝 Third-party (upstream-maintained) | **3** | Vendored upstream skills (Emil, UI/UX Pro Max, Vercel WIG) |
-| 🧩 Core & cross-cutting | **4** | Close everything, burndown, post-launch loops |
+| 🧩 Core & cross-cutting | **7** | Close everything, burndown, post-launch loops |
 | 🖱️ Cursor IDE skills | **12** | Canvas, hooks, rules, PR splitter, CLI helpers |
-| **Total** | **122** | |
+| **Total** | **126** | |
 
 #### Full list (every skill)
 
@@ -269,7 +270,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 |:------|:-------------|
 | `housekeep-design` | Consolidate a design system that has drifted across many vibe-coding sessions and developer handoffs into one single source of truth |
 
-### 🔗 Workflows — multi-step recipes (17)
+### 🔗 Workflows — multi-step recipes (18)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -283,6 +284,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `workflow-green-repo` | Drive an entire repository to a fully green baseline — typecheck, lint, tests, and build all passing from a clean checkout — when the user… |
 | `workflow-housekeep` | Repo housekeeping: sync READMEs to match current architecture, remove dead files (logs, screenshots, deprecated code, build artifacts),… |
 | `workflow-launch-ready` | Full launch preparation sweep for a new app or major release |
+| `workflow-merge-conflicts` | Resolve an in-progress git merge or rebase conflict by tracing each side back to its original intent |
 | `workflow-onboard` | First-contact orientation for an unfamiliar codebase |
 | `workflow-parallel-agents` | Run multiple agents in parallel via git worktrees, cloud agents, or multi-model comparison |
 | `workflow-pr` | Manage the full PR lifecycle — create, review, address bot feedback, resolve conflicts, and merge |
@@ -343,12 +345,15 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `thirdparty-ui-ux-pro-max` | Third-party skill — design intelligence for professional UI/UX (the full style catalog, palettes, typography, UX guidelines) |
 | `thirdparty-web-interface-guidelines` | Third-party skill — reviews UI code for Vercel Web Interface Guidelines compliance (accessibility, focus, forms, animation, performance,… |
 
-### 🧩 Core & cross-cutting (4)
+### 🧩 Core & cross-cutting (7)
 
 | Skill | What it does |
 |:------|:-------------|
 | `burndown-full` | Drive a planned change to 100% coverage across an entire codebase when a prior agent run stopped early |
 | `complete-everything` | Close an approved plan with zero plan-related deferrals: implement every unfinished item, absorb every connected… |
+| `domain-modeling` | Build and sharpen a project's domain model — a CONTEXT.md glossary plus ADRs |
+| `grilling` | Grill the user relentlessly about a plan, decision, or idea — one question at a time — until shared understanding is reached |
+| `handoff` | Compact the current conversation into a handoff document a fresh agent can pick up |
 | `iterate-agent-harness` | Turn an agent's own failure — a premature stop, a false "done", a reward- hacked check, a missed file, a broken handoff — into a durable… |
 | `iterate-post-launch` | Close the post-launch improvement loop for any shipped app |
 
@@ -608,7 +613,7 @@ Every skill has two labels: a **family** (its `<prefix>-<topic>` name) and a **l
 
 ---
 
-## Commands (36)
+## Commands (38)
 
 Commands are shortcuts for the things you do constantly. Type `/` in chat to see them all.
 
@@ -729,9 +734,9 @@ Where everything lives:
 
 ```
 cursor-kenji/
-├── skills/           # 110 Agent Skills (SKILL.md each)
+├── skills/           # 114 Agent Skills (SKILL.md each)
 ├── skills-cursor/    # 12 Cursor-specific skills
-├── commands/         # 36 slash commands
+├── commands/         # 38 slash commands
 ├── agents/           # 6 subagents
 ├── hooks/            # opt-in completion stop gate
 ├── rules/            # Global + project-starter rules
@@ -783,7 +788,7 @@ A box of ready-made recipes for your AI editor ([Agent Skills](https://agentskil
 `npx skills add kensaurus/cursor-kenji` (recommended) or `npx @kensaurus/cursor-kenji`. Restart Cursor after install.
 
 **How many skills?**  
-**110** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**122** total). Counts come from the filesystem and stay synced via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
+**114** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**126** total). Counts come from the filesystem and stay synced via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
 
 **How do skills trigger?**  
 You talk normally. Cursor matches your words to each skill's YAML `description`. To force one: *"use \`audit-security\` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).

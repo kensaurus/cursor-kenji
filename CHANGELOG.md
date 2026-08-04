@@ -4,6 +4,24 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.16.0] — 2026-08-04
+
+Patterns adopted from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT) after a full comparison of the two packs: alignment-first interviewing, shared domain language, session handoff, intent-first conflict resolution, and the "writing great skills" verbosity levers.
+
+### Added
+
+- **`grilling` skill + `/grill-me` command** — relentless one-question-at-a-time interview to close the user↔agent alignment gap before any code: recommended answer with each question, facts looked up vs decisions asked, no edits until confirmed, closes with a decision log that feeds `design-prd` / `/plan`.
+- **`domain-modeling` skill** — build a `CONTEXT.md` glossary and sparing ADRs (hard-to-reverse + surprising + real trade-off only); challenges conflicting terms, sharpens fuzzy language, cross-references claims against code.
+- **`handoff` skill + `/handoff` command** — compact the session into a handoff doc (state, ordered next steps, suggested skills, gotchas) in the OS temp dir; secrets redacted, artifacts referenced not copied, verification claims held to the `verification-before-completion` ladder. `disable-model-invocation: true`, so it costs zero always-on context.
+- **`workflow-merge-conflicts` skill** — resolve in-progress merges/rebases by tracing each hunk to its original intent (commits, PRs, issues) before resolving; repo checks re-run before finishing.
+
+### Changed
+
+- **`meta-skill-creator` + `create-skill` (Cursor)** — added the verbosity levers: no-op test (delete lines the model already obeys), positive phrasing over prohibition, leading words ("fast, deterministic, low-overhead" → *tight*), single source of truth, one trigger per branch in descriptions, checkable completion criteria; plus model-invoked vs user-invoked (`disable-model-invocation`) cost guidance.
+- **`debug-error`** — Phase 1 now requires a tight feedback loop before any hypothesis: one red-capable, deterministic, fast command already run once, asserting the user's exact symptom; Phase 2 gains repro minimisation (every remaining element load-bearing); Phase 6 requires the loop re-run green and the minimised repro converted to a regression test at a correct seam.
+- **`workflow-spec-tdd`** — TDD phase now tests only at pre-agreed seams (named in the plan, confirmed with the user), works in vertical slices (tracer bullets, not all-tests-first), bans tautological tests (expected values from an independent source of truth), and treats refactor-broken tests as implementation coupling to fix at the seam.
+- **`.cursor-plugin/plugin.json`** — re-synced version with `package.json` (was left at 1.14.1 by the 1.15.0 release).
+
 ## [1.15.0] — 2026-08-02
 
 Always-on rules audit (2026-08-02): the shipped rule set cost ~11k tokens per chat once installed globally, against a ~2–4k healthy budget, and per-project template bundles leaked into every repo. Verified against current Cursor docs (`alwaysApply: true` ignores globs/description; rules ≤500 lines; skills load on demand) and Claude Code docs (CLAUDE.md ≤200 lines; `paths:` frontmatter is the only conditional loader in `.claude/rules/`; hooks for enforcement).

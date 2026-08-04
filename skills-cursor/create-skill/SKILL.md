@@ -204,7 +204,24 @@ Put essential information in SKILL.md; detailed reference material in separate f
 
 **Keep references one level deep** - link directly from SKILL.md to reference files. Deeply nested references may result in partial reads.
 
-### 4. Set Appropriate Degrees of Freedom
+### 4. Prune with the verbosity levers
+
+Adapted from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT):
+
+- **No-op test** — if a sentence doesn't change behavior versus the agent's
+  default ("be thorough"), delete the whole sentence. Cure weak intensifiers
+  with a stronger single word (*relentless*), not more prose.
+- **Positive phrasing** — state the target behavior instead of prohibiting the
+  bad one; keep prohibitions only as hard guardrails, paired with what to do
+  instead.
+- **Leading words** — collapse restated qualities into one compact concept the
+  model already knows ("fast, deterministic, low-overhead" → a *tight* loop).
+- **One trigger per branch** — in descriptions, synonyms of the same trigger are
+  duplication; keep only genuinely distinct branches.
+- **Checkable completion criteria** — end steps on a condition the agent can
+  verify, not a vibe; vague criteria invite premature completion.
+
+### 5. Set Appropriate Degrees of Freedom
 
 Match specificity to the task's fragility:
 

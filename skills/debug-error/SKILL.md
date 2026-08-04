@@ -79,6 +79,28 @@ Before diving into debug, state:
 
 ## Phase 1: Reproduce
 
+### Build a tight feedback loop first
+
+**This is the skill — everything after is mechanical.** Before reading code to
+build a theory, construct one command that goes red on *this* bug and will go
+green when it's fixed (adapted from
+[mattpocock/skills](https://github.com/mattpocock/skills), MIT). In rough order
+of preference: a failing test at the nearest seam → a curl/HTTP script against
+the dev server → a CLI invocation with a fixture input → a headless browser
+script → replaying a captured trace/payload through the code path in isolation.
+
+The loop is done when it is:
+
+- [ ] **Red-capable** — asserts the user's exact symptom, not "runs without erroring"
+- [ ] **Deterministic** — same verdict every run (flaky bugs: loop the trigger to raise the reproduction rate until debuggable)
+- [ ] **Fast** — seconds, not minutes
+- [ ] **Already run once** — you can paste the invocation and its red output
+
+If you catch yourself forming a hypothesis before this command exists, stop —
+that is the exact failure this phase prevents. If you genuinely cannot build a
+loop, say so explicitly, list what you tried, and ask for a captured artifact
+(HAR, log dump, recording) instead of proceeding blind.
+
 ### Gather Information
 
 ```markdown
@@ -124,6 +146,14 @@ User Action → Frontend Handler → API Call → Backend Controller → Databas
 ```
 
 Identify where the data goes wrong by checking each boundary.
+
+### Minimise the repro
+
+Once the feedback loop is red, shrink the repro to the smallest scenario that
+still goes red: cut inputs, callers, config, and data one at a time, re-running
+the loop after each cut. Done when every remaining element is load-bearing —
+removing any one makes the loop go green. A minimal repro shrinks the hypothesis
+space and becomes the regression test in Phase 6.
 
 ### Binary Search (when completely lost)
 
@@ -229,6 +259,10 @@ Do NOT apply these as the sole fix:
 
 ### Test the Fix
 
+- [ ] Phase 1 feedback loop re-run and now green (paste the invocation + output)
+- [ ] Minimised repro converted into a regression test at a correct seam — one
+      that exercises the real bug pattern; if no correct seam exists, document
+      that as an architectural finding instead of writing a false-confidence test
 - [ ] Original bug no longer occurs
 - [ ] Related functionality still works
 - [ ] Edge cases handled

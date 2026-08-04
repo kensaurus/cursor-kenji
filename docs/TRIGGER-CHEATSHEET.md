@@ -96,6 +96,8 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "mobile design", "responsive layout", "touch UI", "small screen" | `design-mobile-first` |
 | "animation", "micro-interaction", "hover effect", "scroll animation" | `design-motion` |
 | "write a PRD", "product requirements", "spec this feature", "what should we build" | `design-prd` |
+| "grill me", "stress-test this plan", "interview me about this", "poke holes in this", "challenge my thinking" | `grilling` |
+| "pin down terminology", "ubiquitous language", "glossary", "record an ADR", "you're using the wrong words" | `domain-modeling` |
 | "UI/UX unification plan", "design system audit plan", "UI burndown", "unify design system", "plan UI overhaul", "audit UI without fixing" | `plan-uiux-unification` |
 | "feels AI-generated", "de-slop", "AI slop", "reads like ChatGPT", "generic/templated/soulless", "voice pass", "authenticity pass" | `plan-antislop` |
 | "check my RLS", "row level security", "is my Supabase secure", "anyone can read my data", "service_role key", "lock down my tables" | `plan-rls-audit` |
@@ -211,6 +213,8 @@ Attribution and update policy → [THIRD-PARTY-SKILLS.md](./THIRD-PARTY-SKILLS.m
 | "think before coding", "simplicity first", "stop overcomplicating" | `workflow-coding-discipline` |
 | "add a feature flag", "gradual rollout", "kill switch", "dark launch", "canary release" | `workflow-feature-flag` |
 | "commit my changes", "write a commit message" | `workflow-git-commit` |
+| "resolve the conflicts", "fix this merge", "the rebase is stuck" | `workflow-merge-conflicts` |
+| `/handoff` (user-invoked only) — compact the session into a handoff doc | `handoff` |
 | "clean up the repo", "update README", "update dependencies", "remove dead code" | `workflow-housekeep` |
 | "I'm new to this repo", "orient me", "explain this codebase", "catch me up" | `workflow-onboard` |
 | "run agents in parallel", "best-of-N", "compare approaches", "multi-model" | `workflow-parallel-agents` |

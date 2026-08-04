@@ -6,7 +6,7 @@ license: Apache-2.0
 
 # Skill Creator
 
- guidance for creating effective skills.
+Guidance for creating effective skills.
 
 ## About Skills
 
@@ -31,6 +31,44 @@ The context window is a public good. Skills share the context window with everyt
 **Default assumption: Claude is already very smart.** Only add context Claude doesn't already have. Challenge each piece of information: "Does Claude really need this explanation?" and "Does this paragraph justify its token cost?"
 
 Prefer concise examples over verbose explanations.
+
+### Pruning — the verbosity levers
+
+Every line must earn its tokens. Sweep each skill with these tests (adapted from
+[mattpocock/skills](https://github.com/mattpocock/skills), MIT):
+
+- **No-op test.** Does the line change behavior versus what the agent already
+  does by default? "Be thorough" is a no-op; delete the whole sentence, don't
+  trim words from it. A weak intensifier is cured by a stronger word
+  (*relentless*), not more prose.
+- **Positive phrasing.** Steering by prohibition backfires — "don't think of an
+  elephant" names the elephant. State the target behavior so the banned one is
+  never spoken; keep a prohibition only as a hard guardrail you can't phrase
+  positively, paired with what to do instead.
+- **Leading words.** Replace a restated quality with one compact concept the
+  model already knows — "fast, deterministic, low-overhead" collapses to a
+  *tight* loop. Fewer tokens and a sharper hook for the agent's thinking.
+- **Single source of truth.** Each meaning lives in exactly one place; a
+  duplicated rule costs maintenance, tokens, and inflates its apparent
+  importance.
+- **One trigger per branch.** In descriptions, synonyms that rename the same
+  trigger are duplication — collapse them; keep only genuinely distinct
+  branches.
+- **Checkable completion criteria.** End each step on a condition the agent can
+  verify ("every modified file accounted for"), not a vibe ("make sure it's
+  good") — vague criteria invite premature completion.
+
+### Invocation — who pays the cost
+
+Two modes, trading different costs:
+
+- **Model-invoked** (default): the description sits in context every turn so the
+  agent can fire the skill autonomously. Pay this cost only when auto-triggering
+  earns it.
+- **User-invoked**: set `disable-model-invocation: true`. The description leaves
+  the agent's always-on context — zero token cost — but only the user typing its
+  name can fire it. Right for compactors, wrappers, and rituals the user always
+  initiates deliberately (e.g. `handoff`).
 
 ### Set Appropriate Degrees of Freedom
 
@@ -178,7 +216,8 @@ Write the YAML frontmatter with `name` and `description`:
  - Include both what the Skill does and specific triggers/contexts for when to use it.
  - Include all "when to use" information here - Not in the body. The body is only loaded after triggering, so "When to Use This Skill" sections in the body are not helpful to Claude.
 
-Do not include any other fields in YAML frontmatter.
+The only other fields to consider: `license`, and `disable-model-invocation: true`
+for user-invoked skills (see "Invocation — who pays the cost"). Nothing else.
 
 ##### Body
 
