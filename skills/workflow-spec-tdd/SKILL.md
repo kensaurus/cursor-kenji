@@ -74,6 +74,10 @@ Rules:
 - The first implementation task is always "write the failing test."
 - Never write code with no test path unless the repo has zero test setup — then add the smallest harness first, or explicitly flag that you're skipping TDD and why.
 - One concern per test. Test behavior, not implementation details.
+- **Test only at pre-agreed seams.** A seam is the public boundary you test at — the interface where behavior is observable without reaching inside. Name the seams in the plan (Phase 3) and confirm them with the user; prefer existing seams, at the highest level possible. Agreed seams put test effort on critical paths instead of every internal.
+- **Vertical slices, not horizontal.** One test → one implementation → repeat, each test a tracer bullet informed by the last cycle. Writing all tests up front verifies imagined behavior and locks in test structure before the implementation teaches you anything.
+- **No tautological tests.** Expected values come from an independent source of truth (a known-good literal, a worked example, the spec) — never recomputed the same way the code computes them, or the test passes by construction.
+- **The refactor-breaks-test tell.** If a test breaks when you refactor but behavior hasn't changed, it was implementation-coupled — fix the test's seam, don't patch the assertion.
 - Surface-specific runners: web → vitest/jest/playwright; RN → jest + RNTL, `mobile-emulator-test` for device; Capacitor → vitest + `mobile-mobile-capacitor-platform` E2E.
 
 ### Phase 5 — Self-review (gate before "done")

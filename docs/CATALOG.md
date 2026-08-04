@@ -28,7 +28,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (110)
+## Skills (114)
 
 ### Enhance
 
@@ -120,6 +120,16 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Triggers:** "PRD", "product requirements", "write a spec", "new feature spec", "feature requirements", "scope a feature"
 **What it does:** Generate PRDs via structured conversation. Auto-detects tech stack, features, data model. Uses Firecrawl for competitive research, Context7 for feasibility, Supabase MCP for data model verification.
 **Related:** `docs-coauthor`, `workflow-spec-tdd`
+
+#### `grilling` *(adapted from mattpocock/skills, MIT)*
+**Triggers:** "grill me", "stress-test this plan", "interview me about this", "poke holes in this", "challenge my thinking"
+**What it does:** Relentless one-question-at-a-time interview until shared understanding is reached. Recommends an answer with each question, looks up facts itself, puts every decision to the user, and writes no code until confirmed. Ends with a compact decision log to feed `design-prd` or `/plan`.
+**Related:** `domain-modeling`, `design-prd`, `workflow-spec-tdd`
+
+#### `domain-modeling` *(adapted from mattpocock/skills, MIT)*
+**Triggers:** "pin down terminology", "ubiquitous language", "glossary", "record an architectural decision", "ADR", "the agent uses the wrong words"
+**What it does:** Actively build and sharpen the project's domain model: a `CONTEXT.md` glossary plus sparing ADRs (only for hard-to-reverse, surprising, real-trade-off decisions). Challenges conflicting terms, sharpens fuzzy language, stress-tests boundaries with concrete scenarios, and cross-references claims against the code.
+**Related:** `grilling`, `design-prd`, `docs-coauthor`
 
 #### `plan-uiux-unification`
 **Triggers:** "UI/UX unification plan", "design system audit plan", "UI burndown", "unify the design system", "plan UI overhaul", "design system consolidation", "IA audit before redesign", "audit UI without fixing", "UI/UX unification"
@@ -549,6 +559,16 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **What it does:** First-contact orientation for any codebase. Reads package manifests, entry points, routing, data layer, auth, env vars, and recent git history. Produces a concise briefing: what the app does, how it's structured, how to run it, and the top 3 areas to understand first.
 **Related:** `workflow-build-feature`, `docs-writer`
 
+#### `workflow-merge-conflicts` *(adapted from mattpocock/skills, MIT)*
+**Triggers:** "resolve the conflicts", "fix this merge", "the rebase is stuck", conflict markers left in the tree
+**What it does:** Resolve an in-progress merge/rebase by tracing each conflicting hunk back to its original intent (commits, PRs, issues), preserving both intents where possible, then running the repo's real checks before finishing the operation. Never resolves on textual appearance alone; never aborts without instruction.
+**Related:** `workflow-git-commit`, `workflow-pr`
+
+#### `handoff` *(adapted from mattpocock/skills, MIT; user-invoked via `/handoff`)*
+**Triggers:** `/handoff` only — `disable-model-invocation: true`, so it costs zero always-on context
+**What it does:** Compact the current conversation into a handoff document (state, ordered next steps, suggested skills, gotchas) saved to the OS temp directory, with secrets redacted, artifacts referenced by path instead of copied, and verification claims held to the `verification-before-completion` ladder.
+**Related:** `verification-before-completion`, `workflow-parallel-agents`
+
 ---
 
 ### Bundled Workflows
@@ -620,7 +640,7 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 
 ---
 
-## Commands (36)
+## Commands (38)
 
 Commands fall into two groups: **standalone** (full playbook in the file) and **pointer** (thin slash entry delegating to a skill).
 
@@ -651,6 +671,8 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/test` | `test-unit`, `test-qa`, `mobile-emulator-test` | Type check → unit → integration → E2E |
 | `/uiux` | `audit-uiux-design-system`, `audit-ux`, `enhance-web-ui`, `enhance-web-ux` | Audit + enhance UI/UX |
 | `/uiux-plan` | `plan-uiux-unification` | Full UI/UX unification plan (audit only, no fixes) |
+| `/grill-me` | `grilling` | One-question-at-a-time interview to align before building |
+| `/handoff` | `handoff` | Compact the conversation into a handoff doc for a fresh session |
 | `/slop-plan` | `plan-antislop` | AI slop / authenticity audit + de-slop burndown (plan only) |
 | `/rls-plan` | `plan-rls-audit` | Supabase RLS + access-control audit (plan only) |
 | `/secrets-plan` | `plan-secrets-audit` | Secrets scan + rotate-vs-relocate plan (plan only) |
