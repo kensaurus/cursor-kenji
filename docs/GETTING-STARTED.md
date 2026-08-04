@@ -72,6 +72,9 @@ These chain multiple skills into a single tracked loop:
 
 | Type this in chat… | What happens |
 |:-------------------|:-------------|
+| `grill me about this plan` | The AI interviews **you** — one question at a time — until you're both sure what to build |
+| `pin down our terminology` | Builds a project glossary (`CONTEXT.md`) so the AI stops using the wrong words |
+| `resolve the merge conflicts` | Traces each conflict back to why the code was written, resolves with intent, re-runs checks |
 | `audit my app's security` | Scans for OWASP vulnerabilities, checks auth, flags secrets in code |
 | `make this page look better` | Improves layout, spacing, hierarchy — like a designer would |
 | `commit my changes` | Writes a proper conventional commit message for you |
@@ -86,6 +89,61 @@ These chain multiple skills into a single tracked loop:
 | `is my app production-ready?` | Checks timeouts, retries, idempotency — the reliability the happy path skips |
 
 The AI picks the right skill automatically based on what you typed.
+
+---
+
+## A typical session, start to finish
+
+The single biggest cause of bad AI output isn't bad code — it's the AI building
+the wrong thing. This loop prevents that:
+
+### 1. Get oriented (new repo only)
+
+```
+I'm new to this repo, orient me
+```
+
+The AI reads the codebase and gives you a 5-minute briefing.
+
+### 2. Get grilled *before* any code
+
+```
+/grill-me I want to add a referral program
+```
+
+Instead of guessing, the AI interviews you — **one question at a time**, each
+with a recommended answer so you can just say "yes" or push back:
+
+> *"Should a referral reward fire on signup or on first payment? I'd recommend
+> first payment — it prevents signup-farming. Agree?"*
+
+It looks up facts in your codebase itself and only asks you the *decisions*.
+Nothing is built until you confirm. The session ends with a decision log.
+
+### 3. Build from the decisions
+
+```
+build the feature from those decisions
+```
+
+The `workflow-build-feature` loop takes over: spec → failing test → code →
+smoke test → PR. Because you were grilled first, the spec matches what you
+actually meant.
+
+### 4. Hand off when you stop
+
+Long session? Context getting full? Type:
+
+```
+/handoff finish the referral UI tomorrow
+```
+
+You get a compact handoff document (what's done, what's verified, exact next
+steps, which skills to invoke) saved outside your repo. Tomorrow, paste its
+path into a fresh chat and continue where you left off — no re-explaining.
+
+**The rhythm: orient → grill → build → prove → hand off.** Skip the grilling
+and you're back to the AI guessing.
 
 ---
 
