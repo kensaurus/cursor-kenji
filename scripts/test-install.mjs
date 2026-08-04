@@ -16,6 +16,7 @@ import {
   mkdirSync,
   readFileSync,
   writeFileSync,
+  statSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
@@ -42,7 +43,9 @@ try {
   const repoSkills = countDir(join(repoRoot, "skills")) + countDir(join(repoRoot, "skills-cursor"));
   const repoCommands = countDir(join(repoRoot, "commands"));
   const repoAgents = countDir(join(repoRoot, "agents"));
-  const repoRules = countDir(join(repoRoot, "rules"));
+  // Per-project rule bundles (directories) are excluded from global installs.
+  const repoRules = readdirSync(join(repoRoot, "rules"))
+    .filter((f) => !statSync(join(repoRoot, "rules", f)).isDirectory()).length;
 
   expect(countDir(join(cur, "skills")) === repoSkills,
     `skills: expected ${repoSkills}, got ${countDir(join(cur, "skills"))}`);
@@ -56,7 +59,11 @@ try {
   // Top-level .md files must survive (the bug class we are guarding against).
   expect(existsSync(join(cur, "agents", "code-reviewer.md")), "missing agents/code-reviewer.md");
   expect(existsSync(join(cur, "commands", "commit.md")), "missing commands/commit.md");
-  expect(existsSync(join(cur, "rules", "senior-engineer.md")), "missing rules/senior-engineer.md");
+  expect(existsSync(join(cur, "rules", "senior-engineer.mdc")), "missing rules/senior-engineer.mdc");
+  expect(!existsSync(join(cur, "rules", "native-rn-monorepo")),
+    "per-project bundle native-rn-monorepo leaked into global rules");
+  expect(!existsSync(join(cur, "rules", "project-starter")),
+    "per-project bundle project-starter leaked into global rules");
   expect(existsSync(join(cur, "cursor-kenji-hooks", "completion-gate.mjs")),
     "missing completion hook script");
 
