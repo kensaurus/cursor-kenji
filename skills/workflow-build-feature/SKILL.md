@@ -1,12 +1,10 @@
 ---
 name: workflow-build-feature
-description: >-
-  End-to-end feature build workflow: spec → TDD → implement → smoke test → PR.
-  Sequences workflow-spec-tdd, test-unit, test-playwright, and workflow-pr into
-  a single tracked loop. The single entry point for "build a feature",
-  "implement this", "add X", "ship a new capability", or any non-trivial
-  feature request. Asks for scope clarification before starting if the request
-  is ambiguous. Generic across web, mobile, and full-stack repos.
+description: >
+  End-to-end feature build workflow: spec → TDD → implement → smoke test → PR. Sequences
+  workflow-spec-tdd, test-unit, test-playwright, and workflow-pr into a single tracked
+  loop. The single entry point for "build a feature", "implement this", "add X", "ship a
+  new capability", or any non-trivial feature request. Asks.
 license: MIT
 ---
 

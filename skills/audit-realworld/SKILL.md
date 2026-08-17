@@ -1,18 +1,10 @@
 ---
 name: audit-realworld
-description: >-
-  Audit a full-stack app against the RealWorld ("Conduit") reference — its
-  formal API spec, shared Bruno/Hurl E2E suite, and closest-stack reference
-  implementation — to find what is implemented correctly, partially, or not at
-  all across frontend, backend, and data layer. Auto-detects whether to run
-  strict spec conformance (the repo IS a RealWorld build) or benchmark the
-  repo's own domain against RealWorld's production-relevant patterns, and bows
-  out cleanly on non-CRUD/non-web repos. Read-only: produces a prioritized gap
-  report and hands remediation to other skills. Use when "audit against
-  realworld", "compare my app to realworld", "conduit conformance", "is my
-  full-stack app complete", "full-stack gap check", or "what's missing to reach
-  production". RealWorld is a completeness/pattern reference, not a production
-  bar — real hardening is delegated to audit-security / plan-* skills.
+description: >
+  Audit a full-stack app against the RealWorld ("Conduit") reference — its formal API
+  spec, shared Bruno/Hurl E2E suite, and closest-stack reference implementation — to find
+  what is. Use when "audit against realworld", "compare my app to realworld", "conduit
+  conformance", "is my full-stack app complete", "full-stack gap.
 license: MIT
 ---
 

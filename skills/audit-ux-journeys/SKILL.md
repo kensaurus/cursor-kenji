@@ -1,17 +1,10 @@
 ---
 name: audit-ux-journeys
-description: >-
-  Cross-page UX audit for user stories, task completion, and information architecture — the layer
-  audit-ux (per-page heuristics) doesn't cover. Derives real user stories from routes/nav/CTAs (not
-  invented personas), scopes depth by audit trigger (KPIs dropping / complaints / redesign /
-  pre-launch), audits IA structurally (click depth, orphan pages, dead ends, label consistency,
-  grouping vs mental model, findability/first-click), then walks every core story end-to-end in a
-  headed browser producing a task-completion matrix with friction logs. Evidence-disciplined: validates
-  with analytics/funnels/drop-offs when available, otherwise marks findings as expert-judgment
-  hypotheses — never presents taste as data. Reports impact×effort quick-wins vs roadmap. Use when
-  "audit user flows", "user story audit", "information architecture / IA audit", "can users find X",
-  "users get lost", "navigation audit", "funnel drop-off", "task completion", or "audit-ux-journeys".
-  Per-page heuristics/microcopy stay with audit-ux.
+description: >
+  Cross-page UX audit for user stories, task completion, and information architecture —
+  the layer audit-ux (per-page heuristics) doesn't cover. Use when "audit user flows",
+  "user story audit", "information architecture / IA audit", "can users find X", "users
+  get lost", "navigation audit", "funnel drop-off", "task.
 license: MIT
 ---
 
@@ -180,6 +173,7 @@ alone is not a journey audit).
 
 ## Related
 
+- `audit-responsive` — page-level layout/IA at 375 / 768 / 1440 (this skill is cross-page stories)
 - `audit-ux` — per-page NN/g heuristics, Laws of UX, microcopy, emotional design (the page lens to this skill's path lens)
 - `enhance-web-ux` / `enhance-web-forms` — fix the screens and forms this audit flags
 - `audit-uiux-design-system` — visual token/component compliance

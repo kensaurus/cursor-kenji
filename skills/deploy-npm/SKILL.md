@@ -4,9 +4,7 @@ description: >
   Release npm packages end-to-end: Changesets version bump, CHANGELOG update, GitHub
   Actions OIDC publish, and post-release verification. Use when the user says "release to
   npm", "publish this package", "ship a new version", "cut a release", "update the
-  changelog", or combines a package name with a release verb. Covers monorepo and
-  single-package workflows. Pairs with deploy-verify, docs-writer. Do NOT use for
-  non-npm deploys (Vercel, Docker) or internal release notes only.
+  changelog", or combines a package name with a release verb.
 license: MIT
 ---
 

@@ -1,16 +1,10 @@
 ---
 name: workflow-feedback-to-closure
-description: >-
-  Turn raw feedback — bug reports, user complaints, review comments, Sentry
-  issues, QA findings, audit/red-team output — into deduplicated, durable,
-  trackable tickets and drive each to production-verified closure. Normalize
-  and cluster incoming signals, dedupe against existing issues, write clear
-  reproducible tickets, prioritize by impact, fix via the right skill, and
-  close only after the fix is verified live. Use when "triage this feedback",
-  "turn these reports into tickets", "process the bug backlog", "handle these
-  review comments", "close the loop on QA findings", or "manage incoming
-  issues". Bridges audit/QA/monitoring outputs into complete-everything and
-  workflow-fix-and-ship.
+description: >
+  Turn raw feedback — bug reports, user complaints, review comments, Sentry issues, QA
+  findings, audit/red-team output — into deduplicated, durable, trackable tickets and
+  drive each. Use when "triage this feedback", "turn these reports into tickets", "process
+  the bug backlog", "handle these review comments", "close the.
 license: MIT
 ---
 

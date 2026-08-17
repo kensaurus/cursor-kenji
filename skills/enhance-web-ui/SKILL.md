@@ -1,7 +1,10 @@
 ---
 name: enhance-web-ui
 description: >
-  Artistic, research-grounded UI enhancement skill for making an existing page feel intentional, spacious, and human-crafted. Use when the user asks to make a page nicer, more polished, more premium, more editorial, less crowded, less AI-generated, better laid out or balanced, or mentions typography, visual hierarchy, spacing, empty/dead space, motion, hover states, cards, grids, or density — especially vague-but-visceral feedback ("clunky", "heavy", "incoherent", "wasted space", "feels AI-generated", "monochromatic", "everything stacked left"). Catches hard-to-spot failures: active-state mass mismatch, chrome tautology, card-on-card layering, brand-color competition, full-cell wash where a micro-indicator belongs, wrapper-collapsed tiles, conditional slots reserving space for absent content, and the same datum repeated 3× in one fold. General across web repos. Focuses on content choreography, hierarchy, spacing, and motion; for task-flow usability/data correctness use enhance-web-ux first or alongside it.
+  Artistic, research-grounded UI enhancement skill for making an existing page feel
+  intentional, spacious, and human-crafted. Use when the user asks to make a page nicer,
+  more polished, more premium, more editorial, less crowded, less AI-generated, better
+  laid out or balanced, or mentions typography, visual hierarchy.
 license: MIT
 ---
 
@@ -10,6 +13,7 @@ license: MIT
 > | Your surface | Use |
 > |:-------------|:----|
 > | **Web** product page / dashboard — composition, hierarchy, spacing, motion | `enhance-web-ui` |
+> | **Web** linearized desktop / stacked at every breakpoint | `audit-responsive` |
 > | **Web** product page — UX heuristics, flows, data wiring | `enhance-web-ux` |
 > | **Web** landing / marketing / portfolio (greenfield, anti-slop) | `enhance-web-landing` |
 > | **Web** existing site upgrade (audit-first, preserve behavior) | `enhance-web-redesign` |

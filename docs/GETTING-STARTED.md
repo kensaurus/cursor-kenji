@@ -83,6 +83,7 @@ These chain multiple skills into a single tracked loop:
 | `write a PR` | Creates the pull request with a proper title and description |
 | `red team this app` | Adversarial sweep — UX, data pipeline, security, performance |
 | `make the app feel alive with motion` | Adds coherent, accessible animations that match your design system |
+| `desktop looks like a stretched phone` | Unstacks the layout — max-width, side-by-side groups, hierarchy at 375 / 768 / 1440 |
 | `improve this form` | Accessible labels, real validation, error/success states, multi-step flows |
 | `clean up our design system` | Consolidates drifted colors/components into one source of truth |
 | `set up guardrails so AI doesn't break things` | Installs pre-commit + CI checks against secrets, bugs, and risky ops |

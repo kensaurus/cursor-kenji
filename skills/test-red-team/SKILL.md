@@ -1,18 +1,9 @@
 ---
 name: test-red-team
-description: >-
-  Adversarial red-team of a running web, React Native, or Capacitor hybrid app.
-  Drives a visible (headed) browser by hand — playwright-cli (web/PWA),
-  Android WebView attach (Capacitor), or adb tap-walk (native) — never scripted
-  test files. Attacks every feature across 4 dimensions: UI/UX, data pipeline,
-  security (OWASP-mapped), and performance. Cross-references Sentry telemetry,
-  Supabase DB-layer mutation truth and RLS, and current OWASP/MASVS guidance.
-  Produces a severity-ranked defect list with repro steps and evidence. Generic
-  across any repo and stack. Use when asked to "red team this app", "attack my
-  app", "break it", "find all the defects", "adversarial test", "pre-launch
-  hardening", "pentest the app", or "full app QA". Distinct from
-  test-playwright (session PDCA), test-qa (happy-path crawl), and
-  audit-security (static code review).
+description: >
+  Adversarial red-team of a running web, React Native, or Capacitor hybrid app. Use when
+  asked to "red team this app", "attack my app", "break it", "find all the defects",
+  "adversarial test", "pre-launch hardening", "pentest the app", or "full app QA".
 license: MIT
 ---
 

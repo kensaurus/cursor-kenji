@@ -1,6 +1,7 @@
 ---
 name: update-cursor-settings
 description: Modify Cursor/VSCode user settings in settings.json. Use when user wants to change editor settings, preferences, themes, font size, tab size, keybindings, or mentions "settings", "preferences", "theme", "font", "format on save", "auto save", or "cursor config".
+disable-model-invocation: true
 ---
 # Updating Cursor Settings
 

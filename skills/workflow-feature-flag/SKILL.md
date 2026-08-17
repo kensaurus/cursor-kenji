@@ -1,16 +1,10 @@
 ---
 name: workflow-feature-flag
-description: >-
-  Plan and execute a disciplined feature-flag rollout for any app. Detects
-  existing flag infrastructure (LaunchDarkly, Flagsmith, GrowthBook, Unleash,
-  PostHog, or custom env-var gates). Designs flag taxonomy, targeting rules,
-  and kill-switch path. Gates the feature behind the flag, monitors error rate
-  and performance in Sentry during staged rollout, and either promotes to 100%
-  or rolls back. Schedules flag cleanup once stable. Generic across any stack
-  and flag vendor. Use when asked to "add a feature flag", "gradual rollout",
-  "staged release", "kill switch", "dark launch", "flag cleanup", "canary
-  release", "rollback plan", "safe feature release", or "deploy without
-  switching on".
+description: >
+  Plan and execute a disciplined feature-flag rollout for any app. Use when asked to "add
+  a feature flag", "gradual rollout", "staged release", "kill switch", "dark launch",
+  "flag cleanup", "canary release", "rollback plan", "safe feature release", or "deploy
+  without switching on".
 license: MIT
 ---
 

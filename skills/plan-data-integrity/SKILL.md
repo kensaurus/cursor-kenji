@@ -1,12 +1,10 @@
 ---
 name: plan-data-integrity
 description: >
-  Audit a project for destructive-operation and migration safety gaps, then produce a phased
-  safeguard plan. Use when the user says "is my migration safe", "could I lose data", "check
-  my backups", "my agent might delete prod", "safe schema changes", or "disaster recovery".
-  Audits unguarded DELETE/TRUNCATE/DROP, column drops without backfill, backups in prod
-  blast radius, and over-scoped agent/CI tokens. Plan only until approved. Pairs with
-  plan-rls-audit, audit-db-schema, db-migrator. Do NOT use for query perf or RLS alone.
+  Audit a project for destructive-operation and migration safety gaps, then produce a
+  phased safeguard plan. Use when the user says "is my migration safe", "could I lose
+  data", "check my backups", "my agent might delete prod", "safe schema changes", or
+  "disaster recovery".
 license: MIT
 ---
 

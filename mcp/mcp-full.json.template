@@ -8,14 +8,16 @@
 
     "context7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@3.2.2"]
+      "args": ["-y", "@upstash/context7-mcp@3.2.2", "--api-key", "${env:CONTEXT7_API_KEY}"]
     },
 
     "firecrawl": {
       "command": "npx",
       "args": ["-y", "firecrawl-mcp@3.21.3"],
       "env": {
-        "FIRECRAWL_API_KEY": "YOUR_FIRECRAWL_API_KEY"
+        "FIRECRAWL_API_KEY": "${env:FIRECRAWL_API_KEY}",
+        "FIRECRAWL_NO_SEARCH_FEEDBACK": "1",
+        "FIRECRAWL_NO_ENDPOINT_FEEDBACK": "1"
       }
     },
 
@@ -23,15 +25,15 @@
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-github@2025.4.8"],
       "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "YOUR_GITHUB_PAT"
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_PERSONAL_ACCESS_TOKEN}"
       }
     },
 
     "supabase": {
       "command": "npx",
-      "args": ["-y", "@supabase/mcp-server-supabase@0.8.2", "--project-ref", "YOUR_SUPABASE_PROJECT_REF"],
+      "args": ["-y", "@supabase/mcp-server-supabase@0.8.2", "--project-ref", "${env:SUPABASE_PROJECT_REF}"],
       "env": {
-        "SUPABASE_ACCESS_TOKEN": "YOUR_SUPABASE_ACCESS_TOKEN"
+        "SUPABASE_ACCESS_TOKEN": "${env:SUPABASE_ACCESS_TOKEN}"
       }
     },
 
@@ -61,7 +63,7 @@
         "ghcr.io/github/github-mcp-server"
       ],
       "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "YOUR_GITHUB_PAT"
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_PERSONAL_ACCESS_TOKEN}"
       }
     },
 

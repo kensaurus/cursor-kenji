@@ -1,12 +1,9 @@
 ---
 name: audit-cicd
 description: >
-  Audit CI/CD pipelines (GitHub Actions) for cost, speed, and safety. Use when
-  the GitHub Actions bill is high, when the user mentions Actions minutes,
-  runner cost, workflow cost, slow CI, artifact/cache storage, or wants a
-  CI/CD / workflow audit. Finds double-billing triggers, missing concurrency,
-  macOS/large runners on push, missing path filters, long artifact retention,
-  and doomed jobs — then proposes fixes that never delete tests or break deploys.
+  Audit CI/CD pipelines (GitHub Actions) for cost, speed, and safety. Use when the GitHub
+  Actions bill is high, when the user mentions Actions minutes, runner cost, workflow
+  cost, slow CI, artifact/cache storage, or wants a CI/CD / workflow audit.
 license: MIT
 ---
 

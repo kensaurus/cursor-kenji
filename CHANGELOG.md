@@ -4,6 +4,39 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.18.0] — 2026-08-18
+
+Adds **`audit-responsive`**: the missing layout/IA audit for "desktop is a linearized phone." Existing skills covered mobile-up (`design-mobile-first`), cross-page IA (`audit-ux-journeys`), tokens (`audit-uiux-design-system`), and polish (`enhance-web-ui` / `enhance-web-ux`) — none owned the 10 breakpoint anti-patterns + wireframe-then-implement loop.
+
+### Added
+
+- **`audit-responsive`** — detect stack, score 10 layout/IA anti-patterns (`file:line` + severity), extract or propose a token sheet, ASCII wireframes at 375 / 768 / 1440, then implement in reviewable chunks (report-first if scope is large). Live verify via playwright-cli. References: `references/checklist.md`.
+- **`/responsive-audit`** — thin slash entry. Optional path scope.
+
+### Changed
+
+- **`design-mobile-first`** — description no longer claims generic "responsive" (that stole this skill). Routes linearized-desktop complaints to `audit-responsive`.
+- **Neighbors** — `plan-uiux-unification`, `audit-ux`, `audit-ux-journeys`, `audit-uiux-design-system`, `/uiux`, `docs/PLAN-LOOPS.md`, catalog compositions, and the trigger cheat sheet now point at the new skill.
+
+---
+
+## [1.17.0] — 2026-08-15
+
+Cursor/Claude config housekeep: cut always-on rule weight, stop shipping Cursor builtin skill dupes, slim default MCP, interpolate secrets.
+
+### Changed
+
+- **Skill descriptions** — house budget 320 characters (was 1024). 86 descriptions shortened; bodies unchanged. `paths` on RN/Capacitor skills; `disable-model-invocation` on slash-only `skills-cursor` utilities.
+- **Installer** — Cursor skips 11 `skills-cursor` names that Cursor already ships as managed builtins (keeps `babysit`). Claude still gets portable copies. `--no-agents-mirror` and `--quiet` added. `install.sh` is a wrapper around `bin/install.mjs`. `cursor-sync` finds `~/Documents/GitHub/cursor-kenji` and calls the Node installer.
+- **Rules** — `full-stack-ship-discipline` is agent-selected (no auto-push). `composer-2.5-execution` drops empty `globs`. `shell-first-search` is a hang-fallback, not a Grep/Glob ban.
+- **MCP** — essential template is Firecrawl (authenticated, feedback flags off) + Context7 + Supabase with `${env:NAME}` interpolation. Sequential Thinking and Playwright MCP are full-template only. Research command no longer requires Sequential Thinking MCP.
+
+### Added
+
+- `scripts/shorten-skill-descriptions.mjs` — description budget rewriter used for this release.
+
+---
+
 ## [1.16.0] — 2026-08-04
 
 Patterns adopted from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT) after a full comparison of the two packs: alignment-first interviewing, shared domain language, session handoff, intent-first conflict resolution, and the "writing great skills" verbosity levers.

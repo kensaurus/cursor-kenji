@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Ready-made playbooks for your AI coding editor.</strong><br/>
-  114 agent skills · 38 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
+  115 agent skills · 39 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
   <em>You talk in plain English. The matching expert recipe runs itself.</em>
 </p>
 
@@ -29,7 +29,7 @@ Your AI editor is smart, but without a recipe it **guesses**. Sometimes that gue
 
 You do **not** need to memorize skill names. Talking like a human is enough.
 
-It ships **114 Cursor agent skills**, 38 slash commands, and 6 subagents — tuned for React / Next.js / Supabase, useful on almost any stack. Works in [Cursor](https://cursor.com), [Claude Code](https://www.anthropic.com/claude-code), and (with a lighter install) Codex + Gemini CLI. Brand new? Read the **[plain-language guide →](docs/GETTING-STARTED.md)**.
+It ships **115 Cursor agent skills**, 39 slash commands, and 6 subagents — tuned for React / Next.js / Supabase, useful on almost any stack. Works in [Cursor](https://cursor.com), [Claude Code](https://www.anthropic.com/claude-code), and (with a lighter install) Codex + Gemini CLI. Brand new? Read the **[plain-language guide →](docs/GETTING-STARTED.md)**.
 
 ### Install (30 seconds)
 
@@ -52,6 +52,7 @@ Restart Cursor. Done.
 | *"audit my security"* | `audit-security` | OWASP-style findings with file:line |
 | *"is this production-ready?"* | `audit-resilience` + `audit-realworld` | Timeouts, retries, parity checks |
 | *"make this page less AI-looking"* | `enhance-web-ui` / `enhance-web-ux` | Cleaner layout, real content hierarchy |
+| *"desktop looks like a phone"* | `audit-responsive` | Unstack the layout at 375 / 768 / 1440 |
 | *"make the forms accessible"* | `enhance-web-forms` | Labels, validation, keyboard-friendly |
 | *"plan a security hardening pass"* | `plan-security-audit` | A burndown **you** approve before edits |
 | *"complete everything"* | `complete-everything` | No parked leftovers — judge verifies "done" |
@@ -69,7 +70,7 @@ Full menu with every skill name → **[Every skill](#every-skill-in-plain-englis
 | **Rule** | A house rule the AI always obeys | Drop a `.mdc` into your project |
 | **MCP server** | A phone line to your database / GitHub / browser | Copy a template + paste your keys |
 
-Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **126** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
+Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **127** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
 
 ### How the recipes fit together (the loop)
 
@@ -104,9 +105,9 @@ The whole kit, at a glance:
 
 | | Count | What it does |
 |:--|------:|:-------------|
-| **Skills** | 114 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
+| **Skills** | 115 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
 | **Cursor Skills** | 12 | IDE tools (canvas, hooks, rules, PR splitter) |
-| **Commands** | 38 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
+| **Commands** | 39 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
 | **Subagents** | 6 | Background helpers (code-reviewer, debugger, db-migrator…) |
 | **Completion hook** | 1 | Opt-in stop gate: continues only unfinished durable closure state |
 | **MCP Servers** | 16 | Supabase · GitHub · Sentry · Playwright · AWS · Slack |
@@ -124,13 +125,13 @@ Scroll the **family counts**, then the **full list**. You don't memorize names �
 
 <!-- SKILL-INDEX:START -->
 
-_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **126 skills** listed below._
+_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **127 skills** listed below._
 
 #### Skill families at a glance
 
 | Family | Count | In one sentence |
 |:-------|------:|:----------------|
-| 🔍 Audit — look before you change | **18** | Check the codebase — security, UX, performance, payments… |
+| 🔍 Audit — look before you change | **19** | Check the codebase — security, UX, performance, payments… |
 | 📋 Plan — audit first, change only after you approve | **17** | Write a fix plan you approve before any code changes |
 | 🎨 Enhance — improve what already exists | **12** | Polish UI, forms, motion, SEO, PWA on an existing app |
 | ✨ Design — build something new | **10** | Create new UI, APIs, emails, themes from scratch |
@@ -149,11 +150,11 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | 🤝 Third-party (upstream-maintained) | **3** | Vendored upstream skills (Emil, UI/UX Pro Max, Vercel WIG) |
 | 🧩 Core & cross-cutting | **7** | Close everything, burndown, post-launch loops |
 | 🖱️ Cursor IDE skills | **12** | Canvas, hooks, rules, PR splitter, CLI helpers |
-| **Total** | **126** | |
+| **Total** | **127** | |
 
 #### Full list (every skill)
 
-### 🔍 Audit — look before you change (18)
+### 🔍 Audit — look before you change (19)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -171,6 +172,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `audit-performance` | Audit and optimize application performance |
 | `audit-realworld` | Audit a full-stack app against the RealWorld ("Conduit") reference — its formal API spec, shared Bruno/Hurl E2E suite, and closest-stack… |
 | `audit-resilience` | Read-only audit for the non-functional "20%" AI agents systematically skip: timeouts, retries with backoff+jitter, circuit breakers,… |
+| `audit-responsive` | Audit and fix linearized mobile layouts at every breakpoint — desktop is not a wide phone |
 | `audit-security` | Audit code for security vulnerabilities and best practices |
 | `audit-uiux-design-system` | Audit visual UI coherency, design token compliance, and component modularity against a design system for any project |
 | `audit-ux` | Audit user experience quality using research-backed frameworks: Nielsen Norman Group's 10 usability heuristics, Intuit Content Design… |
@@ -210,7 +212,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `enhance-web-forms` | Build or upgrade web forms to production quality: accessible structure (labels, fieldsets, autocomplete, correct input types),… |
 | `enhance-web-landing` | Build landing pages, portfolios, and marketing sites that don't look AI-generated |
 | `enhance-web-redesign` | Upgrades existing websites and apps to premium quality |
-| `enhance-web-seo` | Audit and fix SEO for any web app. Checks meta tags, Open Graph and Twitter Card tags, JSON-LD structured data, robots.txt, sitemap.xml,… |
+| `enhance-web-seo` | Audit and fix SEO for any web app |
 | `enhance-web-ui` | Artistic, research-grounded UI enhancement skill for making an existing page feel intentional, spacious, and human-crafted |
 | `enhance-web-ux` | Generative, NN/g-grounded page enhancement skill |
 | `enhance-web-web3d` | Add 3D and scroll-driven motion to an existing website or web app — Three.js / React Three Fiber for the scene, GSAP ScrollTrigger for… |
@@ -224,7 +226,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `design-email` | Design and implement transactional and marketing email templates |
 | `design-frontend` | Create distinctive, production-grade frontend interfaces that avoid generic AI aesthetics |
 | `design-generative-art` | Create algorithmic art using p5.js, Canvas API, or SVG with seeded randomness and interactive parameters |
-| `design-mobile-first` | Designs mobile-first responsive interfaces with touch optimization — breakpoint strategy, touch targets, safe areas, and gesture handling,… |
+| `design-mobile-first` | Design mobile-first UIs: touch targets, safe areas, gestures, then enhance up |
 | `design-motion` | Design and implement purposeful motion — micro-interactions, page transitions, scroll animations, and hover effects — using Framer Motion,… |
 | `design-prd` | Generate Product Requirements Documents through structured conversation for any project |
 | `design-system` | Build and maintain cohesive design systems and component libraries with tokens, theming, and documented variants |
@@ -415,7 +417,7 @@ npx skills add kensaurus/mushi-mushi
 
 **After install:** (1) Restart Cursor (2) Copy `mcp/mcp.json.template` → `~/.cursor/mcp.json`, fill `YOUR_*` keys (3) Describe any task — skills match on keywords.
 
-**Authoring skills?** Each skill must pass [Agent Skills spec](https://agentskills.io/specification) validation (`npm run validate:skills`): `name` matches directory, `description` ≤ 1024 chars, body < 500 lines.
+**Authoring skills?** Each skill must pass [Agent Skills spec](https://agentskills.io/specification) validation (`npm run validate:skills`): `name` matches directory, `description` ≤ 320 chars (house budget; spec max 1024), body < 500 lines.
 
 ### Claude Code
 
@@ -613,7 +615,7 @@ Every skill has two labels: a **family** (its `<prefix>-<topic>` name) and a **l
 
 ---
 
-## Commands (38)
+## Commands (39)
 
 Commands are shortcuts for the things you do constantly. Type `/` in chat to see them all.
 
@@ -734,9 +736,9 @@ Where everything lives:
 
 ```
 cursor-kenji/
-├── skills/           # 114 Agent Skills (SKILL.md each)
+├── skills/           # 115 Agent Skills (SKILL.md each)
 ├── skills-cursor/    # 12 Cursor-specific skills
-├── commands/         # 38 slash commands
+├── commands/         # 39 slash commands
 ├── agents/           # 6 subagents
 ├── hooks/            # opt-in completion stop gate
 ├── rules/            # Global + project-starter rules
@@ -788,7 +790,7 @@ A box of ready-made recipes for your AI editor ([Agent Skills](https://agentskil
 `npx skills add kensaurus/cursor-kenji` (recommended) or `npx @kensaurus/cursor-kenji`. Restart Cursor after install.
 
 **How many skills?**  
-**114** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**126** total). Counts come from the filesystem and stay synced via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
+**115** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**127** total). Counts come from the filesystem and stay synced via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
 
 **How do skills trigger?**  
 You talk normally. Cursor matches your words to each skill's YAML `description`. To force one: *"use \`audit-security\` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).

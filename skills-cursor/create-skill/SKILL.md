@@ -1,6 +1,7 @@
 ---
 name: create-skill
 description: Guide users through creating effective Agent Skills for Cursor. Use when user wants to create, write, update, or debug a skill, or asks about SKILL.md format, skill structure, ~/.cursor/skills/, or skill best practices.
+disable-model-invocation: true
 ---
 # Creating Skills in Cursor
 
@@ -105,7 +106,7 @@ Concrete examples of using this skill.
 | Field | Requirements | Purpose |
 |-------|--------------|---------|
 | `name` | Max 64 chars, lowercase letters/numbers/hyphens only | Unique identifier for the skill |
-| `description` | Max 1024 chars, non-empty | Helps agent decide when to apply the skill |
+| `description` | Max 320 chars in kenji (spec max 1024), non-empty | Helps agent decide when to apply the skill |
 
 ---
 
@@ -238,7 +239,7 @@ Match specificity to the task's fragility:
 1. **Discovery** — purpose, location, triggers, constraints
 2. **Design** — name, description, sections, supporting files
 3. **Implement** — `SKILL.md` + `references/` + `scripts/` as needed
-4. **Verify** — in cursor-kenji run `npm run validate:skills`; description ≤1024 chars, body <500 lines
+4. **Verify** — in cursor-kenji run `npm run validate:skills`; description ≤320 chars, body <500 lines
 
 ## Additional resources
 

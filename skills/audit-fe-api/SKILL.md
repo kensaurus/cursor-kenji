@@ -1,13 +1,9 @@
 ---
 name: audit-fe-api
 description: >
-  Audit frontend API calls against backend implementation for any project. Auto-detects API
-  client library (axios, fetch, ky), state management (TanStack Query, SWR, Redux), and backend
-  framework. Uses Sentry MCP for production API error data, Firecrawl for current API contract
-  best practices, Context7 for library docs, and Supabase MCP for schema verification. Replaces
-  hardcoded paths with auto-detected patterns. Use when reviewing frontend API integration,
-  optimizing network requests, ensuring FE-BE contract alignment, or when the user mentions
-  API audit, API errors, or network optimization.
+  Audit frontend API calls against backend implementation for any project. Use when
+  reviewing frontend API integration, optimizing network requests, ensuring FE-BE contract
+  alignment, or when the user mentions API audit, API errors, or network optimization.
 license: MIT
 ---
 

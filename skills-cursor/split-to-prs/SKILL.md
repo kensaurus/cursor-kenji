@@ -1,6 +1,7 @@
 ---
 name: split-to-prs
 description: Split current work into small reviewable PRs. Use when the user asks to split a chat, set of changes, branch, or PR.
+disable-model-invocation: true
 ---
 # Split to PRs
 

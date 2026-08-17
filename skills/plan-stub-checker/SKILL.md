@@ -2,13 +2,9 @@
 name: plan-stub-checker
 description: >
   Exhaustive audit for stubs, dead buttons, fake/placeholder components, unwired handlers,
-  dead links, orphans, and severed integrations — produces a burndown and wiring plan with
-  no implementation in this pass. Traces intended backend, Supabase, Sentry, and data-pipeline
-  targets; conservative false-positive filtering. Plan only — user approves before wiring.
-  Uses codebase static analysis + optional Playwright/Sentry/Supabase MCP. Use when asked to
-  "find dead buttons", "stub checker", "fake components", "unwired handlers", "dead links",
-  "orphaned components", "plan stub wiring", "what's not connected", "mock data in prod",
-  "buttons that do nothing", or "stub audit".
+  dead links, orphans, and severed integrations — produces a burndown and wiring plan
+  with. Use when asked to "find dead buttons", "stub checker", "fake components", "unwired
+  handlers", "dead links", "orphaned components", "plan.
 license: MIT
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: create-rule
 description: Create Cursor rules for persistent AI guidance. Use when user wants to create a rule, add coding standards, project conventions, file-specific patterns, or mentions ".cursor/rules", "AGENTS.md", "cursor rule", "coding standard", "convention", or "AI guidance".
+disable-model-invocation: true
 ---
 # Creating Cursor Rules
 

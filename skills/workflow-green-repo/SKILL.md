@@ -1,15 +1,10 @@
 ---
 name: workflow-green-repo
-description: >-
-  Drive an entire repository to a fully green baseline — typecheck, lint,
-  tests, and build all passing from a clean checkout — when the user has
-  explicitly authorized fixing pre-existing debt. Enumerate every failing gate,
-  externalize the worklist, fix root causes in batches, and prove green with a
-  fresh from-scratch run. Use when "make the repo green", "get CI passing",
-  "fix all the failing tests", "clear the typecheck errors", "zero lint
-  errors", "make the build pass", or "clean up the baseline". Distinct from
-  complete-everything (closes one plan's connected scope) and burndown-full
-  (one searchable pattern) — this closes the whole repository's health gates.
+description: >
+  Drive an entire repository to a fully green baseline — typecheck, lint, tests, and build
+  all passing from a clean checkout — when the user has explicitly authorized fixing. Use
+  when "make the repo green", "get CI passing", "fix all the failing tests", "clear the
+  typecheck errors", "zero lint errors", "make the build.
 license: MIT
 ---
 

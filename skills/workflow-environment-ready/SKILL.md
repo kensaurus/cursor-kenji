@@ -1,14 +1,10 @@
 ---
 name: workflow-environment-ready
-description: >-
-  Prove the working environment is actually runnable before starting a long or
-  autonomous task, so a multi-hour run does not fail at the finish line on a
-  missing tool, dependency, service, or credential. Detect the stack, verify
-  runtimes and package installs, confirm required services and env vars are
-  reachable (without printing secrets), and confirm the real verification
-  commands execute. Use when "set up the environment", "is this ready to run",
-  "before we start the big task", "preflight the repo", "why won't the tests
-  run", or at the start of any burndown / complete-everything / long agent run.
+description: >
+  Prove the working environment is actually runnable before starting a long or autonomous
+  task, so a multi-hour run does not fail at the finish line on a missing tool,
+  dependency. Use when "set up the environment", "is this ready to run", "before we start
+  the big task", "preflight the repo", "why won't the tests run".
 license: MIT
 ---
 

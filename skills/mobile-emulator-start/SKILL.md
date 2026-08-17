@@ -2,15 +2,9 @@
 name: mobile-emulator-start
 description: >
   Boots a clean Android emulator + Metro (Expo dev-client / bare React Native) with the
-  right ordering: inspect existing IDE terminals first, kill stale ports/processes, choose
-  "fresh cache wipe" vs "fast iteration" for Hot Reload, default to **1080×2400** display
-  (standard phone size; use a tall 1080×4000 display only when scroll-QA is requested
-  and a matching tall skin is applied),
-  adb reverse + poll Metro /status before deeplink to avoid connection races, and
-  troubleshoot adb/Expo connectivity and white-screen. Use when asked to start Metro and emulator,
-  restart dev loop, fix “Cannot connect to Expo”, spin up a new terminal instance, debug
-  stuck bundler, or align emulator geometry for scroll QA. Generic for any app; repos may
-  wrap these steps in package.json scripts.
+  right ordering: inspect existing IDE terminals first, kill stale ports/processes,
+  choose. Use when asked to start Metro and emulator, restart dev loop, fix “Cannot
+  connect to Expo”, spin up a new terminal instance, debug stuck.
 license: MIT
 ---
 

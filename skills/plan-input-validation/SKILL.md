@@ -2,14 +2,9 @@
 name: plan-input-validation
 description: >
   Audit every trust boundary for unvalidated input, injection, and forged-request gaps,
-  then produce a phased hardening plan. Use when the user says "validate my inputs",
-  "is my app injection-safe", "check my forms", "XSS", "dangerouslySetInnerHTML",
-  "my Stripe webhook", "can someone forge requests", or is hardening before launch. AI
-  code has happy-path bias: missing Zod, dangerouslySetInnerHTML without DOMPurify,
-  webhook signature gaps (empty or unchecked signing secrets), raw-body signature
-  mistakes, missing idempotency. Stack-aware for Supabase, Stripe, Next.js. Plan only until each
-  phase is approved. Pairs with plan-rls-audit, plan-security-audit, audit-fe-api. Do
-  NOT use for row access (plan-rls-audit) or secrets (plan-secrets-audit).
+  then produce a phased hardening plan. Use when the user says "validate my inputs", "is
+  my app injection-safe", "check my forms", "XSS", "dangerouslySetInnerHTML", "my Stripe
+  webhook", "can someone forge requests", or is hardening.
 license: MIT
 ---
 

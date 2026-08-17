@@ -1,17 +1,10 @@
 ---
 name: design-email
-description: >-
-  Design and implement transactional and marketing email templates. Detects
-  email framework (React Email, MJML, or plain HTML), mail provider (Resend,
-  SendGrid, Postmark, AWS SES, Nodemailer), and delivery setup (SPF/DKIM/DMARC).
-  Builds mobile-first templates with dark mode support, 600px max-width, inline
-  styles for client compatibility, and accessible alt text. Reviews copy for
-  natural, conversational tone — no jargon, no passive voice, no corporate
-  formality. Checks deliverability config. Tests rendering across major email
-  clients. Generic across any stack. Use when asked to "build an email
-  template", "transactional email", "welcome email", "password reset email",
-  "email design", "React Email", "MJML", "dark mode email", "deliverability",
-  "SPF DKIM", "email copy review", or "why is my email in spam".
+description: >
+  Design and implement transactional and marketing email templates. Use when asked to
+  "build an email template", "transactional email", "welcome email", "password reset
+  email", "email design", "React Email", "MJML", "dark mode email", "deliverability", "SPF
+  DKIM", "email copy review", or "why is my email in spam".
 license: MIT
 ---
 

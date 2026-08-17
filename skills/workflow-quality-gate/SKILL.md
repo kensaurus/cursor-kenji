@@ -1,11 +1,10 @@
 ---
 name: workflow-quality-gate
-description: >-
+description: >
   Pre-release quality gate that sequences test-red-team, audit-security,
-  audit-bundle-size, audit-performance, and test-unit into a single sweep.
-  Produces a go/no-go verdict with a ranked defect list. Use when "is this
-  ready to ship?", "quality gate", "pre-release checklist", "what do I need to
-  fix before launch?", "ship-readiness check", or before any production release.
+  audit-bundle-size, audit-performance, and test-unit into a single sweep. Use when "is
+  this ready to ship?", "quality gate", "pre-release checklist", "what do I need to fix
+  before launch?", "ship-readiness check", or before any production release.
 license: MIT
 ---
 

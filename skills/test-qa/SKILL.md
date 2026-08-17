@@ -2,16 +2,9 @@
 name: test-qa
 description: >
   Generic webapp QA fallback — use only when no project-specific QA skill applies
-  (project-local QA skills take precedence; use mobile-emulator-test for native
-  builds). For unit tests use test-unit.
-  Drives a visible (headed) browser manually through playwright-cli like a real
-  user — clicking and typing one action at a time, never via scripts or test runners.
-  Auto-discovers pages, entities, and auth from the codebase, generates user stories,
-  performs real CRUD with data-pipeline verification (FE -> API -> DB -> FE), audits
-  UX quality, tests edge cases, and produces a pass/fail report. Use when asked to
-  "QA the app", "test the app", "find bugs", "run QA", "test CRUD", "smoke test",
-  "check for dead buttons", or "test like a real user" AND no project-specific QA
-  skill matches the repo.
+  (project-local QA skills take precedence; use mobile-emulator-test for native builds).
+  Use when asked to "QA the app", "test the app", "find bugs", "run QA", "test CRUD",
+  "smoke test", "check for dead buttons", or "test like a real user".
 license: MIT
 ---
 

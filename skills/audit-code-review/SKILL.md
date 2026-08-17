@@ -1,11 +1,9 @@
 ---
 name: audit-code-review
 description: >
-  Review code for quality, security, and maintainability following best practices.
-  Use when reviewing pull requests, examining code changes, auditing code quality,
-  or when the user asks for a code review. Integrates research via Firecrawl
-  to verify patterns against current best practices, and Sentry MCP to check
-  if the code change relates to production errors.
+  Review code for quality, security, and maintainability following best practices. Use
+  when reviewing pull requests, examining code changes, auditing code quality, or when the
+  user asks for a code review.
 license: MIT
 ---
 

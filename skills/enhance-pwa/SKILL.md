@@ -1,16 +1,10 @@
 ---
 name: enhance-pwa
-description: >-
-  Add or upgrade PWA features to any web app: service worker, offline mode,
-  install prompt, push notifications, and background sync. Detects existing
-  manifest and service worker setup. Installs and configures the right tooling
-  for the framework (Vite PWA plugin, next-pwa, Workbox). Runs a Playwright
-  Lighthouse audit to measure the PWA score before and after. Compatible with
-  Capacitor hybrid apps — bridges PWA web layer with native shell without
-  conflicts. Generic across any web framework. Use when asked to "make it a
-  PWA", "offline support", "install prompt", "push notifications", "service
-  worker", "add to home screen", "background sync", "Lighthouse PWA score",
-  "app-like experience", "installable", or "works offline".
+description: >
+  Add or upgrade PWA features to any web app: service worker, offline mode, install
+  prompt, push notifications, and background sync. Use when asked to "make it a PWA",
+  "offline support", "install prompt", "push notifications", "service worker", "add to
+  home screen", "background sync", "Lighthouse PWA score", "app-like.
 license: MIT
 ---
 

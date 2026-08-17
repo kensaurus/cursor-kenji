@@ -1,16 +1,10 @@
 ---
 name: audit-uiux-design-system
 description: >
-  Audit visual UI coherency, design token compliance, and component modularity against a design
-  system for any project. Auto-detects CSS framework (Tailwind v3/v4, CSS Modules, Styled
-  Components), component library (shadcn, Radix, MUI, Chakra), and icon library. Uses
-  playwright-cli for live visual verification, Firecrawl for current design system best practices,
-  and Context7 for component library documentation. Use when reviewing design consistency,
-  checking component modularity, auditing color/typography/spacing tokens, checking dark mode
-  compliance, or when the user mentions design drift, UI inconsistency, design system compliance,
-  visual coherency, token violations, or component architecture review. This skill focuses on
-  VISUAL UI only — for UX evaluation (heuristics, content, interaction patterns, user flows),
-  use the audit-ux skill instead.
+  Audit visual UI coherency, design token compliance, and component modularity against a
+  design system for any project. Use when reviewing design consistency, checking component
+  modularity, auditing color/typography/spacing tokens, checking dark mode compliance, or
+  when the user mentions design drift, UI inconsistency.
 license: MIT
 ---
 
@@ -18,6 +12,8 @@ license: MIT
 
 Visual design system coherency audit: tokens, components, visual consistency, dark mode,
 animations, and WCAG visual compliance.
+
+Linearized desktop / no-max-width / stacked-at-1440 → `audit-responsive`.
 
 **Before ANY browser interaction, read the `protocol-browser-anti-stall` skill and apply its rules
 to every step.** That skill is `protocol-browser-anti-stall`.

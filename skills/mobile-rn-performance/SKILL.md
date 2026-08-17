@@ -2,6 +2,14 @@
 name: mobile-rn-performance
 description: Fix React Native / Expo performance, build, and upgrade issues. Use for jank, frame drops, slow startup, large bundles, memory leaks, Hermes, FlashList, Reanimated, Turbo Modules, Android 16KB alignment, or RN/Expo version upgrades.
 license: MIT
+paths:
+  - "**/ios/**"
+  - "**/android/**"
+  - "**/app.json"
+  - "**/app.config.*"
+  - "**/capacitor.config.*"
+  - "**/*.gradle"
+  - "**/Podfile"
 ---
 
 # React Native Performance & Build

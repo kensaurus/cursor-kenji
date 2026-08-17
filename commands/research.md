@@ -281,25 +281,11 @@ When two authoritative sources recommend different approaches:
 
 ---
 
-## Step 7: Sequential Thinking — Plan Complex Implementations
+## Step 7: Plan Complex Implementations
 
-For complex changes that touch multiple files or have architectural implications, use the Sequential Thinking MCP to reason through the implementation step by step:
+Sequential Thinking MCP is **optional** and is not in the default kenji MCP template. If that server is connected, you may use it for multi-file architectural migrations. Otherwise write the same step-by-step plan in the transcript (ordered files, intermediate states, side effects) and continue.
 
-```json
-sequential-thinking:sequentialthinking
-{
-  "thought": "Step 1: The research recommends [pattern]. The project currently uses [old pattern] in [files]. The migration path is...",
-  "nextThoughtNeeded": true,
-  "thoughtNumber": 1,
-  "totalThoughts": 5
-}
-```
-
-Use Sequential Thinking when:
-- The change touches 3+ files
-- There are dependency ordering concerns
-- The migration has intermediate states that must work
-- You need to reason about side effects across the codebase
+Do **not** add Playwright MCP for research or browser checks — use headed `playwright-cli` per `protocol-browser-anti-stall`. Firecrawl stays authenticated; do not switch to the keyless tool subset just to save tokens.
 
 ---
 

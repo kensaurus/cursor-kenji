@@ -2,9 +2,8 @@
 name: audit-security
 description: >
   Audit code for security vulnerabilities and best practices. Use when reviewing security,
-  checking for vulnerabilities, auditing auth code, or when the user mentions security concerns.
-  Integrates Firecrawl for researching current OWASP guidelines and CVEs,
-  Sentry MCP for checking production security-related errors, and automated codebase scanning.
+  checking for vulnerabilities, auditing auth code, or when the user mentions security
+  concerns.
 license: MIT
 ---
 

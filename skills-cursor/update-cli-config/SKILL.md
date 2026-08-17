@@ -4,6 +4,7 @@ description: View and modify Cursor CLI configuration in ~/.cursor/cli-config.js
 metadata:
   surfaces:
     - cli
+disable-model-invocation: true
 ---
 # Cursor CLI Configuration
 

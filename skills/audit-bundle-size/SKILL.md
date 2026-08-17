@@ -1,16 +1,10 @@
 ---
 name: audit-bundle-size
-description: >-
-  Analyse and shrink JavaScript bundle size for any web app. Auto-detects
-  bundler (Vite, Webpack, Rollup, esbuild, Next.js, Turbopack). Runs a
-  production build with bundle analysis, identifies the largest chunks,
-  duplicate dependencies, non-tree-shakeable imports, and missing code-splitting
-  or lazy-load boundaries. Researches current best practices via Firecrawl and
-  Context7. Maps every finding to a specific file and import with before/after
-  size estimates. Generic across any framework. Use when asked to "reduce bundle
-  size", "analyse bundle", "tree shaking", "lazy loading", "code splitting",
-  "slow initial load", "large JS", "chunk size", "build performance", "LCP
-  caused by JS", "why is the bundle so big", or "first load JS too large".
+description: >
+  Analyse and shrink JavaScript bundle size for any web app. Use when asked to "reduce
+  bundle size", "analyse bundle", "tree shaking", "lazy loading", "code splitting", "slow
+  initial load", "large JS", "chunk size", "build performance", "LCP caused by JS", "why
+  is the bundle so big", or "first load JS too large".
 license: MIT
 ---
 

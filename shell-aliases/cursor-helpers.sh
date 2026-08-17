@@ -81,7 +81,10 @@ lsskills() {
 cursor-sync() {
   local repo_dir="${CURSOR_KENJI_DIR:-}"
   if [ -z "$repo_dir" ]; then
-    for candidate in "$HOME/cursor_kenji" "$HOME/cursor-kenji"; do
+    for candidate in \
+      "$HOME/Documents/GitHub/cursor-kenji" \
+      "$HOME/cursor-kenji" \
+      "$HOME/cursor_kenji"; do
       if [ -d "$candidate" ]; then
         repo_dir="$candidate"
         break
@@ -89,10 +92,10 @@ cursor-sync() {
     done
   fi
   if [ -z "$repo_dir" ] || [ ! -d "$repo_dir" ]; then
-    echo "cursor_kenji repo not found. Set CURSOR_KENJI_DIR or clone to ~/cursor_kenji"
+    echo "cursor-kenji repo not found. Set CURSOR_KENJI_DIR or clone to ~/Documents/GitHub/cursor-kenji"
     return 1
   fi
-  cd "$repo_dir" && git pull origin main && ./install.sh --quiet
+  cd "$repo_dir" && git pull origin main && node ./bin/install.mjs --cursor --claude --quiet
   cd - > /dev/null
   echo "Skills synced."
 }

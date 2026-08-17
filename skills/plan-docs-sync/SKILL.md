@@ -1,13 +1,10 @@
 ---
 name: plan-docs-sync
 description: >
-  Audit documentation against actual code behavior and plan corrections — no rewrites in this
-  pass. Drift taxonomy (stale, missing, phantom, contradictory, onboarding-breaking, inline
-  rot, API-contract drift) with code-as-source-of-truth methodology. Onboarding-drift checks
-  against .env.example and CLI --help; docs-as-code guardrails for same-PR updates. Docs
-  describe real current behavior — never aspirational or invented. Use when asked to "docs
-  drift", "sync docs with code", "audit documentation", "stale README", "onboarding docs
-  broken", "doc sync plan", "phantom docs", or "docs out of date".
+  Audit documentation against actual code behavior and plan corrections — no rewrites in
+  this pass. Use when asked to "docs drift", "sync docs with code", "audit documentation",
+  "stale README", "onboarding docs broken", "doc sync plan", "phantom docs", or "docs out
+  of date".
 license: MIT
 ---
 

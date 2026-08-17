@@ -1,6 +1,7 @@
 ---
 name: create-hook
 description: Create Cursor hooks. Use to create a hook, write hooks.json, add hook scripts, or automate behavior around agent events.
+disable-model-invocation: true
 ---
 # Creating Cursor Hooks
 

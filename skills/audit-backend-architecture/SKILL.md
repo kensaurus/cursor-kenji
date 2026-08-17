@@ -1,17 +1,10 @@
 ---
 name: audit-backend-architecture
-description: >-
-  Read-only audit AND decision advisor for backend/distributed-systems architecture, topology-gated so
-  a Next.js/Supabase monolith and a Kubernetes fleet each see only relevant findings. Reports which
-  patterns are present (maturity matrix, file:line), then — following "start simple, earn every
-  pattern" — recommends which to adopt now, adopt-when-[trigger], or defer as premature, flagging
-  over-engineering and the distributed-monolith anti-pattern. Covers sync request/response vs
-  event-driven, cache-aside, database-per-service, API gateway, BFF, circuit breaker, bulkhead,
-  outbox + CDC, saga, CQRS, hexagonal, strangler-fig, service mesh, cell-based, mTLS, tracing + SLOs,
-  contract testing. Use when "audit backend architecture", "which pattern should I use", "am I
-  over-engineering", "sync vs event-driven", "cache-aside/CQRS/saga/db-per-service",
-  "microservices resilience review", or "audit-backend-architecture". Defers per-call resilience to
-  audit-resilience; fixes via backend-patterns.
+description: >
+  Read-only audit AND decision advisor for backend/distributed-systems architecture,
+  topology-gated so a Next.js/Supabase monolith and a Kubernetes fleet each see only
+  relevant. Use when "audit backend architecture", "which pattern should I use", "am I
+  over-engineering", "sync vs event-driven".
 license: MIT
 ---
 

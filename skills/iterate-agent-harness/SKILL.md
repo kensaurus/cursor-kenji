@@ -1,15 +1,10 @@
 ---
 name: iterate-agent-harness
-description: >-
-  Turn an agent's own failure — a premature stop, a false "done", a reward-
-  hacked check, a missed file, a broken handoff — into a durable improvement to
-  the harness (skills, rules, hooks, subagents, verification scripts) plus a
-  regression check that would have caught it. Diagnose the root failure mode,
-  make the smallest durable fix, add a repeatable guard, validate it, and record
-  the lesson. Use when "the agent stopped early again", "it said done but
-  wasn't", "it gamed the test", "improve the skills so this doesn't recur",
-  "add a guard for this", "close the loop on that failure", or after any run
-  that ended wrong. Operates on this toolkit itself.
+description: >
+  Turn an agent's own failure — a premature stop, a false "done", a reward- hacked check,
+  a missed file, a broken handoff — into a durable improvement to the harness (skills,
+  rules. Use when "the agent stopped early again", "it said done but wasn't", "it gamed
+  the test", "improve the skills so this doesn't recur", "add.
 license: MIT
 ---
 
