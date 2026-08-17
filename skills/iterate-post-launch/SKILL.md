@@ -1,16 +1,10 @@
 ---
 name: iterate-post-launch
-description: >-
-  Close the post-launch improvement loop for any shipped app. Pulls Sentry for
-  top errors and performance regressions, Supabase for slow queries, failed API
-  calls, and advisor warnings, Firecrawl for current best-practice patterns.
-  Identifies the top user pain points, ranks them by impact × effort, plans
-  concrete improvements, implements fixes, and verifies them with Playwright.
-  Generic across any stack. Use when asked to "improve the app after launch",
-  "fix the top issues", "post-launch polish", "what should I fix next",
-  "production issues", "iterate on feedback", "post-release improvements",
-  "what is broken in prod", "ship a polish pass", or "make it better based on
-  real usage".
+description: >
+  Close the post-launch improvement loop for any shipped app. Use when asked to "improve
+  the app after launch", "fix the top issues", "post-launch polish", "what should I fix
+  next", "production issues", "iterate on feedback", "post-release improvements", "what is
+  broken in prod", "ship a polish pass", or "make it better.
 license: MIT
 ---
 

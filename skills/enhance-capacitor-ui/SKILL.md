@@ -1,8 +1,19 @@
 ---
 name: enhance-capacitor-ui
 description: >
-  Cross-surface UIUX separation skill for hybrid web apps that ship as PWA + iOS + Android via Capacitor (or Tauri / Expo Web / Ionic / RN-Web). Use when a previous UI/UX sweep "improved one surface and broke the other" — desktop polished but mobile cramped, or mobile native but desktop wastes space. Also use when the project has ad-hoc useIsMobile / isNative branches scattered across components, a single md: breakpoint doing double duty as "is desktop" and "wider slot", or per-component platform styling instead of mode tokens. Establishes three orthogonal axes — form factor (compact/medium/expanded), platform (web/ios/android), pointer (fine/coarse) — and a three-layer architecture (context hook, mode tokens, container-query primitives) so one sweep can enhance one axis without degrading the others. Catches axis conflation in a single boolean, hover-only affordances on native shells, and SSR/Capacitor first-paint mismatch. For pure visual polish on a single surface, use enhance-web-ui first.
+  Cross-surface UIUX separation skill for hybrid web apps that ship as PWA + iOS + Android
+  via Capacitor (or Tauri / Expo Web / Ionic / RN-Web). Use when a previous UI/UX sweep
+  "improved one surface and broke the other" — desktop polished but mobile cramped, or
+  mobile native but desktop wastes space.
 license: MIT
+paths:
+  - "**/ios/**"
+  - "**/android/**"
+  - "**/app.json"
+  - "**/app.config.*"
+  - "**/capacitor.config.*"
+  - "**/*.gradle"
+  - "**/Podfile"
 ---
 
 > ### Which enhance skill? (surface router)

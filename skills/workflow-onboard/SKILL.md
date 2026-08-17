@@ -1,13 +1,9 @@
 ---
 name: workflow-onboard
-description: >-
-  First-contact orientation for an unfamiliar codebase. Reads package manifests,
-  entry points, routing, data layer, auth, environment variables, and recent git
-  history. Produces a concise briefing: what the app does, how it's structured,
-  how to run it locally, and the top areas to understand first. Generic across
-  web, mobile, and full-stack repos. Use when "I'm new to this repo", "orient
-  me", "explain this codebase", "what does this do?", "onboard me", "first day
-  on this project", or "catch me up on the codebase".
+description: >
+  First-contact orientation for an unfamiliar codebase. Use when "I'm new to this repo",
+  "orient me", "explain this codebase", "what does this do?", "onboard me", "first day on
+  this project", or "catch me up on the codebase".
 license: MIT
 ---
 

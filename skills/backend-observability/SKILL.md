@@ -1,6 +1,10 @@
 ---
 name: backend-observability
-description: Instrument features so errors, traces, and logs are correlated from the first line. Use when adding logging, tracing, or monitoring; wiring Sentry, Langfuse, or structured logs; or when asked "add logging", "instrument this", "why can't I debug prod", "correlate the error to the trace", "redact PII from logs", "set up alerts/SLOs".
+description: >
+  Instrument features so errors, traces, and logs are correlated from the first line. Use
+  when adding logging, tracing, or monitoring; wiring Sentry, Langfuse, or structured
+  logs; or when asked "add logging", "instrument this", "why can't I debug prod",
+  "correlate the error to the trace", "redact PII from logs", "set up.
 license: MIT
 ---
 

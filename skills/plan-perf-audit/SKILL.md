@@ -2,13 +2,9 @@
 name: plan-perf-audit
 description: >
   Measure-don't-guess performance audit across web, mobile, backend, and data layers —
-  produces burndown and optimization plan with no fixes in this pass. No fabricated metrics;
-  every issue needs a measured baseline or [NEEDS PROFILING]. Research-backed proposals for
-  React (code-split, memo, react-window, startTransition), RN (Hermes, JSI, <2s cold start),
-  data N+1/index work with EXPLAIN, and prevention via Lighthouse CI budgets + RUM. Mobile
-  thresholds stricter than web CWV. Use when asked to "performance audit plan", "perf
-  burndown", "measure before optimize", "bundle size audit", "LCP slow", "N+1 audit plan",
-  "plan performance improvements", or "Core Web Vitals audit".
+  produces burndown and optimization plan with no fixes in this pass. Use when asked to
+  "performance audit plan", "perf burndown", "measure before optimize", "bundle size
+  audit", "LCP slow", "N+1 audit plan", "plan performance.
 license: MIT
 ---
 

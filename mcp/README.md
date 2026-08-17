@@ -6,8 +6,8 @@ Model Context Protocol (MCP) servers extend Cursor's AI with external tools and 
 
 | File | Description |
 |------|-------------|
-| `mcp.json.template` | **Essential 5** — Core servers for most projects |
-| `mcp-full.json.template` | **Full suite (16 servers)** — Everything including AWS, GitHub, Slack, Notion |
+| `mcp.json.template` | **Essential** — Firecrawl (authenticated) + Context7 + Supabase. Prefer Cursor plugins for Context7 / Supabase / Sentry / Stripe when those are already connected. |
+| `mcp-full.json.template` | **Full suite** — optional extras including sequential-thinking, Playwright MCP fallback, AWS, GitHub, Slack, Notion |
 
 Copy your preferred template:
 
@@ -19,21 +19,23 @@ cp mcp/mcp.json.template ~/.cursor/mcp.json
 cp mcp/mcp-full.json.template ~/.cursor/mcp.json
 ```
 
-Then edit `~/.cursor/mcp.json` and replace `YOUR_*` placeholders with real credentials.
+Then set `FIRECRAWL_API_KEY`, `CONTEXT7_API_KEY`, and `SUPABASE_ACCESS_TOKEN` in the environment (Cursor interpolates `${env:NAME}`). Do not paste live keys into `mcp.json`. Prefer Cursor's `envFile` pointing at a chmod-restricted file such as `~/.cursor/mcp.env`.
+
+Claude Code live config (`~/.claude.json`) uses `${NAME}` (no `env:` prefix). Never put `${env:…}` inside Claude `settings.json` `env` — that block is real environment values. `claude mcp list` reads `~/.claude.json`, not an `mcpServers` block in `settings.json`.
 
 ---
 
 ## Server Reference
 
-### Tier 1: Essential (Always On)
+### Tier 1: Essential (defaults)
 
 | Server | API Key? | What it Does |
 |--------|----------|-------------|
-| **Sequential Thinking** | No | Step-by-step reasoning for complex tasks |
-| **Context7** | No | Live, up-to-date library documentation |
-| **Firecrawl** | Yes | Web scraping for research ([firecrawl.dev](https://firecrawl.dev)) |
-| **Supabase** | Yes | Direct DB access, auth, storage, migrations |
-| **Playwright** | No | Browser automation, E2E testing, screenshots |
+| **Firecrawl** | Yes | Web scraping for research ([firecrawl.dev](https://firecrawl.dev)). Keep authenticated. Set `FIRECRAWL_NO_SEARCH_FEEDBACK=1` and `FIRECRAWL_NO_ENDPOINT_FEEDBACK=1` to skip unused feedback tools. |
+| **Context7** | Yes (API key) | Live library documentation. Skip this stdio server if the Context7 Cursor plugin is already connected. |
+| **Supabase** | Yes | Direct DB access, auth, storage, migrations. Skip if the Supabase Cursor plugin is already connected. |
+
+**Not in the default template:** Sequential Thinking (optional reasoning; add from the full template when a research pass needs it) and Playwright MCP (skills use **headed `playwright-cli`**, not the MCP).
 
 Chrome DevTools MCP is in the full template — attach to Chrome with `--remote-debugging-port=9222` (see below).
 
@@ -78,7 +80,7 @@ The most useful addition after the essentials. Two options:
     "command": "npx",
     "args": ["-y", "@modelcontextprotocol/server-github"],
     "env": {
-      "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_your_token_here"
+      "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_PERSONAL_ACCESS_TOKEN}"
     }
   }
 }
@@ -91,7 +93,7 @@ The most useful addition after the essentials. Two options:
     "command": "docker",
     "args": ["run", "-i", "--rm", "-e", "GITHUB_PERSONAL_ACCESS_TOKEN", "ghcr.io/github/github-mcp-server"],
     "env": {
-      "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_your_token_here"
+      "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_PERSONAL_ACCESS_TOKEN}"
     }
   }
 }
@@ -230,8 +232,9 @@ Persistent memory that survives across sessions:
 
 ### Solo Developer (Web App)
 ```
-sequential-thinking + context7 + firecrawl + supabase + playwright + github
+firecrawl + context7-or-plugin + supabase-or-plugin + github (optional)
 ```
+Browser QA: `playwright-cli`, not Playwright MCP.
 
 ### Team / Full-Stack
 ```
@@ -240,12 +243,12 @@ All of above + postgres + memory + slack
 
 ### AWS Cloud Development
 ```
-sequential-thinking + context7 + aws-lambda + aws-s3 + aws-cloudwatch + github
+firecrawl + context7 + aws-lambda + aws-s3 + aws-cloudwatch + github
 ```
 
 ### Content / Product
 ```
-sequential-thinking + context7 + github + notion + slack + memory
+firecrawl + context7 + github + notion + slack + memory
 ```
 
 ---

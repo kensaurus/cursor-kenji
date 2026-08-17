@@ -19,8 +19,10 @@
  *
  * Why two Cursor paths?
  *   ~/.cursor/skills/   — read by the Cursor agent at runtime
- *   ~/.agents/skills/   — indexed by the Cursor Skills UI panel
- *   Both must be populated for skills to appear AND work.
+ *   ~/.agents/skills/   — historically indexed by the Cursor Skills UI panel
+ *   Default still mirrors both. Pass --no-agents-mirror to skip the UI copy.
+ *   skills-cursor names that Cursor already ships as managed builtins are not
+ *   copied into ~/.cursor/skills (Claude still gets the portable copies).
  *
  * Claude Code paths:
  *   ~/.claude/skills/    — global skills, appear as /slash-commands
@@ -86,10 +88,12 @@ Flags:
   --link              Symlink (junction on Windows) instead of copying — for repo dev.
   --restore [stamp]   Copy a backup under <target>/.cursor-kenji-backups/ back into place.
   --dry-run           Show what would happen; make no changes.
+  --quiet             Suppress install logs (errors still print).
+  --no-agents-mirror  Skip copying skills to ~/.agents/skills.
 
 What gets installed (Cursor):
-  ~/.cursor/skills/       ← agent skills at runtime (skills/ + skills-cursor/ merged)
-  ~/.agents/skills/       ← Cursor Skills UI index (same content, required for UI visibility)
+  ~/.cursor/skills/       ← agent skills at runtime (skills/ + non-builtin skills-cursor/)
+  ~/.agents/skills/       ← optional Skills UI mirror (same content; skip with --no-agents-mirror)
   ~/.cursor/commands/     ← slash commands
   ~/.cursor/agents/       ← subagent definitions
   ~/.cursor/rules/        ← project rules starter pack
@@ -113,10 +117,30 @@ What gets installed (Codex CLI / Gemini CLI — no skills system):
   process.exit(0);
 }
 
+if (has('quiet', 'q')) {
+  console.log = () => {};
+}
+
 const isDryRun = has('dry-run');
 const isClean = has('clean', 'mirror', 'force');
 const noBackup = has('no-backup');
 const useLink = has('link');
+const noAgentsMirror = has('no-agents-mirror');
+
+/** Cursor already ships these under ~/.cursor/skills-cursor (managed builtins). */
+const CURSOR_MANAGED_BUILTIN_SKILLS = new Set([
+  'canvas',
+  'create-hook',
+  'create-rule',
+  'create-skill',
+  'create-subagent',
+  'migrate-to-skills',
+  'shell',
+  'split-to-prs',
+  'statusline',
+  'update-cli-config',
+  'update-cursor-settings',
+]);
 
 // ---- target resolution -----------------------------------------------------
 // Backward compatible: a bare invocation still installs Cursor only.
@@ -244,7 +268,7 @@ function backupAndWipe(base) {
 
 // ---- copy / link one target base -------------------------------------------
 // renameMdc: Claude Code reads .md rules; .mdc sources are installed as .md.
-function installDirs(base, { renameMdc = false } = {}) {
+function installDirs(base, { renameMdc = false, skipCursorBuiltins = false } = {}) {
   let copiedDirs = 0;
   let copiedFiles = 0;
   for (const { src, dest } of DIRS) {
@@ -255,9 +279,20 @@ function installDirs(base, { renameMdc = false } = {}) {
 
     for (const item of readdirSync(srcPath)) {
       if (skillName && item !== skillName) continue;
+      if (
+        skipCursorBuiltins &&
+        src === 'skills-cursor' &&
+        dest === 'skills' &&
+        CURSOR_MANAGED_BUILTIN_SKILLS.has(item) &&
+        item !== skillName
+      ) {
+        continue;
+      }
       const itemSrc = join(srcPath, item);
       const isDir = statSync(itemSrc).isDirectory();
       if (dest === 'rules' && isDir && PROJECT_RULE_BUNDLES.has(item)) continue;
+      // Cursor ignores plain .md rules; keep those Claude-only (installed as .md via renameMdc).
+      if (!renameMdc && dest === 'rules' && !isDir && item.endsWith('.md')) continue;
       let outName = item;
       if (renameMdc && dest === 'rules' && !isDir && item.endsWith('.mdc')) {
         outName = item.slice(0, -4) + '.md';
@@ -473,7 +508,14 @@ const results = [];
 // ---- Cursor ----------------------------------------------------------------
 if (wantCursor) {
   const clean = isClean ? backupAndWipe(cursorBase) : null;
-  const counts = installDirs(cursorBase);
+  const counts = installDirs(cursorBase, { skipCursorBuiltins: true });
+  if (!skillName && !isDryRun) {
+    const cursorSkills = join(cursorBase, 'skills');
+    for (const name of CURSOR_MANAGED_BUILTIN_SKILLS) {
+      const stale = join(cursorSkills, name);
+      if (existsSync(stale)) rmSync(stale, { recursive: true, force: true });
+    }
+  }
   const hookStatus =
     !onlyGroups || onlyGroups.has('hooks')
       ? installCursorCompletionHook()
@@ -484,8 +526,8 @@ if (wantCursor) {
     process.exit(1);
   }
 
-  // Also write skills to ~/.agents/skills/ (Cursor Skills UI reads here).
-  if (!onlyGroups || onlyGroups.has('skills')) {
+  // Also write skills to ~/.agents/skills/ (Cursor Skills UI historically reads here).
+  if (!noAgentsMirror && (!onlyGroups || onlyGroups.has('skills'))) {
     const agentsSkillsDest = join(agentsBase, 'skills');
     const cursorSkillsSrc = join(cursorBase, 'skills');
     if (isDryRun) {
@@ -496,6 +538,12 @@ if (wantCursor) {
       for (const item of readdirSync(cursorSkillsSrc)) {
         if (skillName && item !== skillName) continue;
         cpSync(join(cursorSkillsSrc, item), join(agentsSkillsDest, item), { recursive: true });
+      }
+      if (!skillName) {
+        for (const name of CURSOR_MANAGED_BUILTIN_SKILLS) {
+          const stale = join(agentsSkillsDest, name);
+          if (existsSync(stale)) rmSync(stale, { recursive: true, force: true });
+        }
       }
     }
   }

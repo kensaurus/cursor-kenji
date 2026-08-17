@@ -1,12 +1,9 @@
 ---
 name: workflow-launch-ready
-description: >-
-  Full launch preparation sweep for a new app or major release. One entry point
-  that sequences enhance-web-seo, enhance-pwa, audit-bundle-size, audit-i18n,
-  workflow-quality-gate, deploy-verify, and iterate-post-launch. Produces a
-  launch checklist with all open items and a launch-readiness verdict. Use when
-  "prepare for launch", "launch week", "everything before going live", "is the
-  app launch-ready?", "pre-launch sweep", or "ship it to the world".
+description: >
+  Full launch preparation sweep for a new app or major release. Use when "prepare for
+  launch", "launch week", "everything before going live", "is the app launch-ready?",
+  "pre-launch sweep", or "ship it to the world".
 license: MIT
 ---
 

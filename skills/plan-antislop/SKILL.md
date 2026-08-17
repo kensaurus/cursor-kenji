@@ -4,9 +4,7 @@ description: >
   Audit a codebase, UI, or copy for machine-generated tells across prose, visual/UI, code,
   and structure/IA, then produce a phased de-slop burndown. Use when the user says "feels
   AI-generated", "looks like AI slop", "reads like ChatGPT", "feels generic/soulless", or
-  wants an authenticity/voice pass before launch. Plan only — nothing rewritten until each
-  phase is approved. Pairs with enhance-web-ux, enhance-web-landing, design-frontend. Do
-  NOT use for functional bugs (debug-*), security (plan-security-audit), or net-new design.
+  wants an authenticity/voice pass before launch.
 license: MIT
 ---
 

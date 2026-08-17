@@ -28,19 +28,19 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (114)
+## Skills (115)
 
 ### Enhance
 
 #### `enhance-web-ui`
 **Triggers:** "make this page nicer", "more polished", "more beautiful", "less crowded", "less AI-generated", "better laid out", "typography", "visual hierarchy", "empty/dead space", "fades", "microinteractions", "density"
 **What it does:** Composition before decoration — fix hierarchy, grouping, alignment, rhythm. Subtract clutter, group related items, soften scroll cuts, animate purposefully. Generic across web stacks.
-**Related:** `enhance-web-ux`, `audit-uiux-design-system`, `design-frontend`
+**Related:** `enhance-web-ux`, `audit-responsive`, `audit-uiux-design-system`, `design-frontend`
 
 #### `enhance-web-ux`
 **Triggers:** "enhance this page", "make /xxx better", "this page feels AI-generated", "fix UX of /xxx", "improve information density", "icons all look the same", "buttons wrap to 2 lines", "empty columns"
 **What it does:** Replaces generic / "stacked" UI with semantic data wired to real backend state. Maps every pain point to an NN/g heuristic, fixes at the helper / token level. Verified live at multiple viewports via playwright-cli.
-**Related:** `enhance-web-ui`, `audit-ux`, `audit-uiux-design-system`
+**Related:** `enhance-web-ui`, `audit-responsive`, `audit-ux`, `audit-uiux-design-system`
 
 #### `enhance-web-landing`
 **Triggers:** "build a landing page", "portfolio", "marketing site", "anti-slop", "Awwwards-style", "premium frontend", "make it not look AI-generated", "taste"
@@ -134,7 +134,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `plan-uiux-unification`
 **Triggers:** "UI/UX unification plan", "design system audit plan", "UI burndown", "unify the design system", "plan UI overhaul", "design system consolidation", "IA audit before redesign", "audit UI without fixing", "UI/UX unification"
 **What it does:** Exhaustive, non-destructive UI/UX + design-system audit that produces a burndown and unification plan — **no code changes in this pass**. IA-first (hierarchy before layout), preservation contract, full surface inventory, violation log, prioritized burndown with risk column, phased roadmap, guardrails. Enhances existing DS; does not replace it. Optional playwright-cli for evidence; Firecrawl for current-year best practices.
-**Related:** `audit-uiux-design-system`, `audit-ux`, `enhance-web-ux`, `enhance-web-ui`, `design-system`
+**Related:** `audit-responsive`, `audit-uiux-design-system`, `audit-ux`, `enhance-web-ux`, `enhance-web-ui`, `design-system`
 
 #### `plan-antislop`
 **Triggers:** "feels AI-generated", "AI slop", "de-slop", "reads like ChatGPT", "generic/templated/soulless", "every component looks the same", "voice pass", "authenticity pass", "strip the AI smell"
@@ -222,9 +222,9 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Related:** `design-frontend`, `enhance-web-web3d`
 
 #### `design-mobile-first`
-**Triggers:** "mobile", "responsive", "touch", "PWA", "mobile-first", "small screen", "tablet", "swipe", "gesture"
-**What it does:** Touch-optimized navigation, bottom sheets, swipe-to-delete, pull-to-refresh, responsive tables/grids, 44px touch targets, safe area handling, PWA install prompts.
-**Related:** `design-frontend`, `audit-performance`
+**Triggers:** "mobile", "touch", "PWA", "mobile-first", "small screen", "tablet", "swipe", "gesture", "safe area"
+**What it does:** Touch-optimized navigation, bottom sheets, swipe-to-delete, pull-to-refresh, responsive tables/grids, 44px touch targets, safe area handling, PWA install prompts. Linearized desktop / responsive audit → `audit-responsive`.
+**Related:** `audit-responsive`, `design-frontend`, `audit-performance`
 
 #### `design-theme`
 **Triggers:** "apply theme", "color palette", "brand colors", "styling slides", "presentation design", "visual identity"
@@ -357,17 +357,22 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `audit-uiux-design-system`
 **Triggers:** "design system audit", "UI consistency", "token compliance", "design drift", "component audit", "visual coherency"
 **What it does:** Audit UI/UX coherency against design system. Auto-detects CSS framework, component library, icon library. Checks token compliance, component modularity, live visual verification via playwright-cli, Nielsen's 10 heuristics.
-**Related:** `design-system`, `audit-accessibility`, `audit-ux`
+**Related:** `design-system`, `audit-accessibility`, `audit-ux`, `audit-responsive`
 
 #### `audit-ux`
 **Triggers:** "UX audit", "usability review", "heuristic evaluation", "content audit", "interaction design review", "user flow analysis", "UX quality", "check cognitive load", "audit microcopy"
-**What it does:** Research-driven UX audit — Nielsen Norman Group's 10 heuristics, Laws of UX, Intuit Content Design, Google HEART metrics. playwright-cli for live walkthrough, Firecrawl for research, Sequential Thinking for complex flow analysis. Per-page experience lens — for cross-page journeys, user-story completion, and IA structure use `audit-ux-journeys`.
-**Related:** `audit-ux-journeys`, `audit-uiux-design-system`, `audit-accessibility`, `enhance-web-ux`
+**What it does:** Research-driven UX audit — Nielsen Norman Group's 10 heuristics, Laws of UX, Intuit Content Design, Google HEART metrics. playwright-cli for live walkthrough, Firecrawl for research, Sequential Thinking for complex flow analysis. Per-page experience lens — for cross-page journeys use `audit-ux-journeys`; for linearized desktop / breakpoint layout use `audit-responsive`.
+**Related:** `audit-ux-journeys`, `audit-responsive`, `audit-uiux-design-system`, `audit-accessibility`, `enhance-web-ux`
 
 #### `audit-ux-journeys`
 **Triggers:** "audit user flows", "user story audit", "information architecture audit", "IA audit", "can users find X", "users get lost", "navigation audit", "funnel drop-off", "task completion", "audit-ux-journeys"
 **What it does:** Cross-page UX audit for **user stories, task completion, and information architecture** — the layer `audit-ux` (per-page heuristics) doesn't cover. A site can pass every per-page heuristic and still fail because users can't *find* the feature or *finish* the story. **Phase 0** derives 5–10 real user stories from routes/nav/CTAs (reusing `design-prd` / `plan-test-coverage` inventories — never invented personas) and scopes depth by audit trigger (KPIs dropping → targeted funnel; complaints → thematic; redesign → comprehensive; pre-launch → qualitative walkthroughs labeled as assumptions). **Phase 1** audits IA structurally: click depth per story target (money pages ≤2–3), orphan pages, dead ends, label consistency (nav ≈ title ≈ H1, one concept = one word), grouping vs user mental model (not DB schema), first-click logic, wayfinding (breadcrumbs, `aria-current`), search/filter presence, URL sanity. **Phase 2** walks every story end-to-end in a headed browser (desktop + 390px mobile) producing a task-completion matrix: steps-to-goal, friction log (hesitation/mislabel/backtrack/surprise/stall), error-recovery probes (invalid input, Back, refresh mid-flow), success-moment clarity — a BLOCKED story is automatically a Blocker finding. **Phase 3** enforces evidence discipline: every finding tagged `[data]` (analytics/funnels/drop-offs from GA4/PostHog/Clarity/etc.), `[observed]` (reproduced), or `[judgment]` (assumption to validate) — never presents taste as data; with no analytics, recommends minimal funnel instrumentation as a roadmap item. **Phase 4** reports impact×effort: quick wins vs roadmap vs deprioritized, neutral behavior-grounded language, always names what works. Delegates per-page fixes to `enhance-web-ux`, forms to `enhance-web-forms`, WCAG to `audit-accessibility`, heuristics depth to `audit-ux`.
-**Related:** `audit-ux`, `enhance-web-ux`, `enhance-web-forms`, `audit-accessibility`, `audit-performance`, `audit-realworld`, `plan-test-coverage`, `design-prd`, `test-playwright`
+**Related:** `audit-ux`, `audit-responsive`, `enhance-web-ux`, `enhance-web-forms`, `audit-accessibility`, `audit-performance`, `audit-realworld`, `plan-test-coverage`, `design-prd`, `test-playwright`
+
+#### `audit-responsive`
+**Triggers:** "responsive audit", "desktop looks like a phone", "linearized layout", "no max-width", "stacked at 1440", "stretched buttons on desktop", "breakpoint gaps", "audit-responsive"
+**What it does:** Finds and fixes the anti-pattern where every breakpoint is a linearized mobile layout — stacked, left-aligned, full-width, no hierarchy. **Desktop is not a wide phone.** Detects the stack, scores 10 layout/IA anti-patterns with `file:line`, extracts or proposes a token sheet, draws ASCII wireframes at 375 / 768 / 1440, then implements in reviewable chunks (report-first if scope is large). Verifies live via playwright-cli. Distinct from `design-mobile-first` (touch / mobile-up) and `audit-ux-journeys` (cross-page IA).
+**Related:** `design-mobile-first`, `plan-uiux-unification`, `audit-uiux-design-system`, `audit-ux`, `audit-ux-journeys`, `enhance-web-ui`, `enhance-web-ux`, `housekeep-design`, `audit-accessibility`, `test-playwright`
 
 #### `audit-bundle-size`
 **Triggers:** "reduce bundle size", "analyse bundle", "tree shaking", "lazy loading", "code splitting", "slow initial load", "large JS", "chunk size", "why is the bundle so big", "first load JS too large", "LCP caused by JS"
@@ -640,7 +645,7 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 
 ---
 
-## Commands (38)
+## Commands (39)
 
 Commands fall into two groups: **standalone** (full playbook in the file) and **pointer** (thin slash entry delegating to a skill).
 
@@ -669,7 +674,8 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/refactor` | `workflow-refactor` | Analyze → split → extract → verify behavior |
 | `/review-code` | `audit-code-review` | Agent review + manual checklist (renamed from `/review` to avoid Claude Code's built-in `/review`) |
 | `/test` | `test-unit`, `test-qa`, `mobile-emulator-test` | Type check → unit → integration → E2E |
-| `/uiux` | `audit-uiux-design-system`, `audit-ux`, `enhance-web-ui`, `enhance-web-ux` | Audit + enhance UI/UX |
+| `/uiux` | `audit-responsive`, `audit-uiux-design-system`, `audit-ux`, `enhance-web-ui`, `enhance-web-ux` | Audit + enhance UI/UX |
+| `/responsive-audit` | `audit-responsive` | Linearized layout / breakpoint IA — desktop is not a wide phone |
 | `/uiux-plan` | `plan-uiux-unification` | Full UI/UX unification plan (audit only, no fixes) |
 | `/grill-me` | `grilling` | One-question-at-a-time interview to align before building |
 | `/handoff` | `handoff` | Compact the conversation into a handoff doc for a fresh session |
@@ -776,13 +782,16 @@ After approval: `backend-patterns`, `db-migrator`, `backend-observability`, prov
 `audit-performance` → `backend-db-performance` + `audit-code-quality` + `workflow-refactor`
 
 #### Design System Sprint
-`plan-uiux-unification` → user approval → `enhance-web-ux` + `enhance-web-ui` → `audit-accessibility` + `design-mobile-first` + `design-theme`
+`plan-uiux-unification` → user approval → `audit-responsive` + `enhance-web-ux` + `enhance-web-ui` → `audit-accessibility` + `design-mobile-first` + `design-theme`
 
 #### LLM Quality Cycle
 `audit-langfuse-llm` → `debug-sentry-monitor` → `deploy-verify`
 
 #### UX Polish
 `audit-ux` → `enhance-web-ux` → `enhance-web-ui` → `/commit`
+
+#### Responsive layout / breakpoint IA
+`audit-responsive` → `enhance-web-ui` / `enhance-web-ux` → `test-playwright`
 
 #### Native RN Ship Loop
 `mobile-emulator-start` → `mobile-emulator-test` → `workflow-pr` → `deploy-verify`

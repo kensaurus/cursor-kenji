@@ -3,11 +3,8 @@ name: plan-capacitor-hardening
 description: >
   Audit a Capacitor/Ionic hybrid app for native-layer security gaps, then produce a phased
   hardening plan. Use when the user says "is my Capacitor app secure", "harden my hybrid
-  app", "WebView security", "secure token storage", "deep link OAuth", "cleartext traffic",
-  "exported activity", or is hardening before store submission. Audits four pillars: Data,
-  Auth/Deep-Linking, Network, WebView, plus OTA vs store policy. Plan only until approved.
-  Pairs with plan-secrets-audit, plan-mobile-readiness, mobile-capacitor-platform. Do NOT
-  use for UI polish or React Native perf.
+  app", "WebView security", "secure token storage", "deep link OAuth", "cleartext
+  traffic", "exported activity", or is hardening before store.
 license: MIT
 ---
 

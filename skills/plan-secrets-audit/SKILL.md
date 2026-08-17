@@ -3,13 +3,8 @@ name: plan-secrets-audit
 description: >
   Audit a codebase and git history for exposed credentials and mis-scoped keys, then
   produce a phased rotation-and-remediation plan. Use when the user says "check for
-  hardcoded secrets", "are my API keys exposed", "did I commit a key", "secret scan",
-  "is my .env safe", "rotate keys", or is hardening before launch or open-sourcing.
-  Vibe-coded apps ship keys in client bundles; secrets committed once live in git history
-  forever — ROTATE, not just relocate. Scans sk_/pk_/whsec_/service_role, separates
-  safe-client (anon, publishable) from never-client (service_role, secret), flags history
-  needing rotation, checks NEXT_PUBLIC_ exposure and Vercel/AWS env config. Plan only
-  until approved. Pairs with plan-rls-audit. Do NOT use for RLS logic or input validation.
+  hardcoded secrets", "are my API keys exposed", "did I commit a key", "secret scan", "is
+  my .env safe", "rotate keys", or is hardening before launch or.
 license: MIT
 ---
 

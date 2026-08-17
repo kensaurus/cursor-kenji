@@ -1,17 +1,9 @@
 ---
 name: audit-i18n
-description: >-
-  Audit and fix internationalisation for any web or mobile app. Finds hardcoded
-  user-facing strings, checks they are extracted to i18n keys, and reviews
-  translation quality: natural tone that sounds like a real person wrote it,
-  locale-appropriate phrasing (not literal translation), consistent voice,
-  helpful error messages that guide rather than blame, and action labels that
-  say what actually happens. Walks the live app in each locale via Playwright.
-  Uses Firecrawl for i18n best practices, Context7 for library docs. Works with
-  react-i18next, i18next, next-intl, vue-i18n, and any other library. Use when
-  asked to "audit i18n", "fix translations", "add locale", "natural language",
-  "translation quality", "hardcoded strings", "localisation", or "the Japanese
-  feels like Google Translate".
+description: >
+  Audit and fix internationalisation for any web or mobile app. Use when asked to "audit
+  i18n", "fix translations", "add locale", "natural language", "translation quality",
+  "hardcoded strings", "localisation", or "the Japanese feels like Google Translate".
 license: MIT
 ---
 

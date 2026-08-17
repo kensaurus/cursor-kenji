@@ -1,6 +1,10 @@
 ---
 name: design-generative-art
-description: Create algorithmic art using p5.js, Canvas API, or SVG with seeded randomness and interactive parameters. Use when user requests generative art, procedural art, flow fields, particle systems, creative coding, noise patterns, mathematical visualizations, or asks for "art from code", "generate visuals", or "interactive animation".
+description: >
+  Create algorithmic art using p5.js, Canvas API, or SVG with seeded randomness and
+  interactive parameters. Use when user requests generative art, procedural art, flow
+  fields, particle systems, creative coding, noise patterns, mathematical visualizations,
+  or asks for "art from code", "generate visuals", or "interactive.
 license: Apache-2.0
 ---
 

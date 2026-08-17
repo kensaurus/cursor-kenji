@@ -1,12 +1,9 @@
 ---
 name: data-visualization
 description: >
-  Build interactive, accessible charts, graphs, and data dashboards using Recharts, D3,
-  or Victory. Use when the user says "chart", "graph", "data visualization", "analytics
+  Build interactive, accessible charts, graphs, and data dashboards using Recharts, D3, or
+  Victory. Use when the user says "chart", "graph", "data visualization", "analytics
   dashboard", "metrics display", "D3", "Recharts", "time-series", or "data display".
-  Covers responsive layout, tooltip design, color accessibility, and real-time data
-  patterns. Pairs with design-frontend, design-system. Do NOT use for raw data transforms
-  or server-side reporting pipelines.
 license: MIT
 ---
 

@@ -1,15 +1,10 @@
 ---
 name: audit-resilience
-description: >-
+description: >
   Read-only audit for the non-functional "20%" AI agents systematically skip: timeouts,
-  retries with backoff+jitter, circuit breakers, idempotency keys, rate limiting, graceful
-  degradation/fallbacks, cancellation, audit logging on sensitive actions, and PII handling in
-  logs. Inventories every external call, mutation, webhook, and payment path and marks each
-  concern Implemented/Partial/Missing with file:line, severity, and the exact skill to fix it.
-  Use when "is this production-ready", "resilience audit", "will this survive real traffic",
-  "audit retries/timeouts/idempotency", "reliability review", "the 80% problem", or
-  "audit-resilience". Produces a prioritized report only — remediation is delegated to
-  backend-error-handling / backend-observability / backend-patterns / plan-* skills.
+  retries with backoff+jitter, circuit breakers, idempotency keys, rate limiting,
+  graceful. Use when "is this production-ready", "resilience audit", "will this survive
+  real traffic", "audit retries/timeouts/idempotency", "reliability.
 license: MIT
 ---
 

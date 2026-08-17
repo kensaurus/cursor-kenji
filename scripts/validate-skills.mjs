@@ -10,7 +10,7 @@
  *   - SKILL.md exists with YAML frontmatter delimited by `---`
  *   - `name` present, matches the parent directory, lowercase a-z/0-9/-,
  *     no leading/trailing hyphen, no consecutive `--`, <= 64 chars
- *   - `description` present, non-empty, <= 1024 chars (always-in-context trigger)
+ *   - `description` present, non-empty, <= 320 chars (house budget; spec max 1024)
  *   - (warn) SKILL.md body <= 500 lines (move detail to references/)
  */
 import { readdirSync, existsSync, readFileSync, statSync } from "node:fs";
@@ -22,7 +22,7 @@ const groups = ["skills", "skills-cursor"];
 const asJson = process.argv.includes("--json");
 
 const NAME_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/; // lowercase, hyphen-separated, no -- or edge -
-const DESC_MAX = 1024;
+const DESC_MAX = 320;
 const BODY_WARN = 500;
 
 const errors = [];

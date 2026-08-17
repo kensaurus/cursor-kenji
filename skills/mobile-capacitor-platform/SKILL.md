@@ -2,6 +2,14 @@
 name: mobile-capacitor-platform
 description: Handle Capacitor platform depth beyond UI: plugins, OTA, deep links, push, offline, native CI/CD, App Store / Play Store submission, Apple preflight, security scan, Cordova migration. Use for "add push notifications", "deep linking", "OTA update", "native build CI", "App Store rejection", "migrate to Capacitor".
 license: MIT
+paths:
+  - "**/ios/**"
+  - "**/android/**"
+  - "**/app.json"
+  - "**/app.config.*"
+  - "**/capacitor.config.*"
+  - "**/*.gradle"
+  - "**/Podfile"
 ---
 
 # Capacitor Platform & Pipeline

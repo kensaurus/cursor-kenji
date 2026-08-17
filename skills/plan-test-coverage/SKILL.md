@@ -1,13 +1,10 @@
 ---
 name: plan-test-coverage
 description: >
-  User-story-driven test coverage audit and plan — no test writing in this pass. Derives
-  stories from real code, builds story-to-test traceability matrix, detects fake-green and
-  weak tests, multi-lens coverage (branch/path/risk/integration/mutation). Coverage numbers
-  from real runs or [NEEDS RUN]. Natural lock-in after stub-wiring. Use when asked to "test
-  coverage plan", "coverage audit", "traceability matrix", "fake-green tests", "uncovered
-  user stories", "plan tests for critical flows", "mutation testing plan", or "what's not
-  tested".
+  User-story-driven test coverage audit and plan — no test writing in this pass. Use when
+  asked to "test coverage plan", "coverage audit", "traceability matrix", "fake-green
+  tests", "uncovered user stories", "plan tests for critical flows", "mutation testing
+  plan", or "what's not tested".
 license: MIT
 ---
 

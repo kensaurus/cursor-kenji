@@ -1,12 +1,18 @@
 ---
 name: design-mobile-first
-description: Designs mobile-first responsive interfaces with touch optimization — breakpoint strategy, touch targets, safe areas, and gesture handling, enhanced progressively for larger screens. Use when the user mentions "mobile", "responsive", "touch", "PWA", "small screen", "tablet", "swipe", or "gesture", or when a UI looks desktop-only on a phone viewport.
+description: >
+  Design mobile-first UIs: touch targets, safe areas, gestures, then enhance up.
+  Use when building for small screens, touch, swipe, PWA, or tablet. Linearized
+  desktop / responsive audit → audit-responsive.
 license: MIT
 ---
 
 # Mobile-First Design Skill
 
-Build interfaces that work beautifully on mobile devices first, then enhance for larger screens.
+Build interfaces that work on mobile first, then enhance for larger screens.
+
+**Not this skill:** a desktop that is a linearized phone (no max-width, stacked
+at 1440, stretched buttons). That is `audit-responsive`.
 
 ## CRITICAL: Check Existing First
 
@@ -476,3 +482,10 @@ After implementing mobile features:
 6. **Safe areas** → Content respects notches and home indicators
 7. **Offline** → Graceful handling when offline
 8. **Real device test** → Test on actual phones, not just emulators
+
+## Related
+
+- `audit-responsive` — unstack desktop; layout/IA at 375 / 768 / 1440
+- `enhance-capacitor-ui` — hybrid web + native form-factor axes
+- `design-frontend` — new visual surfaces
+- `audit-performance` — mobile perf budgets

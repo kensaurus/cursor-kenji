@@ -1,6 +1,9 @@
 ---
 name: burndown-full
-description: Drive a planned change to 100% coverage across an entire codebase when a prior agent run stopped early. Use whenever a refactor, migration, rename, rule-application, or sweeping edit was planned and partially executed but left incomplete — i.e. the agent "ran out of steam," forgot files, or treated the plan's file list as the full scope. Triggers on phrases like "finish the burndown", "it stopped halfway", "apply this everywhere", "complete the refactor across all files", "make sure nothing was missed", or invoking /burndown-full. Works for any plan and any task, framework-agnostic.
+description: >
+  Drive a planned change to 100% coverage across an entire codebase when a prior agent run
+  stopped early. Use whenever a refactor, migration, rename, rule-application, or sweeping
+  edit was planned and partially executed but left incomplete — i.e.
 ---
 
 # Burndown Full

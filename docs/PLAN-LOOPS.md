@@ -47,7 +47,7 @@ flowchart LR
 
 | Plan skill | Execution skills |
 |------------|------------------|
-| `plan-uiux-unification` | `enhance-web-ux`, `enhance-web-ui`, `audit-accessibility` |
+| `plan-uiux-unification` | `audit-responsive`, `enhance-web-ux`, `enhance-web-ui`, `audit-accessibility` |
 | `plan-antislop` | `docs-writer`, `audit-i18n`, `enhance-web-ui`, `enhance-web-ux`, `enhance-web-landing`, `workflow-refactor` |
 | `plan-stub-checker` | `debug-fe-be-integration`, `workflow-fix-and-ship` |
 | `plan-test-coverage` | `test-unit`, `workflow-spec-tdd`, `test-playwright` |

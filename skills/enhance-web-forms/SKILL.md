@@ -1,15 +1,10 @@
 ---
 name: enhance-web-forms
-description: >-
+description: >
   Build or upgrade web forms to production quality: accessible structure (labels,
-  fieldsets, autocomplete, correct input types), schema-driven validation with client↔server
-  parity, inline errors correctly associated for screen readers, complete interaction states
-  (loading, disabled, success, error, empty), multi-step flows, unsaved-changes guards, and
-  optimistic/pending submit feedback. Auto-detects the form + validation stack (react-hook-form,
-  Formik, TanStack Form, native; zod/yup/valibot). Use when "improve this form", "form
-  validation", "accessible form", "multi-step form", "form error handling", "the form UX is
-  bad", or "enhance-web-forms". Applies changes and verifies them. Delegates deep a11y to
-  audit-accessibility, submit-contract checks to audit-fe-api, and micro-feedback to design-motion.
+  fieldsets, autocomplete, correct input types), schema-driven validation with
+  client↔server parity. Use when "improve this form", "form validation", "accessible
+  form", "multi-step form", "form error handling", "the form UX is bad", or.
 license: MIT
 ---
 

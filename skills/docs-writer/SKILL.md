@@ -4,9 +4,7 @@ description: >
   Write clear, developer-friendly documentation — READMEs, API references, code comments,
   and changelog entries — tailored to the audience and the project's voice. Use when the
   user says "write docs", "document this API", "update the README", "add code comments",
-  "changelog entry", or "explain this for contributors". Covers structure, examples, and
-  jargon choices. Pairs with deploy-npm, audit-i18n. Do NOT use for in-product UX copy
-  (enhance-web-ux) or marketing copy.
+  "changelog entry", or "explain this for contributors".
 license: MIT
 ---
 

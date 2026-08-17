@@ -1,20 +1,18 @@
 ---
 name: mobile-rn-screen
 description: >
-  Polish an existing React Native screen to feel intentional, native, and
-  human-crafted. Catches RN-specific silent failures — safe area violations,
-  sub-minimum touch targets, keyboard occlusion, JS-thread animation jank,
-  gesture conflicts, tab-bar content clipping, double safe-area insets, and
-  FlatList re-render storms — alongside the platform-agnostic composition
-  failures shared with the web skills (active-state mass mismatch, brand-color
-  competition, monochromatic surfaces, information duplication per screen,
-  left-anchored stacks). Use for "this screen looks off", "feels clunky on
-  iOS", "Android version looks wrong", "jank when scrolling", "button is
-  unreachable", or any RN-specific UX polish pass. Applies to bare React
-  Native, Expo bare workflow, and Expo managed workflow. Pairs with
-  mobile-emulator-start and mobile-emulator-test. For web/PWA surfaces use enhance-web-ui
-  or enhance-web-ux instead.
+  Polish an existing React Native screen to feel intentional, native, and human-crafted.
+  Use for "this screen looks off", "feels clunky on iOS", "Android version looks wrong",
+  "jank when scrolling", "button is unreachable", or any RN-specific UX polish pass.
 license: MIT
+paths:
+  - "**/ios/**"
+  - "**/android/**"
+  - "**/app.json"
+  - "**/app.config.*"
+  - "**/capacitor.config.*"
+  - "**/*.gradle"
+  - "**/Podfile"
 ---
 
 > ### Which enhance skill? (surface router)

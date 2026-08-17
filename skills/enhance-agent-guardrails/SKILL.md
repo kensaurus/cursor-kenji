@@ -1,15 +1,10 @@
 ---
 name: enhance-agent-guardrails
-description: >-
-  Install guardrails-as-code into a repo so AI/vibe-coding can't keep reintroducing the same
-  classes of problems (leaked secrets, injection, off-system styles, untested code, hallucinated
-  or vulnerable dependencies, destructive shell/DB ops). Audits what protection already exists,
-  then sets up a tailored stack: agent policy files (.cursor/rules + AGENTS.md), a pre-commit
-  hook (secret scan + SAST + lint/typecheck), a CI gate that treats agent output as untrusted,
-  and lint-as-policy rules. Use when "set up guardrails", "stop vibe-coding regressions", "add
-  pre-commit security checks", "protect the repo from AI mistakes", "add CI security gates",
-  "governance for AI code", or "enhance-agent-guardrails". Configures tooling; CI/secret-scanner
-  changes are flagged for human review before they block merges.
+description: >
+  Install guardrails-as-code into a repo so AI/vibe-coding can't keep reintroducing the
+  same classes of problems (leaked secrets, injection, off-system styles, untested code.
+  Use when "set up guardrails", "stop vibe-coding regressions", "add pre-commit security
+  checks", "protect the repo from AI mistakes", "add CI.
 license: MIT
 ---
 

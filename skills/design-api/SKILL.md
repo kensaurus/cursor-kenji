@@ -4,8 +4,7 @@ description: >
   Design RESTful and GraphQL APIs following current best practices for naming, versioning,
   error shapes, and auth patterns. Use when the user says "design an API", "create
   endpoints", "structure my API responses", "plan API architecture", "REST vs GraphQL", or
-  "API contract". Covers OpenAPI spec, pagination, rate limiting, and backwards-compatible
-  evolution. Pairs with backend-patterns, audit-security.
+  "API contract".
 license: MIT
 ---
 

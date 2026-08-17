@@ -40,21 +40,35 @@ try {
   const cur = join(sandbox, ".cursor");
 
   // Expected source counts from the repo.
-  const repoSkills = countDir(join(repoRoot, "skills")) + countDir(join(repoRoot, "skills-cursor"));
+  const cursorBuiltinDupes = new Set([
+    "canvas", "create-hook", "create-rule", "create-skill", "create-subagent",
+    "migrate-to-skills", "shell", "split-to-prs", "statusline",
+    "update-cli-config", "update-cursor-settings",
+  ]);
+  const repoGeneralSkills = countDir(join(repoRoot, "skills"));
+  const repoCursorExtra = readdirSync(join(repoRoot, "skills-cursor"))
+    .filter((name) => !cursorBuiltinDupes.has(name)).length;
+  const repoCursorSkills = repoGeneralSkills + repoCursorExtra;
+  const repoClaudeSkills = repoGeneralSkills + countDir(join(repoRoot, "skills-cursor"));
   const repoCommands = countDir(join(repoRoot, "commands"));
   const repoAgents = countDir(join(repoRoot, "agents"));
   // Per-project rule bundles (directories) are excluded from global installs.
-  const repoRules = readdirSync(join(repoRoot, "rules"))
-    .filter((f) => !statSync(join(repoRoot, "rules", f)).isDirectory()).length;
+  const repoRuleFiles = readdirSync(join(repoRoot, "rules"))
+    .filter((f) => !statSync(join(repoRoot, "rules", f)).isDirectory());
+  const repoCursorRules = repoRuleFiles.filter((f) => !f.endsWith(".md")).length;
+  const repoClaudeRules = repoRuleFiles.length;
 
-  expect(countDir(join(cur, "skills")) === repoSkills,
-    `skills: expected ${repoSkills}, got ${countDir(join(cur, "skills"))}`);
+  expect(countDir(join(cur, "skills")) === repoCursorSkills,
+    `cursor skills: expected ${repoCursorSkills}, got ${countDir(join(cur, "skills"))}`);
+  expect(existsSync(join(cur, "skills", "babysit")), "missing skills/babysit (not a Cursor builtin)");
+  expect(!existsSync(join(cur, "skills", "create-skill")),
+    "Cursor builtin create-skill should not be copied into ~/.cursor/skills");
   expect(countDir(join(cur, "commands")) === repoCommands,
     `commands: expected ${repoCommands}, got ${countDir(join(cur, "commands"))}`);
   expect(countDir(join(cur, "agents")) === repoAgents,
     `agents: expected ${repoAgents}, got ${countDir(join(cur, "agents"))}`);
-  expect(countDir(join(cur, "rules")) === repoRules,
-    `rules: expected ${repoRules}, got ${countDir(join(cur, "rules"))}`);
+  expect(countDir(join(cur, "rules")) === repoCursorRules,
+    `cursor rules: expected ${repoCursorRules}, got ${countDir(join(cur, "rules"))}`);
 
   // Top-level .md files must survive (the bug class we are guarding against).
   expect(existsSync(join(cur, "agents", "code-reviewer.md")), "missing agents/code-reviewer.md");
@@ -64,6 +78,8 @@ try {
     "per-project bundle native-rn-monorepo leaked into global rules");
   expect(!existsSync(join(cur, "rules", "project-starter")),
     "per-project bundle project-starter leaked into global rules");
+  expect(!existsSync(join(cur, "rules", "shell-first-search.md")),
+    "Claude-only .md rule leaked into Cursor rules");
   expect(existsSync(join(cur, "cursor-kenji-hooks", "completion-gate.mjs")),
     "missing completion hook script");
 
@@ -91,6 +107,10 @@ try {
 
   // MCP template should be written when none exists.
   expect(existsSync(join(cur, "mcp.json")), "missing mcp.json template");
+  const installedMcp = readFileSync(join(cur, "mcp.json"), "utf8");
+  expect(installedMcp.includes("firecrawl-mcp@3.21.3"), "mcp template missing pinned firecrawl");
+  expect(!installedMcp.includes("sequential-thinking"), "essential mcp template still lists sequential-thinking");
+  expect(!installedMcp.includes("@playwright/mcp"), "essential mcp template still lists Playwright MCP");
 
   // --skill should install exactly one skill into a fresh sandbox.
   const sandbox2 = join(sandbox, "single");
@@ -155,6 +175,21 @@ try {
     stdio: "pipe",
   });
   expect(existsSync(join(sandbox4, ".codex", "AGENTS.md")), "--auto did not install to detected ~/.codex");
+
+  const sandbox5 = join(sandbox, "claude-skills");
+  mkdirSync(sandbox5, { recursive: true });
+  execFileSync(process.execPath, [installer, "--claude"], {
+    env: { ...process.env, HOME: sandbox5, USERPROFILE: sandbox5 },
+    stdio: "pipe",
+  });
+  expect(countDir(join(sandbox5, ".claude", "skills")) === repoClaudeSkills,
+    `claude skills: expected ${repoClaudeSkills}, got ${countDir(join(sandbox5, ".claude", "skills"))}`);
+  expect(existsSync(join(sandbox5, ".claude", "skills", "create-skill")),
+    "Claude should still receive portable skills-cursor copies");
+  expect(existsSync(join(sandbox5, ".claude", "rules", "shell-first-search.md")),
+    "Claude should receive shell-first-search.md");
+  expect(countDir(join(sandbox5, ".claude", "rules")) === repoClaudeRules,
+    `claude rules: expected ${repoClaudeRules}, got ${countDir(join(sandbox5, ".claude", "rules"))}`);
 } catch (err) {
   fail.push("installer threw: " + (err.stderr?.toString() || err.message));
 } finally {

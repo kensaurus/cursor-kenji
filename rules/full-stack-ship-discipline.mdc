@@ -1,6 +1,6 @@
 ---
-description: Ship the backend with the frontend — every feature is full-stack until verified end-to-end, and database changes must reach the remote DB before the chat ends.
-alwaysApply: true
+description: Ship the backend with the frontend — every feature is full-stack until verified end-to-end, and database changes must reach the remote DB before the chat ends. Attach when a change reads or writes data, RPCs, tables, policies, buckets, or secrets.
+alwaysApply: false
 ---
 
 # Full-Stack Ship Discipline
@@ -21,8 +21,8 @@ is never deployed, the live API 404s, and the bug masquerades as a UI issue.
    `drizzle-kit push`, `rails db:migrate`, …) against the confirmed
    environment before the turn ends.
 3. **Keep file and deploy in sync.** SQL applied via MCP also gets a matching
-   versioned file in the repo's migrations folder; an unpushed local
-   migration file gets pushed.
+   versioned file in the repo's migrations folder. Do not `git push` unless
+   the user asked in this turn.
 4. **Edge functions, secrets, RLS, buckets, and cron jobs count as schema** —
    deploy and configure them with the UI change (`verify_jwt`, CORS, keys).
 5. **Never re-ask before deploying schema the user asked to ship; always ask

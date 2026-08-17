@@ -1,15 +1,10 @@
 ---
 name: audit-accessibility
 description: >
-  Automated WCAG 2.2 accessibility audit using playwright-cli to crawl every page,
-  inject axe-core via eval, test keyboard navigation, check color contrast,
-  ARIA labels, heading hierarchy, form labels, and focus management. Cross-references
-  Sentry for assistive-technology-related errors, researches current WCAG guidelines via
-  Firecrawl, and produces a structured PASS/FAIL compliance report per criterion.
-  Works with any project — auto-detects pages from the route manifest.
-  Use when asked to: "audit accessibility", "check a11y", "WCAG audit", "check keyboard nav",
-  "test screen reader", "accessibility compliance", "ADA compliance check",
-  "run a11y audit", "check color contrast", or "audit for disabilities".
+  Automated WCAG 2.2 accessibility audit using playwright-cli to crawl every page, inject
+  axe-core via eval, test keyboard navigation, check color contrast, ARIA labels, heading.
+  Use when asked to: "audit accessibility", "check a11y", "WCAG audit", "check keyboard
+  nav", "test screen reader", "accessibility compliance".
 license: MIT
 ---
 

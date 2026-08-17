@@ -1,16 +1,10 @@
 ---
 name: workflow-ship-and-observe
-description: >-
-  Take merged, repository-green code all the way to a verified, monitored
-  production release for any app stack. Confirm the target and the exact source
-  revision, deploy (or trigger the deploy pipeline), verify the intended
-  revision is actually live, smoke-test critical flows against production, then
-  watch error/latency signals through a defined stability window and either
-  confirm stable or execute an explicit rollback/hotfix. Use when "ship it",
-  "deploy to production", "release this", "go live", "roll this out", "promote
-  to prod", or "cut a release" for a running application (not an npm package —
-  use deploy-npm for that). Complements deploy-verify with the observe-and-roll-
-  back tail.
+description: >
+  Take merged, repository-green code all the way to a verified, monitored production
+  release for any app stack. Use when "ship it", "deploy to production", "release this",
+  "go live", "roll this out", "promote to prod", or "cut a release" for a running
+  application (not an npm package — use deploy-npm for that).
 license: MIT
 ---
 

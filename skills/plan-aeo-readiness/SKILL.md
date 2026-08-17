@@ -4,10 +4,7 @@ description: >
   Audit a site for answer-engine and generative-engine visibility (citation by ChatGPT,
   Claude, Perplexity, AI Overviews), then produce a phased improvement plan. Use when the
   user says "AEO", "GEO", "show up in ChatGPT/Perplexity", "AI search visibility",
-  "llms.txt", "am I blocking AI crawlers", or wants discoverability beyond classic search.
-  Audits AI-crawler access, SSR vs JS-hidden content, llms.txt, structured schema, and
-  direct-answer-first structure. Plan only until approved. Pairs with enhance-web-seo,
-  docs-writer, plan-antislop. Do NOT use for Core Web Vitals alone (enhance-web-seo).
+  "llms.txt", "am I blocking AI crawlers", or wants.
 license: MIT
 ---
 

@@ -1,10 +1,8 @@
 ---
 name: audit-performance
 description: >
-  Audit and optimize application performance. Use when optimizing performance,
-  debugging slow code, reducing load times, or when the user mentions performance issues.
-  Integrates Sentry MCP for production performance data (Web Vitals, slow transactions),
-  Firecrawl for researching current optimization techniques, and automated codebase analysis.
+  Audit and optimize application performance. Use when optimizing performance, debugging
+  slow code, reducing load times, or when the user mentions performance issues.
 license: MIT
 ---
 

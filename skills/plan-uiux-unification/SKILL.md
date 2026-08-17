@@ -2,12 +2,9 @@
 name: plan-uiux-unification
 description: >
   Exhaustive, non-destructive UI/UX and design-system audit that produces a burndown and
-  unification plan — no code changes until each phase is approved. Covers IA hierarchy,
-  surface inventory, per-surface violation log, prioritized burndown with risk column, and
-  phased enhancement roadmap. Enhances the existing design system; does not replace it.
-  Use when asked to "audit UI without fixing", "UI burndown", "unify the design system",
-  "design system consolidation", "IA audit before redesign", or "UI/UX unification plan".
-  Pairs with audit-uiux-design-system. Do NOT use for live UI fixes (audit-uiux-design-system).
+  unification plan — no code changes until each phase is approved. Use when asked to
+  "audit UI without fixing", "UI burndown", "unify the design system", "design system
+  consolidation", "IA audit before redesign", or "UI/UX unification.
 license: MIT
 ---
 
@@ -25,13 +22,14 @@ do not replace it, strip features, fabricate data, or rewrite UI in this pass.**
 | Skill | Does |
 |-------|------|
 | **plan-uiux-unification** (this) | Plan only — full inventory, burndown, roadmap; no fixes |
+| `audit-responsive` | Linearized desktop / breakpoint IA — audit then fix |
 | `audit-uiux-design-system` | Visual/token/component audit; may recommend or fix |
 | `audit-ux` | Heuristics, flows, microcopy quality |
 | `enhance-web-ui` / `enhance-web-ux` | Implement visual/UX improvements |
 | `design-system` | Build or extend the design system itself |
 
 **Chain:** Step 1 of six-skill plan loop — see `docs/PLAN-LOOPS.md`  
-**Execute:** `enhance-web-ux` / `enhance-web-ui` → `test-playwright`
+**Execute:** `audit-responsive` (layout/IA) → `enhance-web-ux` / `enhance-web-ui` → `test-playwright`
 
 ---
 

@@ -44,6 +44,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "audit design system", "check token compliance", "design consistency" | `audit-uiux-design-system` |
 | "UX audit", "usability review", "heuristic evaluation", "UX quality" | `audit-ux` |
 | "audit user flows", "user story audit", "information architecture / IA audit", "can users find X", "users get lost", "navigation audit", "funnel drop-off", "task completion" | `audit-ux-journeys` |
+| "responsive audit", "desktop looks like a phone", "linearized layout", "no max-width", "stacked at 1440", "stretched buttons on desktop", "breakpoint gaps" | `audit-responsive` |
 | "set up guardrails", "stop vibe-coding regressions", "pre-commit security checks", "CI security gates", "governance for AI code" | `enhance-agent-guardrails` |
 
 ---
@@ -93,7 +94,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "build an email template", "transactional email", "welcome email", "why is my email in spam" | `design-email` |
 | "build a component", "new UI page", "make this look good" | `design-frontend` |
 | "generative art", "creative coding", "flow fields", "particle system" | `design-generative-art` |
-| "mobile design", "responsive layout", "touch UI", "small screen" | `design-mobile-first` |
+| "mobile design", "touch UI", "small screen", "swipe", "safe area" | `design-mobile-first` |
 | "animation", "micro-interaction", "hover effect", "scroll animation" | `design-motion` |
 | "write a PRD", "product requirements", "spec this feature", "what should we build" | `design-prd` |
 | "grill me", "stress-test this plan", "interview me about this", "poke holes in this", "challenge my thinking" | `grilling` |

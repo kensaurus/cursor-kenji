@@ -4,10 +4,7 @@ description: >
   Audit dependencies for hallucinated or slopsquatted packages, supply-chain risk, and
   licensing/provenance gaps, then produce a phased remediation plan. Use when the user
   says "check my dependencies", "is this package real", "slopsquatting", "audit my supply
-  chain", "license check", "SBOM", or "did the AI hallucinate a package". Audits package
-  existence/age/popularity, lockfile integrity, typo-squatted names, transitive bloat, and
-  license provenance. Plan only until approved. Pairs with plan-secrets-audit,
-  workflow-housekeep. Do NOT use for version bumps or bundle size (audit-bundle-size).
+  chain", "license check", "SBOM", or "did the AI hallucinate a.
 license: MIT
 ---
 

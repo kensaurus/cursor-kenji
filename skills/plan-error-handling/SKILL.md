@@ -1,13 +1,10 @@
 ---
 name: plan-error-handling
 description: >
-  Audit a codebase for silent failures, swallowed exceptions, and observability gaps across
-  Sentry and Langfuse, then produce a phased fix plan. Use when the user says "errors
-  aren't showing in Sentry", "things fail silently", "empty catch blocks", "add error
-  handling", "check my Langfuse tracing", or is hardening observability before launch.
-  Covers error handling and LLM observability (untraced model calls, missing cost/latency,
-  no eval scores). Plan only until each phase is approved. Pairs with backend-observability,
-  debug-sentry-monitor, audit-langfuse-llm. Do NOT use for live incidents (debug-error).
+  Audit a codebase for silent failures, swallowed exceptions, and observability gaps
+  across Sentry and Langfuse, then produce a phased fix plan. Use when the user says
+  "errors aren't showing in Sentry", "things fail silently", "empty catch blocks", "add
+  error handling", "check my Langfuse tracing", or is hardening.
 license: MIT
 ---
 

@@ -1,16 +1,10 @@
 ---
 name: housekeep-design
-description: >-
+description: >
   Consolidate a design system that has drifted across many vibe-coding sessions and
-  developer handoffs into one single source of truth. Detects competing tokens,
-  duplicate/near-duplicate components, naming drift, mixed icon libraries, and ad-hoc
-  arbitrary values; reconciles each conflict by picking the best-of-both canonical form;
-  migrates all usages via mechanical codemod; and installs lint guardrails so drift can't
-  recur. Establishes a 3-layer W3C token taxonomy (primitive → semantic → component). Use
-  when "clean up the design system", "resolve design conflicts", "our UI is inconsistent
-  across pages", "consolidate tokens/components", "streamline the design system", "keep the
-  design SSOT", or "housekeep-design". This is the execution arm of plan-uiux-unification
-  (which only plans) and the design counterpart of workflow-housekeep (which cleans files).
+  developer handoffs into one single source of truth. Use when "clean up the design
+  system", "resolve design conflicts", "our UI is inconsistent across pages", "consolidate
+  tokens/components", "streamline the design system", "keep the.
 license: MIT
 ---
 

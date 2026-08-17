@@ -1,12 +1,10 @@
 ---
 name: plan-security-audit
 description: >
-  OWASP Top 10 security audit with Supabase-first methodology — RLS pass, bundle/secret scan,
-  auth-path tracing, dependency CVEs. Plan only, no patches or destructive testing. Never
-  paste secret values — location + rotation flag only. Research-backed: tables without RLS
-  and service_role in client bundle as top critical classes. Use when asked to "security
-  audit plan", "OWASP audit", "RLS audit", "Supabase security review", "hardening plan",
-  "secrets scan plan", "plan security fixes", or "security burndown".
+  OWASP Top 10 security audit with Supabase-first methodology — RLS pass, bundle/secret
+  scan, auth-path tracing, dependency CVEs. Use when asked to "security audit plan",
+  "OWASP audit", "RLS audit", "Supabase security review", "hardening plan", "secrets scan
+  plan", "plan security fixes", or "security burndown".
 license: MIT
 ---
 

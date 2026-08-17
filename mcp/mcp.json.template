@@ -1,33 +1,17 @@
 {
   "mcpServers": {
-    "sequential-thinking": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-sequential-thinking@2025.12.18"
-      ]
-    },
     "firecrawl": {
       "command": "npx",
-      "args": [
-        "-y",
-        "firecrawl-mcp@3.21.3"
-      ],
+      "args": ["-y", "firecrawl-mcp@3.21.3"],
       "env": {
-        "FIRECRAWL_API_KEY": "YOUR_FIRECRAWL_API_KEY"
+        "FIRECRAWL_API_KEY": "${env:FIRECRAWL_API_KEY}",
+        "FIRECRAWL_NO_SEARCH_FEEDBACK": "1",
+        "FIRECRAWL_NO_ENDPOINT_FEEDBACK": "1"
       }
     },
-    "playwright": {
+    "context7": {
       "command": "npx",
-      "args": [
-        "-y",
-        "@playwright/mcp@0.0.76",
-        "--viewport-size",
-        "1280x800",
-        "--save-session",
-        "--output-dir",
-        ".playwright-mcp"
-      ]
+      "args": ["-y", "@upstash/context7-mcp@3.2.2", "--api-key", "${env:CONTEXT7_API_KEY}"]
     },
     "supabase": {
       "command": "npx",
@@ -35,18 +19,11 @@
         "-y",
         "@supabase/mcp-server-supabase@0.8.2",
         "--project-ref",
-        "YOUR_SUPABASE_PROJECT_REF"
+        "${env:SUPABASE_PROJECT_REF}"
       ],
       "env": {
-        "SUPABASE_ACCESS_TOKEN": "YOUR_SUPABASE_ACCESS_TOKEN"
+        "SUPABASE_ACCESS_TOKEN": "${env:SUPABASE_ACCESS_TOKEN}"
       }
-    },
-    "context7": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@upstash/context7-mcp@3.2.2"
-      ]
     }
   }
 }

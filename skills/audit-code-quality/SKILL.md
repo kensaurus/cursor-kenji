@@ -1,6 +1,10 @@
 ---
 name: audit-code-quality
-description: Detect and fix code anti-patterns, and audit codebase consistency. Use when reviewing code quality, fixing anti-patterns, enforcing naming conventions, standardising file organisation, onboarding to a codebase, or when user mentions "code smell", "anti-pattern", "technical debt", "inconsistent", "standardize", "cleanup codebase", "conventions", or "why is this slow/broken".
+description: >
+  Detect and fix code anti-patterns, and audit codebase consistency. Use when reviewing
+  code quality, fixing anti-patterns, enforcing naming conventions, standardising file
+  organisation, onboarding to a codebase, or when user mentions "code smell",
+  "anti-pattern", "technical debt", "inconsistent", "standardize".
 license: MIT
 ---
 

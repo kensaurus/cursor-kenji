@@ -1,14 +1,10 @@
 ---
 name: audit-db-schema
 description: >
-  Audit database schema for consistency, validation, and industry standards. Auto-detects
-  database type (Supabase/Postgres/MySQL), ORM (Prisma/Drizzle/Sequelize), and migration tool.
-  Uses Supabase MCP for live schema inspection and advisors, Firecrawl for current schema best
-  practices, and Context7 for ORM documentation. Covers naming conventions, data types,
-  constraints, indexes, RLS policies, relationships, migrations, and security. Use when
-  reviewing database schema design, checking naming conventions, validating constraints/indexes/
-  RLS policies, auditing migrations, or when the user mentions database quality, schema review,
-  or data integrity concerns.
+  Audit database schema for consistency, validation, and industry standards. Use when
+  reviewing database schema design, checking naming conventions, validating
+  constraints/indexes/ RLS policies, auditing migrations, or when the user mentions
+  database quality, schema review, or data integrity concerns.
 license: MIT
 ---
 

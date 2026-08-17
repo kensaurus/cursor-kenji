@@ -10,6 +10,12 @@ const PINNED = JSON.parse(readFileSync(join(ROOT, 'mcp/pinned-versions.json'), '
 
 const FILES = ['.mcp.json', 'mcp/mcp.json.template', 'mcp/mcp-full.json.template'];
 
+const ESSENTIAL = ['mcp/mcp.json.template', '.mcp.json'];
+const ESSENTIAL_FORBIDDEN = [
+  '@modelcontextprotocol/server-sequential-thinking',
+  '@playwright/mcp',
+];
+
 /** @type {string[]} */
 const errors = [];
 
@@ -18,6 +24,14 @@ for (const rel of FILES) {
 
   if (/@latest\b/.test(text)) {
     errors.push(`${rel}: contains @latest — pin in mcp/pinned-versions.json`);
+  }
+
+  if (ESSENTIAL.includes(rel)) {
+    for (const pkg of ESSENTIAL_FORBIDDEN) {
+      if (text.includes(pkg)) {
+        errors.push(`${rel}: essential template must not include ${pkg}`);
+      }
+    }
   }
 
   const allPins = { ...PINNED.npm, ...PINNED.pypi_uvx };

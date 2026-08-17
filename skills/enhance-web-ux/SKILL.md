@@ -1,7 +1,10 @@
 ---
 name: enhance-web-ux
 description: >
-  Generative, NN/g-grounded page enhancement skill. Given a route, screen, or component, it produces concrete, design-system-compliant code changes that replace generic, AI-templated, or "stacked" UI with intelligent, context-aware layouts. Inventories the page's data domain and primitives FIRST, maps each pain point to a Nielsen Norman heuristic, then proposes the smallest change using an existing primitive (Badge, Button, Card, Tooltip, semantic token). Replaces empty cells with semantic data, fixes label-wrap/overflow at the helper level, and verifies live across viewports via playwright-cli. Use when the user says "enhance this page", "make /xxx better", "this page feels AI-generated", "fix UX of /xxx", "improve information density", "icons all look the same", or asks for any non-trivial UX improvement on a screen. Generic across stacks. For visual-token compliance use audit-uiux-design-system; for a heuristic report use audit-ux.
+  Generative, NN/g-grounded page enhancement skill. Use when the user says "enhance this
+  page", "make /xxx better", "this page feels AI-generated", "fix UX of /xxx", "improve
+  information density", "icons all look the same", or asks for any non-trivial UX
+  improvement on a screen.
 license: MIT
 ---
 
@@ -10,6 +13,7 @@ license: MIT
 > | Your surface | Use |
 > |:-------------|:----|
 > | **Web** product page / dashboard — composition, hierarchy, spacing, motion | `enhance-web-ui` |
+> | **Web** linearized desktop / stacked at every breakpoint | `audit-responsive` |
 > | **Web** product page — UX heuristics, flows, data wiring | `enhance-web-ux` |
 > | **Web** landing / marketing / portfolio (greenfield, anti-slop) | `enhance-web-landing` |
 > | **Web** existing site upgrade (audit-first, preserve behavior) | `enhance-web-redesign` |

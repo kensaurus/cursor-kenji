@@ -1,12 +1,10 @@
 ---
 name: meta-mcp-builder
 description: >
-  Scaffold and implement Model Context Protocol (MCP) servers that expose external services,
-  APIs, and data sources as typed tools and resources for LLM agents. Use when the user says
-  "build an MCP server", "give Claude access to X", "create an MCP tool", "expose my API
-  to an agent", or "AI agent integration". Covers tool schemas, authentication, error
-  handling, and CLAUDE.md registration. Do NOT use for general API design (design-api) or
-  LLM cost management (plan-llm-cost-guardrails).
+  Scaffold and implement Model Context Protocol (MCP) servers that expose external
+  services, APIs, and data sources as typed tools and resources for LLM agents. Use when
+  the user says "build an MCP server", "give Claude access to X", "create an MCP tool",
+  "expose my API to an agent", or "AI agent integration".
 license: MIT
 ---
 

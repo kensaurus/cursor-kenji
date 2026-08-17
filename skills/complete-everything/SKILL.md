@@ -1,14 +1,10 @@
 ---
 name: complete-everything
 description: >
-  Close an approved plan with zero plan-related deferrals: implement every
-  unfinished item, absorb every connected out-of-scope/follow-up/nice-to-have
-  item parked by prior runs, fix newly exposed gaps, and run the full applicable
-  verification ladder. Use when a plan was marked done with work deferred, or
-  the user says "complete everything", "don't defer", "fix out of scope too",
-  "finish the whole plan", "close every TODO", or invokes
-  /complete-everything. Distinct from burndown-full, which proves mechanical
-  pattern coverage; this skill closes intent, behavior, and verification gaps.
+  Close an approved plan with zero plan-related deferrals: implement every unfinished
+  item, absorb every connected out-of-scope/follow-up/nice-to-have item parked by prior
+  runs, fix. Use when a plan was marked done with work deferred, or the user says
+  "complete everything", "don't defer", "fix out of scope too", "finish.
 ---
 
 # Complete Everything

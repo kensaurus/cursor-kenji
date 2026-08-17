@@ -1,6 +1,9 @@
 ---
 name: enhance-web-redesign
-description: Upgrades existing websites and apps to premium quality. Audits current design, identifies generic AI patterns, and applies high-end design standards without breaking functionality. Use when redesigning existing projects, upgrading UI to premium quality, removing AI slop patterns, or when the user asks for a redesign audit. Works with any CSS framework or vanilla CSS.
+description: >
+  Upgrades existing websites and apps to premium quality. Use when redesigning existing
+  projects, upgrading UI to premium quality, removing AI slop patterns, or when the user
+  asks for a redesign audit.
 license: MIT
 ---
 

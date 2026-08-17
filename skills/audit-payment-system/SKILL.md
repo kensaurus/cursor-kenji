@@ -1,17 +1,10 @@
 ---
 name: audit-payment-system
-description: >-
-  Read-only audit for payment/money-movement systems, scope-gated so a simple Stripe-Checkout site and
-  an in-house ledger/gateway each see only relevant findings. Checks the things that lose money or
-  trigger PCI liability: idempotency on every mutation (double-charge on retry), double-entry
-  append-only ledger, payment state machine (no double-capture), sync-auth vs async-webhook flow,
-  HMAC + event-id webhook dedup, 3-way reconciliation vs PSP settlement, fraud/velocity + 3DS/SCA,
-  multi-currency in minor units, PCI DSS v4.0.1 (never log PAN, tokens only, key rotation), and
-  resilience (PSP timeout, partial ledger write, breaker). Uses the Stripe MCP for version-anchored
-  provider checks when the PSP is Stripe. Use when "audit payment system", "payment gateway audit",
-  "double charge / idempotency", "ledger / reconciliation", "webhook / 3DS / PCI", or
-  "audit-payment-system". Defers per-call resilience to audit-resilience, PCI/secrets to audit-security,
-  ledger schema to audit-db-schema.
+description: >
+  Read-only audit for payment/money-movement systems, scope-gated so a simple
+  Stripe-Checkout site and an in-house ledger/gateway each see only relevant findings. Use
+  when "audit payment system", "payment gateway audit", "double charge / idempotency",
+  "ledger / reconciliation", "webhook / 3DS / PCI", or.
 license: MIT
 ---
 

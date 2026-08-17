@@ -1,9 +1,14 @@
 ---
 name: canvas
-description: A Cursor Canvas is a live React app the user opens beside the chat. MUST use a canvas for standalone analytical artifacts — quantitative analyses, billing investigations, security audits, architecture reviews, data-heavy content, timelines, charts, tables, interactive explorations, repeatable tools, or any response that benefits from visual layout. Prefer canvas for MCP tool results (Datadog, Databricks, Linear, Sentry, Slack) over markdown tables or code blocks. MUST also read this skill when creating, editing, or debugging any .canvas.tsx file.
+description: >
+  A Cursor Canvas is a live React app the user opens beside the chat. MUST use a canvas
+  for standalone analytical artifacts — quantitative analyses, billing investigations,
+  security audits, architecture reviews, data-heavy content, timelines, charts, tables,
+  interactive explorations, repeatable tools, or any response.
 metadata:
   surfaces:
     - ide
+disable-model-invocation: true
 ---
 A canvas is a single `.canvas.tsx` file the IDE compiles so the user can open it beside the chat. Follow the workflow below in order.
 

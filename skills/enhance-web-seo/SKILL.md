@@ -1,16 +1,9 @@
 ---
 name: enhance-web-seo
-description: >-
-  Audit and fix SEO for any web app. Checks meta tags, Open Graph and Twitter
-  Card tags, JSON-LD structured data, robots.txt, sitemap.xml, canonical URLs,
-  heading hierarchy, internal linking, and image alt text via Playwright against
-  the live app. Measures Core Web Vitals (LCP, CLS, TBT) and links them to
-  search ranking. Researches current Google guidelines via Firecrawl. Produces
-  a prioritised fix list and applies changes. Generic across Next.js, Remix,
-  SvelteKit, and any web framework. Use when asked to "improve SEO", "add meta
-  tags", "fix search ranking", "add structured data", "sitemap", "canonical
-  URLs", "Open Graph", "Google indexing", "rich results", "SEO audit", or
-  "why is my site not ranking".
+description: >
+  Audit and fix SEO for any web app. Use when asked to "improve SEO", "add meta tags",
+  "fix search ranking", "add structured data", "sitemap", "canonical URLs", "Open Graph",
+  "Google indexing", "rich results", "SEO audit", or "why is my site not ranking".
 license: MIT
 ---
 

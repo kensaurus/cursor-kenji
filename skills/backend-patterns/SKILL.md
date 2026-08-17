@@ -3,14 +3,8 @@ name: backend-patterns
 description: >
   Apply modern backend patterns — auth middleware, caching strategies, background queues,
   rate limiting, and serverless/edge function design — across stacks (examples use
-  Next.js, Node, and Supabase; adapts to your detected ecosystem). Use when the user says
-  "backend architecture", "queue jobs", "caching layer",
-  "rate limiting", "server actions", "edge function", "microservices", "authentication
-  pattern", "circuit breaker", "outbox pattern", "saga", "bulkhead", "hexagonal architecture",
-  "API gateway", or "BFF" (see references/architecture-patterns.md for the distributed-systems
-  patterns). Pairs with design-api, audit-security, backend-realtime, and audit-backend-architecture
-  (the read-only gap report). Do NOT use for database schema design (audit-db-schema) or pure
-  frontend work.
+  Next.js. Use when the user says "backend architecture", "queue jobs", "caching layer",
+  "rate limiting", "server actions", "edge function".
 license: MIT
 ---
 

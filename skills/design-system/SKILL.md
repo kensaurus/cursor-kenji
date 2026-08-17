@@ -4,8 +4,7 @@ description: >
   Build and maintain cohesive design systems and component libraries with tokens, theming,
   and documented variants. Use when the user says "design system", "component library",
   "design tokens", "theming", "consistent styling", "reusable components", or "variant
-  props". Produces token files, component specs, and usage guidelines. Pairs with
-  design-frontend, audit-uiux-design-system. Do NOT use for one-off component styling.
+  props".
 license: MIT
 ---
 

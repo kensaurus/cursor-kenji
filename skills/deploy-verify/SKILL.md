@@ -1,14 +1,10 @@
 ---
 name: deploy-verify
 description: >
-  Post-deploy smoke test combining all 5 tools (Sentry + Supabase + Firecrawl MCPs,
-  plus the Langfuse and Playwright CLIs) into one workflow. Auto-detects deployment context, checks
-  Sentry for new errors (with Seer AI root-cause on P0s), verifies Supabase migration
-  health and logs, confirms Langfuse trace pipeline, runs Playwright smoke test on
-  critical paths, and produces a ship-or-rollback verdict. Works with any project.
-  Use when asked to: "verify deploy", "post-deploy check", "smoke test production",
-  "check if deploy is healthy", "ship or rollback", "post-release check",
-  "verify release", "deploy health check", or "run post-deploy".
+  Post-deploy smoke test combining all 5 tools (Sentry + Supabase + Firecrawl MCPs, plus
+  the Langfuse and Playwright CLIs) into one workflow. Use when asked to: "verify deploy",
+  "post-deploy check", "smoke test production", "check if deploy is healthy", "ship or
+  rollback", "post-release check", "verify release", "deploy.
 license: MIT
 ---
 

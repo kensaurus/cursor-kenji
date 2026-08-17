@@ -1,16 +1,10 @@
 ---
 name: enhance-motion
-description: >-
+description: >
   Audit an existing app's design system and current motion, then apply coherent,
-  performant, accessible motion using the right-sized 2026 stack — CSS/tw-animate-css
-  for utility transitions, Auto-Animate for zero-config list/layout changes, Motion
-  (motion.dev, ex-Framer Motion) for component transitions/gestures/presence, and GSAP
-  only for complex timelines. Defines a motion-token SSOT (durations/easings) coherent
-  with the app's existing scale, respects prefers-reduced-motion, and keeps everything on
-  transform/opacity at 60fps. Use when "add motion", "animate the app", "make it feel
-  alive", "motion pass", "add micro-interactions across the app", or "enhance-motion".
-  Distinct from design-motion (from-scratch cookbook): this audits the existing system
-  first and layers motion coherently on top. Applies changes and verifies them.
+  performant, accessible motion using the right-sized 2026 stack — CSS/tw-animate-css for
+  utility. Use when "add motion", "animate the app", "make it feel alive", "motion pass",
+  "add micro-interactions across the app", or "enhance-motion".
 license: MIT
 ---
 

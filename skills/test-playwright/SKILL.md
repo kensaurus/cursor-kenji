@@ -1,18 +1,10 @@
 ---
 name: test-playwright
-description: >-
-  Close the PDCA loop on the work you just did. After implementing changes, drive
-  the LIVE app on localhost through the playwright-cli like a real end user —
-  manually, in a visible (headed) browser, clicking and typing one action at a time,
-  NEVER through scripts or test runners — exercising every page, component, and flow
-  the current session touched. Reproduce real user journeys, hunt for pain points, and
-  FIX them as you go (full-stack: UI/UX + backend + DB), using already-enabled MCP
-  servers (Sentry for production errors, Supabase for schema/logs/data, Firecrawl for
-  research). Red-team your own work, give brutally honest critique, and suggest
-  feature/UX improvements. Generic across any repo and stack. Use after building or
-  changing a feature, or when the user says "test this with playwright", "test my
-  changes", "test on localhost like a user", "PDCA this", "did you actually test it",
-  "red-team this feature", or "verify the work end-to-end".
+description: >
+  Close the PDCA loop on the work you just did. After implementing changes, drive the LIVE
+  app on localhost through the playwright-cli like a real end user — manually, in a
+  visible (headed) browser, clicking and typing one action at a time, NEVER through
+  scripts or test runners — exercising every page, component, and.
 license: MIT
 ---
 

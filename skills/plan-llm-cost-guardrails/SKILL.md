@@ -1,13 +1,10 @@
 ---
 name: plan-llm-cost-guardrails
 description: >
-  Audit an LLM-powered app for runaway-cost and quota-abuse exposure, then produce a phased
-  guardrail plan. Use when the user says "cap my AI costs", "my LLM bill could blow up",
-  "rate limit my AI", "token budget", "runaway agent loop", or is hardening LLM features
-  before launch. Audits three layers: token-bucket limits, cost-velocity circuit breakers,
-  and fallback chains; also covers Langfuse cost alerts and streaming usage accounting.
-  Plan only until approved. Pairs with audit-langfuse-llm, plan-input-validation. Do NOT
-  use for output quality evals (audit-langfuse-llm).
+  Audit an LLM-powered app for runaway-cost and quota-abuse exposure, then produce a
+  phased guardrail plan. Use when the user says "cap my AI costs", "my LLM bill could blow
+  up", "rate limit my AI", "token budget", "runaway agent loop", or is hardening LLM
+  features before launch.
 license: MIT
 ---
 
