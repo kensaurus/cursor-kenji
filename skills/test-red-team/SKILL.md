@@ -446,3 +446,10 @@ For each finding, assign:
    before calling any MCP tool.
 10. **Pure-native iOS/Android out of scope** — document it in the report if relevant.
 
+## Related
+
+- `audit-llm-security` — product LLM / prompt-injection depth
+- `test-load` — concurrency breaking point (not a headed UI attack)
+- `test-playwright` / `test-qa` / `audit-security` / `iterate-post-launch`
+
+

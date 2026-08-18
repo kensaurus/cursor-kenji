@@ -58,16 +58,19 @@ flowchart LR
 | `plan-error-handling` | `backend-observability`, `audit-langfuse-llm`, `debug-sentry-monitor` |
 | `plan-input-validation` | `backend-patterns`, `backend-error-handling`, `audit-security`, `audit-fe-api` |
 | `plan-secrets-audit` | provider dashboards, Vercel/AWS env, `audit-security`, `create-hook` |
-| `plan-data-integrity` | `db-migrator`, `backend-patterns`, infra config, `create-hook` |
+| `plan-data-integrity` | `db-migrator`, `backend-patterns`, infra config, `create-hook`, `plan-backup-dr` |
 | `plan-dependency-provenance` | `workflow-housekeep`, `create-hook`, `/update-deps`, `audit-security` |
-| `plan-llm-cost-guardrails` | `backend-patterns`, `audit-langfuse-llm`, `backend-observability` |
+| `plan-llm-cost-guardrails` | `backend-patterns`, `audit-langfuse-llm`, `backend-observability`, `audit-llm-security` |
 | `plan-aeo-readiness` | `enhance-web-seo`, `docs-writer`, `enhance-web-landing` |
-| `plan-mobile-readiness` | `mobile-capacitor-platform`, `enhance-capacitor-ui`, `plan-stub-checker`, `mobile-emulator-test` |
+| `plan-mobile-readiness` | `mobile-capacitor-platform`, `enhance-capacitor-ui`, `plan-stub-checker`, `mobile-emulator-test`, `plan-privacy-compliance`, `plan-aso` |
 | `plan-capacitor-hardening` | `mobile-capacitor-platform`, `plan-secrets-audit`, `plan-input-validation`, `mobile-emulator-test` |
+| `plan-privacy-compliance` | `audit-analytics`, `plan-error-handling`, `plan-rls-audit`, `enhance-email-deliverability` |
+| `plan-backup-dr` | `plan-data-integrity`, `audit-env-parity`, `audit-infra-cost` |
+| `plan-aso` | `plan-mobile-readiness`, `design-frontend`, `plan-privacy-compliance` |
 
 **Verify every execution phase:** `test-playwright` (live user paths) + `deploy-verify` (prod smoke).
 
-## Plan skill map (17 skills — pick loops, don't run all at once)
+## Plan skill map (20 skills — pick loops, don't run all at once)
 
 | Group | Skills | When |
 |-------|--------|------|
@@ -76,7 +79,8 @@ flowchart LR
 | **Pre-launch hardening** | security spine + `plan-dependency-provenance` | Supabase/Stripe apps, vibe-coded repos, pre-open-source |
 | **Observability & spend** | `plan-error-handling` + `plan-llm-cost-guardrails` | Sentry/Langfuse gaps, LLM features shipping |
 | **Mobile gate** | `plan-capacitor-hardening` + `plan-mobile-readiness` | Capacitor/hybrid pre-store; native-layer security + paperwork |
-| **Growth gate** | `plan-aeo-readiness` | AI citation / GEO — run as needed |
+| **Privacy & recovery** | `plan-privacy-compliance` + `plan-backup-dr` | Consumer launch labels + "can we restore" |
+| **Growth gate** | `plan-aeo-readiness` + `plan-aso` | AI citation / GEO + store listing conversion |
 
 ## Pre-launch hardening loop (security + supply chain)
 
@@ -146,6 +150,9 @@ Independent of the six-skill and hardening loops — run when you're about to sh
 |------|-------|---------|
 | Capacitor native security | `plan-capacitor-hardening` | WebView, secure storage, OAuth/deep links, OTA, cleartext |
 | App Store / Play | `plan-mobile-readiness` | Pre-submission, privacy manifest, 2.5.2 thin-app |
+| Privacy / store labels | `plan-privacy-compliance` | Collection-vs-claimed, GDPR/APPI, consent |
+| Disaster recovery | `plan-backup-dr` | Restore drills, RPO/RTO |
+| Store listing / ASO | `plan-aso` | Keywords, screenshots, ratings |
 | AI citation / GEO | `plan-aeo-readiness` | "Do ChatGPT/Perplexity cite me?", llms.txt, crawler block |
 
 **Capacitor hybrid apps:** run `plan-capacitor-hardening` **before** `plan-mobile-readiness` — native-layer gaps are invisible to web-only review.
@@ -159,7 +166,7 @@ Cross-hand: bundle secrets → plan-secrets-audit; deep-link input → plan-inpu
 Stop after planning.
 ```
 
-Slash aliases: `/capacitor-plan`, `/mobile-plan`, `/aeo-plan`
+Slash aliases: `/capacitor-plan`, `/mobile-plan`, `/privacy-plan`, `/backup-plan`, `/aso-plan`, `/aeo-plan`
 
 ## Slash aliases (CATALOG)
 
@@ -182,6 +189,9 @@ Slash aliases: `/capacitor-plan`, `/mobile-plan`, `/aeo-plan`
 | `/perf-plan` | `plan-perf-audit` |
 | `/security-plan` | `plan-security-audit` |
 | `/docs-plan` | `plan-docs-sync` |
+| `/privacy-plan` | `plan-privacy-compliance` |
+| `/backup-plan` | `plan-backup-dr` |
+| `/aso-plan` | `plan-aso` |
 
 ## Copy-paste prompts
 
@@ -248,7 +258,8 @@ Every `plan-*` skill shares the same discipline:
 | **Pre-launch hardening** | `plan-input-validation` | Supabase/Stripe, vibe-coded, pre-open-source |
 | **Observability & spend** | `plan-error-handling` | Silent failures, LLM cost exposure |
 | **Mobile gate** | `plan-capacitor-hardening` / `plan-mobile-readiness` | Capacitor pre-store, native security |
-| **Growth gate** | `plan-aeo-readiness` | AI citation |
+| **Privacy & recovery** | `plan-privacy-compliance` / `plan-backup-dr` | Consumer launch labels; restore capability |
+| **Growth gate** | `plan-aeo-readiness` / `plan-aso` | AI citation; store listing conversion |
 | `workflow-quality-gate` | `test-red-team` | Ship/no-ship verdict with fixes |
 | `workflow-launch-ready` | SEO + PWA + … | Launch week |
 | Core iterate | `/research` → audits → `/plan` → TDD | General improvement |

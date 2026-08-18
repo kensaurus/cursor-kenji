@@ -232,4 +232,5 @@ per the composer execution rule).
 - `backend-patterns` / `backend-patterns/references/architecture-patterns.md` — implement idempotency, outbox, saga, state machine
 - `data-pipeline` — reconciliation/settlement ingestion jobs
 - the Stripe plugin skills (`stripe-best-practices`, `connect-recommend`, `upgrade-stripe`) — Stripe-specific integration
+- `audit-monetization-iap` — StoreKit / Play Billing / RevenueCat (not Stripe/web)
 - `complete-everything` — close audited gaps to done with verification (human-reviewed for payment code)

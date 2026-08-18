@@ -176,3 +176,10 @@ gh api "repos/<owner>/<repo>/actions/caches" --paginate --jq '.actions_caches[].
 ### Expected outcome
 ~$A → ~$B/mo, no loss of test coverage or deploy safety.
 ```
+
+## Related
+
+- `audit-infra-cost` — hosting / DB / egress (not Actions minutes)
+- `test-visual-regression` — screenshot CI artifact retention
+- `audit-security` / `deploy-verify` / `workflow-pr` / `create-hook`
+

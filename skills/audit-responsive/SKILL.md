@@ -185,4 +185,6 @@ to `design-mobile-first`.
 - `enhance-web-ui` / `enhance-web-ux` — polish once the wireframe is implemented
 - `housekeep-design` — competing token/component SSOTs
 - `audit-accessibility` — WCAG after reflow (focus order, target size)
+- `audit-ui-states` — empty/error/offline matrix (not breakpoint layout)
+- `test-visual-regression` — lock the 375 / 768 / 1440 baselines
 - `test-playwright` — regression coverage for the new layouts

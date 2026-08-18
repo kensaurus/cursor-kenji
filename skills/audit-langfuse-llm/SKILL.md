@@ -465,3 +465,11 @@ P2 — Improvement opportunity:
 ## Further reading
 
 - [Improvement Details and more](references/details.md)
+
+## Related
+
+- `audit-llm-security` — OWASP LLM Top 10 (injection, agency, leaks) — not quality/evals
+- `plan-llm-cost-guardrails` — token budgets and quota abuse
+- `plan-privacy-compliance` — PII in traces
+- `backend-observability` / `debug-sentry-monitor` — non-LLM telemetry
+

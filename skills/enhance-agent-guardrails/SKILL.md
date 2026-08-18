@@ -132,4 +132,5 @@ A guardrail you didn't test is a guardrail that doesn't work.
 - `plan-dependency-provenance` — hallucinated/slopsquatted dependency audit
 - `plan-data-integrity` — destructive-operation and data-loss guardrails
 - `verification-before-completion` (rule) + `completion-judge` — the false-done guard agents should obey
+- `audit-llm-security` — product-facing LLM attack surface (not this repo's coding agent)
 - `housekeep-design` — pairs the visual lint-as-policy with a full design consolidation

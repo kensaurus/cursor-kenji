@@ -7,7 +7,7 @@ Quick map of `docs/` — start with [GETTING-STARTED.md](GETTING-STARTED.md) if 
 | [GETTING-STARTED.md](GETTING-STARTED.md) | Plain-language install and first skills to try |
 | [CATALOG.md](CATALOG.md) | Full skill/command reference with trigger phrases |
 | [TRIGGER-CHEATSHEET.md](TRIGGER-CHEATSHEET.md) | "Say X → skill Y" lookup table |
-| [PLAN-LOOPS.md](PLAN-LOOPS.md) | How to chain the 17 `plan-*` skills (grouped loops) |
+| [PLAN-LOOPS.md](PLAN-LOOPS.md) | How to chain the 20 `plan-*` skills (grouped loops) |
 | [THIRD-PARTY-SKILLS.md](THIRD-PARTY-SKILLS.md) | Vendored upstream skills (`thirdparty-*`), attribution, update policy |
 | [AGENTS.template.md](AGENTS.template.md) | Project constitution template (mission / stack / roadmap / agent discipline) |
 | [examples/](examples/) | Sample `plan-*.md` audit outputs |

@@ -180,3 +180,9 @@ Deliver as markdown or canvas for large repos. **Do not implement wiring** unles
 - **Never fabricate** endpoints, tables, env, or behavior.
 - Missing target/integration/env → say so, don't guess.
 - Before proposing any file change: one line on what must keep working.
+
+## Related
+
+- `audit-ui-states` — empty/error/offline rendering (wired controls that still look broken)
+- `debug-fe-be-integration` / `audit-fe-api` / `test-qa` / `workflow-fix-and-ship`
+

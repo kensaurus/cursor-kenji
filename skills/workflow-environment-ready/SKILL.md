@@ -96,6 +96,7 @@ ask one precise question immediately rather than starting a run that will fail.
 ## Related
 
 - `workflow-green-repo` — after the environment runs, make every gate pass
+- `audit-env-parity` — after local is runnable, check staging/prod agree
 - `complete-everything` / `burndown-full` — run this first for long closures
 - `workflow-onboard` — orient to an unfamiliar codebase
 - `debug-error` — diagnose a command that cannot start

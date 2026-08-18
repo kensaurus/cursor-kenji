@@ -125,6 +125,9 @@ Real older devices + IAP dry-run before submit.
 ## Chains with
 
 - **Launch gates loop** — mobile submission; pair with `plan-aeo-readiness` for web.
+- **`plan-privacy-compliance`** — collection-vs-claimed + store privacy labels.
+- **`plan-aso`** — listing keywords/screenshots after the app is submittable.
+- **`audit-monetization-iap`** — receipt validation / restore (not just "uses official billing").
 - **`plan-stub-checker`** — placeholders are rejections on mobile.
 - **Execution:** `mobile-capacitor-platform`, `enhance-capacitor-ui`,
   `mobile-emulator-test` (then real device).

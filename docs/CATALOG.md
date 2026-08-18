@@ -12,7 +12,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 |:-------|:------|:--------|
 | `audit-` | Assess | Read-only assessment that produces a structured report |
 | `plan-` | Assess | Audit + phased burndown you approve **before** any code changes |
-| `enhance-` | Change | Improve existing web UI/UX, motion, forms, SEO, PWA |
+| `enhance-` | Change | Improve existing web UI/UX, motion, forms, SEO, PWA, email deliverability |
 | `design-` | Change | Create something new (UI, system, API, spec, art) |
 | `backend-` | Change | Server / data-layer engineering patterns |
 | `mobile-` | Change | Native / React Native / emulator / Capacitor |
@@ -28,7 +28,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (115)
+## Skills (128)
 
 ### Enhance
 
@@ -70,7 +70,12 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `enhance-web-seo`
 **Triggers:** "improve SEO", "add meta tags", "fix search ranking", "add structured data", "sitemap", "canonical URLs", "Open Graph", "Google indexing", "rich results", "SEO audit", "why is my site not ranking"
 **What it does:** Full SEO audit and fix for any web app. Checks meta tags, OG/Twitter Card, JSON-LD structured data, robots.txt, sitemap, canonical URLs, heading hierarchy, image alt text, and Core Web Vitals (LCP, CLS) via Playwright. Researches current Google guidelines, applies fixes, verifies with Playwright.
-**Related:** `audit-performance`, `audit-bundle-size`, `enhance-web-ui`
+**Related:** `audit-performance`, `audit-bundle-size`, `enhance-web-ui`, `plan-aso`
+
+#### `enhance-email-deliverability`
+**Triggers:** "emails go to spam", "set up SPF/DKIM/DMARC", "check email deliverability", "handle bounces", "why is my email in spam"
+**What it does:** Audit-and-fix inbox placement — SPF/DKIM/DMARC + alignment, bounce/complaint suppression, list hygiene, one-click unsubscribe, US/JP legal footer. Applies DNS/config on approval. Templates stay on `design-email`.
+**Related:** `design-email`, `plan-privacy-compliance`, `audit-analytics`, `backend-patterns`
 
 #### `enhance-pwa`
 **Triggers:** "make it a PWA", "offline support", "install prompt", "push notifications", "service worker", "add to home screen", "background sync", "Lighthouse PWA score", "app-like experience", "installable", "works offline"
@@ -162,9 +167,9 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Related:** `plan-rls-audit`, `create-hook`, `audit-security`
 
 #### `plan-data-integrity`
-**Triggers:** "is my migration safe", "could I lose data", "check my backups", "agent might delete prod", "destructive operations", "disaster recovery"
-**What it does:** Destructive-op and migration safety audit — unguarded DELETE/DROP, backfill-before-drop, backup blast radius (PocketOS Apr 2026), overprivileged agent/CI tokens, confirmation gates. Emits `plan-data-integrity.md` — **no migrations/tokens until approved**.
-**Related:** `plan-secrets-audit`, `plan-rls-audit`, `audit-db-schema`, `db-migrator`
+**Triggers:** "is my migration safe", "could I lose data", "agent might delete prod", "destructive operations", "safe schema changes"
+**What it does:** Destructive-op and migration safety audit — unguarded DELETE/DROP, backfill-before-drop, backup blast radius (same-volume wipe), overprivileged agent/CI tokens, confirmation gates. Emits `plan-data-integrity.md` — **no migrations/tokens until approved**. Restore drills / RPO/RTO → `plan-backup-dr`.
+**Related:** `plan-backup-dr`, `plan-secrets-audit`, `plan-rls-audit`, `audit-db-schema`, `db-migrator`
 
 #### `plan-dependency-provenance`
 **Triggers:** "check my dependencies", "slopsquatting", "is this package real", "supply chain audit", "license check", "SBOM", "did the AI hallucinate a package"
@@ -174,7 +179,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `plan-llm-cost-guardrails`
 **Triggers:** "cap my AI costs", "LLM bill could blow up", "token budget", "runaway agent loop", "per-user AI limits", "drain my API quota"
 **What it does:** 3-layer guardrail audit — token-bucket limits, cost-velocity circuit breakers, fallback chain (cheaper model → cache → 503). Complements Langfuse observability. Emits `plan-llm-cost-guardrails.md`.
-**Related:** `audit-langfuse-llm`, `plan-input-validation`, `backend-patterns`
+**Related:** `audit-langfuse-llm`, `audit-llm-security`, `audit-infra-cost`, `plan-input-validation`, `backend-patterns`
 
 #### `plan-aeo-readiness`
 **Triggers:** "AEO", "GEO", "do AI engines cite me", "llms.txt", "blocking AI crawlers", "ChatGPT/Perplexity visibility"
@@ -184,7 +189,22 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `plan-mobile-readiness`
 **Triggers:** "App Store ready", "Google Play reject", "privacy manifest", "data safety form", "pre-submission", "Guideline 2.5.2"
 **What it does:** Store submission audit — privacy manifests, Data Safety ↔ permissions, IAP via billing, demo account, 2.5.2 thin-app risk, Android closed-test gate. Emits `plan-mobile-readiness.md`.
-**Related:** `mobile-capacitor-platform`, `enhance-capacitor-ui`, `plan-stub-checker`, `plan-capacitor-hardening`
+**Related:** `mobile-capacitor-platform`, `enhance-capacitor-ui`, `plan-stub-checker`, `plan-capacitor-hardening`, `plan-privacy-compliance`, `plan-aso`, `audit-monetization-iap`
+
+#### `plan-privacy-compliance`
+**Triggers:** "privacy compliance", "what data do we collect", "App Store privacy labels", "GDPR", "APPI", "consent gating"
+**What it does:** Maps real personal-data flows vs the written policy and store labels (GDPR / Japan APPI). Consent timing, deletion/export, retention, SDK leakage. **Plan only.** Consent-gated analytics firing is shared with `audit-analytics` — run both.
+**Related:** `audit-analytics`, `plan-mobile-readiness`, `plan-rls-audit`, `plan-error-handling`, `enhance-email-deliverability`
+
+#### `plan-backup-dr`
+**Triggers:** "can we recover if the DB dies", "audit our backups", "what's our RPO/RTO", "disaster recovery"
+**What it does:** Proves restore capability — PITR, drill evidence, storage/secrets recovery, SPOF. **Plan only.** Preventing wipe stays on `plan-data-integrity`.
+**Related:** `plan-data-integrity`, `audit-env-parity`, `audit-infra-cost`, `plan-secrets-audit`
+
+#### `plan-aso`
+**Triggers:** "optimize our app store listing", "improve app downloads", "ASO", "app store keywords"
+**What it does:** App Store / Play listing audit — keywords, locales, screenshots, ratings prompts — then a prioritized find/install plan. **Plan only.** Submission mechanics → `plan-mobile-readiness`.
+**Related:** `plan-mobile-readiness`, `plan-privacy-compliance`, `audit-monetization-iap`, `enhance-web-seo`, `design-frontend`
 
 #### `plan-capacitor-hardening`
 **Triggers:** "Capacitor app secure", "harden hybrid app", "WebView security", "secure storage tokens", "deep link OAuth", "cleartext traffic", "allowNavigation", "exported activity", "OTA update safe"
@@ -232,9 +252,9 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Related:** `design-system`, `design-frontend`
 
 #### `design-email`
-**Triggers:** "build an email template", "transactional email", "welcome email", "password reset email", "email design", "React Email", "MJML", "dark mode email", "deliverability", "SPF DKIM", "email copy review", "why is my email in spam"
-**What it does:** Full-stack transactional and marketing email. Detects React Email / MJML / plain HTML and Resend / SendGrid / Postmark / SES. Builds mobile-first templates (600px, inline styles, dark mode), reviews copy for natural conversational tone (no jargon, one action per email), checks SPF/DKIM/DMARC deliverability, and wires Supabase Edge Function triggers.
-**Related:** `design-frontend`, `backend-patterns`, `workflow-feature-flag`
+**Triggers:** "build an email template", "transactional email", "welcome email", "password reset email", "email design", "React Email", "MJML", "dark mode email", "email copy review"
+**What it does:** Full-stack transactional and marketing email templates. Detects React Email / MJML / plain HTML and Resend / SendGrid / Postmark / SES. Builds mobile-first templates (600px, inline styles, dark mode), reviews copy, wires Edge Function triggers. Inbox placement / SPF DKIM DMARC → `enhance-email-deliverability`.
+**Related:** `enhance-email-deliverability`, `design-frontend`, `backend-patterns`, `workflow-feature-flag`
 
 #### `design-generative-art` *(Apache-2.0, adapted from Anthropic)*
 **Triggers:** "generative art", "procedural art", "flow fields", "particle systems", "creative coding", "noise patterns", "mathematical visualizations", "art from code", "generate visuals", "interactive animation"
@@ -283,7 +303,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `data-visualization`
 **Triggers:** "chart", "graph", "visualization", "dashboard", "analytics", "D3", "Recharts", "data display", "metrics", "statistics"
 **What it does:** Recharts (line, bar, area, pie/donut), sparklines, stat cards with trends, real-time chart updates, D3.js custom visualizations. Includes accessibility patterns for charts.
-**Related:** `design-frontend`, `design-system`
+**Related:** `design-frontend`, `design-system`, `audit-analytics`
 
 ---
 
@@ -302,7 +322,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `audit-cicd`
 **Triggers:** "CI/CD cost", "GitHub Actions bill", "Actions minutes", "runner cost", "workflow cost", "CI is expensive", "slow CI", "audit my workflows", "artifact/cache storage", "reduce Actions spend"
 **What it does:** Audits GitHub Actions workflows for cost, speed, and safety via the `gh` CLI (live billing, run volume, runner types, artifact/cache storage). Flags double-billing triggers, missing concurrency, macOS/large runners on push, missing path filters, doomed jobs, and long artifact retention — then proposes fixes (concurrency, dispatch-gated runners, retention limits, caching, storage cleanup) that never delete tests or break deploys. Includes account-level backstops (retention default, spending budget).
-**Related:** `audit-security`, `deploy-verify`, `workflow-pr`, `create-hook`
+**Related:** `audit-security`, `deploy-verify`, `workflow-pr`, `create-hook`, `audit-infra-cost`
 
 #### `audit-performance`
 **Triggers:** "slow", "performance", "LCP", "INP", "CLS", "bundle size", "loading time", "optimize", "Web Vitals", "lighthouse score"
@@ -347,12 +367,47 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `audit-payment-system`
 **Triggers:** "audit payment system", "payment gateway audit", "double charge / idempotency", "double-entry ledger", "reconciliation / settlement", "webhook signature / 3DS / SCA", "PCI DSS", "is my payment flow safe", "audit-payment-system"
 **What it does:** Read-only audit for payment/money-movement systems — the code that fails differently from normal CRUD (a retried charge is a double-charge, a lost ledger write is vanished money, a logged PAN is PCI liability, an unverified webhook is a spoofed "payment succeeded"). **Scope-gated (P0 merchant integrator / P1 platform-marketplace / P2 gateway-PSP-fintech)** so a simple Stripe-Checkout site and an in-house ledger each see only relevant findings — never flags "no double-entry ledger" on a shop that offloads it to Stripe. Checks the 2026 pillars (idempotency + double-entry ledger + reconciliation, with PCI DSS v4.0.1 as the floor and webhooks as source of truth) across seven groups: **A** money-movement correctness (idempotency on every mutation + DB unique constraint, dedup, payment state machine / no double-capture, integer minor units, multi-currency+FX); **B** ledger & data integrity (double-entry balanced/sum-zero, append-only immutable, derived balance snapshots, auditability, date partitioning); **C** async & webhooks (sync-auth vs async-everything, HMAC verify, event-id dedup + 200-then-process, atomic state+ledger+outbox, pull-based recovery for stuck payments, refund/dispute/payout saga); **D** reconciliation & settlement (daily 3-way match ledger↔PSP↔bank, break report, discrepancy handling, halt-on-unreconciled brake); **E** fraud/risk/SCA (velocity/geo/device + rules/ML score, 3DS2/SCA + exemptions, fraud-service fail policy, chargeback/VAMP monitoring, AML); **F** PCI/compliance (never store/log PAN or CVV, tokens-only, key rotation, access audit); **G** resilience (PSP/bank timeout + breaker, bulkhead, partial-write safety, graceful degradation). Uses the **Stripe MCP** (`search_stripe_documentation` + `stripe_api_search`/`stripe_api_details`) for version-anchored provider checks when the PSP is Stripe. Every finding cites `file:line`; no severity below Critical for a double-charge, lost-money, or PAN-exposure gap. Read-only and payment code is a STOP-and-confirm surface — findings feed a human-reviewed remediation, not an unattended edit.
-**Related:** `audit-resilience`, `audit-security`, `audit-db-schema`, `audit-backend-architecture`, `plan-data-integrity`, `plan-secrets-audit`, `backend-patterns`, `data-pipeline`, `complete-everything`
+**Related:** `audit-resilience`, `audit-security`, `audit-db-schema`, `audit-backend-architecture`, `plan-data-integrity`, `plan-secrets-audit`, `backend-patterns`, `data-pipeline`, `audit-monetization-iap`, `complete-everything`
 
 #### `audit-langfuse-llm`
 **Triggers:** "audit LLM", "check Langfuse", "audit prompts", "check AI quality", "LLM PDCA", "audit AI costs", "check traces", "audit eval scores", "check hallucination"
 **What it does:** PDCA quality audit for LLM/AI features via Langfuse CLI, Sentry, Supabase, Playwright, and Firecrawl. Audits traces, prompts, costs, evals. Performs live verification and grounding/hallucination checks.
-**Related:** `deploy-verify`, `debug-sentry-monitor`, `backend-observability`
+**Related:** `deploy-verify`, `debug-sentry-monitor`, `backend-observability`, `audit-llm-security`, `plan-llm-cost-guardrails`
+
+#### `audit-llm-security`
+**Triggers:** "audit LLM security", "prompt injection", "jailbreak my chatbot", "is my AI safe", "OWASP LLM"
+**What it does:** Read-only OWASP LLM Top 10 audit of *app-facing* AI features — injection, disclosure, supply chain, poisoning, unsafe output, excessive agency, system-prompt leak, RAG/embedding, misinformation, unbounded consumption. Quality/evals → `audit-langfuse-llm`. Coding-agent policy → `enhance-agent-guardrails`.
+**Related:** `audit-langfuse-llm`, `plan-llm-cost-guardrails`, `plan-input-validation`, `enhance-agent-guardrails`, `test-red-team`, `audit-security`
+
+#### `audit-analytics`
+**Triggers:** "audit our analytics", "are we tracking the right events", "funnel instrumentation", "dead events", "consent-gated analytics"
+**What it does:** Read-only product-event audit — intended funnel vs instrumented events, taxonomy consistency, dead/duplicate/phantom fires, PII in properties, consent-gated SDK init. **Run with `plan-privacy-compliance`** when consent is in play. Charts → `data-visualization`.
+**Related:** `plan-privacy-compliance`, `iterate-post-launch`, `audit-ux-journeys`, `data-visualization`
+
+#### `audit-ui-states`
+**Triggers:** "check empty/error states", "audit loading states", "what happens when this fails", "offline state", "zero-results"
+**What it does:** Read-only per-screen matrix of empty / loading / error / offline / zero-results / permission / overflow. Happy-path-only UI is the vibe-code tell. Dead buttons → `plan-stub-checker`. Breakpoints → `audit-responsive`.
+**Related:** `plan-stub-checker`, `audit-resilience`, `audit-responsive`, `audit-ux`, `test-visual-regression`
+
+#### `audit-monetization-iap`
+**Triggers:** "audit our IAP", "check subscriptions", "are purchases validated", "restore purchases broken"
+**What it does:** Read-only StoreKit 2 / Play Billing / RevenueCat audit — server receipt validation, restore, store notifications, lifecycle (trial/grace/refund), cross-platform entitlement. Web Stripe/ledgers → `audit-payment-system`.
+**Related:** `audit-payment-system`, `plan-mobile-readiness`, `plan-aso`, `plan-privacy-compliance`
+
+#### `audit-env-parity`
+**Triggers:** "works locally but not in prod", "check env var config", "audit our environments", "config drift"
+**What it does:** Read-only env/config parity across local / staging / prod — referenced-but-unset, naming drift, public-prefix leaks, staging pointing at prod. Never prints secret values. Local runnability → `workflow-environment-ready`. Exposure → `plan-secrets-audit`.
+**Related:** `workflow-environment-ready`, `plan-secrets-audit`, `plan-data-integrity`, `plan-backup-dr`
+
+#### `audit-infra-cost`
+**Triggers:** "why is my hosting bill high", "cut infra costs", "audit cloud spend", "reduce Supabase/Vercel costs"
+**What it does:** Read-only hosting/DB/storage/egress/serverless spend audit. CI minutes → `audit-cicd`. Model tokens → `plan-llm-cost-guardrails`. Consumes `test-load` numbers. Never cuts backups.
+**Related:** `audit-cicd`, `plan-llm-cost-guardrails`, `test-load`, `plan-backup-dr`, `audit-bundle-size`
+
+#### `audit-skill-conflicts`
+**Triggers:** "audit my skills", "check for conflicting skills", "why did the wrong skill trigger", "which skills overlap", "after adding a batch of skills"
+**What it does:** Read-only self-audit of the *skill pack* — contradictory directives (especially always-on rules vs skills), overlapping trigger descriptions, stale cross-refs, duplicated guidance, context-budget bloat. Per-file spec stays on `validate:skills`. Authoring how-to → `meta-skill-creator`. Expected to flag the UI-audit cluster (`audit-ux` / `audit-responsive` / `audit-ui-states` / …) and leftover `audit-responsive-layout` / `responsive-audit` names.
+**Related:** `meta-skill-creator`, `enhance-agent-guardrails`, `plan-docs-sync`, `audit-responsive`, `audit-ux`, `audit-ui-states`
 
 #### `audit-uiux-design-system`
 **Triggers:** "design system audit", "UI consistency", "token compliance", "design drift", "component audit", "visual coherency"
@@ -367,12 +422,12 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `audit-ux-journeys`
 **Triggers:** "audit user flows", "user story audit", "information architecture audit", "IA audit", "can users find X", "users get lost", "navigation audit", "funnel drop-off", "task completion", "audit-ux-journeys"
 **What it does:** Cross-page UX audit for **user stories, task completion, and information architecture** — the layer `audit-ux` (per-page heuristics) doesn't cover. A site can pass every per-page heuristic and still fail because users can't *find* the feature or *finish* the story. **Phase 0** derives 5–10 real user stories from routes/nav/CTAs (reusing `design-prd` / `plan-test-coverage` inventories — never invented personas) and scopes depth by audit trigger (KPIs dropping → targeted funnel; complaints → thematic; redesign → comprehensive; pre-launch → qualitative walkthroughs labeled as assumptions). **Phase 1** audits IA structurally: click depth per story target (money pages ≤2–3), orphan pages, dead ends, label consistency (nav ≈ title ≈ H1, one concept = one word), grouping vs user mental model (not DB schema), first-click logic, wayfinding (breadcrumbs, `aria-current`), search/filter presence, URL sanity. **Phase 2** walks every story end-to-end in a headed browser (desktop + 390px mobile) producing a task-completion matrix: steps-to-goal, friction log (hesitation/mislabel/backtrack/surprise/stall), error-recovery probes (invalid input, Back, refresh mid-flow), success-moment clarity — a BLOCKED story is automatically a Blocker finding. **Phase 3** enforces evidence discipline: every finding tagged `[data]` (analytics/funnels/drop-offs from GA4/PostHog/Clarity/etc.), `[observed]` (reproduced), or `[judgment]` (assumption to validate) — never presents taste as data; with no analytics, recommends minimal funnel instrumentation as a roadmap item. **Phase 4** reports impact×effort: quick wins vs roadmap vs deprioritized, neutral behavior-grounded language, always names what works. Delegates per-page fixes to `enhance-web-ux`, forms to `enhance-web-forms`, WCAG to `audit-accessibility`, heuristics depth to `audit-ux`.
-**Related:** `audit-ux`, `audit-responsive`, `enhance-web-ux`, `enhance-web-forms`, `audit-accessibility`, `audit-performance`, `audit-realworld`, `plan-test-coverage`, `design-prd`, `test-playwright`
+**Related:** `audit-ux`, `audit-responsive`, `audit-analytics`, `enhance-web-ux`, `enhance-web-forms`, `audit-accessibility`, `audit-performance`, `audit-realworld`, `plan-test-coverage`, `design-prd`, `test-playwright`
 
 #### `audit-responsive`
 **Triggers:** "responsive audit", "desktop looks like a phone", "linearized layout", "no max-width", "stacked at 1440", "stretched buttons on desktop", "breakpoint gaps", "audit-responsive"
 **What it does:** Finds and fixes the anti-pattern where every breakpoint is a linearized mobile layout — stacked, left-aligned, full-width, no hierarchy. **Desktop is not a wide phone.** Detects the stack, scores 10 layout/IA anti-patterns with `file:line`, extracts or proposes a token sheet, draws ASCII wireframes at 375 / 768 / 1440, then implements in reviewable chunks (report-first if scope is large). Verifies live via playwright-cli. Distinct from `design-mobile-first` (touch / mobile-up) and `audit-ux-journeys` (cross-page IA).
-**Related:** `design-mobile-first`, `plan-uiux-unification`, `audit-uiux-design-system`, `audit-ux`, `audit-ux-journeys`, `enhance-web-ui`, `enhance-web-ux`, `housekeep-design`, `audit-accessibility`, `test-playwright`
+**Related:** `design-mobile-first`, `plan-uiux-unification`, `audit-uiux-design-system`, `audit-ux`, `audit-ux-journeys`, `audit-ui-states`, `enhance-web-ui`, `enhance-web-ux`, `housekeep-design`, `audit-accessibility`, `test-playwright`, `test-visual-regression`
 
 #### `audit-bundle-size`
 **Triggers:** "reduce bundle size", "analyse bundle", "tree shaking", "lazy loading", "code splitting", "slow initial load", "large JS", "chunk size", "why is the bundle so big", "first load JS too large", "LCP caused by JS"
@@ -425,7 +480,17 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `test-red-team`
 **Triggers:** "red team this app", "attack my app", "break it", "find all the defects", "adversarial test", "pre-launch hardening", "pentest the app", "full app QA", "security + perf + UX sweep", "try to break it"
 **What it does:** Adversarial full-app sweep driven by a **feature-first coverage matrix**: each feature decomposed to surfaces, sub-pages, components, and states, attacked across 4 dimensions — UI/UX, data pipeline, security (OWASP Top 10 + MASVS), and performance. Drives playwright-cli (web), Playwright Android WebView attach (Capacitor), or adb tap-walk (native chrome). Cross-references Sentry + Supabase + Firecrawl. Produces a severity-ranked defect list with repro evidence and a launch-readiness verdict.
-**Related:** `test-playwright`, `test-qa`, `audit-security`, `iterate-post-launch`
+**Related:** `test-playwright`, `test-qa`, `audit-security`, `iterate-post-launch`, `audit-llm-security`, `test-load`
+
+#### `test-visual-regression`
+**Triggers:** "add visual regression tests", "catch UI regressions", "screenshot testing"
+**What it does:** Playwright screenshot baselines + CI diff artifacts. Locks `audit-responsive` / `audit-ui-states` fixes. Functional clicks stay on `test-playwright`.
+**Related:** `audit-responsive`, `audit-ui-states`, `test-playwright`, `protocol-browser-anti-stall`, `audit-cicd`
+
+#### `test-load`
+**Triggers:** "load test this", "will it handle launch traffic", "find the breaking point", "test under concurrency"
+**What it does:** k6/Artillery journeys with smoke → load → stress → spike. Reports p50/p95/p99, error types, breaking resource. Never hits prod unsigned. Feeds `audit-infra-cost`.
+**Related:** `audit-resilience`, `audit-infra-cost`, `backend-db-performance`, `backend-patterns`, `audit-performance`
 
 #### `protocol-browser-anti-stall`
 **Triggers:** (protocol — used by other skills before browser automation sessions); also "parallel browser agents", "playwright session", "browser keeps stalling"
@@ -473,7 +538,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `iterate-post-launch`
 **Triggers:** "improve the app after launch", "fix the top issues", "post-launch polish", "what should I fix next", "production issues", "iterate on feedback", "post-release improvements", "what is broken in prod", "ship a polish pass", "make it better based on real usage"
 **What it does:** Closes the post-ship improvement loop. Pulls Sentry top errors (with Seer AI root-cause), Supabase slow-query and API logs, advisor warnings, and a live Playwright walkthrough into a ranked improvement backlog (impact × effort). Implements the approved fixes full-stack and verifies each one live. Resolves confirmed Sentry issues.
-**Related:** `test-red-team`, `deploy-verify`, `debug-sentry-monitor`, `test-playwright`
+**Related:** `test-red-team`, `deploy-verify`, `debug-sentry-monitor`, `test-playwright`, `audit-analytics`
 
 #### `deploy-npm`
 **Triggers:** "release", "publish to npm", "ship a new version", "cut a release", "deploy to production", "update the changelog and publish"
@@ -625,6 +690,12 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 #### `meta-skill-creator` *(Apache-2.0, adapted from Anthropic)*
 **Triggers:** "create skill", "SKILL.md format", "skill structure", "skill best practices"
 **What it does:** Guide for creating effective AI agent skills with proper frontmatter, descriptions, progressive disclosure structure, and concise body.
+**Related:** `audit-skill-conflicts`, `meta-mcp-builder`
+
+#### `audit-skill-conflicts`
+**Triggers:** "audit my skills", "conflicting skills", "wrong skill triggered", "which skills overlap"
+**What it does:** Pack-level coherence (see Audit section). Run after adding a batch of skills.
+**Related:** `meta-skill-creator`
 
 #### `meta-mcp-builder`
 **Triggers:** "MCP", "Model Context Protocol", "AI tools", "LLM integration", "agent tools", "build MCP server"
@@ -645,7 +716,7 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 
 ---
 
-## Commands (39)
+## Commands (43)
 
 Commands fall into two groups: **standalone** (full playbook in the file) and **pointer** (thin slash entry delegating to a skill).
 
@@ -674,8 +745,9 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/refactor` | `workflow-refactor` | Analyze → split → extract → verify behavior |
 | `/review-code` | `audit-code-review` | Agent review + manual checklist (renamed from `/review` to avoid Claude Code's built-in `/review`) |
 | `/test` | `test-unit`, `test-qa`, `mobile-emulator-test` | Type check → unit → integration → E2E |
-| `/uiux` | `audit-responsive`, `audit-uiux-design-system`, `audit-ux`, `enhance-web-ui`, `enhance-web-ux` | Audit + enhance UI/UX |
+| `/uiux` | `audit-responsive`, `audit-ui-states`, `audit-uiux-design-system`, `audit-ux`, `enhance-web-ui`, `enhance-web-ux` | Audit + enhance UI/UX |
 | `/responsive-audit` | `audit-responsive` | Linearized layout / breakpoint IA — desktop is not a wide phone |
+| `/skill-conflicts` | `audit-skill-conflicts` | Pack self-audit — contradictions, trigger overlap, stale refs |
 | `/uiux-plan` | `plan-uiux-unification` | Full UI/UX unification plan (audit only, no fixes) |
 | `/grill-me` | `grilling` | One-question-at-a-time interview to align before building |
 | `/handoff` | `handoff` | Compact the conversation into a handoff doc for a fresh session |
@@ -690,6 +762,9 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/aeo-plan` | `plan-aeo-readiness` | Answer-engine / AEO readiness audit (plan only) |
 | `/mobile-plan` | `plan-mobile-readiness` | App Store / Play submission audit (plan only) |
 | `/capacitor-plan` | `plan-capacitor-hardening` | Capacitor native-layer security audit (plan only) |
+| `/privacy-plan` | `plan-privacy-compliance` | Privacy / GDPR / APPI / store-label audit (plan only) |
+| `/backup-plan` | `plan-backup-dr` | Backup + DR capability audit (plan only) |
+| `/aso-plan` | `plan-aso` | App Store / Play listing ASO plan (plan only) |
 | `/stub-plan` | `plan-stub-checker` | Stub/dead-link/fake-component audit + wiring plan (no fixes) |
 | `/perf-plan` | `plan-perf-audit` | Performance audit + optimization plan (no fixes) |
 | `/security-plan` | `plan-security-audit` | Security/OWASP/RLS audit + hardening plan (no fixes) |
@@ -770,10 +845,10 @@ plan-input-validation → plan-secrets-audit → plan-rls-audit → plan-data-in
 After approval: `backend-patterns`, `db-migrator`, `backend-observability`, provider rotation, infra gates → `test-playwright` + `test-red-team`
 
 #### Observability & Spend Loop
-`plan-error-handling` + `plan-llm-cost-guardrails` → approval → `backend-observability`, `audit-langfuse-llm`, `backend-patterns`
+`plan-error-handling` + `plan-llm-cost-guardrails` → approval → `backend-observability`, `audit-langfuse-llm`, `backend-patterns` · hosting bill → `audit-infra-cost` · LLM attacks → `audit-llm-security`
 
 #### Launch Gates
-`plan-capacitor-hardening` → `plan-mobile-readiness` (Capacitor pre-store) · `plan-aeo-readiness` → `enhance-web-seo` / `docs-writer`
+`plan-capacitor-hardening` → `plan-mobile-readiness` (Capacitor pre-store) · `plan-privacy-compliance` · `plan-aso` · `plan-aeo-readiness` → `enhance-web-seo` / `docs-writer`
 
 #### Stub & Wiring Audit
 `plan-stub-checker` → user approval → `debug-fe-be-integration` → `workflow-fix-and-ship` → `test-playwright`
@@ -792,6 +867,36 @@ After approval: `backend-patterns`, `db-migrator`, `backend-observability`, prov
 
 #### Responsive layout / breakpoint IA
 `audit-responsive` → `enhance-web-ui` / `enhance-web-ux` → `test-playwright`
+
+#### Lock UI after layout + state audits
+`audit-responsive` + `audit-ui-states` → `test-visual-regression`
+
+#### LLM security (app-facing)
+`audit-llm-security` → `plan-input-validation` / `plan-llm-cost-guardrails`
+
+#### Consumer launch (privacy → store)
+`plan-privacy-compliance` → `audit-analytics` → `audit-ui-states` → `audit-responsive` → `plan-aso`
+
+#### Disaster recovery
+`plan-backup-dr` → `plan-data-integrity`
+
+#### Product analytics → iterate
+`audit-analytics` → `iterate-post-launch`
+
+#### Traffic + spend
+`test-load` → `audit-infra-cost` → `backend-patterns`
+
+#### Paid mobile app
+`audit-monetization-iap` → `audit-payment-system`
+
+#### Prod config drift
+`audit-env-parity` → `plan-secrets-audit`
+
+#### Email inbox placement
+`enhance-email-deliverability` + `design-email`
+
+#### After adding a batch of skills
+`audit-skill-conflicts` → `meta-skill-creator` (description rewrites first)
 
 #### Native RN Ship Loop
 `mobile-emulator-start` → `mobile-emulator-test` → `workflow-pr` → `deploy-verify`

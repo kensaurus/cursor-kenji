@@ -11,6 +11,9 @@ license: MIT
 
 Create beautiful, accessible, and interactive data visualizations for dashboards and reports.
 
+Product-event coverage ("are we tracking the right events?") is `audit-analytics`,
+not this skill. Empty/loading chart frames are `audit-ui-states`.
+
 ## CRITICAL: Check Existing First
 
 **Before creating ANY visualization, verify:**
