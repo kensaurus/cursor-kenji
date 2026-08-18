@@ -50,6 +50,7 @@ with `/goal`.
 | Drive app as real user, fix inline | `test-playwright` |
 | Comprehensive QA with CRUD verification | `test-qa` |
 | Write unit/integration tests | `test-unit` |
+| Mutation testing — do tests actually assert? | `test-mutation` |
 | Screenshot baselines / CI pixel diffs | `test-visual-regression` |
 | k6/Artillery breaking point (never unsigned prod) | `test-load` |
 
@@ -69,7 +70,7 @@ with `/goal`.
 | Mobile IAP / subscriptions | `audit-monetization-iap` |
 | Static security review (OWASP; may fix) | `audit-security` |
 | CI/CD cost, speed & safety (GitHub Actions bill) | `audit-cicd` |
-| CI gate *logic* (silent bypass, ratchet gaming, required-but-not) | `audit-gate-logic` |
+| CI gate *logic* (silent bypass, ratchet gaming, required-but-not, archaeology) | `audit-gate-logic` |
 | Codemod / bulk-transform behavior-preservation | `audit-codemod-safety` |
 | JS bundle analysis & reduction | `audit-bundle-size` |
 | Core Web Vitals & performance | `audit-performance` |
@@ -94,6 +95,8 @@ with `/goal`.
 | Cross-surface (web + mobile) consistency | `enhance-capacitor-ui` |
 | Coherent motion on an existing design system (2026 stack) | `enhance-motion` |
 | Consolidate a drifted design system into one token SSOT | `housekeep-design` |
+| Consolidate accreted CI gates into one aggregator | `housekeep-gates` |
+| Mechanically-enforced architecture boundaries | `enhance-arch-boundaries` |
 | Production-quality forms (a11y, validation, states, multi-step) | `enhance-web-forms` |
 | Install agent guardrails-as-code (rules, hooks, CI gates, lint) | `enhance-agent-guardrails` |
 | Inbox placement — SPF/DKIM/DMARC (audit-and-fix) | `enhance-email-deliverability` |
@@ -109,6 +112,7 @@ with `/goal`.
 | Privacy policy vs real collection (GDPR/APPI/labels) | `plan-privacy-compliance` |
 | App Store / Play listing ASO (no metadata edits) | `plan-aso` |
 | Docs drift audit + sync plan (no rewrites) | `plan-docs-sync` |
+| Architecture Decision Records (why, rejected alternatives) | `docs-adr` |
 | User-story test coverage plan (no tests written) | `plan-test-coverage` |
 | AI slop / authenticity / voice audit + de-slop burndown (no rewrites) | `plan-antislop` |
 | RLS & Supabase access-control audit + remediation plan (no SQL) | `plan-rls-audit` |

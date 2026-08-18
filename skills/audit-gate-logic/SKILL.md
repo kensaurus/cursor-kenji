@@ -2,9 +2,9 @@
 name: audit-gate-logic
 description: >
   Read-only audit of CI gate logic — silent bypass, ratchet gaming, conflicting
-  conditions, required checks that are not. Use when "can CI be bypassed", "is
-  our coverage ratchet sound", "why did a regression pass CI". Cost/speed →
-  audit-cicd. Running the sweep → workflow-quality-gate.
+  conditions, required checks that are not, and accreted duplicate gates. Use
+  when "can CI be bypassed", "why did a regression pass CI", "we have too many
+  overlapping checks". Cost/speed → audit-cicd. Consolidation → housekeep-gates.
 license: MIT
 ---
 
@@ -15,18 +15,21 @@ This asks **"does the gate stop what it claims to stop."** A green check is a
 claim. The expensive failures are the ones where CI passed and shouldn't have.
 
 Present findings. Do not edit workflows, branch protection, or baselines.
-Hand fixes to a follow-up session or `enhance-agent-guardrails`.
+Consolidation of the archaeology map → `housekeep-gates`. Rule-to-mechanical
+gaps → `enhance-agent-guardrails`.
 
 ## This skill vs neighbors
 
 | Skill | Owns |
 |---|---|
-| **audit-gate-logic** (this) | Bypass, ratchet integrity, condition conflicts, required-vs-actual |
+| **audit-gate-logic** (this) | Bypass, ratchet integrity, conflicts, required-vs-actual, archaeology map |
+| `housekeep-gates` | *Executes* the map — aggregator, delete losers, prove |
 | `audit-cicd` | Pipeline cost, speed, storage, runner safety |
 | `workflow-quality-gate` | *Runs* the pre-release sweep — does not audit its soundness |
 | `enhance-agent-guardrails` | *Installs* new gates; does not audit existing gate logic |
 | `burndown-full` / `workflow-green-repo` | Execute MATCH/DONE or green the repo — ratchet holes stay here |
 | `audit-codemod-safety` | Bulk-transform behavior; if CI waved a semantic bug through, that is also a finding here |
+| `test-mutation` | Assertion-strength gate this map should name if coverage is the only test metric |
 
 **Degrade honestly.** Highest-value "is it actually required" checks need
 branch-protection / rulesets via the repo settings API (`gh api`), not just
@@ -112,6 +115,44 @@ Cross-check `completion-judge` / `burndown-full`.
 
 ---
 
+## Phase 2.5 — Gate archaeology (accreted gates from multiple sessions)
+
+Gates accumulate: each dev, agent session, or "let's add a check" iteration
+layers another workflow without removing the last. Audit the *set*:
+
+**Duplicate gates, different vintages** — Two+ jobs checking the same
+thing (two lint jobs with disagreeing configs, ESLint and Biome both
+wired, an old `test.yml` and a newer `ci.yml` both running the suite).
+For each pair: which actually blocks, whether configs disagree, which is
+vestigial.
+
+**Competing baselines / ratchets** — Multiple floors for one metric (jest
+threshold + codecov + a committed floor), updated at different times. The
+agent satisfies whichever loaded; the strictest one silently stopped
+being the real gate.
+
+**Hook-vs-CI divergence** — Pre-commit / pre-push enforcing a different
+ruleset than CI, so "passes locally" and "passes CI" are different claims
+and people learn `--no-verify`.
+
+**Dead gates** — Triggers that can no longer fire (renamed branches,
+removed paths, disabled but not deleted). Still cost comprehension:
+every reader must reason about a gate that does nothing.
+
+**Best-of selection** — For each duplicate cluster, name the winner:
+
+1. Server-side-enforced beats convention
+2. Aggregator-gate pattern (one required check that `needs:` all others) beats N scattered required checks
+3. Merge-queue-compatible (`merge_group` + matching check names) beats PR-only
+4. Auto-tightening ratchet with reviewed resets beats a static threshold
+5. AST / structural checks beat regex greps
+6. Owned + recently maintained beats abandoned
+
+Record winner + losers per cluster — this is the input `housekeep-gates`
+executes.
+
+---
+
 ## Phase 3 — Verify against history (where possible)
 
 Where CI history is inspectable, look for a merged PR that introduced a
@@ -136,7 +177,8 @@ create that branch or push it unless the user asked.
 - [ ] Every ratchet checked for same-PR overwrite, exclusion gaming, slack threshold, staleness, direction bug
 - [ ] Burndown / completion ratchet integrity checked against its evidence requirement
 - [ ] History scanned for regressions-shipped-green; deliberate-violation probe noted or skipped with reason
-- [ ] Read-only — findings presented, gates not edited
+- [ ] Duplicate-gate clusters, competing baselines, hook-vs-CI divergence, and dead gates mapped; a winner named per cluster
+- [ ] Read-only — findings presented, gates not edited; consolidation handed to `housekeep-gates`
 
 ## Output format
 
@@ -144,5 +186,6 @@ create that branch or push it unless the user asked.
 2. **Bypass findings** — gate | failure mode | severity (critical = ships-broken-green) | evidence
 3. **Ratchet findings** — ratchet | weakness | can it lock in / be gamed? | fix
 4. **Conflict map** — workflow A × workflow B | both-fire / both-skip / race
-5. **Proven holes** — merged PR / probe that passed a gate it shouldn't have
-6. **Fix plan** — silent-bypass first, then ratchet integrity, then conflicts; each item → `enhance-agent-guardrails`, `audit-cicd` (pipeline-side), or a fix session. Present and stop.
+5. **Archaeology map** — duplicate cluster | members | winner (+ why) | losers to retire
+6. **Proven holes** — merged PR / probe that passed a gate it shouldn't have
+7. **Fix plan** — silent-bypass first, then ratchet integrity, then conflicts. Consolidation → `housekeep-gates`; pipeline-side → `audit-cicd`; rule-to-mechanical gaps → `enhance-agent-guardrails`. Present and stop.

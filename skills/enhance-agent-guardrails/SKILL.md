@@ -1,10 +1,10 @@
 ---
 name: enhance-agent-guardrails
 description: >
-  Install guardrails-as-code into a repo so AI/vibe-coding cannot keep reintroducing the
-  same classes of problems (leaked secrets, injection, off-system styles, untested code).
-  Use when "set up guardrails", "stop vibe-coding regressions", "add pre-commit security
-  checks". Existing gate-logic audit → audit-gate-logic.
+  Install guardrails-as-code so AI sessions cannot reintroduce leaked secrets,
+  injection, or untested code. Use when "set up guardrails", "stop vibe-coding
+  regressions", "add pre-commit security checks". Gate-logic audit →
+  audit-gate-logic. Gate sprawl → housekeep-gates.
 license: MIT
 ---
 
@@ -128,6 +128,9 @@ A guardrail you didn't test is a guardrail that doesn't work.
 ## Related
 
 - `audit-gate-logic` — audit whether existing gates can be bypassed or gamed (this skill *installs*)
+- `housekeep-gates` — consolidate accreted duplicate gates; this skill does not delete sprawl
+- `test-mutation` — assertion-strength hook this skill can install the wording for
+- `docs-adr` — same-PR / handoff reminder that a decision needs a record
 - `audit-security` / `plan-security-audit` — the vulnerability depth the SAST gate can't fully cover
 - `plan-secrets-audit` — find + triage existing leaked secrets (and rotation plan)
 - `plan-dependency-provenance` — hallucinated/slopsquatted dependency audit

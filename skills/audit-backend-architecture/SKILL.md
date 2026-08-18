@@ -1,10 +1,10 @@
 ---
 name: audit-backend-architecture
 description: >
-  Read-only audit AND decision advisor for backend/distributed-systems architecture,
-  topology-gated so a Next.js/Supabase monolith and a Kubernetes fleet each see only
-  relevant. Use when "audit backend architecture", "which pattern should I use", "am I
-  over-engineering", "sync vs event-driven".
+  Read-only audit and decision advisor for backend architecture, topology-gated by
+  stack. Use when "audit backend architecture", "which pattern should I use", "am I
+  over-engineering", "sync vs event-driven". Mechanical boundary rules →
+  enhance-arch-boundaries.
 license: MIT
 ---
 

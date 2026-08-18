@@ -4,6 +4,22 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.21.0] — 2026-08-18
+
+### Added
+
+- **`housekeep-gates`** (`/housekeep-gates`) — apply-now consolidation of accreted CI gates into one aggregator required check. Execution arm of `audit-gate-logic`.
+- **`test-mutation`** (`/test-mutation`) — StrykerJS / mutmut harness; kills assertion-free coverage theater.
+- **`enhance-arch-boundaries`** (`/arch-boundaries`) — dependency-cruiser / eslint-boundaries as CI fitness functions.
+- **`docs-adr`** (`/adr`) — lightweight ADRs with rejected alternatives; agent-readable INDEX.md.
+
+### Changed
+
+- **`audit-gate-logic`** — Phase 2.5 gate archaeology (duplicate vintages, competing baselines, hook-vs-CI, dead gates) and winner selection for `housekeep-gates`.
+- Neighbor carve-outs: `plan-test-coverage` no longer owns mutation execution; `audit-backend-architecture` defers mechanical rules; `plan-docs-sync` / `docs-coauthor` defer decision memory; `test-unit` defers assertion theater.
+
+---
+
 ## [1.20.0] — 2026-08-18
 
 ### Added

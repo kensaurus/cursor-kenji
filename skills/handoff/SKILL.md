@@ -35,3 +35,6 @@ current workspace — and print the path.
 3. Be honest about verification state — use the ladder from
    `verification-before-completion`: implemented → scoped verified → repository
    green → PR green → deployed verified. Never upgrade a claim in a handoff.
+4. Permanent decisions (stack, layering, rejected alternatives) belong in
+   `docs-adr`, not in the handoff. Point at `docs/adr/INDEX.md` if it exists;
+   do not re-copy those records here.

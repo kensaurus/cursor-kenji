@@ -28,7 +28,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (130)
+## Skills (134)
 
 ### Enhance
 
@@ -90,7 +90,12 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `housekeep-design`
 **Triggers:** "clean up the design system now", "migrate to one button", "resolve token conflicts", "housekeep-design"
 **What it does:** Consolidates a design system that has drifted across many sessions/devs into one source of truth. Detects competing tokens, duplicate components, naming drift, mixed icon libraries, and arbitrary values; reconciles each conflict to a best-of-both canonical form; migrates all usages via mechanical codemod; and installs lint guardrails so drift can't recur. Establishes a 3-layer W3C token taxonomy. The execution arm of `plan-uiux-unification`; the design counterpart of `workflow-housekeep`.
-**Related:** `plan-uiux-unification`, `audit-uiux-design-system`, `enhance-agent-guardrails`, `burndown-full`, `enhance-motion`, `design-system`
+**Related:** `plan-uiux-unification`, `audit-uiux-design-system`, `enhance-agent-guardrails`, `burndown-full`, `enhance-motion`, `design-system`, `housekeep-gates`
+
+#### `housekeep-gates`
+**Triggers:** "clean up our CI checks", "consolidate the workflows", "we have three lint jobs", "make one quality gate", "fix the required checks", "/housekeep-gates"
+**What it does:** Apply-now execution arm of `audit-gate-logic`. Builds one aggregator job that `needs:` every real check and fails on failed **or skipped** dependencies, makes that job the only required status check, ports unique value from duplicate losers then **deletes** them (not disable), restores hook/CI parity, and normalizes ratchets to auto-tighten with reviewed resets. Proves consolidation with deliberate-violation + skip-path probes. Net enforcement strictly ≥ before. Branch-protection changes always get explicit confirmation.
+**Related:** `audit-gate-logic`, `audit-cicd`, `enhance-agent-guardrails`, `workflow-green-repo`, `test-mutation`, `enhance-arch-boundaries`
 
 #### `enhance-web-forms`
 **Triggers:** "improve this form", "form validation", "accessible form", "multi-step form", "form error handling", "the form UX is bad", "enhance-web-forms"
@@ -100,7 +105,12 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `enhance-agent-guardrails`
 **Triggers:** "set up guardrails", "stop vibe-coding regressions", "add pre-commit security checks", "protect the repo from AI mistakes", "add CI security gates", "governance for AI code", "enhance-agent-guardrails"
 **What it does:** Installs guardrails-as-code so AI/vibe-coding can't keep reintroducing the same problem classes (leaked secrets, injection, off-system styles, untested code, vulnerable deps, destructive ops). Audits existing protection, then sets up agent policy files (`.cursor/rules` + `AGENTS.md`), a pre-commit hook (secret scan + SAST + lint/typecheck), a CI gate that treats agent output as untrusted, and lint-as-policy rules. Verifies the guards actually block a planted bad pattern; flags merge-blocking CI changes for human review.
-**Related:** `audit-gate-logic`, `audit-security`, `plan-security-audit`, `plan-secrets-audit`, `plan-dependency-provenance`, `plan-data-integrity`, `housekeep-design`
+**Related:** `audit-gate-logic`, `housekeep-gates`, `test-mutation`, `docs-adr`, `audit-security`, `plan-security-audit`, `plan-secrets-audit`, `plan-dependency-provenance`, `plan-data-integrity`, `housekeep-design`
+
+#### `enhance-arch-boundaries`
+**Triggers:** "enforce module boundaries", "stop spaghetti imports", "agents keep importing across features", "add architecture rules", "dependency-cruiser", "/arch-boundaries"
+**What it does:** Converts intended architecture into CI-enforced fitness functions (dependency-cruiser / eslint-boundaries): layer direction, feature isolation via public surfaces, no cycles, forbidden edges (client → server-only / service-role). Recovers the model from the repo and confirms it — does not invent one. Grandfathers existing violations into a shrink-only baseline. Wires into the `housekeep-gates` aggregator. Records the model via `docs-adr`. `audit-backend-architecture` advises; this enforces.
+**Related:** `audit-backend-architecture`, `housekeep-gates`, `docs-adr`, `enhance-agent-guardrails`, `plan-rls-audit`, `plan-secrets-audit`
 
 ---
 
@@ -132,9 +142,9 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Related:** `domain-modeling`, `design-prd`, `workflow-spec-tdd`
 
 #### `domain-modeling` *(adapted from mattpocock/skills, MIT)*
-**Triggers:** "pin down terminology", "ubiquitous language", "glossary", "record an architectural decision", "ADR", "the agent uses the wrong words"
-**What it does:** Actively build and sharpen the project's domain model: a `CONTEXT.md` glossary plus sparing ADRs (only for hard-to-reverse, surprising, real-trade-off decisions). Challenges conflicting terms, sharpens fuzzy language, stress-tests boundaries with concrete scenarios, and cross-references claims against the code.
-**Related:** `grilling`, `design-prd`, `docs-coauthor`
+**Triggers:** "pin down terminology", "ubiquitous language", "glossary", "the agent uses the wrong words"
+**What it does:** Actively build and sharpen the project's domain model: a `CONTEXT.md` glossary and ubiquitous language. Challenges conflicting terms, sharpens fuzzy language, stress-tests boundaries with concrete scenarios, and cross-references claims against the code. Repo decision-memory system → `docs-adr`.
+**Related:** `grilling`, `design-prd`, `docs-coauthor`, `docs-adr`
 
 #### `plan-uiux-unification`
 **Triggers:** "UI/UX unification plan", "design system audit plan", "UI burndown", "unify the design system", "plan UI overhaul", "design system consolidation", "IA audit before redesign", "audit UI without fixing", "UI/UX unification"
@@ -229,12 +239,12 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `plan-docs-sync`
 **Triggers:** "docs drift", "sync docs with code", "audit documentation", "stale README", "onboarding docs broken", "doc sync plan", "phantom docs", "docs out of date"
 **What it does:** Audit docs vs actual code behavior. Drift taxonomy (stale/missing/phantom/contradictory/onboarding-breaking/inline-rot/API-contract). Code-as-source-of-truth; onboarding-drift check vs `.env.example` + CLI `--help`. Docs-as-code guardrails. **Plan only — no rewrites until approved.** Never aspirational or invented behavior.
-**Related:** `docs-writer`, `workflow-housekeep`, `plan-stub-checker`
+**Related:** `docs-writer`, `workflow-housekeep`, `plan-stub-checker`, `docs-adr`
 
 #### `plan-test-coverage`
-**Triggers:** "test coverage plan", "coverage audit", "traceability matrix", "fake-green tests", "uncovered user stories", "plan tests for critical flows", "mutation testing plan", "what's not tested"
-**What it does:** User-story-driven coverage audit from real code — traceability matrix, multi-lens coverage (branch/path/risk/integration), fake-green detection, mutation-testing recommendations. **Plan only — no test writing until approved.** Natural lock-in after stub-wiring.
-**Related:** `test-unit`, `workflow-spec-tdd`, `test-playwright`, `plan-stub-checker`
+**Triggers:** "test coverage plan", "coverage audit", "traceability matrix", "fake-green tests", "uncovered user stories", "plan tests for critical flows", "what's not tested"
+**What it does:** User-story-driven coverage audit from real code — traceability matrix, multi-lens coverage (branch/path/risk/integration), fake-green detection. **Plan only — no test writing until approved.** Mutation harness / assertion theater → `test-mutation`.
+**Related:** `test-unit`, `test-mutation`, `workflow-spec-tdd`, `test-playwright`, `plan-stub-checker`
 
 #### `design-motion`
 **Triggers:** "add one animation", "hover effect on this button", "page transition on this screen", "isolated micro-interaction". Existing-app pass → `enhance-motion`.
@@ -326,8 +336,8 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 #### `audit-gate-logic`
 **Triggers:** "can our CI gates be bypassed", "audit the quality-gate logic", "is our coverage ratchet sound", "why did a regression pass CI", "check for conflicting workflows", "is this required check actually required", "/gate-logic"
-**What it does:** Read-only audit of the *logic* of CI/CD gates and ratchets — not pipeline cost/speed. Catches silent bypass (`continue-on-error`, `|| true`, skipped-required counting as passed), path filters that skip the files that needed the gate, two workflows whose conditions both fire or both skip, `pull_request_target` / fork bypass, and ratchet traps (same-PR baseline overwrite, exclusion gaming, slack threshold, backwards comparison). Phase 3 looks for regressions that already shipped green. Highest-value required-vs-actual checks need branch-protection / rulesets; if those are invisible, it says so and audits the YAML alone.
-**Related:** `audit-cicd`, `workflow-quality-gate`, `enhance-agent-guardrails`, `burndown-full`, `workflow-green-repo`, `audit-codemod-safety`
+**What it does:** Read-only audit of the *logic* of CI/CD gates and ratchets — not pipeline cost/speed. Catches silent bypass (`continue-on-error`, `|| true`, skipped-required counting as passed), path filters that skip the files that needed the gate, two workflows whose conditions both fire or both skip, `pull_request_target` / fork bypass, and ratchet traps (same-PR baseline overwrite, exclusion gaming, slack threshold, backwards comparison). Phase 2.5 maps accreted duplicate gates / competing baselines / hook-vs-CI divergence / dead workflows and names a winner per cluster. Phase 3 looks for regressions that already shipped green. Highest-value required-vs-actual checks need branch-protection / rulesets; if those are invisible, it says so and audits the YAML alone. Consolidation → `housekeep-gates`.
+**Related:** `housekeep-gates`, `audit-cicd`, `workflow-quality-gate`, `enhance-agent-guardrails`, `burndown-full`, `workflow-green-repo`, `audit-codemod-safety`, `test-mutation`
 
 #### `audit-codemod-safety`
 **Triggers:** "did this codemod break anything", "audit this bulk refactor", "verify the migration mod", "check the mass find-replace", "jscodeshift / ts-morph / ast-grep audit", "/codemod-safety"
@@ -372,7 +382,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `audit-backend-architecture`
 **Triggers:** "audit backend architecture", "which pattern should I use", "is my backend production-grade", "am I over-engineering", "sync vs event-driven", "cache-aside/CQRS/saga/db-per-service", "microservices resilience review", "lift the backend to production"
 **What it does:** Read-only audit **and decision advisor** for backend/distributed-systems architecture. Topology-gated so a serverless/monolith and a Kubernetes fleet each see only relevant findings. **Two lenses:** (1) *conformance* — marks each pattern Implemented/Partial/Missing/N-A with `file:line`; (2) *fit/decision* — following "start simple, earn every pattern" (modular-monolith-first), recommends which to **adopt now / adopt-when-[trigger] / defer as premature**, with a maturity ladder + symptom→pattern table, flagging over-engineering and the **distributed-monolith** anti-pattern just as loudly as real gaps. Covers communication style (sync request/response vs async event-driven, per interaction), cache-aside, database-per-service, API gateway, BFF / API composition / GraphQL federation, circuit breaker, bulkhead, backpressure/load-shedding, outbox + CDC, saga (compensation + saga-pivot), CQRS + event sourcing, hexagonal / ports-and-adapters, anti-corruption layer, strangler-fig, sidecar / service mesh (incl. ambient/sidecarless), cell-based, zero-trust/mTLS, distributed tracing + SLOs, and contract testing. Defers per-call runtime resilience to `audit-resilience` (no overlap); delegates fixes to `backend-patterns` (see its `references/architecture-patterns.md`).
-**Related:** `audit-resilience`, `backend-patterns`, `design-api`, `audit-security`, `backend-observability`, `audit-db-schema`, `workflow-refactor`, `complete-everything`
+**Related:** `audit-resilience`, `backend-patterns`, `design-api`, `audit-security`, `backend-observability`, `audit-db-schema`, `workflow-refactor`, `complete-everything`, `enhance-arch-boundaries`
 
 #### `audit-payment-system`
 **Triggers:** "audit payment system", "payment gateway audit", "double charge / idempotency", "double-entry ledger", "reconciliation / settlement", "webhook signature / 3DS / SCA", "PCI DSS", "is my payment flow safe", "audit-payment-system"
@@ -475,7 +485,12 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `test-unit`
 **Triggers:** "write tests", "test coverage", "unit test", "test this", "add tests", "testing", "Jest", "Vitest", "pytest"
 **What it does:** Write effective unit tests. Auto-detects framework (Vitest/Jest/pytest/Go/etc.), researches patterns via Firecrawl, fetches docs via Context7. Uses Sentry MCP to identify production errors lacking test coverage.
-**Related:** `workflow-spec-tdd`, `test-qa`
+**Related:** `workflow-spec-tdd`, `test-qa`, `test-mutation`
+
+#### `test-mutation`
+**Triggers:** "add mutation testing", "are our tests real", "check test quality not coverage", "can our test suite be gamed", "Stryker", "assertion theater", "/test-mutation"
+**What it does:** Installs and runs mutation testing (StrykerJS / mutmut) so tests must *kill* deliberate bugs, not just execute lines. Never starts whole-repo — scopes to money/auth/entitlements first, incremental mode from day one. Triages survivors into missing-assertion / untested-branch / dead-code / equivalent. Wires a per-PR incremental job + scheduled full run + score ratchet. Closes the coverage-gaming hole `audit-gate-logic` maps.
+**Related:** `plan-test-coverage`, `test-unit`, `housekeep-gates`, `audit-gate-logic`, `enhance-agent-guardrails`
 
 #### `test-qa`
 **Triggers:** "QA the app", "test the app", "find bugs", "test before release", "run QA", "test CRUD", "test data pipeline", "pre-release testing", "smoke test"
@@ -647,7 +662,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `handoff` *(adapted from mattpocock/skills, MIT; user-invoked via `/handoff`)*
 **Triggers:** `/handoff` only — `disable-model-invocation: true`, so it costs zero always-on context
 **What it does:** Compact the current conversation into a handoff document (state, ordered next steps, suggested skills, gotchas) saved to the OS temp directory, with secrets redacted, artifacts referenced by path instead of copied, and verification claims held to the `verification-before-completion` ladder.
-**Related:** `verification-before-completion`, `workflow-parallel-agents`
+**Related:** `verification-before-completion`, `workflow-parallel-agents`, `docs-adr`
 
 ---
 
@@ -686,12 +701,17 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 #### `docs-writer`
 **Triggers:** "write documentation", "README", "API docs", "document this", "create docs", "architecture docs"
 **What it does:** Write clear documentation. Templates for READMEs, API docs, code comments, architecture docs. Includes Mermaid diagram patterns.
-**Related:** `docs-coauthor`, `design-prd`
+**Related:** `docs-coauthor`, `design-prd`, `docs-adr`
+
+#### `docs-adr`
+**Triggers:** "record this decision", "set up ADRs", "why did we choose X", "the agent keeps suggesting Y again", "/adr"
+**What it does:** Lightweight Architecture Decision Records as agent-readable memory — `docs/adr/` + INDEX.md, one page each, **Rejected alternatives** required, supersede-not-edit. Agent rules load the index and forbid silent contradiction of Accepted ADRs. Backfill the decisions every new agent tries to "fix" first. Complements `plan-docs-sync` (what the code is) and `/handoff` (session state).
+**Related:** `plan-docs-sync`, `handoff`, `docs-writer`, `docs-coauthor`, `enhance-arch-boundaries`, `enhance-agent-guardrails`, `workflow-housekeep`
 
 #### `docs-coauthor`
-**Triggers:** "write a doc", "draft proposal", "help me document", "create spec", "design document", "PRD", "RFC", "ADR"
-**What it does:** Three-stage workflow: Context Gathering (questions, info dump), Refinement & Structure (brainstorm, curate, draft per section), Reader Testing (predict questions, verify answers, fix gaps).
-**Related:** `docs-writer`, `design-prd`
+**Triggers:** "write a doc", "draft proposal", "help me document", "create spec", "design document", "PRD", "RFC"
+**What it does:** Three-stage workflow: Context Gathering (questions, info dump), Refinement & Structure (brainstorm, curate, draft per section), Reader Testing (predict questions, verify answers, fix gaps). Repo decision-memory system → `docs-adr`.
+**Related:** `docs-writer`, `design-prd`, `docs-adr`
 
 ---
 
@@ -726,7 +746,7 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 
 ---
 
-## Commands (45)
+## Commands (49)
 
 Commands fall into two groups: **standalone** (full playbook in the file) and **pointer** (thin slash entry delegating to a skill).
 
@@ -760,6 +780,10 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/skill-conflicts` | `audit-skill-conflicts` | Pack self-audit — contradictions, trigger overlap, stale refs |
 | `/gate-logic` | `audit-gate-logic` | CI gate logic — silent bypass, ratchet gaming, conflicting conditions |
 | `/codemod-safety` | `audit-codemod-safety` | Codemod / bulk-transform behavior-preservation |
+| `/housekeep-gates` | `housekeep-gates` | Consolidate accreted CI gates into one aggregator |
+| `/test-mutation` | `test-mutation` | Mutation testing — do tests actually assert? |
+| `/arch-boundaries` | `enhance-arch-boundaries` | Mechanically-enforced architecture boundaries |
+| `/adr` | `docs-adr` | Architecture Decision Records as agent-readable memory |
 | `/uiux-plan` | `plan-uiux-unification` | Full UI/UX unification plan (audit only, no fixes) |
 | `/grill-me` | `grilling` | One-question-at-a-time interview to align before building |
 | `/handoff` | `handoff` | Compact the conversation into a handoff doc for a fresh session |
@@ -912,6 +936,12 @@ After approval: `backend-patterns`, `db-migrator`, `backend-observability`, prov
 
 #### Gate soundness vs pipeline cost
 `audit-gate-logic` (does the gate stop what it claims) × `audit-cicd` (is the pipeline cheap/fast/safe to run)
+
+#### Accreted gates → one aggregator
+`audit-gate-logic` (Phase 2.5 archaeology) → `housekeep-gates` (consolidate, delete losers, prove)
+
+#### Anti-entropy stack
+`audit-gate-logic` / `housekeep-gates` (soundness) → `test-mutation` (assertion strength) → `enhance-arch-boundaries` (structure) → `docs-adr` (memory)
 
 #### Bulk transform slipped past CI
 `audit-codemod-safety` → `audit-gate-logic` (if size defeated review) → `plan-test-coverage` / `test-visual-regression`
