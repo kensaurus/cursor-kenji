@@ -64,7 +64,7 @@ npx skills add kensaurus/cursor-kenji
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/cursor-kenji
 
-**Status:** [x] Published — `@kensaurus/cursor-kenji@1.4.2` ([npm](https://www.npmjs.com/package/@kensaurus/cursor-kenji))
+**Status:** [x] Published — `@kensaurus/cursor-kenji@1.19.0` ([npm](https://www.npmjs.com/package/@kensaurus/cursor-kenji))
 
 ---
 
@@ -110,21 +110,22 @@ All skills validate against the [Agent Skills specification](https://agentskills
 ### Reddit (r/cursor, r/ChatGPT, r/webdev)
 
 ```
-Title: I packaged 90 Cursor AI skills so you don't have to build them yourself
+Title: I packaged 128 Cursor AI skills so you don't have to build them yourself
 
 I got tired of writing the same Cursor prompts every time I started a debugging session
-or wanted to polish a UI. So I built cursor-kenji — a collection of 90 agent skills that
+or wanted to polish a UI. So I built cursor-kenji — a collection of 128 agent skills that
 Cursor picks automatically based on what you type.
 
 Say "audit my security" → it runs an OWASP scan.
 Say "make this page nicer" → it applies NN/g heuristics.
+Say "can we recover if the DB dies?" → a restore plan you approve first.
 Say "commit my changes" → it writes a proper conventional commit.
 
 Install in one line:
 npx skills add kensaurus/cursor-kenji
 
 Covers: React, Next.js, Supabase, TypeScript, React Native, Capacitor, debugging,
-testing, deploy, MCP, and more. MIT licensed.
+testing, deploy, privacy, ASO, MCP, and more. MIT licensed.
 
 GitHub: https://github.com/kensaurus/cursor-kenji
 ```
@@ -132,13 +133,14 @@ GitHub: https://github.com/kensaurus/cursor-kenji
 ### X / Twitter
 
 ```
-I built 90 Cursor agent skills so you don't have to:
+I built 128 Cursor agent skills so you don't have to:
 
 • audit security → OWASP scan runs
 • "make this nicer" → NN/g UX polish
+• "can we recover if the DB dies?" → restore plan
 • "commit" → proper conventional commit message
 
-One install, 90 skills auto-activate:
+One install, 128 skills auto-activate:
 npx skills add kensaurus/cursor-kenji
 
 → github.com/kensaurus/cursor-kenji
@@ -147,7 +149,7 @@ npx skills add kensaurus/cursor-kenji
 ### dev.to / Hashnode article outline
 
 ```
-Title: 90 Cursor AI Skills That Match on Keywords
+Title: 128 Cursor AI Skills That Match on Keywords
 
 1. The problem: writing the same prompts over and over
 2. What Cursor skills are and how they work

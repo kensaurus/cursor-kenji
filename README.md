@@ -57,6 +57,10 @@ Restart Cursor. Done.
 | *"why do our emails go to spam?"* | `enhance-email-deliverability` | SPF/DKIM/DMARC + bounce hygiene |
 | *"can we recover if the DB dies?"* | `plan-backup-dr` | RPO/RTO + restore-drill plan (approve first) |
 | *"why did the wrong skill trigger?"* | `audit-skill-conflicts` | Overlapping descriptions / stale handoffs in the pack |
+| *"is my chatbot safe?"* | `audit-llm-security` | Prompt injection, leaks, unscoped tools |
+| *"are we tracking the right events?"* | `audit-analytics` | Funnel holes, taxonomy, consent gating |
+| *"check our privacy / store labels"* | `plan-privacy-compliance` | Collection vs claimed — approve before edits |
+| *"optimize the App Store listing"* | `plan-aso` | Keywords + screenshots, plan only |
 | *"make the forms accessible"* | `enhance-web-forms` | Labels, validation, keyboard-friendly |
 | *"plan a security hardening pass"* | `plan-security-audit` | A burndown **you** approve before edits |
 | *"complete everything"* | `complete-everything` | No parked leftovers — judge verifies "done" |
@@ -135,9 +139,9 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 
 | Family | Count | In one sentence |
 |:-------|------:|:----------------|
-| 🔍 Audit — look before you change | **26** | Check the codebase — security, UX, performance, payments… |
+| 🔍 Audit — look before you change | **26** | Check the codebase — security, UX, analytics, IAP, the skill pack… |
 | 📋 Plan — audit first, change only after you approve | **20** | Write a fix plan you approve before any code changes |
-| 🎨 Enhance — improve what already exists | **13** | Polish UI, forms, motion, SEO, PWA on an existing app |
+| 🎨 Enhance — improve what already exists | **13** | Polish UI, forms, motion, SEO, PWA, email deliverability |
 | ✨ Design — build something new | **10** | Create new UI, APIs, emails, themes from scratch |
 | 🧱 Backend — server & data patterns | **5** | Auth, caching, queues, realtime, observability |
 | 📱 Mobile — React Native / Capacitor | **5** | RN screens, emulators, Capacitor, App Store prep |
@@ -145,7 +149,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | 📚 Docs — write it down clearly | **2** | READMEs, PRDs, RFCs with a reader-first voice |
 | 🧹 Housekeeping — clean up design drift | **1** | Merge a drifted design system into one source of truth |
 | 🔗 Workflows — multi-step recipes | **18** | End-to-end recipes (build, fix, ship, green the repo) |
-| ✅ Test & QA — prove it works | **6** | Unit, Playwright, red-team, QA |
+| ✅ Test & QA — prove it works | **6** | Unit, Playwright, visual regression, load, red-team |
 | 🚀 Deploy — ship & verify | **2** | npm release + post-deploy smoke tests |
 | 🐛 Debug — find & fix what's broken | **3** | Errors, Sentry, frontend↔backend mismatches |
 | 🦟 Mushi Mushi — bug triage helpers | **2** | Integrate the Mushi Mushi bug-report pipeline |
@@ -424,7 +428,9 @@ npx @kensaurus/cursor-kenji --link     # dev: symlink for live skill authoring
 
 **Use more than one AI tool? Reach for `--auto`.** It checks `~/.cursor`, `~/.claude`, `~/.codex`, and `~/.gemini`, then installs the right files to each one it finds. Running the bare command stays Cursor-only, so nothing changes for existing setups.
 
-From a clone: `npm run install:cursor` · `npm test` validates skills + count + install smoke test.
+From a clone: `npm run install:cursor` · `node bin/install.mjs --all` (all tools) · `npm test` validates skills + count + install smoke test.
+
+**Windows:** `npx @kensaurus/cursor-kenji` can fail (`cursor-kenji` is not recognized). Use `node bin/install.mjs --all` from a clone instead.
 
 **Optional — [Mushi Mushi](https://github.com/kensaurus/mushi-mushi)** bug-report triage + AI draft PRs (pairs with `mushi-health`, `test-playwright`):
 
@@ -526,6 +532,9 @@ Specialist audits worth knowing:
 - `audit-backend-architecture` — which distributed pattern to adopt vs skip as over-engineering
 - `audit-payment-system` — double-charge, ledgers, webhooks, PCI
 - `audit-ux-journeys` — can users actually find things and finish their stories? (IA + task completion)
+- `audit-llm-security` — prompt injection / unscoped tools on the AI you ship
+- `audit-analytics` — are the funnel events actually firing (and after consent)?
+- `audit-skill-conflicts` — did two skills just start giving opposite advice?
 
 ### Start here, by situation
 
@@ -663,6 +672,8 @@ Commands are shortcuts for the things you do constantly. Type `/` in chat to see
 | `/refactor` | Long files | Modular split |
 | `/mcp-guide` | MCP workflow | Tool reference (renamed to avoid Claude Code's built-in `/mcp`) |
 | `/uiux` | UI review | Design-system enforcement |
+| `/responsive-audit` | Desktop looks like a phone | Breakpoint / linearized-layout audit |
+| `/skill-conflicts` | Wrong skill fired / just added skills | Pack contradictions, overlapping triggers, stale refs |
 | `/thirdparty-web-interface-guidelines` | Vercel UI audit | Review files against [Web Interface Guidelines](https://vercel.com/design/guidelines) |
 | `/*-plan` (20 aliases) | Audit before changing | Thin pointers to the `plan-*` skills (`/uiux-plan`, `/privacy-plan`, `/backup-plan`, `/aso-plan`, …) — audit + plan only. See [CATALOG](docs/CATALOG.md#pointer-delegates-to-skill) |
 

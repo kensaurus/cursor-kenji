@@ -4,7 +4,7 @@ Quick map of `docs/` — start with [GETTING-STARTED.md](GETTING-STARTED.md) if 
 
 | File | Purpose |
 |:-----|:--------|
-| [GETTING-STARTED.md](GETTING-STARTED.md) | Plain-language install and first skills to try |
+| [GETTING-STARTED.md](GETTING-STARTED.md) | Plain-language install and first phrases to try (including launch/ops) |
 | [CATALOG.md](CATALOG.md) | Full skill/command reference with trigger phrases |
 | [TRIGGER-CHEATSHEET.md](TRIGGER-CHEATSHEET.md) | "Say X → skill Y" lookup table |
 | [PLAN-LOOPS.md](PLAN-LOOPS.md) | How to chain the 20 `plan-*` skills (grouped loops) |

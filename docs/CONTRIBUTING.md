@@ -12,22 +12,24 @@ Guide for adding, updating, and maintaining skills and commands.
 mkdir -p skills/my-skill-name
 ```
 
-Naming: `<prefix>-<topic>`, lowercase, hyphens only. 13 prefixes:
+Naming: `<prefix>-<topic>`, lowercase, hyphens only. 15 prefixes:
 
 | Prefix | Purpose |
 |:-------|:--------|
-| `audit-` | Quality/security assessments |
+| `audit-` | Quality/security assessments (present-then-stop) |
+| `plan-` | Audit + burndown — **no edits until the user approves** |
 | `backend-` | Server-side patterns (DB, observability, realtime) |
 | `data-` | Pipelines, ETL, visualization |
 | `debug-` | Reproduce → isolate → fix failures |
 | `deploy-` | Release, publish, post-deploy verify |
 | `design-` | Create new visual/API surfaces |
 | `docs-` | Write or co-author documentation |
-| `enhance-` | Improve existing web/mobile UI & UX |
+| `enhance-` | Improve existing web/mobile UI, UX, SEO, email deliverability |
+| `housekeep-` | Consolidate a drifted design system |
 | `meta-` | Skills and MCP authoring |
 | `mobile-` | React Native, Capacitor, emulator |
 | `protocol-` | Procedural guardrails |
-| `test-` | QA, unit tests, acceptance tests |
+| `test-` | QA, unit tests, load, visual regression |
 | `workflow-` | Dev-process skills (git, refactor, PR, spec-TDD) |
 
 Examples: `audit-performance`, `backend-realtime`, `mobile-rn-screen`.
@@ -273,10 +275,13 @@ This is not run automatically on `npm install` — only set it when working from
 
 ### Adding to CATALOG.md
 
-When adding a new skill, also update `docs/CATALOG.md` with:
-- Skill entry under appropriate category
-- Trigger phrases
-- Related skills
+When adding a new skill, also update:
+- `docs/CATALOG.md` — entry, trigger phrases, related skills
+- `docs/TRIGGER-CHEATSHEET.md` — "say this → skill" row
+- `docs/PLAN-LOOPS.md` + a `/…-plan` command if it is a `plan-*` skill
+- `docs/GETTING-STARTED.md` / README use-case table if a newcomer would type that phrase
+
+Then say **"audit my skills"** (`audit-skill-conflicts`) so overlapping descriptions and stale handoffs get caught. Per-file spec lint (`npm run validate:skills`) cannot see those.
 - Brief description
 
 ### Updating README.md
