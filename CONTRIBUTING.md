@@ -43,8 +43,9 @@ npm run check:skills
 
 # 4. Run full test gate (spec + secrets + MCP pins + install smoke)
 npm run test
-# Add an entry to the right table in README.md
-# Add trigger phrases to docs/CATALOG.md
+# Add an entry to docs/CATALOG.md + docs/TRIGGER-CHEATSHEET.md
+# (README skill index is generated: npm run gen:skill-index)
+# After a batch of skills, run audit-skill-conflicts in Cursor
 
 # 5. Commit + PR
 git checkout -b feat/my-new-skill

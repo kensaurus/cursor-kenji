@@ -44,6 +44,14 @@ cd cursor-kenji
 npx @kensaurus/cursor-kenji
 ```
 
+**Windows:** `npx @kensaurus/cursor-kenji` can fail (`cursor-kenji` is not recognized). From a clone, run:
+
+```bash
+git clone https://github.com/kensaurus/cursor-kenji.git
+cd cursor-kenji
+node bin/install.mjs --all
+```
+
 ---
 
 ## Step 3: Restart Cursor
@@ -92,6 +100,22 @@ These chain multiple skills into a single tracked loop:
 | `clean up our design system` | Consolidates drifted colors/components into one source of truth |
 | `set up guardrails so AI doesn't break things` | Installs pre-commit + CI checks against secrets, bugs, and risky ops |
 | `is my app production-ready?` | Checks timeouts, retries, idempotency — the reliability the happy path skips |
+
+### Launch, ops, and the skill pack
+
+| Type this in chat… | What happens |
+|:-------------------|:-------------|
+| `is my chatbot safe?` / `prompt injection` | OWASP LLM Top 10 on the AI features you ship |
+| `check our privacy / GDPR / APPI` | Data-flow vs policy vs store labels — plan you approve first |
+| `are we tracking the right events?` | Funnel coverage, event names, consent-gated analytics |
+| `optimize our App Store listing` | Keywords, screenshots, ratings — ASO plan only |
+| `restore purchases is broken` | StoreKit / Play / RevenueCat entitlements |
+| `will it handle launch traffic?` | Load test — p95/p99 and the breaking point |
+| `works locally but not in prod` | Env/config parity across local / staging / prod |
+| `why is my hosting bill high?` | Egress, storage, zombie resources — plan cuts that keep backups |
+| `/privacy-plan` `/backup-plan` `/aso-plan` `/skill-conflicts` | Slash shortcuts for those same jobs |
+
+Full phrase list → [TRIGGER-CHEATSHEET.md](TRIGGER-CHEATSHEET.md).
 
 The AI picks the right skill automatically based on what you typed.
 

@@ -159,9 +159,9 @@ function build() {
   parts.push("| Family | Count | In one sentence |");
   parts.push("|:-------|------:|:----------------|");
   const blurbs = {
-    audit: "Check the codebase — security, UX, performance, payments…",
+    audit: "Check the codebase — security, UX, analytics, IAP, the skill pack…",
     plan: "Write a fix plan you approve before any code changes",
-    enhance: "Polish UI, forms, motion, SEO, PWA on an existing app",
+    enhance: "Polish UI, forms, motion, SEO, PWA, email deliverability",
     design: "Create new UI, APIs, emails, themes from scratch",
     backend: "Auth, caching, queues, realtime, observability",
     mobile: "RN screens, emulators, Capacitor, App Store prep",
@@ -169,7 +169,7 @@ function build() {
     docs: "READMEs, PRDs, RFCs with a reader-first voice",
     housekeep: "Merge a drifted design system into one source of truth",
     workflow: "End-to-end recipes (build, fix, ship, green the repo)",
-    test: "Unit, Playwright, red-team, QA",
+    test: "Unit, Playwright, visual regression, load, red-team",
     deploy: "npm release + post-deploy smoke tests",
     debug: "Errors, Sentry, frontend↔backend mismatches",
     mushi: "Integrate the Mushi Mushi bug-report pipeline",
