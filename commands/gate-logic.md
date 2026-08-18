@@ -6,10 +6,12 @@ argument-hint: "[repo or workflow path]"
 # Gate-Logic Audit
 
 Run the **`audit-gate-logic`** skill: inventory every gate and test whether
-it can be silently bypassed, whether a ratchet can lock in regressions, and
-whether two workflows' conditions both fire or both skip.
+it can be silently bypassed, whether a ratchet can lock in regressions,
+whether two workflows' conditions both fire or both skip, and map
+accreted duplicate gates (Phase 2.5 archaeology).
 
-**Read-only — rewrite no workflow or branch-protection setting.** Pipeline
+**Read-only — rewrite no workflow or branch-protection setting.**
+Consolidation of the archaeology map stays on `housekeep-gates`. Pipeline
 cost/speed stays on `audit-cicd`. Running the pre-release sweep stays on
 `workflow-quality-gate`. Installing new gates stays on
 `enhance-agent-guardrails`.

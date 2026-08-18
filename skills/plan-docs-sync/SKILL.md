@@ -4,7 +4,7 @@ description: >
   Audit documentation against actual code behavior and plan corrections — no rewrites in
   this pass. Use when asked to "docs drift", "sync docs with code", "audit documentation",
   "stale README", "onboarding docs broken", "doc sync plan", "phantom docs", or "docs out
-  of date".
+  of date". Why-we-chose-X / ADRs → docs-adr.
 license: MIT
 ---
 

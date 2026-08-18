@@ -34,7 +34,8 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "audit database schema", "check my DB design", "naming conventions in DB" | `audit-db-schema` |
 | "audit my API calls", "check frontend API", "FE-BE contract" | `audit-fe-api` |
 | "CI/CD cost", "GitHub Actions bill", "Actions minutes", "runner cost", "workflow cost", "slow CI", "audit my workflows" | `audit-cicd` |
-| "can our CI gates be bypassed", "audit the quality-gate logic", "is our coverage ratchet sound", "why did a regression pass CI", "check for conflicting workflows" | `audit-gate-logic` |
+| "can our CI gates be bypassed", "audit the quality-gate logic", "is our coverage ratchet sound", "why did a regression pass CI", "check for conflicting workflows", "we have too many overlapping checks" | `audit-gate-logic` |
+| "clean up our CI checks", "we have three lint jobs", "make one quality gate", "consolidate the workflows" | `housekeep-gates` |
 | "audit i18n", "fix translations", "the Japanese feels like Google Translate", "hardcoded strings" | `audit-i18n` |
 | "audit LLM quality", "check Langfuse", "audit prompts", "check AI quality", "check traces" | `audit-langfuse-llm` |
 | "audit LLM security", "prompt injection", "jailbreak my chatbot", "is my AI safe", "OWASP LLM" | `audit-llm-security` |
@@ -48,6 +49,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "audit against realworld", "compare to realworld", "conduit conformance", "full-stack gap check", "what's missing to reach production" | `audit-realworld` |
 | "resilience audit", "is this production-ready", "will it survive real traffic", "retries/timeouts/idempotency", "the 80% problem" | `audit-resilience` |
 | "audit backend architecture", "which pattern should I use", "is my backend production-grade", "am I over-engineering", "sync vs event-driven", "cache-aside/CQRS/saga/db-per-service", "microservices resilience review" | `audit-backend-architecture` |
+| "enforce module boundaries", "stop spaghetti imports", "add architecture rules", "agents keep importing across features" | `enhance-arch-boundaries` |
 | "audit payment system", "payment gateway audit", "double charge / idempotency", "double-entry ledger", "reconciliation / settlement", "webhook signature / 3DS / SCA", "PCI DSS", "is my payment flow safe" | `audit-payment-system` |
 | "audit security", "check for vulnerabilities", "OWASP", "security review" | `audit-security` |
 | "audit design system", "check token compliance", "design consistency" | `audit-uiux-design-system` |
@@ -108,7 +110,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "add one animation", "hover effect on this button", "isolated micro-interaction" | `design-motion` |
 | "write a PRD", "product requirements", "spec this feature", "what should we build" | `design-prd` |
 | "grill me", "stress-test this plan", "interview me about this", "poke holes in this", "challenge my thinking" | `grilling` |
-| "pin down terminology", "ubiquitous language", "glossary", "record an ADR", "you're using the wrong words" | `domain-modeling` |
+| "pin down terminology", "ubiquitous language", "glossary", "you're using the wrong words" | `domain-modeling` |
 | "UI/UX unification plan", "design system audit plan", "UI burndown", "unify design system", "plan UI overhaul", "audit UI without fixing" | `plan-uiux-unification` |
 | "feels AI-generated", "de-slop", "AI slop", "reads like ChatGPT", "generic/templated/soulless", "voice pass", "authenticity pass" | `plan-antislop` |
 | "RLS audit", "check my RLS", "row level security", "is my Supabase secure", "anyone can read my data", "service_role key", "lock down my tables" | `plan-rls-audit` |
@@ -126,9 +128,11 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "Capacitor app secure", "WebView security", "secure storage tokens", "cleartext traffic", "allowNavigation", "OTA update safe" | `plan-capacitor-hardening` |
 | "find dead buttons", "stub checker", "fake components", "unwired handlers", "dead links", "buttons that do nothing", "stub audit" | `plan-stub-checker` |
 | "docs drift", "sync docs with code", "stale README", "onboarding docs broken", "phantom docs" | `plan-docs-sync` |
+| "record this decision", "set up ADRs", "why did we choose X", "the agent keeps suggesting Y again" | `docs-adr` |
 | "performance audit plan", "perf burndown", "measure before optimize", "plan performance improvements" | `plan-perf-audit` |
 | "security audit plan", "OWASP audit", "hardening plan", "security burndown" | `plan-security-audit` |
 | "test coverage plan", "traceability matrix", "fake-green tests", "what's not tested" | `plan-test-coverage` |
+| "add mutation testing", "are our tests real", "can our test suite be gamed", "assertion theater" | `test-mutation` |
 | "design system", "component library", "design tokens", "theming" | `design-system` |
 | "apply brand colors", "consistent styling", "color palette", "apply theme" | `design-theme` |
 

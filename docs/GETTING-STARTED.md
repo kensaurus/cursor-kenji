@@ -114,8 +114,12 @@ These chain multiple skills into a single tracked loop:
 | `works locally but not in prod` | Env/config parity across local / staging / prod |
 | `why is my hosting bill high?` | Egress, storage, zombie resources — plan cuts that keep backups |
 | `why did a regression pass CI?` | Gate-logic audit — silent bypass, ratchet gaming, required-but-not |
+| `we have three lint jobs` | Consolidate accreted CI gates into one aggregator |
+| `are our tests real?` | Mutation testing — coverage theater vs assertions |
+| `agents keep importing across features` | Mechanical architecture boundaries in CI |
+| `the agent keeps suggesting Y again` | ADR decision memory — rejected alternatives |
 | `did this codemod break anything?` | Bulk-transform behavior-preservation — compiles/lints is not same-behavior |
-| `/privacy-plan` `/backup-plan` `/aso-plan` `/skill-conflicts` `/gate-logic` `/codemod-safety` | Slash shortcuts for those same jobs |
+| `/privacy-plan` `/backup-plan` `/aso-plan` `/skill-conflicts` `/gate-logic` `/codemod-safety` `/housekeep-gates` `/test-mutation` `/arch-boundaries` `/adr` | Slash shortcuts for those same jobs |
 
 Full phrase list → [TRIGGER-CHEATSHEET.md](TRIGGER-CHEATSHEET.md).
 

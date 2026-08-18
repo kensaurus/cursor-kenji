@@ -1,10 +1,10 @@
 ---
 name: domain-modeling
 description: >-
-  Build and sharpen a project's domain model — a CONTEXT.md glossary plus ADRs.
-  Use when the user wants to pin down domain terminology, define a ubiquitous
-  language, record an architectural decision, complains the agent "uses the wrong
-  words", or when another skill needs the domain model maintained.
+  Build and sharpen a project's domain model — a CONTEXT.md glossary and
+  ubiquitous language. Use when pinning down terminology, or the agent "uses the
+  wrong words". Repo decision-memory system (INDEX.md, rejected alternatives) →
+  docs-adr.
 license: MIT
 ---
 

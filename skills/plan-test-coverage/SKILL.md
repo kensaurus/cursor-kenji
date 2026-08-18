@@ -2,9 +2,9 @@
 name: plan-test-coverage
 description: >
   User-story-driven test coverage audit and plan — no test writing in this pass. Use when
-  asked to "test coverage plan", "coverage audit", "traceability matrix", "fake-green
-  tests", "uncovered user stories", "plan tests for critical flows", "mutation testing
-  plan", or "what's not tested".
+  "test coverage plan", "coverage audit", "traceability matrix", "fake-green tests",
+  "uncovered user stories", "plan tests for critical flows", or "whats not tested".
+  Mutation score / assertion theater → test-mutation.
 license: MIT
 ---
 
