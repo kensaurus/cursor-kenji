@@ -3,8 +3,8 @@ name: workflow-quality-gate
 description: >
   Pre-release quality gate that sequences test-red-team, audit-security,
   audit-bundle-size, audit-performance, and test-unit into a single sweep. Use when "is
-  this ready to ship?", "quality gate", "pre-release checklist", "what do I need to fix
-  before launch?", "ship-readiness check", or before any production release.
+  this ready to ship?", "quality gate", "pre-release checklist", or before production
+  release. Gate soundness → audit-gate-logic.
 license: MIT
 ---
 
@@ -113,3 +113,6 @@ the code path that was changed for this release?
 **GO** = no Critical or High blockers, all gates passed
 **GO WITH CONDITIONS** = High defects present but agreed to fix post-release with a named owner + deadline
 **NO-GO** = any Critical defect, or 2+ High defects without mitigation plan
+
+This skill *runs* the sweep. Whether those gates can be silently bypassed or
+gamed is `audit-gate-logic`.

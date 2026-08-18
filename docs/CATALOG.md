@@ -28,7 +28,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (128)
+## Skills (130)
 
 ### Enhance
 
@@ -100,7 +100,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `enhance-agent-guardrails`
 **Triggers:** "set up guardrails", "stop vibe-coding regressions", "add pre-commit security checks", "protect the repo from AI mistakes", "add CI security gates", "governance for AI code", "enhance-agent-guardrails"
 **What it does:** Installs guardrails-as-code so AI/vibe-coding can't keep reintroducing the same problem classes (leaked secrets, injection, off-system styles, untested code, vulnerable deps, destructive ops). Audits existing protection, then sets up agent policy files (`.cursor/rules` + `AGENTS.md`), a pre-commit hook (secret scan + SAST + lint/typecheck), a CI gate that treats agent output as untrusted, and lint-as-policy rules. Verifies the guards actually block a planted bad pattern; flags merge-blocking CI changes for human review.
-**Related:** `audit-security`, `plan-security-audit`, `plan-secrets-audit`, `plan-dependency-provenance`, `plan-data-integrity`, `housekeep-design`
+**Related:** `audit-gate-logic`, `audit-security`, `plan-security-audit`, `plan-secrets-audit`, `plan-dependency-provenance`, `plan-data-integrity`, `housekeep-design`
 
 ---
 
@@ -168,8 +168,8 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 #### `plan-data-integrity`
 **Triggers:** "is my migration safe", "could I lose data", "agent might delete prod", "destructive operations", "safe schema changes"
-**What it does:** Destructive-op and migration safety audit — unguarded DELETE/DROP, backfill-before-drop, backup blast radius (same-volume wipe), overprivileged agent/CI tokens, confirmation gates. Emits `plan-data-integrity.md` — **no migrations/tokens until approved**. Restore drills / RPO/RTO → `plan-backup-dr`.
-**Related:** `plan-backup-dr`, `plan-secrets-audit`, `plan-rls-audit`, `audit-db-schema`, `db-migrator`
+**What it does:** Destructive-op and migration safety audit — unguarded DELETE/DROP, backfill-before-drop, backup blast radius (same-volume wipe), overprivileged agent/CI tokens, confirmation gates. Emits `plan-data-integrity.md` — **no migrations/tokens until approved**. Restore drills / RPO/RTO → `plan-backup-dr`. Source-code transforms → `audit-codemod-safety`.
+**Related:** `plan-backup-dr`, `plan-secrets-audit`, `plan-rls-audit`, `audit-db-schema`, `db-migrator`, `audit-codemod-safety`
 
 #### `plan-dependency-provenance`
 **Triggers:** "check my dependencies", "slopsquatting", "is this package real", "supply chain audit", "license check", "SBOM", "did the AI hallucinate a package"
@@ -316,13 +316,23 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 #### `audit-code-review`
 **Triggers:** "code review", "review this PR", "review this code", "review changes"
-**What it does:** Thorough code review — correctness, security, performance, a11y, maintainability. Uses Sentry MCP for production error context, Firecrawl for current best practices.
-**Related:** `audit-code-quality`, `workflow-pr`
+**What it does:** Thorough code review — correctness, security, performance, a11y, maintainability. Uses Sentry MCP for production error context, Firecrawl for current best practices. Bulk mechanical-transform semantics → `audit-codemod-safety`.
+**Related:** `audit-code-quality`, `workflow-pr`, `audit-codemod-safety`
 
 #### `audit-cicd`
 **Triggers:** "CI/CD cost", "GitHub Actions bill", "Actions minutes", "runner cost", "workflow cost", "CI is expensive", "slow CI", "audit my workflows", "artifact/cache storage", "reduce Actions spend"
-**What it does:** Audits GitHub Actions workflows for cost, speed, and safety via the `gh` CLI (live billing, run volume, runner types, artifact/cache storage). Flags double-billing triggers, missing concurrency, macOS/large runners on push, missing path filters, doomed jobs, and long artifact retention — then proposes fixes (concurrency, dispatch-gated runners, retention limits, caching, storage cleanup) that never delete tests or break deploys. Includes account-level backstops (retention default, spending budget).
-**Related:** `audit-security`, `deploy-verify`, `workflow-pr`, `create-hook`, `audit-infra-cost`
+**What it does:** Audits GitHub Actions workflows for cost, speed, and safety via the `gh` CLI (live billing, run volume, runner types, artifact/cache storage). Flags double-billing triggers, missing concurrency, macOS/large runners on push, missing path filters, doomed jobs, and long artifact retention — then proposes fixes (concurrency, dispatch-gated runners, retention limits, caching, storage cleanup) that never delete tests or break deploys. Includes account-level backstops (retention default, spending budget). Gate *logic* (bypass, ratchet gaming, required-but-not) → `audit-gate-logic`.
+**Related:** `audit-gate-logic`, `audit-security`, `deploy-verify`, `workflow-pr`, `create-hook`, `audit-infra-cost`
+
+#### `audit-gate-logic`
+**Triggers:** "can our CI gates be bypassed", "audit the quality-gate logic", "is our coverage ratchet sound", "why did a regression pass CI", "check for conflicting workflows", "is this required check actually required", "/gate-logic"
+**What it does:** Read-only audit of the *logic* of CI/CD gates and ratchets — not pipeline cost/speed. Catches silent bypass (`continue-on-error`, `|| true`, skipped-required counting as passed), path filters that skip the files that needed the gate, two workflows whose conditions both fire or both skip, `pull_request_target` / fork bypass, and ratchet traps (same-PR baseline overwrite, exclusion gaming, slack threshold, backwards comparison). Phase 3 looks for regressions that already shipped green. Highest-value required-vs-actual checks need branch-protection / rulesets; if those are invisible, it says so and audits the YAML alone.
+**Related:** `audit-cicd`, `workflow-quality-gate`, `enhance-agent-guardrails`, `burndown-full`, `workflow-green-repo`, `audit-codemod-safety`
+
+#### `audit-codemod-safety`
+**Triggers:** "did this codemod break anything", "audit this bulk refactor", "verify the migration mod", "check the mass find-replace", "jscodeshift / ts-morph / ast-grep audit", "/codemod-safety"
+**What it does:** Read-only audit of a mechanical source transform for behavior-preservation. "Compiles and lints" is not "behaves the same." Hunts semantic traps (`||`→`??`, missing parens, async error-drop, import-default swaps), regex hits inside strings/comments, formatting bundled with logic, surviving old-pattern instances, inconsistent application, and orphans. If size defeated review and syntax defeated linters, also a finding for `audit-gate-logic`.
+**Related:** `audit-code-review`, `plan-data-integrity`, `plan-test-coverage`, `test-visual-regression`, `audit-gate-logic`, `burndown-full`
 
 #### `audit-performance`
 **Triggers:** "slow page", "LCP/INP/CLS", "optimize performance", "Web Vitals", "lighthouse score"
@@ -577,7 +587,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `burndown-full`
 **Triggers:** "finish the burndown", "it stopped halfway", "apply this everywhere", "complete the refactor across all files", "make sure nothing was missed", "ran out of steam", "half-migrated repo", "/burndown-full"
 **What it does:** Drive a planned change to 100% coverage when a prior agent run stopped early. Defines MATCH/DONE searchable patterns, enumerates the full repo-wide worklist (not the plan's file list), executes in small batches with persistent `.cursor/burndown-state.md`, and loops a verification gate (fresh grep → zero hits, typecheck, lint, test, build) until provably complete. Framework-agnostic — discovers project verification commands from package.json/Makefile/AGENTS.md.
-**Related:** `complete-everything`, `composer-2.5-execution`, `plan-*` skills (audit-only), `workflow-refactor`
+**Related:** `complete-everything`, `composer-2.5-execution`, `audit-gate-logic`, `audit-codemod-safety`, `plan-*` skills (audit-only), `workflow-refactor`
 
 #### `complete-everything`
 **Triggers:** "complete everything", "don't defer", "fix out of scope too", "finish the whole plan", "close every TODO", "finish all follow-ups", "no deferrals", "/complete-everything"
@@ -587,7 +597,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `workflow-green-repo`
 **Triggers:** "make the repo green", "get CI passing", "fix all the failing tests", "clear the typecheck errors", "zero lint errors", "make the build pass", "clean up the baseline", "/green-repo"
 **What it does:** Drive an entire repository to a verified-green baseline — typecheck, lint, tests, and build all passing from a clean run — when fixing pre-existing debt is explicitly authorized. Discovers the real gate commands, captures the baseline, enumerates every failure into `.cursor/green-repo-state.md`, fixes root causes in batches (never skip/`.only`/`@ts-ignore`/blanket-snapshot to force green), and proves green with a fresh from-scratch run. Distinct from `complete-everything` (one plan's scope) and `burndown-full` (one searchable pattern).
-**Related:** `complete-everything`, `burndown-full`, `verification-before-completion`, `completion-judge`, `debug-error`
+**Related:** `complete-everything`, `burndown-full`, `audit-gate-logic`, `verification-before-completion`, `completion-judge`, `debug-error`
 
 #### `workflow-feedback-to-closure`
 **Triggers:** "triage this feedback", "turn these reports into tickets", "process the bug backlog", "handle these review comments", "close the loop on QA findings", "manage incoming issues", "/feedback-to-closure"
@@ -661,7 +671,7 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 **Triggers:** "is this ready to ship?", "quality gate", "pre-release checklist", "what do I need to fix before launch?", "ship-readiness check", "run the quality gate"
 **What it does:** Pre-release go/no-go. Sequences: adversarial red team (`test-red-team`) → static security review (`audit-security`) → bundle size (`audit-bundle-size`) → Core Web Vitals (`audit-performance`) → unit test coverage (`test-unit`). Produces a single GO / NO-GO / GO WITH CONDITIONS verdict with a ranked defect list.
 **Chain:** `test-red-team` → `audit-security` → `audit-bundle-size` → `audit-performance` → `test-unit`
-**Related:** `test-red-team`, `audit-security`, `audit-bundle-size`, `audit-performance`, `test-unit`
+**Related:** `test-red-team`, `audit-security`, `audit-bundle-size`, `audit-performance`, `test-unit`, `audit-gate-logic`
 
 #### `workflow-launch-ready`
 **Triggers:** "prepare for launch", "launch week", "everything before going live", "is the app launch-ready?", "pre-launch sweep", "ship it to the world", "launch prep"
@@ -716,7 +726,7 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 
 ---
 
-## Commands (43)
+## Commands (45)
 
 Commands fall into two groups: **standalone** (full playbook in the file) and **pointer** (thin slash entry delegating to a skill).
 
@@ -748,6 +758,8 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/uiux` | `audit-responsive`, `audit-ui-states`, `audit-uiux-design-system`, `audit-ux`, `enhance-web-ui`, `enhance-web-ux` | Audit + enhance UI/UX |
 | `/responsive-audit` | `audit-responsive` | Linearized layout / breakpoint IA — desktop is not a wide phone |
 | `/skill-conflicts` | `audit-skill-conflicts` | Pack self-audit — contradictions, trigger overlap, stale refs |
+| `/gate-logic` | `audit-gate-logic` | CI gate logic — silent bypass, ratchet gaming, conflicting conditions |
+| `/codemod-safety` | `audit-codemod-safety` | Codemod / bulk-transform behavior-preservation |
 | `/uiux-plan` | `plan-uiux-unification` | Full UI/UX unification plan (audit only, no fixes) |
 | `/grill-me` | `grilling` | One-question-at-a-time interview to align before building |
 | `/handoff` | `handoff` | Compact the conversation into a handoff doc for a fresh session |
@@ -897,6 +909,12 @@ After approval: `backend-patterns`, `db-migrator`, `backend-observability`, prov
 
 #### After adding a batch of skills
 `audit-skill-conflicts` → `meta-skill-creator` (description rewrites first)
+
+#### Gate soundness vs pipeline cost
+`audit-gate-logic` (does the gate stop what it claims) × `audit-cicd` (is the pipeline cheap/fast/safe to run)
+
+#### Bulk transform slipped past CI
+`audit-codemod-safety` → `audit-gate-logic` (if size defeated review) → `plan-test-coverage` / `test-visual-regression`
 
 #### Native RN Ship Loop
 `mobile-emulator-start` → `mobile-emulator-test` → `workflow-pr` → `deploy-verify`

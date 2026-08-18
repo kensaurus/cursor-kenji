@@ -254,6 +254,16 @@ const promotionResult = applyFileRules(promotionPath, "docs/PROMOTION.md", [
     to: `cursor-kenji (${count} skills, ${commandCount} commands, ${agentCount} subagents)`,
   },
   {
+    name: "promotion auto-activate",
+    re: /One install, \d+ skills auto-activate/g,
+    to: `One install, ${count} skills auto-activate`,
+  },
+  {
+    name: "promotion article title",
+    re: /Title: \d+ Cursor AI Skills That Match/g,
+    to: `Title: ${count} Cursor AI Skills That Match`,
+  },
+  {
     name: "promotion subagents",
     re: /\d+ subagents/g,
     to: `${agentCount} subagents`,

@@ -113,7 +113,9 @@ These chain multiple skills into a single tracked loop:
 | `will it handle launch traffic?` | Load test — p95/p99 and the breaking point |
 | `works locally but not in prod` | Env/config parity across local / staging / prod |
 | `why is my hosting bill high?` | Egress, storage, zombie resources — plan cuts that keep backups |
-| `/privacy-plan` `/backup-plan` `/aso-plan` `/skill-conflicts` | Slash shortcuts for those same jobs |
+| `why did a regression pass CI?` | Gate-logic audit — silent bypass, ratchet gaming, required-but-not |
+| `did this codemod break anything?` | Bulk-transform behavior-preservation — compiles/lints is not same-behavior |
+| `/privacy-plan` `/backup-plan` `/aso-plan` `/skill-conflicts` `/gate-logic` `/codemod-safety` | Slash shortcuts for those same jobs |
 
 Full phrase list → [TRIGGER-CHEATSHEET.md](TRIGGER-CHEATSHEET.md).
 

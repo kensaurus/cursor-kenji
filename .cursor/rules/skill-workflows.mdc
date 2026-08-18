@@ -69,6 +69,8 @@ with `/goal`.
 | Mobile IAP / subscriptions | `audit-monetization-iap` |
 | Static security review (OWASP; may fix) | `audit-security` |
 | CI/CD cost, speed & safety (GitHub Actions bill) | `audit-cicd` |
+| CI gate *logic* (silent bypass, ratchet gaming, required-but-not) | `audit-gate-logic` |
+| Codemod / bulk-transform behavior-preservation | `audit-codemod-safety` |
 | JS bundle analysis & reduction | `audit-bundle-size` |
 | Core Web Vitals & performance | `audit-performance` |
 | Database schema health | `audit-db-schema` |

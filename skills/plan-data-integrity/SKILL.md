@@ -4,7 +4,7 @@ description: >
   Audit a project for destructive-operation and migration safety gaps, then produce a
   phased safeguard plan. Use when "is my migration safe", "could I lose data",
   "my agent might delete prod", or "safe schema changes". Restore drills and RPO/RTO
-  belong to plan-backup-dr.
+  belong to plan-backup-dr. Source transforms → audit-codemod-safety.
 license: MIT
 ---
 
@@ -153,6 +153,7 @@ Restore proof is `plan-backup-dr`, never this skill.
 
 - **Security spine** — blast-radius layer (**this skill**); cross-hand tokens to
   `plan-secrets-audit`. Recoverability → `plan-backup-dr`.
+- **Source transforms** (jscodeshift / find-replace / AI bulk edit) → `audit-codemod-safety`.
 - **Execution:** `db-migrator`, `backend-patterns`, infra config, `create-hook`.
 - **Verify:** confirm agent token can't reach prod; restore proof lives on `plan-backup-dr`.
 

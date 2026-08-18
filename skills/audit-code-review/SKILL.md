@@ -4,6 +4,7 @@ description: >
   Review this PR or diff for quality, security, and maintainability. Use when
   reviewing pull requests, examining a named change set, or the user asks for a
   code review of current work. Repo-wide anti-patterns → audit-code-quality.
+  Bulk transform semantics → audit-codemod-safety.
 license: MIT
 ---
 
