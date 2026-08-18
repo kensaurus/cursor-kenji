@@ -10,13 +10,22 @@ license: MIT
 
 # Data-Integrity & Destructive-Op Audit + Safeguard Plan
 
-**Role:** Senior platform engineer + disaster-recovery specialist.
+**Role:** Senior platform engineer (destructive-op + migration safety).
 
 **Task:** Map every path to irreversible data loss, score by irreversibility × reach,
 phase structural safeguards, emit `plan-data-integrity.md`. **Audit & plan only — no
 migrations, tokens, or destructive commands until each phase is approved.**
 
 **Find what could wipe prod. Gate it. Change nothing until approved.**
+
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **plan-data-integrity** (this) | Prevent irreversible loss — unguarded deletes, unsafe migrations, backups the agent can also wipe |
+| `plan-backup-dr` | Can you restore? RPO/RTO, drill evidence |
+| `audit-db-schema` | Schema design quality |
+| `plan-rls-audit` | Who can read/write which rows |
 
 In a widely reported 2026 incident, an AI agent deleted a startup's entire production
 database — *and every backup* — in seconds. Four structural failures: **overprivileged
@@ -62,11 +71,10 @@ only question is: *"what here could destroy data, and what stops it?"*
 - **Run straight against prod** — no staging dry-run.
 - **Supabase specifics** — prod-linked CLI without branch/preview check.
 
-### C · Backup blast radius
-- **Backups in same blast radius** as production — same credentials can delete both.
-- **No immutable / air-gapped backup.**
-- **Untested restore** — RPO/RTO undefined.
-- **Stale-only fallback** — note if latest restorable backup is months old.
+### C · Backup blast radius (prevent-wipe only)
+- **Backups in the same blast radius** as production — same credentials can delete both.
+- Hand restore drills, RPO/RTO, and "can we recover" to `plan-backup-dr`. This
+  section only asks: can the same identity that wipes prod also wipe the backups?
 
 ### D · Privilege & isolation (least privilege)
 - **Overprivileged tokens** — destructive scope when only read/narrow write needed.
@@ -119,7 +127,7 @@ _No destructive command is run for any reason._
 |----------|-------|-----------|
 | Critical | n | irreversible prod loss, no gate, backups in blast radius |
 | High     | n | unbackfilled drop, over-scoped token |
-| Medium   | n | no rollback path, untested restore |
+| Medium   | n | no rollback path |
 
 ## Findings
 | # | Operation / location | Data at risk | Reversible? | Gated? | Sev | Direction |
@@ -131,12 +139,12 @@ _No destructive command is run for any reason._
 ## Phased burndown
 - **Phase 1 — Gates & isolation** → infra/RBAC config — D1, D2 (make catastrophe impossible)
 - **Phase 2 — Migration safety** → `db-migrator` — backfill steps, transactions, rollbacks
-- **Phase 3 — Backup blast-radius gates** → hand restore drills / RPO to `plan-backup-dr`; this phase only ensures backups are not on the same volume the agent can wipe
+- **Phase 3 — Backup blast-radius gates** → isolate backups from the agent identity; restore drills / RPO stay on `plan-backup-dr`
 - **Phase 4 — Least-privilege sweep** → infra + `plan-secrets-audit` — token scoping
 
 ## Execution handoff
-Approve a phase to run it. Test restore into an isolated env (never overwrite
-prod). Confirm the agent identity cannot delete backups.
+Approve a phase to run it. Confirm the agent identity cannot delete backups.
+Restore proof is `plan-backup-dr`, never this skill.
 ```
 
 ---

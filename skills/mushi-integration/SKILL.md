@@ -214,7 +214,7 @@ Look for:
 | 1. Bug capture | `mushi test` → `reports` row | ✅ / ❌ | |
 | 2. AI triage | `classify-report` → severity/category | ✅ / ❌ | |
 | 3. Story mapping | `story-mapper` → `inventory_proposals` | ✅ / ❌ | |
-| 4. TDD generation | `test-gen-from-story` → `qa_stories` | ✅ / ❌ | |
+| 4. TDD generation | Mushi edge fn `test-gen-from-story` → `qa_stories` | ✅ / ❌ | |
 | 5. Approval + run | `qa-story-runner` → `qa_story_runs` | ✅ / ❌ | |
 | 6. PDCA improve | `pdca-runner` → `qa_stories (source=pdca)` | ✅ / ❌ | |
 
@@ -227,5 +227,5 @@ Any ❌ → the relevant edge function failed. Run the mushi MCP `diagnose_setup
 
 - **Fastest smoke test:** Stages 1–2 only. Takes ~60 s and confirms bug capture + triage is alive.
 - **Story map only:** Stage 3. Useful after changing the Firecrawl key or updating the `story-mapper` function.
-- **TDD-only check:** Stages 4–6. Run this after changing `test-gen-from-story` or `pdca-runner`.
+- **TDD-only check:** Stages 4–6. Run this after changing the Mushi edge functions `test-gen-from-story` or `pdca-runner`.
 - **Browserbase vs Firecrawl:** Stage 5 uses `firecrawl_actions` by default. To test Browserbase: set `provider = 'browserbase'` on the QA story in the console first.

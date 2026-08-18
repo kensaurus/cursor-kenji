@@ -4,6 +4,27 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.19.1] — 2026-08-18
+
+Routing pass from `audit-skill-conflicts` (no new skills). Description carve-outs
+so overlapping triggers pick one owner; `audit-*` is no longer claimed as
+universally read-only; dangling `mobile-mobile-*` refs fixed; `/test` and `/uiux`
+routers expanded; `check-skill-refs` gate added to `npm test` and CI.
+
+### Changed
+
+- Skill descriptions now name a single owner for LLM quality vs security, RLS/secrets vs the OWASP plan, UI/motion/housekeep, QA vs stubs, and third-party name-gating.
+- `audit-*` default remains present-then-stop. Audit-and-fix exceptions: `audit-responsive`, `audit-code-quality`, `audit-performance`, `audit-security`, `audit-i18n`, `audit-bundle-size` (plus `enhance-email-deliverability`).
+- `/test` routes `test-load` and `test-visual-regression`. `/uiux` holds the enhance surface router.
+- `plan-data-integrity` / `/integrity-plan` no longer own restore drills (those stay on `plan-backup-dr`).
+- `workflow-spec-tdd` no longer references `mobile-mobile-*`.
+
+### Added
+
+- **`check-skill-refs`** — CI gate for doubled-prefix typos and the stale `audit-responsive-layout` alias.
+
+---
+
 ## [1.19.0] — 2026-08-18
 
 Adds the **ops / launch gap pack** (13 skills): product analytics, UI state matrix, LLM attack surface, IAP, env parity, infra cost, visual + load tests, privacy/DR/ASO plans, email deliverability, and a pack self-audit. Skips the pack's `audit-responsive-layout` — already shipped as `audit-responsive` in 1.18.0. `audit-llm-security` is new (source tarball was missing that file).

@@ -41,5 +41,7 @@ jobs:
         run: node scripts/scan-secrets.mjs --self-test
       - name: MCP pin check
         run: node scripts/check-mcp-pins.mjs
+      - name: Skill cross-ref check (doubled prefixes / stale aliases)
+        run: node scripts/check-skill-refs.mjs --self-test && node scripts/check-skill-refs.mjs
       - name: Install smoke test (files preserved, --skill works)
         run: node scripts/test-install.mjs

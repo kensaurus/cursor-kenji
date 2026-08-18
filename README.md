@@ -139,7 +139,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 
 | Family | Count | In one sentence |
 |:-------|------:|:----------------|
-| 🔍 Audit — look before you change | **26** | Check the codebase — security, UX, analytics, IAP, the skill pack… |
+| 🔍 Audit — inspect; some then fix | **26** | Check the codebase — security, UX, analytics, IAP, the skill pack… |
 | 📋 Plan — audit first, change only after you approve | **20** | Write a fix plan you approve before any code changes |
 | 🎨 Enhance — improve what already exists | **13** | Polish UI, forms, motion, SEO, PWA, email deliverability |
 | ✨ Design — build something new | **10** | Create new UI, APIs, emails, themes from scratch |
@@ -162,7 +162,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 
 #### Full list (every skill)
 
-### 🔍 Audit — look before you change (26)
+### 🔍 Audit — inspect; some then fix (26)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -171,39 +171,39 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `audit-backend-architecture` | Read-only audit AND decision advisor for backend/distributed-systems architecture, topology-gated so a Next.js/Supabase monolith and a… |
 | `audit-bundle-size` | Analyse and shrink JavaScript bundle size for any web app |
 | `audit-cicd` | Audit CI/CD pipelines (GitHub Actions) for cost, speed, and safety |
-| `audit-code-quality` | Detect and fix code anti-patterns, and audit codebase consistency |
-| `audit-code-review` | Review code for quality, security, and maintainability following best practices |
+| `audit-code-quality` | Detect and fix repo-wide anti-patterns and consistency drift (naming, organisation, repeated smells) |
+| `audit-code-review` | Review this PR or diff for quality, security, and maintainability |
 | `audit-db-schema` | Audit database schema for consistency, validation, and industry standards |
 | `audit-env-parity` | Read-only audit of config/env parity across dev, staging, and prod — missing or misnamed vars, drifted flags, hardcoded values, secrets… |
-| `audit-fe-api` | Audit frontend API calls against backend implementation for any project |
+| `audit-fe-api` | Audit frontend API calls against backend implementation for contract alignment and network shape |
 | `audit-i18n` | Audit and fix internationalisation for any web or mobile app |
 | `audit-infra-cost` | Read-only audit of hosting, database, storage, egress, and serverless spend (Supabase, Vercel, S3/R2, edge) |
 | `audit-langfuse-llm` | Run a PDCA quality audit on LLM/AI features: traces, prompts, costs, evals, grounding, hallucination |
 | `audit-llm-security` | Read-only OWASP LLM Top 10 audit of app-facing AI features: prompt injection, data leak, supply chain, poisoning, unsafe output, excessive… |
 | `audit-monetization-iap` | Read-only audit of mobile IAP and subscriptions — StoreKit 2, Play Billing, or RevenueCat — for server receipt validation, restore,… |
-| `audit-payment-system` | Read-only audit for payment/money-movement systems, scope-gated so a simple Stripe-Checkout site and an in-house ledger/gateway each see… |
-| `audit-performance` | Audit and optimize application performance |
+| `audit-payment-system` | Read-only audit for payment/money-movement systems, scope-gated so a Stripe-Checkout site and an in-house ledger each see only relevant… |
+| `audit-performance` | Audit and optimize application runtime performance (Core Web Vitals, slow code, load time) |
 | `audit-realworld` | Audit a full-stack app against the RealWorld ("Conduit") reference — its formal API spec, shared Bruno/Hurl E2E suite, and closest-stack… |
 | `audit-resilience` | Read-only audit for the non-functional "20%" AI agents systematically skip: timeouts, retries with backoff+jitter, circuit breakers,… |
-| `audit-responsive` | Audit and fix linearized mobile layouts at every breakpoint — desktop is not a wide phone |
-| `audit-security` | Audit code for security vulnerabilities and best practices |
+| `audit-responsive` | Audit-and-fix linearized mobile layouts at every breakpoint — desktop is not a wide phone |
+| `audit-security` | Static OWASP review of app code (auth, injection, headers) |
 | `audit-skill-conflicts` | Read-only audit of an agent-skill pack for contradictory directives, overlapping triggers, stale cross-refs, and context bloat |
 | `audit-ui-states` | Read-only audit of unhappy-path UI states vibe-coding skips — empty, loading, error, offline, zero-results, permission, overflow — then… |
 | `audit-uiux-design-system` | Audit visual UI coherency, design token compliance, and component modularity against a design system for any project |
-| `audit-ux` | Audit user experience quality using research-backed frameworks: Nielsen Norman Group's 10 usability heuristics, Intuit Content Design… |
-| `audit-ux-journeys` | Cross-page UX audit for user stories, task completion, and information architecture — the layer audit-ux (per-page heuristics) doesn't cover |
+| `audit-ux` | Per-page UX audit using NN/g heuristics, Intuit microcopy, and Google HEART |
+| `audit-ux-journeys` | Cross-page UX audit for user stories, task completion, and information architecture — the layer audit-ux (per-page heuristics) skips |
 
 ### 📋 Plan — audit first, change only after you approve (20)
 
 | Skill | What it does |
 |:------|:-------------|
-| `plan-aeo-readiness` | Audit a site for answer-engine and generative-engine visibility (citation by ChatGPT, Claude, Perplexity, AI Overviews), then produce a… |
+| `plan-aeo-readiness` | Audit a site for answer-engine / GEO citation readiness (ChatGPT, Perplexity, AI Overviews), then a phased plan |
 | `plan-antislop` | Audit a codebase, UI, or copy for machine-generated tells across prose, visual/UI, code, and structure/IA, then produce a phased de-slop… |
 | `plan-aso` | Audit App Store and Google Play listings for discoverability and conversion — keywords, localized metadata, screenshots, ratings prompts —… |
 | `plan-backup-dr` | Audit whether a project can actually recover from data loss — not just whether backups exist — then emit a phased DR plan |
 | `plan-capacitor-hardening` | Audit a Capacitor/Ionic hybrid app for native-layer security gaps, then produce a phased hardening plan |
 | `plan-data-integrity` | Audit a project for destructive-operation and migration safety gaps, then produce a phased safeguard plan |
-| `plan-dependency-provenance` | Audit dependencies for hallucinated or slopsquatted packages, supply-chain risk, and licensing/provenance gaps, then produce a phased… |
+| `plan-dependency-provenance` | Audit dependencies for hallucinated or slopsquatted packages, supply-chain risk, and licensing gaps, then a remediation plan |
 | `plan-docs-sync` | Audit documentation against actual code behavior and plan corrections — no rewrites in this pass |
 | `plan-error-handling` | Audit a codebase for silent failures, swallowed exceptions, and observability gaps across Sentry and Langfuse, then produce a phased fix… |
 | `plan-input-validation` | Audit every trust boundary for unvalidated input, injection, and forged-request gaps, then produce a phased hardening plan |
@@ -212,11 +212,11 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `plan-perf-audit` | Measure-don't-guess performance audit across web, mobile, backend, and data layers — produces burndown and optimization plan with no fixes… |
 | `plan-privacy-compliance` | Audit real personal-data flows against the privacy policy and GDPR / Japan APPI / store privacy labels, then emit a phased plan |
 | `plan-rls-audit` | Audit a Supabase/Postgres project for Row-Level Security and access-control gaps, then produce a phased remediation plan |
-| `plan-secrets-audit` | Audit a codebase and git history for exposed credentials and mis-scoped keys, then produce a phased rotation-and-remediation plan |
-| `plan-security-audit` | OWASP Top 10 security audit with Supabase-first methodology — RLS pass, bundle/secret scan, auth-path tracing, dependency CVEs |
-| `plan-stub-checker` | Exhaustive audit for stubs, dead buttons, fake/placeholder components, unwired handlers, dead links, orphans, and severed integrations —… |
+| `plan-secrets-audit` | Audit the working tree and git history for exposed credentials and mis-scoped keys, then a rotate-vs-relocate plan |
+| `plan-security-audit` | OWASP Top 10 + Supabase-first hardening burndown (auth paths, dependency CVEs) |
+| `plan-stub-checker` | Exhaustive audit for stubs, dead buttons, fake components, unwired handlers, and dead links — then a wiring plan, no implementation |
 | `plan-test-coverage` | User-story-driven test coverage audit and plan — no test writing in this pass |
-| `plan-uiux-unification` | Exhaustive, non-destructive UI/UX and design-system audit that produces a burndown and unification plan — no code changes until each phase… |
+| `plan-uiux-unification` | Non-destructive UI/UX and design-system audit that emits a unification burndown — no code until each phase is approved |
 
 ### 🎨 Enhance — improve what already exists (13)
 
@@ -225,15 +225,15 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `enhance-agent-guardrails` | Install guardrails-as-code into a repo so AI/vibe-coding can't keep reintroducing the same classes of problems (leaked secrets, injection,… |
 | `enhance-capacitor-ui` | Cross-surface UIUX separation skill for hybrid web apps that ship as PWA + iOS + Android via Capacitor (or Tauri / Expo Web / Ionic /… |
 | `enhance-email-deliverability` | Audit and fix transactional/marketing deliverability — SPF, DKIM, DMARC, reputation, bounce/complaint handling, list hygiene, unsubscribe… |
-| `enhance-motion` | Audit an existing app's design system and current motion, then apply coherent, performant, accessible motion using the right-sized 2026… |
+| `enhance-motion` | Audit an existing app's design system and motion, then apply a coherent, performant, reduced-motion-safe pass |
 | `enhance-pwa` | Add or upgrade PWA features to any web app: service worker, offline mode, install prompt, push notifications, and background sync |
 | `enhance-readme` | Turn a plain-text README into a visually rich showcase with a theme-aware hero image, a feature tour grid, an optional animated guided-tour… |
-| `enhance-web-forms` | Build or upgrade web forms to production quality: accessible structure (labels, fieldsets, autocomplete, correct input types),… |
+| `enhance-web-forms` | Build or upgrade web forms to production quality: accessible structure, schema-driven validation, client↔server parity |
 | `enhance-web-landing` | Build landing pages, portfolios, and marketing sites that don't look AI-generated |
 | `enhance-web-redesign` | Upgrades existing websites and apps to premium quality |
 | `enhance-web-seo` | Audit and fix SEO for any web app |
-| `enhance-web-ui` | Artistic, research-grounded UI enhancement skill for making an existing page feel intentional, spacious, and human-crafted |
-| `enhance-web-ux` | Generative, NN/g-grounded page enhancement skill |
+| `enhance-web-ui` | Artistic, research-grounded UI enhancement for making an existing page feel intentional, spacious, and human-crafted |
+| `enhance-web-ux` | NN/g-grounded page enhancement for flows and semantic data wiring — not visual polish |
 | `enhance-web-web3d` | Add 3D and scroll-driven motion to an existing website or web app — Three.js / React Three Fiber for the scene, GSAP ScrollTrigger for… |
 
 ### ✨ Design — build something new (10)
@@ -246,7 +246,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `design-frontend` | Create distinctive, production-grade frontend interfaces that avoid generic AI aesthetics |
 | `design-generative-art` | Create algorithmic art using p5.js, Canvas API, or SVG with seeded randomness and interactive parameters |
 | `design-mobile-first` | Design mobile-first UIs: touch targets, safe areas, gestures, then enhance up |
-| `design-motion` | Design and implement purposeful motion — micro-interactions, page transitions, scroll animations, and hover effects — using Framer Motion,… |
+| `design-motion` | Design and implement new isolated motion — micro-interactions, page transitions, scroll, hover — with Framer Motion, CSS, or GSAP |
 | `design-prd` | Generate Product Requirements Documents through structured conversation for any project |
 | `design-system` | Build and maintain cohesive design systems and component libraries with tokens, theming, and documented variants |
 | `design-theme` | Apply cohesive visual themes to artifacts (slides, docs, landing pages) |
@@ -289,7 +289,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 
 | Skill | What it does |
 |:------|:-------------|
-| `housekeep-design` | Consolidate a design system that has drifted across many vibe-coding sessions and developer handoffs into one single source of truth |
+| `housekeep-design` | Apply-now consolidation of a drifted design system into one token/component SSOT |
 
 ### 🔗 Workflows — multi-step recipes (18)
 
@@ -299,7 +299,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `workflow-coding-discipline` | Apply behavioral guardrails when writing, editing, refactoring, or debugging code |
 | `workflow-environment-ready` | Prove the working environment is actually runnable before starting a long or autonomous task, so a multi-hour run does not fail at the… |
 | `workflow-feature-flag` | Plan and execute a disciplined feature-flag rollout for any app |
-| `workflow-feedback-to-closure` | Turn raw feedback — bug reports, user complaints, review comments, Sentry issues, QA findings, audit/red-team output — into deduplicated,… |
+| `workflow-feedback-to-closure` | Turn raw feedback — bug reports, review comments, Sentry, QA, audit output — into deduplicated durable tickets and drive each to verified… |
 | `workflow-fix-and-ship` | Complete bug-fix lifecycle in one sweep: triage production signals (Sentry / logs) → reproduce → fix (debug-error) → verify full-stack… |
 | `workflow-git-commit` | Generate clear, descriptive commit messages following conventional commits format |
 | `workflow-green-repo` | Drive an entire repository to a fully green baseline — typecheck, lint, tests, and build all passing from a clean checkout — when the user… |
@@ -320,7 +320,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 |:------|:-------------|
 | `test-load` | Design and run a k6/Artillery load profile that measures throughput, latency percentiles, error rate, and the breaking point under… |
 | `test-playwright` | Close the PDCA loop on the work you just did |
-| `test-qa` | Generic webapp QA fallback — use only when no project-specific QA skill applies (project-local QA skills take precedence; use… |
+| `test-qa` | Generic webapp QA fallback — use only when no project-specific QA skill applies (project-local QA wins; native builds →… |
 | `test-red-team` | Adversarial red-team of a running web, React Native, or Capacitor hybrid app |
 | `test-unit` | Write effective unit tests with best practices for any project |
 | `test-visual-regression` | Set up Playwright screenshot baselines and CI diffing so UI changes fail pixel-by-pixel instead of by eye |
@@ -364,9 +364,9 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 
 | Skill | What it does |
 |:------|:-------------|
-| `thirdparty-emil-design-eng` | Third-party skill — Emil Kowalski's design engineering philosophy (UI polish, component design, animation craft) |
-| `thirdparty-ui-ux-pro-max` | Third-party skill — design intelligence for professional UI/UX (the full style catalog, palettes, typography, UX guidelines) |
-| `thirdparty-web-interface-guidelines` | Third-party skill — reviews UI code for Vercel Web Interface Guidelines compliance (accessibility, focus, forms, animation, performance,… |
+| `thirdparty-emil-design-eng` | Third-party skill — Emil Kowalski's design-engineering notes (animation craft, Sonner-style components) |
+| `thirdparty-ui-ux-pro-max` | Third-party skill — searchable style catalog, palettes, typography, and UX guidelines via Python scripts |
+| `thirdparty-web-interface-guidelines` | Third-party skill — Vercel Web Interface Guidelines compliance (focus, forms, animation, copy) |
 
 ### 🧩 Core & cross-cutting (7)
 

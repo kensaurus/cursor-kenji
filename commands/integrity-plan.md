@@ -6,9 +6,10 @@ argument-hint: "[path or scope]"
 # Data Integrity Plan
 
 Run the **`plan-data-integrity`** skill: audit for destructive-operation and
-data-loss risk (unsafe migrations, missing backups, unguarded deletes), then
-produce a safeguard plan. **Audit and plan only — run no migrations and add no
-tokens until the plan is approved.**
+data-loss risk (unsafe migrations, unguarded deletes, backups in the same
+blast radius as prod). Restore drills and RPO/RTO stay on `/backup-plan`.
+**Audit and plan only — run no migrations and add no tokens until the plan is
+approved.**
 
 Emit findings ranked by severity with locations and a phased safeguard
 checklist. After approval, execute with `db-migrator` and `backend-patterns`.

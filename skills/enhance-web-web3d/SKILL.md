@@ -8,20 +8,7 @@ description: >
 license: MIT
 ---
 
-> ### Which enhance skill? (surface router)
->
-> | Your surface | Use |
-> |:-------------|:----|
-> | **Web** product page / dashboard — composition, hierarchy, spacing, motion | `enhance-web-ui` |
-> | **Web** product page — UX heuristics, flows, data wiring | `enhance-web-ux` |
-> | **Web** landing / marketing / portfolio (greenfield, anti-slop) | `enhance-web-landing` |
-> | **Web** existing site upgrade (audit-first, preserve behavior) | `enhance-web-redesign` |
-> | **Web** 3D / WebGL / cinematic scroll on an existing site (audit-first) | `enhance-web-web3d` |
-> | **React Native** screen (Expo / bare) | `mobile-rn-screen` |
-> | **Capacitor / hybrid** shell (one web app shipped to iOS + Android) | `enhance-capacitor-ui` (axis architecture first) → then the web or rn skill |
-> | Repo **README** showcase | `enhance-readme` |
->
-> **You are here: `enhance-web-web3d`.** Native iOS/Android (SwiftUI / Compose, no web layer) is out of scope for all of these — use Apple HIG / Material directly.
+> Surface router: `/uiux`. You are here: `enhance-web-web3d`. Native iOS/Android (SwiftUI / Compose, no web layer) is out of scope — use Apple HIG / Material directly.
 
 # Enhance Web with 3D & Cinematic Motion
 

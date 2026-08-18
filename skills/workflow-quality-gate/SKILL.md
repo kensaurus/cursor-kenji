@@ -28,6 +28,11 @@ class. The combined result is a single verdict.
 Run gates in order — earlier gates often surface issues that make later gates
 redundant or change their scope.
 
+**Plan-only fork:** if the user asked for a burndown and no code changes,
+replace Gate 2 with `plan-security-audit` (and `plan-rls-audit` /
+`plan-secrets-audit` when those are the symptom). `audit-security` may
+fix inline; do not use it when the user said plan-only.
+
 ---
 
 ## Gate 1: Red team (read test-red-team)

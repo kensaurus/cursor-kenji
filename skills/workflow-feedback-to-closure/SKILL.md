@@ -1,10 +1,10 @@
 ---
 name: workflow-feedback-to-closure
 description: >
-  Turn raw feedback — bug reports, user complaints, review comments, Sentry issues, QA
-  findings, audit/red-team output — into deduplicated, durable, trackable tickets and
-  drive each. Use when "triage this feedback", "turn these reports into tickets", "process
-  the bug backlog", "handle these review comments", "close the.
+  Turn raw feedback — bug reports, review comments, Sentry, QA, audit output —
+  into deduplicated durable tickets and drive each to verified closure. Use when
+  "triage this feedback", "turn these reports into tickets", "process the bug
+  backlog", or "close the loop".
 license: MIT
 ---
 

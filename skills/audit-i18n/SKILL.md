@@ -9,6 +9,8 @@ license: MIT
 
 # audit-i18n — Natural, Human-Sounding Translations
 
+> **Audit-and-fix exception.** Find bad copy, then fix it. Not present-then-stop.
+
 **Translations that read like machine output erode user trust** — especially in
 the user's own language. A Japanese user reading stiff, over-literal English
 translated to Japanese can feel it immediately. This skill finds every unnatural,

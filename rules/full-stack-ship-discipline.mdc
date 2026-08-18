@@ -1,5 +1,5 @@
 ---
-description: Ship the backend with the frontend — every feature is full-stack until verified end-to-end, and database changes must reach the remote DB before the chat ends. Attach when a change reads or writes data, RPCs, tables, policies, buckets, or secrets.
+description: Ship the backend with the frontend — every feature is full-stack until verified end-to-end, and database changes must reach the remote DB before the chat ends. Attach when implementing a change that reads or writes data, RPCs, tables, policies, buckets, or secrets. Do not attach during plan-* or present-then-stop audit passes.
 alwaysApply: false
 ---
 
@@ -28,6 +28,9 @@ is never deployed, the live API 404s, and the bug masquerades as a UI issue.
 5. **Never re-ask before deploying schema the user asked to ship; always ask
    before mutating production data** (`DELETE` / `TRUNCATE` / `UPDATE` on
    real rows).
+6. **Do not attach during a present-then-stop pass.** If the active skill is
+   `plan-*` or a read-only `audit-*`, emit findings/plan only — do not
+   `apply_migration` or deploy until the user approves a phase.
 
 Done means: remote objects verified to exist, anon + authenticated paths
 exercised, migration file on disk, and the frontend observed hitting a 200 —

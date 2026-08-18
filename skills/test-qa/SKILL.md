@@ -1,10 +1,11 @@
 ---
 name: test-qa
 description: >
-  Generic webapp QA fallback — use only when no project-specific QA skill applies
-  (project-local QA skills take precedence; use mobile-emulator-test for native builds).
-  Use when asked to "QA the app", "test the app", "find bugs", "run QA", "test CRUD",
-  "smoke test", "check for dead buttons", or "test like a real user".
+  Generic webapp QA fallback — use only when no project-specific QA skill
+  applies (project-local QA wins; native builds → mobile-emulator-test). Use
+  when "QA the app", "test CRUD", "smoke test", or "test like a real user".
+  Dead-button inventory → plan-stub-checker. Pixel diffs →
+  test-visual-regression.
 license: MIT
 ---
 

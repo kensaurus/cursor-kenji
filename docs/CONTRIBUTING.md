@@ -16,7 +16,7 @@ Naming: `<prefix>-<topic>`, lowercase, hyphens only. 15 prefixes:
 
 | Prefix | Purpose |
 |:-------|:--------|
-| `audit-` | Quality/security assessments (present-then-stop) |
+| `audit-` | Findings; default present-then-stop. Audit-and-fix exceptions: `audit-responsive`, `audit-code-quality`, `audit-performance`, `audit-security`, `audit-i18n`, `audit-bundle-size` |
 | `plan-` | Audit + burndown — **no edits until the user approves** |
 | `backend-` | Server-side patterns (DB, observability, realtime) |
 | `data-` | Pipelines, ETL, visualization |
@@ -281,7 +281,7 @@ When adding a new skill, also update:
 - `docs/PLAN-LOOPS.md` + a `/…-plan` command if it is a `plan-*` skill
 - `docs/GETTING-STARTED.md` / README use-case table if a newcomer would type that phrase
 
-Then say **"audit my skills"** (`audit-skill-conflicts`) so overlapping descriptions and stale handoffs get caught. Per-file spec lint (`npm run validate:skills`) cannot see those.
+Then say **"audit my skills"** (`audit-skill-conflicts`) so overlapping descriptions and stale handoffs get caught. Per-file spec lint (`npm run validate:skills`) cannot see those. `npm run check:skill-refs` fails CI on doubled-prefix typos (`mobile-mobile-*`) and stale `audit-responsive-layout` aliases.
 - Brief description
 
 ### Updating README.md

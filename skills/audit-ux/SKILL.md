@@ -1,10 +1,10 @@
 ---
 name: audit-ux
 description: >
-  Audit user experience quality using research-backed frameworks: Nielsen Norman Group's
-  10 usability heuristics, Intuit Content Design System for microcopy, Google's HEART
-  metrics. Use when evaluating usability, reviewing user flows, auditing microcopy,
-  checking UX heuristics, assessing cognitive load, reviewing.
+  Per-page UX audit using NN/g heuristics, Intuit microcopy, and Google HEART.
+  Use when evaluating usability, auditing microcopy, checking UX heuristics, or
+  assessing cognitive load. Cross-page flows/IA → audit-ux-journeys.
+  Layout/breakpoints → audit-responsive. Empty/error states → audit-ui-states.
 license: MIT
 ---
 

@@ -1,14 +1,23 @@
 ---
 name: plan-dependency-provenance
 description: >
-  Audit dependencies for hallucinated or slopsquatted packages, supply-chain risk, and
-  licensing/provenance gaps, then produce a phased remediation plan. Use when the user
-  says "check my dependencies", "is this package real", "slopsquatting", "audit my supply
-  chain", "license check", "SBOM", or "did the AI hallucinate a.
+  Audit dependencies for hallucinated or slopsquatted packages, supply-chain
+  risk, and licensing gaps, then a remediation plan. Use when "check my
+  dependencies", "is this package real", "slopsquatting", "SBOM", or "did the AI
+  hallucinate a package".
 license: MIT
 ---
 
 # Dependency Provenance & Supply-Chain Audit + Remediation Plan
+
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **plan-dependency-provenance** (this) | Slopsquatting / SBOM / license plan |
+| `plan-security-audit` | OWASP umbrella burndown |
+| `workflow-housekeep` | Apply dependency updates after approval |
+
 
 **Role:** Senior supply-chain engineer + open-source compliance specialist.
 

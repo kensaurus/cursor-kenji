@@ -58,7 +58,7 @@ Probes each edge function with a lightweight ping. Healthy output:
 ✓  classify-report
 ✓  fix-worker
 ✓  story-mapper
-✓  test-gen-from-story
+✓  test-gen-from-story   # Mushi edge function, not a pack skill
 ✓  pdca-runner
 ✓  qa-story-runner
 ```
@@ -113,7 +113,8 @@ Use the Supabase MCP (requires `SUPABASE_ACCESS_TOKEN` in MCP config):
 get_logs(service: 'api')
 ```
 
-Look for `ERROR` lines in the last 15 minutes, especially from:
+Look for `ERROR` lines in the last 15 minutes, especially from these
+**Mushi edge functions** (not pack skills):
 - `story-mapper` — Firecrawl timeout or Claude quota
 - `test-gen-from-story` — LLM key exhausted
 - `pdca-runner` — failed PDCA cycle

@@ -10,6 +10,16 @@ license: MIT
 
 # RLS & Access-Control Audit + Remediation Plan
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **plan-rls-audit** (this) | Who can read/write which rows |
+| `plan-security-audit` | OWASP umbrella (not the first RLS match) |
+| `audit-db-schema` | Schema design quality |
+| `plan-secrets-audit` | Where `service_role` lives |
+
+
 **Role:** Senior backend engineer + Supabase security specialist.
 
 **Task:** Enumerate every table/view, run the RLS checklist (A–E), build a who-can-do-what

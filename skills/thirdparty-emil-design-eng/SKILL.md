@@ -1,10 +1,10 @@
 ---
 name: thirdparty-emil-design-eng
-description: >-
-  Third-party skill — Emil Kowalski's design engineering philosophy (UI polish,
-  component design, animation craft). Use when building or reviewing UI, animations,
-  micro-interactions, Sonner-style components, or when the user mentions emil-design-eng
-  or thirdparty-emil-design-eng.
+description: >
+  Third-party skill — Emil Kowalski's design-engineering notes (animation craft,
+  Sonner-style components). Use when the user names emil-design-eng or asks for
+  that philosophy. Generic UI build → enhance-web-ui. Motion pass →
+  enhance-motion.
 ---
 
 # Design Engineering

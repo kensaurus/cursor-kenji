@@ -10,6 +10,15 @@ license: MIT
 
 # Mobile Store-Readiness Audit + Pre-Submission Plan
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **plan-mobile-readiness** (this) | Store submission mechanics |
+| `plan-aso` | Listing keywords / conversion |
+| `plan-privacy-compliance` | Privacy labels vs real collection |
+
+
 **Role:** Senior mobile release engineer + store-compliance specialist.
 
 **Task:** Inventory build/config/listing against checklist A–E, map gaps to store

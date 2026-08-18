@@ -17,7 +17,7 @@ Current npm version: see [npm package page](https://www.npmjs.com/package/@kensa
 
 | Directory | URL | Status |
 |-----------|-----|--------|
-| **npm** | https://www.npmjs.com/package/@kensaurus/cursor-kenji | Live @ 1.19.0 |
+| **npm** | https://www.npmjs.com/package/@kensaurus/cursor-kenji | Live @ 1.19.1 |
 | **GitHub** | https://github.com/kensaurus/cursor-kenji | Source of truth |
 | **Cursor Marketplace** | https://cursor.com/marketplace | Publisher application submitted — awaiting review |
 | **cursor.directory** | https://cursor.directory/plugins/cursor-kenji | Submitted — pending security scan |

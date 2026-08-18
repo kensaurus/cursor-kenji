@@ -1,10 +1,10 @@
 ---
 name: design-motion
 description: >
-  Design and implement purposeful motion — micro-interactions, page transitions, scroll
-  animations, and hover effects — using Framer Motion, CSS animations, and GSAP. Use when
-  the user says "add animation", "make it feel alive", "micro-interaction", "page
-  transition", "scroll animation", "hover effect", or "motion.
+  Design and implement new isolated motion — micro-interactions, page
+  transitions, scroll, hover — with Framer Motion, CSS, or GSAP. Use when adding
+  one animation to a new surface. Existing-app coherent pass → enhance-motion.
+  Do not fire for "motion pass across the app".
 license: MIT
 ---
 

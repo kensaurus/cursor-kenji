@@ -26,13 +26,22 @@ for the plan-loop sequences.
 - Drive the whole repo to green → `workflow-green-repo`
 - Finish a partial burndown to 100% → `burndown-full`
 - Close a plan with zero deferrals → `complete-everything`
+- Preflight the environment → `workflow-environment-ready`
+- Feedback to durable tickets → `workflow-feedback-to-closure`
+- Feature-flag rollout → `workflow-feature-flag`
+- Convert an agent failure into a guard → `iterate-agent-harness`
 
 ## Use an individual skill when scoped to one phase
 
-Names are predictable: `audit-*` (read-only findings), `plan-*` (audit →
-approved burndown, no fixes), `enhance-*` (apply improvements), `test-*`,
-`debug-*`, `deploy-*`, `design-*`, `backend-*`, `mobile-*`. State the task;
-the matching skill self-selects by description.
+Names are predictable: `plan-*` (audit → approved burndown, no fixes),
+`audit-*` (findings; default present-then-stop), `enhance-*` (apply
+improvements), `test-*`, `debug-*`, `deploy-*`, `design-*`, `backend-*`,
+`mobile-*`. State the task; the matching skill self-selects by description.
+
+**Audit-and-fix exceptions** (report, then implement): `audit-responsive`,
+`audit-code-quality`, `audit-performance`, `audit-security`, `audit-i18n`,
+`audit-bundle-size`. `enhance-email-deliverability` is also audit-and-fix.
+Do not treat those as present-then-stop.
 
 ## Closure modes
 

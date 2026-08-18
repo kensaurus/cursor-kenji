@@ -33,7 +33,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 ### Enhance
 
 #### `enhance-web-ui`
-**Triggers:** "make this page nicer", "more polished", "more beautiful", "less crowded", "less AI-generated", "better laid out", "typography", "visual hierarchy", "empty/dead space", "fades", "microinteractions", "density"
+**Triggers:** "make this page nicer", "more polished", "more beautiful", "less crowded", "better laid out", "typography", "visual hierarchy", "empty/dead space", "fades", "microinteractions", "density"
 **What it does:** Composition before decoration — fix hierarchy, grouping, alignment, rhythm. Subtract clutter, group related items, soften scroll cuts, animate purposefully. Generic across web stacks.
 **Related:** `enhance-web-ux`, `audit-responsive`, `audit-uiux-design-system`, `design-frontend`
 
@@ -83,12 +83,12 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Related:** `enhance-capacitor-ui`, `mobile-capacitor-platform`, `audit-performance`
 
 #### `enhance-motion`
-**Triggers:** "add motion", "animate the app", "make it feel alive", "motion pass", "add micro-interactions across the app", "enhance-motion"
+**Triggers:** "motion pass", "animate the app", "add micro-interactions across the app", "enhance-motion"
 **What it does:** Audits the existing design system + current motion, then applies coherent, reduced-motion-safe, 60fps motion using the right-sized 2026 stack — CSS/tw-animate-css for utility transitions, Auto-Animate for zero-config list/layout changes, Motion (motion.dev) for component transitions/gestures/presence, GSAP only for complex timelines. Defines a motion-token SSOT (durations/easings). Distinct from `design-motion` (from-scratch cookbook). Applies changes and verifies via playwright-cli.
 **Related:** `design-motion`, `audit-uiux-design-system`, `audit-performance`, `audit-accessibility`, `housekeep-design`
 
 #### `housekeep-design`
-**Triggers:** "clean up the design system", "resolve design conflicts", "our UI is inconsistent across pages", "consolidate tokens/components", "streamline the design system", "keep the design SSOT", "housekeep-design"
+**Triggers:** "clean up the design system now", "migrate to one button", "resolve token conflicts", "housekeep-design"
 **What it does:** Consolidates a design system that has drifted across many sessions/devs into one source of truth. Detects competing tokens, duplicate components, naming drift, mixed icon libraries, and arbitrary values; reconciles each conflict to a best-of-both canonical form; migrates all usages via mechanical codemod; and installs lint guardrails so drift can't recur. Establishes a 3-layer W3C token taxonomy. The execution arm of `plan-uiux-unification`; the design counterpart of `workflow-housekeep`.
 **Related:** `plan-uiux-unification`, `audit-uiux-design-system`, `enhance-agent-guardrails`, `burndown-full`, `enhance-motion`, `design-system`
 
@@ -222,9 +222,9 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Related:** `audit-performance`, `audit-bundle-size`, `backend-db-performance`, `mobile-rn-performance`
 
 #### `plan-security-audit`
-**Triggers:** "security audit plan", "OWASP audit plan", "RLS audit", "Supabase security review", "hardening plan", "secrets scan plan", "plan security fixes", "security burndown"
-**What it does:** OWASP Top 10 audit with Supabase-first methodology (RLS pass, service_role bundle scan, auth-path trace, CVE deps). Plan only — no patches, no destructive testing. Never pastes secret values. Top classes: tables without RLS, service_role in client, permissive policies.
-**Related:** `audit-security`, `audit-db-schema`, `test-red-team`, `plan-stub-checker`
+**Triggers:** "security audit plan", "OWASP audit plan", "hardening plan", "plan security fixes", "security burndown"
+**What it does:** OWASP Top 10 + Supabase-first hardening burndown (auth paths, dependency CVEs). Plan only — no patches, no destructive testing. Table RLS → `plan-rls-audit`. Key rotation → `plan-secrets-audit`. App LLM attacks → `audit-llm-security`.
+**Related:** `audit-security`, `plan-rls-audit`, `plan-secrets-audit`, `test-red-team`
 
 #### `plan-docs-sync`
 **Triggers:** "docs drift", "sync docs with code", "audit documentation", "stale README", "onboarding docs broken", "doc sync plan", "phantom docs", "docs out of date"
@@ -237,7 +237,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Related:** `test-unit`, `workflow-spec-tdd`, `test-playwright`, `plan-stub-checker`
 
 #### `design-motion`
-**Triggers:** "animation", "transition", "micro-interaction", "motion", "animate", "hover effect", "scroll animation", "page transition", "make it interactive", "fun interactions", "playful UI", "gamification", "delightful", "Easter eggs"
+**Triggers:** "add one animation", "hover effect on this button", "page transition on this screen", "isolated micro-interaction". Existing-app pass → `enhance-motion`.
 **What it does:** Framer Motion, CSS animations, GSAP. Covers entrance/exit, staggered lists, scroll-triggered effects, layout animations. Includes delight patterns (bouncy buttons, magnetic elements, confetti, Konami code). Always respects `prefers-reduced-motion`.
 **Related:** `design-frontend`, `enhance-web-web3d`
 
@@ -325,14 +325,14 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Related:** `audit-security`, `deploy-verify`, `workflow-pr`, `create-hook`, `audit-infra-cost`
 
 #### `audit-performance`
-**Triggers:** "slow", "performance", "LCP", "INP", "CLS", "bundle size", "loading time", "optimize", "Web Vitals", "lighthouse score"
-**What it does:** Core Web Vitals assessment (LCP, INP, CLS), bundle analysis, network optimization, JavaScript/CSS performance, React 19+ optimizations, image optimization.
-**Related:** `backend-db-performance`, `design-mobile-first`
+**Triggers:** "slow page", "LCP/INP/CLS", "optimize performance", "Web Vitals", "lighthouse score"
+**What it does:** Audit-and-fix runtime performance (Core Web Vitals, slow code, load time). JS payload → `audit-bundle-size`. Concurrent breaking point → `test-load`. Timeouts/retries → `audit-resilience`.
+**Related:** `audit-bundle-size`, `test-load`, `audit-resilience`, `backend-db-performance`
 
 #### `audit-security`
-**Triggers:** "security", "vulnerability", "XSS", "CSRF", "SQL injection", "auth", "RLS", "secrets", "security headers"
-**What it does:** OWASP Top 10 review, authentication flow audit, RLS policy verification, secrets management, CSP headers, input validation, rate limiting assessment.
-**Related:** `backend-patterns`, `design-api`
+**Triggers:** "review security", "check vulnerabilities", "audit auth code", "OWASP", "security headers"
+**What it does:** Static OWASP review of app code (auth, injection, headers). May fix inline. Plan-only burndown → `plan-security-audit`. Table RLS → `plan-rls-audit`. Key rotation → `plan-secrets-audit`. LLM attacks → `audit-llm-security`.
+**Related:** `plan-security-audit`, `plan-rls-audit`, `plan-secrets-audit`, `audit-llm-security`
 
 #### `audit-accessibility`
 **Triggers:** "accessible", "WCAG", "ADA", "a11y", "screen reader", "disability"
@@ -340,7 +340,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Related:** `design-frontend`, `audit-uiux-design-system`
 
 #### `audit-db-schema`
-**Triggers:** "schema review", "database audit", "naming conventions", "RLS audit", "migration check", "index audit", "constraint check"
+**Triggers:** "schema review", "database audit", "naming conventions", "migration check", "index audit", "constraint check"
 **What it does:** Audit database schema for consistency, validation, and industry standards. Auto-detects database type, ORM, migration tool. Uses Supabase MCP for live inspection, Firecrawl for best practices, Context7 for ORM docs.
 **Related:** `backend-db-performance`, `audit-security`
 
@@ -370,7 +370,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Related:** `audit-resilience`, `audit-security`, `audit-db-schema`, `audit-backend-architecture`, `plan-data-integrity`, `plan-secrets-audit`, `backend-patterns`, `data-pipeline`, `audit-monetization-iap`, `complete-everything`
 
 #### `audit-langfuse-llm`
-**Triggers:** "audit LLM", "check Langfuse", "audit prompts", "check AI quality", "LLM PDCA", "audit AI costs", "check traces", "audit eval scores", "check hallucination"
+**Triggers:** "audit LLM quality", "check Langfuse", "audit prompts", "check AI quality", "LLM PDCA", "audit AI costs", "check traces", "audit eval scores", "check hallucination"
 **What it does:** PDCA quality audit for LLM/AI features via Langfuse CLI, Sentry, Supabase, Playwright, and Firecrawl. Audits traces, prompts, costs, evals. Performs live verification and grounding/hallucination checks.
 **Related:** `deploy-verify`, `debug-sentry-monitor`, `backend-observability`, `audit-llm-security`, `plan-llm-cost-guardrails`
 
@@ -415,7 +415,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Related:** `design-system`, `audit-accessibility`, `audit-ux`, `audit-responsive`
 
 #### `audit-ux`
-**Triggers:** "UX audit", "usability review", "heuristic evaluation", "content audit", "interaction design review", "user flow analysis", "UX quality", "check cognitive load", "audit microcopy"
+**Triggers:** "UX audit", "usability review", "heuristic evaluation", "content audit", "UX quality", "check cognitive load", "audit microcopy"
 **What it does:** Research-driven UX audit — Nielsen Norman Group's 10 heuristics, Laws of UX, Intuit Content Design, Google HEART metrics. playwright-cli for live walkthrough, Firecrawl for research, Sequential Thinking for complex flow analysis. Per-page experience lens — for cross-page journeys use `audit-ux-journeys`; for linearized desktop / breakpoint layout use `audit-responsive`.
 **Related:** `audit-ux-journeys`, `audit-responsive`, `audit-uiux-design-system`, `audit-accessibility`, `enhance-web-ux`
 
@@ -468,7 +468,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Related:** `workflow-spec-tdd`, `test-qa`
 
 #### `test-qa`
-**Triggers:** "QA the app", "test the app", "find bugs", "test before release", "run QA", "test CRUD", "test data pipeline", "check for dead buttons", "pre-release testing", "smoke test"
+**Triggers:** "QA the app", "test the app", "find bugs", "test before release", "run QA", "test CRUD", "test data pipeline", "pre-release testing", "smoke test"
 **What it does:** Full-app QA via playwright-cli. Auto-discovers pages, features, data entities, auth patterns. Performs real CRUD with data pipeline verification (FE → API → DB → FE), audits UX quality, tests edge cases.
 **Related:** `test-unit`, `test-playwright`, `protocol-browser-anti-stall`
 
@@ -767,7 +767,7 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/aso-plan` | `plan-aso` | App Store / Play listing ASO plan (plan only) |
 | `/stub-plan` | `plan-stub-checker` | Stub/dead-link/fake-component audit + wiring plan (no fixes) |
 | `/perf-plan` | `plan-perf-audit` | Performance audit + optimization plan (no fixes) |
-| `/security-plan` | `plan-security-audit` | Security/OWASP/RLS audit + hardening plan (no fixes) |
+| `/security-plan` | `plan-security-audit` | Security/OWASP hardening plan (no fixes; RLS → `/rls-plan`) |
 | `/docs-plan` | `plan-docs-sync` | Docs drift audit + sync plan (no rewrites) |
 | `/test-plan` | `plan-test-coverage` | User-story test coverage audit + plan (no tests written) |
 | `/update-deps` | `workflow-housekeep` (Phase 3) | Audit and update dependencies safely |
@@ -919,19 +919,19 @@ See [THIRD-PARTY-SKILLS.md](./THIRD-PARTY-SKILLS.md) for attribution and update 
 Upstream-maintained skills vendored with `thirdparty-` prefix. Each includes `ATTRIBUTION.md`. See [CONTRIBUTING.md](./CONTRIBUTING.md) for update policy.
 
 #### `thirdparty-emil-design-eng`
-**Triggers:** "animation craft", "emil design", "micro-interactions", "Sonner-style", "design engineering", "thirdparty-emil-design-eng"
-**What it does:** Emil Kowalski's design engineering philosophy — animation decision framework, component polish, performance rules, review checklist with Before/After tables.
+**Triggers:** "emil-design-eng", "emil design", "thirdparty-emil-design-eng", "Sonner-style components"
+**What it does:** Emil Kowalski's design-engineering notes (animation craft, Sonner-style components). Name-gated — not a generic UI or motion pass.
 **Upstream:** [emilkowalski/skills](https://github.com/emilkowalski/skills)
-**Related:** `thirdparty-web-interface-guidelines`, `motion-design`, `enhance-page-ui`
+**Related:** `thirdparty-web-interface-guidelines`, `design-motion`, `enhance-web-ui`
 
 #### `thirdparty-ui-ux-pro-max`
-**Triggers:** "ui ux pro max", "design system generator", "landing page design", "color palette", "typography pairing", "thirdparty-ui-ux-pro-max"
+**Triggers:** "ui-ux-pro-max", "thirdparty-ui-ux-pro-max", "look up a palette from the pro-max catalog"
 **What it does:** Generates tailored design systems via Python search scripts (`scripts/search.py`). 67 styles, palettes, typography, stack-specific guidelines.
 **Upstream:** [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill)
 **Related:** `design-system`, `design-frontend`, `thirdparty-web-interface-guidelines`
 
 #### `thirdparty-web-interface-guidelines`
-**Triggers:** "Vercel guidelines", "web interface guidelines", "review UI compliance", "thirdparty-web-interface-guidelines"
+**Triggers:** "Vercel guidelines", "web interface guidelines", "thirdparty-web-interface-guidelines"
 **What it does:** Reviews UI code against Vercel Web Interface Guidelines — accessibility, focus, forms, animation, performance, navigation, copy. Terse file:line output.
 **Upstream:** [vercel-labs/web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines) · [vercel.com/design/guidelines](https://vercel.com/design/guidelines)
 **Related:** `audit-accessibility`, `audit-uiux-design-system`, `thirdparty-emil-design-eng`

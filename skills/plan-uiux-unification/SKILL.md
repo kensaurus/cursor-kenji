@@ -1,10 +1,10 @@
 ---
 name: plan-uiux-unification
 description: >
-  Exhaustive, non-destructive UI/UX and design-system audit that produces a burndown and
-  unification plan — no code changes until each phase is approved. Use when asked to
-  "audit UI without fixing", "UI burndown", "unify the design system", "design system
-  consolidation", "IA audit before redesign", or "UI/UX unification.
+  Non-destructive UI/UX and design-system audit that emits a unification
+  burndown — no code until each phase is approved. Use when "audit UI without
+  fixing", "UI burndown", or "IA audit before redesign". Apply-now token cleanup
+  → housekeep-design. Per-page heuristics → audit-ux.
 license: MIT
 ---
 

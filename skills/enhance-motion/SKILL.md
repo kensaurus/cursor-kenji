@@ -1,10 +1,10 @@
 ---
 name: enhance-motion
 description: >
-  Audit an existing app's design system and current motion, then apply coherent,
-  performant, accessible motion using the right-sized 2026 stack — CSS/tw-animate-css for
-  utility. Use when "add motion", "animate the app", "make it feel alive", "motion pass",
-  "add micro-interactions across the app", or "enhance-motion".
+  Audit an existing app's design system and motion, then apply a coherent,
+  performant, reduced-motion-safe pass. Use when "motion pass", "animate the
+  app", or "add micro-interactions across the app". One new isolated animation →
+  design-motion.
 license: MIT
 ---
 

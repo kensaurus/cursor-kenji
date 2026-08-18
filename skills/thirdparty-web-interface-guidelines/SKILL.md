@@ -1,10 +1,10 @@
 ---
 name: thirdparty-web-interface-guidelines
-description: >-
-  Third-party skill — reviews UI code for Vercel Web Interface Guidelines compliance
-  (accessibility, focus, forms, animation, performance, copy). Use when auditing
-  interfaces, reviewing UI PRs, or when the user mentions Vercel guidelines,
-  web interface guidelines, or /thirdparty-web-interface-guidelines.
+description: >
+  Third-party skill — Vercel Web Interface Guidelines compliance (focus, forms,
+  animation, copy). Use when the user names Vercel guidelines, web interface
+  guidelines, or /thirdparty-web-interface-guidelines. Generic a11y →
+  audit-accessibility.
 ---
 
 # Web Interface Guidelines

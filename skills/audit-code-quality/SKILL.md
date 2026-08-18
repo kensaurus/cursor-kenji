@@ -1,14 +1,16 @@
 ---
 name: audit-code-quality
 description: >
-  Detect and fix code anti-patterns, and audit codebase consistency. Use when reviewing
-  code quality, fixing anti-patterns, enforcing naming conventions, standardising file
-  organisation, onboarding to a codebase, or when user mentions "code smell",
-  "anti-pattern", "technical debt", "inconsistent", "standardize".
+  Detect and fix repo-wide anti-patterns and consistency drift (naming,
+  organisation, repeated smells). Use when "code smell", "anti-pattern",
+  "technical debt", or "standardize the codebase". This PR/diff review →
+  audit-code-review.
 license: MIT
 ---
 
 # Code Quality Audit
+
+> **Audit-and-fix exception.** Detect and then fix. Not present-then-stop.
 
 Two-in-one: (1) detect and fix React/TypeScript anti-patterns that cause bugs and performance issues, and (2) audit the whole codebase for naming, organisation, and pattern consistency.
 

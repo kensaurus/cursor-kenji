@@ -29,7 +29,7 @@ Skip for: one-line edits, pure formatting, a single obvious fix. Don't ceremony-
 
 ### Phase 0 — Read the room (always first)
 - Read the dependency manifest for exact versions; read the files you'll touch in full.
-- Restate the ask in one sentence and name the surface (web / RN / Capacitor). If the surface has a domain skill (`mobile-mobile-capacitor-platform`, `mobile-mobile-rn-performance`, `enhance-*`), note it.
+- Restate the ask in one sentence and name the surface (web / RN / Capacitor). If the surface has a domain skill (`mobile-capacitor-platform`, `mobile-rn-performance`, `enhance-*`), note it.
 - If the request is genuinely ambiguous, ask **exactly one** clarifying question. Otherwise state your reading and proceed.
 
 ### Phase 1 — Brainstorm (before any code)
@@ -78,7 +78,7 @@ Rules:
 - **Vertical slices, not horizontal.** One test → one implementation → repeat, each test a tracer bullet informed by the last cycle. Writing all tests up front verifies imagined behavior and locks in test structure before the implementation teaches you anything.
 - **No tautological tests.** Expected values come from an independent source of truth (a known-good literal, a worked example, the spec) — never recomputed the same way the code computes them, or the test passes by construction.
 - **The refactor-breaks-test tell.** If a test breaks when you refactor but behavior hasn't changed, it was implementation-coupled — fix the test's seam, don't patch the assertion.
-- Surface-specific runners: web → vitest/jest/playwright; RN → jest + RNTL, `mobile-emulator-test` for device; Capacitor → vitest + `mobile-mobile-capacitor-platform` E2E.
+- Surface-specific runners: web → vitest/jest/playwright; RN → jest + RNTL, `mobile-emulator-test` for device; Capacitor → vitest + `mobile-capacitor-platform` E2E.
 
 ### Phase 5 — Self-review (gate before "done")
 Run this checklist. If any box fails, you are not done:
@@ -109,5 +109,5 @@ Run this checklist. If any box fails, you are not done:
 ## Composes with
 - `workflow-coding-discipline` — behavioral guardrails (this skill operationalizes them).
 - `full-stack-ship-discipline` — Phase 5 backend-deploy gate.
-- `mobile-mobile-capacitor-platform` / `mobile-mobile-rn-performance` / `enhance-*` — surface domain knowledge for the plan.
+- `mobile-capacitor-platform` / `mobile-rn-performance` / `enhance-*` — surface domain knowledge for the plan.
 - `test-playwright` / `mobile-emulator-test` / `test-unit` — the verification runners for Phase 4–5.

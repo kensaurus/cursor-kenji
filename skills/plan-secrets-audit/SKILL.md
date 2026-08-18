@@ -1,14 +1,24 @@
 ---
 name: plan-secrets-audit
 description: >
-  Audit a codebase and git history for exposed credentials and mis-scoped keys, then
-  produce a phased rotation-and-remediation plan. Use when the user says "check for
-  hardcoded secrets", "are my API keys exposed", "did I commit a key", "secret scan", "is
-  my .env safe", "rotate keys", or is hardening before launch or.
+  Audit the working tree and git history for exposed credentials and mis-scoped
+  keys, then a rotate-vs-relocate plan. Use when "hardcoded secrets", "did I
+  commit a key", "secret scan", "is my .env safe", or "rotate keys". Do not fire
+  for "RLS audit" or generic "security burndown".
 license: MIT
 ---
 
 # Secrets & Key-Scope Audit + Rotation Plan
+
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **plan-secrets-audit** (this) | Rotate vs relocate leaked keys |
+| `plan-security-audit` | OWASP umbrella (not the first secrets match) |
+| `plan-rls-audit` | Table access control |
+| `audit-env-parity` | Env/config drift |
+
 
 **Role:** Senior security engineer (credential exposure + key scoping).
 

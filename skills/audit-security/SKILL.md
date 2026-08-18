@@ -1,13 +1,16 @@
 ---
 name: audit-security
 description: >
-  Audit code for security vulnerabilities and best practices. Use when reviewing security,
-  checking for vulnerabilities, auditing auth code, or when the user mentions security
-  concerns.
+  Static OWASP review of app code (auth, injection, headers). Use when "review
+  security", "check vulnerabilities", or "audit auth code". May fix inline.
+  Plan-only burndown → plan-security-audit. Table RLS → plan-rls-audit. LLM
+  attacks → audit-llm-security.
 license: MIT
 ---
 
 # Security Audit Skill
+
+> **Audit-and-fix exception.** May fix inline. Plan-only burndown → `plan-security-audit`.
 
 Systematic security review for any web application. Research-driven, using current OWASP guidelines.
 

@@ -1,28 +1,15 @@
 ---
 name: enhance-web-ui
 description: >
-  Artistic, research-grounded UI enhancement skill for making an existing page feel
-  intentional, spacious, and human-crafted. Use when the user asks to make a page nicer,
-  more polished, more premium, more editorial, less crowded, less AI-generated, better
-  laid out or balanced, or mentions typography, visual hierarchy.
+  Artistic, research-grounded UI enhancement for making an existing page feel
+  intentional, spacious, and human-crafted. Use when "make this page
+  nicer/polished/premium/editorial", less crowded, better laid out, typography,
+  or visual hierarchy. Flows/AI-templated UX → enhance-web-ux. Layout contract →
+  audit-responsive.
 license: MIT
 ---
 
-> ### Which enhance skill? (surface router)
->
-> | Your surface | Use |
-> |:-------------|:----|
-> | **Web** product page / dashboard — composition, hierarchy, spacing, motion | `enhance-web-ui` |
-> | **Web** linearized desktop / stacked at every breakpoint | `audit-responsive` |
-> | **Web** product page — UX heuristics, flows, data wiring | `enhance-web-ux` |
-> | **Web** landing / marketing / portfolio (greenfield, anti-slop) | `enhance-web-landing` |
-> | **Web** existing site upgrade (audit-first, preserve behavior) | `enhance-web-redesign` |
-> | **Web** 3D / WebGL / cinematic scroll on an existing site (audit-first) | `enhance-web-web3d` |
-> | **React Native** screen (Expo / bare) | `mobile-rn-screen` |
-> | **Capacitor / hybrid** shell (one web app shipped to iOS + Android) | `enhance-capacitor-ui` (axis architecture first) → then the web or rn skill |
-> | Repo **README** showcase | `enhance-readme` |
->
-> **You are here: `enhance-web-ui`.** Native iOS/Android (SwiftUI / Compose, no web layer) is out of scope for all of these — use Apple HIG / Material directly.
+> Surface router: `/uiux`. You are here: `enhance-web-ui`. Native iOS/Android (SwiftUI / Compose, no web layer) is out of scope — use Apple HIG / Material directly.
 
 # Enhance Page UI
 

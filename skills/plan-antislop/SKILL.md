@@ -10,6 +10,15 @@ license: MIT
 
 # Anti-Slop Audit + Authenticity Burndown Plan
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **plan-antislop** (this) | Authenticity / slop burndown (plan only) |
+| `enhance-web-ui` / `enhance-web-ux` | Apply polish after the plan |
+| `plan-uiux-unification` | Design-system + IA unification |
+
+
 **Role:** Senior editor + product designer + staff engineer (authenticity lens).
 
 **Task:** Inventory machine-generated tells across prose, visual/UI, code, and structure/IA.

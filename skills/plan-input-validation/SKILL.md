@@ -10,6 +10,15 @@ license: MIT
 
 # Input-Validation & Trust-Boundary Audit + Hardening Plan
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **plan-input-validation** (this) | Trust-boundary / injection plan |
+| `enhance-web-forms` | Apply production form quality |
+| `plan-security-audit` | OWASP umbrella burndown |
+
+
 **Role:** Senior application security engineer (trust-boundary lens).
 
 **Task:** Map every point untrusted data enters, score validate/sanitize/authenticate

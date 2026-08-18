@@ -50,11 +50,24 @@ with `/goal`.
 | Drive app as real user, fix inline | `test-playwright` |
 | Comprehensive QA with CRUD verification | `test-qa` |
 | Write unit/integration tests | `test-unit` |
+| Screenshot baselines / CI pixel diffs | `test-visual-regression` |
+| k6/Artillery breaking point (never unsigned prod) | `test-load` |
 
 ### Audits
+`audit-*` is findings-first. **Audit-and-fix exceptions:** `audit-responsive`, `audit-code-quality`, `audit-performance`, `audit-security`, `audit-i18n`, `audit-bundle-size`. `enhance-email-deliverability` is also audit-and-fix.
+
 | Task | Skill |
 |------|-------|
-| Static security review (OWASP) | `audit-security` |
+| Linearized desktop / breakpoint layout (audit-and-fix) | `audit-responsive` |
+| Empty / loading / error / overflow states | `audit-ui-states` |
+| Pack coherence (skills vs skills) | `audit-skill-conflicts` |
+| LLM quality / Langfuse traces | `audit-langfuse-llm` |
+| OWASP LLM Top 10 (app-facing) | `audit-llm-security` |
+| Analytics taxonomy / consent-gated events | `audit-analytics` |
+| Hosting / egress spend | `audit-infra-cost` |
+| Env/config parity across deploys | `audit-env-parity` |
+| Mobile IAP / subscriptions | `audit-monetization-iap` |
+| Static security review (OWASP; may fix) | `audit-security` |
 | CI/CD cost, speed & safety (GitHub Actions bill) | `audit-cicd` |
 | JS bundle analysis & reduction | `audit-bundle-size` |
 | Core Web Vitals & performance | `audit-performance` |
@@ -81,6 +94,7 @@ with `/goal`.
 | Consolidate a drifted design system into one token SSOT | `housekeep-design` |
 | Production-quality forms (a11y, validation, states, multi-step) | `enhance-web-forms` |
 | Install agent guardrails-as-code (rules, hooks, CI gates, lint) | `enhance-agent-guardrails` |
+| Inbox placement — SPF/DKIM/DMARC (audit-and-fix) | `enhance-email-deliverability` |
 
 ### Plan (audit → approve → execute)
 | Task | Skill |
@@ -88,7 +102,10 @@ with `/goal`.
 | UI/UX + design-system unification plan (no fixes) | `plan-uiux-unification` |
 | Stub/dead-link/fake-component audit + wiring plan (no fixes) | `plan-stub-checker` |
 | Performance audit + optimization plan (no fixes) | `plan-perf-audit` |
-| Security/OWASP/RLS audit + hardening plan (no fixes) | `plan-security-audit` |
+| Security/OWASP hardening plan (no fixes; RLS → `plan-rls-audit`) | `plan-security-audit` |
+| Backup / restore capability + RPO/RTO (no infra edits) | `plan-backup-dr` |
+| Privacy policy vs real collection (GDPR/APPI/labels) | `plan-privacy-compliance` |
+| App Store / Play listing ASO (no metadata edits) | `plan-aso` |
 | Docs drift audit + sync plan (no rewrites) | `plan-docs-sync` |
 | User-story test coverage plan (no tests written) | `plan-test-coverage` |
 | AI slop / authenticity / voice audit + de-slop burndown (no rewrites) | `plan-antislop` |

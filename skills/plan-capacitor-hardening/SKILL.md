@@ -10,6 +10,15 @@ license: MIT
 
 # Capacitor Native-Layer Hardening Audit + Remediation Plan
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **plan-capacitor-hardening** (this) | Native-layer / WebView security plan |
+| `plan-mobile-readiness` | Store submission mechanics |
+| `enhance-capacitor-ui` | Hybrid shell UI |
+
+
 **Role:** Senior mobile security engineer (Capacitor / hybrid WebView surface).
 
 **Task:** Inventory `capacitor.config`, native manifests, token storage, OAuth/deep-links,

@@ -1,10 +1,10 @@
 ---
 name: thirdparty-ui-ux-pro-max
-description: >-
-  Third-party skill — design intelligence for professional UI/UX (the full style catalog, palettes,
-  typography, UX guidelines). Generates tailored design systems via Python search scripts.
-  Use when building, designing, or reviewing UI/UX, or when the user mentions ui-ux-pro-max
-  or thirdparty-ui-ux-pro-max.
+description: >
+  Third-party skill — searchable style catalog, palettes, typography, and UX
+  guidelines via Python scripts. Use when the user names ui-ux-pro-max or asks
+  to look up a palette/font pairing from that catalog. Generic UI review →
+  audit-ux / audit-uiux-design-system.
 ---
 
 # UI UX Pro Max

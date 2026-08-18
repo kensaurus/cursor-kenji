@@ -10,7 +10,9 @@ license: MIT
 
 # audit-bundle-size — Find and Eliminate Bundle Bloat
 
-**Every kilobyte of JavaScript the browser must download, parse, and compile
+> **Audit-and-fix exception.** Measure the payload, then shrink it. Runtime slowness → `audit-performance`.
+
+**Every kilobyte of JavaScript the browser must download, parse, and compile**
 before showing anything costs real users real time.** A large initial bundle is
 the #1 avoidable cause of slow LCP and poor Core Web Vitals. This skill finds
 exactly what is bloating it and tells you how to fix each item.

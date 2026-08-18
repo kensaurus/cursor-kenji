@@ -1,10 +1,10 @@
 ---
 name: audit-accessibility
 description: >
-  Automated WCAG 2.2 accessibility audit using playwright-cli to crawl every page, inject
-  axe-core via eval, test keyboard navigation, check color contrast, ARIA labels, heading.
-  Use when asked to: "audit accessibility", "check a11y", "WCAG audit", "check keyboard
-  nav", "test screen reader", "accessibility compliance".
+  Automated WCAG 2.2 accessibility audit using playwright-cli to crawl every
+  page, inject axe-core via eval, test keyboard navigation, check color
+  contrast, ARIA labels, and heading order. Use when "audit accessibility",
+  "check a11y", "WCAG audit", "check keyboard nav", or "test screen reader".
 license: MIT
 ---
 

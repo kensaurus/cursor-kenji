@@ -1,10 +1,10 @@
 ---
 name: housekeep-design
 description: >
-  Consolidate a design system that has drifted across many vibe-coding sessions and
-  developer handoffs into one single source of truth. Use when "clean up the design
-  system", "resolve design conflicts", "our UI is inconsistent across pages", "consolidate
-  tokens/components", "streamline the design system", "keep the.
+  Apply-now consolidation of a drifted design system into one token/component
+  SSOT. Use after an approved plan-uiux-unification pass, or when "clean up the
+  design system now", "migrate to one button", or "resolve token conflicts".
+  Plan-only burndown → plan-uiux-unification.
 license: MIT
 ---
 

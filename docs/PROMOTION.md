@@ -64,7 +64,7 @@ npx skills add kensaurus/cursor-kenji
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/cursor-kenji
 
-**Status:** [x] Published — `@kensaurus/cursor-kenji@1.19.0` ([npm](https://www.npmjs.com/package/@kensaurus/cursor-kenji))
+**Status:** [x] Published — `@kensaurus/cursor-kenji@1.19.1` ([npm](https://www.npmjs.com/package/@kensaurus/cursor-kenji))
 
 ---
 

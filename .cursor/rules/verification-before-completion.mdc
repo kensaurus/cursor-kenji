@@ -15,6 +15,7 @@ Completion is a claim about observed state, not effort or confidence.
 - Run fresh, applicable checks after the final relevant edit. Changed-file diagnostics alone do not prove project behavior.
 - Later edits invalidate earlier evidence for affected gates. Re-run every invalidated check.
 - A failing check is work to diagnose and repair, not a warning to mention after claiming success.
+- During a present-then-stop `audit-*` or `plan-*` pass, record failing checks as findings. Do not implement fixes unless the user asked to execute.
 - Never delete, skip, narrow, mock away, blanket-update, or silence the behavior under test to obtain green output.
 - If a check is unavailable, report `not run` and the concrete reason. Never translate missing evidence into a pass.
 
