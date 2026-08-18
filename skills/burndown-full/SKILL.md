@@ -141,5 +141,6 @@ Leave `.cursor/burndown-state.md` in place (fully ticked) as an audit trail unle
 - The plan is a hypothesis about scope; the repo is bigger than the plan and bigger than your context window.
 - The checklist file is your memory; the fresh grep is your source of truth. When they disagree, the grep wins.
 - "I edited the files in the plan" is **not** completion. "A from-scratch search for the old pattern returns zero and the project checks clean" is completion.
+- Whether this MATCH/DONE ratchet itself can be gamed (DONE without evidence, count going down) is `audit-gate-logic`. Whether the transform preserved behavior is `audit-codemod-safety`.
 - Work in small batches and persist progress every batch, so a truncated context never costs progress.
 - Never stop early to ask permission to continue. Only stop for (a) a genuine ambiguity needing a human decision, or (b) a verification failure you cannot resolve — and in both cases, report precisely what's left.

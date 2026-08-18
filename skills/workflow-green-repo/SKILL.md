@@ -3,8 +3,8 @@ name: workflow-green-repo
 description: >
   Drive an entire repository to a fully green baseline — typecheck, lint, tests, and build
   all passing from a clean checkout — when the user has explicitly authorized fixing. Use
-  when "make the repo green", "get CI passing", "fix all the failing tests", "clear the
-  typecheck errors", "zero lint errors", "make the build.
+  when "make the repo green", "get CI passing", "fix all the failing tests". Ratchet
+  integrity → audit-gate-logic.
 license: MIT
 ---
 
@@ -137,6 +137,7 @@ if that aids review.
 
 - `complete-everything` — close one plan's connected scope (not the whole repo)
 - `burndown-full` — one searchable pattern to 100% coverage
+- `audit-gate-logic` — whether the green baseline / ratchet can be gamed
 - `verification-before-completion` — evidence levels this skill proves
 - `completion-judge` — independent verdict before a green claim
 - `debug-error` — root-cause a single stubborn failure

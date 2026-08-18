@@ -30,9 +30,11 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "reduce bundle size", "why is the bundle so big", "tree shaking", "code splitting" | `audit-bundle-size` |
 | "code smell", "anti-pattern", "naming conventions", "tech debt" | `audit-code-quality` |
 | "code review", "review this PR", "review this function" | `audit-code-review` |
+| "did this codemod break anything", "audit this bulk refactor", "verify the migration mod", "check the mass find-replace" | `audit-codemod-safety` |
 | "audit database schema", "check my DB design", "naming conventions in DB" | `audit-db-schema` |
 | "audit my API calls", "check frontend API", "FE-BE contract" | `audit-fe-api` |
 | "CI/CD cost", "GitHub Actions bill", "Actions minutes", "runner cost", "workflow cost", "slow CI", "audit my workflows" | `audit-cicd` |
+| "can our CI gates be bypassed", "audit the quality-gate logic", "is our coverage ratchet sound", "why did a regression pass CI", "check for conflicting workflows" | `audit-gate-logic` |
 | "audit i18n", "fix translations", "the Japanese feels like Google Translate", "hardcoded strings" | `audit-i18n` |
 | "audit LLM quality", "check Langfuse", "audit prompts", "check AI quality", "check traces" | `audit-langfuse-llm` |
 | "audit LLM security", "prompt injection", "jailbreak my chatbot", "is my AI safe", "OWASP LLM" | `audit-llm-security` |

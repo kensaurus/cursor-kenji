@@ -4,6 +4,20 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.20.0] — 2026-08-18
+
+### Added
+
+- **`audit-gate-logic`** (`/gate-logic`) — read-only audit of CI/CD *gate logic*: silent bypass, ratchet gaming, conflicting workflow conditions, required-in-name-only checks. Distinct from `audit-cicd` (cost/speed/safety) and `workflow-quality-gate` (which runs gates).
+- **`audit-codemod-safety`** (`/codemod-safety`) — read-only audit of a mechanical source transform for behavior-preservation. Distinct from `audit-code-review` (diff quality) and `plan-data-integrity` (SQL/data migrations).
+
+### Changed
+
+- Neighbor descriptions now carve those owners: `audit-cicd`, `workflow-quality-gate`, `audit-code-review`, `plan-data-integrity`, `enhance-agent-guardrails`, `workflow-green-repo`.
+- `check-skill-count` now rewrites leftover PROMOTION.md count tokens (`One install, N skills`, article title).
+
+---
+
 ## [1.19.1] — 2026-08-18
 
 Routing pass from `audit-skill-conflicts` (no new skills). Description carve-outs
