@@ -24,6 +24,8 @@ const promotionPath = join(repoRoot, "docs", "PROMOTION.md");
 const packagePath = join(repoRoot, "package.json");
 const pluginPath = join(repoRoot, ".cursor-plugin", "plugin.json");
 const llmsPath = join(repoRoot, "llms.txt");
+const gettingStartedPath = join(repoRoot, "docs", "GETTING-STARTED.md");
+const docsReadmePath = join(repoRoot, "docs", "README.md");
 const fix = process.argv.includes("--fix");
 
 const count = readdirSync(skillsDir, { withFileTypes: true })
@@ -164,6 +166,11 @@ function applyReadmeRules(src) {
       to: `The ${planCount} \`plan-*\` skills`,
     },
     {
+      name: "plan skill count generic",
+      re: /\d+ `plan-\*` skills/g,
+      to: `${planCount} \`plan-*\` skills`,
+    },
+    {
       name: "plan skill count bold",
       re: /\*\*\d+ `plan-\*` skills\*\*/g,
       to: `**${planCount} \`plan-*\` skills**`,
@@ -172,6 +179,16 @@ function applyReadmeRules(src) {
       name: "plan prefix taxonomy",
       re: /burndowns \(\d+ skills\)/g,
       to: `burndowns (${planCount} skills)`,
+    },
+    {
+      name: "plan taxonomy execute count",
+      re: /approve before execute \(\d+\)/g,
+      to: `approve before execute (${planCount})`,
+    },
+    {
+      name: "plan slash alias count",
+      re: /\/\*-plan` \(\d+ aliases\)/g,
+      to: `/*-plan\` (${planCount} aliases)`,
     },
   ];
 
@@ -273,6 +290,32 @@ const llmsResult = applyFileRules(llmsPath, "llms.txt", [
     re: /\d+ agent skills, \d+ slash commands, \d+ subagents/g,
     to: `${count} agent skills, ${commandCount} slash commands, ${agentCount} subagents`,
   },
+  {
+    name: "llms plan count",
+    re: /\d+ `plan-\*` audit skills/g,
+    to: `${planCount} \`plan-*\` audit skills`,
+  },
+]);
+
+const gettingStartedResult = applyFileRules(gettingStartedPath, "docs/GETTING-STARTED.md", [
+  {
+    name: "getting-started plan count bold",
+    re: /\*\*\d+ `plan-\*` skills\*\*/g,
+    to: `**${planCount} \`plan-*\` skills**`,
+  },
+  {
+    name: "getting-started planning skills",
+    re: /chain the \d+ planning skills/g,
+    to: `chain the ${planCount} planning skills`,
+  },
+]);
+
+const docsReadmeResult = applyFileRules(docsReadmePath, "docs/README.md", [
+  {
+    name: "docs readme plan count",
+    re: /chain the \d+ `plan-\*` skills/g,
+    to: `chain the ${planCount} \`plan-*\` skills`,
+  },
 ]);
 
 const allMismatches = [
@@ -282,6 +325,8 @@ const allMismatches = [
   ...packageResult.mismatches,
   ...pluginResult.mismatches,
   ...llmsResult.mismatches,
+  ...gettingStartedResult.mismatches,
+  ...docsReadmeResult.mismatches,
 ];
 
 if (fix) {
@@ -291,6 +336,8 @@ if (fix) {
   if (packageResult.src) writeFileSync(packagePath, packageResult.src);
   if (pluginResult.src) writeFileSync(pluginPath, pluginResult.src);
   if (llmsResult.src) writeFileSync(llmsPath, llmsResult.src);
+  if (gettingStartedResult.src) writeFileSync(gettingStartedPath, gettingStartedResult.src);
+  if (docsReadmeResult.src) writeFileSync(docsReadmePath, docsReadmeResult.src);
   console.log(
     `✓ Normalized to ${count} skills (${planCount} plan-*), ${commandCount} commands, and ${agentCount} subagents.`,
   );

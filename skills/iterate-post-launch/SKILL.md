@@ -247,3 +247,9 @@ sentry:update_issue
 - **Ask before deleting or restructuring** — fixes should be surgical.
 - **Schema the user asked for ships; DELETE/UPDATE on real rows asks first.**
 - **Re-test every fix live** — a fix is not done until Playwright confirms it.
+
+## Related
+
+- `audit-analytics` — prove the funnel events this loop iterates on actually fire
+- `test-red-team` / `deploy-verify` / `debug-sentry-monitor` / `test-playwright`
+

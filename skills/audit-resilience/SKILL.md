@@ -124,4 +124,6 @@ rg -n "password|token|secret|email|ssn|card|cvv" -g "*.{ts,tsx,js,py}" | rg -n "
 - `plan-llm-cost-guardrails` — rate limiting + quota abuse for LLM/expensive endpoints
 - `plan-input-validation` — the trust-boundary validation side of hardening
 - `plan-data-integrity` — destructive-op and data-loss protections
+- `test-load` — prove timeouts/retries under concurrent traffic
+- `audit-ui-states` — front-end empty/error/offline rendering
 - `complete-everything` — close the audited gaps to done with verification

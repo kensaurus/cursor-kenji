@@ -84,6 +84,10 @@ These chain multiple skills into a single tracked loop:
 | `red team this app` | Adversarial sweep — UX, data pipeline, security, performance |
 | `make the app feel alive with motion` | Adds coherent, accessible animations that match your design system |
 | `desktop looks like a stretched phone` | Unstacks the layout — max-width, side-by-side groups, hierarchy at 375 / 768 / 1440 |
+| `what happens when this list is empty?` | Empty / loading / error / offline states for every screen |
+| `why do our emails go to spam?` | SPF/DKIM/DMARC and bounce handling so mail lands in the inbox |
+| `can we recover if the database dies?` | Backup + restore plan you approve before any infra change |
+| `why did the wrong skill trigger?` | Finds overlapping descriptions and stale handoffs in the skill pack |
 | `improve this form` | Accessible labels, real validation, error/success states, multi-step flows |
 | `clean up our design system` | Consolidates drifted colors/components into one source of truth |
 | `set up guardrails so AI doesn't break things` | Installs pre-commit + CI checks against secrets, bugs, and risky ops |
@@ -184,7 +188,7 @@ Yes, MIT licensed.
 
 ## Planning skills — audit first, fix after you approve
 
-**17 `plan-*` skills** run **before** you change code. They produce burndowns and phased roadmaps. You approve each phase, then run the matching execution skills.
+**20 `plan-*` skills** run **before** you change code. They produce burndowns and phased roadmaps. You approve each phase, then run the matching execution skills.
 
 **Full guide:** [PLAN-LOOPS.md](PLAN-LOOPS.md) — grouped loops (not one mega-chain):
 
@@ -194,7 +198,8 @@ Yes, MIT licensed.
 | **Pre-launch hardening** | Security spine + dependency provenance |
 | **Observability & spend** | Sentry/Langfuse gaps, LLM cost caps |
 | **Mobile gate** | Capacitor native security, then App Store / Play paperwork |
-| **Growth gate** | Answer-engine (AEO) visibility |
+| **Privacy & recovery** | Store labels / GDPR-APPI; restore drills + RPO/RTO |
+| **Growth gate** | Answer-engine (AEO) visibility + store listing ASO |
 | **Authenticity** | `plan-antislop` — prose/visual/code slop pass |
 
 **Quick start (six-skill loop only):**
@@ -217,7 +222,7 @@ For security or launch prep, see the other loop prompts in [PLAN-LOOPS.md](PLAN-
 
 ## Get help
 
-- [PLAN-LOOPS.md](PLAN-LOOPS.md) — how to chain the 17 planning skills
+- [PLAN-LOOPS.md](PLAN-LOOPS.md) — how to chain the 20 planning skills
 - [AGENTS.template.md](AGENTS.template.md) — project constitution for your app repo
 - [GitHub Issues](https://github.com/kensaurus/cursor-kenji/issues) — bug reports, feature requests
 - [GitHub Discussions](https://github.com/kensaurus/cursor-kenji/discussions) — questions, ideas

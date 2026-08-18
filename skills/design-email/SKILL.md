@@ -3,8 +3,8 @@ name: design-email
 description: >
   Design and implement transactional and marketing email templates. Use when asked to
   "build an email template", "transactional email", "welcome email", "password reset
-  email", "email design", "React Email", "MJML", "dark mode email", "deliverability", "SPF
-  DKIM", "email copy review", or "why is my email in spam".
+  email", "email design", "React Email", "MJML", "dark mode email", or "email copy
+  review". Inbox / SPF / spam → enhance-email-deliverability.
 license: MIT
 ---
 
@@ -13,7 +13,7 @@ license: MIT
 **Email is the one channel users check before they check your app.** A
 well-crafted transactional email — clear, warm, fast-loading, and readable on
 any device — builds trust. A corporate, jargon-heavy, broken email erodes it.
-This skill handles the full stack: design, copy, deliverability.
+This skill handles design and copy. Inbox placement / SPF DKIM DMARC is `enhance-email-deliverability`.
 
 ---
 
@@ -54,11 +54,9 @@ If templates already exist, walk through each one and check:
 - Dark mode support? (`@media (prefers-color-scheme: dark)` + inline fallbacks)
 - Mobile: tap targets ≥ 44px, font size ≥ 14px
 
-**Deliverability**:
-- SPF record configured for the sending domain?
-- DKIM signing enabled at the provider?
-- DMARC policy set?
+**Sender identity (template-side):**
 - "From" address uses the app domain, not a personal Gmail?
+- SPF / DKIM / DMARC / bounces → `enhance-email-deliverability`
 
 ---
 
@@ -281,27 +279,17 @@ supabase functions deploy send-welcome-email --no-verify-jwt
 
 ---
 
-## Phase 6: Deliverability checks
+## Phase 6: Content flags that hurt placement
 
-```json
-firecrawl:firecrawl_search
-{
-  "query": "email deliverability SPF DKIM DMARC setup 2026",
-  "limit": 3,
-  "sources": [{ "type": "web" }]
-}
-```
+DNS auth, bounces, and List-Unsubscribe headers are `enhance-email-deliverability`.
+This phase only owns copy/markup that templates can fix:
 
-Checklist:
-- [ ] SPF record: `TXT @ "v=spf1 include:_spf.resend.com ~all"` (adjust for your provider)
-- [ ] DKIM: enabled in the email provider dashboard, DNS record added
-- [ ] DMARC: `TXT _dmarc "v=DMARC1; p=quarantine; rua=mailto:dmarc@yourdomain.com"`
 - [ ] From address uses your domain (not `noreply@gmail.com`)
 - [ ] Reply-To set if replies should go somewhere useful
-- [ ] List-Unsubscribe header included for bulk/marketing emails
 - [ ] No ALL-CAPS words in subject line
 - [ ] No spam trigger words: "FREE", "URGENT", "ACT NOW", "GUARANTEED"
 - [ ] Plain text version matches the HTML version
+- [ ] Hand remaining inbox-placement work to `enhance-email-deliverability`
 
 ---
 
@@ -350,10 +338,9 @@ Copy:
 - [ ] No jargon or passive voice
 - [ ] Plain text version exists
 
-Deliverability:
-- [ ] SPF configured
-- [ ] DKIM configured
-- [ ] DMARC configured
+Deliverability (handoff — do not own here):
 - [ ] From address on app domain
-- [ ] Unsubscribe link in bulk/marketing emails
+- [ ] Plain-text alternative present
+- [ ] SPF / DKIM / DMARC / bounces / unsubscribe headers → `enhance-email-deliverability`
 ```
+

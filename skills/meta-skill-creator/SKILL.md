@@ -233,3 +233,9 @@ After testing the skill, users may request improvements. Often this happens righ
 2. Notice struggles or inefficiencies
 3. Identify how SKILL.md or bundled resources should be updated
 4. Implement changes and test again
+
+## Related
+
+- `audit-skill-conflicts` — after a batch of skills: contradictions, trigger overlap, stale refs
+- `meta-mcp-builder` — MCP servers, not SKILL.md
+- `enhance-agent-guardrails` — app-repo policy, not pack authoring

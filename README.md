@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Ready-made playbooks for your AI coding editor.</strong><br/>
-  115 agent skills · 39 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
+  128 agent skills · 43 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
   <em>You talk in plain English. The matching expert recipe runs itself.</em>
 </p>
 
@@ -29,7 +29,7 @@ Your AI editor is smart, but without a recipe it **guesses**. Sometimes that gue
 
 You do **not** need to memorize skill names. Talking like a human is enough.
 
-It ships **115 Cursor agent skills**, 39 slash commands, and 6 subagents — tuned for React / Next.js / Supabase, useful on almost any stack. Works in [Cursor](https://cursor.com), [Claude Code](https://www.anthropic.com/claude-code), and (with a lighter install) Codex + Gemini CLI. Brand new? Read the **[plain-language guide →](docs/GETTING-STARTED.md)**.
+It ships **128 Cursor agent skills**, 43 slash commands, and 6 subagents — tuned for React / Next.js / Supabase, useful on almost any stack. Works in [Cursor](https://cursor.com), [Claude Code](https://www.anthropic.com/claude-code), and (with a lighter install) Codex + Gemini CLI. Brand new? Read the **[plain-language guide →](docs/GETTING-STARTED.md)**.
 
 ### Install (30 seconds)
 
@@ -53,6 +53,10 @@ Restart Cursor. Done.
 | *"is this production-ready?"* | `audit-resilience` + `audit-realworld` | Timeouts, retries, parity checks |
 | *"make this page less AI-looking"* | `enhance-web-ui` / `enhance-web-ux` | Cleaner layout, real content hierarchy |
 | *"desktop looks like a phone"* | `audit-responsive` | Unstack the layout at 375 / 768 / 1440 |
+| *"what happens when this list is empty?"* | `audit-ui-states` | Empty / loading / error / offline matrix |
+| *"why do our emails go to spam?"* | `enhance-email-deliverability` | SPF/DKIM/DMARC + bounce hygiene |
+| *"can we recover if the DB dies?"* | `plan-backup-dr` | RPO/RTO + restore-drill plan (approve first) |
+| *"why did the wrong skill trigger?"* | `audit-skill-conflicts` | Overlapping descriptions / stale handoffs in the pack |
 | *"make the forms accessible"* | `enhance-web-forms` | Labels, validation, keyboard-friendly |
 | *"plan a security hardening pass"* | `plan-security-audit` | A burndown **you** approve before edits |
 | *"complete everything"* | `complete-everything` | No parked leftovers — judge verifies "done" |
@@ -70,7 +74,7 @@ Full menu with every skill name → **[Every skill](#every-skill-in-plain-englis
 | **Rule** | A house rule the AI always obeys | Drop a `.mdc` into your project |
 | **MCP server** | A phone line to your database / GitHub / browser | Copy a template + paste your keys |
 
-Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **127** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
+Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **140** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
 
 ### How the recipes fit together (the loop)
 
@@ -105,9 +109,9 @@ The whole kit, at a glance:
 
 | | Count | What it does |
 |:--|------:|:-------------|
-| **Skills** | 115 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
+| **Skills** | 128 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
 | **Cursor Skills** | 12 | IDE tools (canvas, hooks, rules, PR splitter) |
-| **Commands** | 39 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
+| **Commands** | 43 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
 | **Subagents** | 6 | Background helpers (code-reviewer, debugger, db-migrator…) |
 | **Completion hook** | 1 | Opt-in stop gate: continues only unfinished durable closure state |
 | **MCP Servers** | 16 | Supabase · GitHub · Sentry · Playwright · AWS · Slack |
@@ -125,15 +129,15 @@ Scroll the **family counts**, then the **full list**. You don't memorize names �
 
 <!-- SKILL-INDEX:START -->
 
-_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **127 skills** listed below._
+_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **140 skills** listed below._
 
 #### Skill families at a glance
 
 | Family | Count | In one sentence |
 |:-------|------:|:----------------|
-| 🔍 Audit — look before you change | **19** | Check the codebase — security, UX, performance, payments… |
-| 📋 Plan — audit first, change only after you approve | **17** | Write a fix plan you approve before any code changes |
-| 🎨 Enhance — improve what already exists | **12** | Polish UI, forms, motion, SEO, PWA on an existing app |
+| 🔍 Audit — look before you change | **26** | Check the codebase — security, UX, performance, payments… |
+| 📋 Plan — audit first, change only after you approve | **20** | Write a fix plan you approve before any code changes |
+| 🎨 Enhance — improve what already exists | **13** | Polish UI, forms, motion, SEO, PWA on an existing app |
 | ✨ Design — build something new | **10** | Create new UI, APIs, emails, themes from scratch |
 | 🧱 Backend — server & data patterns | **5** | Auth, caching, queues, realtime, observability |
 | 📱 Mobile — React Native / Capacitor | **5** | RN screens, emulators, Capacitor, App Store prep |
@@ -141,7 +145,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | 📚 Docs — write it down clearly | **2** | READMEs, PRDs, RFCs with a reader-first voice |
 | 🧹 Housekeeping — clean up design drift | **1** | Merge a drifted design system into one source of truth |
 | 🔗 Workflows — multi-step recipes | **18** | End-to-end recipes (build, fix, ship, green the repo) |
-| ✅ Test & QA — prove it works | **4** | Unit, Playwright, red-team, QA |
+| ✅ Test & QA — prove it works | **6** | Unit, Playwright, red-team, QA |
 | 🚀 Deploy — ship & verify | **2** | npm release + post-deploy smoke tests |
 | 🐛 Debug — find & fix what's broken | **3** | Errors, Sentry, frontend↔backend mismatches |
 | 🦟 Mushi Mushi — bug triage helpers | **2** | Integrate the Mushi Mushi bug-report pipeline |
@@ -150,40 +154,49 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | 🤝 Third-party (upstream-maintained) | **3** | Vendored upstream skills (Emil, UI/UX Pro Max, Vercel WIG) |
 | 🧩 Core & cross-cutting | **7** | Close everything, burndown, post-launch loops |
 | 🖱️ Cursor IDE skills | **12** | Canvas, hooks, rules, PR splitter, CLI helpers |
-| **Total** | **127** | |
+| **Total** | **140** | |
 
 #### Full list (every skill)
 
-### 🔍 Audit — look before you change (19)
+### 🔍 Audit — look before you change (26)
 
 | Skill | What it does |
 |:------|:-------------|
 | `audit-accessibility` | Automated WCAG 2.2 accessibility audit using playwright-cli to crawl every page, inject axe-core via eval, test keyboard navigation, check… |
+| `audit-analytics` | Read-only audit of product-analytics instrumentation: event taxonomy, funnel completeness, consent-gated firing, dead/duplicate/phantom… |
 | `audit-backend-architecture` | Read-only audit AND decision advisor for backend/distributed-systems architecture, topology-gated so a Next.js/Supabase monolith and a… |
 | `audit-bundle-size` | Analyse and shrink JavaScript bundle size for any web app |
 | `audit-cicd` | Audit CI/CD pipelines (GitHub Actions) for cost, speed, and safety |
 | `audit-code-quality` | Detect and fix code anti-patterns, and audit codebase consistency |
 | `audit-code-review` | Review code for quality, security, and maintainability following best practices |
 | `audit-db-schema` | Audit database schema for consistency, validation, and industry standards |
+| `audit-env-parity` | Read-only audit of config/env parity across dev, staging, and prod — missing or misnamed vars, drifted flags, hardcoded values, secrets… |
 | `audit-fe-api` | Audit frontend API calls against backend implementation for any project |
 | `audit-i18n` | Audit and fix internationalisation for any web or mobile app |
+| `audit-infra-cost` | Read-only audit of hosting, database, storage, egress, and serverless spend (Supabase, Vercel, S3/R2, edge) |
 | `audit-langfuse-llm` | Run a PDCA quality audit on LLM/AI features: traces, prompts, costs, evals, grounding, hallucination |
+| `audit-llm-security` | Read-only OWASP LLM Top 10 audit of app-facing AI features: prompt injection, data leak, supply chain, poisoning, unsafe output, excessive… |
+| `audit-monetization-iap` | Read-only audit of mobile IAP and subscriptions — StoreKit 2, Play Billing, or RevenueCat — for server receipt validation, restore,… |
 | `audit-payment-system` | Read-only audit for payment/money-movement systems, scope-gated so a simple Stripe-Checkout site and an in-house ledger/gateway each see… |
 | `audit-performance` | Audit and optimize application performance |
 | `audit-realworld` | Audit a full-stack app against the RealWorld ("Conduit") reference — its formal API spec, shared Bruno/Hurl E2E suite, and closest-stack… |
 | `audit-resilience` | Read-only audit for the non-functional "20%" AI agents systematically skip: timeouts, retries with backoff+jitter, circuit breakers,… |
 | `audit-responsive` | Audit and fix linearized mobile layouts at every breakpoint — desktop is not a wide phone |
 | `audit-security` | Audit code for security vulnerabilities and best practices |
+| `audit-skill-conflicts` | Read-only audit of an agent-skill pack for contradictory directives, overlapping triggers, stale cross-refs, and context bloat |
+| `audit-ui-states` | Read-only audit of unhappy-path UI states vibe-coding skips — empty, loading, error, offline, zero-results, permission, overflow — then… |
 | `audit-uiux-design-system` | Audit visual UI coherency, design token compliance, and component modularity against a design system for any project |
 | `audit-ux` | Audit user experience quality using research-backed frameworks: Nielsen Norman Group's 10 usability heuristics, Intuit Content Design… |
 | `audit-ux-journeys` | Cross-page UX audit for user stories, task completion, and information architecture — the layer audit-ux (per-page heuristics) doesn't cover |
 
-### 📋 Plan — audit first, change only after you approve (17)
+### 📋 Plan — audit first, change only after you approve (20)
 
 | Skill | What it does |
 |:------|:-------------|
 | `plan-aeo-readiness` | Audit a site for answer-engine and generative-engine visibility (citation by ChatGPT, Claude, Perplexity, AI Overviews), then produce a… |
 | `plan-antislop` | Audit a codebase, UI, or copy for machine-generated tells across prose, visual/UI, code, and structure/IA, then produce a phased de-slop… |
+| `plan-aso` | Audit App Store and Google Play listings for discoverability and conversion — keywords, localized metadata, screenshots, ratings prompts —… |
+| `plan-backup-dr` | Audit whether a project can actually recover from data loss — not just whether backups exist — then emit a phased DR plan |
 | `plan-capacitor-hardening` | Audit a Capacitor/Ionic hybrid app for native-layer security gaps, then produce a phased hardening plan |
 | `plan-data-integrity` | Audit a project for destructive-operation and migration safety gaps, then produce a phased safeguard plan |
 | `plan-dependency-provenance` | Audit dependencies for hallucinated or slopsquatted packages, supply-chain risk, and licensing/provenance gaps, then produce a phased… |
@@ -193,6 +206,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `plan-llm-cost-guardrails` | Audit an LLM-powered app for runaway-cost and quota-abuse exposure, then produce a phased guardrail plan |
 | `plan-mobile-readiness` | Audit a Capacitor/React Native app for App Store and Google Play submission readiness, then produce a phased pre-submission plan |
 | `plan-perf-audit` | Measure-don't-guess performance audit across web, mobile, backend, and data layers — produces burndown and optimization plan with no fixes… |
+| `plan-privacy-compliance` | Audit real personal-data flows against the privacy policy and GDPR / Japan APPI / store privacy labels, then emit a phased plan |
 | `plan-rls-audit` | Audit a Supabase/Postgres project for Row-Level Security and access-control gaps, then produce a phased remediation plan |
 | `plan-secrets-audit` | Audit a codebase and git history for exposed credentials and mis-scoped keys, then produce a phased rotation-and-remediation plan |
 | `plan-security-audit` | OWASP Top 10 security audit with Supabase-first methodology — RLS pass, bundle/secret scan, auth-path tracing, dependency CVEs |
@@ -200,12 +214,13 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `plan-test-coverage` | User-story-driven test coverage audit and plan — no test writing in this pass |
 | `plan-uiux-unification` | Exhaustive, non-destructive UI/UX and design-system audit that produces a burndown and unification plan — no code changes until each phase… |
 
-### 🎨 Enhance — improve what already exists (12)
+### 🎨 Enhance — improve what already exists (13)
 
 | Skill | What it does |
 |:------|:-------------|
 | `enhance-agent-guardrails` | Install guardrails-as-code into a repo so AI/vibe-coding can't keep reintroducing the same classes of problems (leaked secrets, injection,… |
 | `enhance-capacitor-ui` | Cross-surface UIUX separation skill for hybrid web apps that ship as PWA + iOS + Android via Capacitor (or Tauri / Expo Web / Ionic /… |
+| `enhance-email-deliverability` | Audit and fix transactional/marketing deliverability — SPF, DKIM, DMARC, reputation, bounce/complaint handling, list hygiene, unsubscribe… |
 | `enhance-motion` | Audit an existing app's design system and current motion, then apply coherent, performant, accessible motion using the right-sized 2026… |
 | `enhance-pwa` | Add or upgrade PWA features to any web app: service worker, offline mode, install prompt, push notifications, and background sync |
 | `enhance-readme` | Turn a plain-text README into a visually rich showcase with a theme-aware hero image, a feature tour grid, an optional animated guided-tour… |
@@ -295,14 +310,16 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `workflow-ship-and-observe` | Take merged, repository-green code all the way to a verified, monitored production release for any app stack |
 | `workflow-spec-tdd` | Stop vibe-coding with a spec → plan → TDD loop before writing a line |
 
-### ✅ Test & QA — prove it works (4)
+### ✅ Test & QA — prove it works (6)
 
 | Skill | What it does |
 |:------|:-------------|
+| `test-load` | Design and run a k6/Artillery load profile that measures throughput, latency percentiles, error rate, and the breaking point under… |
 | `test-playwright` | Close the PDCA loop on the work you just did |
 | `test-qa` | Generic webapp QA fallback — use only when no project-specific QA skill applies (project-local QA skills take precedence; use… |
 | `test-red-team` | Adversarial red-team of a running web, React Native, or Capacitor hybrid app |
 | `test-unit` | Write effective unit tests with best practices for any project |
+| `test-visual-regression` | Set up Playwright screenshot baselines and CI diffing so UI changes fail pixel-by-pixel instead of by eye |
 
 ### 🚀 Deploy — ship & verify (2)
 
@@ -524,6 +541,12 @@ Find the row that sounds like your day, then follow the chain:
 | Backend architecture — which pattern to use / am I over-engineering? | **`audit-backend-architecture`** → `backend-patterns` |
 | Payment flow — double-charge, ledger, webhook, PCI safe? | **`audit-payment-system`** → `audit-security` / `audit-resilience` |
 | Users get lost / can't finish a flow / nav feels wrong | **`audit-ux-journeys`** → `enhance-web-ux` / `audit-ux` |
+| Empty/error screens are blank or raw | **`audit-ui-states`** → `test-visual-regression` |
+| Emails land in spam | **`enhance-email-deliverability`** → `design-email` |
+| Can we restore if the DB dies? | **`plan-backup-dr`** → `plan-data-integrity` |
+| Are we tracking the right events? | **`audit-analytics`** → `plan-privacy-compliance` / `iterate-post-launch` |
+| Prompt injection / is the chatbot safe? | **`audit-llm-security`** → `plan-input-validation` / `plan-llm-cost-guardrails` |
+| Wrong skill fired / just added a batch | **`audit-skill-conflicts`** → `meta-skill-creator` |
 | Stop AI / vibe-coding regressions | **`enhance-agent-guardrails`** → `plan-security-audit` |
 | Close everything, zero deferrals | **`complete-everything`** → `completion-judge` |
 | Ship it and watch it | `workflow-ship-and-observe` → `debug-sentry-monitor` → `workflow-feedback-to-closure` |
@@ -546,7 +569,7 @@ Say the phrase, and the whole sequence runs for you:
 
 ### Plan loops (audit only — approve before execution)
 
-These **17 `plan-*` skills** come in grouped loops. Each one audits, then hands you a plan — nothing changes until you approve it. See **[docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md)** for diagrams, slash aliases (`/uiux-plan`, `/capacitor-plan`, …), and how each maps to execution.
+These **20 `plan-*` skills** come in grouped loops. Each one audits, then hands you a plan — nothing changes until you approve it. See **[docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md)** for diagrams, slash aliases (`/uiux-plan`, `/capacitor-plan`, …), and how each maps to execution.
 
 | Loop | Skills | When |
 |------|--------|------|
@@ -554,7 +577,8 @@ These **17 `plan-*` skills** come in grouped loops. Each one audits, then hands 
 | Pre-launch hardening | input-validation → secrets → RLS → data-integrity → dependency-provenance | Supabase/Stripe, pre-open-source |
 | Observability & spend | error-handling + llm-cost-guardrails | LLM features, Sentry/Langfuse gaps |
 | Mobile gate | capacitor-hardening → mobile-readiness | Capacitor/hybrid pre-store |
-| Growth gate | aeo-readiness | AI citation visibility |
+| Privacy & recovery | privacy-compliance + backup-dr | Consumer launch labels; "can we restore" |
+| Growth gate | aeo-readiness + aso | AI citation + store listing conversion |
 
 **One-shot (six-skill plan only):**
 
@@ -590,7 +614,7 @@ Every skill has two labels: a **family** (its `<prefix>-<topic>` name) and a **l
 | Prefix | Stage | Purpose | Examples |
 |:-------|:------|:--------|:---------|
 | `audit-` | 🔍 Assess | Read-only assessments (may fix inline) | `audit-security`, `audit-resilience`, `audit-realworld` |
-| `plan-` | 🔍 Assess | Audit-and-plan burndowns — approve before execute (17) | `plan-stub-checker`, `plan-rls-audit`, `plan-security-audit` |
+| `plan-` | 🔍 Assess | Audit-and-plan burndowns — approve before execute (20) | `plan-stub-checker`, `plan-privacy-compliance`, `plan-backup-dr` |
 | `enhance-` | 🛠️ Change | Improve existing UI/UX/motion/forms/SEO/PWA | `enhance-motion`, `enhance-web-forms`, `enhance-web-ux` |
 | `design-` | 🛠️ Change | New surfaces from scratch | `design-frontend`, `design-motion`, `design-system` |
 | `backend-` | 🛠️ Change | Server patterns & resilience | `backend-patterns`, `backend-observability` |
@@ -615,7 +639,7 @@ Every skill has two labels: a **family** (its `<prefix>-<topic>` name) and a **l
 
 ---
 
-## Commands (39)
+## Commands (43)
 
 Commands are shortcuts for the things you do constantly. Type `/` in chat to see them all.
 
@@ -640,7 +664,7 @@ Commands are shortcuts for the things you do constantly. Type `/` in chat to see
 | `/mcp-guide` | MCP workflow | Tool reference (renamed to avoid Claude Code's built-in `/mcp`) |
 | `/uiux` | UI review | Design-system enforcement |
 | `/thirdparty-web-interface-guidelines` | Vercel UI audit | Review files against [Web Interface Guidelines](https://vercel.com/design/guidelines) |
-| `/*-plan` (17 aliases) | Audit before changing | Thin pointers to the `plan-*` skills (`/uiux-plan`, `/security-plan`, …) — audit + plan only. See [CATALOG](docs/CATALOG.md#pointer-delegates-to-skill) |
+| `/*-plan` (20 aliases) | Audit before changing | Thin pointers to the `plan-*` skills (`/uiux-plan`, `/privacy-plan`, `/backup-plan`, `/aso-plan`, …) — audit + plan only. See [CATALOG](docs/CATALOG.md#pointer-delegates-to-skill) |
 
 **RN monorepo bundle:** copy `commands/native-rn-monorepo/` + `rules/native-rn-monorepo/` into your project (iOS builds on CI, not locally).
 
@@ -701,7 +725,7 @@ cp ~/cursor-kenji/rules/project-starter/*.mdc your-project/.cursor/rules/
 
 Global rules in this repo: `full-stack-ship-discipline.mdc`, `composer-2.5-execution.mdc`, `skill-workflows.mdc`.
 
-> **Plan with a strong model, execute with Composer 2.5.** The 17 `plan-*` skills are authored/reviewed with a stronger reasoning model; `composer-2.5-execution.mdc` constrains how approved plans are implemented.
+> **Plan with a strong model, execute with Composer 2.5.** The 20 `plan-*` skills are authored/reviewed with a stronger reasoning model; `composer-2.5-execution.mdc` constrains how approved plans are implemented.
 
 **Project constitution:** copy [docs/AGENTS.template.md](docs/AGENTS.template.md) to your app repo as `AGENTS.md` for always-on agent discipline.
 
@@ -736,9 +760,9 @@ Where everything lives:
 
 ```
 cursor-kenji/
-├── skills/           # 115 Agent Skills (SKILL.md each)
+├── skills/           # 128 Agent Skills (SKILL.md each)
 ├── skills-cursor/    # 12 Cursor-specific skills
-├── commands/         # 39 slash commands
+├── commands/         # 43 slash commands
 ├── agents/           # 6 subagents
 ├── hooks/            # opt-in completion stop gate
 ├── rules/            # Global + project-starter rules
@@ -761,7 +785,7 @@ A few opinions this project keeps coming back to — and what keeps them honest:
 | 1 | Check existing first | `workflow-housekeep`, `plan-stub-checker` |
 | 2 | CI-validated examples | `workflow-spec-tdd`, skill validation CI |
 | 3 | Modular & composable | `skill-workflows.mdc`, bundled workflows |
-| 4 | Audit before change | 17 `plan-*` skills, `/plan` |
+| 4 | Audit before change | 20 `plan-*` skills, `/plan` |
 | 5 | Verify end-to-end | `full-stack-ship-discipline.mdc`, `test-playwright` |
 | 6 | Accessible by default | `audit-accessibility`, project-starter rules |
 | 7 | Performance aware | `audit-performance`, `audit-bundle-size` |
@@ -790,7 +814,7 @@ A box of ready-made recipes for your AI editor ([Agent Skills](https://agentskil
 `npx skills add kensaurus/cursor-kenji` (recommended) or `npx @kensaurus/cursor-kenji`. Restart Cursor after install.
 
 **How many skills?**  
-**115** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**127** total). Counts come from the filesystem and stay synced via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
+**128** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**140** total). Counts come from the filesystem and stay synced via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
 
 **How do skills trigger?**  
 You talk normally. Cursor matches your words to each skill's YAML `description`. To force one: *"use \`audit-security\` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).

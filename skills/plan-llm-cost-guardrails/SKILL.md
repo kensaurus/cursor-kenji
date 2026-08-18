@@ -127,6 +127,8 @@ Simulate a runaway in test env after Phase 1; confirm cap holds before bill move
 
 - **Observability & spend loop** — pairs with `plan-error-handling` (visibility) and
   `audit-langfuse-llm` (quality); this owns *bounded spend*.
+- **`audit-llm-security`** — LLM10 unbounded consumption is the attack-shaped twin.
+- **`audit-infra-cost`** — hosting/egress, not tokens.
 - **Execution:** `backend-patterns`, `audit-langfuse-llm`, `backend-observability`.
 - **Verify:** sandbox load/abuse test — caps, breakers, fallback trip before spend escapes.
 

@@ -2,9 +2,9 @@
 name: plan-data-integrity
 description: >
   Audit a project for destructive-operation and migration safety gaps, then produce a
-  phased safeguard plan. Use when the user says "is my migration safe", "could I lose
-  data", "check my backups", "my agent might delete prod", "safe schema changes", or
-  "disaster recovery".
+  phased safeguard plan. Use when "is my migration safe", "could I lose data",
+  "my agent might delete prod", or "safe schema changes". Restore drills and RPO/RTO
+  belong to plan-backup-dr.
 license: MIT
 ---
 
@@ -28,13 +28,14 @@ are not a control; the guardrail must be a *system boundary*.
 
 ## When this fires
 
-Trigger phrases: *"is this migration safe"*, *"could I lose data"*, *"check my
-backups"*, *"destructive operations"*, *"my agent might nuke prod"*, *"safe
-schema change"*, *"disaster recovery"*, *"pre-launch data safety"*.
+Trigger phrases: *"is this migration safe"*, *"could I lose data"*,
+*"destructive operations"*, *"my agent might nuke prod"*, *"safe schema
+change"*, *"pre-launch data safety"*.
 
 Do **not** fire for: query speed (`backend-db-performance`), RLS access
-(`plan-rls-audit`), or schema *design* quality (`audit-db-schema`). This skill
-owns *irreversible data loss and migration safety* specifically.
+(`plan-rls-audit`), schema *design* (`audit-db-schema`), or *"can we restore /
+what's our RPO / disaster recovery"* → `plan-backup-dr`. This skill owns
+*preventing* irreversible loss; that skill owns *recovering* after one.
 
 ---
 
@@ -130,7 +131,7 @@ _No destructive command is run for any reason._
 ## Phased burndown
 - **Phase 1 — Gates & isolation** → infra/RBAC config — D1, D2 (make catastrophe impossible)
 - **Phase 2 — Migration safety** → `db-migrator` — backfill steps, transactions, rollbacks
-- **Phase 3 — Backup & restore proof** → infra — immutable backups, test a restore
+- **Phase 3 — Backup blast-radius gates** → hand restore drills / RPO to `plan-backup-dr`; this phase only ensures backups are not on the same volume the agent can wipe
 - **Phase 4 — Least-privilege sweep** → infra + `plan-secrets-audit` — token scoping
 
 ## Execution handoff
@@ -143,9 +144,9 @@ prod). Confirm the agent identity cannot delete backups.
 ## Chains with
 
 - **Security spine** — blast-radius layer (**this skill**); cross-hand tokens to
-  `plan-secrets-audit`.
+  `plan-secrets-audit`. Recoverability → `plan-backup-dr`.
 - **Execution:** `db-migrator`, `backend-patterns`, infra config, `create-hook`.
-- **Verify:** restore backup into isolated env; confirm agent token can't reach prod.
+- **Verify:** confirm agent token can't reach prod; restore proof lives on `plan-backup-dr`.
 
 > Plan with a strong model; execute with `composer-2.5-execution.mdc` riding
 > along. Highest-stakes plan in the set — the plan says *what* can destroy data;

@@ -35,6 +35,13 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "CI/CD cost", "GitHub Actions bill", "Actions minutes", "runner cost", "workflow cost", "slow CI", "audit my workflows" | `audit-cicd` |
 | "audit i18n", "fix translations", "the Japanese feels like Google Translate", "hardcoded strings" | `audit-i18n` |
 | "audit LLM", "check Langfuse", "audit prompts", "check AI quality", "check traces" | `audit-langfuse-llm` |
+| "audit LLM security", "prompt injection", "jailbreak my chatbot", "is my AI safe", "OWASP LLM" | `audit-llm-security` |
+| "audit our analytics", "are we tracking the right events", "funnel instrumentation", "consent-gated analytics" | `audit-analytics` |
+| "check empty/error states", "audit loading states", "what happens when this fails", "zero-results" | `audit-ui-states` |
+| "audit our IAP", "check subscriptions", "restore purchases broken", "are purchases validated" | `audit-monetization-iap` |
+| "works locally but not in prod", "audit our environments", "config drift", "check env var config" | `audit-env-parity` |
+| "hosting bill is high", "cut infra costs", "audit cloud spend", "reduce Supabase/Vercel costs" | `audit-infra-cost` |
+| "audit my skills", "conflicting skills", "wrong skill triggered", "which skills overlap" | `audit-skill-conflicts` |
 | "performance audit", "optimize performance", "slow page", "Web Vitals" | `audit-performance` |
 | "audit against realworld", "compare to realworld", "conduit conformance", "full-stack gap check", "what's missing to reach production" | `audit-realworld` |
 | "resilience audit", "is this production-ready", "will it survive real traffic", "retries/timeouts/idempotency", "the 80% problem" | `audit-resilience` |
@@ -59,7 +66,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "API design", "backend architecture", "caching", "queues", "microservices" | `backend-patterns` |
 | "real-time", "live updates", "WebSocket", "chat", "collaborative", "presence" | `backend-realtime` |
 | "build a pipeline", "sync X into Y", "nightly aggregation", "cron double-counts", "dedupe" | `data-pipeline` |
-| "chart", "graph", "dashboard", "analytics", "D3", "Recharts", "data visualization" | `data-visualization` |
+| "chart", "graph", "dashboard", "D3", "Recharts", "data visualization" | `data-visualization` |
 
 ---
 
@@ -91,7 +98,8 @@ You don't have to type the skill name. Just describe the task in plain language.
 |:-----------------|:------|
 | "design an API", "create endpoints", "REST API design", "GraphQL schema" | `design-api` |
 | "create a poster", "design an infographic", "make a banner", "social graphic" | `design-canvas` |
-| "build an email template", "transactional email", "welcome email", "why is my email in spam" | `design-email` |
+| "build an email template", "transactional email", "welcome email", "email copy review" | `design-email` |
+| "emails go to spam", "set up SPF/DKIM", "check email deliverability", "handle bounces" | `enhance-email-deliverability` |
 | "build a component", "new UI page", "make this look good" | `design-frontend` |
 | "generative art", "creative coding", "flow fields", "particle system" | `design-generative-art` |
 | "mobile design", "touch UI", "small screen", "swipe", "safe area" | `design-mobile-first` |
@@ -105,7 +113,10 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "errors aren't showing in Sentry", "fail silently", "empty catch blocks", "check my Langfuse", "observability before launch" | `plan-error-handling` |
 | "validate my inputs", "XSS", "dangerouslySetInnerHTML", "Stripe webhook", "forge requests", "injection-safe" | `plan-input-validation` |
 | "hardcoded secrets", "did I commit a key", "secret scan", "rotate keys", "are my API keys exposed" | `plan-secrets-audit` |
-| "is my migration safe", "could I lose data", "check my backups", "agent might delete prod", "destructive operations" | `plan-data-integrity` |
+| "is my migration safe", "could I lose data", "agent might delete prod", "destructive operations" | `plan-data-integrity` |
+| "can we recover if the DB dies", "audit our backups", "what's our RPO/RTO", "disaster recovery" | `plan-backup-dr` |
+| "privacy compliance", "what data do we collect", "GDPR", "APPI", "App Store privacy labels" | `plan-privacy-compliance` |
+| "optimize our app store listing", "improve app downloads", "ASO", "app store keywords" | `plan-aso` |
 | "check my dependencies", "slopsquatting", "is this package real", "supply chain audit", "did the AI hallucinate a package" | `plan-dependency-provenance` |
 | "cap my AI costs", "LLM bill could blow up", "token budget", "runaway agent loop", "per-user AI limits" | `plan-llm-cost-guardrails` |
 | "AEO", "GEO", "do AI engines cite me", "llms.txt", "am I blocking AI crawlers", "ChatGPT visibility" | `plan-aeo-readiness` |
@@ -138,6 +149,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "make it a PWA", "offline support", "service worker", "install prompt", "add to home screen" | `enhance-pwa` |
 | "improve my README", "add screenshots to README", "make README prettier" | `enhance-readme` |
 | "improve SEO", "add meta tags", "sitemap", "Open Graph", "Google indexing", "rich results" | `enhance-web-seo` |
+| "emails go to spam", "set up SPF/DKIM", "check email deliverability", "handle bounces" | `enhance-email-deliverability` |
 | "make this landing page look premium", "anti-slop design", "portfolio design" | `enhance-web-landing` |
 | "redesign this page", "remove AI slop", "make this look hand-crafted" | `enhance-web-redesign` |
 | "make this page nicer", "better layout", "improve spacing", "polish UI" | `enhance-web-ui` |
@@ -167,6 +179,7 @@ Attribution and update policy → [THIRD-PARTY-SKILLS.md](./THIRD-PARTY-SKILLS.m
 |:-----------------|:------|
 | "build an MCP server", "integrate external API into Cursor" | `meta-mcp-builder` |
 | "create a skill", "write a SKILL.md", "how do I make a skill" | `meta-skill-creator` |
+| "audit my skills", "conflicting skills", "wrong skill triggered", "which skills overlap" | `audit-skill-conflicts` |
 
 ---
 
@@ -199,6 +212,8 @@ Attribution and update policy → [THIRD-PARTY-SKILLS.md](./THIRD-PARTY-SKILLS.m
 | "QA the app", "find bugs", "test before release", "smoke test" | `test-qa` |
 | "red team this app", "attack my app", "break it", "find all the defects", "pre-launch hardening" | `test-red-team` |
 | "write unit tests", "add test coverage", "write tests for this function" | `test-unit` |
+| "add visual regression tests", "catch UI regressions", "screenshot testing" | `test-visual-regression` |
+| "load test this", "will it handle launch traffic", "find the breaking point" | `test-load` |
 
 ---
 

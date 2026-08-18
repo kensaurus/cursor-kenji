@@ -4,6 +4,34 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.19.0] — 2026-08-18
+
+Adds the **ops / launch gap pack** (13 skills): product analytics, UI state matrix, LLM attack surface, IAP, env parity, infra cost, visual + load tests, privacy/DR/ASO plans, email deliverability, and a pack self-audit. Skips the pack's `audit-responsive-layout` — already shipped as `audit-responsive` in 1.18.0. `audit-llm-security` is new (source tarball was missing that file).
+
+### Added
+
+- **`audit-llm-security`** — OWASP LLM Top 10 on *app-facing* AI (not Langfuse quality, not coding-agent policy).
+- **`plan-privacy-compliance`** + `/privacy-plan` — collection-vs-claimed, consent, deletion/export, GDPR / APPI / store labels. Cross-linked with `audit-analytics`.
+- **`plan-backup-dr`** + `/backup-plan` — restore capability, RPO/RTO, drill evidence (not destructive-op gates).
+- **`audit-analytics`** — funnel coverage, taxonomy, consent-gated firing.
+- **`audit-ui-states`** — empty / loading / error / offline / overflow matrix.
+- **`test-visual-regression`** — Playwright screenshot baselines + CI diffs (playwright-cli, not MCP).
+- **`test-load`** — k6/Artillery journeys; never hits prod unsigned.
+- **`audit-monetization-iap`** — StoreKit / Play / RevenueCat (not Stripe/web).
+- **`plan-aso`** + `/aso-plan` — store listing find + install conversion.
+- **`enhance-email-deliverability`** — SPF/DKIM/DMARC + hygiene (kept `enhance-*` beside `design-email`).
+- **`audit-env-parity`** — config agreement across envs (local runnability stays on `workflow-environment-ready`).
+- **`audit-infra-cost`** — hosting/egress (CI minutes → `audit-cicd`; tokens → `plan-llm-cost-guardrails`).
+- **`audit-skill-conflicts`** + `/skill-conflicts` — pack self-audit: contradictory directives, overlapping triggers, stale cross-refs, context bloat. Per-file spec stays on `validate:skills`.
+
+### Changed
+
+- **`design-email`** — no longer claims deliverability / SPF / "why is my email in spam".
+- **`plan-data-integrity`** — no longer claims backup drills / disaster recovery; those route to `plan-backup-dr`.
+- **Neighbors** — `audit-responsive`, `audit-langfuse-llm`, `plan-llm-cost-guardrails`, `plan-mobile-readiness`, `audit-payment-system`, `audit-cicd`, `workflow-environment-ready`, `iterate-post-launch`, `plan-stub-checker`, `enhance-agent-guardrails`, `test-red-team`, `audit-resilience`, `data-visualization` now point at the new skills.
+
+---
+
 ## [1.18.0] — 2026-08-18
 
 Adds **`audit-responsive`**: the missing layout/IA audit for "desktop is a linearized phone." Existing skills covered mobile-up (`design-mobile-first`), cross-page IA (`audit-ux-journeys`), tokens (`audit-uiux-design-system`), and polish (`enhance-web-ui` / `enhance-web-ux`) — none owned the 10 breakpoint anti-patterns + wireframe-then-implement loop.
