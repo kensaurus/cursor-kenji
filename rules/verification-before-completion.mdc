@@ -16,6 +16,9 @@ Completion is a claim about observed state, not effort or confidence.
 - A failing check is work to diagnose and repair. Never delete, skip,
   narrow, mock away, blanket-update, or silence the behavior under test to
   obtain green output.
+- During a present-then-stop `audit-*` or `plan-*` pass, record failing
+  checks as findings. Do not implement fixes unless the user asked to
+  execute.
 - If a check is unavailable, report `not run` with the concrete reason.
   Missing evidence is never a pass.
 

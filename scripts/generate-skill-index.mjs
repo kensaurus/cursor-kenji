@@ -27,7 +27,7 @@ const END = "<!-- SKILL-INDEX:END -->";
 
 /** Family prefix → display heading. Anything unmatched falls into "Core & cross-cutting". */
 const FAMILY_HEADINGS = {
-  audit: "🔍 Audit — look before you change",
+  audit: "🔍 Audit — inspect; some then fix",
   plan: "📋 Plan — audit first, change only after you approve",
   enhance: "🎨 Enhance — improve what already exists",
   design: "✨ Design — build something new",

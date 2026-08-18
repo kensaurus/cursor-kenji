@@ -1,28 +1,14 @@
 ---
 name: enhance-web-ux
 description: >
-  Generative, NN/g-grounded page enhancement skill. Use when the user says "enhance this
-  page", "make /xxx better", "this page feels AI-generated", "fix UX of /xxx", "improve
-  information density", "icons all look the same", or asks for any non-trivial UX
-  improvement on a screen.
+  NN/g-grounded page enhancement for flows and semantic data wiring — not visual
+  polish. Use when "this page feels AI-generated", "fix UX of /xxx", "improve
+  information density", or "icons all look the same". Composition/type →
+  enhance-web-ui. Heuristics-only → audit-ux.
 license: MIT
 ---
 
-> ### Which enhance skill? (surface router)
->
-> | Your surface | Use |
-> |:-------------|:----|
-> | **Web** product page / dashboard — composition, hierarchy, spacing, motion | `enhance-web-ui` |
-> | **Web** linearized desktop / stacked at every breakpoint | `audit-responsive` |
-> | **Web** product page — UX heuristics, flows, data wiring | `enhance-web-ux` |
-> | **Web** landing / marketing / portfolio (greenfield, anti-slop) | `enhance-web-landing` |
-> | **Web** existing site upgrade (audit-first, preserve behavior) | `enhance-web-redesign` |
-> | **Web** 3D / WebGL / cinematic scroll on an existing site (audit-first) | `enhance-web-web3d` |
-> | **React Native** screen (Expo / bare) | `mobile-rn-screen` |
-> | **Capacitor / hybrid** shell (one web app shipped to iOS + Android) | `enhance-capacitor-ui` (axis architecture first) → then the web or rn skill |
-> | Repo **README** showcase | `enhance-readme` |
->
-> **You are here: `enhance-web-ux`.** Native iOS/Android (SwiftUI / Compose, no web layer) is out of scope for all of these — use Apple HIG / Material directly.
+> Surface router: `/uiux`. You are here: `enhance-web-ux`. Native iOS/Android (SwiftUI / Compose, no web layer) is out of scope — use Apple HIG / Material directly.
 
 # Enhance Page UX
 

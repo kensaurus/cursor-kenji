@@ -1,10 +1,9 @@
 ---
 name: test-playwright
 description: >
-  Close the PDCA loop on the work you just did. After implementing changes, drive the LIVE
-  app on localhost through the playwright-cli like a real end user — manually, in a
-  visible (headed) browser, clicking and typing one action at a time, NEVER through
-  scripts or test runners — exercising every page, component, and.
+  Close the PDCA loop on the work you just did. Drive the live app in a headed
+  playwright-cli browser, one real user action at a time — never scripts or test
+  runners. Pixel diffs → test-visual-regression. Full-app QA → test-qa.
 license: MIT
 ---
 

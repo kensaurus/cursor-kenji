@@ -1,10 +1,10 @@
 ---
 name: audit-ux-journeys
 description: >
-  Cross-page UX audit for user stories, task completion, and information architecture —
-  the layer audit-ux (per-page heuristics) doesn't cover. Use when "audit user flows",
-  "user story audit", "information architecture / IA audit", "can users find X", "users
-  get lost", "navigation audit", "funnel drop-off", "task.
+  Cross-page UX audit for user stories, task completion, and information
+  architecture — the layer audit-ux (per-page heuristics) skips. Use when "audit
+  user flows", "IA audit", "can users find X", "navigation audit", or "funnel
+  drop-off". Full DS burndown → plan-uiux-unification.
 license: MIT
 ---
 

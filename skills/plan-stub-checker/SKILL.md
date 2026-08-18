@@ -1,10 +1,10 @@
 ---
 name: plan-stub-checker
 description: >
-  Exhaustive audit for stubs, dead buttons, fake/placeholder components, unwired handlers,
-  dead links, orphans, and severed integrations — produces a burndown and wiring plan
-  with. Use when asked to "find dead buttons", "stub checker", "fake components", "unwired
-  handlers", "dead links", "orphaned components", "plan.
+  Exhaustive audit for stubs, dead buttons, fake components, unwired handlers,
+  and dead links — then a wiring plan, no implementation. Use when "find dead
+  buttons", "stub checker", "fake components", "unwired handlers", or "dead
+  links". Live QA → test-qa.
 license: MIT
 ---
 

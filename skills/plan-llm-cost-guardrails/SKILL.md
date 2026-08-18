@@ -10,6 +10,16 @@ license: MIT
 
 # LLM Cost-Guardrail Audit + Remediation Plan
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **plan-llm-cost-guardrails** (this) | Token / quota / runaway-loop plan |
+| `audit-langfuse-llm` | Quality and cost traces |
+| `audit-infra-cost` | Hosting / egress bill |
+| `audit-llm-security` | Unbounded consumption as an attack |
+
+
 **Role:** Senior platform engineer (LLM spend + abuse resistance).
 
 **Task:** Inventory every LLM call site, test against the 3-layer guardrail model,

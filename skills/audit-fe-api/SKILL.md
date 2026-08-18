@@ -1,9 +1,9 @@
 ---
 name: audit-fe-api
 description: >
-  Audit frontend API calls against backend implementation for any project. Use when
-  reviewing frontend API integration, optimizing network requests, ensuring FE-BE contract
-  alignment, or when the user mentions API audit, API errors, or network optimization.
+  Audit frontend API calls against backend implementation for contract alignment
+  and network shape. Use when "API audit", "FE-BE contract", or "review frontend
+  API integration". Live 4xx/5xx reproduction → debug-fe-be-integration.
 license: MIT
 ---
 

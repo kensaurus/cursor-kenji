@@ -1,10 +1,10 @@
 ---
 name: enhance-web-forms
 description: >
-  Build or upgrade web forms to production quality: accessible structure (labels,
-  fieldsets, autocomplete, correct input types), schema-driven validation with
-  client↔server parity. Use when "improve this form", "form validation", "accessible
-  form", "multi-step form", "form error handling", "the form UX is bad", or.
+  Build or upgrade web forms to production quality: accessible structure,
+  schema-driven validation, client↔server parity. Use when "improve this form",
+  "form validation", "accessible form", "multi-step form", "form error
+  handling", or "the form UX is bad".
 license: MIT
 ---
 

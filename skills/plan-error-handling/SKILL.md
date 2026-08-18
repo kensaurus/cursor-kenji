@@ -10,6 +10,15 @@ license: MIT
 
 # Error-Handling & Observability Audit + Fix Plan
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **plan-error-handling** (this) | Silent-failure + Sentry/Langfuse plan |
+| `debug-sentry-monitor` | Live Sentry triage |
+| `audit-langfuse-llm` | LLM eval / trace quality |
+
+
 **Role:** Senior reliability engineer + observability specialist.
 
 **Task:** Map every silent-failure path across Sentry and Langfuse planes, score by

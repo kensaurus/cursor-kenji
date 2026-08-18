@@ -1,5 +1,5 @@
 ---
-description: "Route to the right UI/UX skill: design-system audit, UX heuristics, cosmetic polish, or semantic-data rewrite"
+description: "Route to the right UI/UX skill: layout, states, tokens, heuristics, polish, or unification plan"
 argument-hint: "[route, component, or symptom]"
 ---
 
@@ -7,13 +7,36 @@ argument-hint: "[route, component, or symptom]"
 
 > Discover existing system → detect rogue implementations → fix → validate.
 
-This command is a thin entry point. Six skills cover the UI/UX surface — pick the right one for the goal:
+This command is a thin entry point. Pick the right skill for the goal:
 
-- **`audit-responsive`** — linearized mobile layout at every breakpoint; desktop is not a wide phone. Prefer `/responsive-audit` when that is the symptom.
-- **`audit-ui-states`** — empty / loading / error / offline / overflow matrix.
+**Audit (findings; responsive may then fix)**
+
+- **`audit-responsive`** — linearized mobile layout at every breakpoint; desktop is not a wide phone. Prefer `/responsive-audit` when that is the symptom. Audit-and-fix.
+- **`audit-ui-states`** — empty / loading / error / offline / overflow matrix. Read-only.
 - **`audit-uiux-design-system`** — token compliance, component modularity, design drift.
-- **`audit-ux`** — NN/g heuristics, microcopy, content patterns, user flows.
-- **`enhance-web-ui`** — cosmetic polish, hierarchy, spacing, vague-but-visceral feedback.
-- **`enhance-web-ux`** — replace generic AI-templated UI with semantic data.
+- **`audit-ux`** — per-page NN/g heuristics and microcopy. Not cross-page flows.
+- **`audit-ux-journeys`** — cross-page stories, IA, findability.
+- **`audit-accessibility`** — WCAG 2.2 / axe / keyboard.
 
-Use `/uiux` to explicitly trigger UI/UX work. Otherwise, describe the symptom ("page feels AI-generated", "design drift", "tokens are inconsistent") and the right skill auto-fires.
+**Plan vs apply-now cleanup**
+
+- **`plan-uiux-unification`** — full UI/UX + design-system burndown. No code until approved.
+- **`housekeep-design`** — apply-now SSOT migration after an approved plan (or explicit "clean it up now").
+
+**Enhance (apply)**
+
+- **`enhance-web-ui`** — composition, hierarchy, spacing, type on an existing product page.
+- **`enhance-web-ux`** — flows and semantic data wiring; "this page feels AI-generated".
+- **`enhance-web-landing`** — marketing / portfolio greenfield.
+- **`enhance-web-redesign`** — existing-site upgrade, preserve behavior.
+- **`enhance-web-web3d`** — WebGL / cinematic scroll on an existing site.
+- **`enhance-web-forms`** — production-quality forms.
+- **`enhance-motion`** — coherent motion pass across an existing app.
+- **`design-motion`** — one new isolated animation.
+- **`mobile-rn-screen`** — React Native screen (Expo / bare).
+- **`enhance-capacitor-ui`** — Capacitor / hybrid shell, then the web or RN skill.
+- **`enhance-readme`** — repo README showcase.
+
+Native iOS/Android (SwiftUI / Compose, no web layer) is out of scope — use Apple HIG / Material directly.
+
+Use `/uiux` to explicitly trigger UI/UX work. Otherwise, describe the symptom and the right skill auto-fires.

@@ -1,14 +1,23 @@
 ---
 name: plan-aeo-readiness
 description: >
-  Audit a site for answer-engine and generative-engine visibility (citation by ChatGPT,
-  Claude, Perplexity, AI Overviews), then produce a phased improvement plan. Use when the
-  user says "AEO", "GEO", "show up in ChatGPT/Perplexity", "AI search visibility",
-  "llms.txt", "am I blocking AI crawlers", or wants.
+  Audit a site for answer-engine / GEO citation readiness (ChatGPT, Perplexity,
+  AI Overviews), then a phased plan. Use when "AEO", "GEO", "show up in
+  ChatGPT/Perplexity", "AI search visibility", "llms.txt", or "am I blocking AI
+  crawlers". Classic SEO meta/sitemap → enhance-web-seo.
 license: MIT
 ---
 
 # Answer-Engine Readiness Audit + Citation Plan
+
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **plan-aeo-readiness** (this) | Answer-engine / GEO citation plan |
+| `enhance-web-seo` | Classic search meta / sitemap / OG |
+| `plan-antislop` | Voice / slop in the copy itself |
+
 
 **Role:** Senior growth engineer + content strategist (AEO/GEO lens).
 

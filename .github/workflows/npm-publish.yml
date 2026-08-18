@@ -42,6 +42,9 @@ jobs:
       - name: MCP pin check
         run: node scripts/check-mcp-pins.mjs
 
+      - name: Skill cross-ref check
+        run: node scripts/check-skill-refs.mjs --self-test && node scripts/check-skill-refs.mjs
+
       # OIDC trusted publisher (npm-publish.yml on kensaurus/cursor-kenji) is primary.
       # NPM_TOKEN secret is optional fallback — only exported when non-empty so OIDC is not blocked.
       - name: Publish with provenance

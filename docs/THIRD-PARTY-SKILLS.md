@@ -79,7 +79,7 @@ flowchart LR
   A["thirdparty-ui-ux-pro-max\n(design system)"] --> B["Implement UI"]
   B --> C["thirdparty-emil-design-eng\n(animation polish)"]
   C --> D["thirdparty-web-interface-guidelines\n(compliance review)"]
-  D --> E["enhance-page-ui\n(final Kenji polish)"]
+  D --> E["enhance-web-ui\n(final Kenji polish)"]
   E --> F["/commit"]
 
   style A fill:#1e3a5f,stroke:#60a5fa,color:#dbeafe
@@ -90,7 +90,7 @@ flowchart LR
 
 Alternative audit-first path:
 
-`audit-ux` → `enhance-page-ux` → `thirdparty-emil-design-eng` → `thirdparty-web-interface-guidelines`
+`audit-ux` → `enhance-web-ux` → `thirdparty-emil-design-eng` → `thirdparty-web-interface-guidelines`
 
 ## Adding a new third-party skill
 

@@ -1,7 +1,7 @@
 ---
 name: audit-responsive
 description: >
-  Audit and fix linearized mobile layouts at every breakpoint — desktop is not a
+  Audit-and-fix linearized mobile layouts at every breakpoint — desktop is not a
   wide phone. Use when "responsive audit", desktop looks stacked/stretched, no
   max-width, breakpoint gaps, or 1440 looks like a phone. Distinct from
   design-mobile-first (touch/mobile-up) and audit-ux-journeys (cross-page IA).
@@ -9,6 +9,8 @@ license: MIT
 ---
 
 # audit-responsive — Layout & breakpoint IA
+
+> **Audit-and-fix exception.** Report first; then implement. Not present-then-stop.
 
 **Desktop is not a wide phone.** Responsive means groups reflow, controls size to
 function, and reading columns cap. A 1440px screenshot that looks like a stretched

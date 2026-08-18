@@ -1,10 +1,10 @@
 ---
 name: plan-security-audit
 description: >
-  OWASP Top 10 security audit with Supabase-first methodology — RLS pass, bundle/secret
-  scan, auth-path tracing, dependency CVEs. Use when asked to "security audit plan",
-  "OWASP audit", "RLS audit", "Supabase security review", "hardening plan", "secrets scan
-  plan", "plan security fixes", or "security burndown".
+  OWASP Top 10 + Supabase-first hardening burndown (auth paths, dependency
+  CVEs). Use when "security audit plan", "OWASP audit", "hardening plan", or
+  "security burndown". Table RLS → plan-rls-audit. Key rotation →
+  plan-secrets-audit. App LLM attacks → audit-llm-security.
 license: MIT
 ---
 

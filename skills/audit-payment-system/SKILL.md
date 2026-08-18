@@ -1,10 +1,10 @@
 ---
 name: audit-payment-system
 description: >
-  Read-only audit for payment/money-movement systems, scope-gated so a simple
-  Stripe-Checkout site and an in-house ledger/gateway each see only relevant findings. Use
-  when "audit payment system", "payment gateway audit", "double charge / idempotency",
-  "ledger / reconciliation", "webhook / 3DS / PCI", or.
+  Read-only audit for payment/money-movement systems, scope-gated so a
+  Stripe-Checkout site and an in-house ledger each see only relevant findings.
+  Use when "audit payment system", "double charge / idempotency", "ledger /
+  reconciliation", "webhook / 3DS / PCI". Mobile IAP → audit-monetization-iap.
 license: MIT
 ---
 

@@ -34,7 +34,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "audit my API calls", "check frontend API", "FE-BE contract" | `audit-fe-api` |
 | "CI/CD cost", "GitHub Actions bill", "Actions minutes", "runner cost", "workflow cost", "slow CI", "audit my workflows" | `audit-cicd` |
 | "audit i18n", "fix translations", "the Japanese feels like Google Translate", "hardcoded strings" | `audit-i18n` |
-| "audit LLM", "check Langfuse", "audit prompts", "check AI quality", "check traces" | `audit-langfuse-llm` |
+| "audit LLM quality", "check Langfuse", "audit prompts", "check AI quality", "check traces" | `audit-langfuse-llm` |
 | "audit LLM security", "prompt injection", "jailbreak my chatbot", "is my AI safe", "OWASP LLM" | `audit-llm-security` |
 | "audit our analytics", "are we tracking the right events", "funnel instrumentation", "consent-gated analytics" | `audit-analytics` |
 | "check empty/error states", "audit loading states", "what happens when this fails", "zero-results" | `audit-ui-states` |
@@ -103,13 +103,13 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "build a component", "new UI page", "make this look good" | `design-frontend` |
 | "generative art", "creative coding", "flow fields", "particle system" | `design-generative-art` |
 | "mobile design", "touch UI", "small screen", "swipe", "safe area" | `design-mobile-first` |
-| "animation", "micro-interaction", "hover effect", "scroll animation" | `design-motion` |
+| "add one animation", "hover effect on this button", "isolated micro-interaction" | `design-motion` |
 | "write a PRD", "product requirements", "spec this feature", "what should we build" | `design-prd` |
 | "grill me", "stress-test this plan", "interview me about this", "poke holes in this", "challenge my thinking" | `grilling` |
 | "pin down terminology", "ubiquitous language", "glossary", "record an ADR", "you're using the wrong words" | `domain-modeling` |
 | "UI/UX unification plan", "design system audit plan", "UI burndown", "unify design system", "plan UI overhaul", "audit UI without fixing" | `plan-uiux-unification` |
 | "feels AI-generated", "de-slop", "AI slop", "reads like ChatGPT", "generic/templated/soulless", "voice pass", "authenticity pass" | `plan-antislop` |
-| "check my RLS", "row level security", "is my Supabase secure", "anyone can read my data", "service_role key", "lock down my tables" | `plan-rls-audit` |
+| "RLS audit", "check my RLS", "row level security", "is my Supabase secure", "anyone can read my data", "service_role key", "lock down my tables" | `plan-rls-audit` |
 | "errors aren't showing in Sentry", "fail silently", "empty catch blocks", "check my Langfuse", "observability before launch" | `plan-error-handling` |
 | "validate my inputs", "XSS", "dangerouslySetInnerHTML", "Stripe webhook", "forge requests", "injection-safe" | `plan-input-validation` |
 | "hardcoded secrets", "did I commit a key", "secret scan", "rotate keys", "are my API keys exposed" | `plan-secrets-audit` |
@@ -125,7 +125,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "find dead buttons", "stub checker", "fake components", "unwired handlers", "dead links", "buttons that do nothing", "stub audit" | `plan-stub-checker` |
 | "docs drift", "sync docs with code", "stale README", "onboarding docs broken", "phantom docs" | `plan-docs-sync` |
 | "performance audit plan", "perf burndown", "measure before optimize", "plan performance improvements" | `plan-perf-audit` |
-| "security audit plan", "OWASP audit", "RLS audit", "Supabase security review", "hardening plan" | `plan-security-audit` |
+| "security audit plan", "OWASP audit", "hardening plan", "security burndown" | `plan-security-audit` |
 | "test coverage plan", "traceability matrix", "fake-green tests", "what's not tested" | `plan-test-coverage` |
 | "design system", "component library", "design tokens", "theming" | `design-system` |
 | "apply brand colors", "consistent styling", "color palette", "apply theme" | `design-theme` |
@@ -155,8 +155,10 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "make this page nicer", "better layout", "improve spacing", "polish UI" | `enhance-web-ui` |
 | "improve UX", "this page feels bad", "fix user flow", "better information density" | `enhance-web-ux` |
 | "add 3D", "WebGL hero", "Three.js scene", "cinematic scroll", "GSAP animation" | `enhance-web-web3d` |
-| "add motion", "animate the app", "make it feel alive", "motion pass", "micro-interactions across the app" | `enhance-motion` |
-| "clean up the design system", "resolve design conflicts", "consolidate tokens", "inconsistent UI across pages", "keep the design SSOT" | `housekeep-design` |
+| "motion pass", "animate the app", "micro-interactions across the app" | `enhance-motion` |
+| "add one animation", "hover effect on this button" | `design-motion` |
+| "clean up the design system now", "migrate to one button", "resolve token conflicts" | `housekeep-design` |
+| "audit UI without fixing", "UI burndown", "IA audit before redesign" | `plan-uiux-unification` |
 | "improve this form", "form validation", "accessible form", "multi-step form", "form error handling" | `enhance-web-forms` |
 
 ---
@@ -165,9 +167,9 @@ You don't have to type the skill name. Just describe the task in plain language.
 
 | Say this in chat | Skill / command |
 |:-----------------|:----------------|
-| "animation craft", "emil design", "micro-interactions", "Sonner-style" | `thirdparty-emil-design-eng` |
-| "design system generator", "ui ux pro max", "landing page palette" | `thirdparty-ui-ux-pro-max` |
-| "Vercel guidelines", "web interface guidelines", "review UI compliance" | `thirdparty-web-interface-guidelines` or `/thirdparty-web-interface-guidelines <file>` |
+| "emil-design-eng", "emil design", "Sonner-style components" | `thirdparty-emil-design-eng` |
+| "ui-ux-pro-max", "look up a palette from the pro-max catalog" | `thirdparty-ui-ux-pro-max` |
+| "Vercel guidelines", "web interface guidelines", "/thirdparty-web-interface-guidelines" | `thirdparty-web-interface-guidelines` or `/thirdparty-web-interface-guidelines <file>` |
 
 Attribution and update policy → [THIRD-PARTY-SKILLS.md](./THIRD-PARTY-SKILLS.md)
 

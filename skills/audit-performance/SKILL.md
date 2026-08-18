@@ -1,12 +1,16 @@
 ---
 name: audit-performance
 description: >
-  Audit and optimize application performance. Use when optimizing performance, debugging
-  slow code, reducing load times, or when the user mentions performance issues.
+  Audit and optimize application runtime performance (Core Web Vitals, slow
+  code, load time). Use when "slow page", "LCP/INP/CLS", or "optimize
+  performance". JS payload → audit-bundle-size. Concurrent breaking point →
+  test-load. Timeouts/retries → audit-resilience.
 license: MIT
 ---
 
 # Performance Audit Skill
+
+> **Audit-and-fix exception.** Measure, then optimize. JS payload → `audit-bundle-size`. Breaking point → `test-load`. Timeouts/retries → `audit-resilience`.
 
 Systematic approach to finding and fixing performance issues. Research-driven, data-backed.
 
