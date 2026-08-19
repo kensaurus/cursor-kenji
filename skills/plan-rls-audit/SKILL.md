@@ -2,9 +2,9 @@
 name: plan-rls-audit
 description: >
   Audit a Supabase/Postgres project for Row-Level Security and access-control gaps, then
-  produce a phased remediation plan. Use when the user says "RLS", "is my Supabase
-  secure", "anyone can read my data", "lock down my tables", "service_role key", or is
-  hardening before launch.
+  produce a phased remediation plan. Use when "RLS", "is my Supabase secure", "anyone
+  can read my data", "lock down my tables". App-layer session/route gates →
+  audit-auth-flows.
 license: MIT
 ---
 
@@ -18,6 +18,7 @@ license: MIT
 | `plan-security-audit` | OWASP umbrella (not the first RLS match) |
 | `audit-db-schema` | Schema design quality |
 | `plan-secrets-audit` | Where `service_role` lives |
+| `audit-auth-flows` | App-layer session / route×gate / getSession vs getUser |
 
 
 **Role:** Senior backend engineer + Supabase security specialist.

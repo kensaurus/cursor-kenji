@@ -52,6 +52,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "enforce module boundaries", "stop spaghetti imports", "add architecture rules", "agents keep importing across features" | `enhance-arch-boundaries` |
 | "audit payment system", "payment gateway audit", "double charge / idempotency", "double-entry ledger", "reconciliation / settlement", "webhook signature / 3DS / SCA", "PCI DSS", "is my payment flow safe" | `audit-payment-system` |
 | "audit security", "check for vulnerabilities", "OWASP", "security review" | `audit-security` |
+| "audit our auth", "check middleware protection", "is getSession safe", "route gate coverage" | `audit-auth-flows` |
 | "audit design system", "check token compliance", "design consistency" | `audit-uiux-design-system` |
 | "UX audit", "usability review", "heuristic evaluation", "UX quality" | `audit-ux` |
 | "audit user flows", "user story audit", "information architecture / IA audit", "can users find X", "users get lost", "navigation audit", "funnel drop-off", "task completion" | `audit-ux-journeys` |

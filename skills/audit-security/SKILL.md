@@ -1,10 +1,10 @@
 ---
 name: audit-security
 description: >
-  Static OWASP review of app code (auth, injection, headers). Use when "review
-  security", "check vulnerabilities", or "audit auth code". May fix inline.
-  Plan-only burndown → plan-security-audit. Table RLS → plan-rls-audit. LLM
-  attacks → audit-llm-security.
+  Static OWASP review of app code (injection, headers, deps). Use when "review
+  security" or "check vulnerabilities". Session/route×gate/getSession →
+  audit-auth-flows. Plan-only burndown → plan-security-audit. Table RLS →
+  plan-rls-audit. LLM attacks → audit-llm-security.
 license: MIT
 ---
 
@@ -303,3 +303,6 @@ const env = envSchema.parse(process.env);
 ### Research Sources
 - [URL] — [what it confirmed or revealed]
 ```
+
+Session / route×gate / `getSession()` findings belong on `audit-auth-flows`,
+not in this OWASP checklist.

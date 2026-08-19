@@ -28,7 +28,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (134)
+## Skills (135)
 
 ### Enhance
 
@@ -159,7 +159,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `plan-rls-audit`
 **Triggers:** "RLS", "row level security", "is my Supabase secure", "anyone can read my data", "check my database policies", "lock down my tables", "service_role key", "Supabase security advisor"
 **What it does:** Table-by-table Supabase/Postgres RLS audit — relrowsecurity, permissive/inverted policies (CVE-2025-48757 class), service_role client-side, auth.uid() perf. Produces access matrix + `plan-rls-audit.md` — **no SQL until approved**.
-**Related:** `plan-secrets-audit`, `plan-security-audit`, `audit-db-schema`, `db-migrator`
+**Related:** `plan-secrets-audit`, `plan-security-audit`, `audit-db-schema`, `db-migrator`, `audit-auth-flows`
 
 #### `plan-error-handling`
 **Triggers:** "errors aren't showing in Sentry", "fail silently", "empty catch blocks", "observability", "check my Langfuse", "LLM tracing"
@@ -233,8 +233,8 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 #### `plan-security-audit`
 **Triggers:** "security audit plan", "OWASP audit plan", "hardening plan", "plan security fixes", "security burndown"
-**What it does:** OWASP Top 10 + Supabase-first hardening burndown (auth paths, dependency CVEs). Plan only — no patches, no destructive testing. Table RLS → `plan-rls-audit`. Key rotation → `plan-secrets-audit`. App LLM attacks → `audit-llm-security`.
-**Related:** `audit-security`, `plan-rls-audit`, `plan-secrets-audit`, `test-red-team`
+**What it does:** OWASP Top 10 + Supabase-first hardening burndown. Plan only — no patches, no destructive testing. App-layer auth flows → `audit-auth-flows`. Table RLS → `plan-rls-audit`. Key rotation → `plan-secrets-audit`. App LLM attacks → `audit-llm-security`.
+**Related:** `audit-security`, `audit-auth-flows`, `plan-rls-audit`, `plan-secrets-audit`, `test-red-team`
 
 #### `plan-docs-sync`
 **Triggers:** "docs drift", "sync docs with code", "audit documentation", "stale README", "onboarding docs broken", "doc sync plan", "phantom docs", "docs out of date"
@@ -350,9 +350,14 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Related:** `audit-bundle-size`, `test-load`, `audit-resilience`, `backend-db-performance`
 
 #### `audit-security`
-**Triggers:** "review security", "check vulnerabilities", "audit auth code", "OWASP", "security headers"
-**What it does:** Static OWASP review of app code (auth, injection, headers). May fix inline. Plan-only burndown → `plan-security-audit`. Table RLS → `plan-rls-audit`. Key rotation → `plan-secrets-audit`. LLM attacks → `audit-llm-security`.
-**Related:** `plan-security-audit`, `plan-rls-audit`, `plan-secrets-audit`, `audit-llm-security`
+**Triggers:** "review security", "check vulnerabilities", "OWASP", "security headers"
+**What it does:** Static OWASP review of app code (injection, headers, deps). May fix inline. Session / route×gate / getSession → `audit-auth-flows`. Plan-only burndown → `plan-security-audit`. Table RLS → `plan-rls-audit`. Key rotation → `plan-secrets-audit`. LLM attacks → `audit-llm-security`.
+**Related:** `audit-auth-flows`, `plan-security-audit`, `plan-rls-audit`, `plan-secrets-audit`, `audit-llm-security`
+
+#### `audit-auth-flows`
+**Triggers:** "audit our auth", "check middleware protection", "is getSession safe", "route gate coverage", "CVE-2025-29927", "/auth-flows"
+**What it does:** Read-only app-layer auth audit. Centerpiece is the route×gate matrix (every protected route/API/action → the gate that actually covers it, server-side verified). Middleware is not a security boundary — sole-gate is a finding even after CVE-2025-29927 is patched (official Vercel postmortem). Supabase `getSession()` for server-side authz is critical (`getUser()` is the network-verified call). Session lifecycle, refresh-token reuse detection (default 10s; do not widen), OAuth/PKCE, IDOR/admin gates. Live probes non-prod only. Data-layer half → `plan-rls-audit`.
+**Related:** `audit-security`, `plan-rls-audit`, `plan-secrets-audit`, `plan-security-audit`, `backend-patterns`
 
 #### `audit-accessibility`
 **Triggers:** "accessible", "WCAG", "ADA", "a11y", "screen reader", "disability"
@@ -746,7 +751,7 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 
 ---
 
-## Commands (49)
+## Commands (50)
 
 Commands fall into two groups: **standalone** (full playbook in the file) and **pointer** (thin slash entry delegating to a skill).
 
@@ -784,6 +789,7 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/test-mutation` | `test-mutation` | Mutation testing — do tests actually assert? |
 | `/arch-boundaries` | `enhance-arch-boundaries` | Mechanically-enforced architecture boundaries |
 | `/adr` | `docs-adr` | Architecture Decision Records as agent-readable memory |
+| `/auth-flows` | `audit-auth-flows` | App-layer auth — route×gate, getSession vs getUser, middleware-as-only-gate |
 | `/uiux-plan` | `plan-uiux-unification` | Full UI/UX unification plan (audit only, no fixes) |
 | `/grill-me` | `grilling` | One-question-at-a-time interview to align before building |
 | `/handoff` | `handoff` | Compact the conversation into a handoff doc for a fresh session |
@@ -942,6 +948,9 @@ After approval: `backend-patterns`, `db-migrator`, `backend-observability`, prov
 
 #### Anti-entropy stack
 `audit-gate-logic` / `housekeep-gates` (soundness) → `test-mutation` (assertion strength) → `enhance-arch-boundaries` (structure) → `docs-adr` (memory)
+
+#### Auth defense in depth
+`audit-auth-flows` (app layer: route×gate, session, getSession) → `plan-rls-audit` (data layer) → `plan-secrets-audit` (keys)
 
 #### Bulk transform slipped past CI
 `audit-codemod-safety` → `audit-gate-logic` (if size defeated review) → `plan-test-coverage` / `test-visual-regression`

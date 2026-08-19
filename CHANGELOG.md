@@ -4,6 +4,18 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.22.0] — 2026-08-19
+
+### Added
+
+- **`audit-auth-flows`** (`/auth-flows`) — read-only app-layer auth audit. Route×gate matrix, Supabase `getSession()` vs `getUser()`, middleware-as-only-gate (CVE-2025-29927), refresh-token reuse detection, OAuth/IDOR. Data-layer half stays on `plan-rls-audit`.
+
+### Changed
+
+- `audit-security` / `plan-security-audit` / `plan-rls-audit` no longer own session/route-gate / getSession triggers.
+
+---
+
 ## [1.21.0] — 2026-08-18
 
 ### Added

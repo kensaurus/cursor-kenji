@@ -1,9 +1,9 @@
 ---
 name: plan-security-audit
 description: >
-  OWASP Top 10 + Supabase-first hardening burndown (auth paths, dependency
-  CVEs). Use when "security audit plan", "OWASP audit", "hardening plan", or
-  "security burndown". Table RLS → plan-rls-audit. Key rotation →
+  OWASP Top 10 + Supabase-first hardening burndown. Use when "security audit
+  plan", "OWASP audit", "hardening plan", or "security burndown". App-layer
+  auth flows → audit-auth-flows. Table RLS → plan-rls-audit. Key rotation →
   plan-secrets-audit. App LLM attacks → audit-llm-security.
 license: MIT
 ---
