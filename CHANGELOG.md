@@ -4,6 +4,14 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.23.1] — 2026-08-19
+
+### Fixed
+
+- **Windows `npx` from a clone** — `npx @kensaurus/cursor-kenji` from the repo folder failed with `cursor-kenji is not recognized` because npm exec uses the local package and `cmd` looks for a cwd shim that did not exist. Added `cursor-kenji.cmd` plus a `bin/cursor-kenji.js` entry so the same command works from the clone and from any other directory. Registry `npx` from a non-clone folder already worked.
+
+---
+
 ## [1.23.0] — 2026-08-19
 
 ### Added

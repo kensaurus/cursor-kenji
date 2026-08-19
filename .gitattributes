@@ -11,6 +11,7 @@
 *.mdc   text eol=lf
 *.yml   text eol=lf
 *.yaml  text eol=lf
+*.cmd   text eol=crlf
 
 # Treat these as binary (never normalize / diff as text).
 *.png   binary

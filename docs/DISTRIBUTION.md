@@ -7,8 +7,8 @@ Where cursor-kenji is published and how users find it.
 | Channel | Command |
 |---------|---------|
 | **skills.sh** (recommended) | `npx skills add kensaurus/cursor-kenji` |
-| **npm** | `npx @kensaurus/cursor-kenji` |
-| **Clone (Windows-safe)** | `git clone … && node bin/install.mjs --all` |
+| **npm** | `npx @kensaurus/cursor-kenji --all` |
+| **Clone** | `git clone … && node bin/install.mjs --all` |
 | **Git clone** | `git clone https://github.com/kensaurus/cursor-kenji.git && ./install.sh` |
 
 Current npm version: see [npm package page](https://www.npmjs.com/package/@kensaurus/cursor-kenji) or `npm view @kensaurus/cursor-kenji version`.
@@ -17,7 +17,7 @@ Current npm version: see [npm package page](https://www.npmjs.com/package/@kensa
 
 | Directory | URL | Status |
 |-----------|-----|--------|
-| **npm** | https://www.npmjs.com/package/@kensaurus/cursor-kenji | Live @ 1.19.1 |
+| **npm** | https://www.npmjs.com/package/@kensaurus/cursor-kenji | Live — `npm view @kensaurus/cursor-kenji version` |
 | **GitHub** | https://github.com/kensaurus/cursor-kenji | Source of truth |
 | **Cursor Marketplace** | https://cursor.com/marketplace | Publisher application submitted — awaiting review |
 | **cursor.directory** | https://cursor.directory/plugins/cursor-kenji | Submitted — pending security scan |

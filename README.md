@@ -454,7 +454,7 @@ npx @kensaurus/cursor-kenji --link     # dev: symlink for live skill authoring
 
 From a clone: `npm run install:cursor` · `node bin/install.mjs --all` (all tools) · `npm test` validates skills + count + install smoke test.
 
-**Windows:** `npx @kensaurus/cursor-kenji` can fail (`cursor-kenji` is not recognized). Use `node bin/install.mjs --all` from a clone instead.
+From any folder: `npx @kensaurus/cursor-kenji --all`. From a clone, `node bin/install.mjs --all` also works (Windows ships `cursor-kenji.cmd` so `npx` from the repo folder works too).
 
 **Optional — [Mushi Mushi](https://github.com/kensaurus/mushi-mushi)** bug-report triage + AI draft PRs (pairs with `mushi-health`, `test-playwright`):
 

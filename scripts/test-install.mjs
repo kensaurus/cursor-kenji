@@ -7,7 +7,7 @@
  *
  *   node scripts/test-install.mjs   # exit 0 on pass, 1 on failure
  */
-import { execFileSync } from "node:child_process";
+import { execFileSync, execSync } from "node:child_process";
 import {
   mkdtempSync,
   rmSync,
@@ -190,6 +190,49 @@ try {
     "Claude should receive shell-first-search.md");
   expect(countDir(join(sandbox5, ".claude", "rules")) === repoClaudeRules,
     `claude rules: expected ${repoClaudeRules}, got ${countDir(join(sandbox5, ".claude", "rules"))}`);
+
+  // Official npm bin is the .js wrapper (Windows cmd-shim friendly).
+  expect(existsSync(join(repoRoot, "bin", "cursor-kenji.js")), "missing bin/cursor-kenji.js");
+  const wrapperHelp = execFileSync(process.execPath, [join(repoRoot, "bin", "cursor-kenji.js"), "--help"], {
+    encoding: "utf8",
+  });
+  expect(wrapperHelp.includes("cursor-kenji installer"), "bin/cursor-kenji.js --help did not run installer");
+
+  // From a clone on Windows, `npx @kensaurus/cursor-kenji` becomes `cmd /c cursor-kenji`
+  // and cmd looks in the current directory. The cwd shim must exist and run.
+  expect(existsSync(join(repoRoot, "cursor-kenji.cmd")), "missing Windows cwd shim cursor-kenji.cmd");
+  if (process.platform === "win32") {
+    const cmdHelp = execFileSync("cmd.exe", ["/c", "cursor-kenji.cmd", "--help"], {
+      cwd: repoRoot,
+      encoding: "utf8",
+    });
+    expect(cmdHelp.includes("cursor-kenji installer"), "cursor-kenji.cmd --help did not run installer");
+  }
+
+  // Packed tarball (what npm publish ships) must expose a working bin.
+  const packDir = mkdtempSync(join(tmpdir(), "cursor-kenji-pack-"));
+  try {
+    execSync("npm pack --pack-destination " + JSON.stringify(packDir), {
+      cwd: repoRoot,
+      stdio: "pipe",
+    });
+    const tgz = readdirSync(packDir).find((name) => name.endsWith(".tgz"));
+    expect(Boolean(tgz), "npm pack did not produce a tarball");
+    if (tgz) {
+      execSync("tar -xzf " + JSON.stringify(tgz), { cwd: packDir, stdio: "pipe" });
+      const packedPkg = JSON.parse(readFileSync(join(packDir, "package", "package.json"), "utf8"));
+      expect(packedPkg.bin?.["cursor-kenji"] === "bin/cursor-kenji.js",
+        `packed bin must be bin/cursor-kenji.js, got ${packedPkg.bin?.["cursor-kenji"]}`);
+      const packedHelp = execFileSync(
+        process.execPath,
+        [join(packDir, "package", "bin", "cursor-kenji.js"), "--help"],
+        { encoding: "utf8" },
+      );
+      expect(packedHelp.includes("cursor-kenji installer"), "packed bin/cursor-kenji.js --help failed");
+    }
+  } finally {
+    rmSync(packDir, { recursive: true, force: true });
+  }
 } catch (err) {
   fail.push("installer threw: " + (err.stderr?.toString() || err.message));
 } finally {

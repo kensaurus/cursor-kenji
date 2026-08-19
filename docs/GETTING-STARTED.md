@@ -44,13 +44,13 @@ cd cursor-kenji
 npx @kensaurus/cursor-kenji
 ```
 
-**Windows:** `npx @kensaurus/cursor-kenji` can fail (`cursor-kenji` is not recognized). From a clone, run:
+Works on Windows too — including from a clone of this repo:
 
 ```bash
-git clone https://github.com/kensaurus/cursor-kenji.git
-cd cursor-kenji
-node bin/install.mjs --all
+npx @kensaurus/cursor-kenji --all
 ```
+
+From a clone you can also run `node bin/install.mjs --all`.
 
 ---
 
