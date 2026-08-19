@@ -10,6 +10,9 @@ license: MIT
 
 # Input-Validation & Trust-Boundary Audit + Hardening Plan
 
+**Degree of freedom: HIGH** — map trust boundaries, score gaps, emit a plan.
+Stay **plan-only**. No Zod, sanitizers, or webhook edits until approved.
+
 ## This skill vs neighbors
 
 | Skill | Owns |
@@ -26,6 +29,21 @@ gaps, phase remediations, emit `plan-input-validation.md`. **Audit & plan only �
 code changes until each phase is approved.**
 
 **Walk every boundary. Find what's trusted that shouldn't be. Change nothing until approved.**
+
+## How to reason (every plan item)
+
+1. **Propose** — schema, sanitize, signature verify, or allowlist
+2. **Risk** — forgeable money/data, stored XSS, or injection
+3. **Keep-working** — boundaries that already validate + authenticate
+4. **Phase** — Forgeable paths → XSS → Schema pass → Uploads (do not execute)
+
+## Worked example
+
+> **Propose:** verify the Stripe webhook with `constructEvent` on the raw body; reject empty secrets; return 400 on bad signatures.
+> **Risk:** empty-signing-secret bypass — anyone can forge `invoice.paid` and credit quota.
+> **Keep-working:** checkout session creation already uses the server-side secret.
+> **Phase:** Phase 1 — Forgeable money/data paths.
+> **Note:** origin proof ≠ safe to interpolate into SQL/HTML.
 
 AI agents write code that works on the inputs you showed them. Two signature patterns
 recur: `dangerouslySetInnerHTML` without DOMPurify (XSS), and webhook handlers without
@@ -50,7 +68,7 @@ This skill owns the *boundary where untrusted data enters*.
 
 ---
 
-## The four boundary classes
+## The four boundary classes  [HIGH freedom]
 
 ### 1 · Form & API input
 - **No schema validation** — bodies/params/query without Zod (or equivalent).
@@ -81,7 +99,7 @@ This skill owns the *boundary where untrusted data enters*.
 
 ---
 
-## Procedure
+## Procedure  [HIGH freedom — plan only]
 
 1. **Map boundaries.** Enumerate every untrusted entry point. Skip absent ones.
 2. **Test each.** For every boundary: validated? sanitized? authenticated?
@@ -99,6 +117,14 @@ This skill owns the *boundary where untrusted data enters*.
 - **Don't trust the client copy.** Browser-only checks are UX, not security.
 - **Stack-specific raw-body note.** Call out Next.js + Stripe raw-body requirement.
 - **Minimal quoting** of source.
+
+## Self-critique before the burndown  [LOW freedom — do not skip]
+
+1. **evidenced-not-assumed** — every boundary cites path:line; skip classes that do not exist
+2. **plan-only** — no Zod schemas, DOMPurify, or webhook config
+3. **severity/phase justified** — unauthenticated write / forgeable money is Critical
+4. **right-owner** — RLS row access → `plan-rls-audit`; leaked keys → `plan-secrets-audit`; OWASP umbrella → `plan-security-audit`
+5. **no-false-safety** — browser-only checks are UX; signature ≠ sanitization; empty webhook secret is a bypass
 
 ---
 

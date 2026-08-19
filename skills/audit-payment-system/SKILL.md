@@ -10,43 +10,63 @@ license: MIT
 
 # audit-payment-system — Money-Movement Correctness & Compliance Audit
 
-Payment code fails differently from normal CRUD. A dropped `PUT` is an annoyance; a **retried charge**
-is a double-charge, a **lost ledger write** is money that vanished, a **logged PAN** is PCI liability,
-and an **unverified webhook** is a spoofed "payment succeeded". The bugs are silent — everything looks
-green until a customer is charged twice or the month-end books don't balance. This audit checks the
-controls that keep every cent accounted for and every charge exactly-once.
+**Degree of freedom: MIXED** — Scope, matrix, and severity `[HIGH freedom]`;
+Phase 0 detection searches `[LOW freedom — run exactly]`. **Do not write
+exploit or payment-fraud PoCs** — quote the missing control, never a replay
+or spoof recipe.
 
-The 2026 consensus is consistent across sources: a payment system rests on three pillars —
-**idempotency**, a **double-entry ledger**, and **reconciliation** — with **PCI DSS v4.0.1** as a
-non-negotiable floor and **webhooks as the source of truth** (never trust the synchronous API response
-alone).
+Read-only. Assess and prioritize; do not change code. Payment code is a
+STOP-and-confirm surface — findings feed a human-reviewed remediation, ideally
+with a stronger model. Delegations: per-call resilience → **`audit-resilience`**;
+PCI/secrets/authz → **`audit-security`**; ledger schema → **`audit-db-schema`**;
+outbox/saga *structure* → **`audit-backend-architecture`**; append-only
+integrity → **`plan-data-integrity`**; Stripe integration → the Stripe plugin
+skills. This skill owns *payment-domain correctness*.
 
-> **Read-only.** This skill assesses and prioritizes; it does not change code. Payment code is a
-> STOP-and-confirm surface (see the composer execution rule) — findings here feed a human-reviewed
-> remediation, ideally with a stronger model, not an unattended edit. Delegations: per-call runtime
-> resilience → **`audit-resilience`**; PCI/secrets/authz/injection → **`audit-security`**; ledger &
-> partitioning schema → **`audit-db-schema`**; outbox/saga *structure* → **`audit-backend-architecture`**;
-> destructive/append-only integrity → **`plan-data-integrity`**; Stripe-specific integration →
-> the Stripe plugin skills. This skill owns the *payment-domain correctness* layer and links out rather
-> than duplicating.
+Payment failures are silent: a retried charge is a double-charge, a lost ledger
+write is vanished money, a logged PAN is PCI liability, an unverified webhook
+is an untrusted "paid". Three pillars: **idempotency**, a **double-entry
+ledger** (when in scope), **reconciliation** — plus **PCI DSS v4.0.1** and
+**webhooks as source of truth** (never trust the sync API response alone).
 
 ---
 
 ## Core principle — earn each control by scope; every gap is money or liability
 
-Not every app needs an in-house double-entry ledger. A shop using Stripe Checkout offloads the ledger,
-settlement, and most PCI scope to Stripe — flagging "no double-entry ledger" there is noise. But
-**idempotency, webhook verification, state sync, and tokens-only** apply to *everyone* who moves money.
-Gate depth by scope (Phase 0), then treat every in-scope gap by its blast radius: **Critical = a
-customer is charged twice, money is lost/unaccounted, or card data is exposed.** There is no "low
-severity" for a double-charge.
+Not every app needs an in-house double-entry ledger. Stripe Checkout offloads
+ledger, settlement, and most PCI — flagging "no double-entry ledger" there is
+noise. **Idempotency, webhook verification, state sync, and tokens-only** apply
+to *everyone* who moves money. Gate depth by scope (Phase 0). **Critical = a
+customer is charged twice, money is lost/unaccounted, or card data is
+exposed.** There is no "low severity" for a double-charge.
+
+## How to reason — Observe → Interpret → Classify → Severity
+
+1. **Observe** — quote the mutation/webhook/ledger `file:line` (or "searched, none found")
+2. **Interpret** — what money or liability path breaks if that control is missing?
+3. **Classify** — Implemented / Partial / Missing / N/A (tier reason); control id (A1–G4)
+4. **Severity** — double-charge, lost money, or PAN/CVV exposure = Critical; P2-only rows are N/A on P0
+
+## Worked example
+
+> **Observe:** P0 Stripe Checkout. `POST /api/checkout` calls
+> `paymentIntents.create` with no idempotency key and no unique business-intent
+> constraint (`app/api/checkout/route.ts`). Webhook handler updates order status
+> from the parsed body without `constructEvent` / signature verification
+> (`app/api/stripe/route.ts`).
+> **Interpret:** a network retry can create two PaymentIntents for one checkout;
+> an unverified webhook is not a trusted state change.
+> **Classify:** Missing A1 + Missing C2. Ledger rows B* are N/A (P0).
+> **Severity:** Critical — double-charge and untrusted "paid" are in-scope.
+> **Finding:** A1+C2 | checkout + webhook routes | Critical | add intent-scoped
+> idempotency + verify-then-process. Do not demonstrate a replay or spoof.
 
 ---
 
-## Phase 0 — Detect payment surfaces & scope (gates every later finding)
+## Phase 0 — Detect payment surfaces & scope (gates every later finding)  [LOW freedom — run exactly]
 
-Find the money paths and the provider first; the scope tier decides which controls are in play. Never
-report an in-house-ledger control as "Missing" on a pure merchant-integrator (`N/A` with a reason).
+Find the money paths and the provider first. Never report an in-house-ledger
+control as "Missing" on a pure merchant-integrator (`N/A` with a reason).
 
 ```bash
 # Provider / SDK
@@ -82,33 +102,34 @@ applicability. If card data appears in the last `rg` above, that is **Critical, 
 
 ---
 
-## Phase 1 — Research (version-anchored, provider-aware)
+## Phase 1 — Research (version-anchored, provider-aware)  [HIGH freedom]
 
-Follow `/research`. Anchor to the **installed** SDK version and the provider's *current* API (e.g.
-Stripe **PaymentIntents**, not the legacy Charges API, which lacks native SCA/3DS2). Confirm the
-current-year shape of the controls before judging the code.
+Follow `/research`. Anchor to the **installed** SDK version and the provider's
+*current* API (e.g. Stripe **PaymentIntents**, not the legacy Charges API).
+Confirm the current-year shape of the controls before judging the code.
 
 **When the provider is Stripe, use the Stripe MCP as the authoritative source:**
 
-- Concepts / best practice (idempotency keys, webhook signature verification, PaymentIntents lifecycle,
-  SCA/3DS2, Radar) — `search_stripe_documentation` with `search_only_api_ref: false`, e.g.
-  `{ "question": "verify webhook signatures and prevent duplicate event processing", "language": "node" }`.
-- Exact API params the integration should be sending — `stripe_api_search` (intent + resource) then
-  `stripe_api_details` on the operation id (e.g. confirm `PaymentIntent.create` is called with an
-  idempotency key and amounts in minor units).
+- Concepts / best practice (idempotency keys, webhook signature verification,
+  PaymentIntents lifecycle, SCA/3DS2, Radar) — `search_stripe_documentation`
+  with `search_only_api_ref: false`.
+- Exact API params the integration should be sending — `stripe_api_search`
+  then `stripe_api_details` on the operation id (confirm `PaymentIntent.create`
+  is called with an idempotency key and amounts in minor units).
 
-For **PayPal / Square / Adyen / PayPay / Braintree / others**, the Stripe MCP does not apply — use
-`/research` against the provider's official docs (idempotency header, webhook/HMAC verification, 3DS/SCA,
-settlement report format). Never invent a param or endpoint the provider doesn't expose.
+For **PayPal / Square / Adyen / PayPay / Braintree / others**, the Stripe MCP
+does not apply — use `/research` against the provider's official docs. Never
+invent a param or endpoint the provider doesn't expose.
 
 ---
 
-## Phase 2 — Payment correctness matrix
+## Phase 2 — Payment correctness matrix  [HIGH freedom]
 
-For **each in-scope row**, mark `Implemented / Partial / Missing / N/A` with `file:line`, a one-line
-"why it bites in prod", and the fix-delegate. **Full detection commands, good-vs-red-flag signals, and
-fix targets are in [references/checklist.md](references/checklist.md)** — load it and work the applicable
-groups.
+For **each in-scope row**, mark `Implemented / Partial / Missing / N/A` with
+`file:line`, a one-line "why it bites in prod", and the fix-delegate. **Full
+detection commands, good-vs-red-flag signals, and fix targets are in
+[references/checklist.md](references/checklist.md)** — load it and work the
+applicable groups.
 
 ### A. Money-movement correctness (P0+)
 | # | Control | Bites in prod if missing | Fix via |
@@ -175,10 +196,11 @@ Rules:
 - **Evidence or it didn't happen** — every verdict cites `file:line` or "searched, none found".
 - **N/A is first-class** — record *why* (scope tier), don't drop the row.
 - **No double-counting** — link per-call resilience to `audit-resilience`, PCI to `audit-security`.
+- **No PoCs** — do not write replay, spoof, or card-testing procedures.
 
 ---
 
-## Phase 3 — Prioritized report (read-only)
+## Phase 3 — Prioritized report (read-only)  [HIGH freedom]
 
 ```markdown
 ## Payment System Audit — [repo] — [date]
@@ -189,7 +211,7 @@ Rules:
 | Finding | Control | file:line | Why it bites | Fix via |
 |---|---|---|---|---|
 | Charge has no idempotency key; no unique constraint | A1 | pay/charge.ts:52 | Retry double-charges the customer | audit-resilience |
-| Webhook processed without signature check | C2 | api/webhook.ts:9 | Spoofed "paid" → free goods | audit-security |
+| Webhook processed without signature check | C2 | api/webhook.ts:9 | Untrusted "paid" → free goods | audit-security |
 | Card number written to app log | F1 | pay/log.ts:20 | PCI breach liability | audit-security |
 | DB write then broker publish (not atomic) | C4 | ledger.ts:88 | Captured, never booked → money unaccounted | backend-patterns |
 
@@ -217,10 +239,19 @@ Rules:
 (in-house ledger, 3-way bank match, sharding) against a P0 merchant integrator; re-auditing per-call
 timeouts/retries `audit-resilience` owns; assigning any severity below Critical to a double-charge,
 lost-money, or PAN-exposure finding; recommending a refund/payout saga without compensation logic;
-**editing payment code** — this skill reports; remediation is human-reviewed (route to a stronger model
-per the composer execution rule).
+**writing exploit or payment-fraud PoCs**; **editing payment code** — this skill reports;
+remediation is human-reviewed (route to a stronger model per the composer execution rule).
 
 ---
+
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **Evidenced** — `file:line` or "searched, none found", not "webhooks are probably signed"
+2. **No PoC** — finding names the missing control; no replay, spoof, or card-testing steps
+3. **Tier respected** — P2 ledger / 3-way match are N/A on P0, with why
+4. **Severity justified** — double-charge, lost money, or PAN/CVV = Critical
+5. **Right owner** — IAP / StoreKit → `audit-monetization-iap`; per-call retry → `audit-resilience`
+6. **Nothing edited** — STOP-and-confirm; human-reviewed remediation only
 
 ## Related
 - `audit-resilience` — per-call idempotency keys, timeouts, retry+backoff+jitter, circuit breaker, cancellation

@@ -10,6 +10,9 @@ license: MIT
 
 # Secrets & Key-Scope Audit + Rotation Plan
 
+**Degree of freedom: MIXED** — prefix scan is exact; rotate-vs-relocate
+is judgment. Stay **plan-only**. Never print secret values.
+
 ## This skill vs neighbors
 
 | Skill | Owns |
@@ -19,6 +22,20 @@ license: MIT
 | `plan-rls-audit` | Table access control |
 | `audit-env-parity` | Env/config drift |
 
+## How to reason (every plan item)
+
+1. **Propose** — rotate, relocate, or hygiene — say which, never print the value
+2. **Risk** — who can use the key if it stays live (history counts)
+3. **Keep-working** — keys that are scoped correctly and not in history
+4. **Phase** — rotate → relocate → hygiene → optional scrub (do not execute)
+
+## Worked example
+
+> **Propose:** rotate the Stripe secret at `api/pay.ts` (last-4 only in the report); history presence means rotate, not `.env` move.
+> **Risk:** `sk_` in committed history stays valid forever after a relocate.
+> **Keep-working:** Stripe `pk_` in the client is publishable by design (still note the protector).
+> **Phase:** Phase 1 — rotate exposed never-client secrets.
+> **Redaction:** type + path + last 4 — never the secret.
 
 **Role:** Senior security engineer (credential exposure + key scoping).
 
@@ -57,35 +74,35 @@ making relocation insufficient?).
 
 ## The audit
 
-### A · Pattern scan (working tree)
+### A · Pattern scan (working tree)  [LOW freedom — run exactly]
 Search outside `.env*` and server-only contexts for:
 - Prefixes: `sk_`, `pk_`, `whsec_`, `service_role`, `eyJ...`, `AKIA`, `API_KEY`,
   `SECRET`, `TOKEN`, long random blobs.
 - Supabase: anon vs `service_role`.
 - Any key in files that ship to the browser.
 
-### B · Scope classification
+### B · Scope classification  [HIGH freedom]
 - **Safe client-side:** Supabase **anon**, Stripe **publishable** (`pk_`), public
   analytics keys — note the protector dependency (RLS, Stripe design).
 - **Never client-side (Critical if exposed):** **service_role**, Stripe **secret**
   (`sk_`), **webhook secret** (`whsec_`), AWS secrets, DB URLs.
 - **`NEXT_PUBLIC_` / `VITE_` / `EXPO_PUBLIC_` trap** — bundled into client.
 
-### C · Git history (rotate vs relocate)
+### C · Git history (rotate vs relocate)  [HIGH freedom]
 - Ever in committed history → **rotate** (relocation is theater).
 - Scrubbing (filter-repo/BFG) is secondary — rotation first.
 
-### D · Deployment env config (Vercel / AWS)
+### D · Deployment env config (Vercel / AWS)  [HIGH freedom]
 - Secrets in platform env store, not baked into build.
 - `.env.example` not committed with real values.
 - No secrets as build args (persist in image layers).
 
-### E · `.gitignore` & hygiene
+### E · `.gitignore` & hygiene  [HIGH freedom]
 - `.env*` ignored; no secrets in README, comments, test fixtures.
 
 ---
 
-## Procedure
+## Procedure  [HIGH freedom]
 
 1. **Scan** working tree (A), classify scope (B).
 2. **Check history** for every credential (C).
@@ -95,7 +112,7 @@ Search outside `.env*` and server-only contexts for:
 
 ---
 
-## Guardrails
+## Guardrails  [LOW freedom — run exactly]
 
 - **Plan only.** No rotation, history rewriting, or env edits.
 - **Never print the secret.** Type + location + last 4 chars at most.
@@ -103,6 +120,14 @@ Search outside `.env*` and server-only contexts for:
 - **Don't assume safe-client keys are fine.** Hand anon-key + no-RLS to
   `plan-rls-audit`.
 - **Order:** rotate → update env store → redeploy → (optional) scrub history.
+
+## Self-critique before the burndown  [LOW freedom — do not skip]
+
+1. **evidenced-not-assumed** — type + location + last 4; never the secret value
+2. **plan-only** — no rotation, scrub, or env edit this pass
+3. **phase justified** — history → rotate is Phase 1, not "move to `.env`"
+4. **right-owner** — anon-key + no-RLS → `plan-rls-audit`; generic OWASP → `plan-security-audit`
+5. **no-false-safety** — relocate-without-rotate is theater; safe-client still needs its protector
 
 ---
 

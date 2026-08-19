@@ -10,6 +10,9 @@ license: MIT
 
 # plan-backup-dr — Recovery capability plan
 
+**Degree of freedom: HIGH** — prove restore, quantify RPO/RTO, plan.
+Stay **plan-only**. No PITR toggles or prod-writing drills until approved.
+
 **Role:** Platform / disaster-recovery engineer.
 
 **Task:** Prove restore works, quantify RPO/RTO, emit `plan-backup-dr.md`.
@@ -31,9 +34,25 @@ to prod until approved.**
 Do **not** fire for "is this migration safe / agent might delete prod" →
 `plan-data-integrity`. That skill *prevents* wipe; this one *recovers* after one.
 
+## How to reason (every plan item)
+
+1. **Propose** — backup, restore path, drill, or off-provider export
+2. **Risk** — worst-case in plain language ("lose up to a day of uploads")
+3. **Keep-working** — stores that already have a proven restore
+4. **Phase** — P0 / P1 / P2 (do not execute)
+
+## Worked example
+
+> **Propose:** run one isolated restore drill of the primary DB; write the
+> runbook from what you actually did.
+> **Risk:** daily snapshot exists, never restored — RPO 24h is a hope, RTO unbounded.
+> **Keep-working:** object-storage versioning already on.
+> **Phase:** P0 — no proven restore.
+> **Target:** drill into an isolated env, never over prod.
+
 ---
 
-## Phase 0 — Map the recovery surface
+## Phase 0 — Map the recovery surface  [HIGH freedom]
 
 For each stateful thing, find backup *and* restore:
 
@@ -46,7 +65,7 @@ For each stateful thing, find backup *and* restore:
 
 ---
 
-## Phase 1 — Audit recovery reality
+## Phase 1 — Audit recovery reality  [HIGH freedom]
 
 **RPO** — Real gap between backups. Daily snapshot = up to 24h gone. PITR =
 seconds. State the number, not the aspiration.
@@ -67,7 +86,7 @@ would notice slow corruption.
 
 ---
 
-## Phase 2 — Phased DR plan (approve before executing)
+## Phase 2 — Phased DR plan (approve before executing)  [HIGH freedom — plan only]
 
 - **P0** — no proven restore; any store with *no* backup; secrets unrecoverable; bus-factor-1
 - **P1** — RPO worse than the data justifies; no written runbook; no off-provider export
@@ -75,6 +94,14 @@ would notice slow corruption.
 
 Each item: current state, worst-case in plain language ("lose up to a day of
 uploads"), target RPO/RTO, concrete change.
+
+## Self-critique before the burndown  [LOW freedom — do not skip]
+
+1. **RPO is a number** — not "we have backups"
+2. **Drill evidence or P0** — absence is the finding
+3. **No prod writes** — isolated env only, and only after approval
+4. **Right owner** — unguarded DELETE → `plan-data-integrity`
+5. **Do not cut restore** to save cost (`audit-infra-cost` must not expire backups)
 
 ## Definition of Done
 

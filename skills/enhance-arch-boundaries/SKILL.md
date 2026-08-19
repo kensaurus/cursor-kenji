@@ -11,6 +11,10 @@ license: MIT
 
 # enhance-arch-boundaries — Architecture as a fitness function
 
+**Degree of freedom: MIXED — T1 is the priority.** Recovering the model
+`[HIGH freedom]`; do-not-invent, shrink-only baseline, and deliberate-violation
+probes `[LOW freedom — run exactly]`.
+
 Codify the repo's intended structure as rules that block merge. **Import
 spaghetti is how agents degrade architecture: each import looks locally
 reasonable, no single diff is wrong, and after forty sessions the
@@ -27,9 +31,25 @@ rule in the aggregator gate is physics.
 | `docs-adr` | Records *why* the model was chosen |
 | `enhance-agent-guardrails` | Broader guard install; this owns the import graph |
 
+## How to reason
+
+1. **Observe** — folder layout, existing conventions, any architecture audit
+2. **Interpret** — what layering does the repo already mean to have?
+3. **Classify** — recoverable model / no intended structure (stop) / inventing (forbidden)
+4. **Severity** — client → server-only / service-role is the worst edge
+
+## Worked example
+
+> **Observe:** `app/dashboard/page.tsx` imports `@/lib/supabase/admin`
+> (service-role). No boundary rule.
+> **Interpret:** the intended split exists in folder names but is not physics.
+> **Classify:** forbidden edge — client → server-only.
+> **Fix:** dependency-cruiser / eslint-boundaries rule; grandfather other
+> violations into a shrink-only baseline; probe a new forbidden import fails CI.
+
 ---
 
-## Phase 0 — Recover the intended architecture (do not invent one)
+## Phase 0 — Recover the intended architecture (do not invent one)  [LOW freedom — stop if none]
 
 The rules must encode the architecture the repo *means* to have.
 
@@ -49,7 +69,7 @@ layering first.
 
 ---
 
-## Phase 1 — Install the rule set
+## Phase 1 — Install the rule set  [HIGH freedom; mapped to the confirmed model]
 
 Tool by stack: **dependency-cruiser** (framework-agnostic JS/TS),
 **eslint-plugin-boundaries** (when living inside ESLint is preferable),
@@ -74,7 +94,7 @@ Core rules, each mapped to the confirmed model:
 
 ---
 
-## Phase 2 — Grandfather, then ratchet
+## Phase 2 — Grandfather, then ratchet  [LOW freedom — shrink-only baseline]
 
 Do not weaken the rules to fit existing violations, and do not block the
 repo on fixing them all.
@@ -89,7 +109,7 @@ repo on fixing them all.
 
 ---
 
-## Phase 3 — Wire and make agent-legible
+## Phase 3 — Wire and make agent-legible  [HIGH freedom]
 
 - Add the check to CI wired into the aggregator gate (`housekeep-gates`)
   and mirror it in local hooks (same command, two callers).
@@ -113,6 +133,14 @@ repo on fixing them all.
 - [ ] Graph visualization generated into docs with a regeneration schedule
 - [ ] Agent rules updated to state the model and point at the gate; decision recorded via `docs-adr`
 - [ ] Deliberate-violation probe: a test import that breaks each rule class fails CI
+
+## Self-critique before claiming done  [LOW freedom — do not skip]
+
+1. **Model confirmed** — or you stopped; you did not invent a layering
+2. **Baseline shrink-only** — new violations fail; no silent growth
+3. **Probe per rule class** — a test import failed CI
+4. **Right owner** — pattern advice → `audit-backend-architecture`; why → `docs-adr`
+5. **Aggregator wired** — `housekeep-gates`
 
 ## Output format
 

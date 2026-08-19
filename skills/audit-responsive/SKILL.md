@@ -10,6 +10,10 @@ license: MIT
 
 # audit-responsive — Layout & breakpoint IA
 
+**Degree of freedom: MIXED** — Phases 0–3 `[HIGH freedom]`; viewport
+screenshot loop `[LOW freedom — run exactly]`; Phase 4 implement only after
+the report (wait if scope is large). Never write the retired layout alias.
+
 > **Audit-and-fix exception.** Report first; then implement. Not present-then-stop.
 
 **Desktop is not a wide phone.** Responsive means groups reflow, controls size to
@@ -35,9 +39,26 @@ phone fails this skill.
 | `plan-uiux-unification` | Full DS unification plan — no code |
 | `enhance-web-ui` / `enhance-web-ux` | Polish after the layout contract exists |
 
+## How to reason
+
+1. **Observe** — quote the container/grid and the 375 / 768 / 1440 screenshots
+2. **Interpret** — did groups reflow, or is 1440 a stretched phone?
+3. **Classify** — anti-pattern # (1–10) / present-and-correct
+4. **Severity** — stretched-phone 1440 = blocker for that page
+
+## Worked example
+
+> **Observe:** Dashboard at 1440: single column, full-width buttons, no
+> `max-w-*`. Screenshot matches the 375 stack scaled up.
+> **Interpret:** desktop is a wide phone — groups that compare (stats, list+detail)
+> never sit side-by-side.
+> **Classify:** anti-patterns 1, 2, 3 — blocker.
+> **Finding:** `app/dashboard/page.tsx` | #1+#2+#3 | blocker | add page
+> max-width; 12-col stats + list+detail at ≥1024
+
 ---
 
-## Phase 0 — Detect the stack (do not assume)
+## Phase 0 — Detect the stack (do not assume)  [HIGH freedom]
 
 Inspect the scoped UI and record:
 
@@ -61,7 +82,7 @@ rg -n "from 'lucide-react'|from '@heroicons'|from 'react-icons'|phosphor" -g '*.
 
 ---
 
-## Phase 1 — Audit the 10 anti-patterns
+## Phase 1 — Audit the 10 anti-patterns  [HIGH freedom; screenshot loop = LOW]
 
 Scan scoped pages, views, screens, and major layout components. Full signals and
 pass/fail cues: [references/checklist.md](references/checklist.md).
@@ -99,7 +120,7 @@ If the 1440 screenshot is a stretched phone, that is a **blocker** for the page.
 
 ---
 
-## Phase 2 — Extract or propose the token sheet
+## Phase 2 — Extract or propose the token sheet  [HIGH freedom]
 
 Before fixing, produce a sheet. If the repo already has tokens, **use them
 verbatim** and flag violations — do not invent a second scale.
@@ -115,7 +136,7 @@ verbatim** and flag violations — do not invent a second scale.
 
 ---
 
-## Phase 3 — Information architecture before pixels
+## Phase 3 — Information architecture before pixels  [HIGH freedom]
 
 For each flagged page/screen:
 
@@ -131,7 +152,7 @@ Use **real content** from the codebase — never invented examples.
 
 ---
 
-## Phase 4 — Implement
+## Phase 4 — Implement  [LOW freedom — after the report; repo tokens only]
 
 - Native responsive primitives: CSS grid/flex + media or container queries;
   Tailwind prefixes; framework grid components.
@@ -160,6 +181,14 @@ Hand off leftover polish (motion, microcopy, token drift) — do not absorb it.
 - [ ] Body line length ≤ ~75ch; paragraph line-height ≥ 1.5
 - [ ] No horizontal overflow at 375; touch targets ≥44px; tables have a defined mobile strategy
 - [ ] Layout **meaningfully differs** between 375 and 1440 — a stretched-phone 1440 fails
+
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **Three viewports** — no "done" from code inspection alone
+2. **Repo tokens first** — do not invent a second scale
+3. **Wireframe before CSS** — Phase 3 is the contract
+4. **Right owner** — touch/gestures → `design-mobile-first`; empty states → `audit-ui-states`
+5. **Name** — this skill is `audit-responsive` (not the retired layout alias)
 
 ---
 

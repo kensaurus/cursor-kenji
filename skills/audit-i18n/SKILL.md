@@ -9,13 +9,14 @@ license: MIT
 
 # audit-i18n — Natural, Human-Sounding Translations
 
+**Degree of freedom: MIXED** — Quality judgment and rewrite `[HIGH freedom]`;
+Phase 2 key-diff and Phase 4 locale walk `[LOW freedom — run exactly]`.
+
 > **Audit-and-fix exception.** Find bad copy, then fix it. Not present-then-stop.
 
 **Translations that read like machine output erode user trust** — especially in
-the user's own language. A Japanese user reading stiff, over-literal English
-translated to Japanese can feel it immediately. This skill finds every unnatural,
-jargon-heavy, or technically-worded string and rewrites it to sound like a real
-person in that locale.
+the user's own language. Find every unnatural, jargon-heavy, or technically
+worded string and rewrite it to sound like a real person in that locale.
 
 > **The goal**: every string should sound like it was written by a native speaker
 > who understands the user, not translated from English by a developer.
@@ -38,9 +39,27 @@ These apply to every string in every locale:
 | "The operation was successful" | "Done!" or "Saved" | Natural |
 | "Do you want to proceed?" | "Are you sure? This can't be undone." | Honest and specific |
 
+## How to reason — Observe → Interpret → Classify → Severity
+
+1. **Observe** — quote the source string or locale key (`file:line`) and the base-locale counterpart
+2. **Interpret** — does a native speaker get a next step, or a literal/dev-voiced phrase?
+3. **Classify** — hardcoded / missing key / too-literal / wrong-tone / format-mismatch / untranslated-key
+4. **Severity** — checkout, auth, and error strings first; `[TODO]` if you are not a native speaker
+
+## Worked example
+
+> **Observe:** `CheckoutButton.tsx:42` renders `<button>Submit</button>` (no i18n
+> key). `ja` `errors.email_invalid` is "無効なメールアドレス"; `en` key exists.
+> **Interpret:** the CTA does not name the outcome; JA is a literal of "Invalid
+> email address" — it blames and gives no next step.
+> **Classify:** hardcoded + too-literal error.
+> **Severity:** High — primary checkout CTA and a blocking validation error.
+> **Finding:** extract `buttons.place_order`; rewrite JA to guide a typo check;
+> then apply (audit-and-fix).
+
 ---
 
-## Phase 0: Detect the i18n setup
+## Phase 0: Detect the i18n setup  [HIGH freedom]
 
 ```
 package.json   → i18next, react-i18next, next-intl, vue-i18n, @angular/localize,
@@ -67,7 +86,7 @@ context7:resolve-library-id
 
 ---
 
-## Phase 1: Find hardcoded strings in source code
+## Phase 1: Find hardcoded strings in source code  [HIGH freedom]
 
 Look for user-facing text that bypasses the i18n system entirely.
 
@@ -90,7 +109,7 @@ Build a list: file path, line number, string content, whether it has an i18n key
 
 ---
 
-## Phase 2: Audit translation file completeness
+## Phase 2: Audit translation file completeness  [LOW freedom — run exactly]
 
 For each locale, check that all keys from the base locale (usually `en`) exist:
 
@@ -122,7 +141,7 @@ findMissing(en, ja);
 
 ---
 
-## Phase 3: Review translation quality
+## Phase 3: Review translation quality  [HIGH freedom]
 
 This is the most important phase. For each locale, review every string
 against the natural-language principles at the top of this skill.
@@ -191,7 +210,7 @@ against the natural-language principles at the top of this skill.
 
 ---
 
-## Phase 4: Walk the live app in each locale (Playwright)
+## Phase 4: Walk the live app in each locale (Playwright)  [LOW freedom — run exactly]
 
 For each active locale:
 
@@ -213,9 +232,21 @@ Look for:
 - Numbers using the wrong decimal/thousands separator (1,234.56 vs 1.234,56)
 - Plural forms: English has singular/plural; many languages have more forms
 
+Save screenshots under `.playwright-mcp/`.
+
 ---
 
-## Phase 5: Fix — priority order
+## Self-critique before applying  [LOW freedom — do not skip]
+
+1. **Evidenced** — `file:line` + key, not "Japanese feels off"
+2. **Native-or-TODO** — if you are not a native speaker, mark `[TODO]`; do not ship confident wrong idiom
+3. **Completeness first** — missing keys listed before quality nits
+4. **Right owner** — breakpoint overflow that is not locale-length → `audit-responsive`; WCAG → `audit-accessibility`
+5. **Do not delete copy** to "fix" i18n — extract or rewrite
+
+---
+
+## Phase 5: Fix — priority order  [HIGH freedom]
 
 ### Fix 1: Extract all hardcoded strings
 

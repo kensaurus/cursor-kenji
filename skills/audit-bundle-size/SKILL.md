@@ -10,16 +10,37 @@ license: MIT
 
 # audit-bundle-size — Find and Eliminate Bundle Bloat
 
-> **Audit-and-fix exception.** Measure the payload, then shrink it. Runtime slowness → `audit-performance`.
+**Degree of freedom: MIXED** — Offender triage and swap choice `[HIGH freedom]`;
+Phase 1 production build + analyser `[LOW freedom — run exactly]`.
 
-**Every kilobyte of JavaScript the browser must download, parse, and compile**
+> **Audit-and-fix exception.** Measure the payload, then shrink it. Runtime
+> slowness → `audit-performance`.
+
+**Every kilobyte of JavaScript the browser must download, parse, and compile
 before showing anything costs real users real time.** A large initial bundle is
-the #1 avoidable cause of slow LCP and poor Core Web Vitals. This skill finds
-exactly what is bloating it and tells you how to fix each item.
+the #1 avoidable cause of slow LCP and poor Core Web Vitals. Find exactly what
+is bloating it and fix each item.
+
+## How to reason — Observe → Interpret → Classify → Severity
+
+1. **Observe** — quote First Load JS / chunk gzip and the treemap contributor (`file` + package)
+2. **Interpret** — is this unused code on the critical path, a duplicate, or a missing split?
+3. **Classify** — giant-vendor / full-library import / missing-lazy / unused-dep / dev-in-prod / duplicate
+4. **Severity** — by gzip on the initial route: >250 KB First Load JS = review; do not delete a feature to save KB
+
+## Worked example
+
+> **Observe:** Next.js First Load JS 420 KB gzip. Treemap: default `lodash`
+> import in `lib/utils.ts`; `moment` with all locales in the shared layout.
+> **Interpret:** two libraries pull unused code onto every route.
+> **Classify:** full-library import + oversized date lib.
+> **Severity:** High — over the 250 KB review threshold.
+> **Finding:** named `lodash/debounce` + replace `moment` with `dayjs`; remesure
+> First Load JS before claiming a save.
 
 ---
 
-## Phase 0: Detect bundler and existing setup
+## Phase 0: Detect bundler and existing setup  [HIGH freedom]
 
 ```
 package.json scripts.build   → build command and framework
@@ -37,7 +58,7 @@ Identify:
 
 ---
 
-## Phase 1: Run a production build with analysis
+## Phase 1: Run a production build with analysis  [LOW freedom — run exactly]
 
 ### Vite / Rollup
 
@@ -93,7 +114,7 @@ find dist -name '*.css' | xargs ls -lh | sort -k5 -hr | head -5
 
 ---
 
-## Phase 2: Parse the results — find the problems
+## Phase 2: Parse the results — find the problems  [HIGH freedom]
 
 For each chunk or entry point, record:
 
@@ -118,7 +139,7 @@ For each chunk or entry point, record:
 
 ---
 
-## Phase 3: Research current alternatives
+## Phase 3: Research current alternatives  [HIGH freedom]
 
 For the largest offenders, check current alternatives:
 ```json
@@ -139,7 +160,17 @@ Common swaps (research to confirm current state):
 
 ---
 
-## Phase 4: Fix — ordered by size saved
+## Self-critique before applying  [LOW freedom — do not skip]
+
+1. **Measured** — First Load JS / gzip from a production build, not "looks big"
+2. **Behavior preserved** — dynamic import has a loading state; do not delete a feature to save KB
+3. **Right owner** — runtime slowness without payload evidence → `audit-performance`
+4. **Analyzer honest** — if the analyser was skipped, say what you used
+5. **Remeasure after each fix class** — no save claimed from inspection alone
+
+---
+
+## Phase 4: Fix — ordered by size saved  [HIGH freedom]
 
 ### Fix 1: Named imports (tree shaking)
 
@@ -215,7 +246,7 @@ the bundle after rebuild.
 
 ---
 
-## Phase 5: Measure the improvement
+## Phase 5: Measure the improvement  [LOW freedom — run exactly]
 
 After fixes, rebuild and re-run Phase 1:
 

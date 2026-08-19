@@ -10,6 +10,9 @@ license: MIT
 
 # audit-monetization-iap — Store billing & entitlements
 
+**Degree of freedom: MIXED** — Phases 0–1 `[HIGH freedom]`; Phase 2 sandbox
+`[LOW freedom — run exactly]`. Never test against real billing.
+
 Read-only. Entitlements must match what users paid for: no unlock-without-pay,
 no paid-but-locked, no double-charge, no lost purchase on reinstall.
 
@@ -32,9 +35,26 @@ restore (refunds + 1-star reviews).**
 Do **not** fire for "Stripe webhook / double charge on the website" →
 `audit-payment-system`.
 
+## How to reason
+
+1. **Observe** — quote where "is Pro?" is decided and whether a receipt/token is verified server-side
+2. **Interpret** — can a client lie, or can a paid user lose access?
+3. **Classify** — client-trust / missing restore / lifecycle hole / correct
+4. **Severity** — client-trusted entitlement or broken restore = Critical
+
+## Worked example
+
+> **Observe:** `isPro` reads `RevenueCat.getCustomerInfo()` on-device only;
+> no App Store Server Notification handler.
+> **Interpret:** a patched client can unlock Pro; refunds never revoke.
+> **Classify:** client-trust + missing lifecycle sync.
+> **Severity:** Critical.
+> **Finding:** entitlements | client-only | Critical | `lib/pro.ts:18` |
+> verify on server + ASN V2 / RTDN
+
 ---
 
-## Phase 0 — Detect the billing setup
+## Phase 0 — Detect the billing setup  [HIGH freedom]
 
 - Layer: raw StoreKit 2 / Play Billing, or RevenueCat / Adapty / Glassfy
 - Entitlement check: client-only vs server-verified
@@ -43,7 +63,7 @@ Do **not** fire for "Stripe webhook / double charge on the website" →
 
 ---
 
-## Phase 1 — Correctness
+## Phase 1 — Correctness  [HIGH freedom]
 
 **Receipt / token validation** — Server-side (App Store Server API / Play
 Developer API). Client-trusted "purchase succeeded" is Critical. StoreKit 2
@@ -73,7 +93,7 @@ clock-gamed trials.
 
 ---
 
-## Phase 2 — Sandbox only
+## Phase 2 — Sandbox only  [LOW freedom — never real billing]
 
 Exercise: fresh purchase, restore on clean install, cancel → access ends at
 period end, sandbox refund → revoke, trial → convert, interrupted purchase.
@@ -91,6 +111,14 @@ Confirm backend entitlement flips. Never real billing.
 - [ ] Cross-platform double-charge checked
 - [ ] Prices from store
 - [ ] Nothing patched
+
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **Evidenced** — file:line for the entitlement SoT, not "RevenueCat probably verifies"
+2. **No real charges** — sandbox only
+3. **Severity justified** — Critical = unlock-without-pay or paid-but-locked
+4. **Right owner** — web Stripe → `audit-payment-system`
+5. **Restore probed** — "button exists" is not restore-verified
 
 ## Output format
 

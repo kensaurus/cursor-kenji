@@ -10,6 +10,10 @@ license: MIT
 
 # Security Audit + Hardening Plan
 
+**Degree of freedom: MIXED** — OWASP mapping and severity are judgment; RLS
+enumeration, secret scan, and `npm audit` run exactly. Stay **plan-only**.
+No patches or destructive testing.
+
 **Role:** Senior application security engineer.
 
 **Task:** Exhaustive vulnerability audit (frontend, backend, auth, Supabase, deps, secrets),
@@ -26,6 +30,21 @@ destructive testing.**
 | `audit-db-schema` | Schema health including RLS review |
 
 **Loop:** see `docs/PLAN-LOOPS.md` — after `plan-test-coverage`, parallel with `plan-perf-audit`, before `plan-docs-sync`
+
+## How to reason (every plan item)
+
+1. **Propose** — RLS, secret rotation, auth enforcement, dep bump, or header/CSP
+2. **Risk** — data exposure, auth bypass, or a leaked key that bypasses RLS
+3. **Keep-working** — controls that already enforce server-side
+4. **Phase** — Critical → High → Med-Low (do not execute)
+
+## Worked example
+
+> **Propose:** enable RLS on `public.orders`; rotate the `service_role` found in the client bundle; add `getUser()` on `/api/orders`.
+> **Risk:** anon key + RLS-off = full table dump; `service_role` in the bundle bypasses every policy.
+> **Keep-working:** `/dashboard` layout already calls `getUser()` on the server.
+> **Phase:** Critical — RLS + secret rotation first.
+> **Report:** `lib/supabase.ts:12` service_role (type only — never the value). Table RLS detail → `plan-rls-audit`.
 
 ---
 
@@ -66,7 +85,7 @@ Sentry MCP: security-related production errors. Firecrawl: current OWASP + Supab
 
 ---
 
-## Phase 2 — RLS-first (Supabase)
+## Phase 2 — RLS-first (Supabase)  [LOW freedom — run exactly]
 
 Enumerate every `public` table:
 
@@ -81,7 +100,7 @@ Detail: `references/owasp-supabase-scope.md`
 
 ---
 
-## Phase 3 — Bundle/secret scan
+## Phase 3 — Bundle/secret scan  [LOW freedom — run exactly]
 
 Inspect client bundle + source for:
 
@@ -94,7 +113,7 @@ Report: `file:line` + type only — **never the value**.
 
 ---
 
-## Phase 4–6 — Auth, deps, OWASP
+## Phase 4–6 — Auth, deps, OWASP  [HIGH freedom]
 
 - Every protected route/endpoint → server-side enforcement?
 - `npm audit`, lockfile versions vs CVE databases
@@ -104,13 +123,21 @@ Map each finding to OWASP category.
 
 ---
 
-## Burndown + hardening plan
+## Burndown + hardening plan  [HIGH freedom — plan only]
 
 Template: `references/output-templates.md`
 
 Phases: Critical → High → Med/Low. Each remediation + "what must keep working".
 
 Re-scan proposed after fixes (second pass).
+
+## Self-critique before the burndown  [LOW freedom — do not skip]
+
+1. **evidenced-not-assumed** — every finding cites file:line or scan output; unconfirmed → `[NEEDS VERIFICATION]`
+2. **plan-only** — no patches, no live/destructive exploit testing
+3. **severity/phase justified** — RLS-off + anon key and client `service_role` are Critical
+4. **right-owner** — table-by-table RLS → `plan-rls-audit`; key rotation → `plan-secrets-audit`; app-layer auth flows → `audit-auth-flows`; LLM attacks → `audit-llm-security`
+5. **no-false-safety** — never paste secret values; never fabricate CVEs; confirmed vuln ≠ hardening suggestion
 
 ---
 

@@ -11,21 +11,33 @@ license: MIT
 
 # Langfuse LLM Quality Audit
 
-Automated PDCA audit for LLM/AI features: trace completeness, prompt quality, cost efficiency,
-eval health, grounding accuracy, and end-to-end pipeline verification.
-Works with **any project** — auto-detects Langfuse setup from the codebase.
+**Degree of freedom: MIXED** — Phases 0–1, 4 `[HIGH freedom]`; Phases 2–3
+CLI traces and playwright `[LOW freedom — run exactly]`. Read
+`protocol-browser-anti-stall` before any browser step. Never skip Phase 0.
 
-## Critical Rules
+## How to reason
 
-> **NEVER skip the auto-detect phase.** Every project configures Langfuse differently.
+1. **Observe** — quote the trace, prompt version, token/cost, or live output
+2. **Interpret** — is quality, cost, or the pipeline actually broken?
+3. **Classify** — missing-trace / prompt / cost / eval / grounding / correct
+4. **Severity** — pipeline break or untraced prod feature = P0; cost/eval gap = P1
 
-> **Research before judging.** Use Firecrawl to find current LLM best practices so recommendations are evidence-based, not opinion.
+## Worked example
 
-> **Verify live, not just statically.** Trigger AI features via Playwright and confirm traces land in Langfuse — static code analysis alone misses runtime issues.
+> **Observe:** after Playwright chat, `langfuse-cli api traces list` shows no new
+> row; `app/api/chat/route.ts` calls `openai.chat` with no Langfuse wrap.
+> **Interpret:** the live path is uninstrumented — the static map was wrong.
+> **Classify:** missing instrumentation (pipeline break).
+> **Severity:** P0 — prod chat is invisible.
+> **Finding:** chat | P0 | no trace after live send | wrap the SDK call.
 
-> **Use concrete numbers.** "Costs seem high" is not an audit finding. "gpt-4.1 used for intent classification at $0.02/call when gpt-4.1-mini at $0.002/call achieves equivalent accuracy" is.
+## Self-critique before reporting  [LOW freedom — do not skip]
 
-> **Always use the `protocol-browser-anti-stall` protocol** when using playwright-cli.
+1. **Concrete numbers** — model + $/call or tokens, not "costs seem high"
+2. **Live, not static** — trigger the feature; missing post-trigger trace = P0
+3. **Severity justified** — P0 = pipeline break or untraced user-facing call
+4. **Right owner** — jailbreak/OWASP → `audit-llm-security`; token caps → `plan-llm-cost-guardrails`
+5. **Keys stay in env** — report host + presence, never secret values
 
 ---
 
@@ -45,11 +57,7 @@ Grep(pattern: "LANGFUSE_PUBLIC_KEY|LANGFUSE_SECRET_KEY|LANGFUSE_BASE_URL|LANGFUS
 Grep(pattern: "langfuse|Langfuse|@langfuse", glob: "*.{ts,js,tsx,jsx,py,rb,go}")
 ```
 
-Record:
-- `LANGFUSE_HOST` (cloud or self-hosted URL)
-- `LANGFUSE_PUBLIC_KEY` (identifies the project)
-- Which source files import/use Langfuse
-- Whether the CLI env vars are available (the Shell commands below require `LANGFUSE_PUBLIC_KEY` and `LANGFUSE_SECRET_KEY` in the environment)
+Record: `LANGFUSE_HOST`, public-key present (never the secret), import sites, CLI env ready.
 
 ### 0b. Detect LLM Framework and Provider
 
@@ -58,10 +66,7 @@ Grep(pattern: "openai|OpenAI|anthropic|Anthropic|@google/generative-ai|gemini|co
 Grep(pattern: "langchain|LangChain|@langchain|vercel/ai|ai/core|createOpenAI|createAnthropic", glob: "*.{ts,js,py}")
 ```
 
-Record:
-- LLM providers (OpenAI, Anthropic, Google, etc.)
-- LLM frameworks (LangChain, Vercel AI SDK, direct API calls, etc.)
-- Model names used (grep for model name strings like `gpt-4.1`, `claude-opus-4-8`, `gemini-2.5-pro`)
+Record: providers, frameworks, model name strings (`gpt-4.1`, `claude-opus-4-8`, `gemini-2.5-pro`).
 
 ### 0c. Map AI Features
 
@@ -81,16 +86,11 @@ Grep(pattern: "createScore|langfuse.score|annotation|eval|judge|dataset", glob: 
 Grep(pattern: "getPrompt|langfuse.prompt|fetchPrompt|compilePrompt", glob: "*.{ts,js,py}")
 ```
 
-Record:
-- Prompt management approach: Langfuse managed prompts vs hardcoded vs config file
-- Eval setup: annotation queues, programmatic scoring, judge LLM, dataset runs
-- Whether prompts are versioned and labeled
+Record: prompt source (Langfuse vs hardcoded vs config), eval setup, version/label.
 
 ---
 
 ## Phase 1: Research LLM Best Practices
-
-Before auditing, establish the current state of the art so findings are grounded in evidence.
 
 ### 1a. Firecrawl Research
 
@@ -118,7 +118,7 @@ firecrawl:firecrawl_search
 }
 ```
 
-Scrape the top 2-3 most relevant results for detailed guidance:
+Scrape the top 2–3 results:
 
 ```json
 firecrawl:firecrawl_scrape
@@ -130,7 +130,7 @@ firecrawl:firecrawl_scrape
 
 ### 1b. Langfuse Documentation
 
-Research Langfuse-specific features relevant to the detected setup:
+Langfuse docs for the detected setup:
 
 ```json
 firecrawl:firecrawl_search
@@ -140,11 +140,8 @@ firecrawl:firecrawl_search
 }
 ```
 
-If the project uses a specific LLM framework (LangChain, Vercel AI SDK, etc.), also fetch its Langfuse integration docs.
-
 ### 1c. Context7 for LLM Framework Docs
 
-If detected in Phase 0b, fetch the framework-specific documentation:
 
 ```json
 context7:resolve-library-id
@@ -152,8 +149,6 @@ context7:resolve-library-id
  "libraryName": "<DETECTED_FRAMEWORK e.g. langchain or vercel-ai>"
 }
 ```
-
-Then query for integration patterns:
 
 ```json
 context7:query-docs
@@ -167,8 +162,7 @@ context7:query-docs
 
 ## Phase 2: Audit via Langfuse CLI
 
-All commands below use the Langfuse CLI via the Shell tool. Ensure the environment has
-`LANGFUSE_PUBLIC_KEY` and `LANGFUSE_SECRET_KEY` set (from `.env` or exported).
+Shell + Langfuse CLI. Require `LANGFUSE_PUBLIC_KEY` and `LANGFUSE_SECRET_KEY` in the env.
 
 ### 2a. Trace Completeness
 
@@ -225,9 +219,7 @@ From trace data, analyze:
 npx langfuse-cli api traces list --limit 50
 ```
 
-For each trace, check the generation details (model, usage tokens, latency, cost).
-
-Build a cost table:
+Build a cost table from generation details (model, tokens, latency, cost):
 | Feature | Model | Avg Input Tokens | Avg Output Tokens | Avg Latency | Est. Cost/Call |
 |---------|-------|------------------|-------------------|-------------|----------------|
 
@@ -286,9 +278,7 @@ Evaluate:
 
 ### 3a. Trigger AI Features via Playwright
 
-For each AI feature identified in Phase 0c, use playwright-cli to trigger it live.
-
-**Important**: Apply the `protocol-browser-anti-stall` protocol — set 15-second timeouts, use the incremental `sleep 2` → `snapshot` cycle rather than one long block, and use `snapshot` to detect ready state.
+For each Phase 0c feature, trigger it live. Timeouts 15s; `sleep 2` → `snapshot` (not one long block).
 
 ```bash
 PW="npx --yes @playwright/cli@latest"
@@ -313,8 +303,6 @@ Check:
 - [ ] Trace has generations with model and token data
 - [ ] Trace latency matches observed UX latency
 - [ ] Input/output captured correctly
-
-If a trace is missing after triggering a feature → **pipeline break** (critical finding).
 
 ### 3c. Cross-Check with Sentry
 

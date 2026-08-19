@@ -10,6 +10,9 @@ license: MIT
 
 # RLS & Access-Control Audit + Remediation Plan
 
+**Degree of freedom: MIXED** — access matrix and severity are judgment; table
+inventory and policy reads run exactly. Stay **plan-only**. No SQL until approved.
+
 ## This skill vs neighbors
 
 | Skill | Owns |
@@ -26,6 +29,21 @@ license: MIT
 **Task:** Enumerate every table/view, run the RLS checklist (A–E), build a who-can-do-what
 access matrix, score findings by exposure, emit `plan-rls-audit.md`. **Audit & plan only —
 no SQL runs until each phase is approved.**
+
+## How to reason (every plan item)
+
+1. **Propose** — enable RLS, scope a policy, rotate a client `service_role`, or fix inverted logic
+2. **Risk** — anon/authed can read or write rows they should not
+3. **Keep-working** — tables whose policies already enforce ownership
+4. **Phase** — Stop exposure → Ownership → Correctness-perf → Adjacent gates (do not execute)
+
+## Worked example
+
+> **Propose:** enable RLS on `profiles`; replace `USING (true)` on `orders` SELECT with `user_id = (select auth.uid())`.
+> **Risk:** anon key (public) reads every profile; every authed user reads every order.
+> **Keep-working:** `orders` INSERT already checks owner.
+> **Phase:** Phase 1 — Stop active exposure (Critical).
+> **Direction:** policy shape only — no SQL in this pass. Client `service_role` → `plan-secrets-audit`.
 
 Missing or misconfigured Row-Level Security is the most documented vibe-coding
 catastrophe of the 2025–2026 era. An audit of 50 vibe-coded apps across Lovable,
@@ -61,7 +79,7 @@ is the first step when the anon key can read rows it should not.
 
 ---
 
-## The audit checklist
+## The audit checklist  [HIGH freedom]
 
 Walk the schema (via Supabase MCP, `pg_tables`, migration files, or the dashboard
 security advisor). For **every** table and view:
@@ -114,9 +132,9 @@ severity, and a remediation *direction* (not the SQL — that's execution).
 
 ---
 
-## Procedure
+## Procedure  [HIGH freedom — plan only]
 
-1. **Inventory.** List every table/view in exposed schemas with its
+1. **Inventory.**  [LOW freedom — run exactly] List every table/view in exposed schemas with its
    `relrowsecurity` state and policy set. State how you accessed it (MCP /
    migrations / advisor) and any tables you couldn't see.
 2. **Classify.** Run each through checklist A–E. Tag severity:
@@ -145,6 +163,14 @@ severity, and a remediation *direction* (not the SQL — that's execution).
   (`.eq('user_id', currentUser)` in the client query) is *not* RLS; flag it as
   unprotected — anyone can drop the filter in dev tools.
 - **Minimal quoting** of policy bodies; identify by table + operation.
+
+## Self-critique before the burndown  [LOW freedom — do not skip]
+
+1. **evidenced-not-assumed** — every table has `relrowsecurity` + policy set from MCP/migrations/advisor; unseen tables listed
+2. **plan-only** — no `ALTER TABLE`, no `CREATE POLICY`, no widening access to "verify"
+3. **severity/phase justified** — RLS-off / `USING (true)` / inverted / client `service_role` = Critical even if the fix is one line
+4. **right-owner** — rotate exposed `service_role` → `plan-secrets-audit`; app-layer session/route gates → `audit-auth-flows`; schema design → `audit-db-schema`
+5. **no-false-safety** — client `.eq('user_id', …)` is not RLS; anon key is public; "works in the demo" is not secure
 
 ---
 

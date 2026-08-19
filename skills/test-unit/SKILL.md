@@ -7,74 +7,85 @@ description: >
 license: MIT
 ---
 
-# Unit Testing Skill
+# test-unit — Write tests that would notice a break
 
-Write effective, maintainable unit tests informed by the project's actual framework,
-production error data, and current best practices.
+**Degree of freedom: MIXED** — which cases to write `[HIGH freedom]`;
+detect-then-match existing harness `[LOW freedom — run exactly]`. This skill
+**writes tests**. Coverage theater / mutation score → `test-mutation`.
+
+Write effective, maintainable unit tests from the project's actual
+framework, production error data, and current best practices.
+
+## This skill vs neighbors
+
+| Skill | Owns |
+|:------|:-----|
+| **test-unit** (this) | **Write** the tests |
+| `test-mutation` | Survivors / assertion theater — hand off the score |
+| `plan-test-coverage` | What *should* be tested — plan only, no harness |
+| `test-playwright` | Live this-diff PDCA, not unit files |
+| `test-qa` | Story/CRUD QA in a headed browser |
+
+## How to reason (each test you add)
+
+1. **Observe** — target function, existing pattern, Sentry gap if any
+2. **Interpret** — behavior under test vs implementation detail
+3. **Classify** — write (public/edge/error) / skip (trivial/third-party/markup)
+4. **Severity** — prod-error gap and money/auth paths first
+
+## Worked example
+
+> **Observe:** Sentry `TypeError` in `parsePrice`; `parsePrice.test.ts` only
+> asserts the happy path; coverage 91%.
+> **Interpret:** suite executes the file but never the empty/malformed branch.
+> **Classify:** write the missing edge cases here — do not declare coverage done.
+> **Handoff:** if the new tests still wouldn't catch a `>`/`>=` flip → `test-mutation`.
 
 ---
 
-## Step 0: Auto-Detect Test Environment
-
-Before writing any tests, discover the project's testing setup.
+## Step 0: Auto-Detect Test Environment  [LOW freedom — match the harness]
 
 ### 0a. Detect Test Framework
 
-Read the dependency manifest (`package.json`, `requirements.txt`, `pyproject.toml`, `go.mod`,
-`Cargo.toml`, `build.gradle`, `Gemfile`) and look for:
+Read the dependency manifest (`package.json`, `requirements.txt`,
+`pyproject.toml`, `go.mod`, `Cargo.toml`, `build.gradle`, `Gemfile`):
 
 | Framework | Detection Signal |
 |-----------|-----------------|
 | **Vitest** | `vitest` in devDependencies, `vitest.config.ts` |
-| **Jest** | `jest` in devDependencies, `jest.config.*`, `"jest"` key in `package.json` |
+| **Jest** | `jest` in devDependencies, `jest.config.*`, `"jest"` key |
 | **Testing Library** | `@testing-library/react`, `@testing-library/vue`, etc. |
-| **Playwright** | `@playwright/test` in devDependencies, `playwright.config.ts` |
-| **Cypress** | `cypress` in devDependencies, `cypress.config.*` |
-| **pytest** | `pytest` in requirements, `conftest.py` files |
-| **Go test** | `_test.go` files, `go test` in Makefile |
-| **RSpec** | `rspec` in Gemfile, `spec/` directory |
-| **JUnit** | `junit` in build.gradle, `src/test/` directory |
+| **Playwright** | `@playwright/test`, `playwright.config.ts` |
+| **Cypress** | `cypress`, `cypress.config.*` |
+| **pytest** | `pytest` in requirements, `conftest.py` |
+| **Go test** | `_test.go`, `go test` in Makefile |
+| **RSpec** | `rspec` in Gemfile, `spec/` |
+| **JUnit** | `junit` in build.gradle, `src/test/` |
 
 ### 0b. Discover Existing Test Patterns
 
 ```
 Glob: **/*.test.{ts,tsx,js,jsx} → JS/TS test files
 Glob: **/*.spec.{ts,tsx,js,jsx} → JS/TS spec files
-Glob: **/test_*.py → Python test files
-Glob: **/*_test.go → Go test files
-Glob: **/spec/**/*_spec.rb → Ruby spec files
+Glob: **/test_*.py → Python
+Glob: **/*_test.go → Go
+Glob: **/spec/**/*_spec.rb → Ruby
 ```
 
-Read 2-3 existing test files to understand:
-- Import patterns and test utilities used
-- Naming conventions (`describe`/`it` vs `test`)
-- Mock/stub patterns (`vi.mock`, `jest.mock`, `unittest.mock`)
-- Setup/teardown patterns (`beforeEach`, `afterEach`, fixtures)
-- Assertion library (`expect`, `assert`, `chai`)
+Read 2–3 existing tests: imports/utilities, `describe`/`it` vs `test`,
+mock style (`vi.mock`, `jest.mock`, `unittest.mock`), setup/teardown,
+assertion library (`expect`, `assert`, `chai`).
 
 ### 0c. Detect Test Configuration
 
-```
-Glob: **/vitest.config.*
-Glob: **/jest.config.*
-Glob: **/pytest.ini
-Glob: **/conftest.py
-Glob: **/setup.cfg
-Glob: **/.nycrc*
-Glob: **/c8.config.*
-```
-
-Extract: coverage thresholds, test directories, global setup files, module aliases.
+Glob `vitest.config.*`, `jest.config.*`, `pytest.ini`, `conftest.py`,
+`setup.cfg`, `.nycrc*`, `c8.config.*`. Extract coverage thresholds, test
+dirs, global setup, module aliases.
 
 ### 0d. Check Coverage Status
 
-If there's a coverage tool configured (c8, istanbul/nyc, coverage.py):
-
-```bash
-# Check if coverage script exists
-Grep: "coverage" in package.json scripts section
-Grep: "c8" or "nyc" or "istanbul" in package.json
-```
+If c8 / istanbul/nyc / coverage.py is configured, grep `package.json`
+scripts for `coverage` / `c8` / `nyc` / `istanbul`.
 
 ### 0e. Record Discovery
 
@@ -93,72 +104,34 @@ TEST ENVIRONMENT:
 
 ---
 
-## Step 1: Research Testing Best Practices
+## Step 1: Research Testing Best Practices  [HIGH freedom]
 
-Before writing tests, research current best practices for the detected framework.
-
-### 1a. Context7 — Official Testing Library Docs
-
-Fetch docs for the detected test framework:
+Context7 for the detected framework + each major testing dep (`vitest`,
+`@testing-library/react`, `msw`):
 
 ```json
 context7:resolve-library-id
-{
- "libraryName": "<DETECTED_FRAMEWORK>",
- "query": "unit testing best practices"
-}
+{ "libraryName": "<DETECTED_FRAMEWORK>", "query": "unit testing best practices" }
 ```
 
-Then fetch specific guidance:
+Then `context7:query-docs` for mocking, setup, teardown.
 
-```json
-context7:query-docs
-{
- "libraryId": "<RESOLVED_ID>",
- "query": "testing patterns mocking setup teardown"
-}
-```
-
-Do this for each major testing dependency (e.g., `vitest`, `@testing-library/react`, `msw`).
-
-### 1b. Firecrawl — Current Testing Patterns
+Firecrawl — one current-year search, scrape the most authoritative result:
 
 ```json
 firecrawl:firecrawl_search
 {
  "query": "<FRAMEWORK> unit testing best practices [current year]",
- "limit": 5,
- "sources": [{ "type": "web" }]
+ "limit": 5, "sources": [{ "type": "web" }]
 }
 ```
 
-Run 2-3 searches targeting different aspects:
-
-| Search | Query |
-|--------|-------|
-| Best practices | `<framework> testing best practices [current year]` |
-| Mocking patterns | `<framework> mocking API calls best practices` |
-| Component testing | `React Testing Library component testing patterns [current year]` |
-| Coverage strategy | `unit test coverage strategy meaningful tests vs coverage percentage` |
-
-Scrape the 1-2 most authoritative results for implementation details:
-
-```json
-firecrawl:firecrawl_scrape
-{
- "url": "<AUTHORITATIVE_URL>",
- "formats": ["markdown"],
- "onlyMainContent": true
-}
-```
+Optional second query: `<framework> mocking API calls` or `React Testing
+Library component testing patterns [current year]`.
 
 ---
 
-## Step 2: Analyze Coverage Gaps (Sentry Integration)
-
-Use Sentry MCP to find production errors that should have been caught by tests.
-
-### 2a. Find Unresolved Production Errors
+## Step 2: Analyze Coverage Gaps (Sentry Integration)  [HIGH freedom]
 
 ```json
 sentry:search_issues
@@ -171,15 +144,8 @@ sentry:search_issues
 }
 ```
 
-### 2b. Cross-Reference with Test Coverage
-
-For each Sentry error:
-1. Identify the source file from the stack trace
-2. Check if a corresponding test file exists (`Glob: **/<filename>.test.*`)
-3. If tests exist, check whether they cover the failing code path
-4. If no tests exist, prioritize writing tests for this file
-
-### 2c. Generate Priority List
+For each issue: stack-trace file → `Glob: **/<filename>.test.*` → does a
+test cover the failing path? No file, or happy-path-only → prioritize it.
 
 ```
 COVERAGE GAP ANALYSIS:
@@ -191,7 +157,7 @@ COVERAGE GAP ANALYSIS:
 
 ---
 
-## Step 3: Write Tests
+## Step 3: Write Tests  [HIGH freedom]
 
 ### Test Structure (AAA Pattern)
 
@@ -199,13 +165,11 @@ COVERAGE GAP ANALYSIS:
 describe('ComponentOrModule', () => {
  describe('methodOrBehavior', () => {
  it('should [expected behavior] when [condition]', () => {
- // Arrange — set up test data and dependencies
+ // Arrange
  const input = createTestData();
-
- // Act — execute the behavior under test
+ // Act
  const result = functionUnderTest(input);
-
- // Assert — verify the outcome
+ // Assert
  expect(result).toEqual(expectedOutput);
  });
  });
@@ -214,7 +178,7 @@ describe('ComponentOrModule', () => {
 
 ### Naming Conventions
 
-**Test file names** — co-locate with source or mirror directory structure:
+Co-locate or mirror the source tree:
 
 | Source File | Test File |
 |-------------|-----------|
@@ -222,72 +186,50 @@ describe('ComponentOrModule', () => {
 | `src/components/Button.tsx` | `src/components/Button.test.tsx` |
 | `app/services/user.py` | `tests/services/test_user.py` |
 
-**Test descriptions** — use `should [behavior] when [condition]`:
-
-```typescript
-describe('validateEmail', () => {
- it('should return true for valid email', () => { /* ... */ });
- it('should return false when @ is missing', () => { /* ... */ });
- it('should return false for empty string', () => { /* ... */ });
- it('should handle unicode characters in local part', () => { /* ... */ });
-});
-```
+Descriptions: `should [behavior] when [condition]`.
 
 ### What to Test
 
-**DO test:**
-- Public API / exported functions
-- Business logic and domain rules
-- Edge cases and boundary values
-- Error handling and failure modes
-- User interactions (clicks, inputs, submissions)
-- State transitions
-- Data transformations
+**DO test:** public API / exported functions; business/domain rules; edge
+and boundary values; error/failure modes; user interactions; state
+transitions; data transformations.
 
-**DON'T test:**
-- Implementation details (private methods, internal state)
-- Third-party library internals
-- Trivial code (simple getters/setters)
-- Framework behavior
-- CSS classes or DOM structure (test behavior, not markup)
+**DON'T test:** private methods / internal state; third-party internals;
+trivial getters/setters; framework behavior; CSS classes or DOM structure
+(behavior, not markup).
 
 ### Edge Cases to Cover
-
-For every function, consider:
 
 | Category | Test Values |
 |----------|------------|
 | Empty | `null`, `undefined`, `""`, `[]`, `{}` |
 | Boundary | `0`, `-1`, `Number.MAX_SAFE_INTEGER`, `Number.MIN_SAFE_INTEGER` |
 | Type confusion | String where number expected, array where object expected |
-| Unicode | Emoji, CJK characters, RTL text, zero-width spaces |
-| Concurrency | Rapid successive calls, race conditions |
-| Network | Timeout, 404, 500, empty response, malformed JSON |
-| Dates | Midnight, DST transitions, leap years, timezone boundaries |
+| Unicode | Emoji, CJK, RTL, zero-width spaces |
+| Concurrency | Rapid successive calls, races |
+| Network | Timeout, 404, 500, empty body, malformed JSON |
+| Dates | Midnight, DST, leap years, timezone boundaries |
 
 ---
 
-## Step 4: Testing Patterns by Category
+## Step 4: Testing Patterns by Category  [HIGH freedom]
 
 ### Pure Functions
 
 ```typescript
 describe('formatCurrency', () => {
- it('should format positive amounts', () => {
- expect(formatCurrency(1234.5)).toBe('$1,234.50');
- });
-
- it('should handle zero', () => {
- expect(formatCurrency(0)).toBe('$0.00');
- });
-
- it('should handle negative amounts', () => {
- expect(formatCurrency(-100)).toBe('-$100.00');
- });
-
- it('should handle very large numbers', () => {
- expect(formatCurrency(999999999.99)).toBe('$999,999,999.99');
- });
+  it('should format positive amounts', () => {
+    expect(formatCurrency(1234.5)).toBe('$1,234.50');
+  });
+  it('should handle zero', () => {
+    expect(formatCurrency(0)).toBe('$0.00');
+  });
+  it('should handle negative amounts', () => {
+    expect(formatCurrency(-100)).toBe('-$100.00');
+  });
+  it('should handle very large numbers', () => {
+    expect(formatCurrency(999999999.99)).toBe('$999,999,999.99');
+  });
 });
 ```
 
@@ -295,22 +237,20 @@ describe('formatCurrency', () => {
 
 ```typescript
 describe('fetchUser', () => {
- it('should return user data for valid id', async () => {
- const user = await fetchUser('123');
- expect(user).toEqual({ id: '123', name: 'John Doe' });
- });
-
- it('should throw for non-existent user', async () => {
- await expect(fetchUser('invalid')).rejects.toThrow('User not found');
- });
-
- it('should handle network timeout', async () => {
- vi.useFakeTimers(); // or jest.useFakeTimers()
- const promise = fetchUser('123');
- vi.advanceTimersByTime(30000);
- await expect(promise).rejects.toThrow('timeout');
- vi.useRealTimers();
- });
+  it('should return user data for valid id', async () => {
+    const user = await fetchUser('123');
+    expect(user).toEqual({ id: '123', name: 'John Doe' });
+  });
+  it('should throw for non-existent user', async () => {
+    await expect(fetchUser('invalid')).rejects.toThrow('User not found');
+  });
+  it('should handle network timeout', async () => {
+    vi.useFakeTimers();
+    const promise = fetchUser('123');
+    vi.advanceTimersByTime(30000);
+    await expect(promise).rejects.toThrow('timeout');
+    vi.useRealTimers();
+  });
 });
 ```
 
@@ -344,24 +284,20 @@ afterAll(() => server.close());
 ### React Components (Testing Library)
 
 ```tsx
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 describe('LoginForm', () => {
  it('should submit with valid credentials', async () => {
  const onSubmit = vi.fn();
  const user = userEvent.setup();
-
  render(<LoginForm onSubmit={onSubmit} />);
-
  await user.type(screen.getByLabelText(/email/i), 'test@example.com');
  await user.type(screen.getByLabelText(/password/i), 'password123');
  await user.click(screen.getByRole('button', { name: /sign in/i }));
-
  await waitFor(() => {
  expect(onSubmit).toHaveBeenCalledWith({
- email: 'test@example.com',
- password: 'password123',
+ email: 'test@example.com', password: 'password123',
  });
  });
  });
@@ -369,42 +305,38 @@ describe('LoginForm', () => {
  it('should show validation error for invalid email', async () => {
  const user = userEvent.setup();
  render(<LoginForm onSubmit={vi.fn()} />);
-
  await user.type(screen.getByLabelText(/email/i), 'invalid');
  await user.click(screen.getByRole('button', { name: /sign in/i }));
-
  expect(screen.getByText(/valid email/i)).toBeInTheDocument();
  });
 
  it('should disable submit button while loading', () => {
  render(<LoginForm onSubmit={vi.fn()} isLoading />);
- expect(screen.getByRole('button', { name: /sign in/i })).toBeDisabled();
- });
+    expect(screen.getByRole('button', { name: /sign in/i })).toBeDisabled();
+  });
 });
 ```
 
 ### Custom Hooks
 
 ```typescript
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 
 describe('useCounter', () => {
- it('should start with initial value', () => {
- const { result } = renderHook(() => useCounter(10));
- expect(result.current.count).toBe(10);
- });
-
- it('should increment', () => {
- const { result } = renderHook(() => useCounter(0));
- act(() => result.current.increment());
- expect(result.current.count).toBe(1);
- });
-
- it('should not go below zero', () => {
- const { result } = renderHook(() => useCounter(0));
- act(() => result.current.decrement());
- expect(result.current.count).toBe(0);
- });
+  it('should start with initial value', () => {
+    const { result } = renderHook(() => useCounter(10));
+    expect(result.current.count).toBe(10);
+  });
+  it('should increment', () => {
+    const { result } = renderHook(() => useCounter(0));
+    act(() => result.current.increment());
+    expect(result.current.count).toBe(1);
+  });
+  it('should not go below zero', () => {
+    const { result } = renderHook(() => useCounter(0));
+    act(() => result.current.decrement());
+    expect(result.current.count).toBe(0);
+  });
 });
 ```
 
@@ -412,34 +344,30 @@ describe('useCounter', () => {
 
 ```typescript
 describe('POST /api/users', () => {
- it('should create user with valid data', async () => {
- const req = new Request('http://localhost/api/users', {
- method: 'POST',
- body: JSON.stringify({ name: 'Test', email: 'test@example.com' }),
- });
-
- const response = await POST(req);
- const data = await response.json();
-
- expect(response.status).toBe(201);
- expect(data).toMatchObject({ name: 'Test', email: 'test@example.com' });
- });
-
- it('should return 422 for invalid email', async () => {
- const req = new Request('http://localhost/api/users', {
- method: 'POST',
- body: JSON.stringify({ name: 'Test', email: 'invalid' }),
- });
-
- const response = await POST(req);
- expect(response.status).toBe(422);
- });
+  it('should create user with valid data', async () => {
+    const req = new Request('http://localhost/api/users', {
+      method: 'POST',
+      body: JSON.stringify({ name: 'Test', email: 'test@example.com' }),
+    });
+    const response = await POST(req);
+    const data = await response.json();
+    expect(response.status).toBe(201);
+    expect(data).toMatchObject({ name: 'Test', email: 'test@example.com' });
+  });
+  it('should return 422 for invalid email', async () => {
+    const req = new Request('http://localhost/api/users', {
+      method: 'POST',
+      body: JSON.stringify({ name: 'Test', email: 'invalid' }),
+    });
+    const response = await POST(req);
+    expect(response.status).toBe(422);
+  });
 });
 ```
 
 ---
 
-## Step 5: Test Data Management
+## Step 5: Test Data Management  [HIGH freedom]
 
 ### Use Factories
 
@@ -453,7 +381,6 @@ const createUser = (overrides: Partial<User> = {}): User => ({
  ...overrides,
 });
 
-// Usage
 const admin = createUser({ role: 'admin' });
 const inactive = createUser({ status: 'inactive', name: 'Inactive User' });
 ```
@@ -463,10 +390,17 @@ const inactive = createUser({ status: 'inactive', name: 'Inactive User' });
 ```typescript
 // Bad — meaningless
 const data = { a: 'b', c: 'd' };
-
 // Good — realistic and descriptive
 const user = { name: 'Jane Doe', email: 'jane@example.com', role: 'admin' };
 ```
+
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **Wrote tests** — this skill does not stop at a plan
+2. **Behavior not markup** — no className / private internals
+3. **Matched harness** — same runner, naming, mock style as existing files
+4. **Isolated + deterministic** — factories, no shared mutable
+5. **Mutation theater not claimed** — score → `test-mutation`
 
 ## Further reading
 

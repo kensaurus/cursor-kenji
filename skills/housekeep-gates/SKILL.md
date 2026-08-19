@@ -10,6 +10,11 @@ license: MIT
 
 # housekeep-gates — One required check, defined in code
 
+**Degree of freedom: MIXED — T1 is the priority.** Mapping and winner
+confirmation `[HIGH freedom]`; aggregator `needs:` + skip-fail, loser
+**deletion**, branch-protection, and Phase 4 probes `[LOW freedom — run
+exactly]`. **Net enforcement strictly ≥ before.**
+
 Apply-now. `audit-gate-logic` mapped the sprawl and named a winner per
 duplicate cluster; this makes the repo match the map. **Target state: one
 required check in branch protection, backed by an aggregator job that
@@ -33,9 +38,25 @@ This is the execution arm of `audit-gate-logic`, the same way
 | `enhance-agent-guardrails` | *Installs* new guard classes, not accreted-gate cleanup |
 | `workflow-green-repo` | Make the repo green — does not redesign the gate graph |
 
+## How to reason
+
+1. **Observe** — archaeology map: cluster, winner, loser, current required checks
+2. **Interpret** — would deleting this loser drop unique coverage?
+3. **Classify** — port-then-delete / keep / not-yet-mapped
+4. **Severity** — deleting the only server-side-enforced gate is a regression
+
+## Worked example
+
+> **Observe:** two lint jobs; old `lint.yml` is required; new `ci.yml` lint
+> is not. `paths:` skips `.github/**`.
+> **Interpret:** retiring `lint.yml` without porting + aggregator skip-fail
+> would let a workflow edit merge unlinted.
+> **Classify:** port unique rules, wire winner, delete loser; probe the skip path.
+> **Probe:** change matching the old skip filter → aggregator must go red, not skip-green.
+
 ---
 
-## Phase 0 — Load the map (or make a quick one)
+## Phase 0 — Load the map (or make a quick one)  [HIGH freedom; confirm before edits]
 
 Consume the archaeology map from `audit-gate-logic` (duplicate clusters,
 winners, losers, ratchet findings). If none exists, run its Phase 0 + 2.5
@@ -47,7 +68,7 @@ changes always get explicit confirmation.
 
 ---
 
-## Phase 1 — Build the aggregator gate
+## Phase 1 — Build the aggregator gate  [LOW freedom — fail on failed or skipped]
 
 Create (or adopt) the single-gate structure:
 
@@ -67,7 +88,7 @@ Create (or adopt) the single-gate structure:
 
 ---
 
-## Phase 2 — Consolidate per the map
+## Phase 2 — Consolidate per the map  [LOW freedom — delete losers, do not disable]
 
 For each duplicate cluster, in this order:
 
@@ -88,7 +109,7 @@ nobody learns `--no-verify`.
 
 ---
 
-## Phase 3 — Normalize the ratchets
+## Phase 3 — Normalize the ratchets  [HIGH freedom]
 
 - **One baseline per metric.** Competing thresholds (jest + codecov + a
   committed floor) collapse to one enforcement point; the rest read from
@@ -105,7 +126,7 @@ nobody learns `--no-verify`.
 
 ---
 
-## Phase 4 — Prove it
+## Phase 4 — Prove it  [LOW freedom — run both probes]
 
 - **Deliberate-violation probe** on a scratch branch: one violation per
   consolidated gate class (lint error, failing test, coverage drop,
@@ -130,6 +151,14 @@ nobody learns `--no-verify`.
 - [ ] One baseline per metric; ratchets auto-tighten; resets require a separate reviewed PR; exemption lists cannot silently grow
 - [ ] Deliberate-violation + skip-path probes red as expected; repo green under the new gate
 - [ ] Net enforcement strictly ≥ before
+
+## Self-critique before claiming done  [LOW freedom — do not skip]
+
+1. **Map confirmed** — no "obvious duplicate" deleted unmapped
+2. **Skipped ≠ success** — aggregator checks dependency results
+3. **Losers deleted** — not disabled
+4. **Probes red** — violation + skip-path
+5. **Branch protection** — only after explicit confirmation
 
 ## Output format
 

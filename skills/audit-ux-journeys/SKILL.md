@@ -10,46 +10,65 @@ license: MIT
 
 # audit-ux-journeys — User-Story, Task-Completion & IA Audit
 
-A site can pass every per-page heuristic and still fail its users: every page individually clean,
-yet nobody can *find* the feature, the checkout takes nine steps with two dead ends, and the nav is
-organized by the database schema instead of the user's mental model. `audit-ux` judges **pages**;
-this skill judges **paths and structure** — whether real user stories can actually be completed,
-and whether the information architecture makes the product findable.
+**Degree of freedom: MIXED** — Story derivation, IA, and evidence tags
+`[HIGH freedom]`; Phase 2 headed walkthrough `[LOW freedom — run exactly]`.
 
-The 2026 practitioner consensus is consistent: a UX audit is **not a list of personal opinions** —
-it derives from user goals, walks the actual journeys, audits navigation/IA against mental models,
-and grounds findings in behavioral evidence (funnels, drop-offs, session behavior) wherever data
-exists. When no data exists (pre-launch), the correct method is qualitative walkthroughs, *labeled
-as assumptions* — not silence, and not fake certainty.
+A site can pass every per-page heuristic and still fail: pages clean, yet nobody
+can *find* the feature, checkout takes nine steps with two dead ends, and nav
+follows the database schema. `audit-ux` judges **pages**; this skill judges
+**paths and structure**.
 
-**Before ANY browser interaction, read `protocol-browser-anti-stall` and apply its rules to every
-step.**
+The 2026 consensus: a UX audit is **not personal taste**. Derive stories from
+the product, walk the journeys, audit IA against mental models, and ground
+findings in behavioral evidence when it exists. Pre-launch: qualitative
+walkthroughs, *labeled as assumptions*.
 
-> **Report-first.** This skill produces a prioritized audit, then delegates fixes: per-page
-> heuristics/microcopy → **`audit-ux`** · single-screen improvements → **`enhance-web-ux`** ·
-> forms → **`enhance-web-forms`** · WCAG → **`audit-accessibility`** · speed → **`audit-performance`**
-> · feature parity → **`audit-realworld`**. It owns the *cross-page journey and IA* layer and links
-> out rather than duplicating.
+**Before ANY browser interaction, read `protocol-browser-anti-stall` and apply
+its rules to every step.**
+
+> **Report-first.** Prioritized audit, then delegate: per-page heuristics/
+> microcopy → **`audit-ux`** · single-screen → **`enhance-web-ux`** · forms →
+> **`enhance-web-forms`** · WCAG → **`audit-accessibility`** · speed →
+> **`audit-performance`** · feature parity → **`audit-realworld`**. Owns the
+> *cross-page journey and IA* layer.
 
 ---
 
 ## Core principle — stories over pages, data over taste
 
-- **The unit of audit is a story, not a screen.** Every finding attaches to a user story ("As a
-  returning customer, I want to reorder in under a minute") and a step in its path.
-- **Derive stories from the product, not from imagination.** Routes, nav, CTAs, README, marketing
-  copy, and existing PRDs define what the product *claims* users can do. Audit those claims.
-- **Evidence or hypothesis — say which.** Every finding is tagged `[data]` (analytics/funnel),
-  `[observed]` (reproduced in the walkthrough), or `[judgment]` (expert assumption to validate).
-  Presenting `[judgment]` as `[data]` is the cardinal sin of UX audits.
-- **Findable beats beautiful.** A feature users can't reach doesn't exist. Depth, labels, and
-  grouping are audited against the *user's* mental model, not the code's module layout.
-- **Prioritize by impact × effort.** A slow checkout matters more than a slow About page. Quick
-  wins ship first; low-impact issues are deprioritized regardless of how easy they are.
+- **The unit of audit is a story, not a screen.** Every finding attaches to a
+  user story and a step in its path.
+- **Derive stories from the product, not imagination.** Routes, nav, CTAs,
+  README, marketing copy, existing PRDs.
+- **Evidence or hypothesis — say which.** Tag `[data]`, `[observed]`, or
+  `[judgment]`. Presenting `[judgment]` as `[data]` is the cardinal sin.
+- **Findable beats beautiful.** Depth, labels, and grouping vs the *user's*
+  mental model, not the module layout.
+- **Prioritize by impact × effort.** Slow checkout beats a slow About page.
+
+## How to reason — Observe → Interpret → Classify → Severity
+
+1. **Observe** — quote the story, the step, the route/nav evidence, and the walkthrough or funnel number
+2. **Interpret** — can the persona complete the claimed task, and is the next click obvious?
+3. **Classify** — COMPLETED / COMPLETED-WITH-FRICTION / BLOCKED; evidence tag `[data]` / `[observed]` / `[judgment]`
+4. **Severity** — Blocker = cannot complete; then impact × effort. A "confusing" page with 95% pass-through is not Critical
+
+## Worked example
+
+> **Observe:** Story "As a returning customer I want to reorder — done when
+> confirmation shows." Desktop: 7 clicks; cart cleared on refresh at step 3.
+> Mobile 390: hamburger does not open; pricing unreachable. No analytics SDK.
+> **Interpret:** mobile cannot start the story; desktop completes with data-loss
+> friction. Nothing to upgrade the evidence tag.
+> **Classify:** BLOCKED (mobile nav) + COMPLETED-WITH-FRICTION (desktop cart).
+> Evidence: `[observed]`.
+> **Severity:** Blocker for mobile findability; High for cart-loss.
+> **Finding:** Checkout loses cart on refresh | Blocker | observed | buy §3 |
+> High × Med | debug-error → enhance-web-ux
 
 ---
 
-## Phase 0 — Derive the stories and scope the trigger
+## Phase 0 — Derive the stories and scope the trigger  [HIGH freedom]
 
 ### 0a. Extract user stories from the real product
 
@@ -65,8 +84,8 @@ fd -H -i 'prd|user-stor|journey|persona' docs/ .cursor/ 2>/dev/null
 ```
 
 Write 5–10 stories max, each with a **completion signal**:
-`As [persona], I want [goal] — done when [observable outcome]`. If `design-prd` output or
-`plan-test-coverage` story inventory exists, start from it (same stories, different lens).
+`As [persona], I want [goal] — done when [observable outcome]`. If `design-prd`
+output or `plan-test-coverage` story inventory exists, start from it.
 
 ### 0b. Scope by audit trigger (sets depth and method)
 
@@ -80,10 +99,10 @@ Write 5–10 stories max, each with a **completion signal**:
 
 ---
 
-## Phase 1 — Information architecture & navigation audit (structural)
+## Phase 1 — Information architecture & navigation audit (structural)  [HIGH freedom]
 
-Build the route tree, then audit structure against findability. Detailed commands and pass/fail
-signals in [references/checklist.md](references/checklist.md).
+Build the route tree, then audit structure against findability. Detailed commands
+and pass/fail signals in [references/checklist.md](references/checklist.md).
 
 | # | Check | Red flag |
 |---|---|---|
@@ -99,10 +118,10 @@ signals in [references/checklist.md](references/checklist.md).
 
 Verdicts: `Pass / Fail / N-A` with `file:line` or route evidence. IA6 requires the browser (Phase 2).
 
-## Phase 2 — Story-by-story task walkthroughs (headed browser)
+## Phase 2 — Story-by-story task walkthroughs (headed browser)  [LOW freedom — run exactly]
 
-Walk **every** story from Phase 0, entry → completion signal, desktop **and** mobile viewport
-(390px — most real friction is mobile). Per story record:
+Walk **every** story from Phase 0, entry → completion signal, desktop **and**
+mobile viewport (390px — most real friction is mobile). Per story record:
 
 ```
 STORY: [As … I want … — done when …]     Trigger tag: [data|observed|judgment]
@@ -113,26 +132,27 @@ Success moment: [is completion confirmed clearly? what happens next?]
 Result: COMPLETED / COMPLETED-WITH-FRICTION / BLOCKED (blocker = finding, severity Blocker)
 ```
 
-Rules: screenshots to `.playwright-mcp/` per the artifact-hygiene rule; forms judged only for
-flow-level friction (field-level → `enhance-web-forms`); per-page heuristic violations noticed
-along the way are *handed to* `audit-ux`, not re-audited here.
+Rules: screenshots to `.playwright-mcp/` per the artifact-hygiene rule; forms
+judged only for flow-level friction (field-level → `enhance-web-forms`);
+per-page heuristic violations noticed along the way are *handed to* `audit-ux`,
+not re-audited here.
 
-## Phase 3 — Evidence layer (validate or label)
+## Phase 3 — Evidence layer (validate or label)  [HIGH freedom]
 
 ```bash
 # What analytics exist?
 rg -n -i "gtag|googletagmanager|G-[A-Z0-9]{6,}|posthog|clarity\.ms|hotjar|amplitude|mixpanel|plausible|umami|fathom" -g '*.{ts,tsx,js,jsx,html,vue,svelte}' -l
 ```
 
-- **Data available** (GA4/PostHog/Clarity/Amplitude/Mixpanel, or Sentry for error hotspots): pull
-  funnel completion and drop-off per story path, top exit pages, rage-click/dead-click signals.
-  Upgrade or *refute* walkthrough findings — a "confusing" page with a 95% pass-through rate is
-  not a Critical finding.
-- **No data** (typical pre-launch): every finding stays `[observed]` or `[judgment]`. Say so
-  explicitly in the report, and recommend minimal instrumentation (page + funnel events on core
-  stories) as its own roadmap item so the *next* audit has evidence.
+- **Data available** (GA4/PostHog/Clarity/Amplitude/Mixpanel, or Sentry for error
+  hotspots): pull funnel completion and drop-off per story path, top exit pages,
+  rage-click/dead-click signals. Upgrade or *refute* walkthrough findings — a
+  "confusing" page with a 95% pass-through rate is not a Critical finding.
+- **No data** (typical pre-launch): every finding stays `[observed]` or
+  `[judgment]`. Say so in the report, and recommend minimal instrumentation
+  (page + funnel events on core stories) so the *next* audit has evidence.
 
-## Phase 4 — Prioritized report
+## Phase 4 — Prioritized report  [HIGH freedom]
 
 ```markdown
 ## UX Journey & IA Audit — [product] — [date]
@@ -160,16 +180,26 @@ rg -n -i "gtag|googletagmanager|G-[A-Z0-9]{6,}|posthog|clarity\.ms|hotjar|amplit
 ### Validate next (all [judgment] findings + the instrumentation to settle them)
 ```
 
-Language discipline: neutral, behavior-grounded observations ("3 of 5 walkthrough runs backtracked
-at X"), never accusatory ("this design is bad"). One observation per finding, one paragraph max.
+Language discipline: neutral, behavior-grounded observations ("3 of 5
+walkthrough runs backtracked at X"), never accusatory. One observation per
+finding, one paragraph max.
 
-**Forbidden:** presenting `[judgment]` as data; re-auditing per-page heuristics/microcopy that
-`audit-ux` owns; inventing personas unmoored from the product; recommending a full redesign when
-incremental fixes close the findings; a findings dump with no impact×effort prioritization;
-only-negatives reports (name what works); auditing without walking the stories (a route-tree grep
+**Forbidden:** presenting `[judgment]` as data; re-auditing per-page
+heuristics/microcopy that `audit-ux` owns; inventing personas unmoored from the
+product; recommending a full redesign when incremental fixes close the findings;
+a findings dump with no impact×effort prioritization; only-negatives reports
+(name what works); auditing without walking the stories (a route-tree grep
 alone is not a journey audit).
 
 ---
+
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **Walked, not grepped** — every story has an entry → completion (or BLOCKED) record
+2. **Evidence tagged** — `[judgment]` is never presented as `[data]`
+3. **Artifacts** — screenshots under `.playwright-mcp/`
+4. **Right owner** — per-page heuristics → `audit-ux`; forms → `enhance-web-forms`; breakpoint layout → `audit-responsive`
+5. **Nothing implemented** — report-first; delegate fixes
 
 ## Related
 

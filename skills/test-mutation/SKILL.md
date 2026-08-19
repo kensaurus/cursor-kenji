@@ -11,6 +11,10 @@ license: MIT
 
 # test-mutation — Coverage proves the test ran; mutants prove it would notice
 
+**Degree of freedom: MIXED** — scope and triage `[HIGH freedom]`; first run
+and CI floor `[LOW freedom — measure, then ratchet]`. Never start with the
+whole repo.
+
 Install and run the gate coverage cannot close. **Coverage proves the test
 *ran* the code; mutation testing proves the test would *notice* if the
 code were wrong.** The tool makes hundreds of small deliberate bugs
@@ -33,9 +37,25 @@ coverage theater.
 | `audit-gate-logic` / `housekeep-gates` | Ratchet policy this score plugs into |
 | `enhance-agent-guardrails` | Wording of the agent-rule hook |
 
+## How to reason (every survivor)
+
+1. **Observe** — mutant (operator/line) and which tests still passed
+2. **Interpret** — missing assertion, untested branch, dead code, or equivalent?
+3. **Classify** — the four triage classes in Phase 2
+4. **Severity** — blast radius: entitlements/auth/money outrank formatters
+
+## Worked example
+
+> **Observe:** Stryker flipped `>` to `>=` in `entitlements.ts` expiry check;
+> suite green; mutation score 62% on a 94% coverage file.
+> **Interpret:** tests execute the line but never assert the boundary.
+> **Classify:** missing assertion.
+> **Severity:** high — paid access could extend a day.
+> **Fix:** assert expired-at-exact-boundary is denied; then re-run incremental.
+
 ---
 
-## Phase 0 — Detect stack and scope deliberately
+## Phase 0 — Detect stack and scope deliberately  [HIGH freedom]
 
 Identify the runner and pick the tool: **StrykerJS** (Jest / Vitest /
 Mocha, TS-aware), **mutmut** / cosmic-ray (Python), or the ecosystem
@@ -55,7 +75,7 @@ so only tests covering the mutated line rerun.
 
 ---
 
-## Phase 1 — Configure for signal, not noise
+## Phase 1 — Configure for signal, not noise  [HIGH freedom]
 
 - **Mutate patterns:** scoped critical paths only, via `mutate:` globs.
 - **Incremental mode on** (Stryker `--incremental`): later runs only
@@ -72,7 +92,7 @@ so only tests covering the mutated line rerun.
 
 ---
 
-## Phase 2 — First run and triage the survivors
+## Phase 2 — First run and triage the survivors  [LOW freedom — classify every survivor]
 
 Run, then classify every surviving mutant — this triage **is** the
 deliverable:
@@ -95,7 +115,7 @@ fifty in a formatting helper.
 
 ---
 
-## Phase 3 — Wire into CI (sustainably)
+## Phase 3 — Wire into CI (sustainably)  [HIGH freedom; floor from measured score = LOW]
 
 - **Per-PR:** incremental mutation on changed files only, as a job wired
   into the aggregator gate (`housekeep-gates`).
@@ -121,6 +141,14 @@ fifty in a formatting helper.
 - [ ] Per-PR incremental job in the aggregator gate; scheduled full run publishing the score
 - [ ] Agent-rule hook added: generated tests validated by mutation before done
 - [ ] Total added CI time measured and reported
+
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **Scope was narrow** — whole-repo first run is a failure mode, not a flex
+2. **Every survivor classified** — no "look at the HTML later"
+3. **Floor measured** — `break` from the first score, not an aspiration
+4. **Right owner** — write the missing test → `test-unit`; delete dead code → `workflow-housekeep`
+5. **Strengthen tests only on approval**
 
 ## Output format
 

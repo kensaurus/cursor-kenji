@@ -10,6 +10,10 @@ license: MIT
 
 # audit-ui-states — Unhappy-path state matrix
 
+**Degree of freedom: MIXED** — Phases 0–1 `[HIGH freedom]`; Phase 2 live
+force `[LOW freedom — run exactly]`. Read `protocol-browser-anti-stall`
+before any browser work.
+
 Read-only. Map every meaningful screen against the states it can be in. Flag
 blank boxes, infinite spinners, raw error objects, and broken overflow.
 
@@ -35,9 +39,25 @@ in the demo and falls apart the first time a list is empty or a request fails.
 Do **not** fire for "desktop looks like a phone" → `audit-responsive`.
 Do **not** fire for "this button does nothing" → `plan-stub-checker`.
 
+## How to reason
+
+1. **Observe** — what renders when the list is empty / the request fails / the network drops?
+2. **Interpret** — is that a designed state or a void / spinner / raw error?
+3. **Classify** — present / missing / broken
+4. **Severity** — blank or raw-error on a core screen = major+
+
+## Worked example
+
+> **Observe:** Orders page: `if (!data) return null`. No empty component.
+> Forced empty account → white content area.
+> **Interpret:** first-run users see a void, not an onboarding empty state.
+> **Classify:** missing empty (zero data, valid).
+> **Severity:** major — core loop looks broken with no data.
+> **Finding:** Orders | empty | major | void | designed empty + CTA
+
 ---
 
-## Phase 0 — Enumerate screens and data dependencies
+## Phase 0 — Enumerate screens and data dependencies  [HIGH freedom]
 
 List screens/views/major components. For each: data fetch, mutation,
 permission, network, variable-length content. A static page has few states;
@@ -48,7 +68,7 @@ empty/error primitives — do not invent a second pattern.
 
 ---
 
-## Phase 1 — The state matrix
+## Phase 1 — The state matrix  [HIGH freedom]
 
 For every data-driven screen, mark present / missing / broken:
 
@@ -79,7 +99,7 @@ don't duplicate breakpoint work.
 
 ---
 
-## Phase 2 — Live verification
+## Phase 2 — Live verification  [LOW freedom — force each state]
 
 Force each state; "exists in code" that throws is *broken*:
 
@@ -100,6 +120,14 @@ Save evidence under `.playwright-mcp/`.
 - [ ] Loading / empty / zero-results / error / offline / permission / overflow scored
 - [ ] States forced live, not only read in code
 - [ ] Fix plan in PR-sized chunks; nothing patched without approval
+
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **Forced, not inferred** — "exists in code" that throws is *broken*
+2. **Empty ≠ zero-results** — do not collapse those two states
+3. **Right owner** — dead button → `plan-stub-checker`; linearized desktop → `audit-responsive`
+4. **Evidence** — screenshot under `.playwright-mcp/`
+5. **Nothing patched** until the matrix is approved
 
 ## Output format
 

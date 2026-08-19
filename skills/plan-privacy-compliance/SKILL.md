@@ -10,6 +10,9 @@ license: MIT
 
 # plan-privacy-compliance — Data-flow & legal-surface plan
 
+**Degree of freedom: HIGH** — interpretive inventory and plan. Stay
+**plan-only**. T4 before presenting the burndown.
+
 **Role:** Privacy engineer (operational compliance, not legal advice).
 
 **Task:** Map what the *code* collects, diff it against the written policy and
@@ -38,9 +41,25 @@ Do **not** fire for "privacy manifest / Data Safety form paperwork only" if the
 user is mid-store-submit → still run this for the *data-flow* half, then
 `plan-mobile-readiness` for the rest.
 
+## How to reason (every plan item)
+
+1. **Propose** — what must change (policy, SDK gate, deletion path, label)
+2. **Risk** — what stays non-compliant or leaking if we skip it
+3. **Keep-working** — collection that is already disclosed and gated
+4. **Phase** — P0 / P1 / P2 (do not execute)
+
+## Worked example
+
+> **Propose:** delay PostHog init until consent; add account-deletion that
+> reaches Sentry + the analytics project.
+> **Risk:** GDPR consent-after-fire + incomplete erasure (PII in traces).
+> **Keep-working:** essential auth cookies already disclosed.
+> **Phase:** P0 — consent timing + deletion completeness.
+> **Execute-via:** `audit-analytics` (event gate) + `plan-error-handling` (logs).
+
 ---
 
-## Phase 0 — Inventory personal data actually collected
+## Phase 0 — Inventory personal data actually collected  [HIGH freedom]
 
 Do not trust the privacy policy. Derive collection from the code:
 
@@ -57,7 +76,7 @@ the finding here *and* point at `audit-analytics` for the event-level matrix.
 
 ---
 
-## Phase 1 — Audit against requirements
+## Phase 1 — Audit against requirements  [HIGH freedom]
 
 **Collection vs claimed** — Diff inventory vs privacy policy vs App Store
 Nutrition Label / Play Data Safety. Collected-but-undisclosed is P0.
@@ -81,7 +100,7 @@ restricts transfers outside Japan without consent/adequacy.
 
 ---
 
-## Phase 2 — Phased plan (approve before executing)
+## Phase 2 — Phased plan (approve before executing)  [HIGH freedom — plan only]
 
 - **P0** — undisclosed collection, absent deletion, consent after fire, PII in logs
 - **P1** — incomplete deletion, missing export, no retention job, wrong store form
@@ -90,6 +109,14 @@ restricts transfers outside Japan without consent/adequacy.
 Each item: what's wrong, requirement (GDPR art. / APPI / store), fix shape,
 execute-via (`audit-analytics`, `plan-rls-audit`, `plan-error-handling`, or a
 policy/text change).
+
+## Self-critique before the burndown  [LOW freedom — do not skip]
+
+1. **From code, not the policy** — inventory derived from collection sites
+2. **Not legal advice** — ambiguity flagged for a lawyer
+3. **Collected-but-undisclosed is P0** — do not bury it in P2 wording
+4. **Right owner** — analytics fire-before-consent also → `audit-analytics`
+5. **Nothing rewritten** — no policy/SDK/deletion job until approved
 
 ## Definition of Done
 

@@ -11,6 +11,11 @@ license: MIT
 
 # test-exploratory — naive-user discovery, two identities
 
+**Degree of freedom: MIXED** — wander and charters `[HIGH freedom]`; driver,
+sessions, and triage `[LOW freedom — run exactly]`. Driver is
+**playwright-cli**, never Playwright MCP. **Three isolated sessions** — never
+share storage.
+
 You drive the **live non-prod app** like a slightly careless user. The job is
 **discovery, not verification**: find the bugs nobody scripted. The sharpest
 bugs live in the **guest vs logged-in diff**. Report only — do not fix in this
@@ -32,7 +37,23 @@ matrix), **not** `test-playwright` (this-diff PDCA + fix-as-you-go).
 | `audit-ux-journeys` | Story completability / IA — not junk submit + double-click |
 | `audit-accessibility` | WCAG / axe only |
 
-## Phase 0 — Safety, driver, isolation
+## How to reason (before a finding)
+
+1. **Observe** — captured console/network event + identity + snapshot ref
+2. **Interpret** — guest-in-protected, guest-only throw, leakage, or expected deny?
+3. **Classify** — Real bug / UX defect / Flaky / Out of scope (Phase 3 table)
+4. **Severity** — blast radius: auth/money first
+
+## Worked example
+
+> **Observe:** guest session `goto /settings/billing` → 200 + "Update card".
+> Authed same route works. Console clean.
+> **Interpret:** protected billing UI reachable without a session.
+> **Classify:** Real bug — guest-in-protected (live complement to `audit-auth-flows`).
+> **Severity:** critical.
+> **Finding:** guest | billing | guest-in-protected | critical | repro: `-s=explore-guest` goto `/settings/billing`
+
+## Phase 0 — Safety, driver, isolation  [LOW freedom — sessions exact]
 
 - **Non-prod only.** You will submit forms and mash destructive controls. If
   only prod exists: read-only navigation and say so.
@@ -66,7 +87,7 @@ matrix), **not** `test-playwright` (this-diff PDCA + fix-as-you-go).
 - **SBTM charters** — copy `references/charter-template.md`. Time-box each
   identity (30–45 min). Stop when the box ends; record leftovers.
 
-## Phase 1 — Map, then wander (per identity)
+## Phase 1 — Map, then wander (per identity)  [HIGH freedom]
 
 1. **Discover routes** from links + router/sitemap. Build a **per-identity**
    list (some routes exist only when logged in).
@@ -83,7 +104,7 @@ matrix), **not** `test-playwright` (this-diff PDCA + fix-as-you-go).
 
 Prioritize blast radius: auth, money, account mutation, then the rest.
 
-## Phase 2 — Guest vs logged-in diff (the deliverable)
+## Phase 2 — Guest vs logged-in diff (the deliverable)  [HIGH freedom]
 
 Run Phase 1 fully as **GUEST**, then fully as **LOGGED-IN**, then
 **POST-LOGOUT**. Compare. File these in a dedicated table — nothing else in
@@ -100,7 +121,7 @@ the pack produces it:
   bfcache/Back showing private data after logout.
 - **Divergent errors** — same action, different failure per identity.
 
-## Phase 3 — Triage (this IS the work)
+## Phase 3 — Triage (this IS the work)  [LOW freedom — T4; do not skip]
 
 Classify every captured event before it becomes a finding:
 
@@ -113,6 +134,10 @@ Classify every captured event before it becomes a finding:
 
 Severity by blast radius (auth/money first). Do not generate a Playwright
 spec dump and call the app "covered" — that is shallow comprehensive coverage.
+
+**Self-critique (same table, before output):** every row has identity +
+evidence; flakes were re-run once; WCAG/pixel/load were handed off, not
+filed here; guest never used `--profile`.
 
 ## Definition of Done
 

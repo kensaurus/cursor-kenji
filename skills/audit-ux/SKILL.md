@@ -10,34 +10,38 @@ license: MIT
 
 # UX Audit Skill
 
-Research-driven user experience evaluation grounded in NN/g heuristics, Laws of UX,
-Intuit Content Design principles, and Google HEART metrics.
+**Degree of freedom: MIXED** — Steps 0, 2–5 `[HIGH freedom]`; Step 1
+research JSON and every playwright step `[LOW freedom — run exactly]`.
+Read `protocol-browser-anti-stall` before any browser interaction.
 
-Linearized desktop / breakpoint layout → `audit-responsive`. Cross-page stories →
-`audit-ux-journeys`.
+## How to reason
 
-**Before ANY browser interaction, read the `protocol-browser-anti-stall` skill and apply its rules
-to every step.** That skill is `protocol-browser-anti-stall`.
+1. **Observe** — quote the screenshot, copy, or code line
+2. **Interpret** — what does this do to the human in this moment of the pipeline?
+3. **Classify** — heuristic fail / law violation / microcopy / correct-as-is
+4. **Severity** — blocks the success moment = P0; recoverable friction = P1; nit = P2
 
-## Context-First, Human-Centric Approach
+## Worked example
 
-UX recommendations that don't understand the WHY behind the product are surface-level
-checkbox audits. Before evaluating any heuristic or pattern, deeply understand:
+> **Observe:** invoice Submit stays enabled; no toast; `POST /invoices` in-flight 4s.
+> **Interpret:** a second click creates a duplicate invoice (H1 + H5, money path).
+> **Classify:** heuristic fail on a trust-sensitive write.
+> **Severity:** P0 — double-submit on money.
+> **Finding:** `/invoices/new` | H1/H5 | P0 | no pending state | disable + toast.
 
-1. **Who is the human?** Not "users" — real people with frustrations, time pressure,
- emotional states, and goals beyond the screen. A tired parent filing taxes at 11pm
- needs different UX than a power-user analyst building dashboards at work.
-2. **What's the full journey?** The page you're looking at is one moment in a longer
- story. Understand what happened before (how they arrived, what they already know)
- and what happens after (what they do with the result, where they go next).
-3. **What's the data pipeline?** Trace data from human input → API → database → back to
- screen. UX breaks when this pipeline has latency, errors, or mismatch between what
- the human expects and what the system returns.
-4. **What's the emotional arc?** Every product interaction has an emotional shape:
- confusion → understanding → action → confirmation → satisfaction (or frustration).
- Map where the product currently creates anxiety, confusion, or dead ends.
+## Self-critique before reporting  [LOW freedom — do not skip]
 
-Step 0 grounds every subsequent finding — shallow context produces shallow recommendations.
+1. **Evidenced** — screenshot or quoted copy, not "feels confusing"
+2. **Per-page** — cross-page IA/stories → `audit-ux-journeys`
+3. **Severity justified** — P0 blocks the recorded success moment
+4. **Right owner** — breakpoints → `audit-responsive`; empty/error → `audit-ui-states`
+5. **Context first** — no finding without Step 0 human + pipeline
+
+## Context-First
+
+Before scoring a heuristic: who is the human (state, not "users"), where this
+page sits in the journey, how data moves input → API → DB → screen, and the
+emotional arc. Step 0 is mandatory.
 
 ---
 
@@ -85,11 +89,7 @@ Discover routes by framework: `app/**/page.tsx` (Next.js App Router), `pages/**/
 (Next.js Pages Router), `src/routes/` (SvelteKit / Remix), `router.*` (Vue Router /
 React Router config).
 
-> This step builds *context* only. For a full structural IA audit (click depth, orphan pages,
-> label consistency, findability) and end-to-end user-story walkthroughs, use **`audit-ux-journeys`**
-> — this skill stays on the per-page experience lens.
-
-Build the information architecture mental model:
+Build the information architecture mental model (per-page only):
 
 ```
 INFORMATION ARCHITECTURE:
@@ -184,11 +184,9 @@ Scrape the best result for domain-specific UX patterns.
 
 ## Step 2: Nielsen's 10 Usability Heuristics (Deep Evaluation)
 
-For each heuristic, perform both **code analysis** and **live browser verification**.
+For each heuristic: code analysis and live browser verification.
 
 ### H1: Visibility of System Status
-
-The system should keep users informed through timely feedback.
 
 **What to find in code:**
 
@@ -208,8 +206,6 @@ Search `*.tsx` for feedback patterns: `loading|isLoading|isPending|skeleton|Skel
 
 ### H2: Match Between System and Real World
 
-Use language and concepts familiar to users, not internal jargon.
-
 **What to find in code:**
 
 Search `*.tsx` for copy-quality TODOs: `TODO.*wording|TODO.*copy|TODO.*label|TODO.*text` (case-insensitive).
@@ -225,8 +221,6 @@ Search `*.tsx` for copy-quality TODOs: `TODO.*wording|TODO.*copy|TODO.*label|TOD
 | Metaphors | Real-world analogies aid understanding | Forced metaphors that confuse |
 
 ### H3: User Control and Freedom
-
-Emergency exits, undo, cancel — users make mistakes.
 
 **What to find in code:**
 
@@ -246,8 +240,6 @@ Search `*.tsx` for emergency-exit patterns: `onCancel|handleCancel|onClose|handl
 
 ### H4: Consistency and Standards
 
-Same thing = same treatment. Follow platform conventions.
-
 **What to verify in browser:**
 
 | Signal | Pass | Fail |
@@ -259,8 +251,6 @@ Same thing = same treatment. Follow platform conventions.
 | Platform conventions | Follows web conventions (links underlined, form patterns) | Custom patterns that break expectations |
 
 ### H5: Error Prevention
-
-Prevent problems before they happen.
 
 **What to find in code:**
 
@@ -280,8 +270,6 @@ Check `package.json` for validation libraries: `zod|yup|joi|superstruct|valibot`
 
 ### H6: Recognition Over Recall
 
-Make options visible. Don't force users to memorize.
-
 **What to verify in browser:**
 
 | Signal | Pass | Fail |
@@ -293,8 +281,6 @@ Make options visible. Don't force users to memorize.
 | Contextual help | Tooltips, placeholders explain fields | Labels without context |
 
 ### H7: Flexibility and Efficiency of Use
-
-Accelerators for experts, simplicity for novices.
 
 **What to find in code:**
 
@@ -313,8 +299,6 @@ Search `*.tsx` for efficiency patterns: `keyboard|shortcut|hotkey|useHotkeys|Cmd
 
 ### H8: Aesthetic and Minimalist Design
 
-Every element competes for attention. Show only what's needed.
-
 **What to verify in browser:**
 
 | Signal | Pass | Fail |
@@ -326,8 +310,6 @@ Every element competes for attention. Show only what's needed.
 | Content priority | Most important content first/prominent | Critical info buried below fold |
 
 ### H9: Help Users Recognize, Diagnose, and Recover from Errors
-
-Error messages in plain language, with solutions.
 
 **What to find in code:**
 
@@ -347,8 +329,6 @@ message strings); `try.*catch|\.catch\(|onError` (catch sites); `fallback|ErrorB
 
 ### H10: Help and Documentation
 
-Easy to search, task-focused, concise.
-
 **What to find in code:**
 
 Search `*.tsx` for in-app help: `Tooltip|tooltip|HelpCircle|InfoIcon|help.*text|aria-describedby`
@@ -367,9 +347,6 @@ Search `*.tsx` for in-app help: `Tooltip|tooltip|HelpCircle|InfoIcon|help.*text|
 
 ## Step 3: Laws of UX Evaluation
 
-Evaluate against key psychological principles from lawsofux.com.
-For each law, check BOTH the current state AND recommend specific improvements.
-
 | Law | Principle | What to Check | How to Fix Violations |
 |-----|-----------|---------------|----------------------|
 | **Jakob's Law** | Users expect your site to work like other sites | Navigation, form patterns, checkout flows follow platform conventions | Research 3 competitors via Firecrawl, adopt their common patterns |
@@ -386,8 +363,6 @@ For each law, check BOTH the current state AND recommend specific improvements.
 ---
 
 ## Step 4: Content and Microcopy Audit (Intuit Content Design Principles)
-
-Evaluate all user-facing text against Intuit's content design standards.
 
 ### 4a. Voice and Tone
 
@@ -436,8 +411,6 @@ Evaluate all user-facing text against Intuit's content design standards.
 ---
 
 ## Step 5: Emotional Design and Human-Centric Evaluation
-
-This step evaluates the FEELING of using the product — the layer most audits miss.
 
 ### 5a. First Impression Test (5-Second Test)
 

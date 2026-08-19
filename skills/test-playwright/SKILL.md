@@ -10,51 +10,63 @@ license: MIT
 
 # test-playwright — Develop → Test → Fix (PDCA)
 
-**The job is not done when the code compiles. It is done when you have driven the
-live app as a user, found what's broken or clunky, and fixed it.** This skill exists
-because agents implement a change, declare victory, and skip the *Check* and *Act*
-phases of PDCA. You will not skip them.
+**Degree of freedom: MIXED** — blast-radius and UX judgment `[HIGH freedom]`;
+session, anti-stall, and live re-test after each fix `[LOW freedom — run exactly]`.
+Driver is **playwright-cli**, never Playwright MCP.
 
-> **Plan** = the change you just made.
-> **Do** = it's already in the code.
-> **Check** = drive the live app as a real user (this skill).
-> **Act** = fix every pain point and error you find, in the same turn.
+The job is not done when the code compiles. It is done when you have driven
+the live app as a user, found what's broken or clunky, and **fixed it**.
+Agents skip Check and Act — you will not.
 
-**Before ANY browser action, read `protocol-browser-anti-stall`
-and apply every rule** —
-especially **Rule 0 (manual & headed, never scripted)**, plus the navigation guard,
-≤3s waits, fresh `snapshot` after every state change, max-4-attempts-per-goal,
-timeout budgets, tab discipline, and persisted auth
+> **Plan** = the change you just made. **Do** = already in the code.
+> **Check** = drive the live app (this skill). **Act** = fix every pain
+> point in the same turn.
+
+Read `protocol-browser-anti-stall` before any browser action — Rule 0
+(manual & headed), navigation guard, ≤3s waits, fresh `snapshot` after every
+state change, max-4-attempts-per-goal, tab discipline, and persisted auth
 (`references/playwright-session-coordination.md`).
 
----
+## This skill vs neighbors
+
+| Skill | Owns |
+|:------|:-----|
+| **test-playwright** (this) | This-diff + blast radius; **fix as you go** |
+| `test-qa` | Full-app story/CRUD smoke — not this session's diff |
+| `test-exploratory` | Unscripted **guest vs authed** wander (do not reclaim) |
+| `test-red-team` | Hostile feature×dimension matrix; report first |
+| `test-visual-regression` | Pixel baselines |
+
+## How to reason (each surface)
+
+1. **Observe** — screenshot + console + network vs this session's diff
+2. **Interpret** — broken / data-wrong / pipeline / friction / visual / a11y
+3. **Classify** — PASS / PAIN (fix now) / BLOCKED (needs decision)
+4. **Severity** — ship-blocker vs polish; Act now unless risky/out-of-scope
+
+## Worked example
+
+> **Observe:** create item → toast "Saved"; `requests` shows POST 500; list
+> empty after `reload`. Diff touched the create action.
+> **Interpret:** optimistic UI over a failed write.
+> **Classify:** PAIN — pipeline lie. Fix the action, then re-drive.
+> **Severity:** ship-blocker.
+> **Act:** fix the handler; re-test until 2xx + persist + clean console.
 
 ## Core principles
 
-> **Drive a visible browser by hand, never a script.**
-> Headed (never `--headless`). Click, type, scroll, read, react — one real action at a
-> time, as someone discovering the feature for the first time. `eval` /
-> `run-code` are inspection-only; never write `*.spec.ts` or run
-> `npx playwright test`. You're here to *feel* the pain points, not pass a green check.
-
-> **Test only what this session changed — plus its blast radius.**
-> Not a full-app crawl (that's `test-qa`). Not an unscripted guest vs logged-in
-> wander (that's `test-exploratory`). Scope to the files you edited and the
-> pages/flows/APIs that consume them. Touch a shared component → test every page that
-> renders it.
-
-> **Fix as you go — full-stack.**
-> Hit a bug, 500, confusing label, dead button, ugly layout → fix the root cause now
-> (frontend, backend, migration, RLS, config), then re-test the same flow. Don't batch
-> fixes for "later".
-
-> **Evidence or it didn't happen.**
-> Every finding needs a screenshot + console + network. Every fix needs a live re-test
-> that proves it against the real backend (a 200, persisted data, clean console).
-
-> **Red-team your own work.**
-> Assume your change is subtly wrong. Try to break it. Be the harshest critic of the
-> UX you just shipped.
+- **Drive a visible browser by hand, never a script.** Headed (never
+  `--headless`). One real action at a time. `eval` / `run-code`
+  inspection-only; no `*.spec.ts`, no `npx playwright test`.
+- **Test only what this session changed — plus its blast radius.** Not a
+  full-app crawl (`test-qa`). Not guest-vs-logged-in wander
+  (`test-exploratory`).
+- **Fix as you go — full-stack.** Bug, 500, dead button, ugly layout →
+  root cause now, then re-test. Don't batch "later".
+- **Evidence or it didn't happen.** Finding = screenshot + console +
+  network. Fix = live re-test against the real backend.
+- **Red-team your own work.** Assume the change is subtly wrong. Try to
+  break it.
 
 ---
 
@@ -73,11 +85,11 @@ PDCA Progress:
 
 ---
 
-## Phase 1: Scope the session changes
+## Phase 1: Scope the session changes  [HIGH freedom]
 
-Figure out exactly what to test. Do NOT test the whole app.
+Do NOT test the whole app.
 
-1. **Get the diff** — what changed in this session:
+1. **Get the diff** (each workspace repo root if needed):
 
 ```bash
 git status --short
@@ -85,23 +97,16 @@ git diff --stat HEAD
 git diff HEAD --name-only
 ```
 
- If work spans multiple repos in the workspace, run this in each repo root.
+2. **Map files → user-facing surfaces.**
+   - Page/route → test that page.
+   - Shared component/hook/util → every importer (`grep -rl "ComponentName" src/`) — the **blast radius**.
+   - API / controller / service → every UI flow that calls it.
+   - Migration / schema / RLS → read AND write paths, as the client's role.
+   - Config / env / pricing / prompt → the feature it drives.
 
-2. **Map files → user-facing surfaces.** For each changed file, ask:
- - Is it a page/route? → test that page.
- - Is it a shared component/hook/util? → find every page that imports it and test
- each one (`grep -rl "ComponentName" src/`). This is the **blast radius**.
- - Is it an API route / controller / service? → test every UI flow that calls it.
- - Is it a migration / schema / RLS change? → test the read AND write paths that
- touch those tables, as the role the client actually uses.
- - Is it config / env / pricing / prompt? → test the feature it drives.
-
-3. **Detect the stack & dev URL** (only what you need):
- - Framework + dev port from `package.json` `scripts.dev` (3000 / 5173 / etc.).
- - Auth method + test credentials (`.env.local`, `.env.test`, README). If none,
- ask the user once.
- - Backend MCPs available this session: Supabase (`supabase`),
- Sentry (`sentry`), Firecrawl (`firecrawl`).
+3. **Stack & dev URL** (only what you need): `scripts.dev` port; auth +
+   test credentials (`.env.local`, `.env.test`, README — ask once if none);
+   backend MCPs this session: Supabase, Sentry, Firecrawl.
 
 4. **Write the test plan** before opening the browser:
 
@@ -117,103 +122,90 @@ SESSION SCOPE:
 
 ---
 
-## Phase 2: Environment verification
+## Phase 2: Environment verification  [LOW freedom — session exact]
 
-**Read `protocol-browser-anti-stall/references/playwright-session-coordination.md`
-before opening the browser** — session naming, persistent auth profiles, Google/OAuth reuse.
+Read `protocol-browser-anti-stall/references/playwright-session-coordination.md`
+before opening the browser.
 
 ```bash
 PW="npx --yes @playwright/cli@latest"
 ```
 
-1. Check the `terminals/` folder for a running dev server (`npm run dev`, `next dev`,
- `vite`, etc.). If none is running, start it (`block_until_ms` sized to startup) and
- wait until it serves, or tell the user and stop.
-2. **Name your session** after the task or branch (`-s=qa-<feature>`). Never reuse another
- agent's session name — each session is its own isolated browser, so there is nothing to claim.
+1. Check `terminals/` for a running dev server. If none, start it
+   (`block_until_ms` sized to startup) or tell the user and stop.
+2. Name the session after the task (`-s=qa-<feature>`). Never reuse another
+   agent's name.
 3. `$PW -s=qa-<feature> open --headed <dev-url>` — add
- `--persistent --profile "$HOME/.playwright-cli-profiles/<app>"` when the flow needs a login.
+   `--persistent --profile "$HOME/.playwright-cli-profiles/<app>"` when
+   login is needed.
 4. Anti-stall: `sleep 2` → `snapshot` → verify content rendered.
-5. `console` + `requests` → baseline before touching the changed feature.
+5. `console` + `requests` → baseline before the changed feature.
 6. **Auth (log in once, by hand — it persists):**
-   - Hit a protected route → if already signed in, continue. With
-     `--persistent --profile`, a one-time manual login survives across turns and restarts.
-   - Else complete login **manually in the visible window** like a user. Then verify a
-     protected route loads.
-   - **Google accounts cannot be signed into from a Playwright-launched browser** — do the
-     one-time real-Chrome login described in the coordination reference.
-   - Lightweight alternative to a profile: `state-save` / `state-load` with
+   - Protected route → already signed in? continue. `--persistent --profile`
+     survives turns.
+   - Else complete login **in the visible window**. Verify a protected route.
+   - **Google accounts cannot sign in from a Playwright-launched browser** —
+     one-time real-Chrome login in the coordination reference.
+   - Lighter alternative: `state-save` / `state-load`
      `.playwright-mcp/auth/<host>.json`.
-   - Do **not** log out at the end unless testing logout.
+   - Do **not** log out unless testing logout.
 7. `$PW -s=qa-<feature> close` when the run is done.
 
 ---
 
-## Phase 3: Walk the changed flows as a real user
+## Phase 3: Walk the changed flows as a real user  [HIGH freedom; cycle = LOW]
 
-For each user journey from the Phase 1 plan, live it step by step.
-
-Per step, follow this cycle (anti-stall applies throughout):
+For each Phase 1 journey, live it. Per step (anti-stall throughout):
 
 ```bash
-S="-s=qa-<feature>"                                  # your session, every call
-$PW $S goto "<url>"                                  # 1. if moving pages
-sleep 2 && $PW $S snapshot                           # 2. confirm the feature rendered
-$PW $S screenshot --filename ".playwright-mcp/<step>.png"   # 3. visual evidence
-$PW $S click <ref>                                   # 4. interact like a user —
-                                                     #    click / type / fill / select /
-                                                     #    hover / press / drag, one at a time
-$PW $S snapshot                                      # 5. FRESH refs after every interaction
-$PW $S console                                       # 6. any NEW error vs baseline?
-$PW $S requests                                      # 7. any 4xx/5xx, CORS, timeout, missing call?
+S="-s=qa-<feature>"
+$PW $S goto "<url>"
+sleep 2 && $PW $S snapshot
+$PW $S screenshot --filename ".playwright-mcp/<step>.png"
+$PW $S click <ref>          # one action: click / type / fill / select / …
+$PW $S snapshot             # FRESH refs after every interaction
+$PW $S console
+$PW $S requests
 ```
 
-8. Judge it: does it WORK and does it feel GOOD? PASS or PAIN POINT.
-
-What to hunt for on every changed surface:
+Then judge: WORK + feel GOOD? PASS or PAIN POINT.
 
 | Category | Look for |
 |----------|----------|
-| **Broken** | Blank screen, error boundary, 404/500, stuck spinner, dead button, no-op submit |
-| **Data wrong** | `undefined` / `null` / `NaN` / `[object Object]` / `Invalid Date` on screen, totals that don't add up, stale data after a mutation |
-| **Pipeline** | Mutation shows in UI but API failed; created item not in list until refresh; deleted item reappears; optimistic update never confirms |
-| **Validation** | Empty/invalid submit gives no feedback; no inline errors; silent backend rejection |
-| **UX friction** | Confusing label/copy, no loading state, no success/error feedback, hidden primary action, too many clicks, surprising navigation |
-| **Visual** | Overflow/clipping, cramped or wasted space, broken images/icons, dark-mode breakage, layout shift, misalignment (verify in screenshot) |
-| **A11y basics** | Inputs without labels, controls without accessible names, focus not visible, low contrast |
+| **Broken** | Blank, error boundary, 404/500, stuck spinner, dead button, no-op submit |
+| **Data wrong** | `undefined` / `null` / `NaN` / `[object Object]` / `Invalid Date`, bad totals, stale after mutation |
+| **Pipeline** | UI shows change but API failed; create missing until refresh; deleted item returns; optimistic never confirms |
+| **Validation** | Empty/invalid submit silent; no inline errors; silent backend reject |
+| **UX friction** | Confusing copy, no loading/success/error, hidden primary, too many clicks |
+| **Visual** | Overflow, cramped/wasted space, broken images/icons, dark-mode, layout shift |
+| **A11y basics** | Unlabeled inputs, unnamed controls, invisible focus, low contrast |
 
-**Mutations must be verified end-to-end:** after create/update/delete, confirm (a)
-the network call returned 2xx, (b) the UI reflects it, (c) it survives a hard
-`reload`, and (d) — if Supabase MCP is available — the row actually
-changed in the DB. Prefix any test data with `QA-TEST-` and clean it up at the end.
+**Mutations E2E:** after create/update/delete confirm (a) network 2xx, (b) UI
+reflects it, (c) survives hard `reload`, (d) if Supabase MCP — the row
+changed. Prefix test data `QA-TEST-` and clean it up.
 
 ---
 
-## Phase 4: Fix pain points and errors — as you go
+## Phase 4: Fix pain points and errors — as you go  [HIGH freedom; re-test = LOW]
 
-This is the **Act** phase agents skip. The moment you find a problem, fix its root
-cause before moving on. Do not just log it.
+The **Act** phase agents skip. Fix the root cause before moving on.
 
 1. **Diagnose to root cause** — don't patch symptoms.
- - Frontend bug → fix the component/hook/state.
- - 4xx/5xx → read the request payload + backend log; fix the controller/service/
- validation/serialization. Use `debug-fe-be-integration` mindset if FE↔BE mismatch.
- - `relation does not exist` / `function not found` / missing column → the migration
- wasn't deployed. **Deploy it via the Supabase MCP** (`apply_migration` for DDL,
- `execute_sql` for data) AND keep the versioned migration file on disk in sync.
- (See the always-on `full-stack-ship-discipline` rule — schema the user just asked
- for ships without re-asking; `DELETE`/`UPDATE`/`TRUNCATE` on real rows asks first.)
- - RLS/permission error → verify as the client's role (`SET ROLE anon;` /
- `authenticated;`), fix the policy, re-verify.
- - Config/env/CORS → fix and note what the user must set in other environments.
-2. **Apply the fix** with the normal edit tools (surgical, repo conventions, no
- unrelated refactors). Run `ReadLints` on files you edited.
-3. **Re-drive the exact same flow** in the browser to confirm the fix — green console,
- 2xx network, correct UI, persisted data. A fix is not done until re-tested live.
-4. If a fix is genuinely out of scope or risky, STOP and surface it explicitly with a
- recommendation rather than silently shipping a broken flow.
-
-Keep a running fix log:
+   - Frontend → component/hook/state.
+   - 4xx/5xx → payload + backend log; controller/service/validation.
+     FE↔BE mismatch → `debug-fe-be-integration` mindset.
+   - `relation does not exist` / missing column → migration not deployed.
+     **Deploy via Supabase MCP** (`apply_migration` for DDL, `execute_sql`
+     for data) AND keep the versioned file on disk. (`full-stack-ship-discipline`
+     — requested schema ships; `DELETE`/`UPDATE`/`TRUNCATE` on real rows asks.)
+   - RLS → verify as the client's role (`SET ROLE anon;` / `authenticated;`),
+     fix policy, re-verify.
+   - Config/env/CORS → fix and note other environments.
+2. **Apply** surgically. `ReadLints` on files you edited.
+3. **Re-drive the same flow** — green console, 2xx, correct UI, persisted
+   data. A fix is not done until re-tested live.
+4. Genuinely out of scope or risky → STOP and surface it; don't silently
+   ship a broken flow.
 
 ```
 FIX LOG:
@@ -222,12 +214,11 @@ FIX LOG:
 
 ---
 
-## Phase 5: Backend truth-check (full-stack)
+## Phase 5: Backend truth-check (full-stack)  [HIGH freedom]
 
-Don't trust the UI alone. Confirm against the systems of record using enabled MCPs.
+Don't trust the UI alone. Look up MCP schemas first.
 
-**Sentry** — did your session introduce or relate to production errors? Look up tool
-schemas first, then:
+**Sentry** — new/related production errors on touched surfaces:
 
 ```json
 sentry:search_issues
@@ -237,59 +228,41 @@ sentry:search_issues
 }
 ```
 
- Cross-reference issues with the surfaces you touched. Use `analyze_issue_with_seer`
- for root cause on anything that maps to your change. Only `update_issue` to resolve
- AFTER a verified fix.
+`analyze_issue_with_seer` on anything that maps to your change. Resolve
+(`update_issue`) only AFTER a verified fix.
 
-**Supabase** — verify schema, data, and logs for the paths you touched. Check tool
-schemas first, then use `list_tables`,
-`execute_sql`, `get_logs(service: 'api'|'postgres')`, and `get_advisors`. Treat new
-ERROR-level advisors from your change as part of your work. Confirm any migration you
-deployed actually exists on the remote (`information_schema` / `pg_proc` / `pg_policies`).
+**Supabase** — `list_tables`, `execute_sql`, `get_logs(service: 'api'|'postgres')`,
+`get_advisors`. New ERROR advisors from your change are in scope. Confirm
+deployed migrations on the remote (`information_schema` / `pg_proc` / `pg_policies`).
 
-**App logs / terminal** — read the dev-server terminal file for server-side stack
-traces that never reached the browser.
+**App logs / terminal** — server stack traces that never reached the browser.
 
 ---
 
-## Phase 6: Red-team and critique
+## Phase 6: Red-team and critique  [HIGH freedom]
 
-Switch hats: you are now a skeptical senior reviewer + a demanding user who is hard to
-impress. For the changed surfaces, push hard:
+Skeptical reviewer + demanding user, **on the changed surfaces only**.
+Full-app hostile matrix → `test-red-team`. Guest wander → `test-exploratory`.
 
-- **Break it:** double-click submits (dupes?), rapid toggling, back/forward buttons,
- direct-URL deep links, empty states, huge inputs, special chars
- (`<script>`, `'; DROP TABLE`, emoji, very long strings), slow/failed network.
-- **Question the UX:** Is the primary action obvious in 3 seconds? Is feedback
- immediate and clear? Is anything redundant, cramped, or confusing? Would a real user
- get stuck? (Lean on `enhance-web-ux` / `enhance-web-ui` heuristics if deep polish
- is warranted.)
-- **Question the design:** Does it match the rest of the app's patterns and tokens, or
- did this change introduce drift?
-- **Research when unsure:** if you're not certain what "good" looks like for this
- feature/pattern, use Firecrawl (`firecrawl`) to check current best practices,
- then map findings back to concrete changes:
+- **Break it:** double-submit, rapid toggle, back/forward, deep links, empty
+  states, huge inputs, special chars (`<script>`, `'; DROP TABLE`, emoji),
+  slow/failed network.
+- **Question the UX:** primary action obvious in 3s? Feedback immediate?
+  Would a real user get stuck? Deep polish → `enhance-web-ux` / `enhance-web-ui`.
+- **Question the design:** match existing tokens/patterns, or drift?
+- **Research when unsure:** Firecrawl `firecrawl_search` for current
+  pattern/feature best practices; map back to concrete changes.
 
-```json
-firecrawl:firecrawl_search
-{
- "query": "[pattern/feature] best practices [current year]", "limit": 5,
- "sources": [{ "type": "web" }]
-}
-```
-
-Capture **enhancement ideas** — concrete, not vague. For each: what to add/change, why
-it helps the user, and rough effort. Distinguish "fix now" (done in Phase 4) from
-"suggested next" (proposed in the report).
+Capture **enhancement ideas** — concrete: what, why, effort. Distinguish
+"fix now" (Phase 4) from "suggested next" (report).
 
 ---
 
-## Phase 7: Re-test and report
+## Phase 7: Re-test and report  [LOW freedom — do not skip]
 
-1. Re-drive every flow you fixed, end to end, one final time. Confirm green.
-2. Clean up `QA-TEST-` data; reset any settings you changed; verify cleanup in DB if
- applicable.
-3. Produce the report:
+1. Re-drive every fixed flow end to end. Confirm green.
+2. Clean up `QA-TEST-` data; reset settings; verify cleanup in DB if applicable.
+3. Report:
 
 ```markdown
 ## PDCA Test Report — [feature / session summary]
@@ -309,12 +282,12 @@ it helps the user, and rough effort. Distinguish "fix now" (done in Phase 4) fro
 | 1 | [...] | [...] | [FE/BE/DB/config] | [...] | ✅ |
 
 ### Still broken / out of scope (needs decision)
-| # | Surface | Issue | Why not fixed | Recommendation |
+| # | Surface | Finding | Why not fixed | Recommendation |
 |---|---------|-------|---------------|----------------|
 
 ### Backend truth-check
 - Sentry: [new/related issues + status]
-- Supabase: [schema/data/logs/advisors verified — migration deployed? Y/N]
+- Supabase: [schema/data/logs/advisors — migration deployed? Y/N]
 
 ### Red-team findings
 | # | Surface | Severity | Finding | Evidence |
@@ -322,57 +295,58 @@ it helps the user, and rough effort. Distinguish "fix now" (done in Phase 4) fro
 
 ### Enhancement suggestions (Plan the next cycle)
 1. [concrete idea] — why it helps — rough effort
-2. ...
 
 ### Verdict
 **Ship / Ship after fixes / Not ready** — [1–2 sentence justification]
 Console clean: [Y/N] · All flows green on re-test: [Y/N] · Test data cleaned: [Y/N]
 ```
 
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **Scope** — this-diff + blast radius, not full-app (`test-qa`) or guest wander
+2. **Driver** — playwright-cli, headed, named session; never Playwright MCP
+3. **Act** — every PAIN fixed or explicitly blocked; live re-test after each fix
+4. **Evidence** — finding = screenshot+console+network; fix = green re-drive
+5. **Honest verdict** — red console or unfixed PAIN ≠ Ship
+
 ---
 
 ## playwright-cli commands
 
 `PW="npx --yes @playwright/cli@latest"`, then `$PW -s=<session> <command>`.
-Snapshot/ref-based (accessibility tree); no locking — sessions are isolated, so just
-re-`snapshot` after each state change. **Headless by default — pass `--headed` on `open`.**
+Snapshot/ref-based; sessions are isolated — re-`snapshot` after each state
+change. **Headless by default — pass `--headed` on `open`.**
 
-**Drive with these (real user actions):** `open --headed`, `goto`, `go-back`,
-`click`, `type`, `fill`, `select`, `check`, `uncheck`,
-`hover`, `drag`, `drop`, `press`, `upload`, `dialog-accept`, `resize`.
+**Drive:** `open --headed`, `goto`, `go-back`, `click`, `type`, `fill`,
+`select`, `check`, `uncheck`, `hover`, `drag`, `drop`, `press`, `upload`,
+`dialog-accept`, `resize`.
 
-**Observe with these:** `snapshot`, `find`, `screenshot --filename .playwright-mcp/<name>.png`,
+**Observe:** `snapshot`, `find`, `screenshot --filename .playwright-mcp/<name>.png`,
 `console`, `requests`, `request <n>`.
 
-**Wait with these:** `sleep N` (shell, ≤3s) or
+**Wait:** `sleep N` (shell, ≤3s) or
 `run-code "async (page) => { await page.getByText('X').first().waitFor({ timeout: 5000 }); }"`.
 
-**Inspection-only (never to drive the UI):** `eval`, `run-code`.
+**Inspection-only:** `eval`, `run-code`.
 
-Full mapping from the old MCP tools: `protocol-browser-anti-stall/references/mcp-to-cli-map.md`.
+Old MCP → CLI map: `protocol-browser-anti-stall/references/mcp-to-cli-map.md`.
 
 ---
 
 ## Guardrails
 
-1. **Manual & headed, never scripted** — visible browser, one real user action at a
- time; `eval` / `run-code` for inspection only; no
- `*.spec.ts`, no `npx playwright test`. See anti-stall Rule 0.
-2. **Scope discipline** — test session changes + blast radius, not the entire app. For
- a full-app sweep use `test-qa`.
-3. **Own your session** — every command carries `-s=<task>`; never reuse another agent's
- session name, and never `close-all` / `kill-all` sessions you didn't open.
-4. **Auth reuse** — log in once by hand into a `--persistent --profile` directory; it keeps
- you signed in across turns; don't log out unless testing logout.
-5. **Anti-stall always** — never block >3s; incremental wait → snapshot → check; max 4
- attempts per goal; skip a stuck step (`[TIMEOUT]`) rather than freeze the session.
-6. **Fix the root cause, full-stack** — UI, API, DB, config; re-test live after each fix.
-7. **Schema in sync** — anything you change via MCP also gets a versioned migration file
- on disk; verify the remote actually has it.
-8. **Ask before mutating real data** — DDL for the requested feature ships; `DELETE` /
- `UPDATE` / `TRUNCATE` on production rows asks first.
-9. **No secrets in chat** — use `.env*` values by name only; never print them.
-10. **Evidence for every finding and fix** — screenshot + console + network + a green
- re-test.
-11. **Honest verdict** — don't declare "done" with a red console or an unfixed pain point.
- If you couldn't fix something, say so clearly with a recommendation.
+1. **Manual & headed, never scripted** — visible browser; no `*.spec.ts`,
+   no `npx playwright test`. Anti-stall Rule 0.
+2. **Scope discipline** — session changes + blast radius. Full-app → `test-qa`.
+3. **Own your session** — every command `-s=<task>`; never `close-all` /
+   `kill-all` sessions you didn't open.
+4. **Auth reuse** — log in once into `--persistent --profile`; don't log out
+   unless testing logout.
+5. **Anti-stall always** — never block >3s; max 4 attempts; `[TIMEOUT]` and skip.
+6. **Fix the root cause, full-stack** — UI, API, DB, config; re-test live.
+7. **Schema in sync** — MCP changes get a versioned migration file; verify remote.
+8. **Ask before mutating real data** — requested DDL ships; prod row
+   `DELETE`/`UPDATE`/`TRUNCATE` asks first.
+9. **No secrets in chat** — `.env*` by name only.
+10. **Evidence** — screenshot + console + network + a green re-test.
+11. **Honest verdict** — don't declare done with a red console or unfixed PAIN.

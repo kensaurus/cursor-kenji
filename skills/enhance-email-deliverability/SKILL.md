@@ -10,6 +10,10 @@ license: MIT
 
 # enhance-email-deliverability — Inbox placement & lawful send
 
+**Degree of freedom: MIXED — T1 is the priority.** Scoring auth/hygiene
+`[HIGH freedom]`; DNS/config apply `[LOW freedom — after approval]`.
+Audit-and-fix. Templates stay on `design-email`.
+
 Close the gap between "the email sends" and "the email arrives". A beautiful
 transactional template in spam is a broken signup flow.
 
@@ -31,9 +35,26 @@ one and placement collapses.
 Keep `enhance-*` here (audit-and-fix, same family as `enhance-web-seo`). Do
 **not** steal "build a welcome email" from `design-email`.
 
+## How to reason
+
+1. **Observe** — SPF/DKIM/DMARC records and a real message's Authentication-Results
+2. **Interpret** — pass raw SPF/DKIM but fail alignment? `+all`? DNS-only DKIM?
+3. **Classify** — auth fail / hygiene hole / compliance miss / template (hand off)
+4. **Severity** — no DMARC or `+all` blocks inbox placement
+
+## Worked example
+
+> **Observe:** one SPF with `+all`; DKIM TXT present; no DMARC; marketing and
+> password-resets share `example.com`.
+> **Interpret:** anyone can spoof; Gmail/Yahoo bulk will fail; a campaign
+> complaint can sink transactional mail.
+> **Classify:** auth fail + domain mixing.
+> **Fix:** SPF `-all` (or `~all` while warming), DMARC `p=none`+`rua` then
+> tighten, split transactional vs marketing domains — apply DNS only after approval.
+
 ---
 
-## Phase 0 — Detect sending setup
+## Phase 0 — Detect sending setup  [HIGH freedom]
 
 - Provider: Resend / Postmark / SES / SendGrid / Mailgun / SMTP
 - Sending domain(s) and DNS host
@@ -42,7 +63,7 @@ Keep `enhance-*` here (audit-and-fix, same family as `enhance-web-seo`). Do
 
 ---
 
-## Phase 1 — Authentication (pass/fail gate)
+## Phase 1 — Authentication (pass/fail gate)  [HIGH freedom; headers not DNS-only]
 
 **SPF** — Authorizes the provider. Exactly one record. Under 10 DNS lookups.
 Not `+all`.
@@ -60,7 +81,7 @@ blocklisted.
 
 ---
 
-## Phase 2 — Reputation & hygiene
+## Phase 2 — Reputation & hygiene  [HIGH freedom]
 
 **Bounces** — Hard bounces via webhook → suppression list honored on every send.
 
@@ -77,7 +98,7 @@ plain-text → `design-email`.
 
 ---
 
-## Phase 3 — Compliance footer
+## Phase 3 — Compliance footer  [HIGH freedom]
 
 - Marketing: functional unsubscribe **and** one-click `List-Unsubscribe`
   headers (Gmail/Yahoo bulk). Transactional is exempt only if it is genuinely
@@ -98,6 +119,14 @@ plain-text → `design-email`.
 - [ ] One-click unsubscribe on marketing; legal footer present
 - [ ] Template flags handed to `design-email`
 - [ ] DNS/config applied only after approval
+
+## Self-critique before applying DNS  [LOW freedom — do not skip]
+
+1. **Real headers** — DKIM scored from a sent message, not DNS-only
+2. **Alignment** — From domain matches SPF/DKIM domains
+3. **Streams split** — marketing must not share the transactional domain
+4. **Right owner** — markup/copy → `design-email`
+5. **Apply only on approval**
 
 ## Output format
 

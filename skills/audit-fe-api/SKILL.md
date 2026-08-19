@@ -9,18 +9,38 @@ license: MIT
 
 # Frontend API Audit Skill
 
-full audit of frontend API calls against backend implementation to ensure correctness,
-optimize performance, and improve reliability.
+**Degree of freedom: MIXED** — Steps 0, 1, 3–6 `[HIGH freedom]`; Step 2
+Sentry queries and schema SQL `[LOW freedom — run exactly]`.
+
+## How to reason
+
+1. **Observe** — quote the FE call site, BE route, and response/error
+2. **Interpret** — does the contract match (path, method, params, types)?
+3. **Classify** — missing route / mismatch / untyped / cache-gap / correct
+4. **Severity** — 404/401/type-mismatch in prod = Critical; cache/prefetch = opportunity
+
+## Worked example
+
+> **Observe:** `useUser` GETs `/api/users/${id}`; no `app/api/users/[id]/route.ts`;
+> Sentry 25× 404 in 14d.
+> **Interpret:** FE calls a route the BE never registered.
+> **Classify:** missing route (Critical).
+> **Severity:** Critical — guaranteed 404.
+> **Finding:** `hooks/useUser.ts` | GET `/api/users/:id` | Critical | no BE route.
+
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **Evidenced** — FE file + BE route or Sentry event, not "probably 500"
+2. **Contract, not taste** — staleTime advice needs a freshness reason
+3. **Severity justified** — Critical = broken contract in prod
+4. **Right owner** — live 4xx/5xx repro → `debug-fe-be-integration`; DB shape → `audit-db-schema`
+5. **Both sides named** — every mismatch lists FE file and BE path (or NOT FOUND)
 
 ---
 
 ## Step 0: Auto-Detect API Layer
 
-Before auditing, discover the project's API architecture from its source code.
-
 ### 0a. Detect Frontend Stack
-
-Read `package.json` (or equivalent) and extract:
 
 | Dependency | Technology |
 |------------|-----------|
@@ -36,7 +56,6 @@ Read `package.json` (or equivalent) and extract:
 
 ### 0b. Detect Backend Stack
 
-Look for backend indicators:
 
 ```
 Glob: **/app/api/**/route.ts → Next.js App Router API routes
@@ -85,8 +104,6 @@ API LAYER DISCOVERY:
 
 ### 1a. Context7 — Library Documentation
 
-Fetch docs for the detected data-fetching library:
-
 ```json
 context7:resolve-library-id
 {
@@ -115,8 +132,6 @@ firecrawl:firecrawl_search
  "sources": [{ "type": "web" }]
 }
 ```
-
-Additional searches:
 
 | Topic | Query |
 |-------|-------|
@@ -158,10 +173,7 @@ sentry:search_events
 
 ### 2c. Cross-Reference with Frontend Code
 
-For each Sentry error:
-1. Identify the API endpoint from the error details
-2. Use `Grep` to find the frontend code making that call
-3. Check if the call has proper error handling, retry logic, and type validation
+For each Sentry error: identify the endpoint, `Grep` the FE caller, check error/retry/types.
 
 ---
 
@@ -169,7 +181,7 @@ For each Sentry error:
 
 ### 3a. Find All API Calls
 
-Use `Grep` (not bash grep) to find API call patterns:
+Grep (not bash grep):
 
 ```
 Grep: pattern "fetch\(|axios\.|api\.(get|post|patch|put|delete)" glob "*.{ts,tsx,js,jsx}"
@@ -179,7 +191,6 @@ Grep: pattern "createApi|injectEndpoints" glob "*.{ts,tsx}"
 
 ### 3b. Create API Call Inventory
 
-For each API call found, record:
 
 | File | Function/Hook | Method | Endpoint | Params | Used By |
 |------|---------------|--------|----------|--------|---------|
@@ -192,13 +203,11 @@ For each API call found, record:
 
 ### 4a. Check Endpoint Existence
 
-For each frontend API call, verify the backend route exists:
-
 ```
 Grep: pattern "<ENDPOINT_PATH>" glob "*.{ts,js,py,go,rb}" — in backend source
 ```
 
-If using Next.js App Router, check that `app/api/<path>/route.ts` exists.
+App Router: `app/api/<path>/route.ts` must exist.
 
 ### 4b. Check Parameter Correctness
 
@@ -221,7 +230,7 @@ supabase:execute_sql
 }
 ```
 
-Compare column names and types against frontend TypeScript interfaces.
+Compare columns/types to FE TypeScript interfaces.
 
 ---
 
@@ -438,17 +447,8 @@ const getUser = async (id: string): Promise<User> => {
 
 ---
 
-## Integration with Other Skills
+## Related
 
-This skill works in conjunction with:
-
-- **`fe-be-integration-debug`**: This skill audits proactively from FE code; that skill debugs reactively from BE logs.
-- **`db-schema-audit`**: Verify that FE types match DB schema via Supabase MCP.
-- **`sentry-monitor`**: Production error data informs which API calls need attention.
-
-**Workflow:**
-1. Run `fe-api-audit` to find potential issues in FE code
-2. Test in browser to trigger actual API calls
-3. Run `fe-be-integration-debug` to analyze backend logs for errors
-4. Cross-reference findings for complete picture
-5. Fix both sides to ensure contract alignment
+- `debug-fe-be-integration` — live 4xx/5xx reproduction from BE logs
+- `audit-db-schema` — FE types vs DB columns
+- `debug-sentry-monitor` — production error volume on the same endpoints

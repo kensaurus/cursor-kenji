@@ -101,6 +101,7 @@ Every skill MUST have:
 - [ ] **TypeScript** in all code examples (strict, no `any`)
 - [ ] **Related Skills** section for cross-referencing
 - [ ] **Validation** section with post-implementation checks
+- [ ] **Prompt enhancement (T1–T6)** — freedom declared, one reasoning scaffold, one worked example, self-critique rubric; see [PROMPT-ENHANCEMENT-PLAYBOOK.md](PROMPT-ENHANCEMENT-PLAYBOOK.md) / `enhance-skill-prompts` (existing skills) or `meta-skill-creator` (new)
 
 ### 4. Description Guidelines
 
@@ -108,7 +109,7 @@ The `description` field is critical — it's how Cursor decides when to use the 
 
 **Rules:**
 - Open with an action verb (`Fix`, `Wire`, `Build`, `Audit`, `Release` …)
-- Keep under 300 characters
+- Keep ≤320 characters (same folding as `scripts/validate-skills.mjs`)
 - Include 3-6 trigger keywords/phrases users actually type
 - Never write "This skill provides…" or "This skill should be used when…"
 - No AI-tells: avoid `leverage`, `seamless`, `robust`, `powerful`, `elevate`, `cutting-edge`, `delve`, `comprehensive solution`

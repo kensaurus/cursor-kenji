@@ -10,6 +10,9 @@ license: MIT
 
 # plan-aso — Store listing growth plan
 
+**Degree of freedom: HIGH** — audit the listing, emit a plan. Stay
+**plan-only**. No metadata, screenshot, or prompt edits until approved.
+
 **Role:** Mobile growth / ASO specialist.
 
 **Task:** Audit the listing that decides whether a visitor installs, emit
@@ -33,9 +36,25 @@ first impression decide who *installs*.
 Do **not** fire for "will Play reject us / Guideline 2.5.2" →
 `plan-mobile-readiness`.
 
+## How to reason (every plan item)
+
+1. **Propose** — keyword, locale, screenshot order, or ratings-prompt change
+2. **Risk** — find vs install: who never sees the app, or who sees it and bounces
+3. **Keep-working** — locales/assets that already convert
+4. **Phase** — quick / medium / ongoing (do not execute)
+
+## Worked example
+
+> **Propose:** fill the unused 40 chars of the iOS keyword field; drop
+> title-word repeats; put the benefit screenshot first.
+> **Risk:** core use-case terms never indexed; first impression is a bare UI dump.
+> **Keep-working:** JP long description already locale-native.
+> **Phase:** quick — keywords + screenshot reorder.
+> **Find vs install:** find (keywords) + install (shot 1).
+
 ---
 
-## Phase 0 — Gather the current listing
+## Phase 0 — Gather the current listing  [HIGH freedom]
 
 Per platform × locale: name, subtitle (iOS) / short description (Android),
 iOS 100-char keyword field, long description, screenshots + captions, preview
@@ -44,7 +63,7 @@ locales.
 
 ---
 
-## Phase 1 — Discoverability (find)
+## Phase 1 — Discoverability (find)  [HIGH freedom]
 
 **iOS keywords** — 100 chars fully used, comma-separated, no wasted spaces, no
 repeats of title/subtitle words, no plural+singular waste. Core use-case terms
@@ -65,7 +84,7 @@ that this listing ignores?
 
 ---
 
-## Phase 2 — Conversion (install)
+## Phase 2 — Conversion (install)  [HIGH freedom]
 
 **Screenshots** — First 2–3 (no scroll) lead with benefit captions, not bare
 UI. Narrative across the set. Localized text for key markets.
@@ -83,7 +102,7 @@ launch). Reviews responded to.
 
 ---
 
-## Phase 3 — Prioritized plan (approve before executing)
+## Phase 3 — Prioritized plan (approve before executing)  [HIGH freedom — plan only]
 
 - **Quick** — fill keyword field, drop redundant title words, add missing
   core-market locale, reorder screenshots value-first
@@ -94,6 +113,14 @@ launch). Reviews responded to.
 
 Each item: current → change → find vs install → effort. Asset work flagged
 for `design-frontend`.
+
+## Self-critique before the burndown  [LOW freedom — do not skip]
+
+1. **Per platform × locale** — do not audit EN-only and call JP done
+2. **Find vs install labeled** — every item says which funnel it moves
+3. **No ASO-lie** — privacy labels stay honest (`plan-privacy-compliance`)
+4. **Right owner** — Guideline 2.5.2 / demo account → `plan-mobile-readiness`
+5. **Nothing edited** on the listing until approved
 
 ## Definition of Done
 

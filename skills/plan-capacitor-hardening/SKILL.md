@@ -10,6 +10,9 @@ license: MIT
 
 # Capacitor Native-Layer Hardening Audit + Remediation Plan
 
+**Degree of freedom: HIGH** — native-layer inventory and plan. Stay
+**plan-only**. No config, manifest, or code edits until approved.
+
 ## This skill vs neighbors
 
 | Skill | Owns |
@@ -18,6 +21,19 @@ license: MIT
 | `plan-mobile-readiness` | Store submission mechanics |
 | `enhance-capacitor-ui` | Hybrid shell UI |
 
+## How to reason (every plan item)
+
+1. **Propose** — config, storage, deep-link, or WebView change
+2. **Risk** — what a extracted APK or hijacked scheme actually exposes
+3. **Keep-working** — native controls that already hold in production
+4. **Phase** — prod-config leaks → tokens → auth → WebView → OTA (do not execute)
+
+## Worked example
+
+> **Propose:** `server.cleartext` and `webContentsDebuggingEnabled` false in prod; move auth tokens off Preferences onto Keychain/Keystore.
+> **Risk:** release APK allows remote WebView inspect + plaintext token backup exfil.
+> **Keep-working:** iOS ATS already blocks cleartext.
+> **Phase:** Phase 1 — strip dev config from prod.
 
 **Role:** Senior mobile security engineer (Capacitor / hybrid WebView surface).
 
@@ -58,7 +74,7 @@ Keychain/Keystore. Hybrid-native gaps are invisible if you only review web code.
 
 ---
 
-## The audit — four pillars (+ OTA)
+## The audit — four pillars (+ OTA)  [HIGH freedom]
 
 ### 1 · Data security
 - **Secrets in the bundle** — API keys, tokens hardcoded in JS or build-time env injection.
@@ -105,7 +121,7 @@ For each finding: location, gap, exposure, severity, remediation *direction*.
 
 ---
 
-## Procedure
+## Procedure  [HIGH freedom]
 
 1. **Inventory.** Read `capacitor.config.*`, `AndroidManifest.xml`, `Info.plist`, network
    configs, OAuth/deep-link setup, token storage. State what you couldn't see.
@@ -119,7 +135,7 @@ For each finding: location, gap, exposure, severity, remediation *direction*.
 
 ---
 
-## Guardrails
+## Guardrails  [LOW freedom — run exactly]
 
 - **Plan only.** No config, manifest, or storage migration edits.
 - **"Works in the browser" hides all of this.** Say so explicitly.
@@ -130,6 +146,14 @@ For each finding: location, gap, exposure, severity, remediation *direction*.
 - **Cross-hand:** bundle secrets → `plan-secrets-audit`; deep-link validation →
   `plan-input-validation`; submission → `plan-mobile-readiness`.
 - **Minimal quoting** of config/manifest.
+
+## Self-critique before the burndown  [LOW freedom — do not skip]
+
+1. **evidenced-not-assumed** — config/manifest path or storage API, not "hybrid apps are risky"
+2. **plan-only** — no config, manifest, or storage migration this pass
+3. **phase justified** — prod-config leaks and plaintext tokens before OTA polish
+4. **right-owner** — bundle secrets → `plan-secrets-audit`; store paperwork → `plan-mobile-readiness`
+5. **no-false-safety** — "works in the browser" hides this surface; custom-scheme OAuth is High even if it works
 
 ---
 

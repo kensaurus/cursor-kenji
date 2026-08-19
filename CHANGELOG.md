@@ -4,6 +4,28 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [Unreleased]
+
+## [1.24.0] — 2026-08-19
+
+### Added
+
+- **`enhance-skill-prompts`** — meta-skill to upgrade an existing SKILL.md
+  prompt (degrees of freedom, structured CoT, one worked example,
+  self-critique rubric, term consistency) without changing what the skill
+  does. Playbook: `docs/PROMPT-ENHANCEMENT-PLAYBOOK.md`. Annotated exemplar:
+  `skills/enhance-skill-prompts/references/exemplar-audit-auth-flows.md`.
+- **Prompt-enhancement playbook** — T1–T6 applied to every first-party
+  `audit-*` / `plan-*` / `test-*` skill plus the Wave 4 apply-now set
+  (frontmatter and stance unchanged). Live `audit-auth-flows` is the
+  reference implementation. Factory (`meta-skill-creator`,
+  `docs/CONTRIBUTING.md`) now inherits T1–T6 for new skills.
+- **`validate-skills` T1/T3/T4 gate** — first-party audit/plan/test skills
+  fail CI if they lack Degree of freedom, a Worked example, or a
+  Self-critique rubric.
+
+---
+
 ## [1.23.1] — 2026-08-19
 
 ### Fixed

@@ -12,6 +12,8 @@
  *     no leading/trailing hyphen, no consecutive `--`, <= 64 chars
  *   - `description` present, non-empty, <= 320 chars (house budget; spec max 1024)
  *   - (warn) SKILL.md body <= 500 lines (move detail to references/)
+ *   - first-party audit-, plan-, and test- family bodies declare
+ *     Degree of freedom, a Worked example, and a Self-critique rubric
  */
 import { readdirSync, existsSync, readFileSync, statSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -96,6 +98,24 @@ for (const group of groups) {
     const lines = body.split("\n").length;
     if (lines > BODY_WARN) {
       warnings.push(`${id}: SKILL.md body ${lines} lines > ${BODY_WARN} (consider references/)`);
+    }
+
+    // First-party audit/plan/test skills must carry T1 + T3 + T4
+    // (PROMPT-ENHANCEMENT-PLAYBOOK.md Wave 7). thirdparty-* is excluded.
+    if (
+      group === "skills" &&
+      /^(audit|plan|test)-/.test(dir) &&
+      !dir.startsWith("thirdparty-")
+    ) {
+      if (!/\bDegree of freedom\b/i.test(body)) {
+        errors.push(`${id}: missing T1 "Degree of freedom" declaration`);
+      }
+      if (!/\bWorked example\b/i.test(body)) {
+        errors.push(`${id}: missing T3 "Worked example"`);
+      }
+      if (!/\bSelf-critique\b/i.test(body)) {
+        errors.push(`${id}: missing T4 "Self-critique" rubric`);
+      }
     }
   }
 }

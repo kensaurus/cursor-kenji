@@ -10,11 +10,32 @@ license: MIT
 
 # Code Quality Audit
 
+**Degree of freedom: MIXED** — Parts 1–2 judgment `[HIGH freedom]`; convention
+greps and Validation `[LOW freedom — run exactly]`.
+
 > **Audit-and-fix exception.** Detect and then fix. Not present-then-stop.
 
-Two-in-one: (1) detect and fix React/TypeScript anti-patterns that cause bugs and performance issues, and (2) audit the whole codebase for naming, organisation, and pattern consistency.
+Repo-wide React/TypeScript anti-patterns plus naming, organisation, and
+pattern consistency. A named PR/diff → `audit-code-review`.
 
-## Before any change
+## How to reason
+
+1. **Observe** — quote the smell (`file:line`) and whether `git blame` / CONTRIBUTING marks it intentional
+2. **Interpret** — bug/perf risk, or style-only drift?
+3. **Classify** — anti-pattern / naming / organisation / pattern-split / intentional
+4. **Severity** — runtime bug or data-fetch `useEffect` = High; naming-only = Low
+
+## Worked example
+
+> **Observe:** `components/PaymentForm.tsx` has `'use server'` and a
+> `useEffect` that fetches invoices; four sortable lists use `key={i}`.
+> **Interpret:** server action lives in UI; fetch refires on remount; reorder remounts rows.
+> **Classify:** organisation + `useEffect`-for-data + index-as-key.
+> **Severity:** High (actions-in-components); Medium (keys).
+> **Finding:** `PaymentForm.tsx` | High | move action to `features/*/server/`;
+> replace fetch effect with TanStack Query
+
+## Before any change  [LOW freedom — run exactly]
 
 ```bash
 cat CONTRIBUTING.md .cursor/rules/*.md 2>/dev/null | head -100 # existing conventions
@@ -25,7 +46,7 @@ Verify the "inconsistency" isn't intentional. Check `git blame` before touching 
 
 ---
 
-## Part 1 — Anti-patterns
+## Part 1 — Anti-patterns  [HIGH freedom]
 
 ### React
 
@@ -154,7 +175,7 @@ lib/
 
 ---
 
-## Part 2 — Consistency audit
+## Part 2 — Consistency audit  [HIGH freedom; greps LOW]
 
 ### Naming conventions
 
@@ -218,7 +239,7 @@ rg "from '\.\." --type tsx | head -20 # relative imports instead of @/
 
 ## Summary
 - Overall score: X/10
-- Critical issues: X
+- Critical findings: X
 
 ## Anti-patterns found
 | Pattern | Files | Severity |
@@ -226,12 +247,12 @@ rg "from '\.\." --type tsx | head -20 # relative imports instead of @/
 | useEffect for data | 3 files | High |
 | Index as key | 2 files | Medium |
 
-## Naming convention issues
+## Naming convention findings
 | Element | Expected | Actual | Files |
 |---------|----------|--------|-------|
 | Components | PascalCase | Mixed | 4 |
 
-## Organisation issues
+## Organisation findings
 - Server actions found in: components/PaymentForm.tsx
 - Types scattered in: 6 component files
 
@@ -268,7 +289,15 @@ rg "from '\.\." --type tsx | head -20 # relative imports instead of @/
 - [ ] Files under 400 lines
 - [ ] Clear module boundaries
 
-## Validation
+## Self-critique before applying fixes  [LOW freedom — do not skip]
+
+1. **Evidenced** — `file:line` or rg hit, not "the codebase feels messy"
+2. **Reproducible** — the convention grep still finds it
+3. **Severity justified** — High = bug/perf, not naming taste
+4. **Right owner** — this PR/diff → `audit-code-review`
+5. **No-false-safety** — `git blame` checked; working intentional code left alone
+
+## Validation  [LOW freedom — run exactly]
 
 1. Run TypeScript strict: `npx tsc --noEmit`
 2. Run linter: `npx eslint src/`

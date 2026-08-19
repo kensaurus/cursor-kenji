@@ -1,3 +1,7 @@
+> Teaching copy of `audit-auth-flows` with T1–T6 annotations (`<!-- TECHNIQUE -->`).
+> Live shipped file (comments stripped; pack frontmatter unchanged):
+> `skills/audit-auth-flows/SKILL.md`.
+
 ---
 name: audit-auth-flows
 description: >
@@ -10,7 +14,12 @@ license: MIT
 
 # audit-auth-flows — Middleware is edge routing, not a security boundary
 
-**Degree of freedom: MIXED — declared per phase**
+## Degree of freedom: MIXED — declared per phase
+
+<!-- TECHNIQUE: T1 degree-of-freedom declaration (Anthropic official). The
+skill states its register up front and per phase, so the agent knows where
+to reason freely and where to follow exact steps. This header is the single
+most important addition. -->
 
 - Phases 0–4 (discovery, judgment): **[HIGH freedom]** — reason about what
   you find; checklists prompt investigation, they are not tick-scripts.
@@ -29,6 +38,12 @@ missed the point. Defense in depth: edge + route handler / server action
 
 ## How to reason in this audit
 
+<!-- TECHNIQUE: T2 structured chain-of-thought (not generic "think step by
+step"). Named stages the agent runs BEFORE writing any finding. Placed once,
+referenced by each phase, so it shapes reasoning without bloating every
+section. Extended thinking, when available, handles the rest — this
+scaffolds only the judgment that most needs it. -->
+
 For every potential finding, reason in this order before recording it:
 
 1. **Observe** — what does the code/probe actually show? (quote the line or the response)
@@ -41,6 +56,11 @@ If you cannot complete Interpret from static code, it is a **needs-a-probe**
 item for Phase 5, not a conclusion.
 
 ## Worked example
+
+<!-- TECHNIQUE: T3 few-shot + CoT combined (the combination beats either
+alone). ONE concrete exemplar that demonstrates the reasoning chain AND the
+output shape at once. This is the highest-leverage single addition to an
+audit skill. -->
 
 > **Observe:** `middleware.ts` matcher is `['/dashboard/:path*']`. The route
 > `/api/orders/[id]` has no check in the handler.
@@ -109,6 +129,9 @@ Hunt the gaps this exposes:
 **Supabase (check first on this stack):**
 
 - **[LOW freedom — run exactly]** `grep -rn "getSession(" <server-code-paths>`.
+  <!-- TECHNIQUE: T1 applied to the fragile bit. Promoted from advisory
+  prose to an explicit "run exactly" step so the agent cannot reason past
+  the grep. -->
   Treat every server-side hit as a finding until proven client-side-only.
   Official JS docs: cookie/storage values *may not be authentic*;
   `getSession()` is strongly advised against for authorization.
@@ -189,6 +212,10 @@ lives in. `plan-rls-audit` owns the data-layer half.
 
 ## Phase 5 — Live probes  [LOW freedom — run each, in order, non-prod]
 
+<!-- TECHNIQUE: T1 low-freedom exact steps for the fragile part. These are
+not suggestions; each is a labeled probe whose result is evidence. The
+reasoning chain's "needs-a-probe" items resolve here. -->
+
 Force the failures rather than only reading code. Log each as
 `P5-x | expected | actual | evidence`:
 
@@ -210,6 +237,10 @@ the repo.
 ---
 
 ## Self-critique before reporting  [LOW freedom — do not skip]
+
+<!-- TECHNIQUE: T4 self-refinement with an explicit rubric (also where
+"constitutional-style" principle-checking belongs — a rubric the agent
+critiques its own output against, not a buzzword). -->
 
 Challenge every finding against this rubric; drop or downgrade any that fail:
 
@@ -262,3 +293,9 @@ Challenge every finding against this rubric; drop or downgrade any that fail:
    lifecycle, then enumeration/OAuth. Handoffs: `plan-rls-audit`,
    `plan-secrets-audit`, `plan-security-audit`, `backend-patterns`.
    Present and stop.
+
+<!-- TECHNIQUE: T5 terminology — this file uses finding (not issue/problem),
+gate (not check/guard) for the auth layer, and probe for live evidence.
+T6 conciseness — neighbor table kept (routing), official CVE/getSession/
+getClaims/10s facts kept (not restated twice). Teaching comments live only
+in this exemplar; strip them from the live SKILL.md. -->

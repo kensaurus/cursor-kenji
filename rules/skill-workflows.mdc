@@ -38,7 +38,9 @@ Highest-impact prove combo: `test-exploratory` → `workflow-feedback-to-closure
 Names are predictable: `plan-*` (audit → approved burndown, no fixes),
 `audit-*` (findings; default present-then-stop), `enhance-*` (apply
 improvements), `test-*`, `debug-*`, `deploy-*`, `design-*`, `backend-*`,
-`mobile-*`. State the task; the matching skill self-selects by description.
+`mobile-*`. Upgrade *how* an existing skill instructs (not what it does) →
+`enhance-skill-prompts`. State the task; the matching skill self-selects by
+description.
 
 **Audit-and-fix exceptions** (report, then implement): `audit-responsive`,
 `audit-code-quality`, `audit-performance`, `audit-security`, `audit-i18n`,

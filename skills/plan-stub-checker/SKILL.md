@@ -10,6 +10,9 @@ license: MIT
 
 # Stub, Dead-Link & Fake-Component Checker + Wiring Plan
 
+**Degree of freedom: MIXED** — wiring plan is judgment; detection
+passes and MCP/live probes run exactly. Stay **plan-only**. No wiring until approved.
+
 **Role:** Senior full-stack engineer + reliability auditor.
 
 **Task:** Exhaustively find every **stub, dead button, fake/placeholder component, and unwired
@@ -29,6 +32,21 @@ Supabase / Sentry path. Produce a burndown + wiring plan. **Audit & plan only �
 
 **Chain:** `plan-stub-checker` → approval → `plan-test-coverage` → … see `docs/PLAN-LOOPS.md`  
 **Execute:** `debug-fe-be-integration` / `workflow-fix-and-ship` → `test-playwright`
+
+## How to reason (every plan item)
+
+1. **Propose** — wiring, target, contract, or instrumentation gap
+2. **Risk** — silent failure, dead control, or a fabricated target
+3. **Keep-working** — already-wired controls and live data paths
+4. **Phase** — silent-failure P0 → mock-to-live → orphan → instrumentation (do not execute)
+
+## Worked example
+
+> **Propose:** wire Settings → Export to the existing `POST /api/export` action; add loading/error/empty.
+> **Risk:** `onClick={() => {}}` — user thinks export ran; no request, no error.
+> **Keep-working:** Settings → Save profile already hits the server action.
+> **Phase:** Phase 1 — silent-failure P0.
+> **Cite:** `app/settings/page.tsx:84`. Missing action → `[NEEDS REAL TARGET]`.
 
 ---
 
@@ -71,7 +89,7 @@ Read `references/preservation-contract.md` before Phase 1.
 
 ---
 
-## Phase 1 — Auto-detect stack
+## Phase 1 — Auto-detect stack  [HIGH freedom]
 
 Read `package.json` and config:
 
@@ -87,7 +105,7 @@ Record: route manifest paths, API client location, env example file.
 
 ---
 
-## Phase 2–4 — Detection passes
+## Phase 2–4 — Detection passes  [LOW freedom — run exactly]
 
 Execute all passes in `references/detection-methodology.md`:
 
@@ -106,7 +124,7 @@ Optional live click pass: `protocol-browser-anti-stall` + your own named session
 
 ---
 
-## Phase 5 — Backend / pipeline / integration linkage
+## Phase 5 — Backend / pipeline / integration linkage  [HIGH freedom]
 
 For every stub that *should* be live, map:
 
@@ -129,7 +147,7 @@ Never invent table names or endpoints.
 
 ---
 
-## Phase 6 — Burndown + wiring plan
+## Phase 6 — Burndown + wiring plan  [HIGH freedom — plan only]
 
 Burndown columns:
 
@@ -154,6 +172,14 @@ Per confirmed stub: proposed wiring (target, contract, auth, states) + one-line 
 - Guardrails: lint empty handlers, CI orphan/mock checks, PR checklist
 
 Each phase independently reviewable + revertible.
+
+## Self-critique before the burndown  [LOW freedom — do not skip]
+
+1. **evidenced-not-assumed** — every stub cites file:line; no invented endpoints
+2. **plan-only** — no wiring, no handler edits, no fabricated tables
+3. **severity/phase justified** — silent-failure and missing RLS are P0, not polish
+4. **right-owner** — empty/error rendering of a wired control → `audit-ui-states`; live QA crawl → `test-qa`
+5. **no-false-safety** — `Review required` stays uncertain until the dynamic-invocation pass
 
 ---
 

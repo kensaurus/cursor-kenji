@@ -10,6 +10,9 @@ license: MIT
 
 # Docs Drift Audit + Sync Plan
 
+**Degree of freedom: MIXED** — inventory globs are exact; drift judgment
+is high. Stay **plan-only**. No rewrites until approved.
+
 **Role:** Senior engineer + technical writer.
 
 **Task:** Audit all documentation against what the code **actually does**, find every drift,
@@ -27,9 +30,23 @@ architecture notes, `.env.example`, CLI `--help`, changelogs. **Audit & plan onl
 
 **Loop position:** run **last** in the six-skill plan loop. See `docs/PLAN-LOOPS.md`.
 
+## How to reason (every plan item)
+
+1. **Propose** — correction that makes the doc match code truth
+2. **Risk** — onboard fail, phantom API, or invented behavior if left stale
+3. **Keep-working** — claims already backed by path:line
+4. **Phase** — factual drift first; wording last (do not execute)
+
+## Worked example
+
+> **Propose:** drop `STRIPE_WEBHOOK_SECRET` from the README setup list (absent from `.env.example` and code); document `POST /v1/webhooks/stripe` which exists undocumented.
+> **Risk:** onboarding fails on a phantom env var; integrators miss a live endpoint.
+> **Keep-working:** CONTRIBUTING install steps match `package.json` scripts.
+> **Phase:** first sync slice — factual drift only.
+
 ---
 
-## ⛔ Preservation Contract
+## ⛔ Preservation Contract  [LOW freedom — run exactly]
 
 Read `references/preservation-contract.md`. Acknowledge in output #1.
 
@@ -60,7 +77,7 @@ Core guardrail: **docs describe real, current behavior — never aspirational or
 
 ---
 
-## Phase 1 — Doc inventory
+## Phase 1 — Doc inventory  [LOW freedom — run exactly]
 
 ```
 Glob: README.md CONTRIBUTING.md docs/**/*.md **/*README*.md
@@ -71,7 +88,7 @@ List: README, CONTRIBUTING, docs/, inline JSDoc targets, OpenAPI, CLI help, chan
 
 ---
 
-## Phase 2–5 — Detection
+## Phase 2–5 — Detection  [HIGH freedom]
 
 Execute all passes in `references/drift-taxonomy.md`.
 
@@ -81,7 +98,7 @@ Every drift: **doc claim** + **code truth** (path:line). Can't verify → `[NEED
 
 ---
 
-## Phase 6 — Burndown + sync plan
+## Phase 6 — Burndown + sync plan  [HIGH freedom — plan only]
 
 Template: `references/output-templates.md`
 
@@ -90,6 +107,14 @@ Quantify: e.g. "9 phantom env vars, 14 undocumented endpoints, 6 onboarding step
 Per drift: before/after correction + "what's still accurate here". **Plan only — no rewrites until approval.**
 
 **Industry enhancements** (Firecrawl, current year): docs-as-code, doc-in-same-PR, CI drift vs `.env.example` + CLI help, generated API refs, `llms.txt`.
+
+## Self-critique before the burndown  [LOW freedom — do not skip]
+
+1. **evidenced-not-assumed** — every drift is doc claim + code path:line (or `[NEEDS VERIFICATION]`)
+2. **plan-only** — no rewrites; deletions are proposals
+3. **phase justified** — factual drift before wording polish
+4. **right-owner** — why-we-chose-X → `docs-adr`; stubs/dead UI → `plan-stub-checker`
+5. **no-false-safety** — never document invented or aspirational behavior
 
 ---
 
@@ -106,7 +131,7 @@ Per drift: before/after correction + "what's still accurate here". **Plan only �
 
 ---
 
-## Rules
+## Rules  [LOW freedom — run exactly]
 
 - Plan only — do not rewrite docs until approved.
 - Code is source of truth. Every drift = doc claim + code fact.

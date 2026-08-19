@@ -6,6 +6,10 @@ license: Apache-2.0
 
 # Skill Creator
 
+**Degree of freedom: MIXED.** Authoring judgment is `[HIGH freedom]`;
+house limits, frontmatter shape, and the T1–T6 checklist are
+`[LOW freedom — do not skip]`.
+
 Guidance for creating effective skills.
 
 ## About Skills
@@ -81,6 +85,25 @@ Match the level of specificity to the task's fragility and variability:
 **Low freedom (specific scripts, few parameters)**: Use when operations are fragile and error-prone, consistency is critical, or a specific sequence must be followed.
 
 Think of Claude as exploring a path: a narrow bridge with cliffs needs specific guardrails (low freedom), while an open field allows many routes (high freedom).
+
+### Prompt techniques (T1–T6)
+
+New skills should be *born* with these, not retrofitted later. Full procedure:
+[docs/PROMPT-ENHANCEMENT-PLAYBOOK.md](../../docs/PROMPT-ENHANCEMENT-PLAYBOOK.md).
+Upgrade an *existing* skill's prompt (not its behavior) with
+`enhance-skill-prompts`.
+
+| # | Technique | One-line rule |
+|---|-----------|---------------|
+| T1 | Degrees of freedom | Declare register under the H1; tag fragile phases LOW, interpretive HIGH |
+| T2 | Structured CoT | One named-stage chain at judgment points (not generic "think step by step") |
+| T3 | One worked example | Few-shot + CoT: reasoning chain and output shape, once |
+| T4 | Self-critique rubric | Specific answerable checks before output (plan skills: before the burndown) |
+| T5 | Terminology consistency | One term per concept |
+| T6 | Conciseness | Cut known context; never trim a LOW-freedom step's exactness |
+
+House limits: description ≤320 chars, body <500 lines, `name` matches dir.
+Never write the retired layout alias (use `audit-responsive`).
 
 ### Anatomy of a Skill
 
@@ -237,5 +260,6 @@ After testing the skill, users may request improvements. Often this happens righ
 ## Related
 
 - `audit-skill-conflicts` — after a batch of skills: contradictions, trigger overlap, stale refs
+- `enhance-skill-prompts` — upgrade an existing skill's prompt (T1–T6), not its behavior
 - `meta-mcp-builder` — MCP servers, not SKILL.md
 - `enhance-agent-guardrails` — app-repo policy, not pack authoring

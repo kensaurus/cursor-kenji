@@ -10,6 +10,9 @@ license: MIT
 
 # Data-Integrity & Destructive-Op Audit + Safeguard Plan
 
+**Degree of freedom: HIGH** — map wipe paths, score irreversibility, emit a plan.
+Stay **plan-only**. No migrations, tokens, or destructive commands until approved.
+
 **Role:** Senior platform engineer (destructive-op + migration safety).
 
 **Task:** Map every path to irreversible data loss, score by irreversibility × reach,
@@ -26,6 +29,21 @@ migrations, tokens, or destructive commands until each phase is approved.**
 | `plan-backup-dr` | Can you restore? RPO/RTO, drill evidence |
 | `audit-db-schema` | Schema design quality |
 | `plan-rls-audit` | Who can read/write which rows |
+
+## How to reason (every plan item)
+
+1. **Propose** — gate, blast-radius split, backfill-before-drop, or token scope
+2. **Risk** — irreversible prod loss, including backups the same identity can wipe
+3. **Keep-working** — already-gated, transactional, isolated paths
+4. **Phase** — Gates & isolation → Migration safety → Backup blast-radius → Least-privilege (do not execute)
+
+## Worked example
+
+> **Propose:** scope the agent token to non-destructive; move backups off the prod volume; split `0007_drop_legacy.sql` into backfill → verify → drop.
+> **Risk:** same identity can `DROP` prod *and* the backups — restore is theater.
+> **Keep-working:** additive migrations already wrap in a transaction.
+> **Phase:** Phase 1 — Gates & isolation (Critical).
+> **Restore proof:** `plan-backup-dr`, never this skill.
 
 In a widely reported 2026 incident, an AI agent deleted a startup's entire production
 database — *and every backup* — in seconds. Four structural failures: **overprivileged
@@ -56,7 +74,7 @@ only question is: *"what here could destroy data, and what stops it?"*
 
 ---
 
-## The audit
+## The audit  [HIGH freedom]
 
 ### A · Destructive operations in code & migrations
 - **Unguarded `DELETE` / `UPDATE` without `WHERE`** — or WHERE that matches all.
@@ -88,7 +106,7 @@ only question is: *"what here could destroy data, and what stops it?"*
 
 ---
 
-## Procedure
+## Procedure  [HIGH freedom — plan only]
 
 1. **Inventory destructive surface.** Migrations, SQL, scripts, agent/CI scopes.
 2. **Trace each to impact.** Reversible? gated? backed up outside blast radius?
@@ -107,6 +125,14 @@ only question is: *"what here could destroy data, and what stops it?"*
 - **Least privilege is the cheapest win.**
 - **Backups outside the blast radius or they don't count.**
 - **Backfill before drop.** One-step column drops on populated data = data loss.
+
+## Self-critique before the burndown  [LOW freedom — do not skip]
+
+1. **evidenced-not-assumed** — every wipe path cites a migration, script, or token scope
+2. **plan-only** — no SQL, no token edits, **never** a destructive "verify"
+3. **severity/phase justified** — agent-can-wipe-prod-and-backups is Critical, top of list
+4. **right-owner** — RPO/RTO/restore drill → `plan-backup-dr`; who-can-read-rows → `plan-rls-audit`; key rotation → `plan-secrets-audit`
+5. **no-false-safety** — prompt-rules are not a gate; backups in the same blast radius do not count
 
 ---
 
