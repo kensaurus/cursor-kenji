@@ -31,6 +31,7 @@ missed the point. Defense in depth: edge + route handler / server action
 | `plan-secrets-audit` | Where `service_role` / keys live |
 | `plan-privacy-compliance` | Consent / policy vs collection — not session gates |
 | `backend-patterns` | Building the middleware / guard fixes after this audit |
+| `test-exploratory` | Live guest vs logged-in probe (runtime complement to this static matrix) |
 
 ---
 

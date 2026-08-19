@@ -18,6 +18,7 @@ class. The combined result is a single verdict.
 ## Gate sequence
 
 ```
+0. EXPLORE    → test-exploratory (optional live probe: guest vs logged-in wander + diff)
 1. RED-TEAM   → test-red-team    (adversarial: UX + pipeline + security + perf)
 2. SECURITY   → audit-security   (static code review: OWASP, auth, RLS, secrets)
 3. BUNDLE     → audit-bundle-size (JS payload: lazy loading, tree-shaking, chunks)
@@ -25,8 +26,10 @@ class. The combined result is a single verdict.
 5. UNIT TESTS → test-unit        (coverage gaps, regression suite green?)
 ```
 
-Run gates in order — earlier gates often surface issues that make later gates
-redundant or change their scope.
+Gate 0 is optional and does **not** replace Gate 1. Use it when the user asked to
+wander / monkey-test / compare guest vs logged-in first. Run gates in order —
+earlier gates often surface issues that make later gates redundant or change
+their scope.
 
 **Plan-only fork:** if the user asked for a burndown and no code changes,
 replace Gate 2 with `plan-security-audit` (and `plan-rls-audit` /

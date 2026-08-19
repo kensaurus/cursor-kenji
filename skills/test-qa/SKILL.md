@@ -3,8 +3,8 @@ name: test-qa
 description: >
   Generic webapp QA fallback — use only when no project-specific QA skill
   applies (project-local QA wins; native builds → mobile-emulator-test). Use
-  when "QA the app", "test CRUD", "smoke test", or "test like a real user".
-  Dead-button inventory → plan-stub-checker. Pixel diffs →
+  when "QA the app", "test CRUD", or "smoke test". Monkey / guest vs logged-in
+  → test-exploratory. Dead buttons → plan-stub-checker. Pixel diffs →
   test-visual-regression.
 license: MIT
 ---
@@ -15,6 +15,7 @@ Perform full QA testing of any webapp through playwright-cli, adopting the
 mindset of a senior QA engineer preparing an app for production release. This is NOT a
 simple page-navigation monkey test — it is controlled, intelligent, user-story-driven
 testing that covers CRUD operations, data pipeline integrity, UX quality, and edge cases.
+Unscripted wander + guest vs logged-in diff → `test-exploratory`.
 
 **Before ANY browser interaction, read the `protocol-browser-anti-stall` skill and apply its
 rules to every step — especially Rule 0 (manual & headed, never scripted).** That skill lives

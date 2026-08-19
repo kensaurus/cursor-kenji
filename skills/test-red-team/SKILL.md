@@ -4,6 +4,7 @@ description: >
   Adversarial red-team of a running web, React Native, or Capacitor hybrid app. Use when
   asked to "red team this app", "attack my app", "break it", "find all the defects",
   "adversarial test", "pre-launch hardening", "pentest the app", or "full app QA".
+  Naive monkey / guest vs logged-in wander → test-exploratory.
 license: MIT
 ---
 
@@ -35,7 +36,8 @@ persisted auth.
 
 ## Coverage model
 
-Do NOT do a blind structural DOM crawl — that is `test-qa`. Traverse a
+Do NOT do a blind structural DOM crawl — that is `test-qa`. Do NOT do an
+unscripted guest vs logged-in wander — that is `test-exploratory`. Traverse a
 **coverage matrix** instead:
 
 ```

@@ -31,6 +31,8 @@ for the plan-loop sequences.
 - Feature-flag rollout → `workflow-feature-flag`
 - Convert an agent failure into a guard → `iterate-agent-harness`
 
+Highest-impact prove combo: `test-exploratory` → `workflow-feedback-to-closure` → `test-playwright`. Optional pre-gate: `test-exploratory` then `workflow-quality-gate`.
+
 ## Use an individual skill when scoped to one phase
 
 Names are predictable: `plan-*` (audit → approved burndown, no fixes),

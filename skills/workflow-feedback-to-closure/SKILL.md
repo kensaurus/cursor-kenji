@@ -25,7 +25,7 @@ Collect every incoming signal for this pass and record its source:
 
 - user reports / support messages / app-store reviews
 - Sentry issues and alerts (`search_issues`, `analyze_issue_with_seer`)
-- QA and red-team findings (`test-qa`, `test-red-team`)
+- QA, exploratory, and red-team findings (`test-qa`, `test-exploratory`, `test-red-team`)
 - audit outputs (`audit-*`, `plan-*` reports)
 - PR review comments and bot findings
 - production logs and advisors (`get_logs`, `get_advisors`)

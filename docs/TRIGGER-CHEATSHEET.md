@@ -218,11 +218,14 @@ Attribution and update policy → [THIRD-PARTY-SKILLS.md](./THIRD-PARTY-SKILLS.m
 | Say this in chat | Skill |
 |:-----------------|:------|
 | "test this with Playwright", "test like a real user", "PDCA this" | `test-playwright` |
-| "QA the app", "find bugs", "test before release", "smoke test" | `test-qa` |
+| "QA the app", "test CRUD", "test before release", "smoke test" | `test-qa` |
+| "monkey test the app", "exploratory QA", "wander like a confused user", "guest vs logged in", "click everything" | `test-exploratory` |
 | "red team this app", "attack my app", "break it", "find all the defects", "pre-launch hardening" | `test-red-team` |
 | "write unit tests", "add test coverage", "write tests for this function" | `test-unit` |
 | "add visual regression tests", "catch UI regressions", "screenshot testing" | `test-visual-regression` |
 | "load test this", "will it handle launch traffic", "find the breaking point" | `test-load` |
+
+Highest-impact combo: `test-exploratory` → `workflow-feedback-to-closure` → `test-playwright`. Pre-release: wander first, then `workflow-quality-gate`.
 
 ---
 

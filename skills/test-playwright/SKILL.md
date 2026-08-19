@@ -1,9 +1,10 @@
 ---
 name: test-playwright
 description: >
-  Close the PDCA loop on the work you just did. Drive the live app in a headed
-  playwright-cli browser, one real user action at a time — never scripts or test
-  runners. Pixel diffs → test-visual-regression. Full-app QA → test-qa.
+  Close the PDCA loop on this session's diff. Headed playwright-cli, fix as
+  you go. Use when "test my changes", "PDCA this". Pixel diffs →
+  test-visual-regression. Story CRUD → test-qa. Monkey / guest vs logged-in
+  → test-exploratory.
 license: MIT
 ---
 
@@ -37,7 +38,8 @@ timeout budgets, tab discipline, and persisted auth
 > `npx playwright test`. You're here to *feel* the pain points, not pass a green check.
 
 > **Test only what this session changed — plus its blast radius.**
-> Not a full-app crawl (that's `test-qa`). Scope to the files you edited and the
+> Not a full-app crawl (that's `test-qa`). Not an unscripted guest vs logged-in
+> wander (that's `test-exploratory`). Scope to the files you edited and the
 > pages/flows/APIs that consume them. Touch a shared component → test every page that
 > renders it.
 

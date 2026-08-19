@@ -4,8 +4,8 @@ Quick map of `docs/` — start with [GETTING-STARTED.md](GETTING-STARTED.md) if 
 
 | File | Purpose |
 |:-----|:--------|
-| [GETTING-STARTED.md](GETTING-STARTED.md) | Plain-language install and first phrases to try (including launch/ops) |
-| [CATALOG.md](CATALOG.md) | Full skill/command reference with trigger phrases |
+| [GETTING-STARTED.md](GETTING-STARTED.md) | Plain-language install, first phrases, and copy-paste combo pipelines |
+| [CATALOG.md](CATALOG.md) | Full skill/command reference + highest-impact composition patterns |
 | [TRIGGER-CHEATSHEET.md](TRIGGER-CHEATSHEET.md) | "Say X → skill Y" lookup table |
 | [PLAN-LOOPS.md](PLAN-LOOPS.md) | How to chain the 20 `plan-*` skills (grouped loops) |
 | [THIRD-PARTY-SKILLS.md](THIRD-PARTY-SKILLS.md) | Vendored upstream skills (`thirdparty-*`), attribution, update policy |

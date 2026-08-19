@@ -4,6 +4,19 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ---
 
+## [1.23.0] — 2026-08-19
+
+### Added
+
+- **`test-exploratory`** — unscripted guest vs logged-in wander of a live non-prod app (headed playwright-cli, SBTM charters, guest/auth/post-logout isolation). Discovery only; tickets via `workflow-feedback-to-closure`, lock via `test-playwright`.
+- Highest-impact combo pipelines in README, GETTING-STARTED, and CATALOG: `test-exploratory` → `workflow-feedback-to-closure` → `test-playwright`, plus wander-then-`workflow-quality-gate`.
+
+### Changed
+
+- `test-qa` / `test-playwright` / `test-red-team` descriptions no longer claim monkey / guest-vs-authed wander; `/test` and the trigger cheatsheet route those phrases to `test-exploratory`.
+
+---
+
 ## [1.22.0] — 2026-08-19
 
 ### Added

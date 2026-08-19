@@ -120,8 +120,8 @@ $PW -s=gmail snapshot        # already signed in
 
 ## 4. Reusing an app login (non-Google)
 
-Goal: sign in once, by hand, and reuse it across `test-playwright`, `test-qa`, `test-red-team`, and
-audit skills.
+Goal: sign in once, by hand, and reuse it across `test-playwright`, `test-qa`, `test-red-team`,
+`test-exploratory` (authed session only), and audit skills.
 
 1. **Check first.** Open the session on a **protected route** (`/dashboard`, not `/login`) and
    `snapshot`. Already signed in? Skip the rest.
@@ -153,3 +153,18 @@ $PW kill-all            # stale/zombie processes that `close` will not clear
 
 **If auth is unexpectedly lost:** confirm you passed the same `--profile` path (a typo silently
 creates a fresh in-memory session), then re-run the §4 interactive login (step 2) once.
+
+---
+
+## 6. Dual-identity exploratory sessions (`test-exploratory`)
+
+Guest and authed must never share storage. Use three names, three browsers:
+
+| Session | Storage | Do |
+|:--------|:--------|:---|
+| `-s=explore-guest` | default in-memory — **no** `--profile`, **no** `state-load` | anonymous wander |
+| `-s=explore-authed` | `state-load` or dedicated `--profile` under `~/.playwright-cli-profiles/` | seeded test account |
+| `-s=explore-post-logout` | fresh in-memory | prove logout cleared cookies / `localStorage` / `sessionStorage` |
+
+`storageState` does **not** persist `sessionStorage` — inspect it in the page after logout. Never
+open the guest session with a persistent profile.

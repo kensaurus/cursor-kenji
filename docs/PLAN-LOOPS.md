@@ -50,7 +50,7 @@ flowchart LR
 | `plan-uiux-unification` | `audit-responsive`, `enhance-web-ux`, `enhance-web-ui`, `audit-accessibility` |
 | `plan-antislop` | `docs-writer`, `audit-i18n`, `enhance-web-ui`, `enhance-web-ux`, `enhance-web-landing`, `workflow-refactor` |
 | `plan-stub-checker` | `debug-fe-be-integration`, `workflow-fix-and-ship` |
-| `plan-test-coverage` | `test-unit`, `workflow-spec-tdd`, `test-playwright` |
+| `plan-test-coverage` | `test-unit`, `workflow-spec-tdd`, `test-playwright`, optional live probe `test-exploratory` |
 | `plan-perf-audit` | `audit-performance`, `audit-bundle-size`, `backend-db-performance`, `mobile-rn-performance` |
 | `plan-security-audit` | `audit-security`, `audit-db-schema` |
 | `plan-docs-sync` | `docs-writer`, `workflow-housekeep` |
@@ -68,7 +68,7 @@ flowchart LR
 | `plan-backup-dr` | `plan-data-integrity`, `audit-env-parity`, `audit-infra-cost` |
 | `plan-aso` | `plan-mobile-readiness`, `design-frontend`, `plan-privacy-compliance` |
 
-**Verify every execution phase:** `test-playwright` (live user paths) + `deploy-verify` (prod smoke).
+**Verify every execution phase:** `test-playwright` (live user paths) + `deploy-verify` (prod smoke). Optional live identity probe (does not replace red-team): `test-exploratory` as guest then logged-in, then ticket via `workflow-feedback-to-closure`.
 
 ## Plan skill map (20 skills — pick loops, don't run all at once)
 
@@ -261,6 +261,7 @@ Every `plan-*` skill shares the same discipline:
 | **Privacy & recovery** | `plan-privacy-compliance` / `plan-backup-dr` | Consumer launch labels; restore capability |
 | **Growth gate** | `plan-aeo-readiness` / `plan-aso` | AI citation; store listing conversion |
 | `workflow-quality-gate` | `test-red-team` | Ship/no-ship verdict with fixes |
+| Live identity probe (optional) | `test-exploratory` | Guest vs logged-in wander + diff — run before the quality gate, not instead of it |
 | `workflow-launch-ready` | SEO + PWA + … | Launch week |
 | Core iterate | `/research` → audits → `/plan` → TDD | General improvement |
 

@@ -49,6 +49,7 @@ with `/goal`.
 | Adversarial full-app sweep | `test-red-team` |
 | Drive app as real user, fix inline | `test-playwright` |
 | Comprehensive QA with CRUD verification | `test-qa` |
+| Unscripted guest vs logged-in wander + diff | `test-exploratory` |
 | Write unit/integration tests | `test-unit` |
 | Mutation testing — do tests actually assert? | `test-mutation` |
 | Screenshot baselines / CI pixel diffs | `test-visual-regression` |
@@ -166,7 +167,10 @@ workflow-fix-and-ship
   └─ debug-error → test-playwright → workflow-pr → deploy-verify
 
 workflow-quality-gate
-  └─ test-red-team → audit-security → audit-bundle-size → audit-performance → test-unit
+  └─ (optional) test-exploratory → test-red-team → audit-security → audit-bundle-size → audit-performance → test-unit
+
+test-exploratory → workflow-feedback-to-closure → test-playwright
+  └─ guest+authed wander → durable tickets → lock the worst bugs
 
 workflow-launch-ready
   └─ enhance-web-seo → enhance-pwa → audit-bundle-size → audit-i18n

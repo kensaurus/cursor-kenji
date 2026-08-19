@@ -28,7 +28,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (135)
+## Skills (136)
 
 ### Enhance
 
@@ -357,7 +357,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `audit-auth-flows`
 **Triggers:** "audit our auth", "check middleware protection", "is getSession safe", "route gate coverage", "CVE-2025-29927", "/auth-flows"
 **What it does:** Read-only app-layer auth audit. Centerpiece is the route×gate matrix (every protected route/API/action → the gate that actually covers it, server-side verified). Middleware is not a security boundary — sole-gate is a finding even after CVE-2025-29927 is patched (official Vercel postmortem). Supabase `getSession()` for server-side authz is critical (`getUser()` is the network-verified call). Session lifecycle, refresh-token reuse detection (default 10s; do not widen), OAuth/PKCE, IDOR/admin gates. Live probes non-prod only. Data-layer half → `plan-rls-audit`.
-**Related:** `audit-security`, `plan-rls-audit`, `plan-secrets-audit`, `plan-security-audit`, `backend-patterns`
+**Related:** `audit-security`, `plan-rls-audit`, `plan-secrets-audit`, `plan-security-audit`, `backend-patterns`, `test-exploratory`
 
 #### `audit-accessibility`
 **Triggers:** "accessible", "WCAG", "ADA", "a11y", "screen reader", "disability"
@@ -412,7 +412,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `audit-ui-states`
 **Triggers:** "check empty/error states", "audit loading states", "what happens when this fails", "offline state", "zero-results"
 **What it does:** Read-only per-screen matrix of empty / loading / error / offline / zero-results / permission / overflow. Happy-path-only UI is the vibe-code tell. Dead buttons → `plan-stub-checker`. Breakpoints → `audit-responsive`.
-**Related:** `plan-stub-checker`, `audit-resilience`, `audit-responsive`, `audit-ux`, `test-visual-regression`
+**Related:** `plan-stub-checker`, `audit-resilience`, `audit-responsive`, `audit-ux`, `test-visual-regression`, `test-exploratory`
 
 #### `audit-monetization-iap`
 **Triggers:** "audit our IAP", "check subscriptions", "are purchases validated", "restore purchases broken"
@@ -447,7 +447,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `audit-ux-journeys`
 **Triggers:** "audit user flows", "user story audit", "information architecture audit", "IA audit", "can users find X", "users get lost", "navigation audit", "funnel drop-off", "task completion", "audit-ux-journeys"
 **What it does:** Cross-page UX audit for **user stories, task completion, and information architecture** — the layer `audit-ux` (per-page heuristics) doesn't cover. A site can pass every per-page heuristic and still fail because users can't *find* the feature or *finish* the story. **Phase 0** derives 5–10 real user stories from routes/nav/CTAs (reusing `design-prd` / `plan-test-coverage` inventories — never invented personas) and scopes depth by audit trigger (KPIs dropping → targeted funnel; complaints → thematic; redesign → comprehensive; pre-launch → qualitative walkthroughs labeled as assumptions). **Phase 1** audits IA structurally: click depth per story target (money pages ≤2–3), orphan pages, dead ends, label consistency (nav ≈ title ≈ H1, one concept = one word), grouping vs user mental model (not DB schema), first-click logic, wayfinding (breadcrumbs, `aria-current`), search/filter presence, URL sanity. **Phase 2** walks every story end-to-end in a headed browser (desktop + 390px mobile) producing a task-completion matrix: steps-to-goal, friction log (hesitation/mislabel/backtrack/surprise/stall), error-recovery probes (invalid input, Back, refresh mid-flow), success-moment clarity — a BLOCKED story is automatically a Blocker finding. **Phase 3** enforces evidence discipline: every finding tagged `[data]` (analytics/funnels/drop-offs from GA4/PostHog/Clarity/etc.), `[observed]` (reproduced), or `[judgment]` (assumption to validate) — never presents taste as data; with no analytics, recommends minimal funnel instrumentation as a roadmap item. **Phase 4** reports impact×effort: quick wins vs roadmap vs deprioritized, neutral behavior-grounded language, always names what works. Delegates per-page fixes to `enhance-web-ux`, forms to `enhance-web-forms`, WCAG to `audit-accessibility`, heuristics depth to `audit-ux`.
-**Related:** `audit-ux`, `audit-responsive`, `audit-analytics`, `enhance-web-ux`, `enhance-web-forms`, `audit-accessibility`, `audit-performance`, `audit-realworld`, `plan-test-coverage`, `design-prd`, `test-playwright`
+**Related:** `audit-ux`, `audit-responsive`, `audit-analytics`, `enhance-web-ux`, `enhance-web-forms`, `audit-accessibility`, `audit-performance`, `audit-realworld`, `plan-test-coverage`, `design-prd`, `test-playwright`, `test-exploratory`
 
 #### `audit-responsive`
 **Triggers:** "responsive audit", "desktop looks like a phone", "linearized layout", "no max-width", "stacked at 1440", "stretched buttons on desktop", "breakpoint gaps", "audit-responsive"
@@ -498,19 +498,24 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Related:** `plan-test-coverage`, `test-unit`, `housekeep-gates`, `audit-gate-logic`, `enhance-agent-guardrails`
 
 #### `test-qa`
-**Triggers:** "QA the app", "test the app", "find bugs", "test before release", "run QA", "test CRUD", "test data pipeline", "pre-release testing", "smoke test"
-**What it does:** Full-app QA via playwright-cli. Auto-discovers pages, features, data entities, auth patterns. Performs real CRUD with data pipeline verification (FE → API → DB → FE), audits UX quality, tests edge cases.
-**Related:** `test-unit`, `test-playwright`, `protocol-browser-anti-stall`
+**Triggers:** "QA the app", "test the app", "test before release", "run QA", "test CRUD", "test data pipeline", "pre-release testing", "smoke test"
+**What it does:** Full-app QA via playwright-cli. Auto-discovers pages, features, data entities, auth patterns. Performs real CRUD with data pipeline verification (FE → API → DB → FE), audits UX quality, tests edge cases. Not a monkey test.
+**Related:** `test-unit`, `test-playwright`, `test-exploratory`, `protocol-browser-anti-stall`
+
+#### `test-exploratory`
+**Triggers:** "monkey test the app", "exploratory QA", "wander the app", "wander like a confused user", "guest vs logged in", "click everything and see what breaks"
+**What it does:** Unscripted headed wander of a live non-prod app — junk inputs, double-submit, nav abuse — run twice as **GUEST** then **LOGGED-IN** in isolated playwright-cli sessions, plus a post-logout isolation pass. Centerpiece is the **guest-vs-authed diff table**. Discovery only; tickets go to `workflow-feedback-to-closure`, then lock with `test-playwright`.
+**Related:** `test-qa`, `test-red-team`, `test-playwright`, `audit-auth-flows`, `workflow-feedback-to-closure`, `protocol-browser-anti-stall`
 
 #### `test-playwright`
 **Triggers:** "test this with playwright", "test my changes", "test on localhost like a user", "PDCA this", "did you actually test it", "red-team this feature", "verify the work end-to-end"
 **What it does:** Closes the PDCA loop after an implementation. Scopes to the current session's diff, drives the live localhost app through playwright-cli manually like a real user, and **fixes** pain points — full-stack (UI/UX + API + DB).
-**Related:** `test-qa`, `protocol-browser-anti-stall`, `debug-fe-be-integration`
+**Related:** `test-qa`, `test-exploratory`, `protocol-browser-anti-stall`, `debug-fe-be-integration`
 
 #### `test-red-team`
 **Triggers:** "red team this app", "attack my app", "break it", "find all the defects", "adversarial test", "pre-launch hardening", "pentest the app", "full app QA", "security + perf + UX sweep", "try to break it"
 **What it does:** Adversarial full-app sweep driven by a **feature-first coverage matrix**: each feature decomposed to surfaces, sub-pages, components, and states, attacked across 4 dimensions — UI/UX, data pipeline, security (OWASP Top 10 + MASVS), and performance. Drives playwright-cli (web), Playwright Android WebView attach (Capacitor), or adb tap-walk (native chrome). Cross-references Sentry + Supabase + Firecrawl. Produces a severity-ranked defect list with repro evidence and a launch-readiness verdict.
-**Related:** `test-playwright`, `test-qa`, `audit-security`, `iterate-post-launch`, `audit-llm-security`, `test-load`
+**Related:** `test-playwright`, `test-qa`, `test-exploratory`, `audit-security`, `iterate-post-launch`, `audit-llm-security`, `test-load`
 
 #### `test-visual-regression`
 **Triggers:** "add visual regression tests", "catch UI regressions", "screenshot testing"
@@ -525,7 +530,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `protocol-browser-anti-stall`
 **Triggers:** (protocol — used by other skills before browser automation sessions); also "parallel browser agents", "playwright session", "browser keeps stalling"
 **What it does:** Standardizes browser work on `playwright-cli` (`npx --yes @playwright/cli@latest`) with named sessions (`-s=<name>`) so parallel agents each get an isolated browser instead of fighting over the single-instance Playwright MCP. Prevents freezing: navigation guards with snapshot verification, max 3-second waits, incremental wait pattern, max 4 attempts per goal, SPA rules, fresh refs after state changes. Ships an MCP→CLI command map and persistent-login setup (including the Google/CDP sign-in workaround).
-**Related:** `test-qa`, `test-playwright`, `deploy-verify`
+**Related:** `test-qa`, `test-playwright`, `test-exploratory`, `deploy-verify`
 
 ---
 
@@ -622,7 +627,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `workflow-feedback-to-closure`
 **Triggers:** "triage this feedback", "turn these reports into tickets", "process the bug backlog", "handle these review comments", "close the loop on QA findings", "manage incoming issues", "/feedback-to-closure"
 **What it does:** Turn raw feedback — bug reports, complaints, review comments, Sentry issues, QA/audit findings — into deduplicated, durable, trackable tickets and drive each to production-verified closure. Normalizes and clusters signals, dedupes against existing issues, writes reproducible tickets to `.cursor/feedback-closure-state.md` (and the tracker), prioritizes by impact, fixes via the right skill with a regression test, and closes only after the fix is verified where the user hit it — not when a PR merges.
-**Related:** `workflow-fix-and-ship`, `complete-everything`, `iterate-post-launch`, `workflow-ship-and-observe`, `debug-sentry-monitor`, `verification-before-completion`
+**Related:** `workflow-fix-and-ship`, `complete-everything`, `iterate-post-launch`, `workflow-ship-and-observe`, `debug-sentry-monitor`, `verification-before-completion`, `test-exploratory`
 
 #### `workflow-environment-ready`
 **Triggers:** "set up the environment", "is this ready to run", "before we start the big task", "preflight the repo", "why won't the tests run", start of any long/autonomous run
@@ -689,9 +694,9 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 
 #### `workflow-quality-gate`
 **Triggers:** "is this ready to ship?", "quality gate", "pre-release checklist", "what do I need to fix before launch?", "ship-readiness check", "run the quality gate"
-**What it does:** Pre-release go/no-go. Sequences: adversarial red team (`test-red-team`) → static security review (`audit-security`) → bundle size (`audit-bundle-size`) → Core Web Vitals (`audit-performance`) → unit test coverage (`test-unit`). Produces a single GO / NO-GO / GO WITH CONDITIONS verdict with a ranked defect list.
-**Chain:** `test-red-team` → `audit-security` → `audit-bundle-size` → `audit-performance` → `test-unit`
-**Related:** `test-red-team`, `audit-security`, `audit-bundle-size`, `audit-performance`, `test-unit`, `audit-gate-logic`
+**What it does:** Pre-release go/no-go. Optional live identity probe (`test-exploratory`) then: adversarial red team (`test-red-team`) → static security review (`audit-security`) → bundle size (`audit-bundle-size`) → Core Web Vitals (`audit-performance`) → unit test coverage (`test-unit`). Produces a single GO / NO-GO / GO WITH CONDITIONS verdict with a ranked defect list.
+**Chain:** (`test-exploratory`) → `test-red-team` → `audit-security` → `audit-bundle-size` → `audit-performance` → `test-unit`
+**Related:** `test-exploratory`, `test-red-team`, `audit-security`, `audit-bundle-size`, `audit-performance`, `test-unit`, `audit-gate-logic`
 
 #### `workflow-launch-ready`
 **Triggers:** "prepare for launch", "launch week", "everything before going live", "is the app launch-ready?", "pre-launch sweep", "ship it to the world", "launch prep"
@@ -779,7 +784,7 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/readme` | `enhance-readme`, `docs-writer` | Visual showcase + content sync |
 | `/refactor` | `workflow-refactor` | Analyze → split → extract → verify behavior |
 | `/review-code` | `audit-code-review` | Agent review + manual checklist (renamed from `/review` to avoid Claude Code's built-in `/review`) |
-| `/test` | `test-unit`, `test-qa`, `mobile-emulator-test` | Type check → unit → integration → E2E |
+| `/test` | `test-unit`, `test-qa`, `test-exploratory`, `mobile-emulator-test` | Type check → unit → integration → E2E / exploratory |
 | `/uiux` | `audit-responsive`, `audit-ui-states`, `audit-uiux-design-system`, `audit-ux`, `enhance-web-ui`, `enhance-web-ux` | Audit + enhance UI/UX |
 | `/responsive-audit` | `audit-responsive` | Linearized layout / breakpoint IA — desktop is not a wide phone |
 | `/skill-conflicts` | `audit-skill-conflicts` | Pack self-audit — contradictions, trigger overlap, stale refs |
@@ -820,6 +825,19 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 
 > **Prefer bundled workflows** (`workflow-build-feature`, `workflow-fix-and-ship`, `workflow-quality-gate`, `workflow-launch-ready`) for multi-phase tasks. Use individual skills when the request is scoped to one phase.
 
+### Highest-impact combos (copy into chat)
+
+These are the loops that move a product the most. Paste the phrase; the pack chains the rest.
+
+| You want… | Paste this | What it chains |
+|-----------|------------|----------------|
+| Find real breaks as a confused user, then lock them | `monkey-test as guest and logged-in, ticket every real bug, then lock a Playwright pass on the worst ones` | `test-exploratory` → `workflow-feedback-to-closure` → `test-playwright` |
+| Pre-release go/no-go with a live identity probe | `wander the app as guest vs logged-in, then run the quality gate` | `test-exploratory` → `workflow-quality-gate` |
+| Build a feature end-to-end | `build this feature` | `workflow-build-feature` (spec → TDD → `test-playwright` → PR) |
+| Fix a bug and ship it | `fix this bug and ship it` | `workflow-fix-and-ship` |
+| Close a plan with nothing parked | `complete everything` | `complete-everything` |
+| Ship and watch it | `ship it and watch it` | `workflow-ship-and-observe` |
+
 ### Bundled workflows (start here)
 
 | Intent | Bundled skill | What it chains |
@@ -827,7 +845,7 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | Close a plan with no connected deferrals | `complete-everything` | durable closure set → conditional specialists → full verification → completion judge |
 | Build a feature end-to-end | `workflow-build-feature` | spec → TDD → unit tests → smoke → PR |
 | Fix a bug and ship it | `workflow-fix-and-ship` | debug → fix → smoke → PR → deploy |
-| Pre-release quality check | `workflow-quality-gate` | red-team → security → bundle → perf → unit tests |
+| Pre-release quality check | `workflow-quality-gate` | (optional explore) → red-team → security → bundle → perf → unit tests |
 | Full launch preparation | `workflow-launch-ready` | SEO + PWA + bundle + i18n + quality gate + deploy + iterate |
 | Green the whole repository (authorized) | `workflow-green-repo` | discover gates → enumerate failures → batch fix → prove green from scratch |
 | Deploy to production and observe | `workflow-ship-and-observe` | preflight → deploy → verify live revision → observe → stable/rollback |
@@ -843,7 +861,11 @@ workflow-fix-and-ship
   └─ debug-error → test-playwright → workflow-pr → deploy-verify
 
 workflow-quality-gate
-  └─ test-red-team → audit-security → audit-bundle-size → audit-performance → test-unit
+  └─ (optional live probe) test-exploratory
+     → test-red-team → audit-security → audit-bundle-size → audit-performance → test-unit
+
+test-exploratory → workflow-feedback-to-closure → test-playwright
+  └─ guest+authed wander → durable tickets → lock the worst bugs
 
 workflow-launch-ready
   └─ enhance-web-seo → enhance-pwa → audit-bundle-size → audit-i18n
@@ -859,6 +881,11 @@ workflow-feedback-to-closure
 ```
 
 ### Specialist compositions (individual skills)
+
+#### Exploratory QA → tickets → lock (guest vs logged-in)
+`test-exploratory` → `workflow-feedback-to-closure` → `test-playwright`
+
+Optional pre-gate: `test-exploratory` → `workflow-quality-gate` (wander first; red-team still owns the hostile matrix).
 
 #### Full Feature Build (manual)
 `workflow-spec-tdd` → `backend-patterns` + `design-api` + `backend-error-handling` + `audit-security`

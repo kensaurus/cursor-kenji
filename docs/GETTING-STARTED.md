@@ -76,6 +76,17 @@ These chain multiple skills into a single tracked loop:
 | `prepare the app for launch` | SEO + PWA + bundle + quality gate + deploy smoke → launch checklist |
 | `I'm new to this repo, orient me` | Reads the codebase and produces a 5-minute briefing |
 
+### Copy-paste combo pipelines (most impact per phrase)
+
+These chain several skills. Paste the whole sentence.
+
+| Paste this… | What happens |
+|:------------|:-------------|
+| `monkey-test as guest and logged-in, ticket every real bug, then lock a Playwright pass on the worst ones` | Wander the live app twice → durable tickets → lock the worst bugs (`test-exploratory` → `workflow-feedback-to-closure` → `test-playwright`) |
+| `wander the app as guest vs logged-in, then run the quality gate` | Identity probe first, then red-team / security / bundle / perf (`test-exploratory` → `workflow-quality-gate`) |
+| `build this feature` | Spec → TDD → implement → smoke → PR |
+| `complete everything` | Close the whole plan — no parked leftovers |
+
 ### Individual skills
 
 | Type this in chat… | What happens |
@@ -90,6 +101,7 @@ These chain multiple skills into a single tracked loop:
 | `deploy my npm package` | Walks through Changesets → CI → publish, step by step |
 | `write a PR` | Creates the pull request with a proper title and description |
 | `red team this app` | Adversarial sweep — UX, data pipeline, security, performance |
+| `monkey test the app as guest and logged in` | Unscripted wander twice, then a guest-vs-authed diff table |
 | `make the app feel alive with motion` | Adds coherent, accessible animations that match your design system |
 | `desktop looks like a stretched phone` | Unstacks the layout — max-width, side-by-side groups, hierarchy at 375 / 768 / 1440 |
 | `what happens when this list is empty?` | Empty / loading / error / offline states for every screen |

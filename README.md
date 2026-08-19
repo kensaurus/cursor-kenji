@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Ready-made playbooks for your AI coding editor.</strong><br/>
-  135 agent skills · 50 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
+  136 agent skills · 50 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
   <em>You talk in plain English. The matching expert recipe runs itself.</em>
 </p>
 
@@ -29,7 +29,7 @@ Your AI editor is smart, but without a recipe it **guesses**. Sometimes that gue
 
 You do **not** need to memorize skill names. Talking like a human is enough.
 
-It ships **135 Cursor agent skills**, 50 slash commands, and 6 subagents — tuned for React / Next.js / Supabase, useful on almost any stack. Works in [Cursor](https://cursor.com), [Claude Code](https://www.anthropic.com/claude-code), and (with a lighter install) Codex + Gemini CLI. Brand new? Read the **[plain-language guide →](docs/GETTING-STARTED.md)**.
+It ships **136 Cursor agent skills**, 50 slash commands, and 6 subagents — tuned for React / Next.js / Supabase, useful on almost any stack. Works in [Cursor](https://cursor.com), [Claude Code](https://www.anthropic.com/claude-code), and (with a lighter install) Codex + Gemini CLI. Brand new? Read the **[plain-language guide →](docs/GETTING-STARTED.md)**.
 
 ### Install (30 seconds)
 
@@ -63,10 +63,24 @@ Restart Cursor. Done.
 | *"optimize the App Store listing"* | `plan-aso` | Keywords + screenshots, plan only |
 | *"make the forms accessible"* | `enhance-web-forms` | Labels, validation, keyboard-friendly |
 | *"plan a security hardening pass"* | `plan-security-audit` | A burndown **you** approve before edits |
+| *"monkey test the app"* / *"guest vs logged in"* | `test-exploratory` | Wander twice, then a guest/auth diff table |
 | *"complete everything"* | `complete-everything` | No parked leftovers — judge verifies "done" |
 | *"ship it and watch it"* | `workflow-ship-and-observe` | Deploy → verify live → observe / rollback |
 
-Full menu with every skill name → **[Every skill](#every-skill-in-plain-english)** below.
+### Highest-impact combo pipelines
+
+You almost never want a single skill. Copy one of these into chat:
+
+| You want… | Paste this | What it chains |
+|:----------|:-----------|:---------------|
+| **Find real breaks, then lock them** | `monkey-test as guest and logged-in, ticket every real bug, then lock a Playwright pass on the worst ones` | `test-exploratory` → `workflow-feedback-to-closure` → `test-playwright` |
+| **Pre-release with a live identity probe** | `wander the app as guest vs logged-in, then run the quality gate` | `test-exploratory` → `workflow-quality-gate` |
+| **Build a feature end-to-end** | `build this feature` | `workflow-build-feature` |
+| **Fix a bug and ship it** | `fix this bug and ship it` | `workflow-fix-and-ship` |
+| **Close a plan with nothing parked** | `complete everything` | `complete-everything` |
+| **Ship and watch it** | `ship it and watch it` | `workflow-ship-and-observe` |
+
+Full menu with every skill name → **[Every skill](#every-skill-in-plain-english)** below. Combos with trigger phrases → **[docs/CATALOG.md — Skill Composition](docs/CATALOG.md#skill-composition-patterns)**.
 
 ### The five toys in the box
 
@@ -78,7 +92,7 @@ Full menu with every skill name → **[Every skill](#every-skill-in-plain-englis
 | **Rule** | A house rule the AI always obeys | Drop a `.mdc` into your project |
 | **MCP server** | A phone line to your database / GitHub / browser | Copy a template + paste your keys |
 
-Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **147** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
+Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **148** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
 
 ### How the recipes fit together (the loop)
 
@@ -105,6 +119,8 @@ You almost never run one skill alone. Think of a simple loop — **look → chan
 
 Rule of thumb: **assess before you change, prove before you ship, never skip a stage.**
 
+Highest-impact prove loop: **wander as guest + logged-in → ticket real bugs → lock them** (`test-exploratory` → `workflow-feedback-to-closure` → `test-playwright`). Copy-paste phrases live in [What should I say?](#what-should-i-say-use-cases).
+
 ---
 
 ## What's Inside
@@ -113,7 +129,7 @@ The whole kit, at a glance:
 
 | | Count | What it does |
 |:--|------:|:-------------|
-| **Skills** | 135 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
+| **Skills** | 136 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
 | **Cursor Skills** | 12 | IDE tools (canvas, hooks, rules, PR splitter) |
 | **Commands** | 50 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
 | **Subagents** | 6 | Background helpers (code-reviewer, debugger, db-migrator…) |
@@ -133,7 +149,7 @@ Scroll the **family counts**, then the **full list**. You don't memorize names �
 
 <!-- SKILL-INDEX:START -->
 
-_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **147 skills** listed below._
+_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **148 skills** listed below._
 
 #### Skill families at a glance
 
@@ -149,7 +165,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | 📚 Docs — write it down clearly | **3** | READMEs, PRDs, RFCs with a reader-first voice |
 | 🧹 Housekeeping — clean up design drift | **2** | Merge a drifted design system into one source of truth |
 | 🔗 Workflows — multi-step recipes | **18** | End-to-end recipes (build, fix, ship, green the repo) |
-| ✅ Test & QA — prove it works | **7** | Unit, Playwright, visual regression, load, red-team |
+| ✅ Test & QA — prove it works | **8** | Unit, Playwright, visual regression, load, red-team |
 | 🚀 Deploy — ship & verify | **2** | npm release + post-deploy smoke tests |
 | 🐛 Debug — find & fix what's broken | **3** | Errors, Sentry, frontend↔backend mismatches |
 | 🦟 Mushi Mushi — bug triage helpers | **2** | Integrate the Mushi Mushi bug-report pipeline |
@@ -158,7 +174,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | 🤝 Third-party (upstream-maintained) | **3** | Vendored upstream skills (Emil, UI/UX Pro Max, Vercel WIG) |
 | 🧩 Core & cross-cutting | **7** | Close everything, burndown, post-launch loops |
 | 🖱️ Cursor IDE skills | **12** | Canvas, hooks, rules, PR splitter, CLI helpers |
-| **Total** | **147** | |
+| **Total** | **148** | |
 
 #### Full list (every skill)
 
@@ -320,13 +336,14 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `workflow-ship-and-observe` | Take merged, repository-green code all the way to a verified, monitored production release for any app stack |
 | `workflow-spec-tdd` | Stop vibe-coding with a spec → plan → TDD loop before writing a line |
 
-### ✅ Test & QA — prove it works (7)
+### ✅ Test & QA — prove it works (8)
 
 | Skill | What it does |
 |:------|:-------------|
+| `test-exploratory` | Exploratory ("monkey") QA of a live app as GUEST then LOGGED-IN, then diff |
 | `test-load` | Design and run a k6/Artillery load profile that measures throughput, latency percentiles, error rate, and the breaking point under… |
 | `test-mutation` | Set up and run mutation testing (StrykerJS / mutmut) to measure whether tests assert behavior, not just execute lines |
-| `test-playwright` | Close the PDCA loop on the work you just did |
+| `test-playwright` | Close the PDCA loop on this session's diff |
 | `test-qa` | Generic webapp QA fallback — use only when no project-specific QA skill applies (project-local QA wins; native builds →… |
 | `test-red-team` | Adversarial red-team of a running web, React Native, or Capacitor hybrid app |
 | `test-unit` | Write effective unit tests with best practices for any project |
@@ -637,7 +654,7 @@ Every skill has two labels: a **family** (its `<prefix>-<topic>` name) and a **l
 | `mobile-` | 🛠️ Change | RN / Capacitor / emulator | `mobile-rn-screen`, `mobile-capacitor-platform` |
 | `docs-` | 🛠️ Change | Documentation | `docs-writer`, `docs-coauthor` |
 | `workflow-` | ♻️ Spans | Multi-phase process bundles | `workflow-build-feature`, `workflow-spec-tdd`, `workflow-housekeep` |
-| `test-` | ✅ Prove | QA and unit tests | `test-playwright`, `test-red-team`, `test-unit` |
+| `test-` | ✅ Prove | QA and unit tests | `test-exploratory`, `test-playwright`, `test-red-team`, `test-unit` |
 | `deploy-` | 🚀 Ship | Release verify | `deploy-verify`, `deploy-npm` |
 | `debug-` | 🚀 Operate | Failures and integration | `debug-error`, `debug-sentry-monitor` |
 | `mushi-` | 🚀 Operate | Mushi Mushi integration | `mushi-health`, `mushi-integration` |
@@ -778,7 +795,7 @@ Where everything lives:
 
 ```
 cursor-kenji/
-├── skills/           # 135 Agent Skills (SKILL.md each)
+├── skills/           # 136 Agent Skills (SKILL.md each)
 ├── skills-cursor/    # 12 Cursor-specific skills
 ├── commands/         # 50 slash commands
 ├── agents/           # 6 subagents
@@ -832,7 +849,7 @@ A box of ready-made recipes for your AI editor ([Agent Skills](https://agentskil
 `npx skills add kensaurus/cursor-kenji` (recommended) or `npx @kensaurus/cursor-kenji`. Restart Cursor after install.
 
 **How many skills?**  
-**135** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**147** total). Counts come from the filesystem and stay synced via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
+**136** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**148** total). Counts come from the filesystem and stay synced via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
 
 **How do skills trigger?**  
 You talk normally. Cursor matches your words to each skill's YAML `description`. To force one: *"use \`audit-security\` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).
