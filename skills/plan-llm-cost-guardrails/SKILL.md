@@ -10,6 +10,9 @@ license: MIT
 
 # LLM Cost-Guardrail Audit + Remediation Plan
 
+**Degree of freedom: HIGH** — inventory call sites, score unbounded
+paths, plan. Stay **plan-only**. No limits or routing changes until approved.
+
 ## This skill vs neighbors
 
 | Skill | Owns |
@@ -19,6 +22,19 @@ license: MIT
 | `audit-infra-cost` | Hosting / egress bill |
 | `audit-llm-security` | Unbounded consumption as an attack |
 
+## How to reason (every plan item)
+
+1. **Propose** — token cap, kill switch, breaker, or fallback
+2. **Risk** — worst-case spend × who can reach the path
+3. **Keep-working** — call sites that already bound tokens and account usage
+4. **Phase** — caps → breakers → fallback → visibility (do not execute)
+
+## Worked example
+
+> **Propose:** per-user daily token cap + hard daily-spend kill switch on `lib/ai.ts`.
+> **Risk:** public `/api/chat` can replay a 50K context until the bill dies; RPM-only does not count.
+> **Keep-working:** summarizer path already sets `max_tokens`.
+> **Phase:** Phase 1 — caps & kill switch.
 
 **Role:** Senior platform engineer (LLM spend + abuse resistance).
 
@@ -50,7 +66,7 @@ performance, or trace visibility (`plan-error-handling`). This owns *bounded spe
 
 ---
 
-## The audit — 3-layer guardrail model
+## The audit — 3-layer guardrail model  [HIGH freedom]
 
 ### Layer 1 · Limits (token-aware, not request-count)
 - **Token-bucket / quota per (user, model)** — any per-identity limit?
@@ -79,7 +95,7 @@ performance, or trace visibility (`plan-error-handling`). This owns *bounded spe
 
 ---
 
-## Procedure
+## Procedure  [HIGH freedom]
 
 1. **Inventory LLM call sites** and public AI endpoints.
 2. **Test each against Layers 1–3.**
@@ -89,13 +105,21 @@ performance, or trace visibility (`plan-error-handling`). This owns *bounded spe
 
 ---
 
-## Guardrails
+## Guardrails  [LOW freedom — run exactly]
 
 - **Plan only.** No limits, gateway config, or routing changes.
 - **Spend cap is non-negotiable for launch** — flag absence as at least High.
 - **Token-aware or it doesn't count** — don't credit RPM-only limits.
 - **Bounded blast radius**, not zero runaways.
 - **Cross-hand abuse** to `plan-input-validation`.
+
+## Self-critique before the burndown  [LOW freedom — do not skip]
+
+1. **evidenced-not-assumed** — each unbounded path names a call site, not "we should cap AI"
+2. **plan-only** — no limits, gateway, or routing edits this pass
+3. **phase justified** — Layer 1 caps + daily kill switch before fallback polish
+4. **right-owner** — quality/evals → `audit-langfuse-llm`; unauth AI input → `plan-input-validation`
+5. **no-false-safety** — RPM-only is not a token cap; missing spend cap is at least High
 
 ---
 

@@ -10,6 +10,10 @@ license: MIT
 
 # audit-skill-conflicts — Pack coherence, not product QA
 
+**Degree of freedom: MIXED** — Phases 0–1 `[HIGH freedom]`; Phase 2 routing
+dry-run `[LOW freedom]` — skip explicitly if the harness cannot show
+selection. Never write `audit-responsive-layout`.
+
 Read-only. Every other `audit-*` inspects an app you ship. This one inspects
 **the skill pack it lives in**.
 
@@ -38,9 +42,26 @@ Do **not** fire for "create a skill" → `meta-skill-creator`.
 Do **not** fire for "audit my app's UI" → `audit-ux` / `audit-responsive` /
 `audit-ui-states` (this skill would *flag* that cluster).
 
+## How to reason
+
+1. **Observe** — quote both descriptions (or rule vs skill) that appear to collide
+2. **Interpret** — can one user phrase honor both, or do they contradict / steal routing?
+3. **Classify** — contradiction / trigger overlap / stale ref / bloat / correct carve-out
+4. **Severity** — opposite stance on the same situation, or a greedy description, first
+
+## Worked example
+
+> **Observe:** "audit my UI" matches `audit-ux`, `audit-responsive`,
+> `audit-ui-states` with no carve-out in two of the three descriptions.
+> **Interpret:** the agent cannot know whether to score heuristics, breakpoints,
+> or empty states.
+> **Classify:** trigger overlap without disambiguation.
+> **Severity:** major — wrong skill fires; wasted context.
+> **Fix:** each description names when *it* wins (layout vs heuristics vs states).
+
 ---
 
-## Phase 0 — Load the corpus
+## Phase 0 — Load the corpus  [HIGH freedom]
 
 Enumerate:
 
@@ -60,7 +81,7 @@ House names in *this* repo: linearized desktop is `audit-responsive` (not
 
 ---
 
-## Phase 1 — Conflict and drift
+## Phase 1 — Conflict and drift  [HIGH freedom]
 
 **Contradictory directives** — Opposite behavior for an overlapping situation
 (e.g. "fix inline" vs "never edit in the audit pass"). Rules-vs-skill is
@@ -96,7 +117,7 @@ read-only/plan-only semantics inside a family. Description-voice drift.
 
 ---
 
-## Phase 2 — Routing dry-run (optional)
+## Phase 2 — Routing dry-run (optional)  [LOW freedom — skip honestly]
 
 If a harness can show which skill the agent selects for a phrase, feed
 realistic user lines and record matches. Ambiguous phrases that should map to
@@ -121,6 +142,15 @@ dry-run ran.
 - [ ] Routing dry-run run **or** explicitly skipped
 - [ ] Nothing edited without approval
 
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **Quoted pair** — every contradiction cites both texts
+2. **Dry-run honesty** — skipped if no harness; do not pretend it ran
+3. **Name hygiene** — leftover `audit-responsive-layout` / `responsive-audit` listed
+4. **Right owner** — how to *write* a skill → `meta-skill-creator`; how to
+   upgrade prompts → `enhance-skill-prompts`
+5. **Nothing rewritten** until approved; description fixes first (routing)
+
 ## Output format
 
 1. **Conflict table** — A | B (or rule) | type | why they can't coexist | severity
@@ -133,7 +163,8 @@ dry-run ran.
 
 ## Related
 
-- `meta-skill-creator` — write or rewrite the flagged SKILL.md
+- `meta-skill-creator` — write a new SKILL.md
+- `enhance-skill-prompts` — upgrade an existing skill's prompt (T1–T6), not its behavior
 - `validate:skills` — per-file spec after description edits
 - `enhance-agent-guardrails` — app-repo policy, not pack coherence
 - `plan-docs-sync` — docs vs code

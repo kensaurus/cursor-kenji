@@ -10,6 +10,9 @@ license: MIT
 
 # audit-infra-cost — Hosting spend without hurting reliability
 
+**Degree of freedom: HIGH** — quantify and plan. Phase 2 stays plan-only
+until approved. Never propose a cut that weakens backups (`plan-backup-dr`).
+
 Read-only. Find where money leaks in the infra bill and plan cuts that do not
 trade away reliability.
 
@@ -30,9 +33,25 @@ can double a bill nobody is watching.
 | `audit-bundle-size` / `audit-performance` | Client payload (feeds egress) |
 | `backend-db-performance` | The index that stops compute burn |
 
+## How to reason
+
+1. **Observe** — billed resource, pricing model, and (if exposed) the breakdown line
+2. **Interpret** — is this utilization, a leak (egress/storage/zombies), or a tier mismatch?
+3. **Classify** — safe quick win / medium / structural / do-not-cut (backup/UX)
+4. **Severity** — by $ magnitude × reliability risk, not by how easy the cut looks
+
+## Worked example
+
+> **Observe:** object-storage bill is 40% of spend; logs prefix has no
+> lifecycle; backups retained 90 days (DR requirement).
+> **Interpret:** unbounded logs are the leak; backup retention is not a cut.
+> **Classify:** safe quick win (expire temp logs) + do-not-cut (backups).
+> **Severity:** major $; reliability risk low if only temp logs expire.
+> **Finding:** logs | ~X% | lifecycle 7d | do not touch backup prefix
+
 ---
 
-## Phase 0 — Map the spend surface
+## Phase 0 — Map the spend surface  [HIGH freedom]
 
 Enumerate billed resources and, if the provider exposes it, the breakdown:
 
@@ -47,7 +66,7 @@ where the leak hides.
 
 ---
 
-## Phase 1 — Waste
+## Phase 1 — Waste  [HIGH freedom]
 
 **Egress** — Large assets from origin every request? Unoptimized images?
 Hotlinking / unthrottled public endpoints? Cross-check `audit-bundle-size`.
@@ -72,7 +91,7 @@ the current pattern?
 
 ---
 
-## Phase 2 — Plan (approve before executing)
+## Phase 2 — Plan (approve before executing)  [HIGH freedom — plan only]
 
 Estimate saving magnitude ("egress is ~X% of the bill; CDN cuts most of it")
 and reliability risk.
@@ -95,6 +114,14 @@ Protect `plan-backup-dr` items. Do not expire backups to save cents.
 - [ ] Each finding has saving magnitude + reliability risk
 - [ ] Nothing proposed that weakens backups or UX
 - [ ] Plan approved before change
+
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **Quantified** — each finding has a saving magnitude, even if rough
+2. **Backups protected** — no expire-backups-to-save-cents item
+3. **Right-sized to evidence** — `test-load` or utilization, not a guess
+4. **Right owner** — CI minutes → `audit-cicd`; tokens → `plan-llm-cost-guardrails`
+5. **Nothing applied** until approved
 
 ## Output format
 

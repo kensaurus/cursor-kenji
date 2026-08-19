@@ -11,6 +11,10 @@ license: MIT
 
 # docs-adr — Decision memory the next session can load
 
+**Degree of freedom: MIXED — T1 is the priority.** What to record
+`[HIGH freedom]`; format, supersede-not-edit, and present-backfill-first
+`[LOW freedom — run exactly]`.
+
 Install and maintain the repo's decision memory. **Code shows what was
 decided; nothing shows why, or what was rejected — so every new agent
 session is free to "improve" its way back to an alternative you already
@@ -28,9 +32,25 @@ ADR makes the decision durable and its reversal deliberate.
 | `enhance-arch-boundaries` | Mechanical layering; this records the model |
 | `workflow-housekeep` | Periodic index / status sweep |
 
+## How to reason
+
+1. **Observe** — the decision, the rejected alternative, who already tried to reverse it
+2. **Interpret** — would a fresh agent "improve" back to the rejected option?
+3. **Classify** — ADR / not-an-ADR (linter already enforces, routine impl)
+4. **Severity** — load-bearing unusual choice first
+
+## Worked example
+
+> **Observe:** agent PR re-proposes Zustand; repo uses React context for
+> session by choice; no ADR.
+> **Interpret:** the rejection is oral memory — the next session will retry.
+> **Classify:** ADR — stack choice with a rejected alternative.
+> **Write:** "We use React context for session. Rejected Zustand: duplicate
+> store vs server session." Present the backfill list **before** writing files.
+
 ---
 
-## Phase 0 — Set up the system (once per repo)
+## Phase 0 — Set up the system (once per repo)  [LOW freedom — INDEX.md + statuses]
 
 - `docs/adr/NNNN-short-title.md`, numbered sequentially, plus
   `docs/adr/INDEX.md` — one line per ADR
@@ -46,7 +66,7 @@ ADR makes the decision durable and its reversal deliberate.
 
 ---
 
-## Phase 1 — The format (one page, hard cap)
+## Phase 1 — The format (one page, hard cap)  [LOW freedom — this shape]
 
 ```
 # NNNN. <Decision as a verb phrase>
@@ -70,7 +90,7 @@ content — failure memory is exactly what a fresh session lacks.
 
 ---
 
-## Phase 2 — What gets an ADR (and what does not)
+## Phase 2 — What gets an ADR (and what does not)  [HIGH freedom]
 
 Write one for any decision an agent could plausibly reverse while
 "helping":
@@ -90,7 +110,7 @@ the system as surely as under-recording.
 
 ---
 
-## Phase 3 — Backfill mode (existing repo)
+## Phase 3 — Backfill mode (existing repo)  [LOW freedom — confirm list before writing]
 
 Mine implicit decisions before they are lost:
 
@@ -105,7 +125,7 @@ memory, not archaeology for its own sake.
 
 ---
 
-## Phase 4 — Keep it alive
+## Phase 4 — Keep it alive  [LOW freedom — supersede, do not edit Accepted]
 
 - New ADR in the same PR as the decision it records.
 - `/handoff` / completion: any decision that meets the Phase-2 bar gets
@@ -128,6 +148,14 @@ memory, not archaeology for its own sake.
 - [ ] Backfill done for still-binding decisions, "things agents keep trying to change" first
 - [ ] Same-PR rule and handoff hook wired
 - [ ] Index verified against files (no dangling numbers, no unindexed ADRs)
+
+## Self-critique before writing ADRs  [LOW freedom — do not skip]
+
+1. **Backfill list shown first** — decisions are theirs; recording is yours
+2. **Rejected alternatives filled** — an ADR without them will not stop re-proposal
+3. **One page** — two decisions or it's docs (`docs-writer`)
+4. **Never edit Accepted** — supersede
+5. **Not everything** — linter-enforced and TODOs stay out
 
 ## Output format
 

@@ -10,6 +10,9 @@ license: MIT
 
 # Error-Handling & Observability Audit + Fix Plan
 
+**Degree of freedom: HIGH** — map silent paths, score, plan. Stay
+**plan-only**. No code or SDK edits until each phase is approved.
+
 ## This skill vs neighbors
 
 | Skill | Owns |
@@ -18,6 +21,19 @@ license: MIT
 | `debug-sentry-monitor` | Live Sentry triage |
 | `audit-langfuse-llm` | LLM eval / trace quality |
 
+## How to reason (every plan item)
+
+1. **Propose** — report, init, redact, or wrap a silent path
+2. **Risk** — what fails in prod with no signal (or PII leaving the env)
+3. **Keep-working** — surfaces that already capture and sanitize
+4. **Phase** — swallows → coverage → redaction → LLM traces (do not execute)
+
+## Worked example
+
+> **Propose:** report + rethrow the empty catch on `api/pay.ts` charge; init Sentry on the edge surface.
+> **Risk:** payment failures produce no event — you only hear from the user.
+> **Keep-working:** web client already captures unhandled exceptions.
+> **Phase:** Phase 1 — stop silent failures.
 
 **Role:** Senior reliability engineer + observability specialist.
 
@@ -58,7 +74,7 @@ production tonight, would you ever know?"*
 
 ---
 
-## Plane 1 · Application errors (Sentry)
+## Plane 1 · Application errors (Sentry)  [HIGH freedom]
 
 Walk every error path:
 
@@ -77,7 +93,7 @@ Walk every error path:
   functions, RN/Capacitor, server actions)? Source maps uploaded?
 - **User-facing vs internal split** — sanitized user message vs raw stack in UI?
 
-## Plane 2 · LLM observability (Langfuse)
+## Plane 2 · LLM observability (Langfuse)  [HIGH freedom]
 
 For any AI/LLM feature:
 
@@ -106,7 +122,7 @@ For any AI/LLM feature:
 
 ---
 
-## Procedure
+## Procedure  [HIGH freedom]
 
 1. **Inventory surfaces.** Which planes exist (Sentry? Langfuse? both?). Skip absent
    planes. State assumptions.
@@ -118,7 +134,7 @@ For any AI/LLM feature:
 
 ---
 
-## Guardrails
+## Guardrails  [LOW freedom — run exactly]
 
 - **Plan only.** No wrapping, no try/catch insertion, no SDK config edits.
 - **Don't add noise.** Flag genuinely-silent real failures; don't recommend
@@ -129,6 +145,14 @@ For any AI/LLM feature:
   minimum.
 - **Observability ≠ prevention.** Pair with `plan-test-coverage`.
 - **Minimal quoting** of source.
+
+## Self-critique before the burndown  [LOW freedom — do not skip]
+
+1. **evidenced-not-assumed** — every row has `path:line` and today's signal
+2. **plan-only** — no try/catch, wrap, or SDK edit this pass
+3. **phase justified** — silent swallows before LLM evals; PII leak is High minimum
+4. **right-owner** — live incident → `debug-sentry-monitor`; LLM quality → `audit-langfuse-llm`
+5. **no-false-safety** — `console.log` ≠ Sentry; do not spam validation misses
 
 ---
 

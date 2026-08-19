@@ -10,6 +10,9 @@ license: MIT
 
 # Mobile Store-Readiness Audit + Pre-Submission Plan
 
+**Degree of freedom: HIGH** — inventory A–E, score rejection risk, emit a plan.
+Stay **plan-only**. No manifest, Data Safety, or listing edits until approved.
+
 ## This skill vs neighbors
 
 | Skill | Owns |
@@ -26,6 +29,21 @@ guidelines, phase remediations, emit `plan-mobile-readiness.md`. **Audit & plan 
 no manifest, Data Safety, or listing edits until approved.**
 
 **Catch the rejections before the reviewer does. Change nothing until approved.**
+
+## How to reason (every plan item)
+
+1. **Propose** — privacy manifest, usage string, demo account, build, or listing fix
+2. **Risk** — first-pass rejection or Guideline 2.5.2 thin-app block
+3. **Keep-working** — platforms/items that already match store rules
+4. **Phase** — Privacy → Functionality → Payments+build → Listing (do not execute)
+
+## Worked example
+
+> **Propose:** add `PrivacyInfo.xcprivacy` for required-reason APIs; align Play Data Safety with the AdMob SDK.
+> **Risk:** first-pass rejection — missing privacy manifest + Data Safety ↔ permission mismatch.
+> **Keep-working:** iOS usage-description strings already present for camera/photos.
+> **Phase:** Phase 1 — Privacy (blocking).
+> **Store:** iOS 5.1.2 / Play Data Safety; demo account still required in Phase 2 if login-gated.
 
 About **25% of App Store submissions are rejected on first pass** — mechanical,
 pre-detectable causes: missing privacy manifests, Data Safety ↔ permission mismatches,
@@ -47,7 +65,7 @@ compliance and rejection-risk*.
 
 ---
 
-## The audit
+## The audit  [HIGH freedom]
 
 ### A · Privacy (#1 modern rejection class)
 - **iOS privacy manifest** — `PrivacyInfo.xcprivacy`, required-reason APIs, SDK manifests.
@@ -78,7 +96,7 @@ compliance and rejection-risk*.
 
 ---
 
-## Procedure
+## Procedure  [HIGH freedom — plan only]
 
 1. **Inventory** Capacitor/RN config, manifests, permissions, listing, IAP.
 2. **Run A–E**, map to guidelines. **Blocking** vs **Risk**.
@@ -96,6 +114,14 @@ compliance and rejection-risk*.
 - **Never advise external payment for digital goods.**
 - **Verify current target-API thresholds at submit time.**
 - **Real devices, not emulators only.**
+
+## Self-critique before the burndown  [LOW freedom — do not skip]
+
+1. **evidenced-not-assumed** — manifests, permissions, and listing fields you actually read
+2. **plan-only** — no PrivacyInfo, Data Safety, or metadata edits
+3. **severity/phase justified** — privacy + 2.5.2 before listing polish
+4. **right-owner** — keywords/screenshots → `plan-aso`; collection-vs-claimed → `plan-privacy-compliance`; receipt/restore → `audit-monetization-iap`; placeholders → `plan-stub-checker`
+5. **no-false-safety** — do not hide Guideline 2.5.2 thin-app risk; declaration must match reality both ways
 
 ---
 

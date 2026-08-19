@@ -10,18 +10,37 @@ license: MIT
 
 # Database Schema Audit Skill
 
-Systematic audit of database schema implementation against industry standards for
-consistency, robustness, and validation.
+**Degree of freedom: MIXED** — Steps 0, 1, 3 `[HIGH freedom]`; Steps 2 and 4
+MCP/SQL probes `[LOW freedom — run exactly]` (run the query; do not invent a schema).
+
+## How to reason
+
+1. **Observe** — quote the column, constraint, advisor row, or query result
+2. **Interpret** — what fails at write-time, read-time, or migrate-time?
+3. **Classify** — naming / type / constraint / index / RLS / migration / correct
+4. **Severity** — missing FK/RLS on public data = P0; type/index drift = P1; naming = P2
+
+## Worked example
+
+> **Observe:** `orders.user_id` is nullable `text`, no FK, no index; `rowsecurity = false`.
+> **Interpret:** orphan rows can insert; the client can SELECT every order; lookups seq-scan.
+> **Classify:** constraint + index + RLS (not a naming nit).
+> **Severity:** P0 — public table, no RLS, no FK.
+> **Finding:** `orders` | RLS+FK | P0 | enable RLS + `user_id uuid references users(id)` + index.
+
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **Evidenced** — query result or advisor URL, not "Postgres usually…"
+2. **Reproducible** — same SQL twice; do not cite a stale `list_tables`
+3. **Severity justified** — P0 = data loss, leak, or unconstrained money type
+4. **Right owner** — who-can-read-what → `plan-rls-audit`; DELETE/TRUNCATE → `plan-data-integrity`; RPO → `plan-backup-dr`
+5. **No migrations applied** — findings only
 
 ---
 
 ## Step 0: Auto-Detect Database Environment
 
-Before auditing, discover the project's database setup.
-
 ### 0a. Detect Database and ORM
-
-Read the dependency manifest and configuration files:
 
 | Signal | Technology |
 |--------|-----------|
@@ -36,7 +55,6 @@ Read the dependency manifest and configuration files:
 
 ### 0b. Find Supabase Project ID
 
-If Supabase is detected, discover the project ID:
 
 ```json
 supabase:list_projects
@@ -128,7 +146,7 @@ firecrawl:firecrawl_scrape
 
 ### 1c. Supabase Docs Search
 
-If Supabase is detected, also search their docs:
+If Supabase:
 
 ```json
 supabase:search_docs
@@ -151,8 +169,6 @@ supabase:list_tables
  "verbose": true
 }
 ```
-
-This returns column details, primary keys, and foreign key constraints for every table.
 
 ### 2b. Run Detailed Audit Queries
 
@@ -240,7 +256,6 @@ Include remediation URLs from advisor results in the final report as clickable l
 **Audit query:**
 
 ```sql
--- Find naming violations
 SELECT table_name FROM information_schema.tables
 WHERE table_schema = 'public'
  AND (table_name ~ '[A-Z]' OR table_name !~ 's$');
@@ -267,18 +282,15 @@ WHERE table_schema = 'public' AND column_name ~ '[A-Z]';
 **Audit queries:**
 
 ```sql
--- Timestamp without timezone
 SELECT table_name, column_name, data_type FROM information_schema.columns
 WHERE table_schema = 'public' AND data_type = 'timestamp without time zone';
 
--- Float/real money columns
 SELECT table_name, column_name, data_type FROM information_schema.columns
 WHERE table_schema = 'public'
  AND data_type IN ('real', 'double precision')
  AND (column_name LIKE '%price%' OR column_name LIKE '%amount%'
  OR column_name LIKE '%cost%' OR column_name LIKE '%balance%');
 
--- json instead of jsonb
 SELECT table_name, column_name FROM information_schema.columns
 WHERE table_schema = 'public' AND data_type = 'json';
 ```
@@ -296,14 +308,12 @@ Every table MUST have:
 **Audit queries:**
 
 ```sql
--- Tables missing created_at or updated_at
 SELECT t.table_name,
  EXISTS(SELECT 1 FROM information_schema.columns c WHERE c.table_name = t.table_name AND c.column_name = 'created_at') AS has_created_at,
  EXISTS(SELECT 1 FROM information_schema.columns c WHERE c.table_name = t.table_name AND c.column_name = 'updated_at') AS has_updated_at
 FROM information_schema.tables t
 WHERE t.table_schema = 'public' AND t.table_type = 'BASE TABLE';
 
--- Check updated_at trigger exists
 SELECT event_object_table, trigger_name FROM information_schema.triggers
 WHERE trigger_schema = 'public' AND action_statement LIKE '%updated_at%';
 ```
@@ -322,12 +332,10 @@ WHERE trigger_schema = 'public' AND action_statement LIKE '%updated_at%';
 **Audit queries:**
 
 ```sql
--- Nullable FK columns (usually a mistake)
 SELECT table_name, column_name FROM information_schema.columns
 WHERE table_schema = 'public' AND column_name LIKE '%_id'
  AND is_nullable = 'YES' AND column_name != 'id';
 
--- FK columns without foreign key constraints
 SELECT c.table_name, c.column_name FROM information_schema.columns c
 WHERE c.table_schema = 'public' AND c.column_name LIKE '%_id' AND c.column_name != 'id'
  AND NOT EXISTS (
@@ -337,7 +345,6 @@ WHERE c.table_schema = 'public' AND c.column_name LIKE '%_id' AND c.column_name 
  AND kcu.table_name = c.table_name AND kcu.column_name = c.column_name
  );
 
--- Booleans without DEFAULT
 SELECT table_name, column_name FROM information_schema.columns
 WHERE table_schema = 'public' AND data_type = 'boolean' AND column_default IS NULL;
 ```
@@ -357,7 +364,6 @@ WHERE table_schema = 'public' AND data_type = 'boolean' AND column_default IS NU
 **Audit query:**
 
 ```sql
--- FK columns without indexes
 SELECT c.table_name, c.column_name FROM information_schema.columns c
 WHERE c.table_schema = 'public' AND c.column_name LIKE '%_id' AND c.column_name != 'id'
  AND NOT EXISTS (
@@ -366,7 +372,6 @@ WHERE c.table_schema = 'public' AND c.column_name LIKE '%_id' AND c.column_name 
  AND i.indexdef LIKE '%' || c.column_name || '%'
  );
 
--- Tables with no indexes besides PK
 SELECT t.table_name, COUNT(i.indexname) as idx_count
 FROM information_schema.tables t
 LEFT JOIN pg_indexes i ON i.tablename = t.table_name AND i.schemaname = 'public'
@@ -390,17 +395,14 @@ GROUP BY t.table_name HAVING COUNT(i.indexname) <= 1;
 **Audit queries:**
 
 ```sql
--- Tables WITHOUT RLS enabled
 SELECT tablename FROM pg_tables WHERE schemaname = 'public' AND rowsecurity = false;
 
--- Tables WITH RLS but NO policies
 SELECT t.tablename FROM pg_tables t
 WHERE t.schemaname = 'public' AND t.rowsecurity = true
  AND NOT EXISTS (
  SELECT 1 FROM pg_policies p WHERE p.tablename = t.tablename AND p.schemaname = 'public'
  );
 
--- Policies using auth.uid() without subquery (performance issue)
 SELECT tablename, policyname, qual FROM pg_policies
 WHERE schemaname = 'public'
  AND qual::text LIKE '%auth.uid()%'
@@ -443,14 +445,12 @@ WHERE schemaname = 'public'
 **Audit query:**
 
 ```sql
--- Columns that might contain sensitive data
 SELECT table_name, column_name FROM information_schema.columns
 WHERE table_schema = 'public'
  AND (column_name LIKE '%password%' OR column_name LIKE '%secret%'
  OR column_name LIKE '%token%' OR column_name LIKE '%ssn%'
  OR column_name LIKE '%credit_card%');
 
--- Check granted permissions
 SELECT grantee, table_name, privilege_type FROM information_schema.table_privileges
 WHERE table_schema = 'public' ORDER BY grantee, table_name;
 ```
@@ -458,8 +458,6 @@ WHERE table_schema = 'public' ORDER BY grantee, table_name;
 ---
 
 ## Step 4: Full Schema Health Check (Single Query)
-
-Run this full health check via Supabase MCP:
 
 ```json
 supabase:execute_sql

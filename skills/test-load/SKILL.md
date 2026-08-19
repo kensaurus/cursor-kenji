@@ -10,6 +10,10 @@ license: MIT
 
 # test-load — Measured concurrency, not a guess
 
+**Degree of freedom: MIXED** — journey design `[HIGH freedom]`; env choice
+and profile order `[LOW freedom]`. **Never production without explicit
+sign-off and rate caps.**
+
 Turn "I think it'll hold" into numbers: at N concurrent users, p95 is X, error
 rate is Y, it falls over at Z.
 
@@ -30,9 +34,24 @@ when 500 people arrive at once.**
 **Never production without explicit sign-off and rate caps.** Prefer prod-like
 staging.
 
+## How to reason
+
+1. **Observe** — profile, VUs, p95/p99, error types, host/DB metrics
+2. **Interpret** — SLO miss vs capacity vs cascade (pool / limiter / memory)
+3. **Classify** — pass / degrade / breaking-point / invalid (unsigned prod)
+4. **Severity** — named failing resource + whether failure is graceful
+
+## Worked example
+
+> **Observe:** load profile 200 VU, p95 2.4s (SLO 500ms), 8% 529s; DB
+> `remaining connections = 0`.
+> **Interpret:** pool exhaustion, not the Node process.
+> **Classify:** SLO fail; breaking resource = DB pool.
+> **Handoff:** `backend-db-performance` (pool + queries); numbers → `audit-infra-cost`.
+
 ---
 
-## Phase 0 — Detect stack and set targets
+## Phase 0 — Detect stack and set targets  [HIGH freedom]
 
 - Tool: **k6** preferred (scriptable, CI-friendly); Artillery as fallback
 - Target env + auth method
@@ -43,7 +62,7 @@ staging.
 
 ---
 
-## Phase 1 — Model realistic load
+## Phase 1 — Model realistic load  [HIGH freedom]
 
 - **Journeys, not one URL** — signup → browse → action, with think-time
 - **Mix** — weight by real traffic (mostly reads)
@@ -52,7 +71,7 @@ staging.
 
 ---
 
-## Phase 2 — Graduated profiles
+## Phase 2 — Graduated profiles  [LOW freedom — smoke → load → stress → spike]
 
 1. **Smoke** — few VUs; script + baseline healthy
 2. **Load** — ramp to expected peak, soak several minutes (SLO pass/fail)
@@ -62,7 +81,7 @@ staging.
 
 ---
 
-## Phase 3 — Measure the right things
+## Phase 3 — Measure the right things  [HIGH freedom]
 
 - Latency **percentiles** (p50/p95/p99) — averages hide pain
 - Error rate **and types** (timeout vs 5xx vs refused)
@@ -84,6 +103,14 @@ Commit the reusable script. Hand capacity numbers to `audit-infra-cost`.
 - [ ] Breaking point + failing resource named
 - [ ] SLO verdict + fix handoff
 - [ ] Script committed
+
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **SLO stated first** — a run without a target is noise
+2. **Not unsigned prod** — if only prod exists, stop
+3. **Percentiles, not averages**
+4. **Breaking resource named** — not "it got slow"
+5. **Journeys, not one URL**
 
 ## Output format
 

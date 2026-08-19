@@ -10,6 +10,9 @@ license: MIT
 
 # Dependency Provenance & Supply-Chain Audit + Remediation Plan
 
+**Degree of freedom: HIGH** — resolve, classify, plan. Stay **plan-only**.
+Never install a suspect package to "check".
+
 ## This skill vs neighbors
 
 | Skill | Owns |
@@ -18,6 +21,19 @@ license: MIT
 | `plan-security-audit` | OWASP umbrella burndown |
 | `workflow-housekeep` | Apply dependency updates after approval |
 
+## How to reason (every plan item)
+
+1. **Propose** — verify, remove, pin, or license-remediate a package
+2. **Risk** — squat, unsigned install, license conflict, or lockfile roll
+3. **Keep-working** — packages that already resolve, pin, and license clean
+4. **Phase** — verify/remove → lock & pin → license → de-bloat (do not execute)
+
+## Worked example
+
+> **Propose:** remove `fast-cache-utils` (no registry hit); do not `npm install` it to "check".
+> **Risk:** AI-suggested name is a squat — install *is* the attack.
+> **Keep-working:** `zod` resolves, MIT, maintained repo.
+> **Phase:** Phase 1 — verify/remove suspect packages.
 
 **Role:** Senior supply-chain engineer + open-source compliance specialist.
 
@@ -63,7 +79,7 @@ who published it, when, and under what license?*
 
 ---
 
-## The audit
+## The audit  [HIGH freedom]
 
 ### A · Existence & slopsquatting (the AI-era core)
 - **Resolve every direct dependency** against its registry. Flag any that don't
@@ -97,7 +113,7 @@ For each finding: package, issue, evidence, severity, remediation *direction*.
 
 ---
 
-## Procedure
+## Procedure  [HIGH freedom]
 
 1. **Inventory.** Parse manifests + lockfiles. State ecosystems and resolution limits.
 2. **Resolve & classify.** Checklist A–E. Tag Critical / High / Med / Low.
@@ -107,7 +123,7 @@ For each finding: package, issue, evidence, severity, remediation *direction*.
 
 ---
 
-## Guardrails
+## Guardrails  [LOW freedom — run exactly]
 
 - **Plan only.** No `install`, `add`, `remove`, `update`, or lockfile edits.
 - **Never install to "check".** That is exactly the attack.
@@ -116,6 +132,14 @@ For each finding: package, issue, evidence, severity, remediation *direction*.
 - **License is a real finding.**
 - **Recommend `create-hook`** pre-install allowlist as regression gate.
 - **Minimal quoting** of manifests.
+
+## Self-critique before the burndown  [LOW freedom — do not skip]
+
+1. **evidenced-not-assumed** — registry resolve (or "none found"), not vibe
+2. **plan-only** — no install/add/remove/update to "check"
+3. **phase justified** — squat/non-existent is Phase 1, not de-bloat
+4. **right-owner** — routine bumps → `/update-deps`; bundle trim → `audit-bundle-size`
+5. **no-false-safety** — exists ≠ safe; license is a finding
 
 ---
 

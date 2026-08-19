@@ -10,6 +10,9 @@ license: MIT
 
 # audit-gate-logic — Does the gate actually stop what it claims?
 
+**Degree of freedom: MIXED** — Phases 0–2.5 `[HIGH freedom]`; Phase 3
+history/probe `[LOW freedom — run exactly]` (no scratch branch unless asked).
+
 Read-only. `audit-cicd` asks "is the pipeline fast, cheap, and safe to run."
 This asks **"does the gate stop what it claims to stop."** A green check is a
 claim. The expensive failures are the ones where CI passed and shouldn't have.
@@ -37,9 +40,25 @@ YAML. If settings are invisible, audit the workflow files and say so — you
 can still catch `continue-on-error` and ratchet classes, but you cannot
 confirm the required-check list.
 
+## How to reason
+
+1. **Observe** — quote the `if:`, `continue-on-error`, required-check list, or history
+2. **Interpret** — can a merge go green while the claimed check did not run or failed?
+3. **Classify** — silent bypass / ratchet game / conflict / archaeology / correct-as-is
+4. **Severity** — ships-broken-green = critical
+
+## Worked example
+
+> **Observe:** `lint` job has `continue-on-error: true` and is the only
+> required status check named "Lint".
+> **Interpret:** lint can fail and the required check still reports success.
+> **Classify:** silent bypass (`continue-on-error`).
+> **Severity:** critical — ships-broken-green.
+> **Finding:** lint | continue-on-error | critical | `.github/workflows/ci.yml:24`
+
 ---
 
-## Phase 0 — Map every gate and its enforcement
+## Phase 0 — Map every gate and its enforcement  [HIGH freedom]
 
 Inventory the full gating surface, not just the obvious jobs:
 
@@ -58,7 +77,7 @@ silently pass), and whether it is enforced server-side or only by convention.
 
 ---
 
-## Phase 1 — Silent-bypass failure modes
+## Phase 1 — Silent-bypass failure modes  [HIGH freedom]
 
 **`continue-on-error` / soft failure** — `continue-on-error: true`, `|| true`,
 `exit 0` swallowing, or `if: always()` masking a failure. The check runs,
@@ -88,7 +107,7 @@ vice versa), so the enforced commit was never the gated one.
 
 ---
 
-## Phase 2 — Ratchet and baseline soundness
+## Phase 2 — Ratchet and baseline soundness  [HIGH freedom]
 
 **One-way that isn't** — Can the baseline be regenerated in the same PR that
 regresses (`--update-snapshot`, `coverage --update-baseline` committed
@@ -115,7 +134,7 @@ Cross-check `completion-judge` / `burndown-full`.
 
 ---
 
-## Phase 2.5 — Gate archaeology (accreted gates from multiple sessions)
+## Phase 2.5 — Gate archaeology (accreted gates from multiple sessions)  [HIGH freedom]
 
 Gates accumulate: each dev, agent session, or "let's add a check" iteration
 layers another workflow without removing the last. Audit the *set*:
@@ -153,7 +172,7 @@ executes.
 
 ---
 
-## Phase 3 — Verify against history (where possible)
+## Phase 3 — Verify against history (where possible)  [LOW freedom — do not invent a branch]
 
 Where CI history is inspectable, look for a merged PR that introduced a
 failure the gate should have caught. Each one is a proven hole, not a
@@ -179,6 +198,14 @@ create that branch or push it unless the user asked.
 - [ ] History scanned for regressions-shipped-green; deliberate-violation probe noted or skipped with reason
 - [ ] Duplicate-gate clusters, competing baselines, hook-vs-CI divergence, and dead gates mapped; a winner named per cluster
 - [ ] Read-only — findings presented, gates not edited; consolidation handed to `housekeep-gates`
+
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **Evidenced** — YAML line, `gh api` result, or merged PR — not "probably bypassable"
+2. **Settings honesty** — if branch protection was invisible, say so; do not invent the required list
+3. **Severity justified** — critical = ships-broken-green
+4. **Right owner** — consolidation → `housekeep-gates`; cost → `audit-cicd`
+5. **Winner named** — every duplicate cluster has a winner + why
 
 ## Output format
 

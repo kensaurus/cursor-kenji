@@ -10,6 +10,10 @@ license: MIT
 
 # audit-codemod-safety — Compiles and lints is not behaves the same
 
+**Degree of freedom: MIXED** — Phases 0–2 `[HIGH freedom]`; Phase 3
+high-risk hand-trace `[LOW freedom — run exactly]`. Do not re-run the
+transform.
+
 Read-only. A codemod's danger is scale plus plausibility: it touches hundreds
 of files and each diff looks trivially correct, so review fatigue waves it
 through. A mechanical transform proves **syntax, not semantics**.
@@ -28,9 +32,26 @@ to a follow-up session.
 | `burndown-full` | Drive a leftover MATCH pattern to zero — this *audits* whether the pass was safe |
 | `audit-gate-logic` | If size defeated review and syntax defeated linters, that is also a gate-logic finding |
 
+## How to reason
+
+1. **Observe** — quote the rule, the before/after AST or text, and a concrete diff hunk
+2. **Interpret** — does the swap change runtime meaning, or only spelling?
+3. **Classify** — silent behavior change / incomplete migration / consistent-as-is / needs-a-probe
+4. **Severity** — silent runtime change on a hot path = critical
+
+## Worked example
+
+> **Observe:** codemod rewrote `value || fallback` → `value ?? fallback` in
+> `pricing.ts`. Tests still pass.
+> **Interpret:** `0` and `''` now keep the left side; price `0` no longer
+> falls back. Syntax-clean; semantics changed.
+> **Classify:** silent behavior change (truthiness vs nullish).
+> **Severity:** critical if money path; else major.
+> **Finding:** `pricing.ts:41` | `||`→`??` | critical | `0` no longer defaults
+
 ---
 
-## Phase 0 — Characterize the transform
+## Phase 0 — Characterize the transform  [HIGH freedom]
 
 Establish what was done and how:
 
@@ -44,7 +65,7 @@ often finds the gap faster than reading 300 diffs.
 
 ---
 
-## Phase 1 — Behavior-preservation
+## Phase 1 — Behavior-preservation  [HIGH freedom]
 
 **Semantic-equivalence traps** — syntactic swap, different runtime meaning:
 
@@ -67,7 +88,7 @@ separated.
 
 ---
 
-## Phase 2 — Coverage and consistency
+## Phase 2 — Coverage and consistency  [HIGH freedom]
 
 **Missed cases** — matched the common shape, not the variants: alias,
 re-export, dynamic import, HOC-wrapped, JSX vs call expression, tests,
@@ -88,7 +109,7 @@ remove but left dangling; or new ones it referenced but never created.
 
 ---
 
-## Phase 3 — Verify, don't trust
+## Phase 3 — Verify, don't trust  [LOW freedom — hand-trace high-risk files]
 
 - **Test behavior, not compilation.** Did tests exercise the transformed
   paths, or do they pass because coverage there is thin? Cross-check
@@ -119,6 +140,14 @@ remove but left dangling; or new ones it referenced but never created.
 - [ ] Transformed paths confirmed actually tested; high-risk files hand-traced
 - [ ] Gate-bypass interaction noted for `audit-gate-logic` if the mod hid a bug past CI
 - [ ] Read-only — findings presented, code not edited
+
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **Evidenced** — quoted hunk or surviving old-pattern grep, not "looks fine"
+2. **Semantics not syntax** — compiles/lints is not a pass
+3. **Severity justified** — critical = silent runtime change
+4. **Right owner** — CI waved it through → also `audit-gate-logic`
+5. **No re-run** — findings only; do not re-apply the transform
 
 ## Output format
 

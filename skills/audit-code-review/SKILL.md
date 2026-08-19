@@ -10,9 +10,29 @@ license: MIT
 
 # Code Review Skill
 
-full code review following industry best practices. Research-aware.
+**Degree of freedom: MIXED** — Phases 1–2 judgment `[HIGH freedom]`;
+mandatory pre-review git/docs `[LOW freedom — run exactly]`.
 
-## MANDATORY: Pre-Review Checks
+Review this PR or named diff. Repo-wide anti-patterns → `audit-code-quality`.
+Bulk transform semantics → `audit-codemod-safety`.
+
+## How to reason
+
+1. **Observe** — quote the hunk and the surrounding file (not the line alone)
+2. **Interpret** — what breaks, leaks, or duplicates if this merges?
+3. **Classify** — blocking / suggestion / nit / praise
+4. **Severity** — security, data-loss, or break-existing = blocking
+
+## Worked example
+
+> **Observe:** new `GET /api/invoices/:id` returns `Invoice.findById(id)`
+> with no `userId` predicate (`app/api/invoices/[id]/route.ts` in this diff).
+> **Interpret:** any authenticated caller reads another user's invoice.
+> **Classify:** blocking (IDOR).
+> **Severity:** Critical — must fix before merge.
+> **Finding:** `[id]/route.ts` | add ownership check | blocking
+
+## MANDATORY: Pre-Review Checks  [LOW freedom — run exactly]
 
 **BEFORE reviewing code, you MUST:**
 
@@ -73,7 +93,7 @@ firecrawl:firecrawl_search
 
 ---
 
-## Review Process
+## Review Process  [HIGH freedom]
 
 ### Phase 1: High-Level Assessment
 
@@ -223,6 +243,14 @@ SELECT * FROM users -- select only needed columns
 
 ---
 
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **Evidenced** — `File:Line` from the diff, not "this could be better"
+2. **Reproducible** — read the full file, not only the hunk
+3. **Severity justified** — blocking = security / data-loss / break / missing critical handling
+4. **Right owner** — repo-wide smells → `audit-code-quality`; bulk transform → `audit-codemod-safety`
+5. **No-false-safety** — linter-covered style is not blocking
+
 ## Review Response Template
 
 ```markdown
@@ -232,7 +260,7 @@ SELECT * FROM users -- select only needed columns
 [1-2 sentence overall assessment — is this ready to merge?]
 
 ### Critical (blocking)
-[List any must-fix issues]
+[List any must-fix findings]
 
 ### Suggestions (recommended)
 [List recommended improvements]
@@ -264,4 +292,4 @@ SELECT * FROM users -- select only needed columns
 - Give vague feedback ("this could be better")
 - Ignore the context/constraints the author worked within
 - Review only the changed lines — read surrounding code too
-- Assume malice — most issues are honest oversights
+- Assume malice — most findings are honest oversights

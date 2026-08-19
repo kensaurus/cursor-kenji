@@ -9,11 +9,30 @@ license: MIT
 
 # CI/CD Audit Skill
 
+**Degree of freedom: MIXED** — Steps 1–3 judgment `[HIGH freedom]`; Step 0
+`gh` inventory and Step 4 deletes `[LOW freedom — run exactly]`.
+
 Systematic audit of GitHub Actions workflows to cut the Actions bill (minutes +
 storage) and speed up CI **without losing test coverage or deploy safety**.
 Uses the `gh` CLI for live billing, run history, and storage data.
 
-## Step 0: Inventory the account and pipelines
+## How to reason
+
+1. **Observe** — quote the trigger, `runs-on`, `concurrency`, or `gh` minute/storage number
+2. **Interpret** — billed twice, doomed minutes, or a 10× runner on every push?
+3. **Classify** — double-bill / no-concurrency / expensive-runner / doomed-job / storage / correct
+4. **Severity** — by `$` × safety; never score a cut that drops coverage
+
+## Worked example
+
+> **Observe:** `build-mobile.yml` `runs-on: macos-15` on `push:` to every
+> branch; no `if:` gate; private repo.
+> **Interpret:** every push bills ~10× Ubuntu for an iOS job nobody requested.
+> **Classify:** expensive-runner on ordinary push.
+> **Severity:** Very high (~10×).
+> **Finding:** `build-mobile.yml` | macos on push | dispatch/tag-only | ~10×
+
+## Step 0: Inventory the account and pipelines  [LOW freedom — run exactly]
 
 Measure before optimizing. Only **private** repos consume the paid minute
 allowance; public repos get free minutes — don't spend effort there.
@@ -35,7 +54,7 @@ gh api "repos/<owner>/<repo>/actions/cache/usage" --jq '.active_caches_size_in_b
 Rank repos by `runs × runner-multiplier`. A `macos-*` job counts ~10x a
 `ubuntu` job; `*-large`/bigger runners cost more than standard.
 
-## Step 1: Anti-pattern scan (per workflow)
+## Step 1: Anti-pattern scan (per workflow)  [HIGH freedom]
 
 For each `.github/workflows/*.yml`, check for the recurring cost drivers:
 
@@ -62,7 +81,7 @@ For each `.github/workflows/*.yml`, check for the recurring cost drivers:
       building once and sharing via artifact (only when their build env is
       identical — see Safety).
 
-## Step 2: Cost levers (highest impact first)
+## Step 2: Cost levers (highest impact first)  [HIGH freedom]
 
 | Lever | Fix | Impact |
 |-------|-----|--------|
@@ -75,7 +94,7 @@ For each `.github/workflows/*.yml`, check for the recurring cost drivers:
 | Artifact retention | `retention-days: 1–7` + `if: failure()` | Storage |
 | Repeated installs | Cache deps / Playwright browsers / build cache | Medium |
 
-## Step 3: Fix patterns
+## Step 3: Fix patterns  [HIGH freedom]
 
 ```yaml
 # Concurrency — every workflow. CI/verification cancels superseded runs:
@@ -106,7 +125,7 @@ build-ios:
 env: { GITLEAKS_ENABLE_UPLOAD_ARTIFACT: "false" }
 ```
 
-## Step 4: Storage cleanup (destructive — confirm first)
+## Step 4: Storage cleanup (destructive — confirm first)  [LOW freedom — confirm first]
 
 Artifacts and caches are ephemeral CI outputs; deleting them is safe but
 irreversible. Confirm with the user, then:
@@ -149,6 +168,14 @@ gh api "repos/<owner>/<repo>/actions/caches" --paginate --jq '.actions_caches[].
   hard-break.
 - **Rotate any secret leaked in a workflow/remote** (the user must revoke;
   you can only strip it from configs).
+
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **Evidenced** — workflow YAML or `gh` count, not "CI feels expensive"
+2. **Reproducible** — same trigger/`runs-on` still present
+3. **Severity justified** — ranked by `$` × runner multiplier
+4. **Right owner** — silent bypass / ratchet → `audit-gate-logic`; hosting bill → `audit-infra-cost`
+5. **No-false-safety** — no test deleted or skipped to save minutes; storage delete confirmed
 
 ## Output: CI/CD Cost Audit Report
 

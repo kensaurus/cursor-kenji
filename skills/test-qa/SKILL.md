@@ -9,78 +9,69 @@ description: >
 license: MIT
 ---
 
-# QA Testing Skill
+# test-qa — Story-driven CRUD, not a monkey test
 
-Perform full QA testing of any webapp through playwright-cli, adopting the
-mindset of a senior QA engineer preparing an app for production release. This is NOT a
-simple page-navigation monkey test — it is controlled, intelligent, user-story-driven
-testing that covers CRUD operations, data pipeline integrity, UX quality, and edge cases.
-Unscripted wander + guest vs logged-in diff → `test-exploratory`.
+**Degree of freedom: MIXED** — story generation and severity `[HIGH freedom]`;
+session, anti-stall, and CRUD verify-after-refresh `[LOW freedom — run exactly]`.
+Driver is **playwright-cli**, never Playwright MCP. Guest-vs-authed wander is
+`test-exploratory` — do not reclaim it.
 
-**Before ANY browser interaction, read the `protocol-browser-anti-stall` skill and apply its
-rules to every step — especially Rule 0 (manual & headed, never scripted).** That skill lives
-at `~/.cursor/skills/protocol-browser-anti-stall/SKILL.md`. Also read
-`references/playwright-session-coordination.md` in that folder — named sessions, auth profiles,
-persisted login.
+Full QA of a live webapp as a senior QA engineer preparing a production
+release: user-story-driven coverage, CRUD, data-pipeline integrity, UX, and
+edge cases. This is **not** a page-navigation monkey test.
 
-## Critical Rules
+Read `protocol-browser-anti-stall` before any browser step (Rule 0: manual &
+headed). Also `references/playwright-session-coordination.md` in that folder.
 
-> **Manual & headed, never scripted.**
-> Drive a visible browser one real action at a time with individual `playwright-cli` commands.
-> `eval` / `run-code` are inspection-only — never use them to click,
-> type, or navigate. Do not write `*.spec.ts` or run `npx playwright test`; experience the app,
-> don't automate past it.
+## This skill vs neighbors
 
-> **Test as a real user, think as an engineer.**
-> Navigate like someone who just opened the app for the first time.
-> Inspect like someone who knows what's under the hood.
+| Skill | Owns |
+|:------|:-----|
+| **test-qa** (this) | Story-driven CRUD + smoke; persist after refresh (+ DB) |
+| `test-exploratory` | Unscripted wander + **guest vs authed diff** |
+| `test-playwright` | This-diff PDCA + fix-as-you-go |
+| `test-red-team` | Hostile feature×dimension matrix |
+| `test-visual-regression` | Pixel baselines |
+| `plan-stub-checker` | Dead buttons / fake components (plan) |
 
-> **Every mutation must be verified end-to-end.**
-> Creating, updating, or deleting something is not "tested" until you confirm the
-> change persisted in the UI after a page refresh AND (if DB access available) in the database.
+## How to reason (every finding)
 
-> **Evidence for every finding.**
-> Every bug report needs: screenshot, console output, network request, and reproduction steps.
-> "It looked broken" is not a finding.
+1. **Observe** — screenshot + console + network (+ DB if available)
+2. **Interpret** — persist fail, dead control, UX defect, or expected empty?
+3. **Classify** — PASS / FAIL / BLOCKED (auth) — never "sort of works"
+4. **Severity** — Critical (blocks ship) / Major (bad UX) / Minor (polish)
 
-> **Clean up after yourself.**
-> If you created test data during CRUD testing, delete it at the end. Leave the app in the
-> state you found it.
+## Worked example
 
-> **No hardcoded assumptions.**
-> Read the codebase to discover pages, entities, and features. Never assume a route
-> exists without confirming it in the source code.
+> **Observe:** POST /api/items 201; list shows "QA-TEST-Widget"; after hard
+> `goto` the row is gone. Console clean.
+> **Interpret:** optimistic UI; write never persisted.
+> **Classify:** FAIL — data pipeline (ghost create).
+> **Severity:** Critical — CRUD not verified E2E.
+
+## Critical rules
+
+- **Manual & headed, never scripted.** One `playwright-cli` action at a time.
+  `eval` / `run-code` inspection-only. No `*.spec.ts`, no `npx playwright test`.
+- **User in the chair, engineer in the head.** First-open navigation; inspect
+  like you know the stack.
+- **Every mutation verified E2E.** Create/update/delete is untested until the
+  change survives a refresh **and** (if DB access exists) the row matches.
+- **Evidence for every finding.** Screenshot + console + network + repro.
+- **Clean up.** Delete `QA-TEST-` data. Leave auth session intact.
+- **No invented routes.** Discover pages/entities from source first.
 
 ---
 
-## Phase 0: Codebase Discovery
-
-Before opening the browser, understand the app from its source code.
+## Phase 0: Codebase Discovery  [HIGH freedom]
 
 ### 0a. Detect Tech Stack
 
-Read the dependency manifest:
-
-```
-package.json → Node/JS/TS (framework, UI lib, auth, ORM, state mgmt)
-requirements.txt → Python
-pyproject.toml → Python
-Cargo.toml → Rust
-go.mod → Go
-```
-
-Extract and record:
-- **Framework**: Next.js, Remix, SvelteKit, Nuxt, Django, Rails, etc.
-- **UI library**: React, Vue, Svelte, Angular
-- **Auth**: Supabase Auth, NextAuth, Clerk, Auth0, Passport, custom
-- **Database/ORM**: Supabase, Prisma, Drizzle, Sequelize, SQLAlchemy
-- **State management**: TanStack Query, Zustand, Redux, Pinia
-- **CSS**: Tailwind, CSS Modules, Styled Components, Chakra, Shadcn
-- **Dev server port**: Read from `scripts.dev` in `package.json` (usually 3000, 3001, 5173, 5174)
+Read the dependency manifest (`package.json`, `requirements.txt`,
+`pyproject.toml`, `Cargo.toml`, `go.mod`). Record framework, UI lib, auth,
+DB/ORM, state, CSS, and `scripts.dev` port (3000 / 3001 / 5173 / 5174).
 
 ### 0b. Discover Routes
-
-Scan the file system for page/route definitions:
 
 | Framework | Scan Pattern |
 |-----------|-------------|
@@ -89,47 +80,36 @@ Scan the file system for page/route definitions:
 | Remix | `app/routes/**/*.tsx` |
 | SvelteKit | `src/routes/**/+page.svelte` |
 | Nuxt | `pages/**/*.vue` |
-| React Router (SPA) | Grep for `<Route` or `createBrowserRouter` in source |
+| React Router (SPA) | Grep for `<Route` or `createBrowserRouter` |
 | Django | `urls.py` files |
 | Rails | `config/routes.rb` |
 
-For each route, note:
-- Path (e.g., `/words`, `/profile`, `/settings`)
-- Dynamic segments (e.g., `/grammar/[slug]`, `/culture/[id]`)
-- Layout nesting (which layout wraps which pages)
-- Auth requirements (is the page behind a guard/middleware?)
+For each route: path, dynamic segments, layout nesting, auth guard.
 
 ### 0c. Discover Data Model
 
-Look for entity definitions:
-
 | Source | Where |
 |--------|-------|
-| Supabase migrations | `supabase/migrations/*.sql` — table definitions, RLS policies |
-| Prisma schema | `prisma/schema.prisma` — models, relations |
+| Supabase migrations | `supabase/migrations/*.sql` — tables, RLS |
+| Prisma schema | `prisma/schema.prisma` |
 | Drizzle schema | `drizzle/schema.ts` or `src/db/schema.ts` |
-| TypeScript types | `types/*.ts`, `**/types.ts` — interfaces for data entities |
-| API routes | `app/api/**` — what CRUD endpoints exist |
-| Feature files | `features/*/` — feature-specific services, hooks, components |
+| TypeScript types | `types/*.ts`, `**/types.ts` |
+| API routes | `app/api/**` — CRUD endpoints |
+| Feature files | `features/*/` — services, hooks, components |
 
-For each entity, note: name, key fields, CRUD capabilities, relationships.
+For each entity: name, key fields, CRUD capabilities, relationships.
 
 ### 0d. Discover Auth Pattern
 
-Search for:
-- Auth provider config (`createClient` for Supabase, `NextAuth`, `ClerkProvider`, `Auth0Provider`)
-- Login page/component (grep for `signIn`, `login`, `authenticate`)
-- Test account credentials (check `.env.local`, `.env.test`, `.env.example`, README)
-- Protected routes (middleware files, auth guards, route wrappers)
+Provider config (`createClient`, `NextAuth`, `ClerkProvider`, `Auth0Provider`);
+login (`signIn` / `login` / `authenticate`); test credentials (`.env.local`,
+`.env.test`, `.env.example`, README); protected routes (middleware, guards).
 
 ### 0e. Read Feature Documentation
 
-If the project has README files in feature directories (`@_*-README.md`, `docs/`, etc.),
-read them to understand expected behavior and business rules.
+Feature-directory READMEs (`@_*-README.md`, `docs/`) for expected behavior.
 
 ### 0f. Record Discovery Results
-
-Produce a structured summary before proceeding:
 
 ```
 APP DISCOVERY:
@@ -147,52 +127,49 @@ APP DISCOVERY:
 
 ---
 
-## Phase 1: Environment Verification
+## Phase 1: Environment Verification  [LOW freedom — session exact]
 
 ### 1a. Verify Dev Server Running
 
-Check the terminals folder for active dev server processes:
-- Read terminal files to find running `npm run dev`, `pnpm dev`, `next dev`, etc.
-- If no dev server found, inform the user and stop.
+Check the terminals folder for `npm run dev` / `pnpm dev` / `next dev`. If
+none, tell the user and stop.
 
 ### 1b. Load the app (own your session)
 
-1. Pick a session name for this run (`-s=qa-<app>`); never reuse another agent's name.
-2. Open your own isolated browser — add `--persistent --profile` if the app needs a login:
+1. Session name `-s=qa-<app>`; never reuse another agent's name.
+2. Isolated browser — add `--persistent --profile` if login is required:
 
 ```bash
 PW="npx --yes @playwright/cli@latest"
 $PW -s=qa-<app> open --headed http://localhost:3000
 sleep 2
-$PW -s=qa-<app> snapshot        # verify content rendered
+$PW -s=qa-<app> snapshot
 $PW -s=qa-<app> screenshot --filename .playwright-mcp/qa-baseline.png
-$PW -s=qa-<app> console         # capture any startup errors
-$PW -s=qa-<app> requests        # capture initial API calls
+$PW -s=qa-<app> console
+$PW -s=qa-<app> requests
 ```
 
-If the page is blank after 3 incremental wait cycles (6s total), report a blocker.
+Blank after 3 incremental waits (6s) → blocker.
 
 ### 1c. Authenticate (reuse session — do not re-login every run)
 
 Follow `protocol-browser-anti-stall/references/playwright-session-coordination.md`.
 
-1. Navigate to a **protected route** — if already signed in, skip to 1d.
-2. `state-load .playwright-mcp/auth/<host>.json` if that file exists (or reuse the
-   `--persistent --profile` directory, which keeps you signed in automatically).
+1. Hit a **protected route** — if already signed in, skip to 1d.
+2. `state-load .playwright-mcp/auth/<host>.json` if it exists (or reuse the
+   `--persistent --profile` directory).
 3. If still logged out:
-   - Email/password: use test credentials from `.env.test` / README (never paste secrets in chat).
-   - **OAuth / SSO**: complete sign-in in the visible window; wait with incremental
-     snapshots; then `state-save .playwright-mcp/auth/<host>.json`.
-   - **Google accounts** cannot be signed into from a Playwright-launched browser — use the
-     one-time real-Chrome profile login in the coordination reference.
-4. Verify auth (avatar, dashboard, protected pages load).
-5. **Do not log out** at cleanup unless explicitly testing the logout flow.
+   - Email/password: credentials from `.env.test` / README (never paste secrets).
+   - **OAuth / SSO**: sign in in the visible window; incremental snapshots;
+     then `state-save .playwright-mcp/auth/<host>.json`.
+   - **Google** cannot sign in from a Playwright-launched browser — use the
+     one-time real-Chrome profile in the coordination reference.
+4. Verify auth (avatar, dashboard, protected pages).
+5. **Do not log out** at cleanup unless testing logout.
 
-If auth is impossible, mark auth-required pages as BLOCKED and test only public pages.
+If auth is impossible, mark auth-required pages BLOCKED and test public only.
 
 ### 1d. Capture Baseline
-
-After login (or on the public home page):
 
 ```
 BASELINE:
@@ -205,225 +182,122 @@ BASELINE:
 
 ---
 
-## Phase 2: Intelligent Page Crawl
+## Phase 2: Intelligent Page Crawl  [HIGH freedom]
 
-For EVERY route discovered in Phase 0b, do the following:
+For EVERY route from Phase 0b:
 
 ### 2a. Navigate and Capture
 
-1. `goto` to the page
-2. Apply anti-stall protocol (2s wait → snapshot → verify)
-3. `screenshot` for visual evidence
-4. `console` — record errors and warnings
-5. `requests` — record API calls, failures, timing
+`goto` → anti-stall (2s → snapshot → verify) → `screenshot` → `console` →
+`requests`.
 
 ### 2b. Classify the Page
 
 | Classification | Signals |
 |---------------|---------|
-| **CRUD page** | Has forms, edit buttons, delete buttons, data tables |
-| **Display page** | Shows data but no mutation controls (dashboards, profiles) |
-| **Settings page** | Has toggles, selects, save buttons for preferences |
-| **Auth page** | Login, register, forgot password forms |
-| **Static page** | No dynamic data (about, terms, privacy) |
-| **Navigation hub** | Links to child pages (home, index pages) |
+| **CRUD page** | Forms, edit/delete, data tables |
+| **Display page** | Data, no mutation (dashboards, profiles) |
+| **Settings page** | Toggles, selects, save for preferences |
+| **Auth page** | Login, register, forgot password |
+| **Static page** | About, terms, privacy |
+| **Navigation hub** | Links to children (home, index) |
 
-### 2c. Detect Issues During Crawl
-
-For each page, immediately flag:
+### 2c. Detect findings during crawl
 
 | Check | What to Look For |
 |-------|-----------------|
-| **Dead page** | Page returns 404, error boundary, or blank screen |
-| **Console errors** | JavaScript errors, failed assertions, React errors |
-| **Network failures** | 4xx/5xx responses, CORS errors, timeouts |
-| **Missing content** | "undefined", "null", "NaN", "[object Object]" visible in text |
-| **Mock data** | Placeholder text ("Lorem ipsum", "TODO", "test", "example@") that should be real |
-| **Dead buttons** | Buttons that have no onClick or navigate nowhere (detect via snapshot inspection) |
-| **Missing metadata** | No page title (`document.title` empty or generic), no description |
-| **Loading stuck** | Spinner or skeleton that never resolves (after 6s) |
-| **Empty state** | No data AND no helpful empty-state message |
-| **Broken images** | Image elements with no `src`, broken `src`, or error fallback showing |
-| **Overflow** | Text or elements overflowing their containers (visible in screenshot) |
+| **Dead page** | 404, error boundary, blank |
+| **Console errors** | JS / React errors, failed assertions |
+| **Network failures** | 4xx/5xx, CORS, timeouts |
+| **Missing content** | "undefined", "null", "NaN", "[object Object]" |
+| **Mock data** | "Lorem ipsum", "TODO", "test", "example@" |
+| **Dead buttons** | No onClick / navigate nowhere (snapshot) |
+| **Missing metadata** | Empty or generic `document.title` |
+| **Loading stuck** | Spinner/skeleton after 6s |
+| **Empty state** | No data AND no helpful empty message |
+| **Broken images** | Missing/broken `src` or error fallback |
+| **Overflow** | Text/elements past their containers |
 
 ### 2d. Build Feature Map
 
-After crawling all pages, produce:
-
 ```
 FEATURE MAP:
-- CRUD pages: [list — with which entity and which operations]
-- Forms found: [list — page + form purpose]
-- Data displays: [list — tables, lists, cards, charts]
+- CRUD pages: [entity + operations]
+- Forms found: [page + purpose]
+- Data displays: [tables, lists, cards, charts]
 - Interactive elements: [buttons, toggles, dropdowns per page]
-- Search/filter: [which pages have search or filter controls]
-- Settings: [which preferences are configurable]
-- Dead buttons found: [list with page + element description]
+- Search/filter: [pages]
+- Settings: [configurable preferences]
+- Dead buttons found: [page + element]
 - Pages with errors: [list]
 ```
 
 ---
 
-## Phase 3: Dynamic User Story Generation
+## Phase 3: Dynamic User Story Generation  [HIGH freedom]
 
-Based on the feature map, generate user stories. These are NOT predefined — they are
-derived from what the app actually contains.
+Stories come from the feature map, not a canned list.
 
-### Story Categories
-
-#### Category A: First Impression
-
-> "As a first-time visitor, I open the app and try to understand what it does."
-
-Steps:
-1. Navigate to home page
-2. Assess: Is the value proposition clear within 3 seconds?
-3. Assess: Is there a clear call-to-action?
-4. Assess: Can I navigate without signing up?
-5. Assess: Does the app look professional and trustworthy?
-
-#### Category B: Core User Journey
-
-Identify the app's primary purpose from Phase 0 (e.g., language learning, project management,
-e-commerce, social network). Generate a story that walks through the main flow:
-
-> "As a [user type], I want to [primary action] so that [value]."
-
-Steps: Follow the app's main flow from start to finish.
-
-#### Category C: CRUD Lifecycle (per entity)
-
-For each data entity discovered:
-
-> "As a user, I create a [entity], verify it appears, edit it, verify changes, delete it, verify removal."
-
-Steps:
-1. Navigate to the creation form
-2. Fill with realistic test data (prefix with `QA-TEST-` for easy cleanup)
-3. Submit and verify success feedback
-4. Navigate to the list view and verify the item appears
-5. Open the item and verify all fields match what was entered
-6. Edit one or more fields
-7. Save and verify the changes appear
-8. Delete the item
-9. Verify it's gone from the list
-10. If DB access available: verify the row was created, updated, and deleted
-
-#### Category D: Navigation Completeness
-
-> "As a user, I can reach every page from the navigation and never hit a dead end."
-
-Steps:
-1. From home, find and click every navigation link
-2. On each page, verify back navigation works
-3. Verify breadcrumbs or location indicators are correct
-4. Check that all bottom nav / sidebar nav items lead somewhere
-5. Try browser back/forward buttons between pages
-
-#### Category E: Search and Filter (if applicable)
-
-> "As a user, I search for something and get relevant results."
-
-Steps:
-1. Find search input
-2. Search for a known item
-3. Verify results contain the item
-4. Search for something that doesn't exist
-5. Verify empty results have a helpful message
-6. Test filters if available
-
-#### Category F: Error Handling
-
-> "As a user, I make mistakes and the app guides me."
-
-Steps:
-1. Submit a form with empty required fields → expect inline validation errors
-2. Enter invalid data (wrong format, too long, negative numbers) → expect helpful error messages
-3. Navigate to a non-existent URL → expect a proper 404 page
-4. If possible, trigger a network error → expect a user-friendly error state
-
-#### Category G: Settings and Preferences
-
-> "As a user, I change my preferences and they persist."
-
-Steps:
-1. Navigate to settings
-2. Change a preference
-3. Navigate away
-4. Come back to settings
-5. Verify the preference persisted
+| Cat | Story | Drive |
+|-----|-------|-------|
+| A | First impression | Home: value prop in 3s, CTA, guest-reachable nav, trust |
+| B | Core journey | Primary purpose from Phase 0, start to finish |
+| C | CRUD per entity | **Phase 4** — verify persist after refresh (+ DB) |
+| D | Navigation | Every nav link, back/forward, breadcrumbs, no dead ends |
+| E | Search/filter | Known hit, empty miss + helpful empty, filters |
+| F | Errors | Empty required, invalid input, `/nonexistent` 404, network fail |
+| G | Settings | Change, navigate away, come back — preference persisted |
 
 ---
 
-## Phase 4: CRUD Testing
+## Phase 4: CRUD Testing  [LOW freedom — verify after refresh]
 
-For each CRUD-capable entity, execute the lifecycle test.
+For each CRUD-capable entity, run the lifecycle.
 
 ### 4a. Create
 
-1. Navigate to the creation page/form
-2. Identify all form fields via `snapshot`
-3. Fill each field with realistic test data:
- - Text fields: `QA-TEST-[field]-[timestamp]`
- - Numbers: reasonable values for the domain
- - Dates: today or near-future
- - Selects: pick a valid option
- - Toggles: set to non-default
-4. `screenshot` before submitting (evidence of input)
-5. Submit the form
-6. `requests` — verify the API call succeeded (2xx response)
-7. `snapshot` — verify success feedback (toast, redirect, confirmation)
-8. `screenshot` — evidence of success state
+1. Open the creation form; identify fields via `snapshot`
+2. Fill realistic data: text `QA-TEST-[field]-[timestamp]`; domain-sane
+   numbers/dates; valid select; non-default toggle
+3. `screenshot` before submit
+4. Submit; `requests` must be 2xx; `snapshot` + `screenshot` for success
+   feedback (toast, redirect, confirmation)
 
-**Record the created item's identifying info** (ID, name, URL) for subsequent steps.
+**Record** the item's ID, name, and URL.
 
 ### 4b. Read
 
-1. Navigate to the list view containing the entity
-2. `snapshot` — find the created item in the list
-3. Verify all displayed fields match what was entered
-4. Click into the detail view (if available)
-5. Verify detail fields match
-6. `screenshot` — evidence
+List view → find the item → displayed fields match → detail view (if any)
+matches → `screenshot`.
 
 ### 4c. Update
 
-1. Navigate to the edit form for the created item
-2. Change 1-2 fields to new values
-3. `screenshot` — evidence of changes before save
-4. Save the changes
-5. `requests` — verify the update API call succeeded
-6. Verify the UI reflects the updated values
-7. Hard-refresh the page (`goto` to same URL) and verify changes persisted
+Edit 1–2 fields → `screenshot` before save → save → `requests` 2xx → UI
+updates → hard-refresh (`goto` same URL) → changes still there.
 
 ### 4d. Delete
 
-1. Find the delete action for the item
-2. `screenshot` — evidence before deletion
-3. Trigger deletion (click delete button, confirm dialog if present)
-4. `requests` — verify the delete API call succeeded
-5. Verify the item is gone from the list view
-6. If the item had a detail URL, navigate to it and verify 404 or redirect
+`screenshot` before → delete (+ confirm if any) → `requests` 2xx → gone from
+list → detail URL is 404 or redirect.
 
 ### 4e. Validation Testing
 
-For each form, also test:
-
-1. **Empty submission**: Clear all fields, submit → expect validation errors
-2. **Invalid data**: Wrong format (email without @, text in number field) → expect specific error messages
-3. **Boundary values**: Very long strings (500+ chars), zero, negative numbers, past dates
-4. **Special characters**: `<script>alert('xss')</script>`, `'; DROP TABLE`, emoji, Unicode
-5. **Duplicate prevention**: Try to create the same item twice → expect duplicate handling
+1. **Empty submission** → inline validation
+2. **Invalid data** — wrong format, text in number field → specific errors
+3. **Boundary** — 500+ chars, zero, negative, past dates
+4. **Special characters** — `<script>alert('xss')</script>`, `'; DROP TABLE`,
+   emoji, Unicode
+5. **Duplicate** — create the same item twice → duplicate handling
 
 ### 4f. Data Pipeline Verification
 
-After each mutation (create/update/delete):
+After each mutation:
 
-1. **Network check**: `requests` — was the API call made? What status code?
-2. **Response check**: Did the response body contain the expected data?
-3. **UI check**: Does the UI reflect the mutation without manual refresh?
-4. **Refresh check**: After `goto` to the same page, is the mutation still visible?
-5. **DB check** (if Supabase MCP or DB access available):
+1. **Network** — `requests`: call made? status?
+2. **Response** — body has expected data?
+3. **UI** — reflects mutation without a manual refresh?
+4. **Refresh** — after `goto` same page, still visible?
+5. **DB** (if Supabase MCP or DB access):
 
 ```json
 supabase:execute_sql
@@ -433,30 +307,28 @@ supabase:execute_sql
 }
 ```
 
-**Pipeline failures to detect:**
-- Optimistic update that never confirms (UI shows change but API failed)
-- Stale cache (mutation succeeded but list view shows old data)
-- Missing cache invalidation (created item doesn't appear until page refresh)
-- Ghost data (deleted item reappears after refresh)
-- Silent failures (no error shown to user but API returned 4xx/5xx)
+**Pipeline failures:** optimistic UI but API failed; stale cache; missing
+invalidation (item appears only after refresh); ghost data (deleted item
+returns); silent 4xx/5xx.
 
 ---
 
-## Phase 5: UX Quality Audit
+## Phase 5: UX Quality Audit  [HIGH freedom]
 
-Assess each page against design-award quality standards.
+Assess each page. Layout breakage → `audit-responsive`. Empty/error chrome →
+`audit-ui-states`. Do not re-own those audits.
 
 ### 5a. Visual Quality
 
 | Check | How to Verify |
 |-------|--------------|
 | Consistent spacing | Screenshot — no irregular gaps or cramped areas |
-| Typography | No mixed font sizes where they should match, no orphaned headings |
-| Truncation | Text truncated with ellipsis where appropriate, not clipped |
-| Image loading | All images render, no broken image icons |
-| Icons | All icons render (no missing icon squares or fallback text) |
-| Dark mode | If supported: toggle and verify all components adapt, no white flashes |
-| Responsive | Test at 1280px, 768px, 375px — layout adapts without breaking |
+| Typography | No mixed sizes where they should match; no orphaned headings |
+| Truncation | Ellipsis where appropriate, not clipped |
+| Image loading | All images render; no broken-image icons |
+| Icons | All icons render (no missing squares) |
+| Dark mode | If supported: toggle; no white flashes |
+| Responsive | 1280 / 768 / 375 — layout adapts without breaking |
 
 ### 5b. Interaction Quality
 
@@ -464,21 +336,30 @@ Assess each page against design-award quality standards.
 |-------|--------------|
 | Dead buttons | Click every button. Does it do something? |
 | Form labels | Every input has a visible label or accessible name |
-| Loading states | Trigger data fetches — is a loading indicator shown? |
-| Success feedback | After mutations — toast, confirmation, or visual change? |
-| Error feedback | After failures — is the error message helpful and visible? |
-| Disabled states | Are disabled elements visually distinct? Is the reason clear? |
-| Focus management | After modal close or form submit, is focus moved appropriately? |
+| Loading states | Data fetch shows a loading indicator |
+| Success feedback | After mutations — toast, confirmation, or visual change |
+| Error feedback | Failures — helpful, visible |
+| Disabled states | Visually distinct; reason clear |
+| Focus management | After modal close or submit, focus moves |
 
 ### 5c. Information Architecture
 
 | Check | How to Verify |
 |-------|--------------|
-| Page titles | `document.title` — is it descriptive and unique per page? |
-| Active nav state | Current page highlighted in navigation? |
-| Dead ends | Any page with no way to navigate forward or back? |
-| Empty states | Pages with no data — do they show a helpful message? |
-| 404 page | Navigate to `/nonexistent-page` — is the 404 page helpful? |
+| Page titles | `document.title` descriptive and unique |
+| Active nav state | Current page highlighted |
+| Dead ends | Any page with no way forward or back? |
+| Empty states | No data — helpful message? |
+| 404 page | `/nonexistent-page` — helpful 404? |
+
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **CRUD E2E** — create/update/delete proven after refresh (+ DB if available)
+2. **Evidence** — every FAIL has screenshot + console + network + repro
+3. **Cleanup** — `QA-TEST-` rows gone; auth session left intact
+4. **Right owner** — guest/authed wander → `test-exploratory`; pixel →
+   `test-visual-regression`; hostile → `test-red-team`
+5. **Binary** — no "sort of works"
 
 ## Further reading
 

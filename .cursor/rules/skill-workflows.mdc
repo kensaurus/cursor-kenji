@@ -102,6 +102,7 @@ with `/goal`.
 | Production-quality forms (a11y, validation, states, multi-step) | `enhance-web-forms` |
 | Install agent guardrails-as-code (rules, hooks, CI gates, lint) | `enhance-agent-guardrails` |
 | Inbox placement — SPF/DKIM/DMARC (audit-and-fix) | `enhance-email-deliverability` |
+| Upgrade an existing SKILL.md prompt (T1–T6), not its behavior | `enhance-skill-prompts` |
 
 ### Plan (audit → approve → execute)
 | Task | Skill |

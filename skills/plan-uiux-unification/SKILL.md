@@ -10,6 +10,9 @@ license: MIT
 
 # UI/UX & Design-System Audit + Unification Plan
 
+**Degree of freedom: MIXED** — IA and unification plan are judgment; token
+greps and inventory globs run exactly. Stay **plan-only**. No UI edits until approved.
+
 **Role:** Senior frontend/mobile architect + design-systems engineer.
 
 **Task:** Deep, exhaustive, *non-destructive* audit. Built by many devs over time → expect
@@ -31,6 +34,21 @@ do not replace it, strip features, fabricate data, or rewrite UI in this pass.**
 **Chain:** Step 1 of six-skill plan loop — see `docs/PLAN-LOOPS.md`  
 **Execute:** `audit-responsive` (layout/IA) → `enhance-web-ux` / `enhance-web-ui` → `test-playwright`
 
+## How to reason (every plan item)
+
+1. **Propose** — token, primitive, layout, or voice change against the existing DS
+2. **Risk** — brand-break, a11y fail, or a rewrite that strips a feature
+3. **Keep-working** — surfaces and tokens that already match the canonical system
+4. **Phase** — P0 broken/a11y → structural → polish (do not execute)
+
+## Worked example
+
+> **Propose:** replace raw `#1a1a1a` on `/pricing` CTA with the documented primary token (`bg-fg` or equivalent).
+> **Risk:** 14 hex literals on the highest-traffic page; brand-breaking vs the token SSOT.
+> **Keep-working:** `components/ui/Button` already uses semantic tokens.
+> **Phase:** P0 — brand-breaking hex on a conversion surface.
+> **Canonical fix:** value-for-value token swap; no copy or layout rewrite.
+
 ---
 
 ## ⛔ Preservation Contract
@@ -48,7 +66,7 @@ Read `references/preservation-contract.md` in full before Phase 0.
 
 ---
 
-## Phase flow (do not skip)
+## Phase flow (do not skip)  [HIGH freedom]
 
 ```
 0. Context & IA (before any layout talk)
@@ -65,7 +83,7 @@ Templates: `references/output-templates.md`
 
 ---
 
-## Phase 0 — Context & IA FIRST
+## Phase 0 — Context & IA FIRST  [HIGH freedom]
 
 Before pixels: user goal, primary task, key action, IA map (primary/secondary/tertiary),
 content relationships, progressive disclosure.
@@ -76,9 +94,9 @@ content relationships, progressive disclosure.
 
 ---
 
-## Phase 1 — Design-system ground truth
+## Phase 1 — Design-system ground truth  [HIGH freedom]
 
-Auto-detect (read actual files):
+Auto-detect (read actual files):  [LOW freedom — run exactly]
 
 ```
 Glob: **/tailwind.config.*
@@ -94,7 +112,7 @@ Output short **design-system spec** (current state + proposed enhancements).
 
 ---
 
-## Phase 2 — Surface inventory
+## Phase 2 — Surface inventory  [HIGH freedom]
 
 Exhaustive checklist table — every route, modal, drawer, toast, empty/loading/error state,
 auth/onboarding, responsive + dark per surface. Mark audited only after Phase 3 review.
@@ -103,7 +121,7 @@ See inventory template in `references/output-templates.md`.
 
 ---
 
-## Phase 3 — Per-surface audit
+## Phase 3 — Per-surface audit  [HIGH freedom]
 
 For each surface, log violations by category:
 
@@ -116,7 +134,7 @@ For each surface, log violations by category:
 
 **Three buckets:** violates documented rule · subjective improvement · needs DS enhancement
 
-**Token sweep (quantify for burndown):**
+**Token sweep (quantify for burndown):**  [LOW freedom — run exactly]
 
 ```
 Grep: "#[0-9a-fA-F]{3,8}" glob "*.{tsx,jsx,vue,css}"
@@ -130,7 +148,7 @@ Plan-only — screenshots for evidence, not fixes.
 
 ---
 
-## Phase 4 — Burndown
+## Phase 4 — Burndown  [HIGH freedom — plan only]
 
 Table columns:
 
@@ -140,7 +158,7 @@ P0 = broken/inaccessible/brand-breaking · P3 = cosmetic. Quantify where possibl
 
 ---
 
-## Phase 5 — Unification plan
+## Phase 5 — Unification plan  [HIGH freedom — plan only]
 
 - Consolidate DS conflicts; deprecate loser + migration path
 - High-traffic layouts driven by Phase 0 IA + real content
@@ -152,7 +170,7 @@ P0 = broken/inaccessible/brand-breaking · P3 = cosmetic. Quantify where possibl
 
 ---
 
-## Phase 6 — Research
+## Phase 6 — Research  [HIGH freedom]
 
 Firecrawl / web for **current year** best practices; cite sources:
 
@@ -160,6 +178,14 @@ Firecrawl / web for **current year** best practices; cite sources:
 - IA + visual hierarchy · UX writing · anti-AI-slop aesthetics · WCAG 2.2
 
 Note where this app diverges from research.
+
+## Self-critique before the burndown  [LOW freedom — do not skip]
+
+1. **evidenced-not-assumed** — every violation cites a path you read; no invented copy
+2. **plan-only** — no UI/token edits, no PRs
+3. **severity/phase justified** — P0 is broken/inaccessible/brand-breaking, not taste
+4. **right-owner** — linearized breakpoint IA → `audit-responsive`; apply-now token cleanup → `housekeep-design`; per-page heuristics → `audit-ux`
+5. **no-false-safety** — `[NEEDS REAL CONTENT]` stays open; never fabricate examples to fill IA
 
 ---
 

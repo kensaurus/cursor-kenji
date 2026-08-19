@@ -10,11 +10,32 @@ license: MIT
 
 # Security Audit Skill
 
+**Degree of freedom: MIXED** — Steps 0–4 judgment `[HIGH freedom]`;
+dependency and secret scans `[LOW freedom — run exactly]`. Never write
+exploit PoCs.
+
 > **Audit-and-fix exception.** May fix inline. Plan-only burndown → `plan-security-audit`.
 
-Systematic security review for any web application. Research-driven, using current OWASP guidelines.
+OWASP static review (injection, headers, deps). Session / route×gate /
+`getSession()` → `audit-auth-flows`.
 
-## Step 0: Understand the Project
+## How to reason
+
+1. **Observe** — quote the sink or missing check (`file:line`)
+2. **Interpret** — can untrusted input reach a query, HTML, or object-id?
+3. **Classify** — injection / IDOR / secret / header / dep-CVE / hand-off
+4. **Severity** — exploitable data access or hardcoded secret = Critical
+
+## Worked example
+
+> **Observe:** `GET /documents/:id` loads by id only (`api/docs/route.ts:18`).
+> **Interpret:** any caller who can hit the route reads another user's doc.
+> **Classify:** IDOR.
+> **Severity:** Critical.
+> **Finding:** IDOR | `/documents/:id` | add `userId` predicate.
+> Matcher / `getSession()` on that route → `audit-auth-flows`, not this checklist.
+
+## Step 0: Understand the Project  [HIGH freedom]
 
 Before auditing, discover the tech stack and attack surface:
 
@@ -36,7 +57,7 @@ Before auditing, discover the tech stack and attack surface:
 
 ---
 
-## Step 1: Research Current Threats
+## Step 1: Research Current Threats  [HIGH freedom]
 
 Fetch current OWASP and security best practices for the detected stack:
 
@@ -73,7 +94,7 @@ firecrawl:firecrawl_search
 
 ---
 
-## Step 2: Check Production Security Errors (Sentry)
+## Step 2: Check Production Security Errors (Sentry)  [HIGH freedom]
 
 If Sentry is configured, check for security-related production errors:
 
@@ -88,7 +109,7 @@ sentry:search_issues
 }
 ```
 
-Patterns that indicate security issues:
+Patterns that indicate security findings:
 - Frequent 401/403 errors → possible auth bypass attempts
 - CORS errors from unexpected origins → misconfigured CORS
 - CSP violations → potential XSS vectors
@@ -96,7 +117,7 @@ Patterns that indicate security issues:
 
 ---
 
-## Step 3: Automated Code Scan
+## Step 3: Automated Code Scan  [HIGH freedom]
 
 ### Authentication Audit
 
@@ -153,7 +174,7 @@ Patterns that indicate security issues:
 - [ ] CORS `Access-Control-Allow-Origin` is NOT `*` for authenticated endpoints
 - [ ] Cookies: `HttpOnly`, `Secure`, `SameSite=Strict` (or `Lax`)
 
-### Dependency Audit
+### Dependency Audit  [LOW freedom — run exactly]
 
 ```bash
 npm audit # Node.js
@@ -170,7 +191,7 @@ bundle audit # Ruby
 
 ---
 
-## Step 4: Common Vulnerability Patterns
+## Step 4: Common Vulnerability Patterns  [HIGH freedom]
 
 ### SQL Injection
 
@@ -232,7 +253,7 @@ res.json({ id, name, email, avatar });
 
 ---
 
-## Step 5: Environment and Secrets
+## Step 5: Environment and Secrets  [LOW freedom — names/prefixes only]
 
 ### Scan for Hardcoded Secrets
 
@@ -267,6 +288,14 @@ const env = envSchema.parse(process.env);
 ```
 
 ---
+
+## Self-critique before applying fixes  [LOW freedom — do not skip]
+
+1. **Evidenced** — `file:line` or audit output, not "this might be injectable"
+2. **Reproducible** — same sink still present; no exploit PoC written
+3. **Severity justified** — Critical = demonstrated data access or leaked secret
+4. **Right owner** — session/route×gate/`getSession` → `audit-auth-flows`; RLS → `plan-rls-audit`; LLM → `audit-llm-security`
+5. **No-false-safety** — headers or middleware alone ≠ authorization
 
 ## Output: Security Audit Report
 

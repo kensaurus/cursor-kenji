@@ -10,11 +10,28 @@ license: MIT
 
 # Performance Audit Skill
 
+**Degree of freedom: MIXED** — what to optimize `[HIGH freedom]`;
+measure-first Sentry/vitals and `EXPLAIN` `[LOW freedom — run exactly]`.
+
 > **Audit-and-fix exception.** Measure, then optimize. JS payload → `audit-bundle-size`. Breaking point → `test-load`. Timeouts/retries → `audit-resilience`.
 
-Systematic approach to finding and fixing performance issues. Research-driven, data-backed.
+## How to reason
 
-## Step 0: Gather Performance Data
+1. **Observe** — quote LCP/INP/CLS, p95, or `EXPLAIN` / N+1 loop (`file:line`)
+2. **Interpret** — is the user waiting on bytes, a query, or main-thread work?
+3. **Classify** — vital-miss / N+1 / missing-index / bundle / image / re-render
+4. **Severity** — poor LCP/INP or p95 >> target on a live path = Critical
+
+## Worked example
+
+> **Observe:** Sentry p95 `/users` = 2.3s; handler `findAll` then per-user
+> `Order.findByUserId` (`app/api/users/route.ts:31`).
+> **Interpret:** N+1; TTFB/LCP suffer on that page.
+> **Classify:** N+1.
+> **Severity:** Critical (p95 far over 200ms).
+> **Finding:** `/users` | N+1 | eager-load orders | then re-measure
+
+## Step 0: Gather Performance Data  [LOW freedom — run exactly]
 
 Before optimizing, measure. Collect data from multiple sources.
 
@@ -90,7 +107,7 @@ firecrawl:firecrawl_search
 
 ---
 
-## Frontend Performance Audit
+## Frontend Performance Audit  [HIGH freedom]
 
 ### Bundle Size Analysis
 
@@ -141,7 +158,7 @@ npx source-map-explorer 'dist/**/*.js'
 
 ---
 
-## Backend Performance Audit
+## Backend Performance Audit  [HIGH freedom]
 
 ### Database Queries
 
@@ -165,7 +182,7 @@ const users = await User.findAll({ include: [Order] });
 - [ ] Connection pooling configured
 - [ ] Slow query logging enabled
 
-**Index verification:**
+**Index verification:**  [LOW freedom — run exactly]
 ```sql
 EXPLAIN ANALYZE SELECT * FROM orders WHERE user_id = '123';
 ```
@@ -197,7 +214,7 @@ EXPLAIN ANALYZE SELECT * FROM orders WHERE user_id = '123';
 
 ---
 
-## Research-Driven Optimization
+## Research-Driven Optimization  [HIGH freedom]
 
 For specific performance bottlenecks, research current solutions:
 
@@ -248,6 +265,14 @@ context7:resolve-library-id
 | Layout shifts | Set explicit width/height on images/embeds | Medium |
 
 ---
+
+## Self-critique before applying fixes  [LOW freedom — do not skip]
+
+1. **Evidenced** — a measured vital, p95, or `EXPLAIN`, not "this looks slow"
+2. **Reproducible** — same path still exceeds the target table
+3. **Severity justified** — Critical = poor vital or live-path p95
+4. **Right owner** — JS payload → `audit-bundle-size`; breaking point → `test-load`; timeouts → `audit-resilience`
+5. **No-false-safety** — no `memo`/`useMemo` without a measured re-render; measure again after the fix
 
 ## Output: Performance Audit Report
 

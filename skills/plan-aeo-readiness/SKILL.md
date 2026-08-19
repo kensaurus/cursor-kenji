@@ -10,6 +10,9 @@ license: MIT
 
 # Answer-Engine Readiness Audit + Citation Plan
 
+**Degree of freedom: HIGH** — crawl access, extractability, authority levers, plan.
+Stay **plan-only**. No robots.txt, schema, or copy edits until approved.
+
 ## This skill vs neighbors
 
 | Skill | Owns |
@@ -26,6 +29,21 @@ levers per key page, phase remediations, emit `plan-aeo-readiness.md`. **Audit &
 only — no robots.txt, schema, or copy edits until approved.**
 
 **Find why AI engines don't cite you. Plan the fix. Change nothing until approved.**
+
+## How to reason (every plan item)
+
+1. **Propose** — unblock a bot, SSR/expose, schema, or authority lever
+2. **Risk** — engines never see the page, or they see it and have nothing to cite
+3. **Keep-working** — pages already answer-first with valid schema
+4. **Phase** — Unblock → Structure → Authority → Entity-measure (do not execute)
+
+## Worked example
+
+> **Propose:** allow GPTBot/PerplexityBot in robots.txt; add an FAQ JSON-LD block on `/pricing`.
+> **Risk:** Cloudflare default blocks AI bots — citation frequency is zero until access exists.
+> **Keep-working:** `/docs` is SSR and already direct-answer-first.
+> **Phase:** Phase 1 — Unblock & expose.
+> **Lever:** access before schema; do not promise a rank.
 
 Ranking #1 on Google no longer buys an AI citation. Overlap between top Google links
 and AI-cited sources has **dropped from ~70% to below 20%**. LLM-referred visitors
@@ -47,7 +65,7 @@ prerequisite — note and hand that layer to `enhance-web-seo`.
 
 ---
 
-## The audit
+## The audit  [HIGH freedom]
 
 ### A · Can AI even read the site?
 - **robots.txt** — GPTBot, ClaudeBot, PerplexityBot, Google-Extended allowed?
@@ -75,7 +93,7 @@ prerequisite — note and hand that layer to `enhance-web-seo`.
 
 ---
 
-## Procedure
+## Procedure  [HIGH freedom — plan only]
 
 1. **Crawl-access first** (A) — blocked bots = finding #1.
 2. **Audit content shape & authority** (B, C) per key page.
@@ -92,6 +110,14 @@ prerequisite — note and hand that layer to `enhance-web-seo`.
 - **Don't promise rankings** — frame as citation frequency, not fixed rank.
 - **Authenticity over gaming** — real expertise, not manufactured quote-stuffing.
 - **Cross-hand copy** to `plan-antislop`.
+
+## Self-critique before the burndown  [LOW freedom — do not skip]
+
+1. **evidenced-not-assumed** — robots/CDN/SSR checked on real URLs, not assumed open
+2. **plan-only** — no robots.txt, schema, or copy edits
+3. **severity/phase justified** — blocked bots are finding #1, not buried under schema polish
+4. **right-owner** — classic meta/sitemap/OG → `enhance-web-seo`; slop copy → `plan-antislop`
+5. **no-false-safety** — do not promise rankings; citation frequency only; no manufactured quote-stuffing
 
 ---
 

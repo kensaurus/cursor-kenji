@@ -10,6 +10,10 @@ license: MIT
 
 # test-visual-regression — Screenshot baselines that stay green
 
+**Degree of freedom: MIXED** — what to baseline `[HIGH freedom]`;
+determinism loop and 3× clean runs `[LOW freedom — run exactly]`.
+playwright-cli / project runner — never Playwright MCP.
+
 Establish a screenshot baseline for important UI states and wire diffing so
 unintended visual change fails CI.
 
@@ -31,9 +35,24 @@ Playwright test runner — never Playwright MCP. Read
 | `audit-uiux-design-system` | Token/component compliance (not screenshot CI) |
 | `test-qa` | Exploratory CRUD QA |
 
+## How to reason
+
+1. **Observe** — which surface, viewport, and state; what is volatile
+2. **Interpret** — will this pixel-lock a bug, or fail every run on a timestamp?
+3. **Classify** — baseline / exclude / mask
+4. **Severity** — unmasked volatile content = harness will be abandoned
+
+## Worked example
+
+> **Observe:** dashboard spec screenshots the whole page; a relative
+> "Updated 3s ago" label sits in the header.
+> **Interpret:** every CI run diffs that label.
+> **Classify:** must mask (or freeze time) — not a product regression.
+> **Fix:** `mask` the timestamp; prove ≥3 consecutive local runs with zero diff.
+
 ---
 
-## Phase 0 — Detect the setup
+## Phase 0 — Detect the setup  [HIGH freedom]
 
 - Test runner: Playwright test / Vitest / Storybook + Chromatic/Loki
 - Existing snapshot config
@@ -45,7 +64,7 @@ Playwright screenshots already work.
 
 ---
 
-## Phase 1 — Choose what to baseline (not everything)
+## Phase 1 — Choose what to baseline (not everything)  [HIGH freedom]
 
 - **Key screens** at 375 / 768 / 1440 (`audit-responsive` breakpoints)
 - **State matrix** from `audit-ui-states`: empty, error, loaded
@@ -57,7 +76,7 @@ freeze it — otherwise every run is a false positive.
 
 ---
 
-## Phase 2 — Determinism (or the suite gets abandoned)
+## Phase 2 — Determinism (or the suite gets abandoned)  [LOW freedom — 3× clean]
 
 - Seeded fixtures, never live/random content
 - Freeze time; `prefers-reduced-motion`; disable transitions
@@ -71,7 +90,7 @@ the harness done.
 
 ---
 
-## Phase 3 — Wire the loop
+## Phase 3 — Wire the loop  [HIGH freedom]
 
 - Commit baselines after a human reviews them (a broken screen locks the bug)
 - CI required check; upload expected / actual / diff artifacts
@@ -90,6 +109,14 @@ Save ad-hoc captures under `.playwright-mcp/`, not the repo root.
 - [ ] Baselines human-reviewed
 - [ ] CI check + triptych artifacts
 - [ ] Update path documented
+
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **3× clean locally** — fewer is not "done"
+2. **Human reviewed baselines** — a broken screen must not be locked
+3. **Threshold tight** — anti-alias only; never hide real shifts
+4. **Right owner** — functional clicks stay on `test-playwright`
+5. **Artifacts** under `.playwright-mcp/` for ad-hoc; baselines in the harness dir
 
 ## Output format
 

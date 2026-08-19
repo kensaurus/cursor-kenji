@@ -10,29 +10,48 @@ license: MIT
 
 # audit-realworld — Full-Stack Gap Audit vs the RealWorld Reference
 
-RealWorld ("Conduit", a Medium clone) is the most widely implemented full-stack
-benchmark: a formal API spec, a shared end-to-end contract test suite, a shared
-CSS theme, and a hosted API at `api.realworld.show`. That makes it *objectively
-testable* — unlike vague "best practice" references. This skill uses it to show,
-concretely, what your app has and hasn't built.
+**Degree of freedom: MIXED** — Mode, parity, and routing `[HIGH freedom]`;
+Phase 4 contract-suite run `[LOW freedom — run exactly]` when a server or
+suite exists.
+
+Read-only. Findings and a prioritized gap report only — no code changes.
+Remediation goes to the skill named per finding.
+
+RealWorld ("Conduit") is an objectively testable full-stack benchmark: formal
+API spec, shared E2E suite, shared CSS theme, hosted API at
+`api.realworld.show`.
 
 > **The RealWorld API spec and its E2E suite are the source of truth — not any
-> single community implementation.** Reference repos vary in quality and
-> maintenance; the spec and the passing test suite do not.
+> single community implementation.** Reference repos vary; the spec and the
+> passing suite do not.
 
-> **RealWorld is a demo spec, not a production bar.** It deliberately omits rate
-> limiting, observability, caching, CI/CD, secrets management, and deployment.
-> This skill reports *feature/pattern parity*, then explicitly delegates real
-> production hardening to `audit-security`, `plan-security-audit`,
-> `plan-perf-audit`, `plan-rls-audit`, and `full-stack-ship-discipline`.
+> **RealWorld is a demo spec, not a production bar.** It omits rate limiting,
+> observability, caching, CI/CD, secrets, and deployment. Report *feature/
+> pattern parity*, then delegate hardening to `audit-security`,
+> `plan-security-audit`, `plan-perf-audit`, `plan-rls-audit`, and
+> `full-stack-ship-discipline`.
 
-This is a **read-only** audit. It produces findings and a prioritized gap
-report; it does not change code. Remediation is handed to the skills named per
-finding.
+## How to reason — Observe → Interpret → Classify → Severity
+
+1. **Observe** — quote the spec contract (or pattern) and the repo's `file:line` (or suite result)
+2. **Interpret** — does this layer implement the contract, or only the UI/route?
+3. **Classify** — Implemented / Partial / Missing / Diverges — or Bow-out if the repo is not a web CRUD+auth app
+4. **Severity** — core Conduit / authz / list-contract gaps = High; production-omitted concerns are routed, not scored as RealWorld misses
+
+## Worked example
+
+> **Observe:** Conformance mode. `GET /api/articles` returns `{ articles }`
+> with no `articlesCount` and no `limit`/`offset` (`app/api/articles/route.ts`).
+> Bruno list request fails the count assertion. Auth header is `Token <jwt>`.
+> **Interpret:** the list contract is partial; clients cannot paginate. Auth
+> scheme matches the spec.
+> **Classify:** Partial (pagination / `articlesCount`); auth Implemented.
+> **Severity:** High — feed is a core Conduit surface.
+> **Finding:** Article list | no pagination / articlesCount | High | complete-everything
 
 ---
 
-## Phase 0 — Detect the stack and gate applicability
+## Phase 0 — Detect the stack and gate applicability  [HIGH freedom]
 
 Read the dependency manifest and source before comparing anything (reuse the
 `audit-fe-api` detection approach).
@@ -72,7 +91,7 @@ RealWorld reference chosen: <stack impl> (spec-compliant? maintained?)
 
 ---
 
-## Phase 1 — Pull the reference (current)
+## Phase 1 — Pull the reference (current)  [HIGH freedom]
 
 ### 1a. Spec + test suite (source of truth)
 
@@ -100,7 +119,7 @@ the versions actually installed in the repo.
 
 ---
 
-## Phase 2 — Parity / pattern matrix
+## Phase 2 — Parity / pattern matrix  [HIGH freedom]
 
 ### Conformance mode — audit against the RealWorld contract
 
@@ -152,7 +171,7 @@ relevant patterns* RealWorld demonstrates, for its own resources:
 
 ---
 
-## Phase 3 — Full-stack coverage sweep
+## Phase 3 — Full-stack coverage sweep  [HIGH freedom]
 
 Audit all three layers, not just whichever is easiest to read:
 
@@ -171,7 +190,7 @@ Audit all three layers, not just whichever is easiest to read:
 
 ---
 
-## Phase 4 — Live conformance test (optional but decisive)
+## Phase 4 — Live conformance test (optional but decisive)  [LOW freedom — run exactly]
 
 If a server is running or the E2E suite is present, run the objective proof:
 
@@ -186,7 +205,7 @@ run artifacts under `.playwright-mcp/` if using playwright-cli.
 
 ---
 
-## Phase 5 — Production layering (the honest part)
+## Phase 5 — Production layering (the honest part)  [HIGH freedom]
 
 RealWorld parity is necessary breadth, not sufficient depth. Enumerate what
 RealWorld does **not** cover and route each to the right skill — do not imply
@@ -203,7 +222,7 @@ parity means production-ready:
 
 ---
 
-## Phase 6 — Report (read-only)
+## Phase 6 — Report (read-only)  [HIGH freedom]
 
 ```markdown
 ## RealWorld Full-Stack Audit — [repo] — [date]
@@ -244,6 +263,15 @@ inventing conformance without running or precisely describing the contract test;
 silently skipping a layer (FE, BE, or DB).
 
 ---
+
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **Evidenced** — `file:line` or suite pass/fail, not "looks like Conduit"
+2. **Mode honest** — Bow-out if no HTTP API + auth + owned resources; do not force a comparison
+3. **Suite honesty** — ran N/M or stated exactly how to run; never invent conformance
+4. **All three layers** — FE, BE, and data; skipping one is a failed audit
+5. **Not production-ready** — RealWorld parity is never a security / perf / RLS pass
+6. **Nothing changed** until approved
 
 ## Related
 

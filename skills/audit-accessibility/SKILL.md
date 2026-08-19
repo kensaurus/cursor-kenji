@@ -10,21 +10,32 @@ license: MIT
 
 # Accessibility Audit
 
-Automated WCAG 2.2 accessibility audit: axe-core scanning, keyboard navigation testing,
-color contrast verification, ARIA compliance, and assistive technology error analysis.
-Works with **any project** — auto-detects pages from the codebase route structure.
+**Degree of freedom: MIXED** — Phases 0–1, 5 `[HIGH freedom]`; Phases 2–3
+playwright/axe/Tab sequences `[LOW freedom — run exactly]`. Read
+`protocol-browser-anti-stall` before any browser step.
 
-## Critical Rules
+## How to reason
 
-> **Always use the `protocol-browser-anti-stall` protocol** when using playwright-cli.
+1. **Observe** — quote axe rule+selector, heading list, or Tab snapshot
+2. **Interpret** — can a keyboard or AT user complete the task?
+3. **Classify** — WCAG fail / axe-false-positive / manual-only / correct-as-is
+4. **Severity** — Level A = P0; Level AA = P1; best-practice = P2
 
-> **Test every publicly reachable page.** Accessibility bugs on obscure pages still affect real users.
+## Worked example
 
-> **Keyboard-only testing is non-negotiable.** If a feature cannot be operated without a mouse, it fails WCAG 2.1.1 regardless of what axe-core says.
+> **Observe:** axe `label` on `/signup`; `<input name="email">` has no `id`/`aria-label`.
+> **Interpret:** AT users cannot tell what to type (1.3.1 / 4.1.2).
+> **Classify:** WCAG fail (not an axe false positive).
+> **Severity:** P0 — Level A, blocks signup.
+> **Finding:** `/signup` | 1.3.1+4.1.2 | P0 | unlabeled email | `<label for>`.
 
-> **Automated tools catch ~30-40% of a11y issues.** Always supplement axe-core with manual checks (heading order, focus management, meaningful link text, reading order).
+## Self-critique before reporting  [LOW freedom — do not skip]
 
-> **Use concrete WCAG success criteria IDs.** "Color contrast is bad" is not actionable. "Fails WCAG 2.2 SC 1.4.3 (Contrast Minimum) — foreground #777 on background #fff = 4.48:1, needs 4.5:1" is.
+1. **WCAG SC + numbers** — not "contrast is bad"; quote ratio or selector
+2. **Keyboard, not axe-only** — 2.1.1 fails even if axe is clean
+3. **Every reachable page** — obscure routes still count
+4. **Severity justified** — Level A = P0
+5. **Axe is ~30–40%** — heading/focus/link-text/reading-order always manual
 
 ---
 
@@ -52,8 +63,6 @@ If no production URL, default to `http://localhost:3000` (or detected dev server
 Grep(pattern: "tailwindcss|@chakra-ui|@mui|@radix-ui|shadcn|bootstrap|bulma", glob: "package.json")
 ```
 
-This matters because each framework has different a11y defaults (e.g., Radix primitives are accessible by default, custom components may not be).
-
 ### 0d. Detect Existing a11y Tooling
 
 ```
@@ -61,13 +70,7 @@ Grep(pattern: "axe-core|@axe-core|eslint-plugin-jsx-a11y|pa11y|lighthouse|@testi
 Grep(pattern: "aria-|role=|tabIndex|sr-only|visually-hidden", glob: "*.{tsx,jsx,vue,svelte}", output_mode: "count")
 ```
 
-Record:
-- `APP_URL` — base URL for testing
-- `PAGES` — list of routes to audit
-- `CSS_FRAMEWORK` — Tailwind, MUI, Chakra, etc.
-- `COMPONENT_LIB` — Radix, shadcn, MUI, Headless UI, etc.
-- `EXISTING_A11Y_TOOLS` — what's already in place
-- `ARIA_USAGE_COUNT` — rough indicator of a11y awareness in the codebase
+Record: `APP_URL`, `PAGES`, `CSS_FRAMEWORK`, `COMPONENT_LIB`, `EXISTING_A11Y_TOOLS`, `ARIA_USAGE_COUNT`.
 
 ---
 
@@ -99,7 +102,7 @@ firecrawl:firecrawl_search
 }
 ```
 
-Scrape the 2-3 most authoritative results:
+Scrape 2–3 authoritative results:
 
 ```json
 firecrawl:firecrawl_scrape
@@ -111,8 +114,6 @@ firecrawl:firecrawl_scrape
 ```
 
 ### 1b. Framework-Specific a11y Docs (Context7)
-
-If the project uses a component library, fetch its accessibility documentation:
 
 ```json
 context7:resolve-library-id
@@ -160,8 +161,6 @@ For each violation returned, record:
 - **Count** of affected nodes
 
 ### 2c. Check Specific WCAG Categories Manually
-
-axe-core cannot catch everything. For each page, also check:
 
 **Heading Hierarchy (WCAG 1.3.1):**
 
@@ -298,7 +297,7 @@ sentry:search_issues
 
 ### 4c. Browser/Device Breakdown
 
-Check if errors disproportionately affect specific browsers or devices that assistive technology users favor:
+If errors cluster on AT-favored browsers:
 
 ```json
 sentry:get_issue_tag_values
@@ -312,8 +311,6 @@ sentry:get_issue_tag_values
 ---
 
 ## Phase 5: Static Code Analysis
-
-Supplement runtime testing with static analysis of the source code.
 
 ### 5a. Missing ARIA Attributes
 
@@ -329,7 +326,7 @@ Flag `div` or `span` elements with click handlers but no `role` or `tabIndex` �
 SemanticSearch(query: "Where are custom interactive components defined (dropdowns, modals, tabs, accordions) that don't use a component library?", target_directories: [])
 ```
 
-Custom components are the highest risk for a11y issues. Check each for:
+Check each custom interactive for:
 - Proper ARIA roles (`role="dialog"`, `role="tabpanel"`, etc.)
 - Keyboard event handlers (`onKeyDown`)
 - Focus management (`useRef` + `.focus()`)

@@ -188,6 +188,7 @@ Attribution and update policy → [THIRD-PARTY-SKILLS.md](./THIRD-PARTY-SKILLS.m
 |:-----------------|:------|
 | "build an MCP server", "integrate external API into Cursor" | `meta-mcp-builder` |
 | "create a skill", "write a SKILL.md", "how do I make a skill" | `meta-skill-creator` |
+| "enhance this skill's prompts", "upgrade skill authoring", "apply the prompt playbook" | `enhance-skill-prompts` |
 | "audit my skills", "conflicting skills", "wrong skill triggered", "which skills overlap" | `audit-skill-conflicts` |
 
 ---

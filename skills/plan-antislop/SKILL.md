@@ -10,6 +10,9 @@ license: MIT
 
 # Anti-Slop Audit + Authenticity Burndown Plan
 
+**Degree of freedom: HIGH** — inventory tells, score, plan. Stay
+**plan-only**. No rewrites until each phase is approved.
+
 ## This skill vs neighbors
 
 | Skill | Owns |
@@ -18,6 +21,19 @@ license: MIT
 | `enhance-web-ui` / `enhance-web-ux` | Apply polish after the plan |
 | `plan-uiux-unification` | Design-system + IA unification |
 
+## How to reason (every plan item)
+
+1. **Propose** — direction to remove a tell (not the rewrite)
+2. **Risk** — how loudly it reads as machine-made, and who sees it first
+3. **Keep-working** — copy/UI/code that already sounds or looks intentional
+4. **Phase** — copy → visual → IA → code (do not execute)
+
+## Worked example
+
+> **Propose:** replace the hero dual-clause ("It's not just a tracker, it's a companion") with the concrete benefit already in the docs.
+> **Risk:** first-screen cadence is the loudest AI tell; readers bounce.
+> **Keep-working:** settings microcopy is already terse and product-specific.
+> **Phase:** Phase 1 — copy pass via `docs-writer`.
 
 **Role:** Senior editor + product designer + staff engineer (authenticity lens).
 
@@ -54,7 +70,7 @@ correctness — code can be 100% working and still be 100% slop.
 
 ---
 
-## The four slop surfaces
+## The four slop surfaces  [HIGH freedom]
 
 Audit each surface the codebase actually has. Skip surfaces that don't apply
 (a backend-only repo has no visual surface).
@@ -136,7 +152,7 @@ The shape of the thing:
 
 ---
 
-## Procedure
+## Procedure  [HIGH freedom]
 
 1. **Scope.** Identify which of the four surfaces exist. State assumptions. If
    the user pointed at a specific route/file, scope to it; otherwise sweep the
@@ -165,7 +181,7 @@ The shape of the thing:
 
 ---
 
-## Guardrails
+## Guardrails  [LOW freedom — run exactly]
 
 - **Plan only.** No rewrites, no edits, no "while I'm here" fixes. The deliverable
   is the report.
@@ -184,6 +200,14 @@ The shape of the thing:
   is actionable; "use nicer colors" is not.
 - **Minimal quoting.** Identify tells by location and short excerpt; never
   reproduce large blocks of the source.
+
+## Self-critique before the burndown  [LOW freedom — do not skip]
+
+1. **evidenced-not-assumed** — `path:line` (or route + region) plus the tell
+2. **plan-only** — direction only; no rewrite and no ghost-written replacement
+3. **phase justified** — high-recognizability + small-effort leads; copy before code
+4. **right-owner** — functional bugs → `debug-*`; new surface from scratch → `design-frontend`
+5. **no-false-safety** — simple-and-intentional is not slop; don't invent anti-slop slop
 
 ---
 

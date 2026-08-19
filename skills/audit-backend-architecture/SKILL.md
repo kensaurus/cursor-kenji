@@ -10,52 +10,65 @@ license: MIT
 
 # audit-backend-architecture — Distributed-Systems Pattern Maturity Audit
 
-Agents ship the happy-path CRUD and call it done. What decides whether a backend survives scale is
-the **architecture**: is there one place that enforces auth/rate-limit/CORS, or is it copy-pasted per
-route? Does a payment write and its event commit atomically, or can one succeed while the other fails
-(the dual-write problem)? Does a slow dependency trip a breaker and stay in its own resource pool, or
-does it exhaust the shared thread/connection pool and take everything down?
+**Degree of freedom: MIXED** — Fit, presence, and adopt/defer `[HIGH freedom]`;
+Phase 0 topology probes `[LOW freedom — run exactly]`. Never mark a
+pattern Missing if its tier is N/A.
 
-This skill works in two lenses:
+Read-only. Assess and recommend; do not change code. Per-call timeouts,
+retry+jitter, idempotency keys, cancellation → **`audit-resilience`**. This
+skill checks whether the *patterns* exist and whether they *fit*.
 
-1. **Conformance** (Phase 2) — which patterns are present, marked **Implemented / Partial / Missing /
-   N/A** with `file:line`.
-2. **Fit / decision** (Phase 3) — for each pattern, **Adopt now / Adopt when [trigger] / Defer
-   (premature)** given the codebase's actual stage and pains. The most valuable output is often
-   *"don't build this yet"* — the audit is as much a guard against over-engineering as a gap report.
+Two lenses:
 
-> **Read-only.** This skill assesses and recommends; it does not change code. For the *runtime*
-> resilience knobs on individual calls (per-call timeouts, retry backoff+jitter, idempotency keys,
-> cancellation), defer to **`audit-resilience`** — this skill checks whether the *patterns* exist and
-> whether they *fit*, not per-call tuning, and explicitly avoids duplicating it.
+1. **Conformance** (Phase 2) — Implemented / Partial / Missing / N/A with `file:line`.
+2. **Fit / decision** (Phase 3) — Adopt now / Adopt when [trigger] / Defer
+   (premature). *"Don't build this yet"* is a first-class finding.
 
 ---
 
 ## Core principle — start simple, earn every pattern
 
-Each pattern solves a *specific* problem and carries a *specific* cost. The 2026 consensus is
-**modular-monolith-first**: >90% of systems are well served by a well-structured monolith, and
-**premature decomposition is the #1 failure mode**. A pattern is only "Missing" if the codebase has
-the **measurable trigger** that justifies it — otherwise adopting it is *over-engineering*, which this
-audit flags just as loudly as a real gap.
+Each pattern solves a *specific* problem and carries a *specific* cost. The 2026
+consensus is **modular-monolith-first**: >90% of systems are well served by a
+well-structured monolith; **premature decomposition is the #1 failure mode**. A
+pattern is "Missing" only if the **measurable trigger** is present — otherwise
+adopting it is over-engineering, flagged as loudly as a real gap.
 
 - **Fit beats presence.** "No service mesh / no CQRS" is a finding *only* when a trigger is present.
-  Never recommend a pattern the stage doesn't warrant.
-- **Decide per interaction, not per system.** Sync vs. event-driven is chosen for *each* call that
-  crosses a boundary, not adopted wholesale (see references/patterns.md → Communication style).
-- **Distributed monolith is worse than a monolith.** Services that share a database and must deploy
-  together pay the distributed tax with none of the independence — call it out explicitly.
-- **Reversible steps.** Prefer changes that keep boundaries adjustable (modular monolith, façade,
-  outbox) over irreversible bets (premature service split, event-sourcing everywhere).
+- **Decide per interaction, not per system.** Sync vs event-driven is chosen per
+  boundary-crossing call (see references/patterns.md → Communication style).
+- **Distributed monolith is worse than a monolith.** Shared DB + coupled deploys
+  pays the distributed tax with none of the independence.
+- **Reversible steps.** Prefer modular monolith, façade, outbox over premature
+  service split or event-sourcing everywhere.
+
+## How to reason — Observe → Interpret → Classify → Severity
+
+1. **Observe** — topology signals + the `file:line` (or "searched, none found")
+2. **Interpret** — is there a present pain, a named future trigger, or no trigger?
+3. **Classify** — Implemented / Partial / Missing / N/A, then Adopt now / Adopt when / Defer
+4. **Severity** — dual-write, cascade-outage, silent inconsistency = Critical; Missing with no trigger = over-engineering, not a gap
+
+## Worked example
+
+> **Observe:** T1 Next.js + Supabase. `orders/service.ts` writes the row then
+> publishes to a queue in a second step. Product page hits the DB on every
+> request. No k8s, mesh, or multi-service fleet.
+> **Interpret:** a crash between write and publish loses the fulfillment event
+> (dual-write). Hot reads have no cache. Mesh and CQRS have no trigger.
+> **Classify:** Outbox = Adopt now; cache-aside = Adopt now; mesh / CQRS = Defer (T1 N/A).
+> **Severity:** Critical for dual-write; High for the uncached hot path.
+> **Finding:** Outbox (#6) | orders/service.ts | Critical | Adopt now — close
+> dual-write. Mesh | N/A (T1) | Defer — no 10+ service fleet.
 
 ---
 
-## Phase 0 — Detect topology (gates every later finding)
+## Phase 0 — Detect topology (gates every later finding)  [LOW freedom — run exactly]
 
-Architecture advice is only correct in context. Flagging "no service mesh" on a Next.js + Supabase
-app is noise; missing it on a 40-service Kubernetes fleet is critical. **Classify the repo first**,
-then apply only the patterns that fit. Never report a pattern as "Missing" if its topology tier is
-`N/A`.
+Architecture advice is only correct in context. Flagging "no service mesh" on a
+Next.js + Supabase app is noise; missing it on a 40-service Kubernetes fleet is
+critical. **Classify the repo first**, then apply only the patterns that fit.
+Never report a pattern as "Missing" if its topology tier is `N/A`.
 
 ```bash
 # Deploy target / runtime
@@ -85,7 +98,7 @@ applicability — hand any API-client concerns to `audit-fe-api`.
 
 ---
 
-## Phase 1 — Research current patterns
+## Phase 1 — Research current patterns  [HIGH freedom]
 
 Follow `/research`: confirm current-year conventions and the *installed* libraries for the detected
 stack (gateway/proxy, breaker/bulkhead libs, outbox/CDC tooling, saga/workflow engines, mesh mode).
@@ -94,7 +107,7 @@ run.
 
 ---
 
-## Phase 2 — Architecture maturity matrix
+## Phase 2 — Architecture maturity matrix  [HIGH freedom]
 
 For **each in-scope pattern**, mark `Implemented / Partial / Missing / N/A` with `file:line`, a
 one-line "why it matters", and the fix-delegate. **Detailed detection commands, "good vs. red-flag"
@@ -138,7 +151,7 @@ Rules:
 
 ---
 
-## Phase 3 — Decide: fit, not just presence
+## Phase 3 — Decide: fit, not just presence  [HIGH freedom]
 
 A pattern being "Missing" is only actionable if the codebase has the **trigger** that justifies it.
 For every candidate pattern, classify it into one of three buckets from the detected symptoms:
@@ -178,7 +191,7 @@ For every candidate pattern, classify it into one of three buckets from the dete
 
 ---
 
-## Phase 4 — Prioritized report + decision (read-only)
+## Phase 4 — Prioritized report + decision (read-only)  [HIGH freedom]
 
 ```markdown
 ## Backend Architecture Audit — [repo] — [date]
@@ -230,6 +243,14 @@ its trigger** (fit before presence — a "Missing" with no trigger is over-engin
 recommending a service split that yields a **distributed monolith** (shared DB + coupled deploys).
 
 ---
+
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **Evidenced** — `file:line` or "searched, none found", not "they probably need a mesh"
+2. **Tier respected** — T3-only rows are N/A on T1, with why
+3. **Trigger named** — every Adopt now / Adopt when / Defer cites a symptom or its absence
+4. **Right owner** — per-call timeout/retry → `audit-resilience`; mechanical layer rules → `enhance-arch-boundaries`
+5. **Nothing changed** until approved
 
 ## Related
 

@@ -28,7 +28,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (136)
+## Skills (137)
 
 ### Enhance
 
@@ -111,6 +111,11 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Triggers:** "enforce module boundaries", "stop spaghetti imports", "agents keep importing across features", "add architecture rules", "dependency-cruiser", "/arch-boundaries"
 **What it does:** Converts intended architecture into CI-enforced fitness functions (dependency-cruiser / eslint-boundaries): layer direction, feature isolation via public surfaces, no cycles, forbidden edges (client → server-only / service-role). Recovers the model from the repo and confirms it — does not invent one. Grandfathers existing violations into a shrink-only baseline. Wires into the `housekeep-gates` aggregator. Records the model via `docs-adr`. `audit-backend-architecture` advises; this enforces.
 **Related:** `audit-backend-architecture`, `housekeep-gates`, `docs-adr`, `enhance-agent-guardrails`, `plan-rls-audit`, `plan-secrets-audit`
+
+#### `enhance-skill-prompts`
+**Triggers:** "enhance this skill's prompts", "upgrade skill authoring", "apply the prompt playbook", "degrees of freedom", "worked example", T1–T6
+**What it does:** Upgrades *how* an existing SKILL.md instructs (degrees of freedom, structured CoT, one worked example, self-critique rubric, term consistency) without changing *what* the skill does. Routing/frontmatter stay put. New skill from scratch → `meta-skill-creator`. Playbook: [PROMPT-ENHANCEMENT-PLAYBOOK.md](PROMPT-ENHANCEMENT-PLAYBOOK.md).
+**Related:** `meta-skill-creator`, `audit-skill-conflicts`
 
 ---
 
@@ -729,8 +734,8 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 
 #### `meta-skill-creator` *(Apache-2.0, adapted from Anthropic)*
 **Triggers:** "create skill", "SKILL.md format", "skill structure", "skill best practices"
-**What it does:** Guide for creating effective AI agent skills with proper frontmatter, descriptions, progressive disclosure structure, and concise body.
-**Related:** `audit-skill-conflicts`, `meta-mcp-builder`
+**What it does:** Guide for creating effective AI agent skills with proper frontmatter, descriptions, progressive disclosure structure, and concise body. New skills inherit T1–T6 (see [PROMPT-ENHANCEMENT-PLAYBOOK.md](PROMPT-ENHANCEMENT-PLAYBOOK.md)).
+**Related:** `audit-skill-conflicts`, `enhance-skill-prompts`, `meta-mcp-builder`
 
 #### `audit-skill-conflicts`
 **Triggers:** "audit my skills", "conflicting skills", "wrong skill triggered", "which skills overlap"

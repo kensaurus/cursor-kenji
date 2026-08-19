@@ -10,6 +10,9 @@ license: MIT
 
 # audit-resilience — The "80% Problem" Non-Functional Audit
 
+**Degree of freedom: MIXED** — Phases 1 and 4 `[HIGH freedom]`; Phase 0/2
+surface greps `[LOW freedom — run exactly]`.
+
 Agents nail the happy path (CRUD, passing tests) and silently skip what decides whether code
 survives real traffic: a webhook with no idempotency key double-charges; a fetch with no
 timeout hangs the request; a retry storm with no backoff takes down the dependency; PII lands
@@ -18,9 +21,24 @@ in plaintext logs. This audit finds those gaps before production does.
 > **Read-only.** This skill inventories resilience gaps and hands each to the right fix skill.
 > It does not change code.
 
----
+## How to reason
 
-## Phase 0 — Detect the surfaces
+1. **Observe** — quote the call/mutation and whether timeout, retry+jitter, or idempotency key exists
+2. **Interpret** — hang, retry storm, double-write, or silent catch?
+3. **Classify** — Implemented / Partial / Missing (per matrix row)
+4. **Severity** — payment/webhook without idempotency, or no timeout on a live path = Critical
+
+## Worked example
+
+> **Observe:** `POST /api/webhooks/stripe` inserts a payment with no
+> `Idempotency-Key` / dedupe (`app/api/webhooks/stripe/route.ts:44`);
+> `fetch` to Stripe has no `signal` / timeout.
+> **Interpret:** Stripe retry double-charges; a hung fetch exhausts the pool.
+> **Classify:** idempotency Missing; timeout Missing.
+> **Severity:** Critical.
+> **Finding:** webhook | no idempotency + no timeout | Critical | `backend-patterns`
+
+## Phase 0 — Detect the surfaces  [LOW freedom — run exactly]
 
 ```bash
 # Outbound calls + clients
@@ -39,7 +57,7 @@ library), note reduced applicability.
 
 ---
 
-## Phase 1 — Research current patterns
+## Phase 1 — Research current patterns  [HIGH freedom]
 
 Follow `/research`: current-year resilience patterns for the detected stack (retry/backoff
 libraries, circuit-breaker options, idempotency-key conventions, the platform's rate-limit
@@ -47,7 +65,7 @@ primitives). Anchor to installed versions.
 
 ---
 
-## Phase 2 — Resilience matrix (per external call / mutation / endpoint)
+## Phase 2 — Resilience matrix (per external call / mutation / endpoint)  [HIGH freedom; greps LOW]
 
 For each surface, mark **Implemented / Partial / Missing** with `file:line`:
 
@@ -72,7 +90,7 @@ rg -n "catch\s*\([^)]*\)\s*\{\s*\}" -g "*.{ts,tsx,js}"                        # 
 
 ---
 
-## Phase 3 — Observability & sensitive-data handling
+## Phase 3 — Observability & sensitive-data handling  [HIGH freedom; PII grep LOW]
 
 | Concern | What to check |
 |---|---|
@@ -87,7 +105,7 @@ rg -n "password|token|secret|email|ssn|card|cvv" -g "*.{ts,tsx,js,py}" | rg -n "
 
 ---
 
-## Phase 4 — Prioritized report (read-only)
+## Phase 4 — Prioritized report (read-only)  [HIGH freedom]
 
 ```markdown
 ## Resilience Audit — [repo] — [date]
@@ -114,7 +132,13 @@ rg -n "password|token|secret|email|ssn|card|cvv" -g "*.{ts,tsx,js,py}" | rg -n "
 **Forbidden:** claiming production-readiness from passing tests alone; treating an empty
 `catch` as handled; skipping the payment/webhook idempotency check.
 
----
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **Evidenced** — `file:line` on the call, not "probably has a timeout"
+2. **Reproducible** — the Phase 0/2 grep still hits that surface
+3. **Severity justified** — Critical = double-charge / data-loss / pool-exhaust
+4. **Right owner** — implement via `backend-patterns` / `backend-error-handling`; LLM quota → `plan-llm-cost-guardrails`
+5. **No-false-safety** — passing tests ≠ production-ready; empty `catch` ≠ handled
 
 ## Related
 

@@ -10,6 +10,9 @@ license: MIT
 
 # audit-env-parity — Environments that agree
 
+**Degree of freedom: MIXED** — Phases 0–1 `[HIGH freedom]`; Phase 2
+three-way name diff `[LOW freedom — names only, never values]`.
+
 Read-only. Find where environments disagree in ways that cause "works on my
 machine", silent prod misbehavior, or leaked secrets.
 
@@ -33,9 +36,26 @@ Do **not** fire for "did I commit a key" → `plan-secrets-audit`.
 Do **not** fire for "prove this laptop can run the suite" →
 `workflow-environment-ready`.
 
+## How to reason
+
+1. **Observe** — quote the `process.env` / `import.meta.env` read and whether the name exists in each env
+2. **Interpret** — which runtime path breaks if that name is missing or public-prefixed?
+3. **Classify** — referenced-but-unset / naming drift / secret reuse / hardcoded / dead
+4. **Severity** — prod-missing or public-prefix secret = P0 / Critical
+
+## Worked example
+
+> **Observe:** `process.env.STRIPE_WEBHOOK_SECRET` used in
+> `app/api/stripe/route.ts`; name absent from Vercel prod; present locally.
+> **Interpret:** deploy is green; webhook verify fails only in prod.
+> **Classify:** referenced-but-unset (prod).
+> **Severity:** P0.
+> **Finding:** `STRIPE_WEBHOOK_SECRET` | prod absent | P0 | set the name;
+> never print the value
+
 ---
 
-## Phase 0 — Enumerate environments and sources
+## Phase 0 — Enumerate environments and sources  [HIGH freedom]
 
 - Envs: local, preview/staging, prod
 - Sources: `.env*`, `.env.example`, Vercel/Supabase/Fly dashboards, CI secrets,
@@ -44,7 +64,7 @@ Do **not** fire for "prove this laptop can run the suite" →
 
 ---
 
-## Phase 1 — Parity and correctness
+## Phase 1 — Parity and correctness  [HIGH freedom]
 
 **Referenced-but-unset** — Code reads it; an env that runs that path lacks it.
 P0 if prod-missing. Diff `.env.example` against real usage.
@@ -68,7 +88,7 @@ Prod secrets reachable from a dev context.
 
 ---
 
-## Phase 2 — Three-way gap
+## Phase 2 — Three-way gap  [LOW freedom — names only]
 
 Diff names only (never values) between code-demands × local-has × prod-has.
 A name present in all three with unknown value mismatch is still a manual
@@ -87,6 +107,14 @@ review flag.
 - [ ] Cross-env secret reuse + staging→prod services checked
 - [ ] Three-way gap produced with **no secret values**
 - [ ] Nothing changed without approval
+
+## Self-critique before reporting  [LOW freedom — do not skip]
+
+1. **No secret values** — names and present/absent only
+2. **Evidenced** — code read + env-has, not "probably set on Vercel"
+3. **Severity justified** — P0 = prod-missing on a live path
+4. **Right owner** — committed key → `plan-secrets-audit`; staging→prod data → `plan-data-integrity`
+5. **Nothing changed** until approved
 
 ## Output format
 
