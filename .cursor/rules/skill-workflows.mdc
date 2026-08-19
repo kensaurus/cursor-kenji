@@ -69,6 +69,7 @@ with `/goal`.
 | Env/config parity across deploys | `audit-env-parity` |
 | Mobile IAP / subscriptions | `audit-monetization-iap` |
 | Static security review (OWASP; may fix) | `audit-security` |
+| App-layer auth flows (route×gate, getSession, middleware-as-only-gate) | `audit-auth-flows` |
 | CI/CD cost, speed & safety (GitHub Actions bill) | `audit-cicd` |
 | CI gate *logic* (silent bypass, ratchet gaming, required-but-not, archaeology) | `audit-gate-logic` |
 | Codemod / bulk-transform behavior-preservation | `audit-codemod-safety` |
