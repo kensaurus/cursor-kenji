@@ -6,6 +6,17 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.25.0] — 2026-08-20
+
+### Added
+
+- **`housekeep-backlog`** (`/housekeep-backlog`) — apply-now inventory of
+  parked work (unfinished plans, deferred phases, TODO/FIXME, skipped
+  tests, open audit findings) into a living `BACKLOG.md` that regenerates
+  and diffs (new / done / stale). Collector that feeds
+  `complete-everything` / `burndown-full`. The `docs-adr` pattern applied
+  to parked work.
+
 ## [1.24.0] — 2026-08-19
 
 ### Added

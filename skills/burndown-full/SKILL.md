@@ -24,6 +24,9 @@ The countermeasures below are drawn from how robust coding agents (Claude Code's
 
 Internalize this loop: **enumerate → batch-execute → persist progress → verify from scratch → if anything remains, loop.** Never exit the loop on a feeling of completion.
 
+Repo-wide parked-work inventory (every plan, TODO, skip, open finding) is
+`housekeep-backlog`. This skill burns down **one** mechanical change.
+
 ---
 
 ## Phase 0 — Recover and pin down the change

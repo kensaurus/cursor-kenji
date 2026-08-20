@@ -1,7 +1,7 @@
 {
   "name": "@kensaurus/cursor-kenji",
-  "version": "1.24.0",
-  "description": "137 Cursor AI agent skills, 50 slash commands, 6 subagents, and MCP configs for React/Next.js/Supabase development.",
+  "version": "1.25.0",
+  "description": "138 Cursor AI agent skills, 51 slash commands, 6 subagents, and MCP configs for React/Next.js/Supabase development.",
   "type": "module",
   "bin": {
     "cursor-kenji": "bin/cursor-kenji.js"

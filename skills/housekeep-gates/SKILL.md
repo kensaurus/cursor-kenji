@@ -37,6 +37,7 @@ This is the execution arm of `audit-gate-logic`, the same way
 | `workflow-quality-gate` | *Runs* the pre-release sweep |
 | `enhance-agent-guardrails` | *Installs* new guard classes, not accreted-gate cleanup |
 | `workflow-green-repo` | Make the repo green — does not redesign the gate graph |
+| `housekeep-backlog` | Parked-work register — not CI gates |
 
 ## How to reason
 

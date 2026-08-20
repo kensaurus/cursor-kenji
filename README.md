@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Ready-made playbooks for your AI coding editor.</strong><br/>
-  137 agent skills · 50 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
+  138 agent skills · 51 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
   <em>You talk in plain English. The matching expert recipe runs itself.</em>
 </p>
 
@@ -29,7 +29,7 @@ Your AI editor is smart, but without a recipe it **guesses**. Sometimes that gue
 
 You do **not** need to memorize skill names. Talking like a human is enough.
 
-It ships **137 Cursor agent skills**, 50 slash commands, and 6 subagents — tuned for React / Next.js / Supabase, useful on almost any stack. Works in [Cursor](https://cursor.com), [Claude Code](https://www.anthropic.com/claude-code), and (with a lighter install) Codex + Gemini CLI. Brand new? Read the **[plain-language guide →](docs/GETTING-STARTED.md)**.
+It ships **138 Cursor agent skills**, 51 slash commands, and 6 subagents — tuned for React / Next.js / Supabase, useful on almost any stack. Works in [Cursor](https://cursor.com), [Claude Code](https://www.anthropic.com/claude-code), and (with a lighter install) Codex + Gemini CLI. Brand new? Read the **[plain-language guide →](docs/GETTING-STARTED.md)**.
 
 ### Install (30 seconds)
 
@@ -92,7 +92,7 @@ Full menu with every skill name → **[Every skill](#every-skill-in-plain-englis
 | **Rule** | A house rule the AI always obeys | Drop a `.mdc` into your project |
 | **MCP server** | A phone line to your database / GitHub / browser | Copy a template + paste your keys |
 
-Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **149** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
+Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **150** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
 
 ### How the recipes fit together (the loop)
 
@@ -129,9 +129,9 @@ The whole kit, at a glance:
 
 | | Count | What it does |
 |:--|------:|:-------------|
-| **Skills** | 137 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
+| **Skills** | 138 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
 | **Cursor Skills** | 12 | IDE tools (canvas, hooks, rules, PR splitter) |
-| **Commands** | 50 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
+| **Commands** | 51 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
 | **Subagents** | 6 | Background helpers (code-reviewer, debugger, db-migrator…) |
 | **Completion hook** | 1 | Opt-in stop gate: continues only unfinished durable closure state |
 | **MCP Servers** | 16 | Supabase · GitHub · Sentry · Playwright · AWS · Slack |
@@ -149,7 +149,7 @@ Scroll the **family counts**, then the **full list**. You don't memorize names �
 
 <!-- SKILL-INDEX:START -->
 
-_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **149 skills** listed below._
+_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **150 skills** listed below._
 
 #### Skill families at a glance
 
@@ -163,7 +163,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | 📱 Mobile — React Native / Capacitor | **5** | RN screens, emulators, Capacitor, App Store prep |
 | 📊 Data — charts & pipelines | **2** | Charts, dashboards, ETL / cron jobs |
 | 📚 Docs — write it down clearly | **3** | READMEs, PRDs, RFCs with a reader-first voice |
-| 🧹 Housekeeping — clean up design drift | **2** | Merge a drifted design system into one source of truth |
+| 🧹 Housekeeping — clean up drift | **3** | Merge a drifted design system into one source of truth |
 | 🔗 Workflows — multi-step recipes | **18** | End-to-end recipes (build, fix, ship, green the repo) |
 | ✅ Test & QA — prove it works | **8** | Unit, Playwright, visual regression, load, red-team |
 | 🚀 Deploy — ship & verify | **2** | npm release + post-deploy smoke tests |
@@ -174,7 +174,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | 🤝 Third-party (upstream-maintained) | **3** | Vendored upstream skills (Emil, UI/UX Pro Max, Vercel WIG) |
 | 🧩 Core & cross-cutting | **7** | Close everything, burndown, post-launch loops |
 | 🖱️ Cursor IDE skills | **12** | Canvas, hooks, rules, PR splitter, CLI helpers |
-| **Total** | **149** | |
+| **Total** | **150** | |
 
 #### Full list (every skill)
 
@@ -307,10 +307,11 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `docs-coauthor` | Co-author structured documents (specs, PRDs, RFCs) through a 3-stage workflow: context gathering, drafting, and reader testing |
 | `docs-writer` | Write clear, developer-friendly documentation — READMEs, API references, code comments, and changelog entries — tailored to the audience… |
 
-### 🧹 Housekeeping — clean up design drift (2)
+### 🧹 Housekeeping — clean up drift (3)
 
 | Skill | What it does |
 |:------|:-------------|
+| `housekeep-backlog` | Apply-now inventory of parked work — unfinished plans, deferred phases, TODO/FIXME, skipped tests, open findings — into a living BACKLOG.md… |
 | `housekeep-design` | Apply-now consolidation of a drifted design system into one token/component SSOT |
 | `housekeep-gates` | Apply-now consolidation of accreted CI gates, ratchets, and hooks into one aggregator required check |
 
@@ -673,7 +674,7 @@ Every skill has two labels: a **family** (its `<prefix>-<topic>` name) and a **l
 
 ---
 
-## Commands (50)
+## Commands (51)
 
 Commands are shortcuts for the things you do constantly. Type `/` in chat to see them all.
 
@@ -796,9 +797,9 @@ Where everything lives:
 
 ```
 cursor-kenji/
-├── skills/           # 137 Agent Skills (SKILL.md each)
+├── skills/           # 138 Agent Skills (SKILL.md each)
 ├── skills-cursor/    # 12 Cursor-specific skills
-├── commands/         # 50 slash commands
+├── commands/         # 51 slash commands
 ├── agents/           # 6 subagents
 ├── hooks/            # opt-in completion stop gate
 ├── rules/            # Global + project-starter rules
@@ -850,7 +851,7 @@ A box of ready-made recipes for your AI editor ([Agent Skills](https://agentskil
 `npx skills add kensaurus/cursor-kenji` (recommended) or `npx @kensaurus/cursor-kenji`. Restart Cursor after install.
 
 **How many skills?**  
-**137** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**149** total). Counts come from the filesystem and stay synced via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
+**138** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**150** total). Counts come from the filesystem and stay synced via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
 
 **How do skills trigger?**  
 You talk normally. Cursor matches your words to each skill's YAML `description`. To force one: *"use \`audit-security\` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).

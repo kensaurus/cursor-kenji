@@ -131,6 +131,7 @@ A guardrail you didn't test is a guardrail that doesn't work.
 - `housekeep-gates` — consolidate accreted duplicate gates; this skill does not delete sprawl
 - `test-mutation` — assertion-strength hook this skill can install the wording for
 - `docs-adr` — same-PR / handoff reminder that a decision needs a record
+- `housekeep-backlog` — same-PR reminder that newly parked work gets a `BL-` row
 - `audit-security` / `plan-security-audit` — the vulnerability depth the SAST gate can't fully cover
 - `plan-secrets-audit` — find + triage existing leaked secrets (and rotation plan)
 - `plan-dependency-provenance` — hallucinated/slopsquatted dependency audit
