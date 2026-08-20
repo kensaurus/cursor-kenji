@@ -69,6 +69,7 @@ These chain multiple skills into a single tracked loop:
 | `build a feature: user notifications` | Spec → TDD → implement → smoke test → PR — the whole loop |
 | `fix this Sentry error and ship it` | Triage → reproduce → fix → verify → PR → resolve issue |
 | `is this ready to ship?` | Adversarial test + security + bundle + perf → go/no-go verdict |
+| `prepare this for a PR` / `get my working tree merge-ready` | Review the dirty tree → commit → push → open PR → drive CI green (does not merge) |
 | `prepare the app for launch` | SEO + PWA + bundle + quality gate + deploy smoke → launch checklist |
 | `I'm new to this repo, orient me` | Reads the codebase and produces a 5-minute briefing |
 
@@ -129,7 +130,7 @@ These chain several skills. Paste the whole sentence.
 | `the agent keeps suggesting Y again` | ADR decision memory — rejected alternatives |
 | `did this codemod break anything?` | Bulk-transform behavior-preservation — compiles/lints is not same-behavior |
 | `audit our auth` / `is getSession safe?` | Route×gate matrix — middleware is not a security boundary |
-| `/privacy-plan` `/backup-plan` `/aso-plan` `/skill-conflicts` `/gate-logic` `/codemod-safety` `/housekeep-gates` `/housekeep-backlog` `/test-mutation` `/arch-boundaries` `/adr` `/auth-flows` `/research` | Slash shortcuts for those same jobs |
+| `/privacy-plan` `/backup-plan` `/aso-plan` `/skill-conflicts` `/gate-logic` `/codemod-safety` `/housekeep-gates` `/housekeep-backlog` `/test-mutation` `/arch-boundaries` `/adr` `/auth-flows` `/research` `/release-prep` | Slash shortcuts for those same jobs |
 
 Full phrase list → [TRIGGER-CHEATSHEET.md](TRIGGER-CHEATSHEET.md).
 

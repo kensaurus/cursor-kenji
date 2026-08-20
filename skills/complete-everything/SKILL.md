@@ -1,10 +1,11 @@
 ---
 name: complete-everything
 description: >
-  Close an approved plan with zero plan-related deferrals: implement every unfinished
-  item, absorb every connected out-of-scope/follow-up/nice-to-have item parked by prior
-  runs, fix. Use when a plan was marked done with work deferred, or the user says
-  "complete everything", "don't defer", "fix out of scope too", "finish.
+  Explicit closure mode for one approved plan: implement unfinished items
+  plus connected deferrals, verify every acceptance criterion, require
+  completion-judge PASS. Use when "complete everything", "don't defer",
+  "fix out of scope too", or a plan was falsely marked done. One
+  repo-wide pattern → burndown-full.
 ---
 
 # Complete Everything
@@ -257,5 +258,7 @@ unless the user asks to remove it.
   final gate used by this workflow.
 - `completion-judge` is the independent read-only verdict; the implementation
   agent cannot self-certify a wide closure run.
-- `workflow-pr` or `workflow-git-commit` may ship the result only when the user
-  requested commit, push, or PR actions.
+- `workflow-git-commit` may create the scoped commit only when requested;
+  it never pushes. `workflow-pr` may push/open/manage only when requested.
+  Whole dirty-tree preparation is `workflow-release-prep`, which stops
+  before merge.

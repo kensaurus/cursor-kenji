@@ -1,14 +1,17 @@
 ---
-description: "Smart pre-commit pipeline: lint, Sentry pre-check, build verify, auto-detect scope, conventional commit, push"
+description: "Create one conventional commit from an already-scoped change; never push"
 argument-hint: "[message]"
 ---
 
 # /commit
 
-> Smart pre-commit pipeline: lint, Sentry pre-check, build verify, auto-detect scope, conventional commit, push.
+> Create one conventional commit from an already-scoped change. Never push.
 
-This command is a thin entry point. The full playbook lives in the **`workflow-git-commit`** skill, which the agent loads automatically when this command is invoked or when commit-related intent is detected in chat.
+This command is a thin entry point. The full deliberate-staging and
+message-writing playbook lives in **`workflow-git-commit`**.
 
-Use `/commit` when you want to explicitly trigger the pipeline. Otherwise, just say "commit this" or "stage and commit" and the skill fires on its own.
+Use `/commit` when the files or hunks are already scoped and you need one
+commit. It does not widen staging, push, or open a PR.
 
-Related: `workflow-pr` for full PR lifecycle, `audit-code-review` for pre-merge review.
+Related: `workflow-release-prep` for a whole dirty tree through merge-ready
+PR; `workflow-pr` for an already-committed branch or open PR.

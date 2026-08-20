@@ -1,9 +1,10 @@
 ---
 name: design-frontend
 description: >
-  Create distinctive, production-grade frontend interfaces that avoid generic AI
-  aesthetics. Use when the user says "build this UI", "design this page", "make it look
-  good", "dashboard layout", "beautify this", or "make the UI feel premium".
+  Create a new production-grade UI from scratch — not a polish pass. Use
+  when "build this UI", "design this page", or "new dashboard layout".
+  Polish existing → enhance-web-ui. Landing → enhance-web-landing.
+  Redesign existing → enhance-web-redesign.
 license: MIT
 ---
 

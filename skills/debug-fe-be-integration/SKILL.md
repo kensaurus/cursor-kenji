@@ -1,10 +1,10 @@
 ---
 name: debug-fe-be-integration
 description: >
-  Debug frontend-backend integration issues for any project by analyzing backend logs,
-  identifying incorrect API calls, and fixing both sides. Use when diagnosing API errors,
-  mismatched requests, integration issues between frontend and backend, or when the user
-  mentions API 4xx/5xx errors, validation failures, or FE-BE.
+  Diagnose and fix frontend↔backend contract failures by tracing client
+  requests, server logs, validation, auth, and responses on both sides.
+  Use for API 4xx/5xx, mismatched payloads, validation failures, or
+  "frontend and backend disagree". Single-layer errors → debug-error.
 license: MIT
 ---
 

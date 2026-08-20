@@ -1,10 +1,11 @@
 ---
 name: plan-mobile-readiness
 description: >
-  Audit a Capacitor/React Native app for App Store and Google Play submission readiness,
-  then produce a phased pre-submission plan. Use when the user says "is my app ready for
-  the App Store", "will Google Play reject this", "pre-submission check", "privacy
-  manifest", "data safety form", or is preparing a mobile launch.
+  Plan-only App Store/Google Play submission audit for Capacitor/React
+  Native: manifests, permissions, privacy forms, signing/config, listing
+  prerequisites. Use when "ready for App Store?", "will Google Play
+  reject this?", or "pre-submission check". Native security →
+  plan-capacitor-hardening.
 license: MIT
 ---
 

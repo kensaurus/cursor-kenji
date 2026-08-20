@@ -19,6 +19,7 @@ for the plan-loop sequences.
 - Build a feature end-to-end → `workflow-build-feature`
 - Fix a bug and ship it → `workflow-fix-and-ship`
 - Pre-release quality check → `workflow-quality-gate`
+- Local working tree → merge-ready PR (do not merge) → `workflow-release-prep`
 - Full launch preparation → `workflow-launch-ready`
 - Orient to a new codebase → `workflow-onboard`
 - Post-launch feedback loop → `iterate-post-launch`
@@ -33,7 +34,7 @@ for the plan-loop sequences.
 - Feature-flag rollout → `workflow-feature-flag`
 - Convert an agent failure into a guard → `iterate-agent-harness`
 
-Highest-impact prove combo: `test-exploratory` → `workflow-feedback-to-closure` → `test-playwright`. Optional pre-gate: `test-exploratory` then `workflow-quality-gate`.
+Highest-impact prove combo: `test-exploratory` → `workflow-feedback-to-closure` → `test-playwright`. Optional pre-gate: `test-exploratory` then `workflow-quality-gate`. Pre-release trio: `housekeep-backlog` → `workflow-release-prep` → `docs-adr`.
 
 ## Use an individual skill when scoped to one phase
 

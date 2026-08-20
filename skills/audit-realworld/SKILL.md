@@ -1,10 +1,10 @@
 ---
 name: audit-realworld
 description: >
-  Audit a full-stack app against the RealWorld ("Conduit") reference — its formal API
-  spec, shared Bruno/Hurl E2E suite, and closest-stack reference implementation — to find
-  what is. Use when "audit against realworld", "compare my app to realworld", "conduit
-  conformance", "is my full-stack app complete", "full-stack gap.
+  Read-only full-stack conformance audit against RealWorld ("Conduit"):
+  formal API spec, shared E2E suite, and closest-stack reference. Use when
+  "audit against RealWorld", "Conduit conformance", or "is my full-stack
+  app complete?". General user journeys → audit-ux-journeys.
 license: MIT
 ---
 

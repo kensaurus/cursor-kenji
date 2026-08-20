@@ -1,10 +1,10 @@
 ---
 name: design-system
 description: >
-  Build and maintain cohesive design systems and component libraries with tokens, theming,
-  and documented variants. Use when the user says "design system", "component library",
-  "design tokens", "theming", "consistent styling", "reusable components", or "variant
-  props".
+  Build a new design system (tokens, variants, theming). Use when
+  "create a design system" or "component library from scratch". Drifted
+  existing system → housekeep-design. Plan-only unification →
+  plan-uiux-unification.
 license: MIT
 ---
 

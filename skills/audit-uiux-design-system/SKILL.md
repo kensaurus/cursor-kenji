@@ -1,10 +1,11 @@
 ---
 name: audit-uiux-design-system
 description: >
-  Audit visual UI coherency, design token compliance, and component modularity against a
-  design system for any project. Use when reviewing design consistency, checking component
-  modularity, auditing color/typography/spacing tokens, checking dark mode compliance, or
-  when the user mentions design drift, UI inconsistency.
+  Audit visual-system coherence: tokens, component variants, color/type/
+  spacing, dark mode. Use for "design drift", inconsistent UI, or duplicate
+  primitives. Per-page usability → audit-ux. Breakpoints →
+  audit-responsive. Empty/error states → audit-ui-states. Plan-only
+  unification → plan-uiux-unification.
 license: MIT
 ---
 

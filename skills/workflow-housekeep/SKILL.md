@@ -1,10 +1,11 @@
 ---
 name: workflow-housekeep
 description: >
-  Repo housekeeping: sync READMEs to match current architecture, remove dead files (logs,
-  screenshots, deprecated code, build artifacts), update npm/pip/cargo dependencies to
-  latest. Use when asked to: "housekeep", "clean up repo", "update README", "update
-  dependencies", "fix vulnerabilities", "remove dead code", "tidy.
+  Apply repository maintenance: sync README, remove confirmed dead
+  artifacts, and safely update dependencies. Use when "housekeep",
+  "clean up repo", "update README", "update dependencies", or "remove
+  dead code". Parked-work inventory → housekeep-backlog. Design-system
+  drift → housekeep-design.
 license: MIT
 ---
 

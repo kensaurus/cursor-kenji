@@ -16,6 +16,7 @@ alwaysApply: true
 | Build a new feature end-to-end | `workflow-build-feature` |
 | Fix a bug and ship it | `workflow-fix-and-ship` |
 | Pre-release quality check | `workflow-quality-gate` |
+| Local working tree → merge-ready PR (do not merge) | `workflow-release-prep` |
 | Full launch preparation | `workflow-launch-ready` |
 | Orient to a new codebase | `workflow-onboard` |
 | Close post-launch feedback loop | `iterate-post-launch` |
@@ -171,6 +172,10 @@ workflow-fix-and-ship
 
 workflow-quality-gate
   └─ (optional) test-exploratory → test-red-team → audit-security → audit-bundle-size → audit-performance → test-unit
+
+workflow-release-prep
+  └─ snapshot tree → audit-code-review + release lens → split-to-prs?
+     → workflow-git-commit → workflow-pr → babysit (stop before merge)
 
 test-exploratory → workflow-feedback-to-closure → test-playwright
   └─ guest+authed wander → durable tickets → lock the worst bugs

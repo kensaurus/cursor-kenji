@@ -1,10 +1,11 @@
 ---
 name: iterate-agent-harness
 description: >
-  Turn an agent's own failure — a premature stop, a false "done", a reward- hacked check,
-  a missed file, a broken handoff — into a durable improvement to the harness (skills,
-  rules. Use when "the agent stopped early again", "it said done but wasn't", "it gamed
-  the test", "improve the skills so this doesn't recur", "add.
+  Turn an agent failure—premature stop, false completion, gamed check,
+  missed file, broken handoff—into a durable rule/skill/hook/CI guard
+  plus regression test. Use when "the agent stopped early again", "it
+  gamed the test", or "add a guard so this doesn't recur". App bugs →
+  workflow-fix-and-ship.
 license: MIT
 ---
 

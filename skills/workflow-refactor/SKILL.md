@@ -1,10 +1,11 @@
 ---
 name: workflow-refactor
 description: >
-  Guide for refactoring code to improve quality without changing behavior. Use when refactoring,
-  cleaning up code, reducing duplication, improving readability, or restructuring code.
-  Integrates Firecrawl for researching modern patterns before refactoring,
-  and codebase-aware dependency analysis to avoid breaking changes.
+  Apply a scoped behavior-preserving refactor: map dependencies, change
+  structure, run affected tests. Use when "refactor this", "reduce
+  duplication", or "improve readability". Repo-wide anti-pattern cleanup
+  → audit-code-quality. Mechanical repo-wide transform → burndown-full /
+  audit-codemod-safety.
 license: MIT
 ---
 

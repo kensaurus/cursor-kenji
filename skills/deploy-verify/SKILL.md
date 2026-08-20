@@ -1,10 +1,10 @@
 ---
 name: deploy-verify
 description: >
-  Post-deploy smoke test combining all 5 tools (Sentry + Supabase + Firecrawl MCPs, plus
-  the Langfuse and Playwright CLIs) into one workflow. Use when asked to: "verify deploy",
-  "post-deploy check", "smoke test production", "check if deploy is healthy", "ship or
-  rollback", "post-release check", "verify release", "deploy.
+  Post-deploy smoke test across browser, Sentry, Supabase, Langfuse, and
+  the public web. Use when "verify deploy", "smoke test production",
+  "post-release check", or "ship or rollback". Deploy + observation loop
+  → workflow-ship-and-observe. npm package release → deploy-npm.
 license: MIT
 ---
 

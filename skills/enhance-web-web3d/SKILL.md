@@ -1,10 +1,10 @@
 ---
 name: enhance-web-web3d
 description: >
-  Add 3D and scroll-driven motion to an existing website or web app — Three.js / React
-  Three Fiber for the scene, GSAP ScrollTrigger for scroll-driven choreography, and Motion
-  /. Use when the user asks to "add 3D", "add a WebGL hero", "make it cinematic",
-  "scroll-driven 3D", "three.js scene", "React Three Fiber", "GSAP.
+  Add purposeful 3D/WebGL and scroll choreography to an existing site
+  with Three.js/R3F, GSAP, or Motion. Use when "add 3D", "WebGL hero",
+  "React Three Fiber", or "scroll-driven 3D". General UI polish →
+  enhance-web-ui. Motion without 3D → enhance-motion.
 license: MIT
 ---
 

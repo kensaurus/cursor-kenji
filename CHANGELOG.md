@@ -6,6 +6,24 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.27.0] — 2026-08-20
+
+### Added
+
+- **`workflow-release-prep`** — take the local working tree (uncommitted +
+  staged + untracked + unpushed) to a merge-ready PR against main.
+  Orchestrates `audit-code-review`, `split-to-prs`, `workflow-git-commit`,
+  `workflow-pr`, and `babysit`. Does not merge. Slash: `/release-prep`.
+
+### Changed
+
+- **Skill-conflict routing pass** — carved overlapping triggers across the
+  PR/release, UI/slop, error-handling, tests, backend, and skill-authoring
+  clusters. Completed truncated descriptions (`burndown-full`,
+  `backend-patterns`, `mobile-emulator-start`). Moved
+  `thirdparty-emil-design-eng` body into `references/`. Validator now fails
+  unmatched quotes/parentheses and trailing `i.e.` truncation scars.
+
 ## [1.26.0] — 2026-08-20
 
 ### Added

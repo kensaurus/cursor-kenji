@@ -1,10 +1,11 @@
 ---
 name: debug-sentry-monitor
 description: >
-  Monitor, triage, fix, and proactively enhance Sentry error monitoring for any project.
-  Use when asked to: check Sentry, fix Sentry errors, triage Sentry issues, run
-  post-deploy monitoring, review production errors, clean up Sentry noise, audit Sentry
-  setup, improve monitoring coverage, enhance error tracking, or "run.
+  Operate Sentry: triage/fix unresolved issues, reduce noise, audit
+  instrumentation, and monitor after deploy. Use when "check Sentry",
+  "fix Sentry issues", "review production errors", or "improve error
+  tracking". One named bug through PR → workflow-fix-and-ship. Plan-only
+  observability → plan-error-handling.
 license: MIT
 ---
 

@@ -1,10 +1,11 @@
 ---
 name: plan-perf-audit
 description: >
-  Measure-don't-guess performance audit across web, mobile, backend, and data layers —
-  produces burndown and optimization plan with no fixes in this pass. Use when asked to
-  "performance audit plan", "perf burndown", "measure before optimize", "bundle size
-  audit", "LCP slow", "N+1 audit plan", "plan performance.
+  Plan-only performance audit across web/mobile/backend/data; measures
+  first and emits a burndown, no fixes. Use when "performance audit
+  plan", "perf burndown", "measure before optimize", or "N+1 audit
+  plan". Apply runtime fixes → audit-performance. JS bundle-only →
+  audit-bundle-size.
 license: MIT
 ---
 

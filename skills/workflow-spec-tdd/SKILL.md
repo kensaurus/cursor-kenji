@@ -1,6 +1,10 @@
 ---
 name: workflow-spec-tdd
-description: Stop vibe-coding with a spec → plan → TDD loop before writing a line. Use for any non-trivial feature, refactor, or bug fix on web, React Native, or Capacitor. Use when asked to "build", "implement", "add a feature", "this keeps breaking", "do it properly", or when LLM output keeps being wrong.
+description: >
+  Stop vibe-coding with a spec → plan → TDD loop before writing a line.
+  Use when "spec first", "TDD", "do it properly", or LLM output keeps
+  being wrong. End-to-end feature through PR → workflow-build-feature.
+  One named bug → workflow-fix-and-ship.
 license: MIT
 ---
 

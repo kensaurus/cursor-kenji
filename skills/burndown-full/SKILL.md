@@ -1,9 +1,11 @@
 ---
 name: burndown-full
 description: >
-  Drive a planned change to 100% coverage across an entire codebase when a prior agent run
-  stopped early. Use whenever a refactor, migration, rename, rule-application, or sweeping
-  edit was planned and partially executed but left incomplete — i.e.
+  Drive a planned mechanical change to 100% repo coverage when a prior
+  run stopped early. Use when "finish the burndown", "it stopped
+  halfway", "apply this everywhere", or "half-migrated". One approved
+  plan plus deferrals → complete-everything. Parked inventory →
+  housekeep-backlog.
 ---
 
 # Burndown Full

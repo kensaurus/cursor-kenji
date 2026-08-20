@@ -1,10 +1,10 @@
 ---
 name: backend-observability
 description: >
-  Instrument features so errors, traces, and logs are correlated from the first line. Use
-  when adding logging, tracing, or monitoring; wiring Sentry, Langfuse, or structured
-  logs; or when asked "add logging", "instrument this", "why can't I debug prod",
-  "correlate the error to the trace", "redact PII from logs", "set up.
+  Implement correlated errors, traces, and structured logs with PII
+  redaction. Use when "add logging", "instrument this", "correlate error
+  to trace", or wiring Sentry/Langfuse. Plan-only observability audit →
+  plan-error-handling. Investigate Sentry issues → debug-sentry-monitor.
 license: MIT
 ---
 

@@ -1,6 +1,9 @@
 ---
 name: babysit
-description: Keep a PR merge-ready by triaging comments, resolving clear conflicts, and fixing CI in a loop.
+description: >
+  Keep an already-open PR merge-ready: triage comments, resolve clear
+  conflicts, fix CI. Do not merge. Dirty tree → merge-ready PR →
+  workflow-release-prep. Create/merge PR lifecycle → workflow-pr.
 ---
 # Babysit PR
 Your job is to get this PR to a merge-ready state.

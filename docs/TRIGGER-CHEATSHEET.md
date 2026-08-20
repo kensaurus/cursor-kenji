@@ -17,6 +17,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "build a feature", "implement this", "add X end-to-end", "ship a new capability" | `workflow-build-feature` |
 | "fix this bug and ship it", "patch this and close the ticket", "fix and deploy" | `workflow-fix-and-ship` |
 | "is this ready to ship?", "quality gate", "pre-release checklist", "ship-readiness" | `workflow-quality-gate` |
+| "prepare this for a PR", "get my working tree merge-ready", "release prep this branch", "review everything uncommitted and open a PR" | `workflow-release-prep` |
 | "prepare for launch", "launch week", "everything before going live", "pre-launch sweep" | `workflow-launch-ready` |
 | "I'm new to this repo", "orient me", "explain this codebase", "onboard me" | `workflow-onboard` |
 
@@ -67,9 +68,9 @@ You don't have to type the skill name. Just describe the task in plain language.
 | Say this in chat | Skill |
 |:-----------------|:------|
 | "slow query", "add index", "N+1", "database timeout", "optimize query" | `backend-db-performance` |
-| "error handling", "error boundary", "try/catch", "error state", "toast notification" | `backend-error-handling` |
+| "error boundary", "error toast", "standardize API errors" | `backend-error-handling` |
 | "add logging", "instrument this", "why can't I debug prod", "set up alerts" | `backend-observability` |
-| "API design", "backend architecture", "caching", "queues", "microservices" | `backend-patterns` |
+| "queue jobs", "caching layer", "rate limiting", "server actions", "edge function" | `backend-patterns` |
 | "real-time", "live updates", "WebSocket", "chat", "collaborative", "presence" | `backend-realtime` |
 | "build a pipeline", "sync X into Y", "nightly aggregation", "cron double-counts", "dedupe" | `data-pipeline` |
 | "chart", "graph", "dashboard", "D3", "Recharts", "data visualization" | `data-visualization` |
@@ -90,7 +91,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 
 | Say this in chat | Skill |
 |:-----------------|:------|
-| "publish to npm", "release", "cut a release", "ship a new version" | `deploy-npm` |
+| "publish this package", "release to npm", "ship a new npm version" | `deploy-npm` |
 | "verify deploy", "post-deploy check", "smoke test production", "ship or rollback" | `deploy-verify` |
 | "ship it", "deploy to production", "go live", "roll this out", "promote to prod", "release this" | `workflow-ship-and-observe` |
 | "post-launch polish", "what should I fix next", "iterate on prod feedback", "make it better based on real usage" | `iterate-post-launch` |
@@ -114,7 +115,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "grill me", "stress-test this plan", "interview me about this", "poke holes in this", "challenge my thinking" | `grilling` |
 | "pin down terminology", "ubiquitous language", "glossary", "you're using the wrong words" | `domain-modeling` |
 | "UI/UX unification plan", "design system audit plan", "UI burndown", "unify design system", "plan UI overhaul", "audit UI without fixing" | `plan-uiux-unification` |
-| "feels AI-generated", "de-slop", "AI slop", "reads like ChatGPT", "generic/templated/soulless", "voice pass", "authenticity pass" | `plan-antislop` |
+| "looks like AI slop", "reads like ChatGPT", "authenticity burndown", "de-slop" | `plan-antislop` |
 | "RLS audit", "check my RLS", "row level security", "is my Supabase secure", "anyone can read my data", "service_role key", "lock down my tables" | `plan-rls-audit` |
 | "errors aren't showing in Sentry", "fail silently", "empty catch blocks", "check my Langfuse", "observability before launch" | `plan-error-handling` |
 | "validate my inputs", "XSS", "dangerouslySetInnerHTML", "Stripe webhook", "forge requests", "injection-safe" | `plan-input-validation` |
@@ -135,7 +136,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "security audit plan", "OWASP audit", "hardening plan", "security burndown" | `plan-security-audit` |
 | "test coverage plan", "traceability matrix", "fake-green tests", "what's not tested" | `plan-test-coverage` |
 | "add mutation testing", "are our tests real", "can our test suite be gamed", "assertion theater" | `test-mutation` |
-| "design system", "component library", "design tokens", "theming" | `design-system` |
+| "create a design system", "component library from scratch" | `design-system` |
 | "apply brand colors", "consistent styling", "color palette", "apply theme" | `design-theme` |
 
 ---
@@ -250,5 +251,6 @@ Highest-impact combo: `test-exploratory` → `workflow-feedback-to-closure` → 
 | "I'm new to this repo", "orient me", "explain this codebase", "catch me up" | `workflow-onboard` |
 | "run agents in parallel", "best-of-N", "compare approaches", "multi-model" | `workflow-parallel-agents` |
 | "create a PR", "write pull request", "manage PR review", "merge PR" | `workflow-pr` |
+| "prepare this for a PR", "get my working tree merge-ready", "release prep this branch" | `workflow-release-prep` |
 | "refactor this", "clean up code", "reduce duplication", "improve readability" | `workflow-refactor` |
 | "build this properly", "spec first", "TDD", "stop vibe-coding" | `workflow-spec-tdd` |

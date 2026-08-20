@@ -1,10 +1,11 @@
 ---
 name: debug-error
 description: >
-  Systematic debugging workflow for errors and bugs. Use when debugging errors,
-  investigating bugs, troubleshooting issues, or when something isn't working as expected.
-  Integrates Sentry MCP for production error context, Firecrawl for researching fix patterns,
-  and Sequential Thinking for complex multi-step diagnosis.
+  Diagnose one error/bug with hypotheses and runtime evidence before
+  fixing. Use when "debug this error", "investigate this bug", or behavior
+  is unexpected. FE↔BE contract mismatch → debug-fe-be-integration.
+  Sentry backlog/monitoring → debug-sentry-monitor. Bug-to-PR lifecycle →
+  workflow-fix-and-ship.
 license: MIT
 ---
 

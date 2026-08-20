@@ -1,12 +1,18 @@
 ---
 name: workflow-git-commit
-description: Generate clear, descriptive commit messages following conventional commits format. Use when committing code, writing commit messages, or when the user asks for help with git commits.
+description: >
+  Create one conventional commit from an already-scoped change: stage
+  named files/hunks, write the message, commit, never push. Use when
+  "commit these files" or "write a commit message". Whole dirty tree to
+  a merge-ready PR → workflow-release-prep.
 license: MIT
 ---
 
 # Git Commit Message Generator
 
-Generate clear, meaningful commit messages following best practices.
+Create one clear, meaningful conventional commit. This skill owns
+deliberate staging + commit wording, not release preparation, pushing, or
+PR creation. The change must already be logically scoped.
 
 ## Commit Format
 
@@ -48,12 +54,16 @@ docs(readme): update installation steps
 ### 1. Analyze Changes
 
 ```bash
-# View staged changes
+# Read-only: inspect the already-scoped change
 git diff --staged
 
 # View changed files
-git status
+git status --short
 ```
+
+If the intended scope is not already clear, stop and ask the caller to name
+the files or hunks. Stage only those paths/hunks. Never widen scope with
+`git add .` or `git add -A`, and never push from this skill.
 
 ### 2. Identify Type and Scope
 
@@ -153,46 +163,13 @@ git commit -m "style(auth): update login form spacing"
 ## Quick Reference
 
 ```bash
-# Stage and commit
-git add .
-git commit -m "feat(scope): description"
+git add -- <named-path> [...]
+git commit -m "$(cat <<'EOF'
+feat(scope): concise imperative subject
 
-# Amend last commit message
-git commit --amend -m "new message"
+Explain why the change is needed when the subject is not enough.
 
-# Interactive staging
-git add -p
-
-# View commit history
-git log --oneline -10
-```
-
-## Commit Message Template
-
-Create `~/.gitmessage`:
-```
-# <type>(<scope>): <subject>
-# |<---- Using a Maximum Of 50 Characters ---->|
-
-# Explain why this change is being made
-# |<---- Try To Limit Each Line to a Maximum Of 72 Characters ---->|
-
-# Provide links or keys to any relevant tickets, articles or other resources
-# Example: Fixes #23
-
-# --- COMMIT END ---
-# Type can be:
-# feat (new feature)
-# fix (bug fix)
-# refactor (refactoring code)
-# style (formatting, missing semi colons, etc)
-# docs (changes to documentation)
-# test (adding or refactoring tests)
-# chore (updating grunt tasks etc)
-# --------------------
-```
-
-Set as default:
-```bash
-git config --global commit.template ~/.gitmessage
+Refs: #123
+EOF
+)"
 ```

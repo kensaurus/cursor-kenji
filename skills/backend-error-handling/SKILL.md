@@ -1,6 +1,10 @@
 ---
 name: backend-error-handling
-description: Implement solid error handling patterns. Use when adding error handling, improving error UX, debugging error flows, standardizing error responses, or when user mentions "error boundary", "try/catch", "error state", "toast notification", "form validation error", or "API error handling".
+description: >
+  Implement error-handling patterns (boundaries, toasts, API error
+  shape). Use when "error boundary", "error toast", or "standardize API
+  errors". Plan-only observability audit → plan-error-handling. Live
+  Sentry triage → debug-sentry-monitor.
 license: MIT
 ---
 

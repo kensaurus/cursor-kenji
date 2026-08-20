@@ -1,10 +1,11 @@
 ---
 name: iterate-post-launch
 description: >
-  Close the post-launch improvement loop for any shipped app. Use when asked to "improve
-  the app after launch", "fix the top issues", "post-launch polish", "what should I fix
-  next", "production issues", "iterate on feedback", "post-release improvements", "what is
-  broken in prod", "ship a polish pass", or "make it better.
+  Close the feedback loop for an already-live app: inspect production
+  signals, prioritize top issues, fix, verify live, repeat. Use when
+  "post-launch polish", "fix the top production issues", "iterate on
+  feedback", or "what should I fix next after launch?". One named bug →
+  workflow-fix-and-ship.
 license: MIT
 ---
 

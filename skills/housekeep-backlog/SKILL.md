@@ -34,6 +34,7 @@ has one.
 | `plan-stub-checker` | Stub/dead-UI plan (feeds this register) |
 | `workflow-feature-flag` | Flag debt execution |
 | `workflow-housekeep` | README / dead files / deps — not the backlog |
+| `workflow-release-prep` | What's *done* in the dirty tree → merge-ready PR |
 | `enhance-agent-guardrails` | Installs the same-PR / "read BACKLOG.md" wording |
 
 ## How to reason (every candidate)

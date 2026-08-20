@@ -1,10 +1,11 @@
 ---
 name: canvas
 description: >
-  A Cursor Canvas is a live React app the user opens beside the chat. MUST use a canvas
-  for standalone analytical artifacts — quantitative analyses, billing investigations,
-  security audits, architecture reviews, data-heavy content, timelines, charts, tables,
-  interactive explorations, repeatable tools, or any response.
+  Create a live React canvas beside chat for standalone analytical
+  artifacts that benefit from visual layout: quantitative/security/
+  architecture analyses, data-heavy timelines/charts/tables, interactive
+  explorations, or repeatable tools. Do not use for simple prose or code
+  changes.
 metadata:
   surfaces:
     - ide

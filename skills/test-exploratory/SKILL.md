@@ -1,11 +1,11 @@
 ---
 name: test-exploratory
 description: >
-  Exploratory ("monkey") QA of a live app as GUEST then LOGGED-IN, then
-  diff. Headed playwright-cli, junk inputs, nav abuse. Use when "monkey
-  test the app", "exploratory QA", "wander like a confused user", or
-  "guest vs logged in". Story CRUD → test-qa. Hostile sweep →
-  test-red-team. This-diff PDCA → test-playwright.
+  Headed exploratory QA of a live app as guest then logged-in, followed
+  by a diff; uses junk input and navigation abuse. Use when "monkey test",
+  "wander like a confused user", or "guest vs logged in". CRUD stories →
+  test-qa. Hostile sweep → test-red-team. This-diff fix loop →
+  test-playwright.
 license: MIT
 ---
 
