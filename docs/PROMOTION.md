@@ -42,8 +42,8 @@ npx skills add kensaurus/cursor-kenji
 
 **PR copy:**
 ```markdown
-- [cursor-kenji](https://github.com/kensaurus/cursor-kenji) — ready-made AI playbooks your editor auto-triggers: 137 agent skills,
-  50 slash commands, 6 subagents, and MCP configs for React/Next.js/Supabase development.
+- [cursor-kenji](https://github.com/kensaurus/cursor-kenji) — ready-made AI playbooks your editor auto-triggers: 138 agent skills,
+  51 slash commands, 6 subagents, and MCP configs for React/Next.js/Supabase development.
   `npx skills add kensaurus/cursor-kenji`
 ```
 
@@ -87,7 +87,7 @@ Submit the GitHub repo URL; Cursor reviews manually.
 - https://enterprisedna.co/directories/submit (alternative submission form)
 
 **One-liner description:**
-> 137 Cursor agent skills for React/Next.js/Supabase — installs in one command.
+> 138 Cursor agent skills for React/Next.js/Supabase — installs in one command.
 
 **Status:** [x] Submitted via fallback form at enterprisedna.co/directories/submit (Skills directory; email draft to directories@enterprisedna.co)
 
@@ -140,7 +140,7 @@ I built 128 Cursor agent skills so you don't have to:
 • "can we recover if the DB dies?" → restore plan
 • "commit" → proper conventional commit message
 
-One install, 137 skills auto-activate:
+One install, 138 skills auto-activate:
 npx skills add kensaurus/cursor-kenji
 
 → github.com/kensaurus/cursor-kenji
@@ -149,11 +149,11 @@ npx skills add kensaurus/cursor-kenji
 ### dev.to / Hashnode article outline
 
 ```
-Title: 137 Cursor AI Skills That Match on Keywords
+Title: 138 Cursor AI Skills That Match on Keywords
 
 1. The problem: writing the same prompts over and over
 2. What Cursor skills are and how they work
-3. What's in cursor-kenji (137 skills, 50 commands, 6 subagents)
+3. What's in cursor-kenji (138 skills, 51 commands, 6 subagents)
 4. How to install (one line)
 5. Demo: 5 skills in action with example prompts
 6. How to add your own skills

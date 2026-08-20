@@ -247,6 +247,9 @@ unless the user asks to remove it.
 ## Relationship to other workflows
 
 - `complete-everything` closes plan intent, parked work, behavior, and evidence.
+- `housekeep-backlog` inventories parked work across the repo into
+  `BACKLOG.md`; this skill executes one approved plan from that register
+  (or from a named plan file).
 - `burndown-full` proves repo-wide mechanical pattern coverage.
 - `workflow-quality-gate` assesses release readiness; it does not replace this
   implementation loop.

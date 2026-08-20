@@ -28,7 +28,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (137)
+## Skills (138)
 
 ### Enhance
 
@@ -96,6 +96,11 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Triggers:** "clean up our CI checks", "consolidate the workflows", "we have three lint jobs", "make one quality gate", "fix the required checks", "/housekeep-gates"
 **What it does:** Apply-now execution arm of `audit-gate-logic`. Builds one aggregator job that `needs:` every real check and fails on failed **or skipped** dependencies, makes that job the only required status check, ports unique value from duplicate losers then **deletes** them (not disable), restores hook/CI parity, and normalizes ratchets to auto-tighten with reviewed resets. Proves consolidation with deliberate-violation + skip-path probes. Net enforcement strictly ≥ before. Branch-protection changes always get explicit confirmation.
 **Related:** `audit-gate-logic`, `audit-cicd`, `enhance-agent-guardrails`, `workflow-green-repo`, `test-mutation`, `enhance-arch-boundaries`
+
+#### `housekeep-backlog`
+**Triggers:** "what's left behind", "inventory TODOs", "consolidate the backlog", "parked work register", "living BACKLOG.md", "/housekeep-backlog"
+**What it does:** Apply-now collector for parked work. Scans unfinished plan/burndown docs, deferred phases, TODO/FIXME/HACK markers, skipped tests, open audit findings, commented-out blocks, and unfinished feature flags; dedups so one real piece of work is one `BL-` row; writes a living `docs/BACKLOG.md` that regenerates and diffs (new / done / newly-stale). Inventories only — high-priority items hand off to `complete-everything` / `burndown-full`. The `docs-adr` pattern applied to parked work.
+**Related:** `complete-everything`, `burndown-full`, `docs-adr`, `plan-stub-checker`, `workflow-feature-flag`, `workflow-housekeep`, `enhance-agent-guardrails`
 
 #### `enhance-web-forms`
 **Triggers:** "improve this form", "form validation", "accessible form", "multi-step form", "form error handling", "the form UX is bad", "enhance-web-forms"
@@ -721,7 +726,7 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 #### `docs-adr`
 **Triggers:** "record this decision", "set up ADRs", "why did we choose X", "the agent keeps suggesting Y again", "/adr"
 **What it does:** Lightweight Architecture Decision Records as agent-readable memory — `docs/adr/` + INDEX.md, one page each, **Rejected alternatives** required, supersede-not-edit. Agent rules load the index and forbid silent contradiction of Accepted ADRs. Backfill the decisions every new agent tries to "fix" first. Complements `plan-docs-sync` (what the code is) and `/handoff` (session state).
-**Related:** `plan-docs-sync`, `handoff`, `docs-writer`, `docs-coauthor`, `enhance-arch-boundaries`, `enhance-agent-guardrails`, `workflow-housekeep`
+**Related:** `plan-docs-sync`, `handoff`, `docs-writer`, `docs-coauthor`, `enhance-arch-boundaries`, `enhance-agent-guardrails`, `workflow-housekeep`, `housekeep-backlog`
 
 #### `docs-coauthor`
 **Triggers:** "write a doc", "draft proposal", "help me document", "create spec", "design document", "PRD", "RFC"
@@ -761,7 +766,7 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 
 ---
 
-## Commands (50)
+## Commands (51)
 
 Commands fall into two groups: **standalone** (full playbook in the file) and **pointer** (thin slash entry delegating to a skill).
 
@@ -796,6 +801,7 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/gate-logic` | `audit-gate-logic` | CI gate logic — silent bypass, ratchet gaming, conflicting conditions |
 | `/codemod-safety` | `audit-codemod-safety` | Codemod / bulk-transform behavior-preservation |
 | `/housekeep-gates` | `housekeep-gates` | Consolidate accreted CI gates into one aggregator |
+| `/housekeep-backlog` | `housekeep-backlog` | Living BACKLOG.md of parked work — inventory, do not implement |
 | `/test-mutation` | `test-mutation` | Mutation testing — do tests actually assert? |
 | `/arch-boundaries` | `enhance-arch-boundaries` | Mechanically-enforced architecture boundaries |
 | `/adr` | `docs-adr` | Architecture Decision Records as agent-readable memory |
@@ -977,6 +983,9 @@ After approval: `backend-patterns`, `db-migrator`, `backend-observability`, prov
 
 #### Accreted gates → one aggregator
 `audit-gate-logic` (Phase 2.5 archaeology) → `housekeep-gates` (consolidate, delete losers, prove)
+
+#### Parked work → living register → execute
+`housekeep-backlog` (inventory + diff) → `complete-everything` / `burndown-full` (one plan or one mechanical change). Decisions → `docs-adr`. Flag debt → `workflow-feature-flag`.
 
 #### Anti-entropy stack
 `audit-gate-logic` / `housekeep-gates` (soundness) → `test-mutation` (assertion strength) → `enhance-arch-boundaries` (structure) → `docs-adr` (memory)

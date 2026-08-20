@@ -35,7 +35,7 @@ const FAMILY_HEADINGS = {
   mobile: "📱 Mobile — React Native / Capacitor",
   data: "📊 Data — charts & pipelines",
   docs: "📚 Docs — write it down clearly",
-  housekeep: "🧹 Housekeeping — clean up design drift",
+  housekeep: "🧹 Housekeeping — clean up drift",
   workflow: "🔗 Workflows — multi-step recipes",
   test: "✅ Test & QA — prove it works",
   deploy: "🚀 Deploy — ship & verify",

@@ -31,6 +31,7 @@ ADR makes the decision durable and its reversal deliberate.
 | `docs-writer` | Tutorials / README prose |
 | `enhance-arch-boundaries` | Mechanical layering; this records the model |
 | `workflow-housekeep` | Periodic index / status sweep |
+| `housekeep-backlog` | Parked-work register (`BACKLOG.md`), not decisions |
 
 ## How to reason
 

@@ -26,6 +26,7 @@ for the plan-loop sequences.
 - Drive the whole repo to green → `workflow-green-repo`
 - Finish a partial burndown to 100% → `burndown-full`
 - Close a plan with zero deferrals → `complete-everything`
+- Inventory parked work into a living BACKLOG.md → `housekeep-backlog`
 - Preflight the environment → `workflow-environment-ready`
 - Feedback to durable tickets → `workflow-feedback-to-closure`
 - Feature-flag rollout → `workflow-feature-flag`

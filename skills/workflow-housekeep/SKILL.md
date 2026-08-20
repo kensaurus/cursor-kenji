@@ -27,6 +27,11 @@ Works with **any project** — auto-detects tech stack, package manager, and str
 > **Commit each phase separately.**
 > Documentation, cleanup, and dependency updates are independent concerns.
 
+> **Parked-work register is a different skill.**
+> Unfinished plans, TODOs, skipped tests → `housekeep-backlog`. This skill
+> does README / dead files / deps. A housekeep pass may *schedule* a
+> backlog regeneration; it does not invent the register.
+
 ---
 
 ## Step 0: Auto-Detect Project Configuration

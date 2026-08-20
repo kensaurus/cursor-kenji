@@ -98,6 +98,7 @@ with `/goal`.
 | Coherent motion on an existing design system (2026 stack) | `enhance-motion` |
 | Consolidate a drifted design system into one token SSOT | `housekeep-design` |
 | Consolidate accreted CI gates into one aggregator | `housekeep-gates` |
+| Inventory parked work into a living BACKLOG.md (do not implement) | `housekeep-backlog` |
 | Mechanically-enforced architecture boundaries | `enhance-arch-boundaries` |
 | Production-quality forms (a11y, validation, states, multi-step) | `enhance-web-forms` |
 | Install agent guardrails-as-code (rules, hooks, CI gates, lint) | `enhance-agent-guardrails` |
