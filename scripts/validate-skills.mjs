@@ -136,15 +136,53 @@ const CLAUDE_RESERVED = new Set([
   "code-review", "batch", "debug", "loop", "claude-api", "run", "verify", "run-skill-generator",
 ]);
 const cmdDir = join(repoRoot, "commands");
+const commandNames = [];
 if (existsSync(cmdDir)) {
   for (const f of readdirSync(cmdDir)) {
     if (!f.endsWith(".md")) continue;
     const cmd = f.slice(0, -3);
+    commandNames.push(cmd);
     if (CLAUDE_RESERVED.has(cmd)) {
       errors.push(
         `commands/${f}: '/${cmd}' collides with a Claude Code built-in/bundled command — rename it (e.g. /${cmd}-guide)`,
       );
     }
+  }
+}
+
+// Same-name skill + command is intentional for a small allowlist (thin
+// /slash wrapper → skill). Cursor and Claude both slash-invoke skills, so
+// a new undeclared pair ships as two /entries. Fail CI instead of drifting.
+const INTENTIONAL_SKILL_COMMAND_PAIRS = new Set([
+  "burndown-full",
+  "complete-everything",
+  "handoff",
+  "housekeep-backlog",
+  "housekeep-gates",
+  "research",
+  "test-mutation",
+  "thirdparty-web-interface-guidelines",
+]);
+const skillNames = new Set();
+for (const group of groups) {
+  const base = join(repoRoot, group);
+  if (!existsSync(base)) continue;
+  for (const dir of readdirSync(base)) {
+    if (statSync(join(base, dir)).isDirectory()) skillNames.add(dir);
+  }
+}
+for (const cmd of commandNames) {
+  if (skillNames.has(cmd) && !INTENTIONAL_SKILL_COMMAND_PAIRS.has(cmd)) {
+    errors.push(
+      `commands/${cmd}.md: undeclared dual name with skills/${cmd} — add it to INTENTIONAL_SKILL_COMMAND_PAIRS or rename one side`,
+    );
+  }
+}
+for (const name of INTENTIONAL_SKILL_COMMAND_PAIRS) {
+  if (!skillNames.has(name) || !commandNames.includes(name)) {
+    errors.push(
+      `INTENTIONAL_SKILL_COMMAND_PAIRS contains '${name}' but that pair is no longer on disk — remove it from the allowlist`,
+    );
   }
 }
 

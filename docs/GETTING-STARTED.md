@@ -25,12 +25,20 @@ If you don't have Cursor yet: [download it at cursor.com](https://cursor.com). I
 Open a terminal (on Mac: press `Cmd+Space`, type "Terminal", press Enter) and paste:
 
 ```bash
+npx @kensaurus/cursor-kenji --all
+```
+
+That installs skills **and** slash commands (and agents/rules) for every tool the installer supports, then hash-checks the copies. Windows works too, including from a clone of this repo.
+
+**Skills only** (no `/commands` — Vercel skills CLI, current project by default):
+
+```bash
 npx skills add kensaurus/cursor-kenji
 ```
 
-If you get "command not found", run `npm install -g skills` first, then try again.
+Add `-g` to put skills in `~/.cursor/skills`. That CLI's `--all` means “all skills to all agents”, not the same as kenji `--all`.
 
-**Alternative — no npm:**
+**Alternative — clone:**
 
 ```bash
 git clone https://github.com/kensaurus/cursor-kenji.git
@@ -38,19 +46,7 @@ cd cursor-kenji
 ./install.sh
 ```
 
-**Or with npx directly:**
-
-```bash
-npx @kensaurus/cursor-kenji
-```
-
-Works on Windows too — including from a clone of this repo:
-
-```bash
-npx @kensaurus/cursor-kenji --all
-```
-
-From a clone you can also run `node bin/install.mjs --all`.
+From a clone you can also run `node bin/install.mjs --all`. Re-check anytime with `npx @kensaurus/cursor-kenji --verify --all`.
 
 ---
 
@@ -133,7 +129,7 @@ These chain several skills. Paste the whole sentence.
 | `the agent keeps suggesting Y again` | ADR decision memory — rejected alternatives |
 | `did this codemod break anything?` | Bulk-transform behavior-preservation — compiles/lints is not same-behavior |
 | `audit our auth` / `is getSession safe?` | Route×gate matrix — middleware is not a security boundary |
-| `/privacy-plan` `/backup-plan` `/aso-plan` `/skill-conflicts` `/gate-logic` `/codemod-safety` `/housekeep-gates` `/housekeep-backlog` `/test-mutation` `/arch-boundaries` `/adr` `/auth-flows` | Slash shortcuts for those same jobs |
+| `/privacy-plan` `/backup-plan` `/aso-plan` `/skill-conflicts` `/gate-logic` `/codemod-safety` `/housekeep-gates` `/housekeep-backlog` `/test-mutation` `/arch-boundaries` `/adr` `/auth-flows` `/research` | Slash shortcuts for those same jobs |
 
 Full phrase list → [TRIGGER-CHEATSHEET.md](TRIGGER-CHEATSHEET.md).
 
@@ -201,10 +197,13 @@ and you're back to the AI guessing.
 To get the latest skills:
 
 ```bash
-npx skills add kensaurus/cursor-kenji
+npx @kensaurus/cursor-kenji --all
+npx @kensaurus/cursor-kenji --verify --all
 ```
 
-Running the same command again overwrites with the latest version.
+The installer merge-overwrites same-name files and hash-checks them. `--verify` fails if a packaged file is missing or stale. Extra personal skills are left alone.
+
+Skills-only refresh: `npx skills add kensaurus/cursor-kenji` (does not update slash commands).
 
 ---
 

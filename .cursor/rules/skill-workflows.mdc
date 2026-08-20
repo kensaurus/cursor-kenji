@@ -104,6 +104,7 @@ with `/goal`.
 | Install agent guardrails-as-code (rules, hooks, CI gates, lint) | `enhance-agent-guardrails` |
 | Inbox placement — SPF/DKIM/DMARC (audit-and-fix) | `enhance-email-deliverability` |
 | Upgrade an existing SKILL.md prompt (T1–T6), not its behavior | `enhance-skill-prompts` |
+| Current-year docs + gap analysis before a non-trivial change (no implement) | `research` |
 
 ### Plan (audit → approve → execute)
 | Task | Skill |

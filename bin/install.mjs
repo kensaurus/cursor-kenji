@@ -15,6 +15,7 @@
  *   npx @kensaurus/cursor-kenji --link           Dev mode: symlink instead of copy
  *   npx @kensaurus/cursor-kenji --restore [stamp] Restore a previous --clean backup
  *   npx @kensaurus/cursor-kenji --dry-run        Preview without changing anything
+ *   npx @kensaurus/cursor-kenji --verify         Hash-check dests against this package (no writes)
  *   npx @kensaurus/cursor-kenji --help
  *
  * Why two Cursor paths?
@@ -35,6 +36,7 @@ import {
   existsSync, mkdirSync, cpSync, rmSync, symlinkSync, readdirSync, statSync,
   readFileSync, writeFileSync,
 } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { join, resolve, dirname } from 'node:path';
 import { homedir, platform } from 'node:os';
 import { fileURLToPath } from 'node:url';
@@ -72,6 +74,7 @@ Usage:
   npx @kensaurus/cursor-kenji --link            Dev mode: symlink repo into ~/.cursor (live edits)
   npx @kensaurus/cursor-kenji --restore [stamp]  Restore a previous --clean backup (latest if omitted)
   npx @kensaurus/cursor-kenji --dry-run         Preview without changing anything
+  npx @kensaurus/cursor-kenji --verify          Hash-check dests against this package (no writes)
 
 Flags:
   --auto              Detect installed tools (~/.cursor, ~/.claude, ~/.codex, ~/.gemini) and
@@ -88,6 +91,9 @@ Flags:
   --link              Symlink (junction on Windows) instead of copying — for repo dev.
   --restore [stamp]   Copy a backup under <target>/.cursor-kenji-backups/ back into place.
   --dry-run           Show what would happen; make no changes.
+  --verify            Read-only: fail if any packaged file is missing or
+                      hash-mismatched at the destination (merge-compatible:
+                      extra personal files are allowed).
   --quiet             Suppress install logs (errors still print).
   --no-agents-mirror  Skip copying skills to ~/.agents/skills.
 
@@ -122,13 +128,18 @@ if (has('quiet', 'q')) {
 }
 
 const isDryRun = has('dry-run');
+const isVerifyOnly = has('verify');
 const isClean = has('clean', 'mirror', 'force');
 const noBackup = has('no-backup');
 const useLink = has('link');
 const noAgentsMirror = has('no-agents-mirror');
+const verifyFailures = [];
 
-/** Cursor already ships these under ~/.cursor/skills-cursor (managed builtins). */
+/** Cursor already ships these as managed builtins. Do not copy into
+ *  ~/.cursor/skills — a same-name user copy shadows the builtin and
+ *  shows up twice in the `/` picker. Claude still gets portable copies. */
 const CURSOR_MANAGED_BUILTIN_SKILLS = new Set([
+  'babysit',
   'canvas',
   'create-hook',
   'create-rule',
@@ -226,6 +237,125 @@ if (skillName) onlyGroups = new Set(['skills']);
 const DIRS = ALL_DIRS.filter((d) => !onlyGroups || onlyGroups.has(d.dest));
 const managedDests = [...new Set(DIRS.map((d) => d.dest))];
 
+function fileHash(p) {
+  return createHash('sha256').update(readFileSync(p)).digest('hex');
+}
+
+function walkRelFiles(root) {
+  const out = [];
+  const walk = (rel) => {
+    const p = rel ? join(root, rel) : root;
+    if (!existsSync(p)) return;
+    const st = statSync(p);
+    if (st.isDirectory()) {
+      for (const name of readdirSync(p).sort()) {
+        walk(rel ? `${rel}/${name}` : name);
+      }
+      return;
+    }
+    out.push(rel.replace(/\\/g, '/'));
+  };
+  walk('');
+  return out;
+}
+
+/** Source tree must be a subset of dest with matching file hashes. Extra dest files are allowed (merge). */
+function treesMatch(src, dest) {
+  if (!existsSync(dest)) return { ok: false, reason: 'missing destination' };
+  const sDir = statSync(src).isDirectory();
+  const dDir = statSync(dest).isDirectory();
+  if (sDir !== dDir) return { ok: false, reason: 'file/directory type mismatch' };
+  if (!sDir) {
+    return fileHash(src) === fileHash(dest)
+      ? { ok: true }
+      : { ok: false, reason: 'content hash mismatch' };
+  }
+  for (const rel of walkRelFiles(src)) {
+    const from = join(src, rel);
+    const to = join(dest, rel);
+    if (!existsSync(to)) return { ok: false, reason: `missing ${rel}` };
+    if (statSync(to).isDirectory()) return { ok: false, reason: `${rel} is a directory at dest` };
+    if (fileHash(from) !== fileHash(to)) return { ok: false, reason: `content hash mismatch in ${rel}` };
+  }
+  return { ok: true };
+}
+
+function listInstallItems({ renameMdc = false, skipCursorBuiltins = false } = {}) {
+  const items = [];
+  for (const { src, dest } of DIRS) {
+    const srcPath = resolve(__dir, src);
+    if (!existsSync(srcPath)) continue;
+    for (const item of readdirSync(srcPath)) {
+      if (skillName && item !== skillName) continue;
+      if (
+        skipCursorBuiltins &&
+        src === 'skills-cursor' &&
+        dest === 'skills' &&
+        CURSOR_MANAGED_BUILTIN_SKILLS.has(item) &&
+        item !== skillName
+      ) {
+        continue;
+      }
+      const itemSrc = join(srcPath, item);
+      const isDir = statSync(itemSrc).isDirectory();
+      if (dest === 'rules' && isDir && PROJECT_RULE_BUNDLES.has(item)) continue;
+      if (!renameMdc && dest === 'rules' && !isDir && item.endsWith('.md')) continue;
+      let outName = item;
+      if (renameMdc && dest === 'rules' && !isDir && item.endsWith('.mdc')) {
+        outName = item.slice(0, -4) + '.md';
+      }
+      items.push({ dest, outName, itemSrc, isDir });
+    }
+  }
+  return items;
+}
+
+function recordVerify(src, dest, label) {
+  const match = treesMatch(src, dest);
+  if (!match.ok) verifyFailures.push(`${label}: ${match.reason}`);
+  return match.ok;
+}
+
+function dualSkillCommandNames() {
+  const skillNames = new Set();
+  for (const group of ['skills', 'skills-cursor']) {
+    const dir = resolve(__dir, group);
+    if (!existsSync(dir)) continue;
+    for (const name of readdirSync(dir)) skillNames.add(name);
+  }
+  const cmdDir = resolve(__dir, 'commands');
+  if (!existsSync(cmdDir)) return [];
+  return readdirSync(cmdDir)
+    .filter((f) => f.endsWith('.md'))
+    .map((f) => f.slice(0, -3))
+    .filter((n) => skillNames.has(n))
+    .sort();
+}
+
+function assertNoCursorBuiltins(skillsDir) {
+  if (!existsSync(skillsDir)) return;
+  for (const name of CURSOR_MANAGED_BUILTIN_SKILLS) {
+    if (skillName && name === skillName) continue;
+    if (existsSync(join(skillsDir, name))) {
+      verifyFailures.push(`skills/${name}: Cursor-managed builtin still present (should be absent)`);
+    }
+  }
+}
+
+function verifyTarget(base, opts, label) {
+  for (const it of listInstallItems(opts)) {
+    recordVerify(it.itemSrc, join(base, it.dest, it.outName), `${label} ${it.dest}/${it.outName}`);
+  }
+  if (opts.skipCursorBuiltins) assertNoCursorBuiltins(join(base, 'skills'));
+}
+
+function failIfUnverified(context) {
+  if (!verifyFailures.length) return;
+  console.error(`✗ ${context} failed:`);
+  for (const f of verifyFailures) console.error(`  - ${f}`);
+  process.exit(1);
+}
+
 // ---- placement helper (copy or symlink) ------------------------------------
 let linkFallbacks = 0;
 function place(src, dest, isDir) {
@@ -235,14 +365,14 @@ function place(src, dest, isDir) {
     try {
       const type = isDir ? (platform() === 'win32' ? 'junction' : 'dir') : 'file';
       symlinkSync(src, dest, type);
-      return;
     } catch {
       cpSync(src, dest, { recursive: true }); // file symlinks may need privileges on Windows
       linkFallbacks++;
-      return;
     }
+  } else {
+    cpSync(src, dest, { recursive: true });
   }
-  cpSync(src, dest, { recursive: true });
+  recordVerify(src, dest, dest);
 }
 
 // ---- mirror mode: back up, then wipe managed dirs under a target base ------
@@ -268,38 +398,18 @@ function backupAndWipe(base) {
 
 // ---- copy / link one target base -------------------------------------------
 // renameMdc: Claude Code reads .md rules; .mdc sources are installed as .md.
-function installDirs(base, { renameMdc = false, skipCursorBuiltins = false } = {}) {
+function installDirs(base, opts = {}) {
   let copiedDirs = 0;
   let copiedFiles = 0;
-  for (const { src, dest } of DIRS) {
-    const srcPath = resolve(__dir, src);
-    const destPath = join(base, dest);
-    if (!existsSync(srcPath)) continue;
-    if (!isDryRun) mkdirSync(destPath, { recursive: true });
-
-    for (const item of readdirSync(srcPath)) {
-      if (skillName && item !== skillName) continue;
-      if (
-        skipCursorBuiltins &&
-        src === 'skills-cursor' &&
-        dest === 'skills' &&
-        CURSOR_MANAGED_BUILTIN_SKILLS.has(item) &&
-        item !== skillName
-      ) {
-        continue;
-      }
-      const itemSrc = join(srcPath, item);
-      const isDir = statSync(itemSrc).isDirectory();
-      if (dest === 'rules' && isDir && PROJECT_RULE_BUNDLES.has(item)) continue;
-      // Cursor ignores plain .md rules; keep those Claude-only (installed as .md via renameMdc).
-      if (!renameMdc && dest === 'rules' && !isDir && item.endsWith('.md')) continue;
-      let outName = item;
-      if (renameMdc && dest === 'rules' && !isDir && item.endsWith('.mdc')) {
-        outName = item.slice(0, -4) + '.md';
-      }
-      place(itemSrc, join(destPath, outName), isDir);
-      if (isDir) copiedDirs++; else copiedFiles++;
+  const ensured = new Set();
+  for (const it of listInstallItems(opts)) {
+    const destPath = join(base, it.dest);
+    if (!isDryRun && !ensured.has(destPath)) {
+      mkdirSync(destPath, { recursive: true });
+      ensured.add(destPath);
     }
+    place(it.itemSrc, join(destPath, it.outName), it.isDir);
+    if (it.isDir) copiedDirs++; else copiedFiles++;
   }
   return { copiedDirs, copiedFiles };
 }
@@ -503,6 +613,71 @@ function installContextTool(spec) {
   }
 }
 
+function verifyContextTool(spec) {
+  const { label, base, rulesFile, rulesLoadPath, commandsDir, commandExt, render } = spec;
+  const doRules = !onlyGroups || onlyGroups.has('rules');
+  const doCommands = (!onlyGroups || onlyGroups.has('commands')) && !skillName;
+  if (doRules) {
+    const dest = join(base, rulesFile);
+    const expected = buildMergedRules(label, rulesLoadPath);
+    if (!existsSync(dest)) verifyFailures.push(`${label} ${rulesFile}: missing destination`);
+    else if (readFileSync(dest, 'utf8') !== expected) verifyFailures.push(`${label} ${rulesFile}: content hash mismatch`);
+  }
+  if (doCommands) {
+    for (const cmd of portableCommands()) {
+      const dest = join(base, commandsDir, `${cmd.name}${commandExt}`);
+      const expected = render(cmd);
+      if (!existsSync(dest)) verifyFailures.push(`${label} ${cmd.name}: missing destination`);
+      else if (readFileSync(dest, 'utf8') !== expected) verifyFailures.push(`${label} ${cmd.name}: content hash mismatch`);
+    }
+  }
+}
+
+if (isVerifyOnly) {
+  if (wantCursor) {
+    verifyTarget(cursorBase, { skipCursorBuiltins: true }, 'Cursor');
+    if (!noAgentsMirror && (!onlyGroups || onlyGroups.has('skills'))) {
+      const agentsSkillsDest = join(agentsBase, 'skills');
+      for (const it of listInstallItems({ skipCursorBuiltins: true })) {
+        if (it.dest !== 'skills') continue;
+        recordVerify(it.itemSrc, join(agentsSkillsDest, it.outName), `Agents ${it.outName}`);
+      }
+      assertNoCursorBuiltins(agentsSkillsDest);
+    }
+    if (!onlyGroups || onlyGroups.has('hooks')) {
+      const hookSrc = resolve(__dir, 'hooks', 'completion-gate.mjs');
+      const hookDest = join(cursorBase, 'cursor-kenji-hooks', 'completion-gate.mjs');
+      if (existsSync(hookSrc)) recordVerify(hookSrc, hookDest, 'Cursor completion-gate.mjs');
+    }
+  }
+  if (wantClaude) verifyTarget(claudeBase, { renameMdc: true }, 'Claude');
+  if (wantCodex) {
+    verifyContextTool({
+      label: 'Codex CLI (OpenAI)',
+      base: codexBase,
+      rulesFile: 'AGENTS.md',
+      rulesLoadPath: '~/.codex/AGENTS.md',
+      commandsDir: 'prompts',
+      commandExt: '.md',
+      render: (cmd) => (cmd.body.endsWith('\n') ? cmd.body : cmd.body + '\n'),
+    });
+  }
+  if (wantGemini) {
+    verifyContextTool({
+      label: 'Gemini CLI',
+      base: geminiBase,
+      rulesFile: 'GEMINI.md',
+      rulesLoadPath: '~/.gemini/GEMINI.md',
+      commandsDir: 'commands',
+      commandExt: '.toml',
+      render: toGeminiToml,
+    });
+  }
+  failIfUnverified('install verify');
+  console.log('✓ install verify passed — every packaged file matches the destination.');
+  process.exit(0);
+}
+
 const results = [];
 
 // ---- Cursor ----------------------------------------------------------------
@@ -515,6 +690,7 @@ if (wantCursor) {
       const stale = join(cursorSkills, name);
       if (existsSync(stale)) rmSync(stale, { recursive: true, force: true });
     }
+    assertNoCursorBuiltins(cursorSkills);
   }
   const hookStatus =
     !onlyGroups || onlyGroups.has('hooks')
@@ -537,13 +713,17 @@ if (wantCursor) {
       mkdirSync(agentsSkillsDest, { recursive: true });
       for (const item of readdirSync(cursorSkillsSrc)) {
         if (skillName && item !== skillName) continue;
-        cpSync(join(cursorSkillsSrc, item), join(agentsSkillsDest, item), { recursive: true });
+        const from = join(cursorSkillsSrc, item);
+        const to = join(agentsSkillsDest, item);
+        cpSync(from, to, { recursive: true });
+        recordVerify(from, to, `Agents ${item}`);
       }
       if (!skillName) {
         for (const name of CURSOR_MANAGED_BUILTIN_SKILLS) {
           const stale = join(agentsSkillsDest, name);
           if (existsSync(stale)) rmSync(stale, { recursive: true, force: true });
         }
+        assertNoCursorBuiltins(agentsSkillsDest);
       }
     }
   }
@@ -604,6 +784,8 @@ if (wantGemini) {
 const mode = `${isClean ? 'mirror' : 'merge'}${useLink ? '+link' : ''}${skillName ? `:skill=${skillName}` : ''}`;
 const verb = useLink ? 'linked' : 'copied';
 
+if (!isDryRun) failIfUnverified('post-install verify');
+
 if (isDryRun) {
   for (const r of results) {
     console.log(
@@ -630,6 +812,11 @@ if (isDryRun) {
     }
   }
   if (linkFallbacks) console.log(`  (note: ${linkFallbacks} file(s) copied instead of linked — symlinks need elevated rights on this OS)`);
+  const dual = dualSkillCommandNames();
+  if (dual.length) {
+    console.log(`Note: these names exist as both a skill and a /command (the picker may show two /entries): ${dual.join(', ')}`);
+  }
+  console.log('Re-check anytime with: npx @kensaurus/cursor-kenji --verify');
   if (wantCursor) console.log('Restart Cursor to activate skills, commands, and agents.');
   if (wantClaude) console.log('Restart any active claude sessions — skills appear as /slash-commands.');
   if (wantCodex) console.log('Codex CLI loads ~/.codex/AGENTS.md automatically; prompts appear via the / picker.');

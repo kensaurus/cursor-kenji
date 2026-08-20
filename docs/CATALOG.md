@@ -28,7 +28,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (138)
+## Skills (139)
 
 ### Enhance
 
@@ -624,6 +624,11 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **What it does:** Drive a planned change to 100% coverage when a prior agent run stopped early. Defines MATCH/DONE searchable patterns, enumerates the full repo-wide worklist (not the plan's file list), executes in small batches with persistent `.cursor/burndown-state.md`, and loops a verification gate (fresh grep → zero hits, typecheck, lint, test, build) until provably complete. Framework-agnostic — discovers project verification commands from package.json/Makefile/AGENTS.md.
 **Related:** `complete-everything`, `composer-2.5-execution`, `audit-gate-logic`, `audit-codemod-safety`, `plan-*` skills (audit-only), `workflow-refactor`
 
+#### `research`
+**Triggers:** "/research", "look up current docs", "what does the industry recommend", "research this before we implement", "current best practices"
+**What it does:** Repo-first, version-matched research before a non-trivial change. Reads the current implementation, fetches official docs (Context7 when available), runs Firecrawl broad search → deep scrape → discovery, then writes a gap analysis and a file-mapped plan. Does not implement until asked.
+**Related:** `workflow-onboard`, `plan-*`, `docs-adr`, `complete-everything`
+
 #### `complete-everything`
 **Triggers:** "complete everything", "don't defer", "fix out of scope too", "finish the whole plan", "close every TODO", "finish all follow-ups", "no deferrals", "/complete-everything"
 **What it does:** Close an approved plan's intent, behavior, and verification gaps. Recovers unfinished plan items plus connected work parked as out of scope/follow-up/optional, writes observable acceptance criteria and durable progress to `.cursor/complete-everything-state.md`, implements in independently verifiable milestones, routes API/FE-BE/performance/UI work to the matching skills, and loops the full applicable verification ladder until every closure item has fresh evidence. The packaged Cursor stop hook continues actionable unchecked state; Claude Code 2.1.139+ can use `/goal`. Final closure requires an independent `completion-judge` PASS at the claimed evidence level.
@@ -775,7 +780,6 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | Command | File | Quick Reference |
 |---------|------|-----------------|
 | `/plan` | `plan.md` | Plan Mode — research codebase, clarify, produce approved plan before coding |
-| `/research` | `research.md` | Three-phase Firecrawl deep research → gap analysis → implementation plan |
 | `/fix-issue` | `fix-issue.md` | Fetch GitHub issue → find code → implement fix → open PR |
 | `/mcp-guide` | `mcp-guide.md` | MCP-powered dev workflow reference (renamed from `/mcp` to avoid Claude Code's built-in `/mcp`) |
 
@@ -784,6 +788,7 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | Command | Points to | Notes |
 |---------|-----------|-------|
 | `/burndown-full` | `burndown-full` | Finish a partial refactor/migration to 100% repo coverage (MATCH/DONE + verification gate) |
+| `/research` | `research` | Three-phase Firecrawl deep research → gap analysis → implementation plan |
 | `/complete-everything` | `complete-everything` | Close connected deferrals and prove the whole approved outcome with fresh tests |
 | `/green-repo` | `workflow-green-repo` | Drive the whole repo to green (typecheck/lint/test/build) — authorized debt cleanup |
 | `/ship-and-observe` | `workflow-ship-and-observe` | Deploy, verify the live revision, observe the stability window, roll back if needed |

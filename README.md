@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Ready-made playbooks for your AI coding editor.</strong><br/>
-  138 agent skills · 51 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
+  139 agent skills · 51 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
   <em>You talk in plain English. The matching expert recipe runs itself.</em>
 </p>
 
@@ -29,17 +29,19 @@ Your AI editor is smart, but without a recipe it **guesses**. Sometimes that gue
 
 You do **not** need to memorize skill names. Talking like a human is enough.
 
-It ships **138 Cursor agent skills**, 51 slash commands, and 6 subagents — tuned for React / Next.js / Supabase, useful on almost any stack. Works in [Cursor](https://cursor.com), [Claude Code](https://www.anthropic.com/claude-code), and (with a lighter install) Codex + Gemini CLI. Brand new? Read the **[plain-language guide →](docs/GETTING-STARTED.md)**.
+It ships **139 Cursor agent skills**, 51 slash commands, and 6 subagents — tuned for React / Next.js / Supabase, useful on almost any stack. Works in [Cursor](https://cursor.com), [Claude Code](https://www.anthropic.com/claude-code), and (with a lighter install) Codex + Gemini CLI. Brand new? Read the **[plain-language guide →](docs/GETTING-STARTED.md)**.
 
 ### Install (30 seconds)
 
 ```bash
-npx skills add kensaurus/cursor-kenji
+npx @kensaurus/cursor-kenji --all
 ```
 
-Restart Cursor. Done.
+That merge-installs skills **and** slash commands (and agents/rules) into every tool it supports, then hash-checks the copies. Restart Cursor. Done.
 
-> No Cursor yet? **[Download it](https://cursor.com)**. No `skills` CLI? `npm install -g skills`, or see [manual install](#manual-install).
+> Skills only (no `/commands`)? `npx skills add kensaurus/cursor-kenji` — Vercel skills CLI, project-local by default (`-g` for `~/.cursor/skills`). Its `--all` means “all skills to all agents”, not Cursor+Claude+Codex+Gemini.
+>
+> No Cursor yet? **[Download it](https://cursor.com)**. See [manual install](#manual-install).
 
 ### What should I say? (use cases)
 
@@ -92,7 +94,7 @@ Full menu with every skill name → **[Every skill](#every-skill-in-plain-englis
 | **Rule** | A house rule the AI always obeys | Drop a `.mdc` into your project |
 | **MCP server** | A phone line to your database / GitHub / browser | Copy a template + paste your keys |
 
-Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **150** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
+Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **151** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
 
 ### How the recipes fit together (the loop)
 
@@ -129,7 +131,7 @@ The whole kit, at a glance:
 
 | | Count | What it does |
 |:--|------:|:-------------|
-| **Skills** | 138 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
+| **Skills** | 139 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
 | **Cursor Skills** | 12 | IDE tools (canvas, hooks, rules, PR splitter) |
 | **Commands** | 51 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
 | **Subagents** | 6 | Background helpers (code-reviewer, debugger, db-migrator…) |
@@ -149,7 +151,7 @@ Scroll the **family counts**, then the **full list**. You don't memorize names �
 
 <!-- SKILL-INDEX:START -->
 
-_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **150 skills** listed below._
+_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **151 skills** listed below._
 
 #### Skill families at a glance
 
@@ -172,9 +174,9 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | 🛡️ Protocols — session guardrails | **1** | Keep browser automation from freezing |
 | ✍️ Authoring — build skills & MCP | **2** | Author new skills or MCP servers |
 | 🤝 Third-party (upstream-maintained) | **3** | Vendored upstream skills (Emil, UI/UX Pro Max, Vercel WIG) |
-| 🧩 Core & cross-cutting | **7** | Close everything, burndown, post-launch loops |
+| 🧩 Core & cross-cutting | **8** | Close everything, burndown, post-launch loops |
 | 🖱️ Cursor IDE skills | **12** | Canvas, hooks, rules, PR splitter, CLI helpers |
-| **Total** | **150** | |
+| **Total** | **151** | |
 
 #### Full list (every skill)
 
@@ -394,7 +396,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `thirdparty-ui-ux-pro-max` | Third-party skill — searchable style catalog, palettes, typography, and UX guidelines via Python scripts |
 | `thirdparty-web-interface-guidelines` | Third-party skill — Vercel Web Interface Guidelines compliance (focus, forms, animation, copy) |
 
-### 🧩 Core & cross-cutting (7)
+### 🧩 Core & cross-cutting (8)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -405,6 +407,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `handoff` | Compact the current conversation into a handoff document a fresh agent can pick up |
 | `iterate-agent-harness` | Turn an agent's own failure — a premature stop, a false "done", a reward- hacked check, a missed file, a broken handoff — into a durable… |
 | `iterate-post-launch` | Close the post-launch improvement loop for any shipped app |
+| `research` | Research current best practices with Context7, Firecrawl, and official docs before a non-trivial change |
 
 ### 🖱️ Cursor IDE skills (12)
 
@@ -431,11 +434,11 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 
 Pick whichever fits how you work. The first one covers most people.
 
-| Method | Command |
-|:-------|:--------|
-| **skills.sh** (recommended) | `npx skills add kensaurus/cursor-kenji` |
-| **npm installer** | `npx @kensaurus/cursor-kenji` |
-| **Clone** | `git clone … && ./install.sh` |
+| Method | Command | What it installs |
+|:-------|:--------|:-----------------|
+| **npm installer** (full pack) | `npx @kensaurus/cursor-kenji --all` | Skills + commands + agents + rules. `--all` = Cursor + Claude + Codex + Gemini |
+| **skills.sh** (skills only) | `npx skills add kensaurus/cursor-kenji` | `SKILL.md` folders only. Default is the current project; add `-g` for `~/.cursor/skills`. Does **not** write `~/.cursor/commands` |
+| **Clone** | `git clone … && ./install.sh` | Same as the npm installer (`--cursor --claude` with no args) |
 
 **npm installer modes:**
 
@@ -448,6 +451,7 @@ npx @kensaurus/cursor-kenji --gemini   # install for Gemini CLI (~/.gemini/GEMIN
 npx @kensaurus/cursor-kenji --all      # install for all four supported tools in one run
 npx @kensaurus/cursor-kenji --clean    # mirror ~/.cursor to match this repo (backup first)
 npx @kensaurus/cursor-kenji --dry-run  # preview
+npx @kensaurus/cursor-kenji --verify   # hash-check dests against this package (no writes)
 npx @kensaurus/cursor-kenji --skill audit-ux   # single skill
 npx @kensaurus/cursor-kenji --link     # dev: symlink for live skill authoring
 ```
@@ -532,7 +536,7 @@ curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.
 
 </details>
 
-**Keep fresh:** `npx skills add kensaurus/cursor-kenji` or `git pull && ./install.sh`
+**Keep fresh:** `npx @kensaurus/cursor-kenji --all && npx @kensaurus/cursor-kenji --verify --all` or `git pull && ./install.sh`
 
 ---
 
@@ -797,7 +801,7 @@ Where everything lives:
 
 ```
 cursor-kenji/
-├── skills/           # 138 Agent Skills (SKILL.md each)
+├── skills/           # 139 Agent Skills (SKILL.md each)
 ├── skills-cursor/    # 12 Cursor-specific skills
 ├── commands/         # 51 slash commands
 ├── agents/           # 6 subagents
@@ -848,10 +852,10 @@ See [CONTRIBUTING.md](CONTRIBUTING.md), [docs/README.md](docs/README.md), [docs/
 A box of ready-made recipes for your AI editor ([Agent Skills](https://agentskills.io) format) — plus slash commands, subagents, and MCP templates for [Cursor](https://cursor.com). One command installs them into `~/.cursor/` and `~/.agents/skills/`.
 
 **How do I install?**  
-`npx skills add kensaurus/cursor-kenji` (recommended) or `npx @kensaurus/cursor-kenji`. Restart Cursor after install.
+`npx @kensaurus/cursor-kenji --all` for skills **and** slash commands. `npx skills add kensaurus/cursor-kenji` installs skills only. Restart Cursor after install. Re-check with `npx @kensaurus/cursor-kenji --verify`.
 
 **How many skills?**  
-**138** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**150** total). Counts come from the filesystem and stay synced via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
+**139** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**151** total). Counts come from the filesystem and stay synced via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
 
 **How do skills trigger?**  
 You talk normally. Cursor matches your words to each skill's YAML `description`. To force one: *"use \`audit-security\` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).

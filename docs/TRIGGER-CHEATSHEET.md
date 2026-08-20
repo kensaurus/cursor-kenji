@@ -210,6 +210,7 @@ Attribution and update policy → [THIRD-PARTY-SKILLS.md](./THIRD-PARTY-SKILLS.m
 
 | Say this in chat | Skill |
 |:-----------------|:------|
+| "/research", "look up current docs", "what does the industry recommend", "research this before we implement" | `research` |
 | "browser automation", "Playwright", "page navigation" (as pre-session setup) | `protocol-browser-anti-stall` |
 | "parallel browser agents", "playwright session", "browser keeps stalling", "stay logged in for browser tests" | `protocol-browser-anti-stall` |
 
