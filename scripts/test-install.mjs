@@ -41,7 +41,7 @@ try {
 
   // Expected source counts from the repo.
   const cursorBuiltinDupes = new Set([
-    "canvas", "create-hook", "create-rule", "create-skill", "create-subagent",
+    "babysit", "canvas", "create-hook", "create-rule", "create-skill", "create-subagent",
     "migrate-to-skills", "shell", "split-to-prs", "statusline",
     "update-cli-config", "update-cursor-settings",
   ]);
@@ -60,7 +60,10 @@ try {
 
   expect(countDir(join(cur, "skills")) === repoCursorSkills,
     `cursor skills: expected ${repoCursorSkills}, got ${countDir(join(cur, "skills"))}`);
-  expect(existsSync(join(cur, "skills", "babysit")), "missing skills/babysit (not a Cursor builtin)");
+  expect(existsSync(join(cur, "skills", "research")), "missing skills/research");
+  expect(existsSync(join(cur, "commands", "research.md")), "missing commands/research.md");
+  expect(!existsSync(join(cur, "skills", "babysit")),
+    "Cursor builtin babysit should not be copied into ~/.cursor/skills");
   expect(!existsSync(join(cur, "skills", "create-skill")),
     "Cursor builtin create-skill should not be copied into ~/.cursor/skills");
   expect(countDir(join(cur, "commands")) === repoCommands,
@@ -186,10 +189,58 @@ try {
     `claude skills: expected ${repoClaudeSkills}, got ${countDir(join(sandbox5, ".claude", "skills"))}`);
   expect(existsSync(join(sandbox5, ".claude", "skills", "create-skill")),
     "Claude should still receive portable skills-cursor copies");
+  expect(existsSync(join(sandbox5, ".claude", "skills", "babysit")),
+    "Claude should still receive the portable babysit copy");
+  expect(existsSync(join(sandbox5, ".claude", "skills", "research")),
+    "Claude should receive skills/research");
   expect(existsSync(join(sandbox5, ".claude", "rules", "shell-first-search.md")),
     "Claude should receive shell-first-search.md");
   expect(countDir(join(sandbox5, ".claude", "rules")) === repoClaudeRules,
     `claude rules: expected ${repoClaudeRules}, got ${countDir(join(sandbox5, ".claude", "rules"))}`);
+
+  // Merge must overwrite same-name skills and commands (not leave stale text).
+  const marker = "KENJI-OVERWRITE-PROBE-DO-NOT-SHIP";
+  const skillProbe = join(cur, "skills", "research", "SKILL.md");
+  const cmdProbe = join(cur, "commands", "research.md");
+  writeFileSync(skillProbe, marker);
+  writeFileSync(cmdProbe, marker);
+  execFileSync(process.execPath, [installer], {
+    env: { ...process.env, HOME: sandbox, USERPROFILE: sandbox },
+    stdio: "pipe",
+  });
+  expect(!readFileSync(skillProbe, "utf8").includes(marker),
+    "merge install did not overwrite a stale skill");
+  expect(!readFileSync(cmdProbe, "utf8").includes(marker),
+    "merge install did not overwrite a stale command");
+  expect(readFileSync(skillProbe, "utf8").includes("name: research"),
+    "overwritten research skill is missing frontmatter");
+
+  // --verify passes on a good install and fails closed on corruption.
+  execFileSync(process.execPath, [installer, "--verify"], {
+    env: { ...process.env, HOME: sandbox, USERPROFILE: sandbox },
+    stdio: "pipe",
+  });
+  writeFileSync(skillProbe, marker);
+  let verifyFailed = false;
+  try {
+    execFileSync(process.execPath, [installer, "--verify"], {
+      env: { ...process.env, HOME: sandbox, USERPROFILE: sandbox },
+      stdio: "pipe",
+    });
+  } catch {
+    verifyFailed = true;
+  }
+  expect(verifyFailed, "--verify did not fail after dest corruption");
+
+  // Stale Cursor-managed babysit copies must be deleted on reinstall.
+  const staleBabysit = join(cur, "skills", "babysit");
+  mkdirSync(staleBabysit, { recursive: true });
+  writeFileSync(join(staleBabysit, "SKILL.md"), marker);
+  execFileSync(process.execPath, [installer], {
+    env: { ...process.env, HOME: sandbox, USERPROFILE: sandbox },
+    stdio: "pipe",
+  });
+  expect(!existsSync(staleBabysit), "stale Cursor babysit copy was not deleted");
 
   // Official npm bin is the .js wrapper (Windows cmd-shim friendly).
   expect(existsSync(join(repoRoot, "bin", "cursor-kenji.js")), "missing bin/cursor-kenji.js");

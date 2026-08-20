@@ -6,6 +6,30 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.26.0] — 2026-08-20
+
+### Added
+
+- **`research` skill** — the production research protocol is now a first-party
+  skill (`skills/research/`) so `npx skills add` and Cursor `/` share the same
+  playbook. `/research` is a thin command wrapper (same pattern as
+  `complete-everything`).
+- **Installer `--verify`** — read-only hash check of every packaged file
+  against the destination. Extra personal files are allowed; missing or
+  stale packaged files fail closed. Merge install now verifies each copy
+  before reporting success.
+
+### Fixed
+
+- **Install-channel docs** — `npx skills add` installs skills only and does
+  not write slash commands. `npx @kensaurus/cursor-kenji --all` is the
+  full-pack one-liner. The two `--all` flags are not the same.
+- **Cursor `/babysit` shadow** — `babysit` is a Cursor-managed builtin.
+  The installer no longer copies it into `~/.cursor/skills` and deletes
+  stale copies on upgrade (Claude still gets the portable copy).
+- **Dual-name CI gate** — `validate-skills` errors on an undeclared
+  skill+command pair so new `/` picker duplicates cannot ship unnoticed.
+
 ## [1.25.0] — 2026-08-20
 
 ### Added

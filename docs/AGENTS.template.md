@@ -119,7 +119,7 @@ shows the new path, spec/roadmap reflect reality. **"The agent stopped editing" 
 
 ## Using with cursor-kenji
 
-Install skills: `npx skills add kensaurus/cursor-kenji`
+Install the full pack (skills + commands): `npx @kensaurus/cursor-kenji --all`. Skills only: `npx skills add kensaurus/cursor-kenji`. Re-check: `npx @kensaurus/cursor-kenji --verify`.
 
 Plan loops: [PLAN-LOOPS.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/PLAN-LOOPS.md)
 

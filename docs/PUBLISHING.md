@@ -1,6 +1,6 @@
 # Publishing cursor-kenji
 
-How maintainers ship a new npm version. Consumers only need `npx skills add kensaurus/cursor-kenji`.
+How maintainers ship a new npm version. Consumers who want skills **and** slash commands run `npx @kensaurus/cursor-kenji --all`. `npx skills add kensaurus/cursor-kenji` installs skills only.
 
 ## Prerequisites
 
@@ -35,7 +35,8 @@ gh release create v1.4.2 --title "v1.4.2" --notes "$(cat <<'EOF'
 - …
 
 ## Install
-npx skills add kensaurus/cursor-kenji
+npx @kensaurus/cursor-kenji --all
+npx @kensaurus/cursor-kenji --verify --all
 EOF
 )"
 ```

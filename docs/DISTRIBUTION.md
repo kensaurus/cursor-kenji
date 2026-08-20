@@ -6,10 +6,12 @@ Where cursor-kenji is published and how users find it.
 
 | Channel | Command |
 |---------|---------|
-| **skills.sh** (recommended) | `npx skills add kensaurus/cursor-kenji` |
-| **npm** | `npx @kensaurus/cursor-kenji --all` |
+| **npm** (full pack) | `npx @kensaurus/cursor-kenji --all` |
+| **skills.sh** (skills only) | `npx skills add kensaurus/cursor-kenji` |
 | **Clone** | `git clone … && node bin/install.mjs --all` |
 | **Git clone** | `git clone https://github.com/kensaurus/cursor-kenji.git && ./install.sh` |
+
+`npx skills add --all` is **not** the same as `npx @kensaurus/cursor-kenji --all`. The skills CLI `--all` means “every skill to every detected agent”. The kenji installer `--all` means Cursor + Claude Code + Codex + Gemini, including slash commands.
 
 Current npm version: see [npm package page](https://www.npmjs.com/package/@kensaurus/cursor-kenji) or `npm view @kensaurus/cursor-kenji version`.
 
@@ -38,12 +40,14 @@ Track submission URLs and review status in [PROMOTION.md](PROMOTION.md).
 
 ### By install channel
 
-| Channel | Cursor | Claude Code | Commands | Agents | Rules | Completion hook | MCP config |
+| Channel | Cursor skills | Claude Code | Commands | Agents | Rules | Completion hook | MCP config |
 |---------|:------:|:-----------:|:--------:|:------:|:-----:|:---------------:|:----------:|
-| `npx skills add kensaurus/cursor-kenji` | Yes | No | Yes | Yes | Yes | Plugin stop hook | Template copy if missing |
-| `npx @kensaurus/cursor-kenji` (`--claude` / `--all`) | Yes | Yes | Yes | Yes | Yes | Cursor only | Template copy if missing |
+| `npx skills add kensaurus/cursor-kenji` | Yes (project `.agents/skills` by default; `-g` → `~/.cursor/skills`) | only with `-a claude-code` | No | No | No | No | No |
+| `npx @kensaurus/cursor-kenji` (`--claude` / `--all` / `--auto`) | Yes | Yes (`--claude` / `--all` / `--auto`) | Yes | Yes | Yes | Cursor only | Template copy if missing |
 | `./install.sh` (clone) | Yes | Yes | Yes | Yes | Yes | Cursor only | Template copy if missing |
 | Cursor Marketplace / cursor.directory | Yes | No | Yes | Yes | Yes | Plugin stop hook | `.mcp.json` at repo root |
+
+Re-check a kenji install without writing: `npx @kensaurus/cursor-kenji --verify` (add `--all` to include Claude/Codex/Gemini dests). Extra personal files are allowed; missing or hash-mismatched packaged files fail.
 
 The installer merges into:
 
