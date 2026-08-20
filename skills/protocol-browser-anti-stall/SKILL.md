@@ -1,10 +1,10 @@
 ---
 name: protocol-browser-anti-stall
 description: >
-  Prevent browser automation from freezing, stalling, or colliding between parallel
-  agents, and enforce manual, headed, real-user driving (never scripted). Standardizes on
-  the playwright-cli (`npx --yes @playwright/cli@latest`) with named sessions
-  (`-s=<name>`) so multiple agents each get their own isolated browser.
+  Browser-session guardrail for Playwright CLI: use headed, named,
+  isolated sessions; prevent parallel collisions and recover stalls
+  without scripted shortcuts. Read before browser work or when automation
+  freezes. Product QA behavior remains with the calling test/audit skill.
 license: MIT
 ---
 

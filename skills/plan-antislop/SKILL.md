@@ -1,10 +1,10 @@
 ---
 name: plan-antislop
 description: >
-  Audit a codebase, UI, or copy for machine-generated tells across prose, visual/UI, code,
-  and structure/IA, then produce a phased de-slop burndown. Use when the user says "feels
-  AI-generated", "looks like AI slop", "reads like ChatGPT", "feels generic/soulless", or
-  wants an authenticity/voice pass before launch.
+  Plan-only authenticity / AI-slop audit across prose, UI, code, and IA.
+  Use when "looks like AI slop", "reads like ChatGPT", or "authenticity
+  burndown". One-page UX apply → enhance-web-ux. Visual polish →
+  enhance-web-ui.
 license: MIT
 ---
 

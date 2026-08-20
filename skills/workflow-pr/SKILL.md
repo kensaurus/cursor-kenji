@@ -1,12 +1,27 @@
 ---
 name: workflow-pr
-description: Manage the full PR lifecycle — create, review, address bot feedback, resolve conflicts, and merge. Use when creating pull requests, managing PR reviews, addressing bot feedback, or merging PRs.
+description: >
+  Manage an existing PR lifecycle — review, bot feedback, conflicts,
+  merge. Use when opening a PR from an already-committed branch,
+  addressing review, or merging. Uncommitted working tree to
+  merge-ready → workflow-release-prep.
 license: MIT
 ---
 
 # PR Workflow Skill
 
-full checklist for every pull request.
+Full checklist for an already-committed branch or an open PR.
+
+Uncommitted / staged / untracked working tree that still needs review,
+commit, and a merge-ready PR is **`workflow-release-prep`**. This skill
+does not own that sequence.
+
+## Invocation boundary
+
+- **Standalone:** open or manage the PR. Merge only when the user explicitly
+  asked to merge.
+- **Called by `workflow-release-prep`:** open the PR and return its URL.
+  `babysit` owns the green loop; the caller stops before merge.
 
 ## Phase 1: Before Creating PR
 
@@ -101,10 +116,12 @@ After pushing fixes:
 
 ### 8. Execute Merge
 
-Only after both gates pass:
+Only after both gates pass **and the user explicitly asked to merge**:
 ```bash
 gh pr merge --merge
 ```
+
+Otherwise report that the PR is merge-ready and stop.
 
 ### 9. Verify Success
 

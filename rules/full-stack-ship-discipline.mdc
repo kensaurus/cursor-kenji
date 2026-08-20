@@ -1,5 +1,5 @@
 ---
-description: Ship the backend with the frontend — every feature is full-stack until verified end-to-end, and database changes must reach the remote DB before the chat ends. Attach when implementing a change that reads or writes data, RPCs, tables, policies, buckets, or secrets. Do not attach during plan-* or present-then-stop audit passes.
+description: Require frontend changes and their DB/RPC/RLS/storage/secret dependencies to ship and be remotely verified together. Apply when implementing code that reads or writes backend state. Do not apply to plan-* or present-then-stop audits; production data mutation still requires confirmation.
 alwaysApply: false
 ---
 

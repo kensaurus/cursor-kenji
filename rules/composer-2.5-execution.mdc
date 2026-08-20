@@ -1,5 +1,5 @@
 ---
-description: Execution-time guardrails for implementing an already-approved plan-*.md audit/burndown (anti-reward-hacking, anti-feature-deletion, checkpointing, context + terminal discipline). Attach whenever executing an approved plan, burndown, complete-everything, or burndown-full run — tuned to Composer 2.5 but binding for any implementation model.
+description: Guard execution of approved plan/burndown work: forbid reward hacking and feature deletion; require checkpoints, context discipline, safe terminal use, and fresh verification. Apply to approved plan-*.md, complete-everything, or burndown-full runs; binding for any implementation model.
 alwaysApply: false
 paths:
   - "**/plan-*.md"

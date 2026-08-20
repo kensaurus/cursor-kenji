@@ -11,6 +11,8 @@
  *   - `name` present, matches the parent directory, lowercase a-z/0-9/-,
  *     no leading/trailing hyphen, no consecutive `--`, <= 64 chars
  *   - `description` present, non-empty, <= 320 chars (house budget; spec max 1024)
+ *   - `description` has balanced quoted trigger phrases and no truncation scar
+ *   - (warn) `description` stays below 315 chars so edits retain budget headroom
  *   - (warn) SKILL.md body <= 500 lines (move detail to references/)
  *   - first-party audit-, plan-, and test- family bodies declare
  *     Degree of freedom, a Worked example, and a Self-critique rubric
@@ -25,6 +27,7 @@ const asJson = process.argv.includes("--json");
 
 const NAME_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/; // lowercase, hyphen-separated, no -- or edge -
 const DESC_MAX = 320;
+const DESC_HEADROOM_WARN = 315;
 const BODY_WARN = 500;
 
 const errors = [];
@@ -90,8 +93,29 @@ for (const group of groups) {
     const desc = readDescription(front);
     if (!desc) {
       errors.push(`${id}: missing or empty 'description'`);
-    } else if (desc.length > DESC_MAX) {
-      errors.push(`${id}: description ${desc.length} chars > ${DESC_MAX} (spec max)`);
+    } else {
+      if (desc.length > DESC_MAX) {
+        errors.push(`${id}: description ${desc.length} chars > ${DESC_MAX} (house max)`);
+      } else if (desc.length >= DESC_HEADROOM_WARN) {
+        warnings.push(
+          `${id}: description ${desc.length} chars leaves < ${DESC_MAX - DESC_HEADROOM_WARN + 1} chars headroom`,
+        );
+      }
+      const doubleQuotes = [...desc].filter((char) => char === '"').length;
+      if (doubleQuotes % 2 !== 0) {
+        errors.push(`${id}: description has an unmatched double quote (likely truncated trigger)`);
+      }
+      if (/→\./.test(desc)) {
+        errors.push(`${id}: description contains truncated handoff '→.'`);
+      }
+      const opens = [...desc].filter((char) => char === "(").length;
+      const closes = [...desc].filter((char) => char === ")").length;
+      if (opens !== closes) {
+        errors.push(`${id}: description has unmatched parentheses (likely truncated)`);
+      }
+      if (/\bi\.e\.\s*$/.test(desc)) {
+        errors.push(`${id}: description ends in 'i.e.' (truncated)`);
+      }
     }
 
     // body length (warning only)

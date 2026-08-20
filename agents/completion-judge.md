@@ -1,6 +1,6 @@
 ---
 name: completion-judge
-description: Independently judge whether an approved plan or explicit closure run is actually complete. Compare the requested outcome, durable state, full diff, and fresh verification evidence; return PASS, CONTINUE, or BLOCKED with exact remaining work. Use before final completion claims for wide changes, plan execution, burndowns, and complete-everything runs.
+description: Independently judge wide/approved work against the request, durable state, full diff, and fresh evidence; return PASS, CONTINUE, or BLOCKED with exact gaps. Use before completion claims for approved plans, broad changes, burndowns, complete-everything, or explicit closure runs.
 ---
 
 # Completion Judge

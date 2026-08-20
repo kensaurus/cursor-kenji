@@ -22,13 +22,13 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 | `test-` | Prove | Write/run tests & QA |
 | `deploy-` | Ship | Release & post-deploy verification |
 | `debug-` | Operate | Diagnose & fix a specific failure |
-| `workflow-` | Spans stages | Dev process (git, PR, refactor, spec-TDD, housekeep) |
+| `workflow-` | Spans stages | Dev process (git, PR, release-prep, refactor, spec-TDD, housekeep) |
 | `meta-` | Author | Authoring skills & MCP servers |
 | `protocol-` | Guardrail | Session-level protocols used by other skills |
 
 ---
 
-## Skills (139)
+## Skills (140)
 
 ### Enhance
 
@@ -38,9 +38,9 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Related:** `enhance-web-ux`, `audit-responsive`, `audit-uiux-design-system`, `design-frontend`
 
 #### `enhance-web-ux`
-**Triggers:** "enhance this page", "make /xxx better", "this page feels AI-generated", "fix UX of /xxx", "improve information density", "icons all look the same", "buttons wrap to 2 lines", "empty columns"
+**Triggers:** "enhance this page", "make /xxx better", "fix UX of /xxx", "improve information density", "icons all look the same", "buttons wrap to 2 lines", "empty columns"
 **What it does:** Replaces generic / "stacked" UI with semantic data wired to real backend state. Maps every pain point to an NN/g heuristic, fixes at the helper / token level. Verified live at multiple viewports via playwright-cli.
-**Related:** `enhance-web-ui`, `audit-responsive`, `audit-ux`, `audit-uiux-design-system`
+**Related:** `enhance-web-ui`, `audit-responsive`, `audit-ux`, `audit-uiux-design-system`, `plan-antislop`
 
 #### `enhance-web-landing`
 **Triggers:** "build a landing page", "portfolio", "marketing site", "anti-slop", "Awwwards-style", "premium frontend", "make it not look AI-generated", "taste"
@@ -50,12 +50,12 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `enhance-web-redesign`
 **Triggers:** "redesign this site", "upgrade UI to premium", "remove AI slop patterns", "redesign audit", "make this existing site feel premium"
 **What it does:** Audit-first upgrade of an existing web project. Starts with a 60-second AI-tell triage, then scans codebase and applies targeted fixes — no rewrites.
-**Related:** `enhance-web-landing`, `enhance-web-ui`, `audit-uiux-design-system`
+**Related:** `enhance-web-landing`, `enhance-web-ui`, `audit-uiux-design-system`, `plan-antislop`, `design-frontend`
 
 #### `enhance-web-web3d`
 **Triggers:** "add 3D", "add a WebGL hero", "make it cinematic", "scroll-driven 3D", "three.js scene", "React Three Fiber", "GSAP scroll animation", "product configurator", "3D model viewer", "pinned scroll storytelling", "wow factor"
 **What it does:** Audit-first elevation of an existing web app with 3D + cinematic motion (Three.js / R3F + GSAP ScrollTrigger + Motion). Ships with performance budget, mobile + no-WebGL fallbacks, reduced-motion support, SSR safety.
-**Related:** `enhance-web-redesign`, `enhance-web-landing`, `design-motion`, `audit-performance`
+**Related:** `enhance-web-ui`, `enhance-motion`, `enhance-web-redesign`, `enhance-web-landing`, `audit-performance`
 
 #### `enhance-capacitor-ui`
 **Triggers:** "improved one surface and broke the other", "looks great on web but cramped on mobile", "ad-hoc useIsMobile branches", "Capacitor / Tauri / Expo Web cross-surface issues", "hover-only affordances on touch"
@@ -65,7 +65,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `enhance-readme`
 **Triggers:** "enhance README", "make README prettier", "add screenshots to README", "add hero image", "make README more fun", "add animated demo to README", "record a tour GIF"
 **What it does:** Theme-aware hero + tour grid + optional autoplay GIF via playwright-cli. Captures live screenshots at 1600×1000 in dark and light mode with `<picture>` auto theme-swap.
-**Related:** `docs-writer`, `test-playwright`
+**Related:** `docs-writer`, `plan-docs-sync`, `test-playwright`
 
 #### `enhance-web-seo`
 **Triggers:** "improve SEO", "add meta tags", "fix search ranking", "add structured data", "sitemap", "canonical URLs", "Open Graph", "Google indexing", "rich results", "SEO audit", "why is my site not ranking"
@@ -100,7 +100,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `housekeep-backlog`
 **Triggers:** "what's left behind", "inventory TODOs", "consolidate the backlog", "parked work register", "living BACKLOG.md", "/housekeep-backlog"
 **What it does:** Apply-now collector for parked work. Scans unfinished plan/burndown docs, deferred phases, TODO/FIXME/HACK markers, skipped tests, open audit findings, commented-out blocks, and unfinished feature flags; dedups so one real piece of work is one `BL-` row; writes a living `docs/BACKLOG.md` that regenerates and diffs (new / done / newly-stale). Inventories only — high-priority items hand off to `complete-everything` / `burndown-full`. The `docs-adr` pattern applied to parked work.
-**Related:** `complete-everything`, `burndown-full`, `docs-adr`, `plan-stub-checker`, `workflow-feature-flag`, `workflow-housekeep`, `enhance-agent-guardrails`
+**Related:** `complete-everything`, `burndown-full`, `docs-adr`, `plan-stub-checker`, `workflow-feature-flag`, `workflow-housekeep`, `workflow-release-prep`, `enhance-agent-guardrails`
 
 #### `enhance-web-forms`
 **Triggers:** "improve this form", "form validation", "accessible form", "multi-step form", "form error handling", "the form UX is bad", "enhance-web-forms"
@@ -127,14 +127,14 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 ### Design
 
 #### `design-frontend`
-**Triggers:** "make it look good", "beautify", "style this", "redesign", "modern UI", "professional look", "improve the design"
-**What it does:** Production-grade frontend interfaces avoiding generic AI aesthetics. Enforces bold design thinking with intentional typography, color, motion, and spatial composition.
-**Related:** `design-system`, `design-motion`, `design-theme`
+**Triggers:** "build this UI", "design this page", "new dashboard layout"
+**What it does:** New production-grade UI from scratch. Polish existing → `enhance-web-ui`. Landing → `enhance-web-landing`. Redesign existing → `enhance-web-redesign`.
+**Related:** `design-system`, `design-motion`, `design-theme`, `enhance-web-ui`, `enhance-web-landing`, `enhance-web-redesign`
 
 #### `design-system`
-**Triggers:** "design system", "component library", "tokens", "variants", "consistent styling", "reusable components"
-**What it does:** Build scalable design systems with CSS custom properties, CVA variants, compound components, and Radix primitives.
-**Related:** `design-frontend`, `audit-uiux-design-system`
+**Triggers:** "create a design system", "component library from scratch"
+**What it does:** Build a new design system (tokens, variants, theming). Drifted existing system → `housekeep-design`. Plan-only unification → `plan-uiux-unification`.
+**Related:** `design-frontend`, `audit-uiux-design-system`, `housekeep-design`, `plan-uiux-unification`
 
 #### `design-api`
 **Triggers:** "API", "endpoint", "REST", "GraphQL", "route handler", "request/response", "HTTP methods"
@@ -162,7 +162,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Related:** `audit-responsive`, `audit-uiux-design-system`, `audit-ux`, `enhance-web-ux`, `enhance-web-ui`, `design-system`
 
 #### `plan-antislop`
-**Triggers:** "feels AI-generated", "AI slop", "de-slop", "reads like ChatGPT", "generic/templated/soulless", "every component looks the same", "voice pass", "authenticity pass", "strip the AI smell"
+**Triggers:** "looks like AI slop", "reads like ChatGPT", "authenticity burndown", "de-slop", "generic/templated/soulless", "voice pass"
 **What it does:** Audit-and-plan for machine-generated tells across four surfaces — prose (cadence, filler vocab, hedge-and-pad), visual/UI (default palette, card-grid monotony, centered-everything), code (placeholder residue, comment slop, over-abstraction), structure/IA (listicle-brain, symmetrical scaffolding, README slop). Scores findings by recognizability × effort; emits `plan-antislop.md` phased burndown — **no rewrites until each phase is approved**. Recommends directions, never ghost-written replacements.
 **Related:** `enhance-web-ux`, `enhance-web-ui`, `enhance-web-landing`, `design-frontend`, `audit-i18n`, `docs-writer`, `plan-uiux-unification`
 
@@ -174,7 +174,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `plan-error-handling`
 **Triggers:** "errors aren't showing in Sentry", "fail silently", "empty catch blocks", "observability", "check my Langfuse", "LLM tracing"
 **What it does:** Audits silent failures across Sentry (swallowed catches, PII in events, coverage holes) and Langfuse (untraced calls, missing evals, prompt versioning). Emits `plan-error-handling.md` — **no code until approved**.
-**Related:** `backend-observability`, `audit-langfuse-llm`, `debug-sentry-monitor`, `plan-test-coverage`
+**Related:** `backend-observability`, `audit-langfuse-llm`, `debug-sentry-monitor`, `plan-test-coverage`, `backend-error-handling`
 
 #### `plan-input-validation`
 **Triggers:** "validate my inputs", "XSS", "dangerouslySetInnerHTML", "Stripe webhook", "forge requests", "injection-safe", "sanitize user content"
@@ -279,7 +279,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `design-generative-art` *(Apache-2.0, adapted from Anthropic)*
 **Triggers:** "generative art", "procedural art", "flow fields", "particle systems", "creative coding", "noise patterns", "mathematical visualizations", "art from code", "generate visuals", "interactive animation"
 **What it does:** Seeded randomness, flow fields, recursive subdivision, circle packing, L-systems, animation loops. React component pattern with controllable parameters and PNG/SVG export.
-**Related:** `enhance-web-web3d`, `design-motion`
+**Related:** `data-visualization`, `design-frontend`, `enhance-web-web3d`, `design-motion`
 
 #### `design-canvas` *(Apache-2.0, adapted from Anthropic)*
 **Triggers:** "poster", "visual design", "infographic", "certificate", "badge", "banner", "social media graphic", "print design", "create artwork", "design graphic"
@@ -291,14 +291,14 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 ### Backend
 
 #### `backend-patterns`
-**Triggers:** "API design", "database schema", "authentication", "caching", "queues", "background jobs", "microservices", "serverless", "backend architecture"
-**What it does:** Server Actions (Next.js), tRPC routers, Supabase Edge Functions, database patterns (optimistic locking, soft deletes, audit logging), caching (Next.js cache, Redis), background jobs (Inngest, Trigger.dev), rate limiting.
-**Related:** `design-api`, `backend-db-performance`, `backend-error-handling`
+**Triggers:** "queue jobs", "caching layer", "rate limiting", "server actions", "edge function"
+**What it does:** Apply queues, caching, rate limits, serverless/edge. Architecture decision / over-engineering → `audit-backend-architecture`.
+**Related:** `design-api`, `backend-db-performance`, `backend-error-handling`, `audit-backend-architecture`
 
 #### `backend-db-performance`
-**Triggers:** "slow query", "database performance", "timeout", "index", "query optimization", "Prisma", "Supabase", "PostgreSQL"
+**Triggers:** "slow query", "database performance", "add an index", "N+1", "query optimization"
 **What it does:** N+1 query detection and fixes, index strategy (single, composite, partial, GIN), EXPLAIN ANALYZE interpretation, Prisma/Supabase query patterns, pagination (offset vs cursor), batch operations, RLS performance.
-**Related:** `backend-patterns`, `audit-db-schema`, `audit-performance`
+**Related:** `backend-patterns`, `audit-db-schema`, `audit-performance`, `plan-rls-audit`
 
 #### `backend-realtime`
 **Triggers:** "real-time", "live updates", "WebSocket", "notifications", "chat", "collaborative", "presence", "live data", "instant sync"
@@ -308,12 +308,12 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `backend-error-handling`
 **Triggers:** "error boundary", "try/catch", "error state", "toast notification", "form validation error", "API error handling"
 **What it does:** Standard error types, Server Action error patterns, form error display (React 19 `useActionState`), error boundaries, API route error handling, TanStack Query error handling, monitoring/logging.
-**Related:** `design-api`, `backend-patterns`
+**Related:** `design-api`, `backend-patterns`, `plan-error-handling`, `debug-sentry-monitor`
 
 #### `backend-observability`
 **Triggers:** "add logging", "instrument this", "why can't I debug prod", "no observability", "correlate the error to the trace", "redact PII from logs", "set up alerts/SLOs", wiring Sentry / Langfuse / structured logs
 **What it does:** Build-time observability — shared request/trace ID across every log line, Sentry scope, and Langfuse trace. Structured logging, PII redaction, OTel-conventional span design, LLM trace capture, symptom-based alerts/SLOs. Vendor-neutral.
-**Related:** `debug-sentry-monitor`, `audit-langfuse-llm`, `debug-error`
+**Related:** `debug-sentry-monitor`, `plan-error-handling`, `audit-langfuse-llm`, `debug-error`
 
 #### `data-pipeline`
 **Triggers:** "build an ingestion pipeline", "sync X into Y", "nightly aggregation", "process this queue", "backfill", "this cron double-counts", "dedupe", "the numbers are wrong after a retry"
@@ -337,7 +337,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `audit-code-review`
 **Triggers:** "code review", "review this PR", "review this code", "review changes"
 **What it does:** Thorough code review — correctness, security, performance, a11y, maintainability. Uses Sentry MCP for production error context, Firecrawl for current best practices. Bulk mechanical-transform semantics → `audit-codemod-safety`.
-**Related:** `audit-code-quality`, `workflow-pr`, `audit-codemod-safety`
+**Related:** `audit-code-quality`, `workflow-pr`, `workflow-release-prep`, `audit-codemod-safety`
 
 #### `audit-cicd`
 **Triggers:** "CI/CD cost", "GitHub Actions bill", "Actions minutes", "runner cost", "workflow cost", "CI is expensive", "slow CI", "audit my workflows", "artifact/cache storage", "reduce Actions spend"
@@ -387,12 +387,12 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `audit-realworld`
 **Triggers:** "audit against realworld", "compare my app to realworld", "conduit conformance", "is my full-stack app complete", "full-stack gap check", "what's missing to reach production"
 **What it does:** Audits a full-stack app against the RealWorld ("Conduit") reference — its formal API spec, shared Bruno/Hurl E2E suite, and closest-stack reference implementation. Auto-detects strict spec conformance (repo is a RealWorld build) vs benchmarking the repo's own domain against RealWorld's production-relevant patterns, and bows out on non-CRUD/non-web repos. Read-only: produces a prioritized Implemented/Partial/Missing/Diverges gap report across FE/BE/data, then delegates real production hardening to `audit-security` / `plan-*`. RealWorld is a completeness/pattern reference, not a production bar.
-**Related:** `audit-fe-api`, `debug-fe-be-integration`, `audit-security`, `plan-perf-audit`, `plan-rls-audit`, `complete-everything`, `full-stack-ship-discipline`
+**Related:** `audit-fe-api`, `debug-fe-be-integration`, `audit-ux-journeys`, `audit-security`, `plan-perf-audit`, `plan-rls-audit`, `complete-everything`, `full-stack-ship-discipline`
 
 #### `audit-resilience`
 **Triggers:** "is this production-ready", "resilience audit", "will this survive real traffic", "audit retries/timeouts/idempotency", "reliability review", "the 80% problem"
 **What it does:** Read-only audit for the non-functional "20%" agents skip: timeouts, retries with backoff+jitter, circuit breakers, idempotency keys, rate limiting, graceful degradation, cancellation, audit logging, and PII handling in logs. Inventories every external call, mutation, webhook, and payment path and marks each concern Implemented/Partial/Missing with `file:line`, severity, and the exact fix skill. Delegates remediation to backend-* and plan-* skills.
-**Related:** `backend-error-handling`, `backend-patterns`, `backend-observability`, `plan-llm-cost-guardrails`, `plan-input-validation`, `complete-everything`
+**Related:** `backend-error-handling`, `backend-patterns`, `backend-observability`, `audit-realworld`, `plan-llm-cost-guardrails`, `plan-input-validation`, `complete-everything`
 
 #### `audit-backend-architecture`
 **Triggers:** "audit backend architecture", "which pattern should I use", "is my backend production-grade", "am I over-engineering", "sync vs event-driven", "cache-aside/CQRS/saga/db-per-service", "microservices resilience review", "lift the backend to production"
@@ -446,8 +446,8 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 #### `audit-uiux-design-system`
 **Triggers:** "design system audit", "UI consistency", "token compliance", "design drift", "component audit", "visual coherency"
-**What it does:** Audit UI/UX coherency against design system. Auto-detects CSS framework, component library, icon library. Checks token compliance, component modularity, live visual verification via playwright-cli, Nielsen's 10 heuristics.
-**Related:** `design-system`, `audit-accessibility`, `audit-ux`, `audit-responsive`
+**What it does:** Audits visual-system coherence: tokens, component variants, color/type/spacing, dark mode, and duplicate primitives. Per-page usability is `audit-ux`; breakpoints are `audit-responsive`; unhappy states are `audit-ui-states`; plan-only unification is `plan-uiux-unification`.
+**Related:** `design-system`, `audit-accessibility`, `audit-ux`, `audit-responsive`, `audit-ui-states`, `plan-uiux-unification`
 
 #### `audit-ux`
 **Triggers:** "UX audit", "usability review", "heuristic evaluation", "content audit", "UX quality", "check cognitive load", "audit microcopy"
@@ -480,25 +480,25 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 #### `debug-error`
 **Triggers:** "debug", "error", "bug", "broken", "not working", "exception", "crash", "investigate"
-**What it does:** Systematic debugging: reproduce → isolate → research → identify root cause → fix → verify → prevent. Integrates Sentry MCP for production context, Firecrawl for fix patterns, Context7 for library docs.
-**Related:** `debug-fe-be-integration`, `debug-sentry-monitor`
+**What it does:** Diagnoses one error with hypotheses and runtime evidence: reproduce → isolate → root cause → fix → verify → prevent. FE↔BE contract failures, Sentry operations, and full bug-to-PR lifecycles have dedicated skills.
+**Related:** `debug-fe-be-integration`, `debug-sentry-monitor`, `workflow-fix-and-ship`
 
 #### `debug-fe-be-integration`
 **Triggers:** "API error", "4xx error", "5xx error", "validation error", "integration issue", "backend error", "FE-BE mismatch"
-**What it does:** Debug frontend-backend integration by analyzing backend logs, production errors (Sentry), and source code. Auto-detects FE/BE frameworks, API style, validation library. Generates both FE and BE fixes.
+**What it does:** Traces client requests, server logs, validation, auth, and responses to diagnose and fix frontend↔backend contract failures on both sides.
 **Related:** `audit-fe-api`, `debug-error`
 
 #### `debug-sentry-monitor`
 **Triggers:** "check Sentry", "fix Sentry errors", "triage errors", "production errors", "monitoring", "error tracking", "run sentry check"
 **What it does:** Monitor, triage, fix, and enhance Sentry error monitoring. Auto-detects org, project, framework, config. Seer AI root cause analysis, code fixes, noise filters, monitoring architecture audit.
-**Related:** `debug-error`, `deploy-verify`, `backend-observability`
+**Related:** `debug-error`, `workflow-fix-and-ship`, `deploy-verify`, `backend-observability`, `plan-error-handling`
 
 ---
 
 ### Test
 
 #### `test-unit`
-**Triggers:** "write tests", "test coverage", "unit test", "test this", "add tests", "testing", "Jest", "Vitest", "pytest"
+**Triggers:** "write unit tests", "add tests for this function", "unit test", "Vitest", "pytest"
 **What it does:** Write effective unit tests. Auto-detects framework (Vitest/Jest/pytest/Go/etc.), researches patterns via Firecrawl, fetches docs via Context7. Uses Sentry MCP to identify production errors lacking test coverage.
 **Related:** `workflow-spec-tdd`, `test-qa`, `test-mutation`
 
@@ -578,17 +578,17 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `deploy-verify`
 **Triggers:** "verify deploy", "post-deploy check", "smoke test production", "ship or rollback", "deploy health check", "post-release check"
 **What it does:** Post-deploy smoke test combining Sentry + Supabase + Langfuse + Playwright + Firecrawl. Checks for new errors, verifies migration health, confirms trace pipeline, runs browser smoke test. Binary SHIP/ROLLBACK/MONITOR verdict.
-**Related:** `debug-sentry-monitor`, `audit-langfuse-llm`
+**Related:** `debug-sentry-monitor`, `audit-langfuse-llm`, `workflow-ship-and-observe`, `deploy-npm`
 
 #### `iterate-post-launch`
 **Triggers:** "improve the app after launch", "fix the top issues", "post-launch polish", "what should I fix next", "production issues", "iterate on feedback", "post-release improvements", "what is broken in prod", "ship a polish pass", "make it better based on real usage"
 **What it does:** Closes the post-ship improvement loop. Pulls Sentry top errors (with Seer AI root-cause), Supabase slow-query and API logs, advisor warnings, and a live Playwright walkthrough into a ranked improvement backlog (impact × effort). Implements the approved fixes full-stack and verifies each one live. Resolves confirmed Sentry issues.
-**Related:** `test-red-team`, `deploy-verify`, `debug-sentry-monitor`, `test-playwright`, `audit-analytics`
+**Related:** `test-red-team`, `deploy-verify`, `debug-sentry-monitor`, `workflow-fix-and-ship`, `test-playwright`, `audit-analytics`
 
 #### `deploy-npm`
-**Triggers:** "release", "publish to npm", "ship a new version", "cut a release", "deploy to production", "update the changelog and publish"
+**Triggers:** "publish this package", "release to npm", "ship a new npm version"
 **What it does:** End-to-end release workflow for a Changesets + GitHub Actions + npm Trusted Publisher (OIDC) monorepo with per-package GitHub Releases.
-**Related:** `deploy-verify`, `workflow-pr`
+**Related:** `deploy-verify`, `workflow-pr`, `workflow-ship-and-observe`
 
 #### `workflow-ship-and-observe`
 **Triggers:** "ship it", "deploy to production", "release this", "go live", "roll this out", "promote to prod", "cut a release", "/ship-and-observe"
@@ -600,24 +600,24 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 ### Workflow
 
 #### `workflow-spec-tdd`
-**Triggers:** "build X", "implement", "add a feature", "do it properly", "this keeps breaking", "make it right", any non-trivial feature/refactor/bug
-**What it does:** Anti-vibe-coding spine: brainstorm → spec (the contract) → plan (file-mapped) → TDD (RED failing test → GREEN minimal code → REFACTOR) → self-review gate before declaring done. Stack-agnostic.
-**Related:** `workflow-coding-discipline`, `test-unit`, `test-playwright`
+**Triggers:** "spec first", "TDD", "do it properly", "this keeps breaking", "make it right"
+**What it does:** Anti-vibe-coding spine: brainstorm → spec → plan → TDD. End-to-end feature through PR → `workflow-build-feature`. One named bug → `workflow-fix-and-ship`.
+**Related:** `workflow-coding-discipline`, `test-unit`, `test-playwright`, `workflow-build-feature`
 
 #### `workflow-refactor`
 **Triggers:** "refactor", "split file", "extract", "cleanup", "reorganize", "too big", "technical debt"
-**What it does:** Safe, incremental code transformations. Extract to utils/hooks/components/types/services. Barrel files, separation of concerns, performance patterns (memoization, code splitting), clean code patterns.
-**Related:** `audit-code-quality`, `workflow-spec-tdd`
+**What it does:** Applies a scoped behavior-preserving refactor after mapping dependencies, then runs affected tests. Repo-wide smell cleanup and mechanical whole-repo transforms have dedicated owners.
+**Related:** `audit-code-quality`, `burndown-full`, `audit-codemod-safety`, `workflow-spec-tdd`
 
 #### `workflow-git-commit`
-**Triggers:** "git", "commit message", "branch", "PR", "pull request", "merge", "rebase", "release", "changelog"
-**What it does:** GitHub Flow/GitFlow branching, conventional commits, PR templates, code review checklists, merge strategies, semantic versioning, release workflow, conflict resolution, git hooks.
-**Related:** `workflow-pr`
+**Triggers:** "commit my changes", "write a commit message", "conventional commit"
+**What it does:** Deliberately stages named files/hunks and creates one conventional commit for an already-scoped change; never pushes. Working-tree → merge-ready PR is `workflow-release-prep`.
+**Related:** `workflow-pr`, `workflow-release-prep`
 
 #### `workflow-pr`
 **Triggers:** "create PR", "pull request", "merge PR", "PR review", "PR checks", "merge criteria"
-**What it does:** PR lifecycle from creation to merge. Runs validations, security scans, creates PR with template. Monitors checks (polls status), addresses bot feedback, ensures all threads resolved.
-**Related:** `workflow-git-commit`, `audit-code-review`
+**What it does:** PR lifecycle for an already-committed branch or an open PR — validations, template, bot feedback, merge criteria. Uncommitted working tree reviewed-then-opened as a merge-ready PR is `workflow-release-prep`.
+**Related:** `workflow-git-commit`, `audit-code-review`, `workflow-release-prep`
 
 #### `burndown-full`
 **Triggers:** "finish the burndown", "it stopped halfway", "apply this everywhere", "complete the refactor across all files", "make sure nothing was missed", "ran out of steam", "half-migrated repo", "/burndown-full"
@@ -657,7 +657,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `workflow-housekeep`
 **Triggers:** "housekeep", "clean up repo", "update README", "update dependencies", "fix vulnerabilities", "remove dead code", "tidy up", "repo maintenance", "spring clean", "declutter"
 **What it does:** Full-cycle repository maintenance: README sync, dead file cleanup (logs, screenshots, deprecated code), dependency updates (audit, classify, update with research), config/script/env audit.
-**Related:** `workflow-refactor`, `docs-writer`, `audit-code-review`
+**Related:** `workflow-refactor`, `docs-writer`, `audit-code-review`, `housekeep-backlog`, `housekeep-design`
 
 #### `workflow-parallel-agents`
 **Triggers:** "run agents in parallel", "parallel worktrees", "multi-model", "best-of-N", "compare approaches"
@@ -699,25 +699,31 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 **Triggers:** "build a feature", "implement this", "add X", "ship a new capability", "build this end to end", "implement from scratch"
 **What it does:** End-to-end feature build: spec (`workflow-spec-tdd`) → implement → unit tests (`test-unit`) → smoke test (`test-playwright`) → PR (`workflow-pr`). Enforces spec-before-code discipline and full-stack verification. Done criteria: spec written, RED test was failing, GREEN after implementation, smoke test passed, PR open with evidence.
 **Chain:** `workflow-spec-tdd` → `test-unit` → `test-playwright` → `workflow-pr`
-**Related:** `workflow-spec-tdd`, `test-unit`, `test-playwright`, `workflow-pr`
+**Related:** `workflow-spec-tdd`, `test-unit`, `test-playwright`, `workflow-pr`, `complete-everything`, `workflow-fix-and-ship`
 
 #### `workflow-fix-and-ship`
 **Triggers:** "fix this bug and ship it", "patch this and close the ticket", "fix this Sentry issue", "bug report from user", "fix and deploy", "triage and fix"
 **What it does:** Complete bug-fix lifecycle: triage Sentry/logs → reproduce locally → root cause (`debug-error`) → surgical fix + regression test → smoke test (`test-playwright`) → PR (`workflow-pr`) → optional post-deploy smoke (`deploy-verify`) → resolve Sentry issue. Leaves evidence at every step.
 **Chain:** `debug-error` → `test-playwright` → `workflow-pr` → `deploy-verify`
-**Related:** `debug-error`, `debug-sentry-monitor`, `test-playwright`, `workflow-pr`, `deploy-verify`
+**Related:** `debug-error`, `debug-sentry-monitor`, `test-playwright`, `workflow-pr`, `deploy-verify`, `workflow-feedback-to-closure`
 
 #### `workflow-quality-gate`
 **Triggers:** "is this ready to ship?", "quality gate", "pre-release checklist", "what do I need to fix before launch?", "ship-readiness check", "run the quality gate"
-**What it does:** Pre-release go/no-go. Optional live identity probe (`test-exploratory`) then: adversarial red team (`test-red-team`) → static security review (`audit-security`) → bundle size (`audit-bundle-size`) → Core Web Vitals (`audit-performance`) → unit test coverage (`test-unit`). Produces a single GO / NO-GO / GO WITH CONDITIONS verdict with a ranked defect list.
+**What it does:** Pre-release go/no-go. Optional live identity probe (`test-exploratory`) then: adversarial red team (`test-red-team`) → static security review (`audit-security`) → bundle size (`audit-bundle-size`) → Core Web Vitals (`audit-performance`) → unit test coverage (`test-unit`). Produces a single GO / NO-GO / GO WITH CONDITIONS verdict with a ranked defect list. Does not commit or open a PR — that is `workflow-release-prep`.
 **Chain:** (`test-exploratory`) → `test-red-team` → `audit-security` → `audit-bundle-size` → `audit-performance` → `test-unit`
-**Related:** `test-exploratory`, `test-red-team`, `audit-security`, `audit-bundle-size`, `audit-performance`, `test-unit`, `audit-gate-logic`
+**Related:** `test-exploratory`, `test-red-team`, `audit-security`, `audit-bundle-size`, `audit-performance`, `test-unit`, `audit-gate-logic`, `workflow-release-prep`
+
+#### `workflow-release-prep`
+**Triggers:** "prepare this for a PR", "get my working tree merge-ready", "release prep this branch", "review everything uncommitted and open a PR", "/release-prep"
+**What it does:** Capstone for one developer's dirty tree. Snapshots uncommitted + staged + untracked + unpushed as one release unit, reviews via `audit-code-review` plus a release lens (coherence, debug residue, accidental inclusions, migration/flag safety), self-critiques (complete / clean / coherent / tested / safe), splits via `split-to-prs` if needed, commits via `workflow-git-commit`, opens the PR via `workflow-pr`, and hands to `babysit` until merge-ready. Refuses to run on main. **Does not merge.** Product launch sweep stays on `workflow-launch-ready`.
+**Chain:** snapshot → `audit-code-review` → (`split-to-prs`) → `workflow-git-commit` → `workflow-pr` → `babysit`
+**Related:** `audit-code-review`, `workflow-git-commit`, `workflow-pr`, `workflow-quality-gate`, `workflow-launch-ready`, `housekeep-backlog`, `docs-adr`, `split-to-prs`, `babysit`
 
 #### `workflow-launch-ready`
 **Triggers:** "prepare for launch", "launch week", "everything before going live", "is the app launch-ready?", "pre-launch sweep", "ship it to the world", "launch prep"
-**What it does:** Full launch preparation sweep. Sequences: SEO (`enhance-web-seo`) → PWA (`enhance-pwa`) → bundle (`audit-bundle-size`) → i18n (`audit-i18n`) → quality gate (`workflow-quality-gate`) → deploy smoke (`deploy-verify`) → day-1 iteration (`iterate-post-launch`). Produces a launch checklist with go/no-go verdict.
+**What it does:** Full launch preparation sweep. Sequences: SEO (`enhance-web-seo`) → PWA (`enhance-pwa`) → bundle (`audit-bundle-size`) → i18n (`audit-i18n`) → quality gate (`workflow-quality-gate`) → deploy smoke (`deploy-verify`) → day-1 iteration (`iterate-post-launch`). Produces a launch checklist with go/no-go verdict. Local dirty-tree PR prep is `workflow-release-prep`.
 **Chain:** `enhance-web-seo` → `enhance-pwa` → `audit-bundle-size` → `audit-i18n` → `workflow-quality-gate` → `deploy-verify` → `iterate-post-launch`
-**Related:** `workflow-quality-gate`, `iterate-post-launch`, `deploy-verify`
+**Related:** `workflow-quality-gate`, `iterate-post-launch`, `deploy-verify`, `workflow-release-prep`
 
 ---
 
@@ -725,8 +731,8 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 
 #### `docs-writer`
 **Triggers:** "write documentation", "README", "API docs", "document this", "create docs", "architecture docs"
-**What it does:** Write clear documentation. Templates for READMEs, API docs, code comments, architecture docs. Includes Mermaid diagram patterns.
-**Related:** `docs-coauthor`, `design-prd`, `docs-adr`
+**What it does:** Writes developer-facing README content, API references, code comments, changelog entries, and architecture docs. Visual README makeovers and docs/code drift plans have dedicated owners.
+**Related:** `docs-coauthor`, `design-prd`, `docs-adr`, `enhance-readme`, `plan-docs-sync`
 
 #### `docs-adr`
 **Triggers:** "record this decision", "set up ADRs", "why did we choose X", "the agent keeps suggesting Y again", "/adr"
@@ -743,9 +749,9 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 ### Meta
 
 #### `meta-skill-creator` *(Apache-2.0, adapted from Anthropic)*
-**Triggers:** "create skill", "SKILL.md format", "skill structure", "skill best practices"
+**Triggers:** "author a cursor-kenji skill", "SKILL.md format", "skill structure", "skill best practices"
 **What it does:** Guide for creating effective AI agent skills with proper frontmatter, descriptions, progressive disclosure structure, and concise body. New skills inherit T1–T6 (see [PROMPT-ENHANCEMENT-PLAYBOOK.md](PROMPT-ENHANCEMENT-PLAYBOOK.md)).
-**Related:** `audit-skill-conflicts`, `enhance-skill-prompts`, `meta-mcp-builder`
+**Related:** `audit-skill-conflicts`, `enhance-skill-prompts`, `meta-mcp-builder`, `create-skill`
 
 #### `audit-skill-conflicts`
 **Triggers:** "audit my skills", "conflicting skills", "wrong skill triggered", "which skills overlap"
@@ -771,7 +777,7 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 
 ---
 
-## Commands (51)
+## Commands (52)
 
 Commands fall into two groups: **standalone** (full playbook in the file) and **pointer** (thin slash entry delegating to a skill).
 
@@ -793,9 +799,10 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/green-repo` | `workflow-green-repo` | Drive the whole repo to green (typecheck/lint/test/build) — authorized debt cleanup |
 | `/ship-and-observe` | `workflow-ship-and-observe` | Deploy, verify the live revision, observe the stability window, roll back if needed |
 | `/feedback-to-closure` | `workflow-feedback-to-closure` | Feedback → deduped durable tickets → fix → production-verified closure |
-| `/commit` | `workflow-git-commit` | Pre-commit pipeline: lint, Sentry, build, scope, conventional commit, push |
+| `/commit` | `workflow-git-commit` | One conventional commit from an already-scoped change; no push |
 | `/debug-issue` | `debug-error` | Hypothesis-driven debugging with runtime evidence (renamed from `/debug` to avoid Claude Code's bundled `/debug`) |
-| `/pr` | `workflow-pr` | Pre-flight → commit → push → open PR |
+| `/pr` | `workflow-pr` | Validate and open/manage PR from an already-committed branch |
+| `/release-prep` | `workflow-release-prep` | Dirty working tree → reviewed, merge-ready PR — do not merge |
 | `/readme` | `enhance-readme`, `docs-writer` | Visual showcase + content sync |
 | `/refactor` | `workflow-refactor` | Analyze → split → extract → verify behavior |
 | `/review-code` | `audit-code-review` | Agent review + manual checklist (renamed from `/review` to avoid Claude Code's built-in `/review`) |
@@ -992,6 +999,9 @@ After approval: `backend-patterns`, `db-migrator`, `backend-observability`, prov
 #### Parked work → living register → execute
 `housekeep-backlog` (inventory + diff) → `complete-everything` / `burndown-full` (one plan or one mechanical change). Decisions → `docs-adr`. Flag debt → `workflow-feature-flag`.
 
+#### Pre-release trio
+`housekeep-backlog` (what's not done) → `workflow-release-prep` (what's done, onto a merge-ready PR) → `docs-adr` (decisions along the way)
+
 #### Anti-entropy stack
 `audit-gate-logic` / `housekeep-gates` (soundness) → `test-mutation` (assertion strength) → `enhance-arch-boundaries` (structure) → `docs-adr` (memory)
 
@@ -1049,7 +1059,7 @@ These extend Cursor itself — stored in `~/.cursor/skills-cursor/`.
 
 | Skill | What it does |
 |:------|:-------------|
-| `babysit` | Keep a PR merge-ready — triage comments, resolve conflicts, fix CI in a loop |
+| `babysit` | Keep an already-open PR merge-ready — comments, conflicts, CI. Do not merge. Dirty tree → `workflow-release-prep` |
 | `canvas` | Live React canvas beside chat — rich data visualizations, interactive tools |
 | `create-hook` | Create Cursor hooks — scripts/prompts for before/after agent events |
 | `create-rule` | Create `.cursor/rules/` files for persistent AI guidance |
@@ -1057,7 +1067,7 @@ These extend Cursor itself — stored in `~/.cursor/skills-cursor/`.
 | `create-subagent` | Create custom subagents in `.cursor/agents/` |
 | `migrate-to-skills` | Convert rules/commands to Skills format |
 | `shell` | Direct shell execution without interpretation |
-| `split-to-prs` | Slice one pile of work into small reviewable PRs — safe snapshot, no destructive git ops |
+| `split-to-prs` | Slice one pile into reviewable PRs. Whole dirty tree to one merge-ready PR → `workflow-release-prep` |
 | `statusline` | Configure CLI status line — model, context, git info |
 | `update-cli-config` | Modify CLI settings — permissions, sandbox, vim mode |
 | `update-cursor-settings` | Modify Cursor/VSCode `settings.json` |

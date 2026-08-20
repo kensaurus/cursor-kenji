@@ -1,10 +1,10 @@
 ---
 name: mobile-emulator-start
 description: >
-  Boots a clean Android emulator + Metro (Expo dev-client / bare React Native) with the
-  right ordering: inspect existing IDE terminals first, kill stale ports/processes,
-  choose. Use when asked to start Metro and emulator, restart dev loop, fix “Cannot
-  connect to Expo”, spin up a new terminal instance, debug stuck.
+  Boot Android emulator + Metro (Expo / bare RN) in order: inspect IDE
+  terminals, kill stale ports, pick an AVD. Use when "start Metro",
+  "start emulator", "Cannot connect to Expo", or a stuck dev loop. QA
+  on the running emulator → mobile-emulator-test.
 license: MIT
 ---
 

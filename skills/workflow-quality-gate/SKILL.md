@@ -1,10 +1,11 @@
 ---
 name: workflow-quality-gate
 description: >
-  Pre-release quality gate that sequences test-red-team, audit-security,
-  audit-bundle-size, audit-performance, and test-unit into a single sweep. Use when "is
-  this ready to ship?", "quality gate", "pre-release checklist", or before production
-  release. Gate soundness → audit-gate-logic.
+  Pre-release quality gate: test-red-team, audit-security,
+  audit-bundle-size, audit-performance, test-unit. Use when "is this
+  ready to ship?", "quality gate", "pre-release checklist". Gate
+  soundness → audit-gate-logic. Working tree to a PR →
+  workflow-release-prep.
 license: MIT
 ---
 
@@ -118,4 +119,5 @@ the code path that was changed for this release?
 **NO-GO** = any Critical defect, or 2+ High defects without mitigation plan
 
 This skill *runs* the sweep. Whether those gates can be silently bypassed or
-gamed is `audit-gate-logic`.
+gamed is `audit-gate-logic`. Taking the local working tree to a merge-ready
+PR is `workflow-release-prep`.

@@ -1,10 +1,10 @@
 ---
 name: plan-privacy-compliance
 description: >
-  Audit real personal-data flows against the privacy policy and GDPR / Japan APPI /
-  store privacy labels, then emit a phased plan. Use when "privacy compliance",
-  "what data do we collect", "App Store privacy labels", "GDPR/APPI", or a consumer
-  launch. Plan only. Consent-gating of analytics → also see audit-analytics.
+  Plan-only audit mapping real personal-data flows to the privacy policy,
+  GDPR, Japan APPI, and store labels. Use when "privacy compliance",
+  "what data do we collect?", "App Store privacy labels", or a consumer
+  launch. Analytics consent instrumentation → audit-analytics.
 license: MIT
 ---
 

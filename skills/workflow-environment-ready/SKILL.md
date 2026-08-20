@@ -1,10 +1,10 @@
 ---
 name: workflow-environment-ready
 description: >
-  Prove the working environment is actually runnable before starting a long or autonomous
-  task, so a multi-hour run does not fail at the finish line on a missing tool,
-  dependency. Use when "set up the environment", "is this ready to run", "before we start
-  the big task", "preflight the repo", "why won't the tests run".
+  Prove runtimes, installs, tools, services, env names, and repository
+  verification commands work before a long/autonomous run. Use when
+  "preflight the repo", "set up the environment", or tests cannot start.
+  Tests run but fail on code → workflow-green-repo / debug-error.
 license: MIT
 ---
 

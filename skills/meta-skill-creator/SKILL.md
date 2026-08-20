@@ -1,6 +1,9 @@
 ---
 name: meta-skill-creator
-description: Create or update Cursor agent skills (SKILL.md). Use when authoring a new skill, updating an existing skill, or asking about SKILL.md structure and best practices.
+description: >
+  Create or update a pack SKILL.md (frontmatter, house limits, T1–T6).
+  Use when authoring a cursor-kenji skill. Prompt-only upgrade →
+  enhance-skill-prompts. Cursor skill wizard → create-skill.
 license: Apache-2.0
 ---
 

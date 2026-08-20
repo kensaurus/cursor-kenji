@@ -1,10 +1,9 @@
 ---
 name: deploy-npm
 description: >
-  Release npm packages end-to-end: Changesets version bump, CHANGELOG update, GitHub
-  Actions OIDC publish, and post-release verification. Use when the user says "release to
-  npm", "publish this package", "ship a new version", "cut a release", "update the
-  changelog", or combines a package name with a release verb.
+  Release an npm package: version, CHANGELOG, publish, verify. Use when
+  "publish this package", "release to npm", or "ship a new npm version".
+  Running-app production deploy → workflow-ship-and-observe.
 license: MIT
 ---
 

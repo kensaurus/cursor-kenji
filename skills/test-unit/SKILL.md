@@ -1,9 +1,10 @@
 ---
 name: test-unit
 description: >
-  Write effective unit tests with best practices for any project. Use when writing tests,
-  creating test cases, improving test coverage, increasing confidence before release, or
-  when the user mentions testing. Mutation score / assertion theater → test-mutation.
+  Write unit/integration tests for a named module or change. Use when
+  "write unit tests" or "add tests for this function". Coverage plan →
+  plan-test-coverage. Mutation score → test-mutation. Story QA →
+  test-qa. This-diff Playwright → test-playwright.
 license: MIT
 ---
 

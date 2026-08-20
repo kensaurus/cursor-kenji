@@ -1,11 +1,10 @@
 ---
 name: enhance-web-ui
 description: >
-  Artistic, research-grounded UI enhancement for making an existing page feel
-  intentional, spacious, and human-crafted. Use when "make this page
-  nicer/polished/premium/editorial", less crowded, better laid out, typography,
-  or visual hierarchy. Flows/AI-templated UX → enhance-web-ux. Layout contract →
-  audit-responsive.
+  Polish an existing page's hierarchy, spacing, typography, composition,
+  and visual personality using repo conventions and references. Use when
+  "make this page polished/premium", "less crowded", or "better visual
+  hierarchy". Flow/IA → enhance-web-ux. Breakpoints → audit-responsive.
 license: MIT
 ---
 

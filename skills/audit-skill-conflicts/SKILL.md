@@ -14,8 +14,8 @@ license: MIT
 dry-run `[LOW freedom]` — skip explicitly if the harness cannot show
 selection. Never write `audit-responsive-layout`.
 
-Read-only. Every other `audit-*` inspects an app you ship. This one inspects
-**the skill pack it lives in**.
+Read-only. Most other `audit-*` skills inspect an app or repository you
+ship. This one inspects **the skill pack it lives in**.
 
 `npm run validate:skills` checks each file in isolation (name = dir, description
 ≤320, body <500). It cannot see two skills giving opposite advice, six
@@ -66,18 +66,19 @@ Do **not** fire for "audit my app's UI" → `audit-ux` / `audit-responsive` /
 Enumerate:
 
 - `skills/*/SKILL.md` and `skills-cursor/*/SKILL.md`
-- `commands/*.md`
+- `commands/*.md` and `commands-portable/*.md`
 - `agents/*.md`
-- `rules/*.mdc` — **highest-risk**. Always-on rules silently override a
-  skill's intent.
+- `rules/*.mdc` and `.cursor/rules/*.mdc` — **highest-risk**. Always-on
+  rules silently override a skill's intent.
 
 For each skill extract: `name`, `description` (routing surface), claimed
 triggers, cross-referenced skills, core directives (read-only vs apply-fixes,
 plan-first vs edit, hard always/never). One index. Compare the set, not
 pairwise guesswork.
 
-House names in *this* repo: linearized desktop is `audit-responsive` (not
-`audit-responsive-layout` or `responsive-audit`). Flag any leftover old name.
+House skill name in *this* repo is `audit-responsive`.
+`audit-responsive-layout` is retired. `/responsive-audit` is a valid command
+alias, but bare/backticked `responsive-audit` is not a skill handoff.
 
 ---
 
@@ -135,8 +136,8 @@ dry-run ran.
 - [ ] Contradictory-directive pairs listed (rules-vs-skill included)
 - [ ] Trigger-overlap clusters identified; carve-outs checked
 - [ ] Duplicated blocks + extraction targets named
-- [ ] Cross-refs resolved; dangling listed (incl. old `responsive-audit` /
-      `audit-responsive-layout` names)
+- [ ] Cross-refs resolved; dangling listed (incl. retired
+      `audit-responsive-layout` and bare `responsive-audit` skill handoffs)
 - [ ] Double-coverage and handoff gaps surfaced
 - [ ] Bloat / convention drift noted
 - [ ] Routing dry-run run **or** explicitly skipped
@@ -146,7 +147,8 @@ dry-run ran.
 
 1. **Quoted pair** — every contradiction cites both texts
 2. **Dry-run honesty** — skipped if no harness; do not pretend it ran
-3. **Name hygiene** — leftover `audit-responsive-layout` / `responsive-audit` listed
+3. **Name hygiene** — retired `audit-responsive-layout` and bare
+   `responsive-audit` skill handoffs listed; `/responsive-audit` command kept
 4. **Right owner** — how to *write* a skill → `meta-skill-creator`; how to
    upgrade prompts → `enhance-skill-prompts`
 5. **Nothing rewritten** until approved; description fixes first (routing)

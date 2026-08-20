@@ -1,5 +1,5 @@
 ---
-description: Execution-time guardrails for Composer 2.5 when implementing an approved plan-*.md (anti-reward-hacking, anti-feature-deletion, checkpointing, context + terminal discipline). Plans are authored/reviewed by a stronger model (e.g. Opus 4.8); this governs the Composer execution run.
+description: Guard execution of approved plan/burndown work: forbid reward hacking and feature deletion; require checkpoints, context discipline, safe terminal use, and fresh verification. Apply to approved plan-*.md, complete-everything, or burndown-full runs; binding for any implementation model.
 globs:
 alwaysApply: true
 ---

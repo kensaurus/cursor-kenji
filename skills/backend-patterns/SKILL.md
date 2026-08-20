@@ -1,10 +1,10 @@
 ---
 name: backend-patterns
 description: >
-  Apply modern backend patterns — auth middleware, caching strategies, background queues,
-  rate limiting, and serverless/edge function design — across stacks (examples use
-  Next.js. Use when the user says "backend architecture", "queue jobs", "caching layer",
-  "rate limiting", "server actions", "edge function".
+  Apply backend patterns — queues, caching, rate limits, serverless/edge.
+  Use when "queue jobs", "caching layer", "rate limiting", "server
+  actions", or "edge function". Which architecture to pick →
+  audit-backend-architecture.
 license: MIT
 ---
 

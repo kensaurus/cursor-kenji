@@ -7,12 +7,14 @@
 | **Author** | Emil Kowalski |
 | **License** | [MIT](https://github.com/emilkowalski/skills/blob/main/LICENSE) — Copyright (c) 2026 Emil Kowalski |
 | **Local name** | `thirdparty-emil-design-eng` |
-| **Curated in** | [cursor_kenji](https://github.com/kenji/cursor_kenji) |
+| **Curated in** | [cursor-kenji](https://github.com/kensaurus/cursor-kenji) |
 
 ## Update policy
 
 1. Pull the latest `SKILL.md` from upstream.
-2. Replace `skills/thirdparty-emil-design-eng/SKILL.md` (keep the `thirdparty-` prefix and attribution blocks).
-3. Run `./install.sh` or `cursor-sync` to deploy to `~/.cursor/skills/`.
+2. Replace `references/emil-design-eng.md` with the upstream body beginning
+   at `## Initial Response`; keep the thin local `SKILL.md` loader.
+3. Adjust only the final local attribution link to `../ATTRIBUTION.md`.
+4. Run the repository validation and install smoke test.
 
 Do **not** add Kenji-specific "Check Existing First" sections to upstream content — keep this skill faithful to the source.

@@ -1,6 +1,9 @@
 ---
 name: backend-db-performance
-description: Optimize database queries, schemas, and performance. Use when fixing slow queries, adding indexes, N+1 problems, schema design, RLS policies, or when user mentions "slow query", "database performance", "timeout", "index", "query optimization", "Prisma", "Supabase", or "PostgreSQL".
+description: >
+  Optimize slow queries, indexes, and N+1s. Use when "slow query",
+  "database performance", "add an index", or "N+1". Schema consistency
+  → audit-db-schema. RLS access control → plan-rls-audit.
 license: MIT
 ---
 

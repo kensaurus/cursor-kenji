@@ -1,10 +1,10 @@
 ---
 name: workflow-build-feature
 description: >
-  End-to-end feature build workflow: spec → TDD → implement → smoke test → PR. Sequences
-  workflow-spec-tdd, test-unit, test-playwright, and workflow-pr into a single tracked
-  loop. The single entry point for "build a feature", "implement this", "add X", "ship a
-  new capability", or any non-trivial feature request. Asks.
+  Build a feature end to end: spec-tdd → implement → test-unit →
+  playwright → PR. Use when "build a feature" or "implement this
+  end-to-end". Spec/TDD loop only → workflow-spec-tdd. One bug →
+  workflow-fix-and-ship. Plan closure → complete-everything.
 license: MIT
 ---
 

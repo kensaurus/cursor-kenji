@@ -1,9 +1,10 @@
 ---
 name: enhance-web-redesign
 description: >
-  Upgrades existing websites and apps to premium quality. Use when redesigning existing
-  projects, upgrading UI to premium quality, removing AI slop patterns, or when the user
-  asks for a redesign audit.
+  Upgrade an existing site/app to premium quality. Use when "redesign
+  this app" or "upgrade UI to premium". One-page polish → enhance-web-ui.
+  Plan-only slop audit → plan-antislop. New UI from scratch →
+  design-frontend.
 license: MIT
 ---
 

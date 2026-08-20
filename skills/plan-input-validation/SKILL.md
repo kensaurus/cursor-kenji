@@ -1,10 +1,10 @@
 ---
 name: plan-input-validation
 description: >
-  Audit every trust boundary for unvalidated input, injection, and forged-request gaps,
-  then produce a phased hardening plan. Use when the user says "validate my inputs", "is
-  my app injection-safe", "check my forms", "XSS", "dangerouslySetInnerHTML", "my Stripe
-  webhook", "can someone forge requests", or is hardening.
+  Plan-only trust-boundary audit for missing validation, injection, XSS,
+  and forged requests across forms/APIs/webhooks. Use when "validate my
+  inputs", "is my app injection-safe?", "check my forms", or "can someone
+  forge requests?". Apply fixes only after plan approval.
 license: MIT
 ---
 

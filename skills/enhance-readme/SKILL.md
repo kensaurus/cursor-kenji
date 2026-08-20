@@ -1,10 +1,11 @@
 ---
 name: enhance-readme
 description: >
-  Turn a plain-text README into a visually rich showcase with a theme-aware hero image, a
-  feature tour grid, an optional animated guided-tour GIF, and updated tech badges. Use
-  when asked to "enhance README", "make README prettier", "add screenshots to README",
-  "showcase the app in README", "design the README", "add hero.
+  Enhance an existing README with a theme-aware hero, feature tour,
+  screenshots/GIF, accurate badges, and synced content. Use when "enhance
+  README", "make README prettier", "add screenshots", or "showcase the
+  app". Content-only docs → docs-writer. Drift audit/plan →
+  plan-docs-sync.
 license: MIT
 ---
 

@@ -1,6 +1,9 @@
 ---
 name: split-to-prs
-description: Split current work into small reviewable PRs. Use when the user asks to split a chat, set of changes, branch, or PR.
+description: >
+  Split current work into small reviewable PRs. Use when the user asks
+  to split a chat, branch, or change set. Whole dirty tree to one
+  merge-ready PR → workflow-release-prep.
 disable-model-invocation: true
 ---
 # Split to PRs

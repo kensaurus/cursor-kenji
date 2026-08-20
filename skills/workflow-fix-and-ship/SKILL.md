@@ -1,10 +1,10 @@
 ---
 name: workflow-fix-and-ship
 description: >
-  Complete bug-fix lifecycle in one sweep: triage production signals (Sentry / logs) →
-  reproduce → fix (debug-error) → verify full-stack (test-playwright) → PR (workflow-pr)
-  →. Use when "fix this bug and close the ticket", "patch this and ship", "fix this Sentry
-  issue", "bug report from user", or when a production error.
+  Complete one bug-fix lifecycle: triage → reproduce → debug-error →
+  regression fix → test-playwright → workflow-pr; optional deploy verify.
+  Use when "fix this bug and close the ticket", "patch this and ship", or
+  a named production error. Multiple reports → workflow-feedback-to-closure.
 license: MIT
 ---
 

@@ -1,10 +1,10 @@
 ---
 name: audit-resilience
 description: >
-  Read-only audit for the non-functional "20%" AI agents systematically skip: timeouts,
-  retries with backoff+jitter, circuit breakers, idempotency keys, rate limiting,
-  graceful. Use when "is this production-ready", "resilience audit", "will this survive
-  real traffic", "audit retries/timeouts/idempotency", "reliability.
+  Read-only production-resilience audit: timeouts, bounded retries,
+  circuit breakers, idempotency, rate limits, graceful degradation, PII.
+  Use when "resilience audit", "will this survive real traffic?", or
+  "audit retries/timeouts/idempotency". Feature parity → audit-realworld.
 license: MIT
 ---
 
