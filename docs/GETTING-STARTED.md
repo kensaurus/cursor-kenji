@@ -123,6 +123,7 @@ These chain several skills. Paste the whole sentence.
 | `works locally but not in prod` | Env/config parity across local / staging / prod |
 | `why is my hosting bill high?` | Egress, storage, zombie resources — plan cuts that keep backups |
 | `why did a regression pass CI?` | Gate-logic audit — silent bypass, ratchet gaming, required-but-not |
+| `is this lint rule wrong?` / `the ratchet banned a legitimate pattern` | Doctrine audit — is the rule right, not merely enforced |
 | `we have three lint jobs` | Consolidate accreted CI gates into one aggregator |
 | `what's left behind` / `inventory TODOs` | Living BACKLOG.md of parked work — inventory, then hand off |
 | `are our tests real?` | Mutation testing — coverage theater vs assertions |
@@ -130,7 +131,7 @@ These chain several skills. Paste the whole sentence.
 | `the agent keeps suggesting Y again` | ADR decision memory — rejected alternatives |
 | `did this codemod break anything?` | Bulk-transform behavior-preservation — compiles/lints is not same-behavior |
 | `audit our auth` / `is getSession safe?` | Route×gate matrix — middleware is not a security boundary |
-| `/privacy-plan` `/backup-plan` `/aso-plan` `/skill-conflicts` `/gate-logic` `/codemod-safety` `/housekeep-gates` `/housekeep-backlog` `/test-mutation` `/arch-boundaries` `/adr` `/auth-flows` `/research` `/release-prep` | Slash shortcuts for those same jobs |
+| `/privacy-plan` `/backup-plan` `/aso-plan` `/skill-conflicts` `/gate-logic` `/doctrine` `/codemod-safety` `/housekeep-gates` `/housekeep-backlog` `/test-mutation` `/arch-boundaries` `/adr` `/auth-flows` `/research` `/release-prep` | Slash shortcuts for those same jobs |
 
 Full phrase list → [TRIGGER-CHEATSHEET.md](TRIGGER-CHEATSHEET.md).
 

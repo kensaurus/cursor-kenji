@@ -34,7 +34,7 @@ for the plan-loop sequences.
 - Feature-flag rollout → `workflow-feature-flag`
 - Convert an agent failure into a guard → `iterate-agent-harness`
 
-Highest-impact prove combo: `test-exploratory` → `workflow-feedback-to-closure` → `test-playwright`. Optional pre-gate: `test-exploratory` then `workflow-quality-gate`. Pre-release trio: `housekeep-backlog` → `workflow-release-prep` → `docs-adr`.
+Highest-impact prove combo: `test-exploratory` → `workflow-feedback-to-closure` → `test-playwright`. Optional pre-gate: `test-exploratory` then `workflow-quality-gate`. Pre-release trio: `housekeep-backlog` → `workflow-release-prep` → `docs-adr`. Doctrine vs enforcement: `audit-doctrine` (is the rule right) × `audit-gate-logic` (is it enforced) → `housekeep-gates` / `housekeep-backlog`.
 
 ## Use an individual skill when scoped to one phase
 

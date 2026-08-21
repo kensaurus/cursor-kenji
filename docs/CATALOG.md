@@ -28,7 +28,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (140)
+## Skills (141)
 
 ### Enhance
 
@@ -95,12 +95,12 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `housekeep-gates`
 **Triggers:** "clean up our CI checks", "consolidate the workflows", "we have three lint jobs", "make one quality gate", "fix the required checks", "/housekeep-gates"
 **What it does:** Apply-now execution arm of `audit-gate-logic`. Builds one aggregator job that `needs:` every real check and fails on failed **or skipped** dependencies, makes that job the only required status check, ports unique value from duplicate losers then **deletes** them (not disable), restores hook/CI parity, and normalizes ratchets to auto-tighten with reviewed resets. Proves consolidation with deliberate-violation + skip-path probes. Net enforcement strictly ≥ before. Branch-protection changes always get explicit confirmation.
-**Related:** `audit-gate-logic`, `audit-cicd`, `enhance-agent-guardrails`, `workflow-green-repo`, `test-mutation`, `enhance-arch-boundaries`
+**Related:** `audit-gate-logic`, `audit-cicd`, `enhance-agent-guardrails`, `workflow-green-repo`, `test-mutation`, `enhance-arch-boundaries`, `audit-doctrine`
 
 #### `housekeep-backlog`
 **Triggers:** "what's left behind", "inventory TODOs", "consolidate the backlog", "parked work register", "living BACKLOG.md", "/housekeep-backlog"
 **What it does:** Apply-now collector for parked work. Scans unfinished plan/burndown docs, deferred phases, TODO/FIXME/HACK markers, skipped tests, open audit findings, commented-out blocks, and unfinished feature flags; dedups so one real piece of work is one `BL-` row; writes a living `docs/BACKLOG.md` that regenerates and diffs (new / done / newly-stale). Inventories only — high-priority items hand off to `complete-everything` / `burndown-full`. The `docs-adr` pattern applied to parked work.
-**Related:** `complete-everything`, `burndown-full`, `docs-adr`, `plan-stub-checker`, `workflow-feature-flag`, `workflow-housekeep`, `workflow-release-prep`, `enhance-agent-guardrails`
+**Related:** `complete-everything`, `burndown-full`, `docs-adr`, `plan-stub-checker`, `workflow-feature-flag`, `workflow-housekeep`, `workflow-release-prep`, `enhance-agent-guardrails`, `audit-doctrine`
 
 #### `enhance-web-forms`
 **Triggers:** "improve this form", "form validation", "accessible form", "multi-step form", "form error handling", "the form UX is bad", "enhance-web-forms"
@@ -115,7 +115,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `enhance-arch-boundaries`
 **Triggers:** "enforce module boundaries", "stop spaghetti imports", "agents keep importing across features", "add architecture rules", "dependency-cruiser", "/arch-boundaries"
 **What it does:** Converts intended architecture into CI-enforced fitness functions (dependency-cruiser / eslint-boundaries): layer direction, feature isolation via public surfaces, no cycles, forbidden edges (client → server-only / service-role). Recovers the model from the repo and confirms it — does not invent one. Grandfathers existing violations into a shrink-only baseline. Wires into the `housekeep-gates` aggregator. Records the model via `docs-adr`. `audit-backend-architecture` advises; this enforces.
-**Related:** `audit-backend-architecture`, `housekeep-gates`, `docs-adr`, `enhance-agent-guardrails`, `plan-rls-audit`, `plan-secrets-audit`
+**Related:** `audit-backend-architecture`, `housekeep-gates`, `docs-adr`, `enhance-agent-guardrails`, `plan-rls-audit`, `plan-secrets-audit`, `audit-doctrine`
 
 #### `enhance-skill-prompts`
 **Triggers:** "enhance this skill's prompts", "upgrade skill authoring", "apply the prompt playbook", "degrees of freedom", "worked example", T1–T6
@@ -347,7 +347,12 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `audit-gate-logic`
 **Triggers:** "can our CI gates be bypassed", "audit the quality-gate logic", "is our coverage ratchet sound", "why did a regression pass CI", "check for conflicting workflows", "is this required check actually required", "/gate-logic"
 **What it does:** Read-only audit of the *logic* of CI/CD gates and ratchets — not pipeline cost/speed. Catches silent bypass (`continue-on-error`, `|| true`, skipped-required counting as passed), path filters that skip the files that needed the gate, two workflows whose conditions both fire or both skip, `pull_request_target` / fork bypass, and ratchet traps (same-PR baseline overwrite, exclusion gaming, slack threshold, backwards comparison). Phase 2.5 maps accreted duplicate gates / competing baselines / hook-vs-CI divergence / dead workflows and names a winner per cluster. Phase 3 looks for regressions that already shipped green. Highest-value required-vs-actual checks need branch-protection / rulesets; if those are invisible, it says so and audits the YAML alone. Consolidation → `housekeep-gates`.
-**Related:** `housekeep-gates`, `audit-cicd`, `workflow-quality-gate`, `enhance-agent-guardrails`, `burndown-full`, `workflow-green-repo`, `audit-codemod-safety`, `test-mutation`
+**Related:** `housekeep-gates`, `audit-cicd`, `workflow-quality-gate`, `enhance-agent-guardrails`, `burndown-full`, `workflow-green-repo`, `audit-codemod-safety`, `test-mutation`, `audit-doctrine`
+
+#### `audit-doctrine`
+**Triggers:** "is this lint rule wrong", "the ratchet banned a legitimate pattern", "audit our guardrail doctrine", "appease the regex", "does this rule match Stripe/Docusaurus", "/doctrine"
+**What it does:** Read-only audit of custom lint/ratchet *content* — not whether the gate can be bypassed. Judges each axis against the governance contract: named remedy, reachable sanctioned token, teaching failure output, agreement with Tier-D practice (Stripe / Linear / GitHub / Docusaurus; burden of proof on the rule), exceptions expire and baselines only shrink. Classifies correctness vs taste; taste rules need a remedy and token or they generate restyle-to-appease-the-regex. Remedy-coverage stated as N of M; un-remedied axes → `housekeep-backlog`. Enforcement/bypass stays on `audit-gate-logic`.
+**Related:** `audit-gate-logic`, `housekeep-gates`, `housekeep-design`, `housekeep-backlog`, `docs-adr`, `enhance-arch-boundaries`
 
 #### `audit-codemod-safety`
 **Triggers:** "did this codemod break anything", "audit this bulk refactor", "verify the migration mod", "check the mass find-replace", "jscodeshift / ts-morph / ast-grep audit", "/codemod-safety"
@@ -777,7 +782,7 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 
 ---
 
-## Commands (52)
+## Commands (53)
 
 Commands fall into two groups: **standalone** (full playbook in the file) and **pointer** (thin slash entry delegating to a skill).
 
@@ -811,6 +816,7 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/responsive-audit` | `audit-responsive` | Linearized layout / breakpoint IA — desktop is not a wide phone |
 | `/skill-conflicts` | `audit-skill-conflicts` | Pack self-audit — contradictions, trigger overlap, stale refs |
 | `/gate-logic` | `audit-gate-logic` | CI gate logic — silent bypass, ratchet gaming, conflicting conditions |
+| `/doctrine` | `audit-doctrine` | Custom lint/ratchet *content* — is the rule right, not merely enforced |
 | `/codemod-safety` | `audit-codemod-safety` | Codemod / bulk-transform behavior-preservation |
 | `/housekeep-gates` | `housekeep-gates` | Consolidate accreted CI gates into one aggregator |
 | `/housekeep-backlog` | `housekeep-backlog` | Living BACKLOG.md of parked work — inventory, do not implement |
@@ -992,6 +998,9 @@ After approval: `backend-patterns`, `db-migrator`, `backend-observability`, prov
 
 #### Gate soundness vs pipeline cost
 `audit-gate-logic` (does the gate stop what it claims) × `audit-cicd` (is the pipeline cheap/fast/safe to run)
+
+#### Doctrine vs enforcement
+`audit-doctrine` (is the rule *right*) × `audit-gate-logic` (is it enforced) → `housekeep-gates` (consolidate) / `housekeep-backlog` (un-remedied axes). Token SSOT → `housekeep-design`. Divergence → `docs-adr`.
 
 #### Accreted gates → one aggregator
 `audit-gate-logic` (Phase 2.5 archaeology) → `housekeep-gates` (consolidate, delete losers, prove)
