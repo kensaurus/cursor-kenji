@@ -6,6 +6,16 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.28.0] — 2026-08-21
+
+### Added
+
+- **`audit-doctrine`** — read-only audit of custom lint/ratchet *content*:
+  is each rule right on the merits (named remedy, reachable token,
+  teaching failure, Tier-D practice), not merely enforced. Distinct from
+  `audit-gate-logic` (bypass/gaming). Un-remedied axes →
+  `housekeep-backlog`. Slash: `/doctrine`.
+
 ## [1.27.0] — 2026-08-20
 
 ### Added

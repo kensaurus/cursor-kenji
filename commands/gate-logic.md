@@ -12,8 +12,9 @@ accreted duplicate gates (Phase 2.5 archaeology).
 
 **Read-only — rewrite no workflow or branch-protection setting.**
 Consolidation of the archaeology map stays on `housekeep-gates`. Pipeline
-cost/speed stays on `audit-cicd`. Running the pre-release sweep stays on
-`workflow-quality-gate`. Installing new gates stays on
+cost/speed stays on `audit-cicd`. Whether the *rule is right* (not merely
+enforced) stays on `/doctrine` (`audit-doctrine`). Running the pre-release
+sweep stays on `workflow-quality-gate`. Installing new gates stays on
 `enhance-agent-guardrails`.
 
 Highest-value "is it actually required" checks need branch-protection /

@@ -36,6 +36,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "audit my API calls", "check frontend API", "FE-BE contract" | `audit-fe-api` |
 | "CI/CD cost", "GitHub Actions bill", "Actions minutes", "runner cost", "workflow cost", "slow CI", "audit my workflows" | `audit-cicd` |
 | "can our CI gates be bypassed", "audit the quality-gate logic", "is our coverage ratchet sound", "why did a regression pass CI", "check for conflicting workflows", "we have too many overlapping checks" | `audit-gate-logic` |
+| "is this lint rule wrong", "the ratchet banned a legitimate pattern", "audit our guardrail doctrine", "appease the regex" | `audit-doctrine` |
 | "clean up our CI checks", "we have three lint jobs", "make one quality gate", "consolidate the workflows" | `housekeep-gates` |
 | "what's left behind", "inventory TODOs", "consolidate the backlog", "parked work register" | `housekeep-backlog` |
 | "audit i18n", "fix translations", "the Japanese feels like Google Translate", "hardcoded strings" | `audit-i18n` |

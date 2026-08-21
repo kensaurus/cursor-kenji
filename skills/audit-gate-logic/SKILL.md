@@ -1,10 +1,10 @@
 ---
 name: audit-gate-logic
 description: >
-  Read-only audit of CI gate logic — silent bypass, ratchet gaming, conflicting
-  conditions, required checks that are not, and accreted duplicate gates. Use
-  when "can CI be bypassed", "why did a regression pass CI", "we have too many
-  overlapping checks". Cost/speed → audit-cicd. Consolidation → housekeep-gates.
+  Read-only audit of CI gate logic — silent bypass, ratchet gaming,
+  required-but-not, duplicate gates. Use when "can CI be bypassed" or
+  "why did a regression pass CI". Cost → audit-cicd. Consolidation →
+  housekeep-gates. Rule content → audit-doctrine.
 license: MIT
 ---
 
@@ -19,7 +19,8 @@ claim. The expensive failures are the ones where CI passed and shouldn't have.
 
 Present findings. Do not edit workflows, branch protection, or baselines.
 Consolidation of the archaeology map → `housekeep-gates`. Rule-to-mechanical
-gaps → `enhance-agent-guardrails`.
+gaps → `enhance-agent-guardrails`. Whether the *rule content* is right
+(remedy, named token, Tier-D practice) → `audit-doctrine`.
 
 ## This skill vs neighbors
 

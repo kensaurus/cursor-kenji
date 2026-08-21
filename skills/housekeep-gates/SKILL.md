@@ -3,8 +3,9 @@ name: housekeep-gates
 description: >
   Apply-now consolidation of accreted CI gates, ratchets, and hooks into one
   aggregator required check. Use after audit-gate-logic, or when "clean up our
-  CI checks", "we have three lint jobs", "make one quality gate". Audit-only →
-  audit-gate-logic. Pipeline cost → audit-cicd.
+  CI checks", "we have three lint jobs", "make one quality gate".
+  Audit-only → audit-gate-logic. Rule content → audit-doctrine.
+  Pipeline cost → audit-cicd.
 license: MIT
 ---
 
