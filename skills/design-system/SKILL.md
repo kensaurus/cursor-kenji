@@ -10,9 +10,33 @@ license: MIT
 
 # Design System Skill
 
+**Degree of freedom: MIXED.** Token taxonomy and variants `[HIGH freedom]`;
+existing `ui/` / token inventory `[LOW freedom — run exactly]`.
+
 Build scalable, maintainable design systems with consistent tokens, variants, and documentation.
 
-## CRITICAL: Check Existing First
+## How to reason
+
+1. **Inventory** — `components/ui`, tokens, `cva`, shadcn/Radix
+2. **Tokenize** — semantic tokens, not raw hex in components
+3. **Variant** — `cva` covers real states (default/destructive/disabled)
+4. **Document** — JSDoc, keyboard/focus, dark mode
+
+## Worked example
+
+> **Inventory:** shadcn `Button` exists; colors are raw `#3B82F6` in three pages; no `--primary`.
+> **Tokenize:** `--primary` / `--primary-foreground` in `globals.css`; Tailwind maps `hsl(var(--primary))`.
+> **Variant:** extend existing `buttonVariants` — do not add `components/Button2.tsx`.
+> **Document:** JSDoc lists variants/sizes; focus ring + dark `.dark` overrides.
+
+## Self-critique before reporting
+
+- **Did not fork** — existing primitives were extended, not recreated
+- **Semantic tokens** — components reference tokens, not primitives or hex
+- **A11y + dark** — focus, disabled, and dark variants exist
+- **Right owner** — drifted existing system → `housekeep-design`; plan-only unification → `plan-uiux-unification`
+
+## CRITICAL: Check Existing First  [LOW freedom — run exactly]
 
 **Before creating ANY design system components, verify:**
 
@@ -38,7 +62,7 @@ rg "cn\(|clsx\(|twMerge" --type tsx | head -5
 
 **Why:** Don't recreate existing primitives. Extend and enhance what exists.
 
-## Design Tokens
+## Design Tokens  [HIGH freedom]
 
 ### CSS Custom Properties
 ```css
@@ -418,7 +442,7 @@ src/
 └── tailwind.config.ts # Theme config
 ```
 
-## Validation
+## Validation  [LOW freedom — do not skip]
 
 After creating design system components:
 

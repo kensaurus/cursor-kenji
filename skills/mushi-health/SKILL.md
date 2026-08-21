@@ -10,6 +10,30 @@ license: MIT
 
 # Mushi Health Check
 
+**Degree of freedom: MIXED.** First-red diagnosis `[HIGH freedom]`;
+Steps 1–6 in order `[LOW freedom — run exactly]`.
+
+## How to reason
+
+1. **Observe** — `doctor`, `deploy check`, keys, logs, cron — in that order
+2. **Interpret** — first red is root vs downstream symptom
+3. **Classify** — creds / functions-down / keys / logs / cron-missing
+4. **Severity** — paused project or invalid API key outranks a quiet QA cron on a new project
+
+## Worked example
+
+> **Observe:** `mushi doctor` green; `mushi deploy check` ✗ `qa-story-runner`; `qa_story_runs` empty for 2h.
+> **Interpret:** first red is the runner; empty cron is downstream.
+> **Classify:** function-down — check `get_logs` for `qa-story-runner`; do not add keys yet.
+> **Verify:** stop at Step 2; fix the runner; continue remaining steps only after it is green.
+
+## Self-critique before reporting
+
+- **In order** — did not skip ahead of the first ❌
+- **Evidence** — each row cites command output or a query, not memory
+- **Stopped to fix** — first red was remediated before later steps
+- **Right owner** — e2e loop proof → `mushi-integration`; targeted diagnosis → `diagnose_setup`
+
 Run these checks in order. Stop and fix at the first ❌ before continuing.
 
 ## Component map
@@ -25,7 +49,7 @@ Run these checks in order. Stop and fix at the first ❌ before continuing.
 
 ---
 
-## Step 1 — CLI credentials
+## Step 1 — CLI credentials  [LOW freedom — run exactly]
 
 ```bash
 mushi doctor
@@ -45,7 +69,7 @@ Expected output — all lines green:
 
 ---
 
-## Step 2 — API + edge functions
+## Step 2 — API + edge functions  [LOW freedom — run exactly]
 
 ```bash
 mushi deploy check
@@ -67,7 +91,7 @@ A `✗` on any line means that function is down. Check its logs in Step 5.
 
 ---
 
-## Step 3 — Project overview
+## Step 3 — Project overview  [LOW freedom — run exactly]
 
 ```bash
 mushi status
@@ -80,7 +104,7 @@ Confirm:
 
 ---
 
-## Step 4 — BYOK key pool
+## Step 4 — BYOK key pool  [LOW freedom — run exactly]
 
 Via CLI:
 
@@ -105,7 +129,7 @@ mushi keys add --provider firecrawl --key fc-...   --label "primary" --priority 
 
 ---
 
-## Step 5 — Supabase edge function logs
+## Step 5 — Supabase edge function logs  [LOW freedom — run exactly]
 
 Use the Supabase MCP (requires `SUPABASE_ACCESS_TOKEN` in MCP config):
 
@@ -129,7 +153,7 @@ supabase functions logs qa-story-runner --project-ref <ref>
 
 ---
 
-## Step 6 — QA cron running
+## Step 6 — QA cron running  [LOW freedom — run exactly]
 
 Verify scheduled tests are executing (requires Supabase MCP):
 
@@ -149,7 +173,7 @@ If `qa_story_runs` is empty:
 
 ---
 
-## Pass/Fail Summary Template
+## Pass/Fail Summary Template  [LOW freedom — do not skip]
 
 After running all steps, record results:
 
@@ -167,7 +191,7 @@ If any ❌ → run the mushi MCP `diagnose_setup` tool for targeted diagnosis.
 
 ---
 
-## Common causes of all-red
+## Common causes of all-red  [HIGH freedom]
 
 | Symptom | Likely cause | Fix |
 |---------|-------------|-----|

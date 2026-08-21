@@ -10,14 +10,38 @@ license: MIT
 
 # design-email — Email Templates That Actually Get Read
 
+**Degree of freedom: MIXED.** Copy and layout judgment `[HIGH freedom]`;
+stack detect, markup, send, and preview `[LOW freedom — run exactly]`.
+
 **Email is the one channel users check before they check your app.** A
 well-crafted transactional email — clear, warm, fast-loading, and readable on
 any device — builds trust. A corporate, jargon-heavy, broken email erodes it.
 This skill handles design and copy. Inbox placement / SPF DKIM DMARC is `enhance-email-deliverability`.
 
+## How to reason
+
+1. **Detect** — React Email vs MJML vs none
+2. **Audit** — copy voice, subject, one action; client-safe layout
+3. **Write** — specific subject, human "you", plain-text twin
+4. **Preview** — 375px + dark mode; hand DNS off
+
+## Worked example
+
+> **Detect:** `@react-email/components` already in `package.json`; `emails/` has a receipt only.
+> **Audit:** password-reset subject is "Account notification"; two CTAs; no preview text.
+> **Write:** subject "Reset your App password"; one "Reset my password" button; expiry in the first sentence.
+> **Preview:** `npx email dev` at 375px; tap target ≥44px; DNS/spam → `enhance-email-deliverability`.
+
+## Self-critique before reporting
+
+- **One action** — exactly one primary CTA; subject is specific and honest
+- **Client-safe** — 600px single column, inline styles, alt text, dark fallback
+- **Human copy** — "you"/"we"; no jargon or ALL-CAPS subject
+- **Right owner** — SPF / DKIM / DMARC / bounces / List-Unsubscribe → `enhance-email-deliverability`
+
 ---
 
-## Phase 0: Detect the stack
+## Phase 0: Detect the stack  [LOW freedom — run exactly]
 
 ```
 package.json        → @react-email/*, mjml, nodemailer, @sendgrid/mail,
@@ -35,7 +59,7 @@ src/emails/         → email template directory
 
 ---
 
-## Phase 1: Audit existing templates
+## Phase 1: Audit existing templates  [HIGH freedom]
 
 If templates already exist, walk through each one and check:
 
@@ -60,7 +84,7 @@ If templates already exist, walk through each one and check:
 
 ---
 
-## Phase 2: Research best practices
+## Phase 2: Research best practices  [HIGH freedom]
 
 ```json
 firecrawl:firecrawl_search
@@ -81,7 +105,7 @@ context7:resolve-library-id
 
 ---
 
-## Phase 3: Copy principles
+## Phase 3: Copy principles  [HIGH freedom]
 
 Apply these to every email before looking at design:
 
@@ -152,7 +176,7 @@ Questions about your bill? Reply here and we'll sort it out.
 
 ---
 
-## Phase 4: Build the template (React Email)
+## Phase 4: Build the template (React Email)  [LOW freedom — run exactly]
 
 Install if not present:
 ```bash
@@ -233,7 +257,7 @@ const footer = { fontSize: '12px', color: '#9ca3af', textAlign: 'center' as cons
 
 ---
 
-## Phase 5: Send via provider
+## Phase 5: Send via provider  [LOW freedom — run exactly]
 
 ### Resend (recommended for new projects)
 
@@ -279,7 +303,7 @@ supabase functions deploy send-welcome-email --no-verify-jwt
 
 ---
 
-## Phase 6: Content flags that hurt placement
+## Phase 6: Content flags that hurt placement  [LOW freedom — do not skip]
 
 DNS auth, bounces, and List-Unsubscribe headers are `enhance-email-deliverability`.
 This phase only owns copy/markup that templates can fix:
@@ -293,7 +317,7 @@ This phase only owns copy/markup that templates can fix:
 
 ---
 
-## Phase 7: Preview and test
+## Phase 7: Preview and test  [LOW freedom — run exactly]
 
 Start the React Email preview server:
 ```bash

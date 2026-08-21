@@ -9,15 +9,38 @@ license: MIT
 
 # enhance-web-seo — SEO Audit & Implementation
 
+**Degree of freedom: MIXED.** Title/snippet judgment `[HIGH freedom]`; live probes, robots/sitemap, and re-measure `[LOW freedom — run exactly]`.
+
 **Google does not rank pages it cannot read, understand, or trust.** This skill
 finds every gap between your app and how search engines see it, then fixes them
 in order of impact.
 
 **Before ANY browser action, read `protocol-browser-anti-stall`.**
 
+## How to reason
+
+1. **Detect** — metadata API, robots, sitemap, generator
+2. **Measure** — live title, OG, JSON-LD, headings, LCP/CLS
+3. **Fix** — impact order: title → OG → robots/sitemap → JSON-LD → CWV
+4. **Re-measure** — same probes on each changed route
+
+## Worked example
+
+> **Detect:** Next.js App Router; root `metadata` only; no `sitemap.ts`; `/robots.txt` 404.
+> **Measure:** product pages inherit the home title; no canonical; no JSON-LD; LCP 3.1s.
+> **Fix:** `generateMetadata` per product; `app/sitemap.ts` + robots; Product JSON-LD; image dimensions.
+> **Re-measure:** unique titles; OG image resolves; sitemap lists products; LCP < 2.5s.
+
+## Self-critique before reporting
+
+- **Live, not source-only** — titles/OG/JSON-LD read from the rendered head
+- **Unique per page** — no inherited home title on inner routes
+- **Indexable** — robots/sitemap exist; no accidental `Disallow: /` or noindex
+- **Right owner** — JS/LCP budget → `audit-bundle-size`; AEO citations → `plan-aeo-readiness`
+
 ---
 
-## Phase 0: Detect the stack
+## Phase 0: Detect the stack  [HIGH freedom]
 
 ```
 package.json        → Next.js Metadata API, remix-utils/seo, @vueuse/head, etc.
@@ -32,7 +55,7 @@ SvelteKit's `@sveltejs/adapter-static` sitemap, etc.).
 
 ---
 
-## Phase 1: Live page audit (Playwright)
+## Phase 1: Live page audit (Playwright)  [LOW freedom — run exactly]
 
 For every public-facing route, run the following:
 
@@ -100,7 +123,7 @@ Thresholds: LCP < 2.5 s ✅ / 2.5–4 s ⚠ / > 4 s ❌. CLS < 0.1 ✅ / 0.1–0
 
 ---
 
-## Phase 2: Technical SEO checks
+## Phase 2: Technical SEO checks  [HIGH freedom]
 
 ### 2a. robots.txt
 
@@ -135,7 +158,7 @@ Validate each JSON-LD block found in Phase 1a:
 
 ---
 
-## Phase 3: Research current best practices
+## Phase 3: Research current best practices  [HIGH freedom]
 
 ```json
 firecrawl:firecrawl_search
@@ -158,7 +181,7 @@ firecrawl:firecrawl_search
 
 ---
 
-## Phase 4: Fix — ordered by impact
+## Phase 4: Fix — ordered by impact  [HIGH freedom]
 
 ### Priority 1 — Page title and meta description (every page)
 
@@ -248,7 +271,7 @@ ads/embeds have reserved space.
 
 ---
 
-## Phase 5: Verify with Playwright
+## Phase 5: Verify with Playwright  [LOW freedom — do not skip]
 
 After fixes, re-run Phase 1 checks on each modified page. Confirm:
 - `document.title` and meta description match the intent

@@ -10,6 +10,30 @@ license: MIT
 
 # Error Handling Skill
 
+**Degree of freedom: MIXED.** Which layer and message `[HIGH freedom]`;
+existing-type/boundary probes `[LOW freedom — run exactly]`.
+
+## How to reason
+
+1. **Observe** — existing error types, boundaries, `ActionResult` / `ApiError`
+2. **Interpret** — missing layer vs inconsistent shape vs swallowed catch
+3. **Classify** — reuse-existing / extend-codes / add-boundary / toast-only
+4. **Severity** — unhandled 500 on a mutation outranks a missing toast
+
+## Worked example
+
+> **Observe:** `createUser` throws Prisma `P2002`; UI shows a blank catch; `ActionResult` already lives in `types/errors.ts`.
+> **Interpret:** known conflict is unmapped; no field/toast path.
+> **Classify:** reuse `ActionResult` + `CONFLICT`; toast the message; do not add a second error type.
+> **Verify:** duplicate email returns `{ success: false, error: { code: 'CONFLICT' } }`; form alert shown.
+
+## Self-critique before reporting
+
+- **Reuse shape** — searched `ActionResult` / `ApiError` / `error.tsx` before adding a type
+- **User-safe** — `INTERNAL_ERROR` is generic; PII is not in the client message
+- **Layered** — boundary + action result + toast, not toast-only
+- **Right owner** — plan-only observability audit → `plan-error-handling`; live Sentry triage → `debug-sentry-monitor`
+
 full error handling patterns for full-stack applications.
 
 ## When to Use
@@ -20,7 +44,7 @@ full error handling patterns for full-stack applications.
 - Debugging error propagation
 - Adding error monitoring
 
-## CRITICAL: Check Existing First
+## CRITICAL: Check Existing First  [LOW freedom — run exactly]
 
 **Before adding ANY error handling, verify:**
 
@@ -49,7 +73,7 @@ rg "success: false|error:" src/features/*/server/ --type ts | head -10
 
 **Why:** Inconsistent error handling confuses users and complicates debugging. Always follow established patterns.
 
-## Error Handling Layers
+## Error Handling Layers  [HIGH freedom]
 
 ```
 ┌─────────────────────────────────────────┐
@@ -70,7 +94,7 @@ rg "success: false|error:" src/features/*/server/ --type ts | head -10
 └─────────────────────────────────────────┘
 ```
 
-## Standard Error Types
+## Standard Error Types  [HIGH freedom]
 
 ```typescript
 // types/errors.ts
@@ -99,7 +123,7 @@ const ErrorCode = {
 } as const
 ```
 
-## Server Action Error Handling
+## Server Action Error Handling  [HIGH freedom]
 
 ```typescript
 // features/users/server/actions.ts
@@ -184,7 +208,7 @@ export async function createUser(
 }
 ```
 
-## Form Error Display (React 19+)
+## Form Error Display (React 19+)  [HIGH freedom]
 
 ```tsx
 // components/UserForm.tsx
@@ -251,7 +275,7 @@ export function UserForm() {
 - `useOptimistic` - Optimistic UI updates
 ```
 
-## React Error Boundaries
+## React Error Boundaries  [HIGH freedom]
 
 ```tsx
 // app/error.tsx (Next.js page error boundary)
@@ -308,7 +332,7 @@ export default function GlobalError({
 }
 ```
 
-## API Route Error Handling
+## API Route Error Handling  [HIGH freedom]
 
 ```typescript
 // app/api/products/route.ts
@@ -355,7 +379,7 @@ export async function POST(request: NextRequest) {
 }
 ```
 
-## TanStack Query Error Handling
+## TanStack Query Error Handling  [HIGH freedom]
 
 ```tsx
 // hooks/useProducts.ts
@@ -409,7 +433,7 @@ export function useCreateProduct() {
 }
 ```
 
-## Error State UI Components
+## Error State UI Components  [HIGH freedom]
 
 ```tsx
 // components/ErrorState.tsx

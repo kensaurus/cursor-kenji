@@ -9,12 +9,36 @@ license: MIT
 
 # Data Visualization Skill
 
+**Degree of freedom: MIXED.** Chart type and encoding `[HIGH freedom]`;
+existing-library/token probes and a11y fallback `[LOW freedom — run exactly]`.
+
+## How to reason
+
+1. **Observe** — existing chart library, tokens, data shape
+2. **Interpret** — reuse a component vs new chart type
+3. **Classify** — line / bar / area / donut / sparkline / table-fallback
+4. **Severity** — inaccessible or empty-state-less chart outranks a missing gradient
+
+## Worked example
+
+> **Observe:** `package.json` has recharts; no `src/components/charts`; tokens define `--primary`.
+> **Interpret:** reuse Recharts + tokens, not D3.
+> **Classify:** `ResponsiveContainer` line chart + sr-only table; skeleton while loading.
+> **Verify:** resizes; screen-reader table present; no second chart library.
+
+## Self-critique before reporting
+
+- **Existing lib** — grepped `package.json`; did not add a second chart library
+- **Accessible** — sr-only table or text alternative present
+- **States** — loading + empty handled
+- **Right owner** — event taxonomy → `audit-analytics`; empty/loading frames → `audit-ui-states`
+
 Create beautiful, accessible, and interactive data visualizations for dashboards and reports.
 
 Product-event coverage ("are we tracking the right events?") is `audit-analytics`,
 not this skill. Empty/loading chart frames are `audit-ui-states`.
 
-## CRITICAL: Check Existing First
+## CRITICAL: Check Existing First  [LOW freedom — run exactly]
 
 **Before creating ANY visualization, verify:**
 
@@ -37,7 +61,7 @@ cat tailwind.config.* | grep -A10 "chart\|colors"
 
 **Why:** Use existing chart library and styling conventions.
 
-## Recharts (Recommended for React)
+## Recharts (Recommended for React)  [HIGH freedom]
 
 ### Line Chart
 ```tsx
@@ -229,7 +253,7 @@ export function DonutChart({ data, total }: { data: any[]; total: number }) {
 }
 ```
 
-## Sparklines (Mini Charts)
+## Sparklines (Mini Charts)  [HIGH freedom]
 
 ```tsx
 'use client'
@@ -271,7 +295,7 @@ export function Sparkline({ data, color = 'hsl(var(--primary))', height = 40 }: 
 </div>
 ```
 
-## Stat Cards with Trends
+## Stat Cards with Trends  [HIGH freedom]
 
 ```tsx
 import { ArrowUpIcon, ArrowDownIcon } from 'lucide-react'
@@ -316,7 +340,7 @@ export function StatCard({ title, value, change, trend, sparklineData }: StatCar
 }
 ```
 
-## Real-time Data Updates
+## Real-time Data Updates  [HIGH freedom]
 
 ```tsx
 'use client'
@@ -360,7 +384,7 @@ export function RealtimeChart() {
 }
 ```
 
-## D3.js for Custom Visualizations
+## D3.js for Custom Visualizations  [HIGH freedom]
 
 ```tsx
 'use client'
@@ -422,7 +446,7 @@ export function CustomD3Chart({ data }: { data: { label: string; value: number }
 }
 ```
 
-## Accessibility
+## Accessibility  [LOW freedom — run exactly]
 
 ```tsx
 // Always include ARIA labels and descriptions
@@ -451,7 +475,7 @@ export function CustomD3Chart({ data }: { data: { label: string; value: number }
 </div>
 ```
 
-## Validation
+## Validation  [LOW freedom — do not skip]
 
 After creating visualizations:
 

@@ -10,14 +10,37 @@ license: MIT
 
 # enhance-pwa — Make It Installable and Offline-Ready
 
+**Degree of freedom: MIXED.** Strategy and prompt timing `[HIGH freedom]`; caching rules, Capacitor bypass, and Lighthouse `[LOW freedom — run exactly]`.
+
 **A PWA closes the gap between "website" and "app".** Users can install it to
 their home screen, it loads instantly from cache, and it keeps working when the
 network drops. This skill adds those capabilities to any existing web app without
 breaking what already works.
 
+## How to reason
+
+1. **Audit** — manifest, SW, framework plugin already present
+2. **Choose** — caching strategy per asset type; Workbox over raw SW
+3. **Ship** — installable manifest + offline fallback + autoUpdate
+4. **Prove** — Lighthouse PWA ≥ 90; Capacitor bridge not intercepted
+
+## Worked example
+
+> **Audit:** Next.js app; no manifest link; no SW; also ships Capacitor.
+> **Choose:** Workbox via next-pwa; NetworkFirst APIs; CacheFirst images; skip `capacitor://`.
+> **Ship:** `manifest.webmanifest` + 192/512 icons + `/offline.html`; install prompt after first success.
+> **Prove:** offline revisit of `/` works; Lighthouse PWA ≥ 90; native bridge still functions.
+
+## Self-critique before reporting
+
+- **No stale deploys** — `autoUpdate`, not silent stale cache
+- **No secrets in cache** — auth tokens and sensitive APIs are NetworkOnly
+- **Offline path** — fallback page or cached shell, not a browser error
+- **Right owner** — native Capacitor shell → `mobile-capacitor-platform`; confirm bridge via `mobile-emulator-test`
+
 ---
 
-## Phase 0: Audit what already exists
+## Phase 0: Audit what already exists  [HIGH freedom]
 
 ```
 public/manifest.json or public/manifest.webmanifest  → existing manifest
@@ -39,7 +62,7 @@ const pwaReady = {
 
 ---
 
-## Phase 1: Research framework-specific PWA tooling
+## Phase 1: Research framework-specific PWA tooling  [HIGH freedom]
 
 ```json
 firecrawl:firecrawl_search
@@ -60,7 +83,7 @@ context7:resolve-library-id
 
 ---
 
-## Phase 2: Web App Manifest
+## Phase 2: Web App Manifest  [HIGH freedom]
 
 The manifest is what makes the app installable. Create or improve
 `public/manifest.webmanifest`:
@@ -102,7 +125,7 @@ Reference the manifest in `<head>`:
 
 ---
 
-## Phase 3: Service Worker — caching strategy
+## Phase 3: Service Worker — caching strategy  [HIGH freedom]
 
 Use **Workbox** (via the framework plugin) rather than writing raw service
 worker code. Choose the right caching strategy per asset type:
@@ -174,7 +197,7 @@ if (event.request.url.includes('capacitor://') ||
 
 ---
 
-## Phase 4: Offline page and graceful degradation
+## Phase 4: Offline page and graceful degradation  [HIGH freedom]
 
 When the network is unavailable and a cached response does not exist, show a
 helpful offline page rather than a browser error:
@@ -195,7 +218,7 @@ navigationFallback: '/offline.html',
 
 ---
 
-## Phase 5: Install prompt (optional but high-value)
+## Phase 5: Install prompt (optional but high-value)  [HIGH freedom]
 
 Do not use the browser's default install prompt — it appears at the wrong time.
 Instead, intercept `beforeinstallprompt` and show it when the user has
@@ -222,7 +245,7 @@ not just "Add to Home Screen".
 
 ---
 
-## Phase 6: Push notifications (if backend supports it)
+## Phase 6: Push notifications (if backend supports it)  [HIGH freedom]
 
 Only implement push if the app has a genuine reason to send notifications
 (not just to ask for permission on first load — users will deny that).
@@ -246,7 +269,7 @@ For the backend, use `web-push` (Node.js) or your platform's push service.
 
 ---
 
-## Phase 7: Verify with Lighthouse (Playwright)
+## Phase 7: Verify with Lighthouse (Playwright)  [LOW freedom — do not skip]
 
 ```javascript
 // Run Lighthouse via eval

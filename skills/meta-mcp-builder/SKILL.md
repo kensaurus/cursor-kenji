@@ -10,7 +10,32 @@ license: MIT
 
 # MCP Server Development Guide
 
+**Degree of freedom: MIXED.** Which tools to expose `[HIGH freedom]`;
+SDK tool shape, annotations, env-based auth, and Inspector
+`[LOW freedom — run exactly]`.
+
 Create MCP servers that enable LLMs to interact with external services.
+
+## How to reason
+
+1. **Observe** — the real agent job (search, create, send), not the raw API catalog
+2. **Interpret** — compose-from-primitives vs one workflow tool
+3. **Classify** — prefixed action names, typed params, annotations (readOnly / destructive / idempotent)
+4. **Verify** — Inspector + valid/invalid/edge; errors tell the agent what to do next
+
+## Worked example
+
+> **Observe:** "give Claude access to Linear"; agents will search issues and file one — not walk the full GraphQL schema.
+> **Interpret:** start with workflow-shaped tools, not 40 raw endpoints.
+> **Classify:** `linear_search_issues`, `linear_create_issue`; zod params; `create` is `readOnlyHint: false`.
+> **Ship:** env `LINEAR_API_KEY` (throw if missing); Inspector on both tools; no hardcoded token.
+
+## Self-critique before reporting
+
+- **Names** — action-oriented and service-prefixed
+- **Errors actionable** — next step in the message; no hardcoded credentials
+- **Annotations match** — destructive tools say so
+- **Right owner** — pack SKILL.md authoring → `meta-skill-creator`; calling an existing MCP is not this skill
 
 ## Overview
 
@@ -18,7 +43,7 @@ MCP (Model Context Protocol) servers expose tools that AI agents can use. Qualit
 
 ---
 
-## Quick Start
+## Quick Start  [HIGH freedom]
 
 ### 1. Choose Stack
 
@@ -49,7 +74,7 @@ my-mcp-server/
 
 ---
 
-## Tool Design Principles
+## Tool Design Principles  [HIGH freedom]
 
 ### 1. Clear Naming
 ```typescript
@@ -101,7 +126,7 @@ throw new Error(
 
 ---
 
-## Implementation Pattern
+## Implementation Pattern  [LOW freedom — this shape]
 
 ### Basic Tool Structure
 
@@ -159,7 +184,7 @@ server.tool(
 
 ---
 
-## Best Practices
+## Best Practices  [HIGH freedom]
 
 ### API Coverage vs Workflow Tools
 
@@ -203,7 +228,7 @@ return {
 
 ---
 
-## Testing
+## Testing  [LOW freedom — run exactly]
 
 ### 1. Build Check
 ```bash
@@ -222,7 +247,7 @@ npx @modelcontextprotocol/inspector
 
 ---
 
-## Quality Checklist
+## Quality Checklist  [LOW freedom — do not skip]
 
 - [ ] All tools have clear, descriptive names
 - [ ] All parameters have descriptions
@@ -235,7 +260,7 @@ npx @modelcontextprotocol/inspector
 
 ---
 
-## Common Patterns
+## Common Patterns  [HIGH freedom]
 
 ### Authentication
 ```typescript

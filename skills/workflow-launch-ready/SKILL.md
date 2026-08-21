@@ -10,14 +10,38 @@ license: MIT
 
 # workflow-launch-ready — Full Launch Preparation
 
+**Degree of freedom: MIXED.** Skip/condition judgment `[HIGH freedom]`; sweep
+order and quality-gate NO-GO block `[LOW freedom — run exactly]`.
+
 The pre-launch sequence. Run once, get the complete picture across SEO, PWA,
 performance, quality, and post-launch monitoring.
 
 Local dirty-tree → merge-ready PR is **`workflow-release-prep`**, not this.
 
+## How to reason
+
+1. **Scope** — new app / major release, not a dirty-tree PR
+2. **Sweep** — which steps apply; which are honest skips
+3. **Verdict** — LAUNCH-READY / WITH CONDITIONS / NOT READY
+4. **Handoff** — day-1 loop scheduled; blockers named
+
+## Worked example
+
+> **Scope:** first public launch of a Next.js + Supabase app; single locale; PWA wanted.
+> **Sweep:** SEO + PWA + bundle + quality-gate; skip i18n with a note.
+> **Verdict:** NOT READY — quality-gate NO-GO on missing RLS on `profiles`.
+> **Handoff:** fix RLS, re-run Gate 2, then `deploy-verify`; do not treat this as `workflow-release-prep`.
+
+## Self-critique before reporting
+
+- **Not a PR-prep** — local dirty tree was not routed here
+- **Skips named** — PWA/i18n skipped only when inapplicable, in the table
+- **NO-GO blocks launch** — quality-gate NO-GO is NOT READY, not "with conditions"
+- **Right owner** — merge-ready PR → `workflow-release-prep`; npm package → `deploy-npm`
+
 ---
 
-## Sweep sequence
+## Sweep sequence  [LOW freedom — run exactly]
 
 ```
 1. SEO          → enhance-web-seo    (meta, OG, JSON-LD, sitemap, canonicals)
@@ -33,7 +57,7 @@ Skip steps 2 (PWA) and 4 (i18n) if not applicable — note the skip in the check
 
 ---
 
-## Step 1: SEO (read enhance-web-seo)
+## Step 1: SEO (read enhance-web-seo)  [HIGH freedom]
 
 > Read the `enhance-web-seo` skill and follow it.
 
@@ -42,7 +66,7 @@ structured data (JSON-LD), and a sitemap entry.
 
 ---
 
-## Step 2: PWA (read enhance-pwa)
+## Step 2: PWA (read enhance-pwa)  [HIGH freedom]
 
 > Read the `enhance-pwa` skill and follow it.
 
@@ -51,7 +75,7 @@ PWA score ≥ 90 before launch.
 
 ---
 
-## Step 3: Bundle size (read audit-bundle-size)
+## Step 3: Bundle size (read audit-bundle-size)  [HIGH freedom]
 
 > Read the `audit-bundle-size` skill and follow it.
 
@@ -59,7 +83,7 @@ Target: first-load JS ≤ 200 KB gzip. All routes lazy-loaded.
 
 ---
 
-## Step 4: i18n (read audit-i18n — skip if single locale)
+## Step 4: i18n (read audit-i18n — skip if single locale)  [HIGH freedom]
 
 > Read the `audit-i18n` skill and follow it.
 
@@ -68,7 +92,7 @@ locales, correct date/number/currency formatting.
 
 ---
 
-## Step 5: Quality gate (read workflow-quality-gate)
+## Step 5: Quality gate (read workflow-quality-gate)  [LOW freedom — hand off]
 
 > Read the `workflow-quality-gate` skill and follow it.
 
@@ -77,7 +101,7 @@ internally. A NO-GO verdict from this step blocks launch.
 
 ---
 
-## Step 6: Deploy & smoke (read deploy-verify)
+## Step 6: Deploy & smoke (read deploy-verify)  [LOW freedom — hand off]
 
 > Read the `deploy-verify` skill and follow it.
 
@@ -86,7 +110,7 @@ schema is healthy, and critical flows work.
 
 ---
 
-## Step 7: Day-1 iteration loop (read iterate-post-launch)
+## Step 7: Day-1 iteration loop (read iterate-post-launch)  [LOW freedom — hand off]
 
 > Read the `iterate-post-launch` skill and follow it.
 
@@ -95,7 +119,7 @@ prioritize the first fix pass.
 
 ---
 
-## Launch checklist output
+## Launch checklist output  [LOW freedom — run exactly]
 
 ```markdown
 ## Launch Readiness — [App] — [Date]

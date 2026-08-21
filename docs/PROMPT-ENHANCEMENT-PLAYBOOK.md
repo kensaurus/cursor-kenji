@@ -209,6 +209,13 @@ Every other first-party `audit-*`, `plan-*`, and `test-*` (not
 any of these three families lacks Degree of freedom + Worked example +
 Self-critique.
 
+**Wave 8 — remaining first-party families after Wave 7.**
+`housekeep-*` → `docs-*` → `deploy-*` → `debug-*` → `meta-*` →
+`protocol-*` → `iterate-*` → `backend-*` → `design-*` → `enhance-*` →
+`workflow-*`, plus connected `mobile-*` / `data-*` / `mushi-*`. Skip
+`thirdparty-*`. Extend the validator require-list only after each family
+is upgraded. Same invariants.
+
 ---
 
 ## Part 5 — Acceptance (this pass)

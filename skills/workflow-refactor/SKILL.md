@@ -11,9 +11,33 @@ license: MIT
 
 # Refactor Code Skill
 
+**Degree of freedom: MIXED.** Structure target `[HIGH freedom]`;
+behavior-preserving checks and affected tests `[LOW freedom — run exactly]`.
+
+## How to reason
+
+1. **Observe** — current structure, callers, tests
+2. **Interpret** — duplication vs needed variation
+3. **Classify** — extract / inline / rename / stop (behavior would change)
+4. **Severity** — a public API change is not this skill
+
+## Worked example
+
+> **Observe:** three copy-pasted date formatters; tests only cover one.
+> **Interpret:** same behavior, three implementations.
+> **Classify:** extract `formatDate`; add the missing two call-site tests first (red), then extract (green).
+> **Verify:** same output; no new features.
+
+## Self-critique before reporting
+
+- **Behavior same** — existing tests still pass; no silent product change
+- **Scoped** — not a repo-wide drive-by
+- **Tests first** — missing coverage added before the move when needed
+- **Right owner** — repo-wide anti-pattern → `audit-code-quality`; mechanical rename → `burndown-full`
+
 Improve code quality without changing external behavior. Research-aware.
 
-## MANDATORY: Pre-Refactoring Checks
+## MANDATORY: Pre-Refactoring Checks  [LOW freedom — run exactly]
 
 **BEFORE refactoring any code, you MUST:**
 
@@ -81,7 +105,7 @@ Before refactoring, state:
 
 ---
 
-## Refactoring Principles
+## Refactoring Principles  [HIGH freedom]
 
 1. **Behavior stays the same** — tests pass before and after
 2. **Small steps** — one change at a time, verify after each
@@ -91,7 +115,7 @@ Before refactoring, state:
 
 ---
 
-## Code Smells and Fixes
+## Code Smells and Fixes  [HIGH freedom]
 
 | Smell | Symptom | Solution |
 |-------|---------|----------|
@@ -108,7 +132,7 @@ Before refactoring, state:
 
 ---
 
-## Common Refactorings
+## Common Refactorings  [HIGH freedom]
 
 ### Extract Function
 
@@ -196,7 +220,7 @@ function createUser(params: CreateUserParams) { ... }
 
 ---
 
-## Refactoring Process
+## Refactoring Process  [LOW freedom — run exactly]
 
 ```
 1. Verify tests pass → 2. Make one small change → 3. Verify tests pass → 4. Commit → 5. Repeat
@@ -212,7 +236,7 @@ refactor(scope): description of structural change
 
 ---
 
-## Refactoring Checklist
+## Refactoring Checklist  [LOW freedom — do not skip]
 
 ### Before Starting
 - [ ] Tests pass (if no tests, write them first)
@@ -236,7 +260,7 @@ refactor(scope): description of structural change
 
 ---
 
-## When NOT to Refactor
+## When NOT to Refactor  [LOW freedom — do not skip]
 
 - No test coverage (write tests first)
 - Don't understand the code yet (read and learn first)

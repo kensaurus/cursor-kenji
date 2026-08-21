@@ -10,8 +10,32 @@ license: MIT
 
 # Post-Deploy Verification
 
+**Degree of freedom: MIXED.** Verdict and MONITOR escalation `[HIGH freedom]`;
+probe sequences and the report table `[LOW freedom — run exactly]`.
+
 Automated post-deploy health check across all services. Run after every deploy to catch
 regressions before users do. Works with **any project** — auto-detects configuration.
+
+## How to reason
+
+1. **Observe** — what did each probe actually return (counts, logs, screenshots)?
+2. **Interpret** — new-since-deploy vs pre-existing; skip-missing vs real fail
+3. **Classify** — PASS / MONITOR / FAIL per phase
+4. **Severity** — auth/data-loss/5xx on the main path outranks a Langfuse quiet window
+
+## Worked example
+
+> **Observe:** home loads; Sentry shows 12 new `TypeError` on `/checkout`; Supabase API 200s.
+> **Interpret:** checkout is a critical path; errors started with this release.
+> **Classify:** Sentry FAIL, smoke FAIL on checkout, DB PASS.
+> **Verdict:** ROLLBACK — main money path is 5xx, not a MONITOR item.
+
+## Self-critique before reporting
+
+- **Evidence** — every row cites a probe result, not "looks fine"
+- **Binary verdict** — SHIP / MONITOR / HOTFIX / ROLLBACK with a next action
+- **Skip honesty** — missing Sentry/Supabase/Langfuse is SKIP, not PASS
+- **Right owner** — npm publish → `deploy-npm`; observe window → `workflow-ship-and-observe`
 
 ## Critical Rules
 
@@ -27,7 +51,7 @@ regressions before users do. Works with **any project** — auto-detects configu
 
 ---
 
-## Phase 0: Auto-Detect Deployment Context
+## Phase 0: Auto-Detect Deployment Context  [LOW freedom — run exactly]
 
 ### 0a. Detect Deployment Platform
 
@@ -102,7 +126,7 @@ Record all detected values:
 
 ---
 
-## Phase 1: Sentry Error Check
+## Phase 1: Sentry Error Check  [LOW freedom — run exactly]
 
 ### 1a. Find Organization and Project
 
@@ -176,7 +200,7 @@ This provides:
 
 ---
 
-## Phase 2: Supabase Health Check
+## Phase 2: Supabase Health Check  [LOW freedom — run exactly]
 
 Skip this phase if no Supabase integration detected.
 

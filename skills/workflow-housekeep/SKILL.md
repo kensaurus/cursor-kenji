@@ -11,10 +11,34 @@ license: MIT
 
 # Repo Housekeep
 
+**Degree of freedom: MIXED.** What is dead vs still referenced `[HIGH freedom]`;
+delete-only-after-proof and dependency bump commands `[LOW freedom — run exactly]`.
+
+## How to reason
+
+1. **Observe** — README drift, unused files, outdated deps
+2. **Interpret** — unused by search, or only unused in this package?
+3. **Classify** — sync docs / delete / bump / leave
+4. **Severity** — deleting a file still imported is a break
+
+## Worked example
+
+> **Observe:** `OldButton.tsx` has zero imports; README still lists a removed script; patch bump available.
+> **Interpret:** file is dead; README is stale; bump is safe if tests pass.
+> **Classify:** delete the file after `rg` + import check; sync README; bump patch.
+> **Do not** delete `housekeep-design` token work — that is another skill.
+
+## Self-critique before reporting
+
+- **Proven unused** — imports, refs, config, git history checked
+- **README matches** — scripts and paths in the README actually exist
+- **Tests after bump** — dependency update was not a silent break
+- **Right owner** — parked work → `housekeep-backlog`; token SSOT → `housekeep-design`; CI gates → `housekeep-gates`
+
 Full-cycle repository maintenance: documentation sync, dead file removal, dependency updates, and research-driven cleanup.
 Works with **any project** — auto-detects tech stack, package manager, and structure.
 
-## Critical Rules
+## Critical Rules  [LOW freedom — do not skip]
 
 > **NEVER delete files without confirming they are truly unused.**
 > Check imports, references, git blame, and config entries before removing anything.
@@ -35,7 +59,7 @@ Works with **any project** — auto-detects tech stack, package manager, and str
 
 ---
 
-## Step 0: Auto-Detect Project Configuration
+## Step 0: Auto-Detect Project Configuration  [LOW freedom — run exactly]
 
 ### 0a. Detect Tech Stack
 
@@ -84,7 +108,7 @@ FRAMEWORK: [Next.js / React / Vue / Django / FastAPI / etc.]
 
 ---
 
-## Phase 1: README Sync
+## Phase 1: README Sync  [HIGH freedom]
 
 Update the root README (and any folder-level READMEs) to reflect the **current** architecture.
 
@@ -136,7 +160,7 @@ Check for any `*_readme.md` or `README.md` files in subdirectories. Update them 
 
 ---
 
-## Phase 2: Dead File Cleanup
+## Phase 2: Dead File Cleanup  [LOW freedom — run exactly]
 
 Remove files that serve no purpose in the repository.
 
@@ -261,7 +285,7 @@ If these tools aren't available, do a manual check:
 
 ---
 
-## Phase 3: Dependency Updates
+## Phase 3: Dependency Updates  [HIGH freedom]
 
 ### 3a. Audit Current State
 
@@ -350,7 +374,7 @@ npm test # if tests exist
 
 ---
 
-## Phase 4: Research-Driven General Cleanup
+## Phase 4: Research-Driven General Cleanup  [HIGH freedom]
 
 ### 4a. .gitignore Best Practices
 
@@ -408,7 +432,7 @@ If the project uses TypeScript:
 
 ---
 
-## Phase 5: Summary Report
+## Phase 5: Summary Report  [LOW freedom — do not skip]
 
 Produce a summary using the **Housekeep Report template** in
 [`references/templates.md`](references/templates.md), filling in real values for

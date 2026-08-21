@@ -10,10 +10,34 @@ license: MIT
 
 # Mushi Integration Smoke Test
 
+**Degree of freedom: MIXED.** Pass/fail judgment `[HIGH freedom]`;
+Stages 1–6 probes and DB verifies `[LOW freedom — run exactly]`.
+
+## How to reason
+
+1. **Observe** — each stage's CLI output and DB row
+2. **Interpret** — stage failed vs still-pending vs expected-failure (test detected friction)
+3. **Classify** — capture / triage / map / gen / run / pdca
+4. **Severity** — `classify-report` down outranks optional Stage 7 dashboard drift
+
+## Worked example
+
+> **Observe:** `mushi test` → `rep_…`; DB still `pending` at 70s; `mushi doctor` was green.
+> **Interpret:** capture wrote; `classify-report` did not.
+> **Classify:** Stage 2 fail — check `get_logs`; do not start story mapping.
+> **Verify:** summary marks Stage 2 ❌; later stages skipped; `diagnose_setup` next.
+
+## Self-critique before reporting
+
+- **Health first** — `mushi doctor` green before Stage 1
+- **DB verify** — each stage checked the row, not only CLI text
+- **Expected fail ok** — Stage 5 `failed` still counts if the test executed
+- **Right owner** — component down → `mushi-health`; targeted diagnosis → `diagnose_setup`
+
 Exercises every stage of the Mushi pipeline end-to-end. Run after setup,
 after a deploy, or any time you need proof that the whole loop works.
 
-## Prerequisites
+## Prerequisites  [LOW freedom — run exactly]
 
 - `mushi doctor` passes (all green) — run [`mushi-health`](../mushi-health/SKILL.md) first if unsure.
 - At least one BYOK key for `anthropic` and `firecrawl` is active.
@@ -21,7 +45,7 @@ after a deploy, or any time you need proof that the whole loop works.
 
 ---
 
-## Stage 1 — Bug capture
+## Stage 1 — Bug capture  [LOW freedom — run exactly]
 
 Send a real test report through the SDK pipeline:
 
@@ -44,7 +68,7 @@ If still `pending` after 60 s: `classify-report` edge function failed — check 
 
 ---
 
-## Stage 2 — AI triage
+## Stage 2 — AI triage  [LOW freedom — run exactly]
 
 Confirm the classifier ran:
 
@@ -64,7 +88,7 @@ Confirm `classification.severity` and `classification.category` are set.
 
 ---
 
-## Stage 3 — Story mapping
+## Stage 3 — Story mapping  [LOW freedom — run exactly]
 
 Map user stories from a live URL:
 
@@ -96,7 +120,7 @@ or via CLI when the accept command is available.
 
 ---
 
-## Stage 4 — TDD test generation
+## Stage 4 — TDD test generation  [LOW freedom — run exactly]
 
 Pick a story id from the accepted inventory and generate a Playwright test:
 
@@ -134,7 +158,7 @@ list_pending_review_stories(projectId)
 
 ---
 
-## Stage 5 — Approval and execution
+## Stage 5 — Approval and execution  [LOW freedom — run exactly]
 
 Approve the generated test:
 
@@ -167,7 +191,7 @@ run_qa_story(projectId, qaStoryId)
 
 ---
 
-## Stage 6 — PDCA improvement cycle
+## Stage 6 — PDCA improvement cycle  [LOW freedom — run exactly]
 
 If Stage 5 produced a failure, trigger the PDCA improver:
 
@@ -190,7 +214,7 @@ Expected: at least one row with `source = 'pdca'` and a `parent_story_id` pointi
 
 ---
 
-## Stage 7 — Evolution loop (optional)
+## Stage 7 — Evolution loop (optional)  [HIGH freedom]
 
 Check the full PDCA dashboard to confirm the loop is converging:
 
@@ -207,7 +231,7 @@ Look for:
 
 ---
 
-## Pass/Fail Summary
+## Pass/Fail Summary  [LOW freedom — do not skip]
 
 | Stage | What ran | Status | Notes |
 |-------|----------|--------|-------|
@@ -223,7 +247,7 @@ Any ❌ → the relevant edge function failed. Run the mushi MCP `diagnose_setup
 
 ---
 
-## Tips
+## Tips  [HIGH freedom]
 
 - **Fastest smoke test:** Stages 1–2 only. Takes ~60 s and confirms bug capture + triage is alive.
 - **Story map only:** Stage 3. Useful after changing the Firecrawl key or updating the `story-mapper` function.

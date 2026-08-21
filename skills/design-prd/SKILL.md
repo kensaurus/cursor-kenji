@@ -9,12 +9,36 @@ license: MIT
 
 # Generate PRD Skill
 
+**Degree of freedom: MIXED.** Clarifying questions, scope, and requirements
+`[HIGH freedom]`; stack/feature/schema detection `[LOW freedom — run exactly]`.
+
 Create detailed, actionable Product Requirements Documents through structured conversation,
 informed by codebase analysis and competitive research.
 
+## How to reason
+
+1. **Discover** — stack, features, schema, existing PRDs
+2. **Clarify** — 3–5 numbered questions with lettered options
+3. **Scope** — P0/P1/P2 plus explicit non-goals
+4. **Specify** — testable requirements, not implementation
+
+## Worked example
+
+> **Discover:** Next.js + Supabase; `notifications` table missing; no `prd-*.md`.
+> **Clarify:** in-app vs email vs push? (user: 1A in-app only). MVP vs polish? (2A MVP).
+> **Scope:** P0 in-app bell + read state; non-goal: email/push (`design-email` / `mobile-capacitor-platform`).
+> **Specify:** FR-1 "unread count on the header within 2s of insert" — not "feel realtime".
+
+## Self-critique before reporting
+
+- **Context recorded** — stack, features, schema, and existing PRDs were listed first
+- **Questions capped** — 3–5, lettered; coding did not start first
+- **Testable FRs** — no "should be fast" without a number
+- **Right owner** — ready to implement → `workflow-build-feature`; UI from scratch → `design-frontend`; RLS matrix → `plan-rls-audit`
+
 ---
 
-## Step 0: Auto-Detect Project Context
+## Step 0: Auto-Detect Project Context  [LOW freedom — run exactly]
 
 Before writing any PRD, understand the project from its source code.
 
@@ -75,7 +99,7 @@ PROJECT CONTEXT:
 
 ---
 
-## Step 1: Research Before Writing
+## Step 1: Research Before Writing  [HIGH freedom]
 
 ### 1a. Competitive Research (Firecrawl)
 
@@ -165,7 +189,7 @@ Determine:
 
 ---
 
-## Step 2: Understand the Request
+## Step 2: Understand the Request  [HIGH freedom]
 
 When the user describes a feature, **DO NOT** start writing immediately.
 
@@ -184,7 +208,7 @@ If similar functionality already exists, the PRD should extend it rather than du
 
 ---
 
-## Step 3: Ask Clarifying Questions
+## Step 3: Ask Clarifying Questions  [HIGH freedom]
 
 ### Rules
 
@@ -230,7 +254,7 @@ Reply with selections (e.g., "1B, 2A, 3B")
 
 ---
 
-## Step 4: Generate PRD
+## Step 4: Generate PRD  [HIGH freedom]
 
 ### Template
 
@@ -380,7 +404,7 @@ CREATE TABLE IF NOT EXISTS [table_name] (
 
 ---
 
-## Step 5: Iterate
+## Step 5: Iterate  [HIGH freedom]
 
 After presenting the PRD:
 1. Ask: "Does this capture what you had in mind?"
@@ -390,7 +414,7 @@ After presenting the PRD:
 
 ---
 
-## Step 6: Save
+## Step 6: Save  [LOW freedom — run exactly]
 
 **Location:** `tasks/prd-[feature-name].md`
 

@@ -11,9 +11,31 @@ license: MIT
 
 # Sentry Monitor
 
-Automated Sentry issue triage, root cause analysis, fix, architecture audit, and monitoring enhancement workflow.
-Works with **any project** — auto-detects configuration from the codebase.
-Uses the `sentry` MCP server for all Sentry API operations.
+**Degree of freedom: MIXED.** Triage bucket and root cause `[HIGH freedom]`;
+resolve-only-after-verify `[LOW freedom — run exactly]`.
+
+Triage, fix, and audit Sentry on any project via the `sentry` MCP. Auto-detects config.
+
+## How to reason
+
+1. **Observe** — issue type, frames, users, first-seen, release
+2. **Interpret** — app frame vs extension noise; new vs regression
+3. **Classify** — Noise / Code Bug / Data Bug / Performance / Regression / Config Gap
+4. **Severity** — regressions and multi-user crashes first; never resolve Performance
+
+## Worked example
+
+> **Observe:** 80 events of `TypeError: undefined.email` on `/account`, started at release `1.14.0`.
+> **Interpret:** app frames in the profile card; correlates with the onboarding PR.
+> **Classify:** Data Bug + Regression — API null for incomplete profiles.
+> **Fix:** handle null at the contract; do not resolve until the fix is committed and the loop is green.
+
+## Self-critique before reporting
+
+- **No resolve without proof** — issue stays unresolved if the fix is unverified
+- **No band-aid** — `?.` / swallowed catch is not the sole fix
+- **Bucket is one** — Noise is not used to mute an app-frame crash
+- **Right owner** — one named bug through PR → `workflow-fix-and-ship`
 
 ## Critical Rules
 

@@ -12,6 +12,8 @@ license: MIT
 
 # Enhance Page UI
 
+**Degree of freedom: MIXED.** Composition and tier judgment `[HIGH freedom]`; live read, DOM rects, three-viewport verify `[LOW freedom — run exactly]`.
+
 Turn an existing screen into a composed interface: calmer hierarchy, smarter
 content placement, expressive but purposeful motion, and artful transitions that
 support comprehension. This is not a "add more chips/cards/shadows" skill. It
@@ -23,6 +25,27 @@ rearranges, subtracts, and stages information before adding decoration.
 
 > If browser automation is used, first follow the
 > `protocol-browser-anti-stall` skill when present.
+
+## How to reason
+
+1. **Recon** — primitives, tokens, real data contracts
+2. **Rank** — primary / secondary / metadata / actions / ambient
+3. **Compose** — subtract → group → pin → stage before decorating
+4. **Verify** — 1440/1024/800 + two squints + rect uniformity
+
+## Worked example
+
+> **Recon:** learning app (tier A); stat tiles share a Tooltip wrapper; "0/10 today" appears three times.
+> **Rank:** primary is the next lesson CTA; the count is metadata, not a third headline.
+> **Compose:** patch Tooltip to `block w-full`; drop two duplicate counts; no extra chips.
+> **Verify:** tile widths match; category squint shows distinct hues; CTA still one brand-color target.
+
+## Self-critique before reporting
+
+- **Compose first** — decoration was not the first edit
+- **Real data** — no mocked status/count; primitive patched if the bug repeats
+- **Three viewports** — no wrapped CTAs; dead slots collapse when empty
+- **Right owner** — flow/IA → `enhance-web-ux`; breakpoints-only → `audit-responsive`
 
 ---
 
@@ -144,7 +167,7 @@ UI ENHANCE /<route-or-component>
 
 ---
 
-## Step 1 - Recon: Learn the Existing Visual System
+## Step 1 - Recon: Learn the Existing Visual System  [HIGH freedom]
 
 Read the route/component in full. Then inspect:
 
@@ -178,7 +201,7 @@ hide and where the *primitive-first patch* in step 6 is decided.
 
 ---
 
-## Step 1.5 - Domain Colour & Density Tier
+## Step 1.5 - Domain Colour & Density Tier  [HIGH freedom]
 
 Before touching any colour, name the product class. The same `/8` tint
 that reads "premium and restrained" on a finance dashboard reads
@@ -211,7 +234,7 @@ washed-out and AI-generated even though every token is technically
 
 ---
 
-## Step 2 - Content Rank Before Layout
+## Step 2 - Content Rank Before Layout  [HIGH freedom]
 
 Classify every visible element:
 
@@ -234,7 +257,7 @@ Rules:
 
 ---
 
-## Step 3 - Live Read
+## Step 3 - Live Read  [LOW freedom — run exactly]
 
 Inspect the page at:
 
@@ -341,7 +364,7 @@ delete is a hierarchy upgrade for whatever stays.
 
 ---
 
-## Step 4 - Composition Moves
+## Step 4 - Composition Moves  [HIGH freedom]
 
 Prefer these moves, in order:
 

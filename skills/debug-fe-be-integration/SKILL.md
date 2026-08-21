@@ -10,8 +10,32 @@ license: MIT
 
 # Frontend-Backend Integration Debug Skill
 
+**Degree of freedom: MIXED.** Which side is wrong `[HIGH freedom]`;
+trace-both-sides probes `[LOW freedom — run exactly]`.
+
 Systematic approach to debugging frontend-backend integration issues by analyzing backend
 logs, production errors, and source code to identify root causes and fix both sides.
+
+## How to reason
+
+1. **Observe** — status, payload, validation error, both logs
+2. **Interpret** — FE omitted a field vs BE schema drifted vs auth/CORS
+3. **Classify** — missing-param / type / 404 / 401 / 500 / CORS
+4. **Severity** — 500 on a write path outranks a cosmetic 422 message
+
+## Worked example
+
+> **Observe:** FE `GET /api/reports` → 500; BE log `ZodError: expected string, received undefined` on `year`.
+> **Interpret:** FE omitted `year`; BE schema required it with no default.
+> **Classify:** missing-param — fix FE call and add a clear BE 422/default.
+> **Verify:** same request returns 200 with the year bound; both sides updated.
+
+## Self-critique before reporting
+
+- **Both sides read** — FE call and BE schema/logs, not one side guessed
+- **Contract named** — status + payload field, not "they disagree"
+- **Fix matches class** — 404 is not patched as a Zod default
+- **Right owner** — single-layer crash → `debug-error`; proactive contract audit → `audit-fe-api`
 
 ---
 
@@ -432,6 +456,6 @@ const schema = z.object({
 
 ## Integration with Other Skills
 
-- **`fe-api-audit`**: Proactive audit from FE code perspective (run first).
-- **`sentry-monitor`**: Triage and fix Sentry errors from production.
-- **`db-schema-audit`**: Verify DB schema matches API expectations.
+- **`audit-fe-api`**: Proactive audit from FE code perspective (run first).
+- **`debug-sentry-monitor`**: Triage and fix Sentry errors from production.
+- **`audit-db-schema`**: Verify DB schema matches API expectations.

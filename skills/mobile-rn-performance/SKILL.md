@@ -14,11 +14,36 @@ paths:
 
 # React Native Performance & Build
 
+**Degree of freedom: MIXED.** Which category and fix `[HIGH freedom]`; measure
+before/after, 16KB alignment, and upgrade-helper diffs
+`[LOW freedom — run exactly]`.
+
 > The performance, bundling, and upgrade layer for React Native / Expo. `mobile-rn-screen` handles screen layout and native feel; this skill handles *speed, size, and version moves*.
 >
 > Distilled from [Callstack's React Native best-practices skill](https://github.com/callstackincubator/agent-skills) (MIT) and the Ultimate Guide to RN Optimization.
 
-## Diagnose first, then fix
+## How to reason
+
+1. **Measure** — RN perf monitor / profiler numbers first
+2. **Category** — FPS, bundle, TTI, native, memory, or animation
+3. **Fix** — the profiled hotspot only
+4. **Re-measure** — before/after on a real low-end device
+
+## Worked example
+
+> **Measure:** feed scroll drops to 38fps; React profiler shows every row re-rendering.
+> **Category:** FPS & re-renders — not "add memo everywhere".
+> **Fix:** `FlashList` + stable `keyExtractor`; animation stays on Reanimated shared values.
+> **Re-measure:** 56fps on a low-end Android; no new storm on the changed screen.
+
+## Self-critique before reporting
+
+- **Not vibes** — a number existed before the patch
+- **Hotspot only** — no unprofiled memo/lazy spray
+- **Both platforms** — Android measured; iOS-affecting native changes verified on macOS CI
+- **Right owner** — layout / safe-area / touch feel → `mobile-rn-screen`; on-device walk → `mobile-emulator-test`; hybrid axes → `enhance-capacitor-ui`
+
+## Diagnose first, then fix  [HIGH freedom]
 Never optimize blind. Identify the symptom, then apply the matching category. Measure before/after.
 
 | Symptom | Category | Impact |
@@ -62,13 +87,13 @@ Never optimize blind. Identify the symptom, then apply the matching category. Me
 - Use `react-native-reanimated` on the **UI thread** (`useSharedValue` / `useAnimatedStyle` / worklets). Never drive continuous animation through `setState` — it re-renders the tree every frame and collapses FPS.
 - Use the native driver for `Animated` when staying on the core API.
 
-## React Native / Expo upgrades
+## React Native / Expo upgrades  [LOW freedom — run exactly]
 - Use the official **RN Upgrade Helper** diff for the exact version jump; apply native-side changes (`android/`, `ios/`, Podfile, Gradle) deliberately — these are where upgrades break.
 - Bump Expo SDK via `expo install --fix`; align all `expo-*` and third-party native deps to the SDK's supported ranges.
 - After upgrade: clean caches (`watchman watch-del`, Metro cache, Pods, Gradle), rebuild, and smoke-test on both platforms via `mobile-emulator-test`.
 - For Linux/Windows devs: iOS-affecting upgrade changes verify on **macOS CI**, not locally.
 
-## Definition of done (RN perf)
+## Definition of done (RN perf)  [LOW freedom — do not skip]
 - [ ] Measured before/after on a real device (numbers, not vibes).
 - [ ] The fix targets the profiled hotspot, not a guess.
 - [ ] No new re-render storms introduced (re-profile the changed screen).

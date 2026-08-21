@@ -10,11 +10,35 @@ license: MIT
 
 # Frontend Design Skill
 
+**Degree of freedom: MIXED.** Visual composition `[HIGH freedom]`; design-system
+discovery `[LOW freedom — run exactly]`.
+
 > Discover design systems, respect existing patterns, create beautiful interfaces.
+
+## How to reason
+
+1. **Discover** — tokens, `components/ui`, forbidden patterns
+2. **Reuse** — extend existing components; do not fork a second Button
+3. **Compose** — new surface on those tokens
+4. **Check** — type mins, 44px targets, reduced-motion, no AI clichés
+
+## Worked example
+
+> **Discover:** `components/ui/button.tsx` + `globals.css` tokens; `text-xs` min; `rounded-sm`.
+> **Reuse:** settings rows use existing `Button` / `Input`; no new primitive.
+> **Compose:** new `/settings` page — token spacing, `text-sm` body, 44px save.
+> **Check:** no Inter+purple gradient; `prefers-reduced-motion` on any spinner.
+
+## Self-critique before reporting
+
+- **Discovery stated** — token file, radius, and forbidden list were spoken before JSX
+- **Reuse first** — no duplicate primitive next to `components/ui`
+- **Mins held** — readable type ≥ `text-xs`; tap targets ≥44px
+- **Right owner** — polish existing → `enhance-web-ui`; landing → `enhance-web-landing`; redesign existing → `enhance-web-redesign`
 
 ---
 
-## Phase 1: Design System Discovery (MANDATORY)
+## Phase 1: Design System Discovery (MANDATORY)  [LOW freedom — run exactly]
 
 **Before writing ANY frontend code:**
 
@@ -52,7 +76,7 @@ grep -r "NEVER\|FORBIDDEN\|❌" docs/ README*
 
 ---
 
-## Phase 2: Implementation Standards
+## Phase 2: Implementation Standards  [HIGH freedom]
 
 ### Typography Minimums
 | Context | Minimum | Usage |
@@ -79,7 +103,7 @@ Spacing: 1=4px, 2=8px, 3=12px, 4=16px, 6=24px, 8=32px
 
 ---
 
-## Phase 3: Quality Checklist
+## Phase 3: Quality Checklist  [LOW freedom — do not skip]
 
 ```
 [ ] Uses design system tokens (no hardcoded values)

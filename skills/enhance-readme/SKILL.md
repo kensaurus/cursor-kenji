@@ -13,7 +13,30 @@ license: MIT
 
 # Enhance README
 
+**Degree of freedom: MIXED.** Caption and tour selection `[HIGH freedom]`; capture, generator, gitignore, Camo-safe names `[LOW freedom — run exactly]`.
+
 Add a theme-aware hero image and a tour grid to a project's README so the repo advertises itself visually instead of being a wall of text.
+
+## How to reason
+
+1. **Detect** — live URL vs local, theme toggle, login
+2. **Capture** — dark and light at 1600×1000; promote to `docs/screenshots/`
+3. **Weave** — name + tagline + `<picture>` hero + tour under badges
+4. **Sync** — badges match `package.json`; first screen answers what/why/who
+
+## Worked example
+
+> **Detect:** live Vercel URL; `.dark` class; README is badges + install only.
+> **Capture:** dashboard + three feature pages, both themes; files < 5 MB.
+> **Weave:** theme-aware hero; 4-cell tour with concrete captions; skip GIF.
+> **Sync:** React/Vite badges match lockfile; `.playwright-mcp/` gitignored.
+
+## Self-critique before reporting
+
+- **Both themes** — GitHub dark and light both readable
+- **Camo-safe** — overwritten images were renamed, not just replaced
+- **Artifact hygiene** — keepers in `docs/screenshots/`; scratch never committed
+- **Right owner** — content-only docs → `docs-writer`; drift plan → `plan-docs-sync`
 
 ## The words matter as much as the pixels
 
@@ -59,7 +82,7 @@ Copy and track:
 
 ---
 
-## Step 1: Detect Demo URL and Theme Mechanism
+## Step 1: Detect Demo URL and Theme Mechanism  [HIGH freedom]
 
 Read the existing README for a "Demo" or "Live demo" link. Fall back to `package.json` `homepage` field, then `vercel.json` / `.github/workflows/deploy.yml` for hosting hints.
 
@@ -75,7 +98,7 @@ Confirm credentials if the app has auth. Most demos use `admin/demo`, `test/test
 
 ---
 
-## Step 2: Capture Screenshots
+## Step 2: Capture Screenshots  [LOW freedom — run exactly]
 
 Use playwright-cli. **Always read the `protocol-browser-anti-stall` skill first** if the user has it — never block the browser for more than 3 seconds at a time.
 
@@ -139,7 +162,7 @@ The generator script picks the hero by looking for these keywords (in order): `h
 
 ---
 
-## Step 3: Generate Hero + Tour Markdown
+## Step 3: Generate Hero + Tour Markdown  [LOW freedom — run exactly]
 
 Run from the repo root:
 
@@ -165,7 +188,7 @@ If any file exceeds 10 MB the script exits non-zero — compress with `oxipng -o
 
 ---
 
-## Step 4: Weave Blocks Into README
+## Step 4: Weave Blocks Into README  [HIGH freedom]
 
 ### 4a. Hero placement
 
@@ -223,7 +246,7 @@ Bad caption pattern:
 
 ---
 
-## Step 5: Update Tech Badges + Tech Stack
+## Step 5: Update Tech Badges + Tech Stack  [LOW freedom — match package.json]
 
 While editing the README, sync the badges and Tech Stack table to actual `package.json` versions. Common drift:
 
@@ -242,7 +265,7 @@ Use shields.io URLs:
 
 ---
 
-## Step 6: Gitignore + Commit
+## Step 6: Gitignore + Commit  [LOW freedom — run exactly]
 
 Add to `.gitignore` (create if missing):
 
@@ -268,7 +291,7 @@ The README change does not require a redeploy of the app (it's repo-only). Nothi
 
 ---
 
-## Step 7 (Optional): Record an Animated Guided-Tour GIF
+## Step 7 (Optional): Record an Animated Guided-Tour GIF  [HIGH freedom]
 
 A short autoplaying GIF placed above the static screenshots gives a clearer feel for the app than any single frame. GitHub renders inline GIFs up to 10 MB on every README, no `<video>` workarounds needed.
 

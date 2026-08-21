@@ -10,6 +10,9 @@ license: MIT
 
 # workflow-ship-and-observe — Release, Verify, Observe, Roll Back
 
+**Degree of freedom: MIXED.** Rollback-vs-hotfix `[HIGH freedom]`; pin
+target/SHA, prove revision, observe window `[LOW freedom — run exactly]`.
+
 Shipping is not merging. A release is done only when the **intended revision is
 live on the confirmed target, production smoke checks pass, and a defined
 monitoring window elapses without crossing rollback thresholds** — or a
@@ -20,7 +23,28 @@ rollback/hotfix has been executed.
 
 **Before any browser action, read `protocol-browser-anti-stall`.**
 
-## Phase 0 — Pin the target and the revision
+## How to reason
+
+1. **Pin** — SHA, environment, mechanism, rollback, signals
+2. **Ship** — pipeline deploy; backend deps first
+3. **Prove** — live revision equals SHA; smoke on critical flows
+4. **Watch** — window elapsed under thresholds, or roll back
+
+## Worked example
+
+> **Pin:** `a1b2c3d` on Vercel production; rollback = previous promotion; Sentry + 5xx threshold set.
+> **Ship:** migrations applied; `vercel deploy --prod` succeeded.
+> **Prove:** `/version` returns `a1b2c3d`; checkout + login smoke 2xx.
+> **Watch:** 2h window, error rate flat → STABLE. A 5xx spike would have promoted previous and re-smoked.
+
+## Self-critique before reporting
+
+- **Revision proven** — a 200 is not "our SHA is live"
+- **Level honest** — deployed-verified ≠ observed-stable
+- **Threshold acted** — known-bad prod was not "monitored more"
+- **Right owner** — smoke methodology only → `deploy-verify`; npm package → `deploy-npm`; not-yet-green → `workflow-green-repo`
+
+## Phase 0 — Pin the target and the revision  [LOW freedom — run exactly]
 
 Never guess where or what you are shipping. Establish:
 
@@ -69,7 +93,7 @@ Monitor window: <duration> · thresholds: <error rate / latency / crash-free>
 - <step>: <command/result>
 ```
 
-## Phase 1 — Preflight
+## Phase 1 — Preflight  [LOW freedom — run exactly]
 
 - Confirm the release SHA is merged and green. Do not ship red or unmerged code.
 - Deploy and verify backend dependencies first, so the frontend does not hit a
@@ -77,14 +101,14 @@ Monitor window: <duration> · thresholds: <error rate / latency / crash-free>
   client uses.
 - Confirm the rollback procedure is real and, where possible, dry-run it.
 
-## Phase 2 — Deploy
+## Phase 2 — Deploy  [LOW freedom — run exactly]
 
 - Trigger the deploy via the identified mechanism. Never hand-edit production
   state outside the pipeline.
 - Wait for the deploy to reach a terminal state; capture the build/deploy logs.
   A failed or partial deploy is a stop-and-fix, not a proceed.
 
-## Phase 3 — Verify the revision is live
+## Phase 3 — Verify the revision is live  [LOW freedom — run exactly]
 
 - Confirm the **deployed revision equals the intended SHA** — via the
   provider's deployment metadata, a `/version`/build-id endpoint, a build stamp,
@@ -93,7 +117,7 @@ Monitor window: <duration> · thresholds: <error rate / latency / crash-free>
   a primary read and a primary write path. Capture console, network (2xx where
   expected), and screenshots as evidence. Keep artifacts under `.playwright-mcp/`.
 
-## Phase 4 — Observe the stability window
+## Phase 4 — Observe the stability window  [LOW freedom — run exactly]
 
 - Watch the defined signals for the agreed window (scale it to release risk).
 - Track error rate/new issues (Sentry), latency and 5xx (provider/Supabase
@@ -101,7 +125,7 @@ Monitor window: <duration> · thresholds: <error rate / latency / crash-free>
 - **Crossing a threshold triggers Phase 5.** Not crossing it after the window
   elapses is the only path to a "stable" claim.
 
-## Phase 5 — Roll back or hotfix (only if a threshold is crossed)
+## Phase 5 — Roll back or hotfix (only if a threshold is crossed)  [HIGH freedom]
 
 - If signals breach thresholds: execute the rollback procedure immediately,
   confirm the prior healthy revision is live, and re-verify smoke checks.
@@ -109,7 +133,7 @@ Monitor window: <duration> · thresholds: <error rate / latency / crash-free>
   through the same pipeline and re-enter Phase 3. Record the decision and why.
 - Never leave production in a known-bad state to "monitor more."
 
-## Phase 6 — Report
+## Phase 6 — Report  [LOW freedom — do not skip]
 
 ```md
 ## Ship & Observe — report

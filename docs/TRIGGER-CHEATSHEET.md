@@ -113,8 +113,8 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "mobile design", "touch UI", "small screen", "swipe", "safe area" | `design-mobile-first` |
 | "add one animation", "hover effect on this button", "isolated micro-interaction" | `design-motion` |
 | "write a PRD", "product requirements", "spec this feature", "what should we build" | `design-prd` |
-| "grill me", "stress-test this plan", "interview me about this", "poke holes in this", "challenge my thinking" | `grilling` |
-| "pin down terminology", "ubiquitous language", "glossary", "you're using the wrong words" | `domain-modeling` |
+| "grill me", "stress-test this plan", "interview me about this", "poke holes in this", "challenge my thinking" | `workflow-grilling` |
+| "pin down terminology", "ubiquitous language", "glossary", "you're using the wrong words" | `docs-domain-modeling` |
 | "UI/UX unification plan", "design system audit plan", "UI burndown", "unify design system", "plan UI overhaul", "audit UI without fixing" | `plan-uiux-unification` |
 | "looks like AI slop", "reads like ChatGPT", "authenticity burndown", "de-slop" | `plan-antislop` |
 | "RLS audit", "check my RLS", "row level security", "is my Supabase secure", "anyone can read my data", "service_role key", "lock down my tables" | `plan-rls-audit` |

@@ -10,7 +10,32 @@ license: MIT
 
 # Handoff
 
+**Degree of freedom: LOW.** Contents, redaction, and temp-dir save
+`[LOW freedom — run exactly]`. What to emphasize for the next session
+`[HIGH freedom]`.
+
 > Adapted from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT).
+
+## How to reason
+
+1. **Observe** — what is done, verified, and still open
+2. **Interpret** — which claims are implemented vs scoped-verified vs assumed
+3. **Classify** — include / point-at-artifact / omit (already in an ADR)
+4. **Severity** — a false "green" in the handoff is worse than a missing detail
+
+## Worked example
+
+> **Observe:** auth UI landed; RLS migration is a local file only; tests not run.
+> **Interpret:** UI is implemented, backend is not deployed-verified.
+> **Classify:** write "implemented, not verified"; point at the migration path; do not say SHIP.
+> **Save:** OS temp file, print the path; do not commit the handoff into the repo.
+
+## Self-critique before writing
+
+- **Ladder honest** — no upgraded verification claim
+- **No secrets** — keys/tokens/PII redacted
+- **Pointers not copies** — ADRs and plans referenced by path
+- **Right owner** — permanent decisions → `docs-adr`, not this file
 
 Write a handoff document summarizing the current conversation so a fresh agent
 can continue the work. Save it to the OS temporary directory — **not** the

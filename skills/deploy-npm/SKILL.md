@@ -9,6 +9,31 @@ license: MIT
 
 # deploy-npm — Full release workflow
 
+**Degree of freedom: MIXED.** Semver/changeset judgment `[HIGH freedom]`;
+git/gh/npm publish steps `[LOW freedom — run exactly]`. Never `pnpm publish`
+locally when the repo uses Trusted Publisher.
+
+## How to reason
+
+1. **Observe** — branch, dirty tree, open PRs, pending changesets, release.yml trigger
+2. **Interpret** — is this a changeset-ready release or a no-op?
+3. **Classify** — proceed / stop-and-ask (dirty tree, conflicting PRs, no changeset)
+4. **Severity** — publishing the wrong bump or skipping verify is a user-facing break
+
+## Worked example
+
+> **Observe:** feature PR green; one minor changeset; Version PR opened by the bot; required checks never fired.
+> **Interpret:** GitHub anti-loop suppressed CI on the bot branch.
+> **Classify:** empty-commit to trigger CI (Phase 4), then merge Version PR.
+> **Verify:** `npm view` shows the new version; do not publish from the laptop.
+
+## Self-critique before reporting
+
+- **Phase order** — no publish before version PR + green CI
+- **Verify** — `npm view` (and GH Release) ran after publish, not assumed
+- **No local publish** — Trusted Publisher path only
+- **Right owner** — running app deploy → `workflow-ship-and-observe`
+
 This skill is opinionated for repos that use:
 
 - `pnpm` + `turbo` monorepo

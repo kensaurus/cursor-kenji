@@ -10,6 +10,9 @@ license: MIT
 
 # workflow-feedback-to-closure — Signal → Ticket → Verified Closure
 
+**Degree of freedom: MIXED.** Cluster, severity, and cut-line `[HIGH freedom]`;
+normalize → persist → live-verify-before-close `[LOW freedom — run exactly]`.
+
 Feedback dies in three ways: it is never captured, it is captured twice, or it
 is "fixed" but never verified in production. This skill prevents all three by
 forcing every signal through capture → dedupe → durable ticket → fix →
@@ -19,7 +22,28 @@ live-verified closure.
 > not when a PR merges.** No signal is dropped silently; each ends as done,
 > deduped, tracked, or explicitly won't-fix with a reason.
 
-## Phase 0 — Gather and normalize
+## How to reason
+
+1. **Normalize** — every signal into the common shape
+2. **Dedupe** — one defect, one ticket; search tracker first
+3. **Ticket** — another engineer could repro from the card
+4. **Close** — verified where the user hit it, not at merge
+
+## Worked example
+
+> **Normalize:** Sentry `quoteCart` TypeError + QA note "checkout dies on missing product" + one support email.
+> **Dedupe:** same deleted-SKU path; existing `#412` is the canonical; attach all three sources.
+> **Ticket:** repro steps + acceptance "deleted SKU → inline error, HTTP 200".
+> **Close:** `workflow-fix-and-ship` lands the fix; Playwright on prod-like + Sentry quiet → `verified`.
+
+## Self-critique before reporting
+
+- **No silent drop** — every signal is done, deduped, tracked, or won't-fix
+- **Dedupe first** — no second ticket for a known defect
+- **Close ≠ merge** — `verified` only after live proof
+- **Right owner** — one isolated bug already scoped → `workflow-fix-and-ship`; release+watch → `workflow-ship-and-observe`
+
+## Phase 0 — Gather and normalize  [LOW freedom — run exactly]
 
 Collect every incoming signal for this pass and record its source:
 
@@ -33,7 +57,7 @@ Collect every incoming signal for this pass and record its source:
 Normalize each into a common shape: `{ source, raw, symptom, suspected area,
 severity signal, first/last seen, evidence link }`. Do not fix anything yet.
 
-## Phase 1 — Dedupe and cluster
+## Phase 1 — Dedupe and cluster  [HIGH freedom]
 
 1. Cluster signals that describe the same underlying defect (same stack trace,
    same flow, same root symptom). One defect = one ticket, with all reporting
@@ -46,7 +70,7 @@ severity signal, first/last seen, evidence link }`. Do not fix anything yet.
    intended" — route the latter two out, with a note, rather than forcing them
    into the fix pipeline.
 
-## Phase 2 — Write durable, reproducible tickets
+## Phase 2 — Write durable, reproducible tickets  [HIGH freedom]
 
 For each unique defect, produce a ticket that a different engineer could act on:
 
@@ -84,13 +108,13 @@ Tracker: <gh repo / none>
 - <ticket>: <fix + verification result>
 ```
 
-## Phase 3 — Prioritize
+## Phase 3 — Prioritize  [HIGH freedom]
 
 Rank by impact × severity ÷ effort. Critical production crashes and data-loss
 paths first, then broad UX breakage, then degraded experiences, then cosmetics.
 Present the ranked list; for large batches confirm the cut line with the user.
 
-## Phase 4 — Fix through the right skill
+## Phase 4 — Fix through the right skill  [LOW freedom — hand off]
 
 Drive each ticket to a fix using the matching workflow — do not improvise:
 
@@ -103,7 +127,7 @@ Drive each ticket to a fix using the matching workflow — do not improvise:
 Add a regression test that would have caught the defect. Update the ticket
 status to `fixed` (not `verified`) when the code lands.
 
-## Phase 5 — Verify and close
+## Phase 5 — Verify and close  [LOW freedom — run exactly]
 
 - Verify each fix **where the user hit it**: live flow via `test-playwright`,
   the failing query re-run, or the production signal confirmed gone after
@@ -113,7 +137,7 @@ status to `fixed` (not `verified`) when the code lands.
 - A defect that cannot be reproduced or verified is marked `needs-info` with the
   precise missing detail — not silently closed.
 
-## Phase 6 — Report
+## Phase 6 — Report  [LOW freedom — do not skip]
 
 ```md
 ## Feedback → Closure — report (<date>)

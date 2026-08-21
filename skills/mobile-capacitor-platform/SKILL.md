@@ -14,16 +14,41 @@ paths:
 
 # Capacitor Platform & Pipeline
 
+**Degree of freedom: MIXED.** Which area to tackle `[HIGH freedom]`; Capacitor
+major matching, `cap sync`, secrets, and store preflight
+`[LOW freedom — run exactly]`.
+
 > The native-runtime and shipping layer for Capacitor apps. `enhance-capacitor-ui` handles cross-surface *layout architecture*; this skill handles *platform features, native builds, store submission, and migrations*.
 >
 > Distilled from [cap-go/capgo-skills](https://github.com/cap-go/capgo-skills) (48 skills, MIT). For deep per-task playbooks, install the full pack: `npx skills add Cap-go/capgo-skills` or `claude plugin marketplace add Cap-go/capgo-skills`.
 
-## Version discipline (do this first)
+## How to reason
+
+1. **Version** — `@capacitor/core` major; plugin majors must match
+2. **Choose** — plugin, deep link, push, offline, OTA, CI, or store
+3. **Wire** — entitlements, config, and native files for that capability
+4. **Prove** — both platforms or CI iOS; secrets never in the JS bundle
+
+## Worked example
+
+> **Version:** Capacitor 8 in `package.json`; `@capacitor/push-notifications` is still v5.
+> **Choose:** push — FCM + APNs, not an OTA problem.
+> **Wire:** bump plugin to v8, `npx cap sync`, APNs entitlement, `google-services.json`.
+> **Prove:** emulator tap opens the deep-linked screen; no keystore in git.
+
+## Self-critique before reporting
+
+- **Majors match** — every plugin major equals the Capacitor major
+- **Native config present** — entitlements / usage strings / plist-or-json for the capability
+- **Secrets out of band** — CI/Keychain only; never committed or bundled
+- **Right owner** — form-factor layout → `enhance-capacitor-ui`; listing ASO → `plan-aso`; native-security plan-only → `plan-capacitor-hardening`
+
+## Version discipline (do this first)  [LOW freedom — run exactly]
 - Read `package.json`: the Capacitor major (`@capacitor/core`) drives everything. Match plugin majors to it (Capacitor 8 → plugin v8).
 - Check `capacitor.config.ts` for `appId`, `webDir`, `server.url` (live-reload vs bundled), and plugin config.
 - Confirm the target platforms present (`ios/`, `android/`) before suggesting platform-specific steps.
 
-## Pick the right area
+## Pick the right area  [HIGH freedom]
 
 | Task | Approach |
 |:-----|:---------|
@@ -35,7 +60,7 @@ paths:
 | **Safe area / notch** | Use safe-area insets (env vars / plugin), not hardcoded padding. Account for notch, Dynamic Island, home indicator, Android gesture nav. (Pairs with `enhance-capacitor-ui`.) |
 | **Splash screen** | Configure via plugin + native assets; hide programmatically after first paint to avoid white flash. |
 
-## Shipping pipeline
+## Shipping pipeline  [LOW freedom — run exactly]
 
 ### Live / OTA updates (the Capacitor superpower)
 - Push JS/HTML/CSS instantly without store review (Capgo or equivalent). **Native code changes still require a store build.**
@@ -61,7 +86,7 @@ paths:
 | CocoaPods | Swift Package Manager | iOS dependency migration; check each plugin supports SPM. |
 | SQLite plugin | Fast SQL | Performance migration for data-heavy apps. |
 
-## Definition of done (Capacitor)
+## Definition of done (Capacitor)  [LOW freedom — do not skip]
 - [ ] Plugin majors match the Capacitor major; `npx cap sync` run after any native dep change.
 - [ ] Feature tested on a real device or emulator for **both** iOS and Android (or CI for iOS).
 - [ ] Permissions / entitlements / native config present for any native capability used.

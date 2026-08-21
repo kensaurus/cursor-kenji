@@ -48,7 +48,7 @@ That merge-installs skills **and** slash commands (and agents/rules) into every 
 | You say… | What kicks in | What you get |
 |:---------|:--------------|:-------------|
 | *"orient me"* / *"what's in this repo?"* | `workflow-onboard` | A short tour of the codebase |
-| *"grill me before I build"* | `grilling` | One question at a time until you're truly aligned |
+| *"grill me before I build"* | `workflow-grilling` | One question at a time until you're truly aligned |
 | *"build this feature"* | `workflow-build-feature` | Spec → tests → code → smoke → PR |
 | *"fix this bug and ship it"* | `workflow-fix-and-ship` | Debug → fix → verify → PR → deploy |
 | *"audit my security"* | `audit-security` | OWASP-style findings with file:line |
@@ -164,17 +164,18 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | 🧱 Backend — server & data patterns | **5** | Auth, caching, queues, realtime, observability |
 | 📱 Mobile — React Native / Capacitor | **5** | RN screens, emulators, Capacitor, App Store prep |
 | 📊 Data — charts & pipelines | **2** | Charts, dashboards, ETL / cron jobs |
-| 📚 Docs — write it down clearly | **3** | READMEs, PRDs, RFCs with a reader-first voice |
-| 🧹 Housekeeping — clean up drift | **3** | Merge a drifted design system into one source of truth |
-| 🔗 Workflows — multi-step recipes | **19** | End-to-end recipes (build, fix, ship, green the repo) |
+| 📚 Docs — write it down clearly | **4** | READMEs, PRDs, RFCs with a reader-first voice |
+| 🧹 Housekeeping — consolidate one drifted register | **3** | Consolidate one drifted register (gates, backlog, or design tokens) |
+| 🔗 Workflows — multi-step recipes | **20** | End-to-end recipes (build, fix, ship, green the repo) |
 | ✅ Test & QA — prove it works | **8** | Unit, Playwright, visual regression, load, red-team |
 | 🚀 Deploy — ship & verify | **2** | npm release + post-deploy smoke tests |
 | 🐛 Debug — find & fix what's broken | **3** | Errors, Sentry, frontend↔backend mismatches |
+| 🔁 Iterate — close the loop after launch | **2** | Post-launch feedback loops and agent-harness iteration |
 | 🦟 Mushi Mushi — bug triage helpers | **2** | Integrate the Mushi Mushi bug-report pipeline |
 | 🛡️ Protocols — session guardrails | **1** | Keep browser automation from freezing |
 | ✍️ Authoring — build skills & MCP | **2** | Author new skills or MCP servers |
 | 🤝 Third-party (upstream-maintained) | **3** | Vendored upstream skills (Emil, UI/UX Pro Max, Vercel WIG) |
-| 🧩 Core & cross-cutting | **8** | Close everything, burndown, post-launch loops |
+| 🧩 Core & cross-cutting | **4** | Close everything, burndown, research, handoff |
 | 🖱️ Cursor IDE skills | **12** | Canvas, hooks, rules, PR splitter, CLI helpers |
 | **Total** | **153** | |
 
@@ -302,15 +303,16 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `data-pipeline` | Wire ETL, ingestion, cron, edge-function, and queue jobs correctly |
 | `data-visualization` | Build interactive, accessible charts, graphs, and data dashboards using Recharts, D3, or Victory |
 
-### 📚 Docs — write it down clearly (3)
+### 📚 Docs — write it down clearly (4)
 
 | Skill | What it does |
 |:------|:-------------|
 | `docs-adr` | Create and maintain lightweight Architecture Decision Records as agent-readable decision memory — what was decided, why, and which… |
 | `docs-coauthor` | Co-author structured documents (specs, PRDs, RFCs) through a 3-stage workflow: context gathering, drafting, and reader testing |
+| `docs-domain-modeling` | Build and sharpen a project's domain model — a CONTEXT.md glossary and ubiquitous language |
 | `docs-writer` | Write developer docs: README content, API references, code comments, changelog entries |
 
-### 🧹 Housekeeping — clean up drift (3)
+### 🧹 Housekeeping — consolidate one drifted register (3)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -318,7 +320,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `housekeep-design` | Apply-now consolidation of a drifted design system into one token/component SSOT |
 | `housekeep-gates` | Apply-now consolidation of accreted CI gates, ratchets, and hooks into one aggregator required check |
 
-### 🔗 Workflows — multi-step recipes (19)
+### 🔗 Workflows — multi-step recipes (20)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -330,6 +332,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `workflow-fix-and-ship` | Complete one bug-fix lifecycle: triage → reproduce → debug-error → regression fix → test-playwright → workflow-pr; optional deploy verify |
 | `workflow-git-commit` | Create one conventional commit from an already-scoped change: stage named files/hunks, write the message, commit, never push |
 | `workflow-green-repo` | Drive an entire repository to a fully green baseline — typecheck, lint, tests, and build all passing from a clean checkout — when the user… |
+| `workflow-grilling` | Grill the user relentlessly about a plan, decision, or idea — one question at a time — until shared understanding is reached |
 | `workflow-housekeep` | Apply repository maintenance: sync README, remove confirmed dead artifacts, and safely update dependencies |
 | `workflow-launch-ready` | Full launch preparation sweep for a new app or major release |
 | `workflow-merge-conflicts` | Resolve an in-progress git merge or rebase conflict by tracing each side back to its original intent |
@@ -370,6 +373,13 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `debug-fe-be-integration` | Diagnose and fix frontend↔backend contract failures by tracing client requests, server logs, validation, auth, and responses on both sides |
 | `debug-sentry-monitor` | Operate Sentry: triage/fix unresolved issues, reduce noise, audit instrumentation, and monitor after deploy |
 
+### 🔁 Iterate — close the loop after launch (2)
+
+| Skill | What it does |
+|:------|:-------------|
+| `iterate-agent-harness` | Turn an agent failure—premature stop, false completion, gamed check, missed file, broken handoff—into a durable rule/skill/hook/CI guard… |
+| `iterate-post-launch` | Close the feedback loop for an already-live app: inspect production signals, prioritize top issues, fix, verify live, repeat |
+
 ### 🦟 Mushi Mushi — bug triage helpers (2)
 
 | Skill | What it does |
@@ -398,17 +408,13 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `thirdparty-ui-ux-pro-max` | Third-party skill — searchable style catalog, palettes, typography, and UX guidelines via Python scripts |
 | `thirdparty-web-interface-guidelines` | Third-party skill — Vercel Web Interface Guidelines compliance (focus, forms, animation, copy) |
 
-### 🧩 Core & cross-cutting (8)
+### 🧩 Core & cross-cutting (4)
 
 | Skill | What it does |
 |:------|:-------------|
 | `burndown-full` | Drive a planned mechanical change to 100% repo coverage when a prior run stopped early |
 | `complete-everything` | Explicit closure mode for one approved plan: implement unfinished items plus connected deferrals, verify every acceptance criterion,… |
-| `domain-modeling` | Build and sharpen a project's domain model — a CONTEXT.md glossary and ubiquitous language |
-| `grilling` | Grill the user relentlessly about a plan, decision, or idea — one question at a time — until shared understanding is reached |
 | `handoff` | Compact the current conversation into a handoff document a fresh agent can pick up |
-| `iterate-agent-harness` | Turn an agent failure—premature stop, false completion, gamed check, missed file, broken handoff—into a durable rule/skill/hook/CI guard… |
-| `iterate-post-launch` | Close the feedback loop for an already-live app: inspect production signals, prioritize top issues, fix, verify live, repeat |
 | `research` | Research current best practices with Context7, Firecrawl, and official docs before a non-trivial change |
 
 ### 🖱️ Cursor IDE skills (12)

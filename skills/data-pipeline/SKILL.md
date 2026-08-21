@@ -6,12 +6,36 @@ license: MIT
 
 # Data Pipeline Correctness
 
+**Degree of freedom: MIXED.** Layering and window design `[HIGH freedom]`;
+idempotency, atomic writes, overlap lock, and the DoD `[LOW freedom — run exactly]`.
+
+## How to reason
+
+1. **Observe** — job, retry path, write targets, schedule
+2. **Interpret** — at-least-once vs atomic vs contract vs overlap
+3. **Classify** — upsert / window-recompute / quarantine / lock / watermark
+4. **Severity** — retry double-count outranks a missing metric
+
+## Worked example
+
+> **Observe:** nightly `refresh_order_stats` does `count = count + 1`; cron overlapped twice; dashboard totals jumped.
+> **Interpret:** at-least-once delivery + non-idempotent delta.
+> **Classify:** recompute-and-replace the day window; `pg_try_advisory_lock`; persist a watermark.
+> **Verify:** re-run the same window → identical rows; overlap skipped; `pipeline_runs` recorded.
+
+## Self-critique before reporting
+
+- **Idempotent** — same-window re-run proven identical, not assumed
+- **Atomic** — mid-fail leaves no half-written batch
+- **Locked** — the scheduled job has an overlap guard
+- **Right owner** — schema/constraints → `audit-db-schema`; post-hoc corruption hunt → `plan-data-integrity`
+
 > Pipelines fail silently: a retry double-counts, a partial write corrupts a table, a schema drift poisons a dashboard, and nobody notices until the numbers are wrong. This skill bakes correctness in at build time. It complements post-hoc data-integrity audit skills (which *detect* these after the fact) and the Supabase plugin (DB/Edge Functions/RLS).
 
 ## When this fires
 Any job that **moves, transforms, or aggregates** data: ingestion/ETL/ELT, scheduled aggregations, edge-function workers, `pg_cron` jobs, queue consumers, webhook processors, backfills, materialized-view refreshes.
 
-## Non-negotiables (the 5 that prevent silent corruption)
+## Non-negotiables (the 5 that prevent silent corruption)  [LOW freedom — run exactly]
 
 1. **Idempotency** — running the same job twice must not change the result. Retries, at-least-once queues, and overlapping cron fires are guaranteed, not hypothetical.
  - Use `INSERT ... ON CONFLICT (natural_key) DO UPDATE` (upsert), not blind `INSERT`.
@@ -32,7 +56,7 @@ Any job that **moves, transforms, or aggregates** data: ingestion/ETL/ELT, sched
  - Emit per-run: rows in / out / rejected, duration, watermark, status. Persist it (a `pipeline_runs` table or logs), don't just `console.log`.
  - Alert on: zero rows when rows expected, reject-rate spike, run overran, run skipped.
 
-## Staging architecture (default to 4 layers)
+## Staging architecture (default to 4 layers)  [HIGH freedom]
 ```
 Raw → land source data unchanged, append-only, with ingested_at + source id
 Staged → cleaned, typed, validated, deduped (1 row per natural key)
@@ -41,17 +65,17 @@ Aggregated→ rollups / metrics / materialized views for dashboards
 ```
 Each layer is rebuildable from the one before it. Never transform-in-place on raw; never let dashboards read raw.
 
-## Backfills
+## Backfills  [HIGH freedom]
 - Make jobs **parameterized by window** (`--from`, `--to` / date partition), not "everything since forever". The same code runs the nightly slice and the historical backfill.
 - Backfills must be idempotent and chunked (partition by day/range) so a failure resumes, not restarts.
 - Use a **watermark** (last-processed timestamp/id, persisted) for incremental runs; never re-scan the whole source each run.
 
-## Failure handling
+## Failure handling  [HIGH freedom]
 - **Dead-letter** bad/failed records to a quarantine table or DLQ with the error + payload; keep the main run moving. Silent `try/catch {}` that swallows errors is banned.
 - Retries: bounded, with backoff; only retry transient errors (network/timeout), never validation failures (they'll just fail again).
 - Make partial progress resumable via the watermark, not a full redo.
 
-## Anti-patterns (reject on sight)
+## Anti-patterns (reject on sight)  [HIGH freedom]
 - **Monolithic DAG / mega-function** doing fetch+transform+load+notify in one untestable blob → split into testable stages.
 - `count = count + 1` / `balance = balance + x` on a retryable path → not idempotent.
 - `SELECT *` into a typed model without a contract → schema drift time bomb.
@@ -59,13 +83,13 @@ Each layer is rebuildable from the one before it. Never transform-in-place on ra
 - Cron with no overlap guard (job B starts before job A finishes) → double processing. Add a lock / `pg_try_advisory_lock` / "skip if running".
 - Reading dashboards straight off raw ingestion tables.
 
-## Supabase / edge-function specifics
+## Supabase / edge-function specifics  [LOW freedom — run exactly]
 - `pg_cron` is at-least-once and can overlap under load → make the SQL/function idempotent and guard with an advisory lock.
 - Edge-function workers triggered by table inserts: dedupe on the row's natural key; the trigger can fire more than once.
 - Heavy aggregation belongs in SQL / materialized views (refresh on a schedule), not in a function looping row-by-row.
 - Deploy + verify the function, cron, and any new table/policy on the remote in the same turn — see `full-stack-ship-discipline`.
 
-## Definition of done
+## Definition of done  [LOW freedom — do not skip]
 - [ ] Re-running the job produces the identical result (idempotency proven, not assumed).
 - [ ] A mid-run failure leaves no half-applied state (atomicity).
 - [ ] Bad input is rejected/quarantined with a contract, not silently coerced.

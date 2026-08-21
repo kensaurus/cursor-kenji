@@ -6,7 +6,31 @@ license: MIT
 
 # Theme Factory Skill
 
- a curated collection of professional font and color themes. Once a theme is chosen, it can be applied to any artifact.
+**Degree of freedom: MIXED.** Custom-theme authoring `[HIGH freedom]`; wait-for-
+selection and existing-token inventory `[LOW freedom — run exactly]`.
+
+A curated collection of professional font and color themes. Once a theme is chosen, it can be applied to any artifact.
+
+## How to reason
+
+1. **Inventory** — existing tokens, fonts, and brand colors
+2. **Select** — show the catalog; wait for an explicit choice
+3. **Apply** — one palette + pairing everywhere on the artifact
+4. **Contrast** — 4.5:1 text; do not override the design system arbitrarily
+
+## Worked example
+
+> **Inventory:** slide deck uses mixed hex; `globals.css` already has `--primary`.
+> **Select:** user picks **Forest Canopy** after seeing the 11 options.
+> **Apply:** headings Merriweather / body Lato; `#276749` primary on `#f0fff4`.
+> **Contrast:** body text vs background ≥4.5:1; app chrome still uses existing tokens.
+
+## Self-critique before reporting
+
+- **Choice recorded** — a theme was not applied until the user picked one
+- **One pairing** — no leftover fonts or hex from a second theme
+- **Readable** — contrast checked, not assumed
+- **Right owner** — component library / tokens from scratch → `design-system`; drifted token SSOT → `housekeep-design`
 
 ## Purpose
 
@@ -15,7 +39,7 @@ To apply consistent, professional styling to presentation slide decks or other a
 - Complementary font pairings for headers and body text
 - A distinct visual identity suitable for different contexts and audiences
 
-## Usage Instructions
+## Usage Instructions  [LOW freedom — run exactly]
 
 To apply styling to a slide deck or other artifact:
 
@@ -141,7 +165,7 @@ Neo-Brutalist "Cute-alism" - Japanese ranch/campground aesthetic
 
 See `themes/tsumagoi-ranch.md` for full specification including mobile patterns.
 
-## Application Process
+## Application Process  [LOW freedom — run exactly]
 
 After a preferred theme is selected:
 1. Read the corresponding theme specifications
@@ -149,7 +173,7 @@ After a preferred theme is selected:
 3. Ensure proper contrast and readability
 4. Maintain the theme's visual identity across all elements
 
-## Create Your Own Theme
+## Create Your Own Theme  [HIGH freedom]
 
 To handle cases where none of the existing themes work, create a custom theme based on:
 - User's brand colors
@@ -163,7 +187,7 @@ Generate a new theme with:
 
 After generating, show it for review before applying.
 
-## CRITICAL: Check Existing First
+## CRITICAL: Check Existing First  [LOW freedom — run exactly]
 
 **Before applying ANY theme, verify:**
 
@@ -184,7 +208,7 @@ rg "var\(--" --type css --type tsx | head -20
 
 **Why:** Themes must integrate with existing design systems, not override them arbitrarily.
 
-## Validation
+## Validation  [LOW freedom — do not skip]
 
 After applying a theme:
 

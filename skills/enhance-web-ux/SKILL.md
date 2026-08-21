@@ -12,12 +12,35 @@ license: MIT
 
 # Enhance Page UX
 
+**Degree of freedom: MIXED.** Heuristic mapping `[HIGH freedom]`; three-viewport capture, DOM forensics `[LOW freedom — run exactly]`.
+
 A generative companion to the audit skills. **Audits diagnose; this skill enhances.** It
 takes a single route or screen and produces a concrete, design-system-compliant set of
 code changes that make the page feel hand-crafted — not template-generated.
 
 > **Before any browser interaction, follow the rules in the
 > `protocol-browser-anti-stall` skill.**
+
+## How to reason
+
+1. **Recon** — journey, primary task, unused data, primitives
+2. **Forensics** — 1440/1024/800 + rects + silent-pain catalogue
+3. **Map** — each pain → NN/g + existing primitive (no inventions)
+4. **Verify** — before/after + uniformity recheck + category squint
+
+## Worked example
+
+> **Recon:** `/folders` is the hub; `aiAnalyzedAt` exists but is unused; Badge + tokens exist.
+> **Forensics:** 1024 wraps a toolbar label; all folder icons identical; hint row repeats (S6).
+> **Map:** #6 Recognition → category icon + chip; #8 → delete hint row; #1 → AI badge from real timestamp.
+> **Verify:** wrap gone at 1024; icons discriminate without reading; no new primitive.
+
+## Self-critique before reporting
+
+- **Cited** — every change names an NN/g heuristic, not "looks bad"
+- **Silent pains** — inventory has more than user-reported rows
+- **Primitive-first** — repeating bugs patched at the helper, not one consumer
+- **Right owner** — composition/type → `enhance-web-ui`; repo-wide slop plan → `plan-antislop`; heuristics-only → `audit-ux`
 
 ---
 
@@ -133,7 +156,7 @@ ENHANCE /<route>
 
 ---
 
-## Step 1 — RECON: Understand the Page Before Touching It
+## Step 1 — RECON: Understand the Page Before Touching It  [HIGH freedom]
 
 ### 1a. Read the route entry
 
@@ -206,7 +229,7 @@ A common find: a primitive that documents "do NOT use bg-X with text-X" — resp
 
 ---
 
-## Step 2 — LIVE: Observe the Real Page, Not the Code
+## Step 2 — LIVE: Observe the Real Page, Not the Code  [LOW freedom — run exactly]
 
 ### 2a. Three-viewport screenshot pass
 
@@ -254,7 +277,7 @@ For each screenshot capture, write 2-3 lines:
 
 ---
 
-## Step 2.5 — DOM FORENSICS (catch the silent bugs)
+## Step 2.5 — DOM FORENSICS (catch the silent bugs)  [LOW freedom — run exactly]
 
 Screenshots show *what looks weird*. DOM forensics shows *why*. Run this
 pass before declaring the page understood, especially when a user
@@ -351,7 +374,7 @@ diagnosis, not just an aesthetic preference.
 
 ---
 
-## Step 3 — PAIN INVENTORY (don't hand-wave)
+## Step 3 — PAIN INVENTORY (don't hand-wave)  [HIGH freedom]
 
 Maintain a single table. Include user-reported pains AND silent ones you discovered.
 
@@ -401,7 +424,7 @@ rows, you skipped Step 2.5.
 
 ---
 
-## Step 4 — HEURISTIC MAP (every fix needs a WHY)
+## Step 4 — HEURISTIC MAP (every fix needs a WHY)  [HIGH freedom]
 
 For each pain, name the violated heuristic. Use `HEURISTICS.md` for the canonical list.
 A pain that cannot be tied to a heuristic is probably a personal taste call — defer it.
@@ -418,7 +441,7 @@ A pain that cannot be tied to a heuristic is probably a personal taste call — 
 
 ---
 
-## Step 5 — PRIMITIVE MATCH (no inventions)
+## Step 5 — PRIMITIVE MATCH (no inventions)  [HIGH freedom]
 
 For each fix, match an existing primitive. If none fits, extend the closest one — never
 reach for a raw `<div>` styled inline.

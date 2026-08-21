@@ -10,6 +10,9 @@ license: MIT
 
 # workflow-green-repo — Whole-Repository Greening
 
+**Degree of freedom: MIXED.** Root-cause of each failure `[HIGH freedom]`;
+gate discovery, worklist, and no skip/silence `[LOW freedom — run exactly]`.
+
 Bring the repository to a verified-green baseline: every configured health
 gate passes from a clean state. This is broad, authorized cleanup — the one
 place where fixing unrelated pre-existing failures is the goal, not scope
@@ -19,14 +22,35 @@ creep.
 > failures you happened to see.** Enumerate first, externalize the worklist,
 > fix root causes in batches, and re-run until zero.
 
-## When NOT to use this
+## How to reason
+
+1. **Authorize** — whole-repo green was explicitly asked
+2. **Enumerate** — real commands + baseline failures, not assumed
+3. **Fix-root** — no skip, narrow, or ignore
+4. **Prove** — fresh from-scratch run of every gate
+
+## Worked example
+
+> **Authorize:** user said "get CI passing on this repo."
+> **Enumerate:** `pnpm typecheck` 14 errors in `lib/billing`; `pnpm test` 3 failures on date TZ.
+> **Fix-root:** restore the `Invoice` discriminant the last refactor dropped; fix TZ in the test clock, do not `.skip` the suite.
+> **Prove:** typecheck/lint/test/build re-run from scratch → clean; state file has zero open failures.
+
+## Self-critique before reporting
+
+- **Authorized** — this was not a silent rewrite of unrelated debt
+- **No fake-green** — no `.skip`, `@ts-ignore`, or weakened assertion
+- **Fresh prove** — green is a new full run, not the last batch
+- **Right owner** — one plan's leftovers → `complete-everything`; one pattern → `burndown-full`; ratchet gaming → `audit-gate-logic`
+
+## When NOT to use this  [LOW freedom — do not skip]
 
 - The user asked to finish one plan or feature → use `complete-everything`.
 - The change is one searchable pattern across files → use `burndown-full`.
 - No explicit authorization to touch pre-existing debt → confirm scope first;
   do not silently rewrite unrelated code.
 
-## Phase 0 — Confirm authorization and discover gates
+## Phase 0 — Confirm authorization and discover gates  [LOW freedom — run exactly]
 
 1. Confirm the user wants the **whole repo** green, including debt that predates
    their work. If the surface is narrower, route to `complete-everything`.
@@ -39,7 +63,7 @@ creep.
 4. Capture the **baseline**: run each gate once and record the failing output.
    This is the worklist source, and it separates real regressions from flakes.
 
-## Phase 1 — Enumerate the full failure worklist
+## Phase 1 — Enumerate the full failure worklist  [LOW freedom — run exactly]
 
 Write `.cursor/green-repo-state.md` as the durable source of truth:
 
@@ -71,7 +95,7 @@ State the totals: "N failing gates across M areas. Driving all to green."
 Mirror the worklist into the native task list for UI visibility; the state
 file wins after context compaction.
 
-## Phase 2 — Fix root causes in batches
+## Phase 2 — Fix root causes in batches  [HIGH freedom]
 
 Work the list in small batches (one gate area or 5–10 related failures):
 
@@ -93,7 +117,7 @@ Work the list in small batches (one gate area or 5–10 related failures):
 Do not pause between batches to ask "continue?" — keep going until the
 worklist is empty. Re-read the state file instead of trusting memory.
 
-## Phase 3 — Prove green from scratch
+## Phase 3 — Prove green from scratch  [LOW freedom — run exactly]
 
 Do not report green until every configured gate passes in a fresh run:
 
@@ -110,7 +134,7 @@ Any new failure or regression → add to the worklist and loop back to Phase 2.
 For approved-plan or wide-change contexts, invoke `completion-judge` before the
 final claim.
 
-## Phase 4 — Report
+## Phase 4 — Report  [LOW freedom — do not skip]
 
 ```md
 ## Green Repo — report

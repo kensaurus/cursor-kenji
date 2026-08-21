@@ -10,6 +10,9 @@ license: MIT
 
 # Browser Anti-Stall Protocol (playwright-cli)
 
+**Degree of freedom: LOW.** Almost every step is exact. Only "why it
+stalled" and the next hypothesis are `[HIGH freedom]`.
+
 **Apply these rules to EVERY browser action. No exceptions.**
 
 This repo drives browsers with **`playwright-cli`**, not the Playwright MCP. The MCP exposes one
@@ -22,9 +25,30 @@ loaded into context), and runs natively in parallel shells.
 every tool to its CLI command. **Read `references/playwright-session-coordination.md`** before your
 first command — session naming, persistent logins (incl. the Google/CDP block), and cleanup.
 
+## How to reason
+
+1. **Observe** — snapshot, screenshot, console, requests, and the session name
+2. **Interpret** — stale ref, SPA hydration, pending request, or a real blocker
+3. **Classify** — one new-hypothesis retry / 2s sleep-cycle / BLOCKER report
+4. **Recover** — one real user action, then look; never `eval` to click
+
+## Worked example
+
+> **Observe:** checkout `click`; URL still `/cart`; console hydration warning; `POST /api/checkout` pending; session `-s=qa-checkout`.
+> **Interpret:** SPA not ready + possibly a stale ref — not "the button is missing".
+> **Classify:** attempt 2 — `find`/`waitFor` a landmark, fresh `snapshot`, then click. Not `run-code` to submit.
+> **Stop at 4:** still stuck → BLOCKER with console + requests + screenshot.
+
+## Self-critique before reporting
+
+- **Headed + `-s=`** — every call; never a shared session name
+- **Inspection-only eval** — `eval` / `run-code` never click, type, or submit
+- **Evidence before retry** — max 4 attempts, then BLOCKER
+- **Right owner** — product QA behavior stays with the calling test/audit skill
+
 ---
 
-## Invocation — always this form
+## Invocation — always this form  [LOW freedom — run exactly]
 
 ```bash
 PW="npx --yes @playwright/cli@latest"     # portable; survives fnm/nvm version switches
@@ -37,7 +61,7 @@ $PW -s=<session> <command> [args]
   per-shell and disappears; `npx` always resolves.
 - `--json` / `--raw` are available when you need machine-readable output.
 
-## 0. Manual & headed — never scripted (read first)
+## 0. Manual & headed — never scripted (read first)  [LOW freedom — run exactly]
 
 You are driving a **real, visible browser** to feel what a user feels. A green script proves
 nothing about UX — *see the screen* and *watch the logs*.
@@ -54,7 +78,7 @@ nothing about UX — *see the screen* and *watch the logs*.
 5. **Look after every action.** Fresh `snapshot` + `screenshot` + `console` + `requests`, plus the
    dev-server terminal. Real pain surfaces on screen and in logs, not in an assertion.
 
-## 1. Session lifecycle
+## 1. Session lifecycle  [LOW freedom — run exactly]
 
 ```bash
 $PW -s=qa-checkout open --headed http://localhost:3000    # start (once)
@@ -72,7 +96,7 @@ $PW kill-all                                              # last resort: stale/z
 - Add `--browser chrome|firefox|webkit|msedge`, `--device "iphone 15"`, or `--mobile` on `open`
   when the task calls for it.
 
-## 2. Navigation guard
+## 2. Navigation guard  [LOW freedom — run exactly]
 
 After every `open` / `goto` / `reload`:
 
@@ -82,7 +106,7 @@ After every `open` / `goto` / `reload`:
 
 Never assume navigation succeeded without a snapshot to confirm it.
 
-## 3. Waiting — there is no `wait` command
+## 3. Waiting — there is no `wait` command  [LOW freedom — run exactly]
 
 Playwright **auto-waits** for actionability on `click`/`fill`/`select`, so most explicit waits are
 unnecessary. When you genuinely must wait:
@@ -106,14 +130,14 @@ STOP → report blocker with evidence
 
 This handles cold starts, SPA hydration, and slow APIs without ever blocking blindly.
 
-## 4. SPA-specific rules
+## 4. SPA-specific rules  [LOW freedom — run exactly]
 
 SPAs (React, Next.js, Vue) fire `load` before hydration completes — never trust load events.
 
 - Wait for a **specific UI landmark** that proves the app rendered (`run-code` + `waitFor`, or `find`).
 - If a spinner is showing, wait for it to reach `state: 'hidden'` rather than sleeping.
 
-## 5. Anti-loop: max 4 attempts per goal
+## 5. Anti-loop: max 4 attempts per goal  [LOW freedom — run exactly]
 
 | Attempt | Action |
 |---|---|
@@ -128,7 +152,7 @@ Never repeat the exact same failing action without new evidence.
 navigate/click/fill/hover/key press. Re-`snapshot` before the next interaction. `click` also accepts
 a unique CSS selector, which survives state changes better than a ref.
 
-## 6. Evidence before retry
+## 6. Evidence before retry  [LOW freedom — run exactly]
 
 When something is not working, gather evidence FIRST, then form a hypothesis:
 
@@ -139,7 +163,7 @@ When something is not working, gather evidence FIRST, then form a hypothesis:
 
 Only retry once you have a new hypothesis grounded in that evidence.
 
-## 7. Timeout budget
+## 7. Timeout budget  [LOW freedom — run exactly]
 
 | Scope | Max time |
 |---|---|
@@ -150,7 +174,7 @@ Only retry once you have a new hypothesis grounded in that evidence.
 
 Exceeded? **Skip it** and log `[TIMEOUT] skipped: <step>`. One stuck step must not kill the session.
 
-## 8. Blocker reporting format
+## 8. Blocker reporting format  [LOW freedom — this shape]
 
 ```
 BLOCKER:
@@ -164,7 +188,7 @@ BLOCKER:
 
 Actionable information beats a silent freeze.
 
-## 9. Artifacts
+## 9. Artifacts  [LOW freedom — run exactly]
 
 - Screenshots, snapshots, and logs go under **`.playwright-mcp/`** (gitignored):
   `screenshot --filename .playwright-mcp/home-390.png`. Name by route + viewport/step.
@@ -172,7 +196,7 @@ Actionable information beats a silent freeze.
   also gitignored, never committed.
 - Sweep any stray root-level `*.png` / `*.log` into `.playwright-mcp/` before ending the session.
 
-## 10. Parallel agents
+## 10. Parallel agents  [LOW freedom — run exactly]
 
 Session isolation replaces the old tab-sharing etiquette — each agent gets its own browser:
 

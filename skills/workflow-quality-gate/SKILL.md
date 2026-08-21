@@ -11,12 +11,36 @@ license: MIT
 
 # workflow-quality-gate — Pre-Release Go/No-Go
 
+**Degree of freedom: MIXED.** Verdict and severity `[HIGH freedom]`; gate
+order, Critical pause, and report table `[LOW freedom — run exactly]`.
+
 Run before any production release. Each skill contributes a specific defect
 class. The combined result is a single verdict.
 
+## How to reason
+
+1. **Observe** — what did each gate actually return?
+2. **Interpret** — blocker vs recommended; plan-only fork vs apply-now
+3. **Classify** — GO / GO WITH CONDITIONS / NO-GO
+4. **Severity** — any Critical, or 2+ High without a named mitigation, is NO-GO
+
+## Worked example
+
+> **Observe:** red-team finds unauthenticated `/api/export` dump; bundle 180 KB; LCP 2.1s; tests green.
+> **Interpret:** export is Critical (data leak); later gates cannot make this a GO.
+> **Classify:** NO-GO — pause after Gate 1 and ask fix-now vs continue-and-report.
+> **Severity:** Critical outranks a clean bundle; do not paper it as GO WITH CONDITIONS.
+
+## Self-critique before reporting
+
+- **Gates in order** — an earlier Critical paused the remaining sweep or was explicitly continued
+- **Verdict matches rubric** — Critical ⇒ NO-GO; 2+ High without owner+deadline ⇒ not GO
+- **Plan-only honored** — user said plan-only ⇒ `plan-security-audit`, not `audit-security` fixes
+- **Right owner** — dirty tree to a PR → `workflow-release-prep`; silent-bypass of CI → `audit-gate-logic`
+
 ---
 
-## Gate sequence
+## Gate sequence  [LOW freedom — run exactly]
 
 ```
 0. EXPLORE    → test-exploratory (optional live probe: guest vs logged-in wander + diff)
@@ -39,7 +63,7 @@ fix inline; do not use it when the user said plan-only.
 
 ---
 
-## Gate 1: Red team (read test-red-team)
+## Gate 1: Red team (read test-red-team)  [HIGH freedom]
 
 > Read the `test-red-team` skill and follow it.
 
@@ -51,7 +75,7 @@ Critical defects must be resolved before the verdict can be GO.
 
 ---
 
-## Gate 2: Security audit (read audit-security)
+## Gate 2: Security audit (read audit-security)  [HIGH freedom]
 
 > Read the `audit-security` skill and follow it.
 
@@ -63,7 +87,7 @@ Focus on static code patterns missed by the live red team:
 
 ---
 
-## Gate 3: Bundle size (read audit-bundle-size)
+## Gate 3: Bundle size (read audit-bundle-size)  [HIGH freedom]
 
 > Read the `audit-bundle-size` skill and follow it.
 
@@ -71,7 +95,7 @@ Threshold: first-load JS > 200 KB (gzip) is a Medium defect; > 400 KB is High.
 
 ---
 
-## Gate 4: Performance (read audit-performance)
+## Gate 4: Performance (read audit-performance)  [HIGH freedom]
 
 > Read the `audit-performance` skill and follow it.
 
@@ -82,7 +106,7 @@ Thresholds (Lighthouse mobile, simulated 4G):
 
 ---
 
-## Gate 5: Unit tests (read test-unit)
+## Gate 5: Unit tests (read test-unit)  [HIGH freedom]
 
 > Read the `test-unit` skill and follow it.
 
@@ -91,7 +115,7 @@ the code path that was changed for this release?
 
 ---
 
-## Verdict format
+## Verdict format  [LOW freedom — run exactly]
 
 ```markdown
 ## Quality Gate Report — [App] — [Date]
