@@ -4,7 +4,8 @@ description: >
   NN/g-grounded enhancement of an existing page's flows — not a repo-wide
   slop audit. Use when "fix UX of /xxx" or "improve information density".
   Repo-wide authenticity plan → plan-antislop. Composition/type →
-  enhance-web-ui. Heuristics-only → audit-ux.
+  enhance-web-ui. Dense prose / CPL / reading level → enhance-readability.
+  Heuristics-only → audit-ux.
 license: MIT
 ---
 

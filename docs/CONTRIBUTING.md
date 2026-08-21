@@ -27,7 +27,7 @@ when it is the distinctive word (`/housekeep-gates`).
 | `deploy-` | Release, publish, post-deploy verify |
 | `design-` | Create new visual/API surfaces |
 | `docs-` | Write or co-author documentation |
-| `enhance-` | Improve existing web/mobile UI, UX, SEO, email deliverability |
+| `enhance-` | Improve existing web/mobile UI, UX, SEO, readability, email deliverability |
 | `housekeep-` | Apply-now consolidation of **one** drifted register (gates / backlog / design tokens) |
 | `iterate-` | Close the loop after launch (post-launch feedback, agent-harness iteration) |
 | `meta-` | Skills and MCP authoring |

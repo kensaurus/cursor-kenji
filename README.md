@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Ready-made playbooks for your AI coding editor.</strong><br/>
-  141 agent skills · 53 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
+  142 agent skills · 54 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
   <em>You talk in plain English. The matching expert recipe runs itself.</em>
 </p>
 
@@ -29,7 +29,7 @@ Your AI editor is smart, but without a recipe it **guesses**. Sometimes that gue
 
 You do **not** need to memorize skill names. Talking like a human is enough.
 
-It ships **141 Cursor agent skills**, 53 slash commands, and 6 subagents — tuned for React / Next.js / Supabase, useful on almost any stack. Works in [Cursor](https://cursor.com), [Claude Code](https://www.anthropic.com/claude-code), and (with a lighter install) Codex + Gemini CLI. Brand new? Read the **[plain-language guide →](docs/GETTING-STARTED.md)**.
+It ships **142 Cursor agent skills**, 54 slash commands, and 6 subagents — tuned for React / Next.js / Supabase, useful on almost any stack. Works in [Cursor](https://cursor.com), [Claude Code](https://www.anthropic.com/claude-code), and (with a lighter install) Codex + Gemini CLI. Brand new? Read the **[plain-language guide →](docs/GETTING-STARTED.md)**.
 
 ### Install (30 seconds)
 
@@ -54,6 +54,7 @@ That merge-installs skills **and** slash commands (and agents/rules) into every 
 | *"audit my security"* | `audit-security` | OWASP-style findings with file:line |
 | *"is this production-ready?"* | `audit-resilience` + `audit-realworld` | Timeouts, retries, parity checks |
 | *"make this page less AI-looking"* | `enhance-web-ui` / `enhance-web-ux` | Cleaner layout, real content hierarchy |
+| *"this is too dense / hard to read"* | `enhance-readability` | CPL, Gestalt grouping, a table that replaces the prose |
 | *"desktop looks like a phone"* | `audit-responsive` | Unstack the layout at 375 / 768 / 1440 |
 | *"what happens when this list is empty?"* | `audit-ui-states` | Empty / loading / error / offline matrix |
 | *"why do our emails go to spam?"* | `enhance-email-deliverability` | SPF/DKIM/DMARC + bounce hygiene |
@@ -94,7 +95,7 @@ Full menu with every skill name → **[Every skill](#every-skill-in-plain-englis
 | **Rule** | A house rule the AI always obeys | Drop a `.mdc` into your project |
 | **MCP server** | A phone line to your database / GitHub / browser | Copy a template + paste your keys |
 
-Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **153** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
+Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **154** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
 
 ### How the recipes fit together (the loop)
 
@@ -131,9 +132,9 @@ The whole kit, at a glance:
 
 | | Count | What it does |
 |:--|------:|:-------------|
-| **Skills** | 141 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
+| **Skills** | 142 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
 | **Cursor Skills** | 12 | IDE tools (canvas, hooks, rules, PR splitter) |
-| **Commands** | 53 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
+| **Commands** | 54 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
 | **Subagents** | 6 | Background helpers (code-reviewer, debugger, db-migrator…) |
 | **Completion hook** | 1 | Opt-in stop gate: continues only unfinished durable closure state |
 | **MCP Servers** | 16 | Supabase · GitHub · Sentry · Playwright · AWS · Slack |
@@ -151,7 +152,7 @@ Scroll the **family counts**, then the **full list**. You don't memorize names �
 
 <!-- SKILL-INDEX:START -->
 
-_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **153 skills** listed below._
+_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **154 skills** listed below._
 
 #### Skill families at a glance
 
@@ -159,7 +160,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 |:-------|------:|:----------------|
 | 🔍 Audit — inspect; some then fix | **30** | Check the codebase — security, UX, analytics, IAP, the skill pack… |
 | 📋 Plan — audit first, change only after you approve | **20** | Write a fix plan you approve before any code changes |
-| 🎨 Enhance — improve what already exists | **15** | Polish UI, forms, motion, SEO, PWA, email deliverability |
+| 🎨 Enhance — improve what already exists | **16** | Polish UI, forms, motion, SEO, PWA, email deliverability |
 | ✨ Design — build something new | **10** | Create new UI, APIs, emails, themes from scratch |
 | 🧱 Backend — server & data patterns | **5** | Auth, caching, queues, realtime, observability |
 | 📱 Mobile — React Native / Capacitor | **5** | RN screens, emulators, Capacitor, App Store prep |
@@ -177,7 +178,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | 🤝 Third-party (upstream-maintained) | **3** | Vendored upstream skills (Emil, UI/UX Pro Max, Vercel WIG) |
 | 🧩 Core & cross-cutting | **4** | Close everything, burndown, research, handoff |
 | 🖱️ Cursor IDE skills | **12** | Canvas, hooks, rules, PR splitter, CLI helpers |
-| **Total** | **153** | |
+| **Total** | **154** | |
 
 #### Full list (every skill)
 
@@ -241,7 +242,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `plan-test-coverage` | User-story-driven test coverage audit and plan — no test writing in this pass |
 | `plan-uiux-unification` | Non-destructive UI/UX and design-system audit that emits a unification burndown — no code until each phase is approved |
 
-### 🎨 Enhance — improve what already exists (15)
+### 🎨 Enhance — improve what already exists (16)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -251,13 +252,14 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `enhance-email-deliverability` | Audit and fix transactional/marketing deliverability — SPF, DKIM, DMARC, reputation, bounce/complaint handling, list hygiene, unsubscribe… |
 | `enhance-motion` | Audit an existing app's design system and motion, then apply a coherent, performant, reduced-motion-safe pass |
 | `enhance-pwa` | Add/upgrade PWA capabilities: manifest, service worker, offline mode, install prompt, push notifications, background sync |
+| `enhance-readability` | Audit and fix how easily content is UNDERSTOOD: CPL/reading level, Gestalt grouping, deadspace, icons or a table that cuts verbosity |
 | `enhance-readme` | Enhance an existing README with a theme-aware hero, feature tour, screenshots/GIF, accurate badges, and synced content |
 | `enhance-skill-prompts` | Upgrade an existing SKILL.md prompt (not its behavior) to 2026 practice: degrees of freedom, structured CoT, one worked example,… |
 | `enhance-web-forms` | Build or upgrade web forms to production quality: accessible structure, schema-driven validation, client↔server parity |
 | `enhance-web-landing` | Build landing pages, portfolios, and marketing sites that don't look AI-generated |
 | `enhance-web-redesign` | Upgrade an existing site/app to premium quality |
 | `enhance-web-seo` | Audit and fix SEO for any web app |
-| `enhance-web-ui` | Polish an existing page's hierarchy, spacing, typography, composition, and visual personality using repo conventions and references |
+| `enhance-web-ui` | Polish an existing page's hierarchy, spacing, type, and visual personality |
 | `enhance-web-ux` | NN/g-grounded enhancement of an existing page's flows — not a repo-wide slop audit |
 | `enhance-web-web3d` | Add purposeful 3D/WebGL and scroll choreography to an existing site with Three.js/R3F, GSAP, or Motion |
 
@@ -688,7 +690,7 @@ Every skill has two labels: a **family** (its `<prefix>-<topic>` name) and a **l
 
 ---
 
-## Commands (53)
+## Commands (54)
 
 Commands are shortcuts for the things you do constantly. Type `/` in chat to see them all.
 
@@ -811,9 +813,9 @@ Where everything lives:
 
 ```
 cursor-kenji/
-├── skills/           # 141 Agent Skills (SKILL.md each)
+├── skills/           # 142 Agent Skills (SKILL.md each)
 ├── skills-cursor/    # 12 Cursor-specific skills
-├── commands/         # 53 slash commands
+├── commands/         # 54 slash commands
 ├── agents/           # 6 subagents
 ├── hooks/            # opt-in completion stop gate
 ├── rules/            # Global + project-starter rules
@@ -865,7 +867,7 @@ A box of ready-made recipes for your AI editor ([Agent Skills](https://agentskil
 `npx @kensaurus/cursor-kenji --all` for skills **and** slash commands. `npx skills add kensaurus/cursor-kenji` installs skills only. Restart Cursor after install. Re-check with `npx @kensaurus/cursor-kenji --verify`.
 
 **How many skills?**  
-**141** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**153** total). Counts come from the filesystem and stay synced via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
+**142** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**154** total). Counts come from the filesystem and stay synced via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
 
 **How do skills trigger?**  
 You talk normally. Cursor matches your words to each skill's YAML `description`. To force one: *"use \`audit-security\` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).
@@ -913,18 +915,21 @@ Tired of the same desk, same coffee shop, same fluorescent lights?
 
 ---
 
-## Also by @kensaurus
+## More from KENSAURUS
 
-**[Mushi Mushi](https://kensaur.us/mushi-mushi)** — shake-to-report bugs, AI triage, optional draft PR. `npx mushi-mushi` · pairs with `mushi-health`, `debug-sentry-monitor`, `test-playwright`.
+| | App | What it is |
+|---|---|---|
+| <img src="https://kensaur.us/glot-it/icon-512.png" width="28" height="28" alt=""> | [Glot It](https://kensaur.us/glot-it/?utm_source=github&utm_medium=readme) | Learn Thai — bite-size lessons, smart flashcards, and an AI tutor |
+| <img src="https://kensaur.us/yen-yen/icon.svg" width="28" height="28" alt=""> | [yen-yen](https://kensaur.us/yen-yen/?utm_source=github&utm_medium=readme) | Where did the money go? Now you'll know. A kakeibo for households |
+| <img src="https://kensaur.us/the-wanting-mind/pwa-512x512.png" width="28" height="28" alt=""> | [The Wanting Mind](https://kensaur.us/the-wanting-mind/?utm_source=github&utm_medium=readme) | How the Battle Between Extraction and Generation Is Reshaping Our World — a 147,000-word interactive webbook with 268 concepts, 242 citations, and original illustrations |
+| <img src="https://kensaur.us/help-her-take-photo/assets/apple-touch-icon.png" width="28" height="28" alt=""> | [Help Her Take Photo](https://kensaur.us/help-her-take-photo/?utm_source=github&utm_medium=readme) | Pair phones, direct the pose, nail the photo |
+| <img src="https://talk.kensaur.us/pwa-192.png" width="28" height="28" alt=""> | [How to Talk to Girls](https://talk.kensaur.us/?utm_source=github&utm_medium=readme) | BYOK Claude practice coach for sticky chats |
+| <img src="https://solo-boss.kensaur.us/apple-touch-icon.png" width="28" height="28" alt=""> | [一人社長 Solo Boss](https://solo-boss.kensaur.us/?utm_source=github&utm_medium=readme) | Bookkeeping and tax-filing co-pilot for one-person companies in Japan |
+| <img src="https://tsumagoi.kensaur.us/apple-touch-icon.png" width="28" height="28" alt=""> | [Tsumagoi Work&Camp 嬬恋牧場](https://tsumagoi.kensaur.us/?utm_source=github&utm_medium=readme) | Coworking camp at 1,444 m — [Instagram](https://www.instagram.com/tsumagoicamp/) · [Facebook](https://www.facebook.com/profile.php?id=61592113053042) · [Maps](https://maps.app.goo.gl/JCNnTfsdQVHCS1FA7) |
+| <img src="https://kensaur.us/mushi-mushi/admin/favicon.svg" width="28" height="28" alt=""> | [mushi-mushi](https://github.com/kensaurus/mushi-mushi) | Open-source in-app bug reporting SDK |
+| <img src="https://kensaur.us/favicon.svg" width="28" height="28" alt=""> | [KENSAURUS](https://kensaur.us/?view=portfolio&utm_source=github&utm_medium=readme) | Everything else built under the same roof |
 
-| App | Links |
-|:----|:------|
-| [Tsumagoi Work&Camp](https://tsumagoi.kensaur.us) | Mountain coworking camp · [tsumagoi.kensaur.us](https://tsumagoi.kensaur.us) |
-| [glot.it — Learn Thai](https://kensaur.us/glot-it/) | [iOS](https://apps.apple.com/us/app/glot-it/id6761582648) · [Android](https://play.google.com/store/apps/details?id=com.glotit.app) |
-| [yen-yen — Expense Tracker](https://kensaur.us/yen-yen/) | [iOS](https://apps.apple.com/app/id6764548441) · [Android](https://play.google.com/store/apps/details?id=app.yenyen) |
-| [Help Her Take Photo](https://kensaur.us/help-her-take-photo/) | [iOS](https://apps.apple.com/app/help-her-take-photo/id6762513666) · [Android](https://play.google.com/store/apps/details?id=com.kensaurus.helphertakephoto) |
-| [The Wanting Mind — Free Book](https://kensaur.us/the-wanting-mind/) | [iOS](https://apps.apple.com/us/app/the-wanting-mind/id6761361305) · [Android](https://play.google.com/store/apps/details?id=us.kensaur.thewantingmind) |
-| [How to Talk to Girls](https://talk.kensaur.us/) | [Live demo](https://talk.kensaur.us/) |
+All apps live under [kensaur.us](https://kensaur.us).
 
 ---
 

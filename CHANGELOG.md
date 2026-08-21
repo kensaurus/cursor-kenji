@@ -6,6 +6,16 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.30.0] — 2026-08-21
+
+### Added
+
+- **`enhance-readability`** — information-design pass for comprehension
+  (CLT + Gestalt): CPL / reading level, grouping, deadspace, icons, and
+  visuals that replace verbose prose. Slash `/readability`. Breakpoints
+  stay on `audit-responsive`; looks-good stays on `enhance-web-ui`.
+  CJK 40 CPL from WCAG 2.2 SC 1.4.8.
+
 ## [1.29.1] — 2026-08-21
 
 ### Fixed
