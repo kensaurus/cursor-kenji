@@ -135,9 +135,12 @@ Classify every captured event before it becomes a finding:
 Severity by blast radius (auth/money first). Do not generate a Playwright
 spec dump and call the app "covered" — that is shallow comprehensive coverage.
 
-**Self-critique (same table, before output):** every row has identity +
-evidence; flakes were re-run once; WCAG/pixel/load were handed off, not
-filed here; guest never used `--profile`.
+## Self-critique before reporting
+
+- **Identity + evidence** — every row names who and shows the artifact
+- **Flakes** — re-run once before filing
+- **Handoff** — WCAG / pixel / load were not filed here
+- **Guest** — never used `--profile`
 
 ## Definition of Done
 

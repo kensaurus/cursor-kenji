@@ -68,6 +68,27 @@ dominant term.
 trim a fragile step's exactness. Net tokens should usually drop even after
 T2+T3.
 
+## How to reason
+
+1. **Observe** — existing H1 register, phases, examples, body length
+2. **Interpret** — which of T1–T6 are missing vs already present as headings
+3. **Classify** — apply / skip-with-reason / stop (would change behavior)
+4. **Severity** — a trigger or stance change is an invalid edit
+
+## Worked example
+
+> **Observe:** `meta-skill-creator` has T1 and a T1–T6 table; no `## Worked example`.
+> **Interpret:** the table mention is not T3; the agent still has no few-shot.
+> **Classify:** add one `## Worked example` + `## Self-critique` after the table; do not rewrite Anatomy or frontmatter.
+> **Invariant:** description triggers unchanged; still "create a pack SKILL.md".
+
+## Self-critique before reporting
+
+- **Headings exist** — T3 is `## Worked example`, T4 is `## Self-critique…`, not a table cell
+- **Behavior same** — no phase-order, stance, or trigger change
+- **One example** — not a second tutorial
+- **Right owner** — new skill from scratch → `meta-skill-creator`
+
 ## Phase 2 — Preserve invariants  [LOW freedom — run exactly]
 
 The edit is invalid if any of these break:

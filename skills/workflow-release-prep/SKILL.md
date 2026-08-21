@@ -121,7 +121,7 @@ Run this chain before proceeding:
    half-finished feature)? If yes, surface it and **stop before
    committing** — do not prepare a PR around a known problem.
 
-### Self-critique before committing  [LOW freedom — do not skip]
+## Self-critique before committing  [LOW freedom — do not skip]
 
 Challenge the change against this rubric. If any item fails, fix or
 surface it before Phase 3:
