@@ -6,13 +6,37 @@ license: MIT
 
 # Real-time Features Skill
 
+**Degree of freedom: MIXED.** Which transport and event `[HIGH freedom]`;
+existing-subscription probes and unmount cleanup `[LOW freedom — run exactly]`.
+
+## How to reason
+
+1. **Observe** — existing channels, sockets, hooks, cleanup
+2. **Interpret** — new subscription vs reuse vs transport mismatch
+3. **Classify** — postgres-changes / presence / broadcast / SSE / optimistic
+4. **Severity** — leaked or duplicate subscription outranks a missing typing indicator
+
+## Worked example
+
+> **Observe:** chat mounts `useRealtimeMessages` twice; no untrack on leave; `package.json` already has `@supabase/supabase-js`.
+> **Interpret:** duplicate INSERT listeners; leftover presence.
+> **Classify:** one channel hook with unmount cleanup; reuse Supabase Realtime — do not add Socket.io.
+> **Verify:** one `postgres_changes` subscription; `removeChannel` on unmount; no second socket lib.
+
+## Self-critique before reporting
+
+- **Existing first** — grepped channels/sockets before adding a library
+- **Cleanup** — every subscribe has unmount `removeChannel` / `close`
+- **One listener** — no duplicate subscription for the same event
+- **Right owner** — FE↔BE payload mismatch → `debug-fe-be-integration`; queue/job instead of live push → `backend-patterns`
+
 Implement live, collaborative features using WebSockets, Supabase Realtime, and Server-Sent Events.
 
 > Code examples assume a **Next.js App Router + Supabase** stack
 > (`@/lib/supabase/client`, `'use client'`). Adapt import paths and row types to
 > the detected stack.
 
-## CRITICAL: Check Existing First
+## CRITICAL: Check Existing First  [LOW freedom — run exactly]
 
 **Before implementing ANY real-time feature, verify:**
 
@@ -36,7 +60,7 @@ cat .env* | grep -i SUPABASE
 
 **Why:** Real-time connections are stateful. Don't create duplicate subscriptions.
 
-## Supabase Realtime
+## Supabase Realtime  [HIGH freedom]
 
 ### Subscribe to Database Changes
 
@@ -149,7 +173,7 @@ function CollaborativeCanvas() {
 }
 ```
 
-## TanStack Query + Real-time
+## TanStack Query + Real-time  [HIGH freedom]
 
 ```tsx
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -205,7 +229,7 @@ function ProductList() {
 }
 ```
 
-## Optimistic Updates
+## Optimistic Updates  [HIGH freedom]
 
 ```tsx
 'use client'
@@ -253,7 +277,7 @@ function Chat({ initialMessages }: { initialMessages: Message[] }) {
 }
 ```
 
-## Server-Sent Events (SSE)
+## Server-Sent Events (SSE)  [HIGH freedom]
 
 ```tsx
 // app/api/events/route.ts
@@ -313,7 +337,7 @@ function useSSE(url: string) {
 }
 ```
 
-## Typing Indicators
+## Typing Indicators  [HIGH freedom]
 
 ```tsx
 function useTypingIndicator(channelName: string, userId: string) {
@@ -360,7 +384,7 @@ function useTypingIndicator(channelName: string, userId: string) {
 }
 ```
 
-## Validation
+## Validation  [LOW freedom — do not skip]
 
 After implementing real-time features:
 

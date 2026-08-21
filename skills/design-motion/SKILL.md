@@ -10,9 +10,33 @@ license: MIT
 
 # Motion Design Skill
 
+**Degree of freedom: MIXED.** Purpose and timing `[HIGH freedom]`; existing
+motion inventory and reduced-motion `[LOW freedom — run exactly]`.
+
 Create purposeful, performant animations that enhance UX without overwhelming users.
 
-## CRITICAL: Check Existing First
+## How to reason
+
+1. **Inventory** — existing motion library and `prefers-reduced-motion`
+2. **Purpose** — feedback, orientation, focus, or (rare) delight
+3. **Implement** — `transform`/`opacity` only; match the app's timing
+4. **Motion-safe** — reduced-motion becomes an instant state change
+
+## Worked example
+
+> **Inventory:** Framer Motion already on the modal; no reduced-motion branch.
+> **Purpose:** orientation — show the dialog arriving, not decoration.
+> **Implement:** opacity + scale 0.95→1, 200ms ease-out; no `height` animation.
+> **Motion-safe:** `prefers-reduced-motion` skips enter/exit; focus still moves.
+
+## Self-critique before reporting
+
+- **Purpose named** — not motion for its own sake
+- **GPU-only** — no width/height/top/left animation
+- **Reduced-motion proven** — a reduce setting was actually tested
+- **Right owner** — app-wide coherent motion pass → `enhance-motion`
+
+## CRITICAL: Check Existing First  [LOW freedom — run exactly]
 
 **Before adding ANY animation, verify:**
 
@@ -35,7 +59,7 @@ rg "prefers-reduced-motion" --type tsx --type css
 
 **Why:** Maintain consistent animation language. Respect user motion preferences.
 
-## Animation Principles
+## Animation Principles  [HIGH freedom]
 
 ### 1. Purpose-Driven Motion
 Every animation should serve a purpose:
@@ -268,7 +292,7 @@ function HeroSection() {
 - [ ] Content scale + fade
 - [ ] Exit animation before unmount
 
-## Accessibility
+## Accessibility  [LOW freedom — run exactly]
 
 ```tsx
 // Always respect reduced motion preference
@@ -297,7 +321,7 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
 
 For playful interactions (bouncy buttons, magnetic elements, confetti, Konami code, satisfying toggles, progress milestones), see [references/delight-interactions.md](references/delight-interactions.md).
 
-## Validation
+## Validation  [LOW freedom — do not skip]
 
 After implementing animations:
 

@@ -124,11 +124,12 @@ for (const group of groups) {
       warnings.push(`${id}: SKILL.md body ${lines} lines > ${BODY_WARN} (consider references/)`);
     }
 
-    // First-party audit/plan/test skills must carry T1 + T3 + T4
-    // (PROMPT-ENHANCEMENT-PLAYBOOK.md Wave 7). thirdparty-* is excluded.
+    // First-party families on the prompt-enhancement require-list must
+    // carry T1 + T3 + T4. Extend only after that family is upgraded.
+    // thirdparty-* is excluded.
     if (
       group === "skills" &&
-      /^(audit|plan|test)-/.test(dir) &&
+      /^(audit|plan|test|housekeep|deploy|debug|docs|meta|protocol|iterate|backend|design|enhance|workflow|mobile|data|mushi)-/.test(dir) &&
       !dir.startsWith("thirdparty-")
     ) {
       if (!/\bDegree of freedom\b/i.test(body)) {

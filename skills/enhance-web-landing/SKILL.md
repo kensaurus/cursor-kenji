@@ -8,12 +8,35 @@ license: MIT
 
 # enhance-web-landing — Anti-Slop Landing Pages
 
+**Degree of freedom: MIXED.** Design-read and dials `[HIGH freedom]`; dependency check, contrast, and preflight hard rules `[LOW freedom — run exactly]`.
+
 > Landing pages, portfolios, and redesigns. Not dashboards, not data tables, not multi-step product UI.
 > Every rule below is **contextual**. None of it fires automatically. First read the brief, then pull only what fits.
 
+## How to reason
+
+1. **Read** — page kind, vibe words, audience, existing brand, quiet constraints
+2. **Dial** — VARIANCE / MOTION / DENSITY from the read (not the LLM default)
+3. **System** — official package if the brief is a system; one system per project
+4. **Preflight** — hero-in-viewport, contrast, no slop defaults, real images
+
+## Worked example
+
+> **Read:** B2B SaaS landing for technical buyers; user said "Linear-style"; no brand serif.
+> **Dial:** 5 / 3 / 3 — clean, low motion, airy.
+> **System:** Tailwind v4 + Geist; not Inter + purple mesh; shadcn only if already owned.
+> **Preflight:** split hero (not centered), one accent, real product shot, CTA unwrapped.
+
+## Self-critique before reporting
+
+- **Design read stated** — one line before code; no silent default aesthetic
+- **Anti-default** — no Inter + purple gradient + three equal cards unless the read asks
+- **Hard rules** — hero fits first viewport; button contrast AA; one CTA intent
+- **Right owner** — dashboards/product UI → `enhance-web-ui`; existing-app polish → `enhance-web-redesign`
+
 ---
 
-## 0. BRIEF INFERENCE (Read the Room Before Anything Else)
+## 0. BRIEF INFERENCE (Read the Room Before Anything Else)  [HIGH freedom]
 
 Before touching code or tweaking dials, **infer what the user actually wants**. Most LLM design output is bad because the model jumps to a default aesthetic instead of reading the room.
 
@@ -43,7 +66,7 @@ Do not default to: AI-purple gradients, centered hero over dark mesh, three equa
 
 ---
 
-## 1. THE THREE DIALS (Core Configuration)
+## 1. THE THREE DIALS (Core Configuration)  [HIGH freedom]
 
 After the design read, set three dials. Every layout, motion, and density decision below is gated by these.
 
@@ -82,7 +105,7 @@ Use these (or user-overridden values) as global variables. Cross-references thro
 
 ---
 
-## 2. BRIEF → DESIGN SYSTEM MAP
+## 2. BRIEF → DESIGN SYSTEM MAP  [HIGH freedom]
 
 Once you have the design read (Section 0) and dials (Section 1), pick the right foundation. Do not invent CSS for things that have an official package. Do not pretend an aesthetic trend is an official system.
 
@@ -122,7 +145,7 @@ For these directions, there is **no single official package**. Build with native
 
 ---
 
-## 3. DEFAULT ARCHITECTURE & CONVENTIONS
+## 3. DEFAULT ARCHITECTURE & CONVENTIONS  [HIGH freedom]
 
 Unless the design read picks a real design system (Section 2.A), these are the defaults:
 
@@ -156,12 +179,12 @@ Discouraged by default in code, markup, and visible text. Replace symbols with i
 * **Viewport Stability:** NEVER use `h-screen` for full-height Hero sections. ALWAYS use `min-h-[100dvh]` to prevent layout jumping on mobile (iOS Safari address bar).
 * **Grid over Flex-Math:** NEVER use complex flexbox percentage math (`w-[calc(33%-1rem)]`). ALWAYS use CSS Grid (`grid grid-cols-1 md:grid-cols-3 gap-6`).
 
-### 3.F Dependency Verification (mandatory)
+### 3.F Dependency Verification (mandatory)  [LOW freedom — run exactly]
 Before importing ANY 3rd-party library, check `package.json`. If the package is missing, output the install command first. **Never** assume a library exists.
 
 ---
 
-## 4. DESIGN ENGINEERING DIRECTIVES (Bias Correction)
+## 4. DESIGN ENGINEERING DIRECTIVES (Bias Correction)  [HIGH freedom]
 
 LLMs default to clichés. Override these defaults proactively. Each rule has a context-aware override path.
 
@@ -234,7 +257,7 @@ LLMs default to "static successful state only." Always implement full cycles:
 * Label ABOVE input. Helper text optional but present in markup. Error text BELOW input. Standard `gap-2` for input blocks.
 * No placeholder-as-label. Ever.
 
-### 4.7 Layout Discipline (Hard Rules. Failing any of these is shipping broken work)
+### 4.7 Layout Discipline (Hard Rules. Failing any of these is shipping broken work)  [LOW freedom — run exactly]
 
 * **Hero MUST fit in the initial viewport.** Headline max 2 lines on desktop, subtext max **20 words** AND max 3-4 lines, CTAs visible without scroll. If the copy is too long: reduce font scale OR cut copy. If you cannot describe the value-prop in 20 words of subtext, the value-prop is unclear, not the rule too tight. Never let the hero overflow and force scroll to find the CTA.
 * **Hero font-scale discipline.** Plan font size and image size *together*. If the hero asset is large and the headline is more than 6 words, do not start at `text-7xl/text-8xl`. Default sensible range: `text-4xl md:text-5xl lg:text-6xl` for most heroes; `text-6xl md:text-7xl` only when the headline is 3-5 words. A 4-line hero headline is always a font-size error, never a copy-length error.
@@ -352,7 +375,7 @@ The page has ONE theme. Sections do not invert.
 
 ---
 
-## 5. CONTEXT-AWARE PROACTIVITY
+## 5. CONTEXT-AWARE PROACTIVITY  [HIGH freedom]
 
 These are tools, not defaults. Use them when the design read calls for them. **None of these fire automatically.**
 

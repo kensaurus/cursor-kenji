@@ -19,10 +19,35 @@ paths:
 
 # Enhance Screen — React Native
 
+**Degree of freedom: MIXED.** Pain, tier, and heuristic mapping
+`[HIGH freedom]`; recon, screenshots, no-hex, and ReduceMotion
+`[LOW freedom — run exactly]`.
+
 Turn an existing RN screen into a composed, native-feeling interface:
 calmer hierarchy, correct platform idioms, tight safe-area and keyboard
 handling, purposeful motion, and component primitives that work on both
 iOS and Android without forking.
+
+## How to reason
+
+1. **Recon** — screen file, tree, tokens, safe-area chain
+2. **Rank** — primary / secondary / metadata / actions
+3. **Forensics** — 3 sizes + keyboard + silent pains
+4. **Primitive** — fix the shared wrapper; no hex in the screen
+
+## Worked example
+
+> **Recon:** Home uses `ScreenContainer` + extra `useSafeAreaInsets().top` on the back button.
+> **Rank:** title is primary; streak count is metadata — it appears twice.
+> **Forensics:** 360px back overlaps title (S1/S18); streak ×2 (S10).
+> **Primitive:** drop the child inset; keep the hero streak; no new hex.
+
+## Self-critique before reporting
+
+- **Compose first** — hierarchy/safe-area/targets before color or motion
+- **Both platforms** — iOS shadow + Android elevation/ripple were both written
+- **Tokens only** — no hex literals; ReduceMotion falls back to instant
+- **Right owner** — FPS / bundle / Hermes → `mobile-rn-performance`; emulator down → `mobile-emulator-start`
 
 > **Vague-but-visceral native feedback ("button is weirdly big", "text
 > gets cut off on my phone", "scrolling feels janky", "can't tap that",
@@ -84,7 +109,7 @@ iOS and Android without forking.
 
 ---
 
-## Workflow Checklist
+## Workflow Checklist  [LOW freedom — do not skip]
 
 Copy and track:
 
@@ -110,7 +135,7 @@ RN ENHANCE /<ScreenName>
 
 ---
 
-## Step 1 — Recon: Understand the Screen Before Touching It
+## Step 1 — Recon: Understand the Screen Before Touching It  [LOW freedom — run exactly]
 
 ### 1a. Read the screen file
 
@@ -179,7 +204,7 @@ Grep: hex literals in apps/mobile/src/ (ESLint no-restricted-syntax should catch
 
 ---
 
-## Step 1.5 — Domain Colour & Density Tier
+## Step 1.5 — Domain Colour & Density Tier  [HIGH freedom]
 
 Before touching any colour, name the product class. The same `/8` tint that
 reads "premium and restrained" on a B2B dashboard reads "monochromatic and
@@ -203,7 +228,7 @@ token is technically "correct".
 
 ---
 
-## Step 2 — Content Rank Before Layout
+## Step 2 — Content Rank Before Layout  [HIGH freedom]
 
 Classify every visible element:
 
@@ -223,7 +248,7 @@ Rules:
 
 ---
 
-## Step 3 — Live Read: Screenshot on Real Devices
+## Step 3 — Live Read: Screenshot on Real Devices  [LOW freedom — run exactly]
 
 ### 3a. Three-device-config pass
 
@@ -277,7 +302,7 @@ Run both; the second is the one most enhancers skip:
 
 ---
 
-## Step 3.5 — Device Forensics (catch the silent bugs)
+## Step 3.5 — Device Forensics (catch the silent bugs)  [LOW freedom — run exactly]
 
 Screenshots show *what looks wrong*. Device forensics shows *why*. Run this
 before declaring the screen understood.
@@ -354,7 +379,7 @@ Fix: remove fixed heights on Text containers; use `numberOfLines={1}` +
 
 ---
 
-## Step 4 — Pain Inventory
+## Step 4 — Pain Inventory  [HIGH freedom]
 
 Maintain a single table. Include user-reported pains AND silent ones from Step 3.5.
 
@@ -394,7 +419,7 @@ are often invisible to them.
 
 ---
 
-## Step 5 — Heuristic Map
+## Step 5 — Heuristic Map  [HIGH freedom]
 
 For each pain, name the violated heuristic. A pain that cannot be tied to
 a heuristic is probably a personal taste call — defer it.
@@ -409,7 +434,7 @@ a heuristic is probably a personal taste call — defer it.
 
 ---
 
-## Step 6 — Primitive Match (no inventions)
+## Step 6 — Primitive Match (no inventions)  [HIGH freedom]
 
 For each fix, match an existing primitive or token:
 

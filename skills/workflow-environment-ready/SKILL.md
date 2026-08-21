@@ -10,6 +10,9 @@ license: MIT
 
 # workflow-environment-ready — Preflight the Working Environment
 
+**Degree of freedom: MIXED.** READY/BLOCKED verdict `[HIGH freedom]`; executed
+probes and never echoing secrets `[LOW freedom — run exactly]`.
+
 Long autonomous runs fail most expensively at the end — the work is done, then
 the build won't run, a service is down, or a key is missing. This skill front-
 loads that risk: prove the environment can build, test, and reach its
@@ -18,7 +21,28 @@ dependencies **before** implementation starts.
 > **Verify the environment can run the task, don't assume it.** Every check is
 > an executed command with observed output, not an inference from a config file.
 
-## Phase 0 — Detect the stack and requirements
+## How to reason
+
+1. **Detect** — required runtimes, services, env names, gate commands
+2. **Probe** — run each check; record observed output
+3. **Classify** — cannot-run (env) vs runs-and-fails (code)
+4. **Verdict** — READY / READY WITH NOTES / BLOCKED
+
+## Worked example
+
+> **Detect:** Node 22 + pnpm, `supabase/config.toml`, `.env.example` has `NEXT_PUBLIC_SUPABASE_URL`.
+> **Probe:** `node -v` 22.4; `pnpm install --frozen-lockfile` ok; `supabase status` not running.
+> **Classify:** toolchain ok; local Supabase down is an environment blocker, not a test failure.
+> **Verdict:** BLOCKED — start Supabase, then re-run Phase 2; do not start `complete-everything`.
+
+## Self-critique before reporting
+
+- **Executed** — every row is a command + output, not a config inference
+- **Secrets** — presence/absence only
+- **Cannot-run vs red** — code failures are notes, not BLOCKED
+- **Right owner** — commands run but code is red → `workflow-green-repo`; diagnose a hung command → `debug-error`
+
+## Phase 0 — Detect the stack and requirements  [LOW freedom — run exactly]
 
 Read, don't guess:
 
@@ -34,7 +58,7 @@ Read, don't guess:
 
 Produce a requirements checklist before running anything.
 
-## Phase 1 — Verify toolchain and dependencies
+## Phase 1 — Verify toolchain and dependencies  [LOW freedom — run exactly]
 
 1. Confirm each required runtime is present at the required version
    (`node -v`, `python --version`, etc.). A mismatch is a blocker to surface
@@ -45,7 +69,7 @@ Produce a requirements checklist before running anything.
 3. Confirm the package manager matches the repo (`packageManager` field / lock
    file) — do not switch managers.
 
-## Phase 2 — Verify services and configuration
+## Phase 2 — Verify services and configuration  [LOW freedom — run exactly]
 
 1. For each required service, confirm reachability with a real check (DB
    connect/ping, `supabase status`, an HTTP health request, container up).
@@ -57,7 +81,7 @@ Produce a requirements checklist before running anything.
 3. Note any variable that is present but obviously placeholder (`YOUR_*`,
    empty) so it fails now rather than mid-run.
 
-## Phase 3 — Prove the verification commands execute
+## Phase 3 — Prove the verification commands execute  [LOW freedom — run exactly]
 
 Run the cheapest form of each gate to confirm it actually starts and the
 harness is wired — not to make it fully green (that is `workflow-green-repo`):
@@ -70,7 +94,7 @@ harness is wired — not to make it fully green (that is `workflow-green-repo`):
 Distinguish "the command cannot run" (environment blocker) from "the command
 runs and reports code issues" (normal work for the task ahead).
 
-## Phase 4 — Readiness report
+## Phase 4 — Readiness report  [HIGH freedom]
 
 ```md
 ## Environment Readiness — <repo> — <date>

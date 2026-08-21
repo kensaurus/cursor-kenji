@@ -9,11 +9,35 @@ license: MIT
 
 # workflow-onboard — Codebase Orientation
 
+**Degree of freedom: MIXED.** Briefing synthesis `[HIGH freedom]`; which files
+to read and never printing env values `[LOW freedom — run exactly]`.
+
 Orient to any repo in under 5 minutes. Read first, explain second.
+
+## How to reason
+
+1. **Read** — manifests, routes, schema, auth — don't guess
+2. **Map** — stack, features, data, how-to-run
+3. **Gap** — missing README/schema said out loud
+4. **Brief** — scannable; top-3 complexity called out
+
+## Worked example
+
+> **Read:** `package.json` is Next.js 15 + Supabase; `src/app/(app)/*` has dashboard, billing, settings; latest migration adds `organizations`.
+> **Map:** B2B dashboard; session via middleware + `getUser()`; run `pnpm dev`.
+> **Gap:** no README scripts section; `.env.example` lists `STRIPE_SECRET_KEY`.
+> **Brief:** purpose + stack + route map + 4 tables + auth + `pnpm dev` + env names + "start in `src/lib/billing`".
+
+## Self-critique before reporting
+
+- **Files read** — briefing cites files, not folklore
+- **Secrets safe** — env names only, never values
+- **Gaps explicit** — missing schema/README is stated, not invented
+- **Right owner** — preflight commands/services → `workflow-environment-ready`; parked work → `housekeep-backlog`
 
 ---
 
-## Step 1: Stack & entry points
+## Step 1: Stack & entry points  [LOW freedom — run exactly]
 
 Read (do not shell-grep unless necessary):
 
@@ -28,7 +52,7 @@ Read (do not shell-grep unless necessary):
 
 ---
 
-## Step 2: Data & auth layer
+## Step 2: Data & auth layer  [LOW freedom — run exactly]
 
 | File | What to extract |
 |------|-----------------|
@@ -40,7 +64,7 @@ Read (do not shell-grep unless necessary):
 
 ---
 
-## Step 3: Recent context
+## Step 3: Recent context  [LOW freedom — run exactly]
 
 ```bash
 git log --oneline -15          # recent work direction
@@ -49,7 +73,7 @@ git diff HEAD~5 --stat         # files changed recently
 
 ---
 
-## Step 4: Orientation briefing
+## Step 4: Orientation briefing  [HIGH freedom]
 
 Produce a structured briefing covering:
 
@@ -66,7 +90,7 @@ Format as a scannable briefing, not a wall of text. Use short tables where helpf
 
 ---
 
-## Guardrails
+## Guardrails  [LOW freedom — do not skip]
 
 - Never print `.env` values — names only
 - If the codebase is a monorepo, scope the briefing to the specific app/package the user is working in (ask if unclear)

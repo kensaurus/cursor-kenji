@@ -10,9 +10,34 @@ license: MIT
 
 # API Design Skill
 
+**Degree of freedom: MIXED.** Resource model, error shape, and REST vs
+GraphQL `[HIGH freedom]`; pre-design docs/schema/grep
+`[LOW freedom — run exactly]`.
+
 Design clean, consistent, and developer-friendly APIs.
 
-## MANDATORY: Pre-Design Checks
+## How to reason
+
+1. **Survey** — existing docs, schema, and similar endpoints
+2. **Model** — resources, relations, REST vs GraphQL
+3. **Contract** — paths, statuses, error shape, auth, pagination
+4. **Check** — naming matches this repo; no duplicate endpoint
+
+## Worked example
+
+> **Survey:** `orders` has `user_id`; no `GET /users/:id/orders`; clients use `useQuery`.
+> **Model:** order is a nested user resource, not a `/getUserOrders` RPC.
+> **Contract:** `GET /users/:id/orders` → `{ data, meta }`; shared `{ error: { code, message, details } }`.
+> **Check:** plural kebab-case; list paginated; 401/404/422 only from the status table.
+
+## Self-critique before reporting
+
+- **Pre-design stated** — docs, schema, and similar endpoints were checked out loud
+- **One error shape** — every failure uses `{ error: { code, message, details } }`
+- **Lists paginate** — no unbounded `GET /resources`
+- **Right owner** — live 4xx/5xx repro → `debug-fe-be-integration`; product scope still fuzzy → `design-prd`
+
+## MANDATORY: Pre-Design Checks  [LOW freedom — run exactly]
 
 **BEFORE designing any API, you MUST:**
 
@@ -60,7 +85,7 @@ Before designing, state:
 
 ---
 
-## REST API Design
+## REST API Design  [HIGH freedom]
 
 ### URL Structure
 
@@ -95,7 +120,7 @@ POST /users/123/orders # Create order for user
 
 ---
 
-## Request/Response Format
+## Request/Response Format  [LOW freedom — run this shape]
 
 ### Request Body
 
@@ -154,7 +179,7 @@ POST /users/123/orders # Create order for user
 
 ---
 
-## HTTP Status Codes
+## HTTP Status Codes  [LOW freedom — use this table]
 
 ### Success (2xx)
 
@@ -291,7 +316,7 @@ POST /payments/123/refund
 
 ---
 
-## API Design Checklist
+## API Design Checklist  [LOW freedom — do not skip]
 
 ### Consistency
 - [ ] Consistent naming conventions

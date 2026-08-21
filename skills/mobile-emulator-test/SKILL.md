@@ -6,12 +6,37 @@ license: MIT
 
 # mobile-emulator-test — Native build QA on Android emulator + MCP loop
 
+**Degree of freedom: MIXED.** Walk judgment and findings `[HIGH freedom]`;
+bring-up, Phase 1.5 freshness, and three-layer CRUD
+`[LOW freedom — run exactly]`.
+
 End-to-end verification of any native mobile build through a real Android
 emulator session, with backend truth (Supabase MCP) and crash telemetry
 (Sentry MCP) wired into the same loop. Catches the failure modes that pure
 unit tests and CI bundle builds miss: white screens, prototype-stripped
 cache rehydration, missing migrations, sync-disabled empty states, infinite
 refetch loops, and silent error swallows.
+
+## How to reason
+
+1. **Discover** — stack, tabs, MCP, signed-in test account
+2. **Freshness** — source + Metro bundle + device (Phase 1.5)
+3. **Walk** — guest AND signed-in; every tab
+4. **Three-layer** — UI success + DB row + cold refetch; evidence per finding
+
+## Worked example
+
+> **Discover:** Expo router; five tabs; Supabase MCP live; Sentry MCP missing (mark BLOCKED).
+> **Freshness:** user said "nothing changed"; bundle `grep` of the patch string = 0 → `--clear` Metro, then reload.
+> **Walk:** guest create fails closed; signed-in create shows toast.
+> **Three-layer:** toast yes, `execute_sql` finds the row, kill/reopen still shows it. Finding: guest path only.
+
+## Self-critique before reporting
+
+- **Fresh build** — source, bundle, and screencap all show the patched string
+- **Both identities** — guest and signed-in walks ran; empty-state is not the only path
+- **Three layers** — no mutation called "tested" on UI toast alone
+- **Right owner** — bring-up only → `mobile-emulator-start`; store/plugins/OTA → `mobile-capacitor-platform`
 
 ## Critical Rules
 
@@ -50,7 +75,7 @@ refetch loops, and silent error swallows.
 
 ---
 
-## Phase 0: Codebase + Environment Discovery
+## Phase 0: Codebase + Environment Discovery  [HIGH freedom]
 
 Before launching anything, understand the build.
 
@@ -111,7 +136,7 @@ sync-empty-state bugs live.
 
 ---
 
-## Phase 0.5: Tall-handset AVD + skin/display truth (any Android app)
+## Phase 0.5: Tall-handset AVD + skin/display truth (any Android app)  [LOW freedom — run exactly]
 
 Use this whenever layout QA benefits from extra vertical runway (multi-section
 homes, drawers, FAB stacks) or whenever the emulator exits immediately / shows
@@ -241,7 +266,7 @@ and Expo dev-client builds — only the URLs / ports change.
 
 ---
 
-## Phase 1: Bring the loop online
+## Phase 1: Bring the loop online  [LOW freedom — run exactly]
 
 ### 1a. Verify the emulator + adb
 
@@ -336,7 +361,7 @@ adb logcat -d Capacitor:V SystemWebChromeClient:V '*:S' | tail -50
 
 ---
 
-## Phase 1.5: Build-freshness verification (mandatory)
+## Phase 1.5: Build-freshness verification (mandatory)  [LOW freedom — run exactly]
 
 > If you skip this phase you WILL waste a debugging session on a stale
 > build. The user's report of "nothing changed" is almost never the patch
@@ -458,7 +483,7 @@ to have landed:
 
 ---
 
-## Phase 2: Tap-driven walk of every tab
+## Phase 2: Tap-driven walk of every tab  [HIGH freedom]
 
 ## Further reading
 

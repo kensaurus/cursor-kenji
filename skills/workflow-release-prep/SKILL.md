@@ -47,6 +47,20 @@ merged-unreleased work. One developer's pending change, prepared properly.
 Pre-release trio: `housekeep-backlog` (what's parked) → this skill
 (what's done, onto a PR) → `docs-adr` (decisions).
 
+## How to reason
+
+1. **Observe** — unstaged + staged + untracked + unpushed as one unit
+2. **Interpret** — one reviewable concern, or several tangled together?
+3. **Classify** — GO / SPLIT / BLOCKED
+4. **Severity** — a secret or broken test blocks; formatting churn does not
+
+## Worked example
+
+> **Observe:** feature + leftover `console.log` + an unrelated lockfile bump.
+> **Interpret:** two concerns; debug residue is a completeness fail.
+> **Classify:** SPLIT the lockfile; remove the log; then GO.
+> **Gate:** do not open a PR around the leftover debug print.
+
 ---
 
 ## Phase 0 — Snapshot the working tree  [LOW freedom — run exactly]

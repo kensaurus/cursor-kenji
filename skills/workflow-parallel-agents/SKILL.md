@@ -6,13 +6,37 @@ license: MIT
 
 # Parallel Agents & Worktrees
 
-## Why Run Agents in Parallel?
+**Degree of freedom: MIXED.** What to split and which model `[HIGH freedom]`;
+isolated worktrees and no shared-file writes `[LOW freedom — run exactly]`.
+
+## How to reason
+
+1. **Observe** — independent tasks vs one shared file
+2. **Interpret** — worktree / cloud / best-of-N
+3. **Classify** — parallel-safe / must-serialize
+4. **Severity** — two agents editing one path is a conflict, not speed
+
+## Worked example
+
+> **Observe:** "fix tests" and "write the README" touch different trees.
+> **Interpret:** two worktrees, two agents.
+> **Classify:** parallel-safe; do not also give both `package.json`.
+> **Merge:** integrate one result at a time; compare best-of-N on the same prompt.
+
+## Self-critique before reporting
+
+- **Isolation** — no two agents owned the same files
+- **Prompt named** — each delegate had a concrete done-check
+- **Compared if best-of-N** — a winner was picked with a reason
+- **Right owner** — one sequential feature → `workflow-build-feature`
+
+## Why Run Agents in Parallel?  [HIGH freedom]
 - **Compare approaches**: Same prompt across 3 models → pick the best result
 - **Isolate work**: Each agent edits its own files without conflicts
 - **Delegate background tasks**: Offload bug fixes, tests, docs while you work on something else
 - **Speed**: Multiple independent tasks done simultaneously
 
-## Git Worktrees (Local Parallel Agents)
+## Git Worktrees (Local Parallel Agents)  [LOW freedom — run exactly]
 
 ### How It Works
 Cursor creates isolated git worktrees for each agent. Each has its own:
@@ -40,7 +64,7 @@ When an agent finishes, click **Apply** to merge changes back.
 - Click **Apply** on the winner
 - Discard the others
 
-## Cloud Agents (Background Delegation)
+## Cloud Agents (Background Delegation)  [HIGH freedom]
 
 ### When to Use
 Delegate tasks you'd otherwise put on a todo list:
@@ -82,7 +106,7 @@ Include:
 - Acceptance criteria
 - Any constraints ("don't change the API contract")
 
-## Running Multiple Models on the Same Prompt
+## Running Multiple Models on the Same Prompt  [LOW freedom — run exactly]
 1. Open agent dropdown
 2. Select multiple models
 3. Submit prompt once
@@ -94,13 +118,13 @@ Best for:
 - Hard bugs where different models take different approaches
 - When you want to verify the solution is correct
 
-## Notifications
+## Notifications  [LOW freedom — run exactly]
 When running many agents, configure:
 - Settings → notifications → agent completion
 - Sounds for agent completion (hear it finish across the room)
 - Slack integration for cloud agents
 
-## Patterns
+## Patterns  [HIGH freedom]
 
 ### The Parallel Spike
 Run 2-3 agents with different approaches to a hard problem:
@@ -120,7 +144,7 @@ One agent reviews for security, another for performance:
 - Agent A: "Review `app/api/` for security issues (auth, input validation, RLS)"
 - Agent B: "Review `app/api/` for performance (N+1s, missing indexes, large payloads)"
 
-## Worktree Tips
+## Worktree Tips  [LOW freedom — run exactly]
 - Each worktree needs its own `node_modules` if deps differ
 - Share `.env` by symlinking or copying to each worktree
 - Worktrees share git history — easy to cherry-pick between them

@@ -10,13 +10,37 @@ license: MIT
 
 # Backend Patterns Skill
 
+**Degree of freedom: MIXED.** Which pattern to apply `[HIGH freedom]`;
+existing-architecture probes and the validation list `[LOW freedom — run exactly]`.
+
+## How to reason
+
+1. **Observe** — existing server/api/actions, ORM, queues, cache
+2. **Interpret** — missing pattern vs duplicate vs wrong layer
+3. **Classify** — reuse / add-queue / add-cache / add-rate-limit / edge-fn
+4. **Severity** — unauthenticated mutation outranks a missing cache
+
+## Worked example
+
+> **Observe:** `createOrder` sends email inline; no Inngest/queue; checkout p95 4s.
+> **Interpret:** confirmation is post-response work, not request-path.
+> **Classify:** `after()` or an `order/created` job; keep the write transactional.
+> **Verify:** order row commits; email/inventory run after response; retries do not double-charge.
+
+## Self-critique before reporting
+
+- **Existing first** — searched server/api/actions before adding a second pattern
+- **Auth + validate** — every mutation checks session and Zod
+- **Idempotent** — retries on the new path do not double-apply
+- **Right owner** — which architecture to pick → `audit-backend-architecture`
+
 Design scalable, maintainable backend architectures using modern patterns and best practices.
 
 > Code examples lean on **Next.js App Router + Supabase/Prisma**. The patterns are
 > stack-agnostic — adapt ORMs, client libraries, and deploy targets to your detected
 > ecosystem.
 
-## CRITICAL: Check Existing First
+## CRITICAL: Check Existing First  [LOW freedom — run exactly]
 
 **Before implementing ANY backend pattern, verify:**
 
@@ -41,7 +65,7 @@ cat supabase/config.toml 2>/dev/null
 
 **Why:** Backend changes have wide impact. Understand existing architecture first.
 
-## Server Actions (Next.js 15+)
+## Server Actions (Next.js 15+)  [HIGH freedom]
 
 ### Basic Pattern
 ```tsx
@@ -125,7 +149,7 @@ export async function createOrder(formData: FormData) {
 }
 ```
 
-## tRPC Setup
+## tRPC Setup  [HIGH freedom]
 
 ### Router Definition
 ```tsx
@@ -179,7 +203,7 @@ export const usersRouter = createTRPCRouter({
 })
 ```
 
-## Supabase Edge Functions
+## Supabase Edge Functions  [HIGH freedom]
 
 ### Basic Function
 ```tsx
@@ -233,7 +257,7 @@ serve(async (req) => {
 })
 ```
 
-## Database Patterns
+## Database Patterns  [HIGH freedom]
 
 ### Optimistic Locking
 ```sql
@@ -308,7 +332,7 @@ AFTER INSERT OR UPDATE OR DELETE ON orders
 FOR EACH ROW EXECUTE FUNCTION audit_trigger();
 ```
 
-## Caching Patterns
+## Caching Patterns  [HIGH freedom]
 
 ### Next.js Cache
 ```tsx
@@ -363,7 +387,7 @@ const user = await getCachedData(
 )
 ```
 
-## Background Jobs
+## Background Jobs  [HIGH freedom]
 
 ### Inngest
 ```tsx
@@ -435,7 +459,7 @@ export const syncJob = client.defineJob({
 })
 ```
 
-## Rate Limiting
+## Rate Limiting  [HIGH freedom]
 
 ```tsx
 import { Ratelimit } from '@upstash/ratelimit'
@@ -462,21 +486,14 @@ export async function rateLimitedAction(userId: string) {
 }
 ```
 
-## Architecture patterns (distributed systems)
+## Architecture patterns (distributed systems)  [HIGH freedom]
 
-For the structural/distributed-systems patterns — **API gateway** (centralized cross-cutting
-concerns), **BFF / API composition**, **bulkhead** (resource-pool isolation), **circuit breaker**
-placement, **outbox + CDC** (the dual-write fix), **saga** (compensation + saga-pivot), **hexagonal /
-ports-and-adapters**, **anti-corruption layer**, and **strangler-fig migration** — see
-[references/architecture-patterns.md](references/architecture-patterns.md) for implementation guidance
-and code.
+Gateway, BFF, bulkhead, circuit breaker, outbox+CDC, saga, hexagonal, ACL, and strangler-fig →
+[references/architecture-patterns.md](references/architecture-patterns.md). Pick the pattern for the
+topology (no mesh on a monolith; no CQRS unless reads/writes diverge). Timeouts/retries/idempotency
+→ `audit-resilience`; structural gap report → `audit-backend-architecture`.
 
-Implement the pattern that fits the topology tier (don't add a mesh to a monolith or CQRS where reads
-and writes don't diverge). Runtime resilience tuning (per-call timeouts, retry backoff+jitter,
-idempotency keys, cancellation) lives in `audit-resilience`; a structural gap report comes from
-`audit-backend-architecture`.
-
-## Validation
+## Validation  [LOW freedom — do not skip]
 
 After implementing backend patterns:
 

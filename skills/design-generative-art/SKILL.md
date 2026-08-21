@@ -11,9 +11,33 @@ license: Apache-2.0
 
 # Algorithmic Art Skill
 
+**Degree of freedom: MIXED.** Algorithm and palette `[HIGH freedom]`; existing
+pipeline inventory and seed reproducibility `[LOW freedom — run exactly]`.
+
 Create generative, procedural, and mathematical art using code. Transform algorithms into visual experiences.
 
-## CRITICAL: Check Existing First
+## How to reason
+
+1. **Inventory** — existing p5 / canvas / noise utilities
+2. **Seed** — deterministic RNG; same seed = same pixels
+3. **Parameterize** — density, palette, scale, complexity
+4. **Validate** — resolution-independent; reduced-motion on loops
+
+## Worked example
+
+> **Inventory:** no p5; one `getContext('2d')` chart canvas — do not hijack it.
+> **Seed:** `mulberry32(42)` drives a new `src/components/art/` flow field.
+> **Parameterize:** `density`, `palette` (ocean), `scale`; slider re-renders from the same seed.
+> **Validate:** seed 42 twice matches; `prefers-reduced-motion` stops the RAF loop.
+
+## Self-critique before reporting
+
+- **No pipeline clash** — did not overwrite an existing canvas/WebGL path
+- **Reproducible** — same seed paints identical output
+- **Controls matter** — each param changes the picture, not just a label
+- **Right owner** — data charts → `data-visualization`; UI illustration → `design-frontend`; WebGL/3D → `enhance-web-web3d`
+
+## CRITICAL: Check Existing First  [LOW freedom — run exactly]
 
 **Before creating ANY generative art, verify:**
 
@@ -35,7 +59,7 @@ rg "simplex\|perlin\|noise\|seedrandom" --type ts
 
 **Why:** Don't conflict with existing rendering pipelines or duplicate utility code.
 
-## Core Principles
+## Core Principles  [HIGH freedom]
 
 ### 1. Seeded Randomness
 Every piece should be reproducible with a seed:
@@ -438,7 +462,7 @@ function exportSVG(svgElement: SVGSVGElement, filename: string) {
 - `design-canvas` — Print-quality visual design philosophy
 - `data-visualization` — Data-driven generative compositions
 
-## Validation
+## Validation  [LOW freedom — do not skip]
 
 After creating algorithmic art:
 

@@ -12,6 +12,29 @@ license: MIT
 
 # Redesign Skill
 
+**Degree of freedom: MIXED.** Taste and audit judgment `[HIGH freedom]`; keep-the-stack, no-break-functionality `[LOW freedom — run exactly]`.
+
+## How to reason
+
+1. **Scan** — framework, styling, current patterns
+2. **Triage** — AI-tells first (3+ = slop; kill those)
+3. **Fix** — existing stack, Fix Priority order; no rewrite
+4. **Preserve** — flows still work; deps exist before import
+
+## Worked example
+
+> **Scan:** Vite + Tailwind v4; Inter everywhere; three equal feature cards; no hover.
+> **Triage:** Inter, purple hero gradient, three cards, "Welcome to…" — four tells.
+> **Fix:** Geist; one accent; asymmetric feature row; hover/active; keep routes.
+> **Preserve:** `npm run build` green; no new framework.
+
+## Self-critique before reporting
+
+- **Same stack** — no framework or styling-library migration
+- **Tells killed** — Phase 0 fingerprints actually gone, not restyled in place
+- **States exist** — hover/focus/loading/empty/error present
+- **Right owner** — one-page polish → `enhance-web-ui`; plan-only slop → `plan-antislop`; greenfield → `design-frontend`
+
 ## How This Works
 
 When applied to an existing project, follow this sequence:
@@ -20,7 +43,7 @@ When applied to an existing project, follow this sequence:
 2. **Diagnose** — Run through the audit below. List every generic pattern, weak point, and missing state you find.
 3. **Fix** — Apply targeted upgrades working with the existing stack. Do not rewrite from scratch. Improve what's there.
 
-## Phase 0: 60-Second AI-Tell Triage
+## Phase 0: 60-Second AI-Tell Triage  [HIGH freedom]
 
 Before the full audit, scan for the highest-signal "AI-generated look" fingerprints. If you spot 3+, the page reads as slop and these are the fastest wins. (Distilled from anti-slop research — see [anti-slop-ui](https://github.com/awaken7050dev/anti-slop-ui) and [taste-skill](https://github.com/Leonxlnx/taste-skill).)
 
@@ -37,7 +60,7 @@ Before the full audit, scan for the highest-signal "AI-generated look" fingerpri
 
 Kill these first, then run the full audit.
 
-## Design Audit
+## Design Audit  [HIGH freedom]
 
 ### Typography
 
@@ -153,7 +176,7 @@ Check for these problems and fix them:
 - **No "skip to content" link.** Essential for keyboard users. Add a hidden skip-link.
 - **No cookie consent.** If required by jurisdiction, add a compliant consent banner.
 
-## Upgrade Techniques
+## Upgrade Techniques  [HIGH freedom]
 
 When upgrading a project, pull from these high-impact techniques to replace generic patterns:
 
@@ -180,7 +203,7 @@ When upgrading a project, pull from these high-impact techniques to replace gene
 - **Grain and noise overlays.** A fixed, pointer-events-none overlay with subtle noise to break digital flatness.
 - **Colored, tinted shadows.** Shadows that carry the hue of the background rather than using generic black.
 
-## Fix Priority
+## Fix Priority  [HIGH freedom]
 
 Apply changes in this order for maximum visual impact with minimum risk:
 
@@ -192,7 +215,7 @@ Apply changes in this order for maximum visual impact with minimum risk:
 6. **Add loading, empty, and error states** — makes it feel finished
 7. **Polish typography scale and spacing** — the premium final touch
 
-## Rules
+## Rules  [LOW freedom — run exactly]
 
 - Work with the existing tech stack. Do not migrate frameworks or styling libraries.
 - Do not break existing functionality. Test after every change.

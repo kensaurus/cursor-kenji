@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 /**
  * FILE: check-skill-refs.mjs
- * PURPOSE: Fail CI on doubled-prefix skill typos (`mobile-mobile-*`) and the
- * stale `audit-responsive-layout` alias. Does not attempt a full unknown-name
- * scan (session names like `audit-ux-home` collide with that heuristic).
+ * PURPOSE: Fail CI on doubled-prefix skill typos (`mobile-mobile-*`), the
+ * stale `audit-responsive-layout` alias, and renamed-skill leftovers in
+ * OLD_ALIASES. Does not attempt a full unknown-name scan (session names
+ * like `audit-ux-home` collide with that heuristic).
  *
  * USAGE:
  *   node scripts/check-skill-refs.mjs
@@ -18,9 +19,27 @@ const selfTest = process.argv.includes("--self-test");
 
 const GROUPS = ["skills", "skills-cursor"];
 const SCAN_DIRS = ["skills", "skills-cursor", "commands", "agents", "rules", ".cursor/rules"];
+const OLD_ALIAS_DOC_DIRS = ["docs"];
+const OLD_ALIAS_DOC_FILES = ["CHANGELOG.md", "README.md"];
 
 /** Documented old names — allowed only inside audit-skill-conflicts. */
 const STALE_ALIASES = new Set(["audit-responsive-layout"]);
+
+/** Renamed skills. Historical mentions allowed only in CHANGELOG.md,
+ *  docs/CONTRIBUTING.md, this file, and audit-skill-conflicts. */
+const OLD_ALIASES = {
+  "domain-modeling": "docs-domain-modeling",
+  "grilling": "workflow-grilling",
+};
+
+function isOldAliasAllowed(rel) {
+  return (
+    rel === "CHANGELOG.md" ||
+    rel === "docs/CONTRIBUTING.md" ||
+    rel === "scripts/check-skill-refs.mjs" ||
+    rel.includes("audit-skill-conflicts")
+  );
+}
 
 const TICK_RE = /`([a-z][a-z0-9]+(?:-[a-z0-9]+)+)`/g;
 
@@ -59,12 +78,18 @@ function walkFiles(dir, out = []) {
   return out;
 }
 
-function checkText(rel, text, names) {
+function checkText(rel, text, names, oldAliases = OLD_ALIASES) {
   const errors = [];
   const allowStale = rel.includes("audit-skill-conflicts");
   for (const m of text.matchAll(TICK_RE)) {
     const ref = m[1];
     if (names.has(ref)) continue;
+    if (Object.prototype.hasOwnProperty.call(oldAliases, ref)) {
+      if (!isOldAliasAllowed(rel)) {
+        errors.push(`${rel}: stale skill alias \`${ref}\` — use ${oldAliases[ref]}`);
+      }
+      continue;
+    }
     if (STALE_ALIASES.has(ref)) {
       if (!allowStale) errors.push(`${rel}: stale skill alias \`${ref}\` — use audit-responsive`);
       continue;
@@ -98,6 +123,27 @@ function main() {
     if (hits.some((h) => h.includes("`audit-responsive`"))) {
       fail.push("self-test false-positive on live skill");
     }
+    const fakeOld = { "legacy-probe-skill": "audit-responsive" };
+    const oldHits = checkText(
+      "skills/workflow-spec-tdd/SKILL.md",
+      "see `legacy-probe-skill`",
+      names,
+      fakeOld,
+    );
+    if (!oldHits.some((h) => h.includes("legacy-probe-skill") && h.includes("audit-responsive"))) {
+      fail.push("self-test missed OLD_ALIASES hit");
+    }
+    const allowedOld = checkText("CHANGELOG.md", "see `legacy-probe-skill`", names, fakeOld);
+    if (allowedOld.length) fail.push("self-test rejected OLD_ALIASES in CHANGELOG.md");
+    const allowedDocs = checkText("docs/CONTRIBUTING.md", "see `legacy-probe-skill`", names, fakeOld);
+    if (allowedDocs.length) fail.push("self-test rejected OLD_ALIASES in docs/CONTRIBUTING.md");
+    const allowedAudit = checkText(
+      "skills/audit-skill-conflicts/SKILL.md",
+      "see `legacy-probe-skill`",
+      names,
+      fakeOld,
+    );
+    if (allowedAudit.length) fail.push("self-test rejected OLD_ALIASES in audit-skill-conflicts");
     if (fail.length) {
       for (const f of fail) console.error(`✗ ${f}`);
       process.exit(1);
@@ -113,6 +159,25 @@ function main() {
       const rel = relative(repoRoot, file).replaceAll("\\", "/");
       const text = readFileSync(file, "utf8");
       errors.push(...checkText(rel, text, names));
+    }
+  }
+  const aliasFiles = [];
+  for (const dir of OLD_ALIAS_DOC_DIRS) {
+    walkFiles(join(repoRoot, dir), aliasFiles);
+  }
+  for (const extra of OLD_ALIAS_DOC_FILES) {
+    const p = join(repoRoot, extra);
+    if (existsSync(p)) aliasFiles.push(p);
+  }
+  for (const file of aliasFiles) {
+    const rel = relative(repoRoot, file).replaceAll("\\", "/");
+    const text = readFileSync(file, "utf8");
+    for (const m of text.matchAll(TICK_RE)) {
+      const ref = m[1];
+      if (names.has(ref)) continue;
+      if (!Object.prototype.hasOwnProperty.call(OLD_ALIASES, ref)) continue;
+      if (isOldAliasAllowed(rel)) continue;
+      errors.push(`${rel}: stale skill alias \`${ref}\` — use ${OLD_ALIASES[ref]}`);
     }
   }
   if (errors.length) {

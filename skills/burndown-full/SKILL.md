@@ -10,6 +10,30 @@ description: >
 
 # Burndown Full
 
+**Degree of freedom: MIXED.** Signature and batch sizing `[HIGH freedom]`;
+from-scratch re-search and the zero-hit gate `[LOW freedom — run exactly]`.
+
+## How to reason
+
+1. **Observe** — the old pattern's remaining hits from a fresh search
+2. **Interpret** — planned files vs the real blast radius (tests, barrels, stories)
+3. **Classify** — still-old / already-new / false-positive
+4. **Severity** — leftover production call sites outrank a comment in CHANGELOG
+
+## Worked example
+
+> **Observe:** plan listed 8 files; fresh `rg Button2` finds 14 (plus a story and a re-export).
+> **Interpret:** the plan was a hypothesis; barrels were missed.
+> **Classify:** 6 extra call sites still-old; CHANGELOG mention is false-positive.
+> **Done:** re-search → 0 real hits; typecheck/lint/tests green.
+
+## Self-critique before reporting
+
+- **Fresh search** — done is zero hits from scratch, not memory
+- **Plan is not the boundary** — extras were appended, not ignored
+- **No skip** — tests/stories/re-exports burned down too
+- **Right owner** — one approved plan + deferrals → `complete-everything`; inventory → `housekeep-backlog`
+
 ## What problem this solves
 
 A coding agent is given a plan, generates it, starts executing, and then **stops before the change is actually complete across the codebase**. The user is left with a half-migrated repo. This is not a motivation problem — it is a well-documented set of failure modes in long-horizon LLM agents:

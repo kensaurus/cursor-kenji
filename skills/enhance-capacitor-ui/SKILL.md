@@ -20,6 +20,8 @@ paths:
 
 # Enhance Web ↔ Mobile UI
 
+**Degree of freedom: MIXED.** Axis/tier judgment `[HIGH freedom]`; probes, SSR first-paint, and six-cell verify `[LOW freedom — run exactly]`.
+
 Separate the mobile and desktop design contracts of a hybrid app so that a
 UIUX sweep on one surface cannot silently degrade the other. This is not a
 "add a `useIsMobile` hook" skill. It establishes three orthogonal axes,
@@ -36,6 +38,27 @@ predictable, reviewable change instead of a regression.
 
 > If browser/native automation is used, first follow the
 > `protocol-browser-anti-stall` skill when present.
+
+## How to reason
+
+1. **Inventory** — which surfaces ship; how the code answers "is mobile?"
+2. **Separate** — form factor vs platform vs pointer (never one boolean)
+3. **Allow-list** — viewport queries only in chrome; containers elsewhere
+4. **Verify** — six-cell matrix + SSR first-paint + live `data-*` on `<html>`
+
+## Worked example
+
+> **Inventory:** Capacitor PWA + iOS + Android; 18 `useIsMobile` sites; cards use `lg:grid-cols-2`.
+> **Separate:** sheet vs popover is compact OR coarse pointer, not `viewport < 768`.
+> **Allow-list:** `app-shell` / docks keep `md:`; Card becomes `@container` + `@4xl:`.
+> **Verify:** card in a 320px side panel on a 1920 monitor stays compact; no FOUC of both navs.
+
+## Self-critique before reporting
+
+- **Three axes** — no leftover `useIsMobile` answering platform or hover
+- **SSR** — chrome visibility is CSS-gated; no JS-only first paint
+- **Six cells** — compact/medium/expanded × web/iOS/Android viewed
+- **Right owner** — one-surface polish → `enhance-web-ui`; native SwiftUI/Compose is out of scope
 
 ---
 
@@ -145,7 +168,7 @@ WEB↔MOBILE SEPARATION /<repo or surface>
 
 ---
 
-## Step 0 — Surface Inventory
+## Step 0 — Surface Inventory  [HIGH freedom]
 
 Before any change, write down what the app actually ships to. This prevents
 designing for surfaces that don't exist (and forgetting ones that do).
@@ -169,7 +192,7 @@ Extract from the project:
 
 ---
 
-## Step 1 — Axes Audit (find the conflation)
+## Step 1 — Axes Audit (find the conflation)  [HIGH freedom]
 
 Run these probes; expect to find 5–30 hits per probe in any non-trivial
 hybrid app. Each hit is a candidate for axis-separation.
@@ -210,7 +233,7 @@ gate the chrome).
 
 ---
 
-## Step 2 — Chrome vs Content Map (the allow-list)
+## Step 2 — Chrome vs Content Map (the allow-list)  [HIGH freedom]
 
 The single most important architectural decision in this skill: **which
 files are allowed to read the viewport, and which must read their
@@ -241,7 +264,7 @@ container query, not a chrome file with a viewport query.
 
 ---
 
-## Step 3 — Probe live (SSR first-paint + runtime axes)
+## Step 3 — Probe live (SSR first-paint + runtime axes)  [LOW freedom — run exactly]
 
 ### 3a. SSR / hydration first-paint check
 

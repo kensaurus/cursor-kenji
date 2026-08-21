@@ -6,13 +6,37 @@ license: MIT
 
 # Karpathy Behavioral Guidelines
 
+**Degree of freedom: HIGH.** How strictly to apply each guardrail is judgment.
+Trivial one-liners may skip the full loop; a wrong architectural guess may not.
+
+## How to reason
+
+1. **Observe** — what is already in the repo vs what you are about to invent
+2. **Interpret** — is this a one-liner or a tradeoff that needs a question?
+3. **Classify** — proceed / ask / simplify
+4. **Severity** — a silent assumption that changes public behavior is a fail
+
+## Worked example
+
+> **Observe:** user said "just add caching"; repo already has TanStack Query on the same endpoint.
+> **Interpret:** a second cache would duplicate, not simplify.
+> **Classify:** ask, then reuse Query — do not add Redis.
+> **Check:** surgical edit; no new abstraction.
+
+## Self-critique before reporting
+
+- **Thought first** — confusion was surfaced, not coded through
+- **Simpler option** — no extra layer without a repeating pattern
+- **Surgical** — unrelated files untouched
+- **Right owner** — scoped refactor → `workflow-refactor`; repo-wide pattern → `audit-code-quality`
+
 Four guardrails to apply on every non-trivial coding task. Bias toward caution over speed. For trivial one-liners (typo fixes, obvious renames), use judgment — not every change needs full rigor.
 
 If a project's own rules contradict any guideline below, the project rules win.
 
 ---
 
-## 1. Think Before Coding
+## 1. Think Before Coding  [HIGH freedom]
 
 **Don't assume. Don't hide confusion. Surface tradeoffs.**
 
@@ -27,7 +51,7 @@ Before writing code:
 
 ---
 
-## 2. Simplicity First
+## 2. Simplicity First  [HIGH freedom]
 
 **Minimum code that solves the problem. Nothing speculative.**
 
@@ -42,7 +66,7 @@ Before writing code:
 
 ---
 
-## 3. Surgical Changes
+## 3. Surgical Changes  [HIGH freedom]
 
 **Touch only what you must. Clean up only your own mess.**
 
@@ -62,7 +86,7 @@ When your changes create orphans:
 
 ---
 
-## 4. Goal-Driven Execution
+## 4. Goal-Driven Execution  [HIGH freedom]
 
 **Define success criteria. Loop until verified.**
 
@@ -87,7 +111,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ---
 
-## Self-Check Before Returning a Result
+## Self-Check Before Returning a Result  [LOW freedom — do not skip]
 
 Before saying "done", confirm:
 

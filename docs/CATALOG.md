@@ -18,7 +18,8 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 | `mobile-` | Change | Native / React Native / emulator / Capacitor |
 | `data-` | Change | Data visualization & pipeline correctness |
 | `docs-` | Change | Documentation authoring |
-| `housekeep-` | Change | Consolidate a drifted design system to one source of truth |
+| `housekeep-` | Change | Apply-now consolidation of **one** drifted register (gates / backlog / design tokens) |
+| `iterate-` | Operate | Close the loop after launch (post-launch feedback, agent-harness iteration) |
 | `test-` | Prove | Write/run tests & QA |
 | `deploy-` | Ship | Release & post-deploy verification |
 | `debug-` | Operate | Diagnose & fix a specific failure |
@@ -146,15 +147,15 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **What it does:** Generate PRDs via structured conversation. Auto-detects tech stack, features, data model. Uses Firecrawl for competitive research, Context7 for feasibility, Supabase MCP for data model verification.
 **Related:** `docs-coauthor`, `workflow-spec-tdd`
 
-#### `grilling` *(adapted from mattpocock/skills, MIT)*
+#### `workflow-grilling` *(adapted from mattpocock/skills, MIT)*
 **Triggers:** "grill me", "stress-test this plan", "interview me about this", "poke holes in this", "challenge my thinking"
 **What it does:** Relentless one-question-at-a-time interview until shared understanding is reached. Recommends an answer with each question, looks up facts itself, puts every decision to the user, and writes no code until confirmed. Ends with a compact decision log to feed `design-prd` or `/plan`.
-**Related:** `domain-modeling`, `design-prd`, `workflow-spec-tdd`
+**Related:** `docs-domain-modeling`, `design-prd`, `workflow-spec-tdd`
 
-#### `domain-modeling` *(adapted from mattpocock/skills, MIT)*
+#### `docs-domain-modeling` *(adapted from mattpocock/skills, MIT)*
 **Triggers:** "pin down terminology", "ubiquitous language", "glossary", "the agent uses the wrong words"
 **What it does:** Actively build and sharpen the project's domain model: a `CONTEXT.md` glossary and ubiquitous language. Challenges conflicting terms, sharpens fuzzy language, stress-tests boundaries with concrete scenarios, and cross-references claims against the code. Repo decision-memory system → `docs-adr`.
-**Related:** `grilling`, `design-prd`, `docs-coauthor`, `docs-adr`
+**Related:** `workflow-grilling`, `design-prd`, `docs-coauthor`, `docs-adr`
 
 #### `plan-uiux-unification`
 **Triggers:** "UI/UX unification plan", "design system audit plan", "UI burndown", "unify the design system", "plan UI overhaul", "design system consolidation", "IA audit before redesign", "audit UI without fixing", "UI/UX unification"
@@ -825,7 +826,7 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/adr` | `docs-adr` | Architecture Decision Records as agent-readable memory |
 | `/auth-flows` | `audit-auth-flows` | App-layer auth — route×gate, getSession vs getUser, middleware-as-only-gate |
 | `/uiux-plan` | `plan-uiux-unification` | Full UI/UX unification plan (audit only, no fixes) |
-| `/grill-me` | `grilling` | One-question-at-a-time interview to align before building |
+| `/grill-me` | `workflow-grilling` | One-question-at-a-time interview to align before building |
 | `/handoff` | `handoff` | Compact the conversation into a handoff doc for a fresh session |
 | `/slop-plan` | `plan-antislop` | AI slop / authenticity audit + de-slop burndown (plan only) |
 | `/rls-plan` | `plan-rls-audit` | Supabase RLS + access-control audit (plan only) |

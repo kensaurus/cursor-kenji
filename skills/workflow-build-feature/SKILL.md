@@ -10,12 +10,36 @@ license: MIT
 
 # workflow-build-feature — End-to-End Feature Build
 
+**Degree of freedom: MIXED.** How to implement Phase 2 `[HIGH freedom]`;
+phase order and "no implementation before RED" `[LOW freedom — run exactly]`.
+
 One command that runs the full feature loop. Don't skip phases — each gate
 catches a class of defects the next phase can't.
 
+## How to reason
+
+1. **Contract** — what observable behavior is in / out of scope?
+2. **Sequence** — which phase is next, and what would skipping it hide?
+3. **Prove** — RED was real; GREEN and smoke cover the contract
+4. **Handoff** — PR evidence is complete; no silent "looks done"
+
+## Worked example
+
+> **Contract:** "add a forgot-password link" — email reset, not a magic-link login rewrite.
+> **Sequence:** spec + RED on the request-reset handler before any UI.
+> **Prove:** RED failed on missing route; GREEN + Playwright submits the form and sees the check-email state.
+> **Handoff:** PR links the spec, the RED/GREEN commands, and the smoke screenshot.
+
+## Self-critique before reporting
+
+- **Phases intact** — none of spec / RED / unit / smoke / PR were skipped
+- **RED was real** — the failing test existed before implementation
+- **Full-stack** — if data was touched, the migration was applied and verified
+- **Right owner** — one named bug → `workflow-fix-and-ship`; spec loop only → `workflow-spec-tdd`
+
 ---
 
-## Phase sequence
+## Phase sequence  [LOW freedom — run exactly]
 
 ```
 1. SPEC        → workflow-spec-tdd (contract, plan, RED test)
@@ -27,7 +51,7 @@ catches a class of defects the next phase can't.
 
 ---
 
-## Phase 1: Spec (read workflow-spec-tdd)
+## Phase 1: Spec (read workflow-spec-tdd)  [LOW freedom — run exactly]
 
 > Read the `workflow-spec-tdd` skill and follow it.
 
@@ -40,7 +64,7 @@ Key outputs:
 
 ---
 
-## Phase 2: Build
+## Phase 2: Build  [HIGH freedom]
 
 Implement against the spec. Rules:
 - One logical change per commit
@@ -49,7 +73,7 @@ Implement against the spec. Rules:
 
 ---
 
-## Phase 3: Unit tests (read test-unit)
+## Phase 3: Unit tests (read test-unit)  [LOW freedom — hand off]
 
 > Read the `test-unit` skill and follow it.
 
@@ -59,7 +83,7 @@ Focus on:
 
 ---
 
-## Phase 4: Smoke test (read test-playwright)
+## Phase 4: Smoke test (read test-playwright)  [LOW freedom — hand off]
 
 > Read the `test-playwright` skill and follow it.
 
@@ -69,7 +93,7 @@ Before any browser action, apply `protocol-browser-anti-stall` rules.
 
 ---
 
-## Phase 5: PR (read workflow-pr)
+## Phase 5: PR (read workflow-pr)  [LOW freedom — hand off]
 
 > Read the `workflow-pr` skill and follow it.
 
@@ -80,7 +104,7 @@ Include in the PR description:
 
 ---
 
-## Done criteria
+## Done criteria  [LOW freedom — do not skip]
 
 - [ ] Spec written and agreed
 - [ ] RED test exists and was failing before implementation

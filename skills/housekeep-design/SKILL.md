@@ -10,11 +10,38 @@ license: MIT
 
 # housekeep-design — Consolidate a Drifted Design System to One SSOT
 
+**Degree of freedom: MIXED.** Canonical-form judgment `[HIGH freedom]`;
+inventory searches, migration batches, and the zero-hit re-search
+`[LOW freedom — run exactly]`.
+
 Multiple sessions and multiple devs leave a design system full of competing truths: three
 button variants that look the same, `--brand`, `--primary`, and `#3B82F6` all meaning the
 same blue, `text-[13px]` next to `text-sm`, Lucide and Heroicons side by side. This skill
 picks one canonical form for each conflict, migrates everything to it, and locks the door
 behind you.
+
+## How to reason
+
+1. **Observe** — which tokens, components, or icon libraries compete?
+2. **Interpret** — is this duplication or an intentional variant?
+3. **Classify** — merge-to-canonical / keep-as-variant / ask (visible brand change)
+4. **Severity** — a second Button that ships in prod outranks a unused hex alias
+
+## Worked example
+
+> **Observe:** `--brand`, `--primary`, and `#3B82F6` are the same blue; two Button
+> files; Lucide + Heroicons.
+> **Interpret:** color and Button are duplicates; icon mix is library drift.
+> **Classify:** merge colors to `--color-primary`; keep `components/ui/button.tsx`;
+> standardize Lucide.
+> **Verify:** `rg` for `--brand` and `#3B82F6` → 0 hits; screenshots stay equivalent.
+
+## Self-critique before reporting
+
+- **Zero-hit** — every deprecated form was re-searched from scratch, not from memory
+- **Equivalent** — screenshots or an explicit authorized upgrade; no silent restyle
+- **One SSOT** — no leftover parallel token file or second Button
+- **Right owner** — plan-only burndown still open → `plan-uiux-unification`, not this
 
 > **One source of truth per decision.** When two patterns compete, take the **best of
 > both** (more accessible, tokenized, more reused, better named) as canonical and migrate
@@ -29,7 +56,7 @@ behind you.
 
 ---
 
-## Phase 0 — Detect and scope
+## Phase 0 — Detect and scope  [HIGH freedom]
 
 ### 0a. Consume an existing plan
 
@@ -44,7 +71,7 @@ the token source file(s). Record it.
 
 ---
 
-## Phase 1 — Establish the SSOT structure (3-layer tokens)
+## Phase 1 — Establish the SSOT structure (3-layer tokens)  [HIGH freedom]
 
 Define (or normalize onto) a three-layer token taxonomy — the 2026 standard for
 drift-proof systems:
@@ -60,7 +87,7 @@ canonical token file as the SSOT and note where duplicate/parallel token sets li
 
 ---
 
-## Phase 2 — Detect every conflict (the drift inventory)
+## Phase 2 — Detect every conflict (the drift inventory)  [LOW freedom — run the searches exactly]
 
 Search the whole repo (use Shell/`rg`, not the plan's file list) and build a durable
 checklist at `.cursor/housekeep-design-state.md`. Hunt each conflict class:
@@ -91,7 +118,7 @@ State totals out loud: "Found N conflicts across M files."
 
 ---
 
-## Phase 3 — Reconcile: pick the canonical (best-of-both)
+## Phase 3 — Reconcile: pick the canonical (best-of-both)  [HIGH freedom]
 
 For each conflict, choose the canonical form using explicit criteria, and log the decision
 in a **SSOT decision log** so future contributors know *why*:
@@ -114,7 +141,7 @@ plan didn't authorize. Pure de-duplication proceeds.
 
 ---
 
-## Phase 4 — Migrate all usages (mechanical, per-batch)
+## Phase 4 — Migrate all usages (mechanical, per-batch)  [LOW freedom — run exactly]
 
 Work the checklist in batches of 5–10 files. Prefer codemods for coverage you can verify:
 
@@ -131,7 +158,7 @@ completeness. Append any newly discovered occurrences and burn them down too.
 
 ---
 
-## Phase 5 — Install guardrails so drift can't recur
+## Phase 5 — Install guardrails so drift can't recur  [LOW freedom — run exactly]
 
 Consolidation without guardrails regresses in a week. Add:
 
@@ -148,7 +175,7 @@ For a deeper guardrail install (hooks + CI gates), hand off to `enhance-agent-gu
 
 ---
 
-## Phase 6 — Verify and report
+## Phase 6 — Verify and report  [LOW freedom — do not skip]
 
 - **Fresh search:** `rg` for every deprecated form → **zero** hits (except logged
   exceptions). Any hit → back to Phase 4.

@@ -11,7 +11,31 @@ license: MIT
 
 # Debug Error Skill
 
+**Degree of freedom: MIXED.** Root-cause judgment `[HIGH freedom]`; the red
+feedback loop and verify-green re-run `[LOW freedom — run exactly]`.
+
 Systematic approach to debugging errors and unexpected behavior. Works with any project.
+
+## How to reason
+
+1. **Observe** — exact symptom, stack, environment, first-seen
+2. **Interpret** — crash site vs producer; FE / BE / integration / data
+3. **Classify** — null-access / contract / env / race / unknown
+4. **Severity** — prod-wide auth break outranks a single-user edge
+
+## Worked example
+
+> **Observe:** `TypeError: Cannot read property 'email' of undefined` on `/account` after signup.
+> **Interpret:** crash is in the profile card; API returns `null` for incomplete onboarding.
+> **Classify:** data bug — producer returns null, consumer assumes an object.
+> **Fix:** handle the onboarding-null at the producer contract + UI empty state; do not `?.` the crash site only.
+
+## Self-critique before reporting
+
+- **Red loop first** — a failing command existed before the hypothesis
+- **Root, not symptom** — no `?.` / swallowed catch as the sole fix
+- **Green loop** — the same command was re-run and passed
+- **Right owner** — FE↔BE mismatch → `debug-fe-be-integration`; Sentry backlog → `debug-sentry-monitor`
 
 ## MANDATORY: Pre-Debug Checks
 

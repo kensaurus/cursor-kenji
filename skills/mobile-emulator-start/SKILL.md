@@ -10,15 +10,39 @@ license: MIT
 
 # mobile-emulator-start — Metro + Android emulator in a sane order
 
+**Degree of freedom: MIXED.** Reuse vs fresh Metro `[HIGH freedom]`; port kill,
+boot, reverse, `/status`, then intent `[LOW freedom — run exactly]`.
+
 Deliver a **working dev loop** (emulator online → tunnel → bundler ready → app intent)
 without burning time on duplicate Metros, stale caches, or racing the dev client ahead of
 `/status`.
 
 > Pair with **`mobile-emulator-test`** for full QA; this skill focuses on **bring-up + terminal hygiene**.
 
+## How to reason
+
+1. **Inspect** — existing terminals, `curl /status`, `adb devices`
+2. **Decide** — reuse a healthy Metro vs one explicit fresh wipe
+3. **Order** — free ports → boot AVD → reverse → Metro → wait `/status`
+4. **Launch** — intent only after `packager-status:running`
+
+## Worked example
+
+> **Inspect:** two terminals on 8081; `adb devices` empty; last intent was `ECONNREFUSED`.
+> **Decide:** kill both Metros (not a cache wipe — user asked to start, not "stale bundle").
+> **Order:** boot AVD → `adb reverse` → one `expo start --dev-client` → poll `/status`.
+> **Launch:** `am start` the scheme deeplink; logcat has no immediate refused-to-Metro.
+
+## Self-critique before reporting
+
+- **One Metro** — no second cwd serving the wrong graph
+- **Order held** — emulator in `adb devices` before reverse; `/status` before intent
+- **Size expected** — `wm size` is 1080×2400 unless scroll-QA was requested
+- **Right owner** — guest/signed-in QA walk → `mobile-emulator-test`; crash after start → `debug-error`
+
 ---
 
-## Critical ordering (why this skill exists)
+## Critical ordering (why this skill exists)  [LOW freedom — run exactly]
 
 1. **Emulator attached to `adb`** before trusting `adb reverse` (or reverse again when the serial appears).
 2. **`curl http://127.0.0.1:<PORT>/status`** shows **`packager-status:running`** before `am start` / dev-client deeplink (avoids “Cannot connect to Expo CLI” / `127.0.0.1` refused).
@@ -26,7 +50,7 @@ without burning time on duplicate Metros, stale caches, or racing the dev client
 
 ---
 
-## Phase A: Read existing terminals first
+## Phase A: Read existing terminals first  [HIGH freedom]
 
 Before spawning duplicate processes, **inspect what is already running**.
 
@@ -52,7 +76,7 @@ If Metro responds and an **`emulator-* device`** exists, you may only need **`ad
 
 ---
 
-## Phase B: Fresh instance vs fast iteration
+## Phase B: Fresh instance vs fast iteration  [HIGH freedom]
 
 | Goal | Do this | Avoid |
 |---|---|---|
@@ -63,7 +87,7 @@ If Metro responds and an **`emulator-* device`** exists, you may only need **`ad
 
 ---
 
-## Phase C: Free the ports and orphaned processes
+## Phase C: Free the ports and orphaned processes  [LOW freedom — run exactly]
 
 ### C.1 Ports (adjust to the repo’s Metro port)
 
@@ -80,7 +104,7 @@ Starting Metro from the **wrong `cwd`** serves the wrong graph — always `cd` i
 
 ---
 
-## Phase D: Emulator display resolution
+## Phase D: Emulator display resolution  [LOW freedom — run exactly]
 
 ### D.0 Which resolution to use?
 
@@ -144,7 +168,7 @@ If the emulator exits immediately with **`unknown skin name '_no_skin'`**, remov
 
 ---
 
-## Phase E: `adb` attach + reverse
+## Phase E: `adb` attach + reverse  [LOW freedom — run exactly]
 
 ```bash
 adb start-server
@@ -160,7 +184,7 @@ Re-apply **`adb reverse`** after **new emulator session**, **`adb kill-server`**
 
 ---
 
-## Phase F: Start Metro (background-friendly)
+## Phase F: Start Metro (background-friendly)  [LOW freedom — run exactly]
 
 From the **correct app cwd**:
 
@@ -180,7 +204,7 @@ Run long-lived processes in the **background** when the agent must continue othe
 
 ---
 
-## Phase G: Block until Metro is actually ready
+## Phase G: Block until Metro is actually ready  [LOW freedom — run exactly]
 
 ```bash
 METRO_PORT=8081
@@ -192,7 +216,7 @@ Only **then** trigger the app (Phase H). This removes the classic race where the
 
 ---
 
-## Phase H: Launch the app
+## Phase H: Launch the app  [LOW freedom — run exactly]
 
 ### H.1 Expo dev client (generic)
 
@@ -254,7 +278,7 @@ If such a script **polls `/status`** and sets **`adb reverse`**, prefer it **aft
 
 ---
 
-## Verification checklist (short)
+## Verification checklist (short)  [LOW freedom — do not skip]
 
 - [ ] **One** Metro listening; `curl /status` = **running**
 - [ ] `adb devices` shows **`device`**, not `offline`

@@ -242,6 +242,92 @@ try {
   });
   expect(!existsSync(staleBabysit), "stale Cursor babysit copy was not deleted");
 
+  // Renamed-skill leftovers must be pruned on Cursor, agents mirror, and Claude.
+  const oldName = "kenji-rename-probe-old";
+  const plantOld = (skillsDir) => {
+    mkdirSync(join(skillsDir, oldName), { recursive: true });
+    writeFileSync(join(skillsDir, oldName, "SKILL.md"), marker);
+  };
+  plantOld(join(cur, "skills"));
+  plantOld(join(sandbox, ".agents", "skills"));
+  execFileSync(process.execPath, [installer], {
+    env: {
+      ...process.env,
+      HOME: sandbox,
+      USERPROFILE: sandbox,
+      KENJI_RENAMED_SKILLS: `${oldName}:research`,
+    },
+    stdio: "pipe",
+  });
+  expect(!existsSync(join(cur, "skills", oldName)), "Cursor did not prune renamed skill");
+  expect(!existsSync(join(sandbox, ".agents", "skills", oldName)), "Agents mirror did not prune renamed skill");
+  expect(existsSync(join(cur, "skills", "research")), "rename prune removed the new skill");
+
+  const sandboxSkill = join(sandbox, "rename-skill-scope");
+  const scopedSkills = join(sandboxSkill, ".cursor", "skills");
+  plantOld(scopedSkills);
+  execFileSync(process.execPath, [installer, "--skill", "audit-ux"], {
+    env: {
+      ...process.env,
+      HOME: sandboxSkill,
+      USERPROFILE: sandboxSkill,
+      KENJI_RENAMED_SKILLS: `${oldName}:research`,
+    },
+    stdio: "pipe",
+  });
+  expect(existsSync(join(scopedSkills, oldName)), "--skill scoped install pruned an unrelated renamed dir");
+
+  const sandboxClaude = join(sandbox, "rename-claude");
+  mkdirSync(sandboxClaude, { recursive: true });
+  execFileSync(process.execPath, [installer, "--claude"], {
+    env: { ...process.env, HOME: sandboxClaude, USERPROFILE: sandboxClaude },
+    stdio: "pipe",
+  });
+  plantOld(join(sandboxClaude, ".claude", "skills"));
+  execFileSync(process.execPath, [installer, "--claude"], {
+    env: {
+      ...process.env,
+      HOME: sandboxClaude,
+      USERPROFILE: sandboxClaude,
+      KENJI_RENAMED_SKILLS: `${oldName}:research`,
+    },
+    stdio: "pipe",
+  });
+  expect(!existsSync(join(sandboxClaude, ".claude", "skills", oldName)), "Claude did not prune renamed skill");
+  expect(existsSync(join(sandboxClaude, ".claude", "skills", "research")), "Claude rename prune removed the new skill");
+
+  const sandboxDry = join(sandbox, "rename-dry");
+  plantOld(join(sandboxDry, ".cursor", "skills"));
+  execFileSync(process.execPath, [installer, "--dry-run"], {
+    env: {
+      ...process.env,
+      HOME: sandboxDry,
+      USERPROFILE: sandboxDry,
+      KENJI_RENAMED_SKILLS: `${oldName}:research`,
+    },
+    stdio: "pipe",
+  });
+  expect(existsSync(join(sandboxDry, ".cursor", "skills", oldName)), "dry-run deleted a renamed skill");
+
+  const plantNamed = (skillsDir, name) => {
+    mkdirSync(join(skillsDir, name), { recursive: true });
+    writeFileSync(join(skillsDir, name, "SKILL.md"), marker);
+  };
+  plantNamed(join(cur, "skills"), "domain-modeling");
+  plantNamed(join(cur, "skills"), "grilling");
+  plantNamed(join(sandbox, ".agents", "skills"), "domain-modeling");
+  plantNamed(join(sandbox, ".agents", "skills"), "grilling");
+  execFileSync(process.execPath, [installer], {
+    env: { ...process.env, HOME: sandbox, USERPROFILE: sandbox },
+    stdio: "pipe",
+  });
+  expect(!existsSync(join(cur, "skills", "domain-modeling")), "Cursor did not prune domain-modeling");
+  expect(!existsSync(join(cur, "skills", "grilling")), "Cursor did not prune grilling");
+  expect(!existsSync(join(sandbox, ".agents", "skills", "domain-modeling")), "Agents did not prune domain-modeling");
+  expect(!existsSync(join(sandbox, ".agents", "skills", "grilling")), "Agents did not prune grilling");
+  expect(existsSync(join(cur, "skills", "docs-domain-modeling")), "docs-domain-modeling missing after rename prune");
+  expect(existsSync(join(cur, "skills", "workflow-grilling")), "workflow-grilling missing after rename prune");
+
   // Official npm bin is the .js wrapper (Windows cmd-shim friendly).
   expect(existsSync(join(repoRoot, "bin", "cursor-kenji.js")), "missing bin/cursor-kenji.js");
   const wrapperHelp = execFileSync(process.execPath, [join(repoRoot, "bin", "cursor-kenji.js"), "--help"], {

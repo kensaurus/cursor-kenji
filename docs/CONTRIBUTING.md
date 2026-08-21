@@ -12,7 +12,10 @@ Guide for adding, updating, and maintaining skills and commands.
 mkdir -p skills/my-skill-name
 ```
 
-Naming: `<prefix>-<topic>`, lowercase, hyphens only. 15 prefixes:
+Naming: family-first `<family>-<topic>`, lowercase, hyphens only. Family is
+**stance / lifecycle** (when you reach for it), not the subject. Slash
+commands may drop the family (`/doctrine` → `audit-doctrine`) or keep it
+when it is the distinctive word (`/housekeep-gates`).
 
 | Prefix | Purpose |
 |:-------|:--------|
@@ -25,12 +28,28 @@ Naming: `<prefix>-<topic>`, lowercase, hyphens only. 15 prefixes:
 | `design-` | Create new visual/API surfaces |
 | `docs-` | Write or co-author documentation |
 | `enhance-` | Improve existing web/mobile UI, UX, SEO, email deliverability |
-| `housekeep-` | Consolidate a drifted design system |
+| `housekeep-` | Apply-now consolidation of **one** drifted register (gates / backlog / design tokens) |
+| `iterate-` | Close the loop after launch (post-launch feedback, agent-harness iteration) |
 | `meta-` | Skills and MCP authoring |
 | `mobile-` | React Native, Capacitor, emulator |
-| `protocol-` | Procedural guardrails |
+| `protocol-` | Session guardrails used by other skills |
 | `test-` | QA, unit tests, load, visual regression |
-| `workflow-` | Dev-process skills (git, refactor, PR, spec-TDD) |
+| `workflow-` | Multi-phase process (git, refactor, PR, spec-TDD, housekeep-the-repo) |
+
+`workflow-housekeep` stays in `workflow-` — it is a multi-phase repo cleanup,
+not one-register consolidation. That is why "housekeep" appears at the
+**front** on `housekeep-gates` / `housekeep-backlog` / `housekeep-design` and
+at the **back** on `workflow-housekeep`.
+
+**Documented unprefixed exceptions** (do not rename without a dedicated
+migration):
+
+| Name | Why it stays unprefixed |
+|:-----|:------------------------|
+| `research` | User-invoked protocol; `/research` is the picker entry |
+| `handoff` | `disable-model-invocation: true` — only `/handoff` matters |
+| `complete-everything` | Stop hook + `.cursor/complete-everything-state.md` are path-coupled |
+| `burndown-full` | Stop hook + `.cursor/burndown-state.md` are path-coupled |
 
 Examples: `audit-performance`, `backend-realtime`, `mobile-rn-screen`.
 
@@ -196,6 +215,24 @@ One-line description of what this command does.
 4. Ensure backward compatibility
 5. Update "Related Skills" if new cross-references exist
 6. Test code examples are syntactically valid
+
+### Renaming a skill
+
+A rename does **not** change routing (activation matches `description`). It
+does leave duplicate directories on existing installs unless the installer
+prunes the old name.
+
+1. Add `old-name: new-name` to `RENAMED_SKILLS` in `bin/install.mjs`.
+2. Add the same pair to `OLD_ALIASES` in `scripts/check-skill-refs.mjs`.
+   Historical mentions stay only in `CHANGELOG.md`, this file, the alias
+   table, and `audit-skill-conflicts`.
+3. Rename the directory and the `name:` frontmatter together.
+4. Prove the prune with `node scripts/test-install.mjs` (rename-orphan case).
+
+Never rewrite historical `CHANGELOG.md` lines that still use the old name.
+
+Shipped rename map: `domain-modeling` → `docs-domain-modeling`, `grilling` →
+`workflow-grilling`. Slash `/grill-me` still points at `workflow-grilling`.
 
 ### Version Tracking
 

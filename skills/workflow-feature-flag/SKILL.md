@@ -10,6 +10,30 @@ license: MIT
 
 # workflow-feature-flag — Gate → Rollout → Monitor → Promote or Rollback
 
+**Degree of freedom: MIXED.** Who is in the cohort and when to promote
+`[HIGH freedom]`; default-off, kill switch, and cleanup `[LOW freedom — run exactly]`.
+
+## How to reason
+
+1. **Observe** — existing flag infra, default, targeting, metrics
+2. **Interpret** — deploy vs enable; who can be hurt if this is wrong
+3. **Classify** — dark launch / percent rollout / kill / promote / cleanup
+4. **Severity** — a default-on flag in prod is a failed gate
+
+## Worked example
+
+> **Observe:** new checkout step; no flag library; 100% of traffic would hit it on deploy.
+> **Interpret:** ship dark, enable 5%, watch payment errors.
+> **Classify:** add default-off flag + kill switch; do not delete the old path yet.
+> **Monitor:** error rate > baseline → kill; stable → promote and remove the flag.
+
+## Self-critique before reporting
+
+- **Default off** — merge does not enable the feature
+- **Kill exists** — one switch turns it off without a rollback deploy
+- **Cleanup named** — flag removal is a tracked follow-through, not forgotten
+- **Right owner** — npm package publish → `deploy-npm`; observe window → `workflow-ship-and-observe`
+
 **Shipping code and switching it on are two separate acts.** A feature flag
 lets you deploy on your schedule, enable for specific users or a percentage of
 traffic, and kill it instantly if anything goes wrong — without a rollback
@@ -17,7 +41,7 @@ deploy. This skill gives that discipline to any feature.
 
 ---
 
-## Phase 0: Detect existing flag infrastructure
+## Phase 0: Detect existing flag infrastructure  [LOW freedom — run exactly]
 
 ```
 package.json         → launchdarkly-node-server-sdk, @launchdarkly/js-client-sdk,
@@ -38,7 +62,7 @@ src/config/flags.*   → env-var-based flags
 
 ---
 
-## Phase 1: Design the flag
+## Phase 1: Design the flag  [HIGH freedom]
 
 Before writing any code, define the flag contract:
 
@@ -59,7 +83,7 @@ Cleanup date: [When to remove the flag — typically 2 weeks after 100% stable]
 
 ---
 
-## Phase 2: Implement the flag gate
+## Phase 2: Implement the flag gate  [LOW freedom — run exactly]
 
 ### Option A: Simple env-var flag (no external service)
 
@@ -123,7 +147,7 @@ const { newCheckoutFlow } = useFlags();
 
 ---
 
-## Phase 3: Stage the rollout
+## Phase 3: Stage the rollout  [LOW freedom — run exactly]
 
 ### Step 1: Internal only (0% of real users)
 
@@ -167,7 +191,7 @@ Only proceed when the health gates are green.
 
 ---
 
-## Phase 4: Rollback procedure
+## Phase 4: Rollback procedure  [LOW freedom — run exactly]
 
 If any health gate fails at any stage:
 
@@ -186,7 +210,7 @@ If any health gate fails at any stage:
 
 ---
 
-## Phase 5: Promote to 100% and clean up
+## Phase 5: Promote to 100% and clean up  [LOW freedom — run exactly]
 
 Once the feature is stable at 100% for at least 1 week:
 
@@ -210,7 +234,7 @@ CLEANUP CHECKLIST:
 
 ---
 
-## Phase 6: Rollout report
+## Phase 6: Rollout report  [LOW freedom — do not skip]
 
 ```markdown
 ## Feature Flag Rollout — [flag-name] — [Date]

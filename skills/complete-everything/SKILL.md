@@ -10,6 +10,31 @@ description: >
 
 # Complete Everything
 
+**Degree of freedom: MIXED.** Relevance of parked items `[HIGH freedom]`;
+state-file ticks, verification ladder, and completion-judge
+`[LOW freedom — run exactly]`.
+
+## How to reason
+
+1. **Observe** — plan items, parked quotes, git diff, baseline failures
+2. **Interpret** — connected to the approved goal vs explicit non-goal
+3. **Classify** — plan / previously-parked / discovered / human-gate
+4. **Severity** — an unchecked acceptance criterion blocks the report
+
+## Worked example
+
+> **Observe:** plan shipped the UI; "out of scope" noted the RLS migration file; live API 404s.
+> **Interpret:** the parked migration is connected — the UI cannot work without it.
+> **Classify:** previously-parked now in scope; deploy+verify the RPC.
+> **Done:** state file ticked with evidence; completion-judge PASS.
+
+## Self-critique before reporting
+
+- **Evidence** — every tick cites a fresh command/result
+- **No deferral language** — connected parked work was closed, not restated
+- **Judge** — `completion-judge` ran; CONTINUE loops back
+- **Right owner** — one mechanical pattern → `burndown-full`; dirty-tree PR → `workflow-release-prep`
+
 ## Mission (verbatim)
 
 > fix and test thoroughly on all the plan - do not defer anything. make sure proper full test is done after enhancement - also fix all out of scope.

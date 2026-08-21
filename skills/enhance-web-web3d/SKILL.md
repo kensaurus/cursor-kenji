@@ -12,6 +12,8 @@ license: MIT
 
 # Enhance Web with 3D & Cinematic Motion
 
+**Degree of freedom: MIXED.** Fit and stack choice `[HIGH freedom]`; budget, fallbacks, SSR, and verify `[LOW freedom — run exactly]`.
+
 Add Three.js / React Three Fiber scenes, GSAP scroll choreography, and physics
 motion to an **existing** web project — without rewriting it, breaking the
 build, blowing the performance budget, or shipping a blank canvas to users on
@@ -27,6 +29,27 @@ fallbacks and reduced-motion support from the first commit.
 > deeper references but stays focused on *integrating into a live repo*. For
 > pure visual composition (no 3D) use `enhance-web-ui`; for anti-slop landing
 > pages use `enhance-web-landing`.
+
+## How to reason
+
+1. **Fit** — does 3D serve comprehension/brand, or is it decoration?
+2. **Choose** — minimal stack from the matrix; one system per property
+3. **Integrate** — budget + reduced-motion + no-WebGL + `ssr: false` in the same change
+4. **Prove** — mid-tier FPS, fallbacks, LCP not waiting on WebGL
+
+## Worked example
+
+> **Fit:** cookware PDP; users decide from the pot shape — a viewer earns cost; a torus knot does not.
+> **Choose:** Next.js + R3F + drei; Motion overlays; no GSAP (no scroll story).
+> **Integrate:** `dynamic(..., { ssr: false })`; poster as LCP; `frameloop="demand"`; Draco model.
+> **Prove:** reduced-motion shows poster; WebGL-off shows the same; LCP unchanged.
+
+## Self-critique before reporting
+
+- **Fit passed** — non-3D alternative was considered and rejected for a reason
+- **Same change** — fallbacks, reduced-motion, and SSR safety shipped with the scene
+- **No blank canvas** — no-WebGL and mid-tier paths verified
+- **Right owner** — no-3D polish → `enhance-web-ui`; motion without 3D → `enhance-motion`; anti-slop landing → `enhance-web-landing`
 
 ---
 
@@ -52,7 +75,7 @@ mobile can load.
 
 ---
 
-## Phase 0: Fit Check (does 3D belong here?)
+## Phase 0: Fit Check (does 3D belong here?)  [HIGH freedom]
 
 Before touching any library, answer these. If you can't justify the effect,
 the right move is `enhance-web-ui` or `enhance-web-landing`, not WebGL.
@@ -84,7 +107,7 @@ the right move is `enhance-web-ui` or `enhance-web-landing`, not WebGL.
 
 ---
 
-## Phase 1: Recon — Learn the Existing Stack
+## Phase 1: Recon — Learn the Existing Stack  [HIGH freedom]
 
 Read the entry point, layout, and any existing animated component. Then record:
 
@@ -114,7 +137,7 @@ rg -n "prefers-reduced-motion|matchMedia|DO NOT|deprecated" src/
 
 ---
 
-## Phase 2: Opportunity Audit — Where 3D Earns Its Place
+## Phase 2: Opportunity Audit — Where 3D Earns Its Place  [HIGH freedom]
 
 Map the page to one (rarely more than two) of these archetypes. Each has a
 different cost/benefit and a different stack.
@@ -134,7 +157,7 @@ different cost/benefit and a different stack.
 
 ---
 
-## Phase 3: Decision Matrix — Pick the Minimal Stack
+## Phase 3: Decision Matrix — Pick the Minimal Stack  [HIGH freedom]
 
 GSAP is **100% free for all use since April 2025** (all former Club/bonus
 plugins — ScrollTrigger, SplitText, MorphSVG, etc. — included), so plugin
@@ -157,7 +180,7 @@ timing or split properties (GSAP drives position, Spring drives scale).
 
 ---
 
-## Phase 4: Integration Patterns
+## Phase 4: Integration Patterns  [HIGH freedom]
 
 Pick the pattern that matches the stack from Phase 3. Full, current code lives
 in the foundation references (see *Research & Foundation Skills*); below are the
@@ -221,7 +244,7 @@ weighty. Spring owns scale/position; nothing else touches those props.
 
 ---
 
-## Phase 5: Performance Budget (bake in, don't bolt on)
+## Phase 5: Performance Budget (bake in, don't bolt on)  [LOW freedom — run exactly]
 
 WebGL is expensive and degrades hard on weak devices. Apply these from the
 first commit, not after a complaint.
@@ -253,7 +276,7 @@ first commit, not after a complaint.
 
 ---
 
-## Phase 6: Accessibility & Graceful Degradation
+## Phase 6: Accessibility & Graceful Degradation  [LOW freedom — run exactly]
 
 A 3D enhancement that breaks for some users is a regression, not an upgrade.
 
@@ -282,7 +305,7 @@ const reduce = typeof window !== "undefined"
 
 ---
 
-## Phase 7: SSR / Hydration Safety
+## Phase 7: SSR / Hydration Safety  [LOW freedom — run exactly]
 
 The most common way 3D breaks an existing app is server rendering and React
 Strict Mode.
@@ -317,7 +340,7 @@ Strict Mode.
 
 ---
 
-## Verification Checklist (run before declaring done)
+## Verification Checklist (run before declaring done)  [LOW freedom — do not skip]
 
 - [ ] Builds and type-checks; no hallucinated imports; installed versions matched.
 - [ ] Profiled on a **mid-tier / mobile** device or throttled DevTools — holds target FPS.

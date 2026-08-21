@@ -10,11 +10,35 @@ license: MIT
 
 # PR Workflow Skill
 
+**Degree of freedom: MIXED.** Feedback judgment `[HIGH freedom]`; validations,
+poll loop, and merge-only-if-asked `[LOW freedom — run exactly]`.
+
 Full checklist for an already-committed branch or an open PR.
 
 Uncommitted / staged / untracked working tree that still needs review,
 commit, and a merge-ready PR is **`workflow-release-prep`**. This skill
 does not own that sequence.
+
+## How to reason
+
+1. **Validate** — repo commands green; no secrets in the branch
+2. **Open** — template + complete description
+3. **Drive** — poll checks; address every thread
+4. **Gate** — mergeable_state clean AND threads 0; merge only if asked
+
+## Worked example
+
+> **Validate:** `pnpm typecheck && pnpm test` green; no `.env` in the diff.
+> **Open:** PR uses the repo template; title `fix(checkout): handle deleted SKU`.
+> **Drive:** CI red on lint → fix, push, re-poll; reply + resolve the bot thread.
+> **Gate:** `mergeable_state=clean`, 0 threads; user did not ask to merge → report merge-ready and stop.
+
+## Self-critique before reporting
+
+- **Already committed** — dirty tree was routed to `workflow-release-prep`
+- **Both gates** — never treat `mergeable: true` as approval
+- **Merge gated** — no merge unless the user explicitly asked
+- **Right owner** — uncommitted pile → `workflow-release-prep`; keep-green loop after open → `babysit`
 
 ## Invocation boundary
 
@@ -23,7 +47,7 @@ does not own that sequence.
 - **Called by `workflow-release-prep`:** open the PR and return its URL.
   `babysit` owns the green loop; the caller stops before merge.
 
-## Phase 1: Before Creating PR
+## Phase 1: Before Creating PR  [LOW freedom — run exactly]
 
 ### 1. Run Validations
 
@@ -59,7 +83,7 @@ Before committing, verify:
 
 ---
 
-## Phase 2: Monitor PR (REQUIRED)
+## Phase 2: Monitor PR (REQUIRED)  [LOW freedom — run exactly]
 
 ### 4. Poll Status
 
@@ -101,7 +125,7 @@ After pushing fixes:
 
 ---
 
-## Phase 3: Merge Criteria
+## Phase 3: Merge Criteria  [LOW freedom — run exactly]
 
 ### 7. Final Checklist
 

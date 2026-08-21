@@ -10,6 +10,8 @@ license: MIT
 
 # enhance-web-forms — Production-Quality Forms
 
+**Degree of freedom: MIXED.** Schema and state-machine judgment `[HIGH freedom]`; a11y probes and playwright walks `[LOW freedom — run exactly]`.
+
 Forms are where users hand you their data and where apps most often feel broken: unlabeled
 fields, validation that fires on every keystroke, errors screen readers never announce, a
 submit button that does nothing visible for three seconds, and no recovery when the request
@@ -20,9 +22,30 @@ fails. This skill fixes all of that on real forms in the repo.
 
 **Before any browser interaction, read `protocol-browser-anti-stall` and apply it.**
 
+## How to reason
+
+1. **Inventory** — forms, library, schema; bow out if none
+2. **Structure** — programmatic labels, types, error association
+3. **Parity** — one schema both sides; blur + submit, not every keystroke
+4. **States** — submitting / success / error / unsaved; recover on failure
+
+## Worked example
+
+> **Inventory:** signup uses raw `<form>` + inline `if (!email)`; API validates with zod.
+> **Structure:** `htmlFor` labels; `autocomplete="email"`; `aria-invalid` + summary.
+> **Parity:** share the zod schema; validate on blur/submit; map "email taken" to the field.
+> **States:** submit disables + `aria-busy`; values preserved on 500; dirty-nav warn.
+
+## Self-critique before reporting
+
+- **Labeled** — placeholder is never the only name
+- **Both sides** — client and server rules match; error shapes map to fields
+- **Walked** — empty, invalid, valid, and server-error paths in the browser
+- **Right owner** — page/flow UX beyond the form → `enhance-web-ux`; WCAG sweep → `audit-accessibility`
+
 ---
 
-## Phase 0 — Detect the stack and inventory forms
+## Phase 0 — Detect the stack and inventory forms  [HIGH freedom]
 
 ```bash
 cat package.json | grep -iE "react-hook-form|formik|@tanstack/react-form|final-form|zod|yup|valibot|superstruct"
@@ -35,7 +58,7 @@ forms, bow out.
 
 ---
 
-## Phase 1 — Research + prioritize
+## Phase 1 — Research + prioritize  [HIGH freedom]
 
 Follow `/research`: Context7 for the detected form/validation library's current API;
 Firecrawl for current form UX/a11y guidance dated to now. Prioritize forms by traffic and
@@ -43,7 +66,7 @@ risk (auth, payment, destructive actions first).
 
 ---
 
-## Phase 2 — Accessible structure (the foundation)
+## Phase 2 — Accessible structure (the foundation)  [HIGH freedom]
 
 For each form, verify/fix:
 
@@ -64,7 +87,7 @@ rg -n "aria-describedby|aria-invalid|htmlFor|aria-label" -g "*.{tsx,jsx}" -c
 
 ---
 
-## Phase 3 — Validation (schema-driven, both sides)
+## Phase 3 — Validation (schema-driven, both sides)  [HIGH freedom]
 
 - **Single schema as SSOT** — define validation once (zod/yup/valibot) and share it
   between client and server so rules can't drift. If the backend validates separately,
@@ -77,7 +100,7 @@ rg -n "aria-describedby|aria-invalid|htmlFor|aria-label" -g "*.{tsx,jsx}" -c
 
 ---
 
-## Phase 4 — States & feedback (every one, no gaps)
+## Phase 4 — States & feedback (every one, no gaps)  [HIGH freedom]
 
 Wire the full state machine for each form and submit:
 
@@ -100,7 +123,7 @@ Also handle:
 
 ---
 
-## Phase 5 — Verify and report
+## Phase 5 — Verify and report  [LOW freedom — do not skip]
 
 - **playwright-cli:** walk each form — tab through it, submit empty (see the error summary +
   focus moves to first error), submit invalid, submit valid, force a server error. Check

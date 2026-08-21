@@ -24,6 +24,9 @@
  *   Default still mirrors both. Pass --no-agents-mirror to skip the UI copy.
  *   skills-cursor names that Cursor already ships as managed builtins are not
  *   copied into ~/.cursor/skills (Claude still gets the portable copies).
+ *   RENAMED_SKILLS prunes old skill directories after a rename so existing
+ *   installs do not keep two near-identical copies. Honors --dry-run; skipped
+ *   when --skill is scoped.
  *
  * Claude Code paths:
  *   ~/.claude/skills/    — global skills, appear as /slash-commands
@@ -152,6 +155,44 @@ const CURSOR_MANAGED_BUILTIN_SKILLS = new Set([
   'update-cli-config',
   'update-cursor-settings',
 ]);
+
+/** Old skill directory → new skill directory. Empty until a rename ships.
+ *  Tests may inject pairs via KENJI_RENAMED_SKILLS=old:new,old2:new2. */
+const RENAMED_SKILLS = {
+  'domain-modeling': 'docs-domain-modeling',
+  'grilling': 'workflow-grilling',
+};
+
+function renamedSkillMap() {
+  const map = { ...RENAMED_SKILLS };
+  const extra = process.env.KENJI_RENAMED_SKILLS;
+  if (!extra) return map;
+  for (const pair of extra.split(',')) {
+    const [oldName, newName] = pair.split(':').map((s) => s.trim());
+    if (oldName && newName) map[oldName] = newName;
+  }
+  return map;
+}
+
+function shouldPruneRenamedSkills() {
+  if (skillName) return false;
+  if (onlyGroups && !onlyGroups.has('skills')) return false;
+  return true;
+}
+
+function pruneRenamedSkills(skillsDest, label) {
+  if (!shouldPruneRenamedSkills() || !skillsDest) return;
+  const map = renamedSkillMap();
+  for (const [oldName, newName] of Object.entries(map)) {
+    const stale = join(skillsDest, oldName);
+    if (!existsSync(stale)) continue;
+    if (isDryRun) {
+      console.log(`  [dry-run] prune renamed ${label} skill ${oldName} → ${newName}`);
+      continue;
+    }
+    rmSync(stale, { recursive: true, force: true });
+  }
+}
 
 // ---- target resolution -----------------------------------------------------
 // Backward compatible: a bare invocation still installs Cursor only.
@@ -692,6 +733,7 @@ if (wantCursor) {
     }
     assertNoCursorBuiltins(cursorSkills);
   }
+  pruneRenamedSkills(join(cursorBase, 'skills'), 'Cursor');
   const hookStatus =
     !onlyGroups || onlyGroups.has('hooks')
       ? installCursorCompletionHook()
@@ -725,6 +767,7 @@ if (wantCursor) {
         }
         assertNoCursorBuiltins(agentsSkillsDest);
       }
+      pruneRenamedSkills(agentsSkillsDest, 'Agents');
     }
   }
 
@@ -745,6 +788,7 @@ if (wantCursor) {
 if (wantClaude) {
   const clean = isClean ? backupAndWipe(claudeBase) : null;
   const counts = installDirs(claudeBase, { renameMdc: true });
+  pruneRenamedSkills(join(claudeBase, 'skills'), 'Claude');
 
   if (skillName && counts.copiedDirs + counts.copiedFiles === 0) {
     console.error(`✗ Skill '${skillName}' not found in skills/ or skills-cursor/.`);

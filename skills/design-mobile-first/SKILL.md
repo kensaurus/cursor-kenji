@@ -9,12 +9,36 @@ license: MIT
 
 # Mobile-First Design Skill
 
+**Degree of freedom: MIXED.** Pattern choice `[HIGH freedom]`; breakpoint,
+viewport, and existing-hook inventory `[LOW freedom — run exactly]`.
+
 Build interfaces that work on mobile first, then enhance for larger screens.
 
 **Not this skill:** a desktop that is a linearized phone (no max-width, stacked
 at 1440, stretched buttons). That is `audit-responsive`.
 
-## CRITICAL: Check Existing First
+## How to reason
+
+1. **Survey** — breakpoints, viewport, existing mobile hooks
+2. **Base** — mobile styles first (44px, safe-area)
+3. **Enhance** — `sm:`/`md:`/`lg:` add up; they do not replace the base
+4. **Device-check** — real phone, not only a resized desktop window
+
+## Worked example
+
+> **Survey:** Tailwind `sm/md/lg` exist; checkout CTA is `h-8`; no `safe-area-inset-bottom`.
+> **Base:** `min-h-[44px]`, `pb-[env(safe-area-inset-bottom)]`, stacked fields, 16px inputs.
+> **Enhance:** two-column names at `sm:`; table replaces cards at `md:`.
+> **Device-check:** thumb reaches the CTA; iOS does not zoom on focus.
+
+## Self-critique before reporting
+
+- **Base is mobile** — primary layout is not `lg:`-only
+- **44px + safe-area** — tap targets and notches were measured
+- **Real device** — not emulator-or-resize only
+- **Right owner** — linearized 1440 desktop → `audit-responsive`; hybrid native chrome → `enhance-capacitor-ui`
+
+## CRITICAL: Check Existing First  [LOW freedom — run exactly]
 
 **Before ANY mobile optimization, verify:**
 
@@ -37,7 +61,7 @@ rg "viewport" src/app/layout.tsx index.html
 
 **Why:** Maintain consistent responsive patterns across the app.
 
-## Mobile-First Principles
+## Mobile-First Principles  [HIGH freedom]
 
 ### 1. Design for Mobile First
 ```css
@@ -470,18 +494,9 @@ export function InstallPrompt() {
 }
 ```
 
-## Validation
+## Validation  [LOW freedom — do not skip]
 
-After implementing mobile features:
-
-1. **Touch targets** → All interactive elements ≥44px
-2. **Thumb zones** → Primary actions reachable with thumb
-3. **Gestures** → Natural, discoverable, with visual feedback
-4. **Performance** → 60fps scrolling, no jank
-5. **Forms** → No zoom on focus, appropriate keyboards
-6. **Safe areas** → Content respects notches and home indicators
-7. **Offline** → Graceful handling when offline
-8. **Real device test** → Test on actual phones, not just emulators
+Touch ≥44px · thumb-zone CTAs · gestures with feedback · 60fps · no focus-zoom · safe-area · offline-graceful · real device (not emulator-only).
 
 ## Related
 

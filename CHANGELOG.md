@@ -6,6 +6,35 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.29.0] — 2026-08-21
+
+### Added
+
+- **Family-first naming policy** — `docs/CONTRIBUTING.md` documents
+  `<family>-<topic>`, slash aliases, and the four unprefixed exceptions
+  (`research`, `handoff`, `complete-everything`, `burndown-full`).
+- **`iterate-` family** — registered in the skill index
+  (`FAMILY_HEADINGS`, `FAMILY_ORDER`, blurbs).
+- **Installer `RENAMED_SKILLS` prune** — deletes old skill directories on
+  Cursor, the `~/.agents/skills` mirror, and Claude after a rename.
+  Honors `--dry-run`; skipped when `--skill` is scoped. Tests may inject
+  pairs via `KENJI_RENAMED_SKILLS`.
+- **`OLD_ALIASES` gate** — `check-skill-refs` fails leftover backticks of
+  renamed skills except in `CHANGELOG.md`, `docs/CONTRIBUTING.md`, and
+  `audit-skill-conflicts`.
+
+### Changed
+
+- **`housekeep-` taxonomy** — CATALOG / CONTRIBUTING / index blurb now
+  say "one drifted register (gates / backlog / design tokens)", not
+  "design system only".
+- **Renames** — `domain-modeling` → `docs-domain-modeling`;
+  `grilling` → `workflow-grilling`. `/grill-me` still points at
+  `workflow-grilling`. "grill me" and glossary triggers unchanged.
+- **Prompt waves (T1–T6)** — remaining first-party families after Wave 7
+  (`housekeep`, `docs`, `deploy`, `debug`, then the rest). Validator
+  require-list extended per family. `thirdparty-*` skipped.
+
 ## [1.28.0] — 2026-08-21
 
 ### Added

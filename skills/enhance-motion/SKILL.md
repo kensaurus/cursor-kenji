@@ -10,6 +10,8 @@ license: MIT
 
 # enhance-motion — Coherent Motion for an Existing App
 
+**Degree of freedom: MIXED.** Tier and token judgment `[HIGH freedom]`; reduced-motion, GPU-only, and verify `[LOW freedom — run exactly]`.
+
 Add motion to an app that already exists, without fragmenting its visual language.
 The failure mode this prevents: bolting on one hero animation, three different easing
 curves, and a heavyweight library where a CSS class would do — motion that fights the
@@ -25,9 +27,30 @@ existing system to respect), use `design-motion`. For pure animation-perf triage
 
 **Before any browser interaction, read `protocol-browser-anti-stall` and apply it.**
 
+## How to reason
+
+1. **Inventory** — libraries, easings, durations, reduced-motion coverage
+2. **Right-size** — lightest tier that fits; prefer what's already installed
+3. **Tokenize** — one motion-token SSOT; no magic numbers
+4. **Gate** — reduced-motion degrades; transform/opacity only; 60fps
+
+## Worked example
+
+> **Inventory:** Tailwind `duration-300` + one `framer-motion` modal; no reduced-motion; four easings.
+> **Right-size:** buttons stay CSS; lists get Auto-Animate; modal stays Motion; no GSAP.
+> **Tokenize:** `--motion-fast/base/slow` + three easings in the theme file.
+> **Gate:** `motion-reduce:` zeros travel; layout props not animated; modal 60fps.
+
+## Self-critique before reporting
+
+- **Coherent** — same interaction shares one duration/easing
+- **Reduced-motion** — spatial movement drops; essential opacity stays
+- **GPU-only** — no width/height/top/left animation
+- **Right owner** — one isolated new animation → `design-motion`; perf-only triage → `audit-performance`
+
 ---
 
-## Phase 0 — Detect the design system and current motion
+## Phase 0 — Detect the design system and current motion  [HIGH freedom]
 
 ### 0a. Applicability gate
 
@@ -61,7 +84,7 @@ INCOHERENCE FOUND: <e.g. 4 easing curves, 3 durations for the same interaction>
 
 ---
 
-## Phase 1 — Choose the tier + define the motion-token SSOT
+## Phase 1 — Choose the tier + define the motion-token SSOT  [HIGH freedom]
 
 ### 1a. Research (current)
 
@@ -102,7 +125,7 @@ entrances ~200–320ms, exits faster than entrances.
 
 ---
 
-## Phase 2 — Apply motion, tier by tier
+## Phase 2 — Apply motion, tier by tier  [HIGH freedom]
 
 Work interaction-by-interaction; prefer mechanical, token-driven edits. For each element,
 use the lightest fitting tier from 1b.
@@ -123,7 +146,7 @@ handler or state to "simplify."
 
 ---
 
-## Phase 3 — Accessibility & performance gates (non-negotiable)
+## Phase 3 — Accessibility & performance gates (non-negotiable)  [LOW freedom — run exactly]
 
 - **Reduced motion:** every animation degrades under `prefers-reduced-motion: reduce`.
   Use `useReducedMotion()` (Motion), `motion-safe:`/`motion-reduce:` (Tailwind), or a CSS
@@ -140,7 +163,7 @@ rg -n "prefers-reduced-motion|useReducedMotion|motion-reduce" -g "*.{tsx,css}"  
 
 ---
 
-## Phase 4 — Verify and report
+## Phase 4 — Verify and report  [LOW freedom — do not skip]
 
 - **playwright-cli:** navigate touched routes, capture before/after screenshots to
   `.playwright-mcp/`, check `console` for errors, confirm animations run

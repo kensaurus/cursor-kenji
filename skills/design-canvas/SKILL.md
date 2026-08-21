@@ -6,11 +6,35 @@ license: Apache-2.0
 
 # Canvas Design Skill
 
+**Degree of freedom: MIXED.** Movement name and composition `[HIGH freedom]`;
+brand-asset inventory `[LOW freedom — run exactly]`.
+
 Create design philosophies that are expressed visually. Output .md files (philosophy) and .pdf/.png files (visual art).
+
+## How to reason
+
+1. **Inventory** — existing brand assets and visual language
+2. **Name** — 1–2 word movement
+3. **Compose** — form, space, color; text as accent only
+4. **Refine** — second pass; nothing overlaps; museum craft
+
+## Worked example
+
+> **Inventory:** wordmark in `public/brand/`; no poster system; palette is charcoal + one red.
+> **Name:** "Chromatic Silence".
+> **Compose:** one red field, monumental type as shape, 12pt label only; no paragraph copy.
+> **Refine:** crop so the wordmark does not collide; export PNG at print dpi.
+
+## Self-critique before reporting
+
+- **Brand-first** — new art complements existing assets; it does not invent a second identity
+- **Text is accent** — no paragraph dump on the canvas
+- **Craft pass** — second refine happened; nothing overlaps or clips
+- **Right owner** — UI chrome → `design-frontend`; data charts → `data-visualization`; token SSOT → `design-system`
 
 ## Process
 
-### Step 1: Design Philosophy Creation
+### Step 1: Design Philosophy Creation  [HIGH freedom]
 
 Create a VISUAL PHILOSOPHY that will be expressed through:
 - Form, space, color, composition
@@ -31,7 +55,7 @@ Create a VISUAL PHILOSOPHY that will be expressed through:
 - Emphasize craftsmanship repeatedly
 - Leave creative space for interpretation
 
-### Step 2: Canvas Creation
+### Step 2: Canvas Creation  [HIGH freedom]
 
 With the philosophy established, express it visually.
 
@@ -94,7 +118,7 @@ When requested:
 1. **Design Philosophy** (.md) - 4-6 paragraphs describing the aesthetic movement
 2. **Visual Artifact** (.pdf or .png) - Museum-quality visual design
 
-## CRITICAL: Check Existing First
+## CRITICAL: Check Existing First  [LOW freedom — run exactly]
 
 **Before creating ANY visual design, verify:**
 
@@ -116,7 +140,7 @@ cat docs/THEME_GUIDE.md .cursor/rules/*.md 2>/dev/null
 
 **Why:** Visual designs should complement, not conflict with, existing brand identity.
 
-## Validation
+## Validation  [LOW freedom — do not skip]
 
 After creating the artifact:
 

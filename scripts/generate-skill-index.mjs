@@ -35,11 +35,12 @@ const FAMILY_HEADINGS = {
   mobile: "📱 Mobile — React Native / Capacitor",
   data: "📊 Data — charts & pipelines",
   docs: "📚 Docs — write it down clearly",
-  housekeep: "🧹 Housekeeping — clean up drift",
+  housekeep: "🧹 Housekeeping — consolidate one drifted register",
   workflow: "🔗 Workflows — multi-step recipes",
   test: "✅ Test & QA — prove it works",
   deploy: "🚀 Deploy — ship & verify",
   debug: "🐛 Debug — find & fix what's broken",
+  iterate: "🔁 Iterate — close the loop after launch",
   mushi: "🦟 Mushi Mushi — bug triage helpers",
   protocol: "🛡️ Protocols — session guardrails",
   meta: "✍️ Authoring — build skills & MCP",
@@ -49,7 +50,7 @@ const FAMILY_HEADINGS = {
 };
 const FAMILY_ORDER = [
   "audit", "plan", "enhance", "design", "backend", "mobile", "data", "docs",
-  "housekeep", "workflow", "test", "deploy", "debug", "mushi", "protocol",
+  "housekeep", "workflow", "test", "deploy", "debug", "iterate", "mushi", "protocol",
   "meta", "thirdparty", "_other",
 ];
 
@@ -167,16 +168,17 @@ function build() {
     mobile: "RN screens, emulators, Capacitor, App Store prep",
     data: "Charts, dashboards, ETL / cron jobs",
     docs: "READMEs, PRDs, RFCs with a reader-first voice",
-    housekeep: "Merge a drifted design system into one source of truth",
+    housekeep: "Consolidate one drifted register (gates, backlog, or design tokens)",
     workflow: "End-to-end recipes (build, fix, ship, green the repo)",
     test: "Unit, Playwright, visual regression, load, red-team",
     deploy: "npm release + post-deploy smoke tests",
     debug: "Errors, Sentry, frontend↔backend mismatches",
+    iterate: "Post-launch feedback loops and agent-harness iteration",
     mushi: "Integrate the Mushi Mushi bug-report pipeline",
     protocol: "Keep browser automation from freezing",
     meta: "Author new skills or MCP servers",
     thirdparty: "Vendored upstream skills (Emil, UI/UX Pro Max, Vercel WIG)",
-    _other: "Close everything, burndown, post-launch loops",
+    _other: "Close everything, burndown, research, handoff",
     cursor: "Canvas, hooks, rules, PR splitter, CLI helpers",
   };
   for (const row of familyRows) {

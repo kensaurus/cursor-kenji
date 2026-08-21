@@ -11,6 +11,10 @@ license: MIT
 
 # iterate-post-launch — Production Signal → Prioritised Fix Loop
 
+**Degree of freedom: MIXED.** Triage and sprint plan `[HIGH freedom]`;
+signal pulls, confirmation-before-edit, and live verify
+`[LOW freedom — run exactly]`.
+
 **You shipped. That is the beginning, not the end.** Real users hit real paths
 you did not test. Sentry, Supabase logs, and the live UI tell you exactly what
 to fix next — if you know how to read them. This skill turns those signals into
@@ -21,9 +25,30 @@ a ranked, actionable improvement plan and then implements it.
 
 **Before ANY browser action, read `protocol-browser-anti-stall`.**
 
+## How to reason
+
+1. **Observe** — Sentry, Supabase logs/advisors, and a headed walkthrough in parallel
+2. **Interpret** — impact × effort from those signals, not a guessed redesign
+3. **Classify** — Critical / High / Medium / Low; present the sprint before editing
+4. **Verify** — live Playwright (or the failing query) before resolving the Sentry issue
+
+## Worked example
+
+> **Observe:** Sentry `TypeError` on `/checkout` 2.4k events / 14d; advisor missing index on `orders(user_id)`; live empty cart has no message.
+> **Interpret:** checkout crash blocks paying users — outranks the index and the empty state.
+> **Classify:** Critical = crash fix; High = index; Medium = empty-cart copy. Present that sprint; do not start a homepage rewrite.
+> **Verify:** headed `-s=post-launch` replay of checkout → 2xx; then `sentry:update_issue` resolved.
+
+## Self-critique before reporting
+
+- **Signal-backed** — every fix traces to Sentry, logs, advisors, or the walkthrough
+- **Live before resolve** — Playwright or the query, then Sentry resolved
+- **Rows ask first** — asked-for schema ships; DELETE/UPDATE on real rows waits
+- **Right owner** — one named bug → `workflow-fix-and-ship`
+
 ---
 
-## Phase 0: Context
+## Phase 0: Context  [LOW freedom — run exactly]
 
 Read the stack before pulling any signals:
 
@@ -38,7 +63,7 @@ Confirm available MCPs: `sentry`, `supabase`,
 
 ---
 
-## Phase 1: Pull production signals
+## Phase 1: Pull production signals  [LOW freedom — pull these sources]
 
 Run all signal sources in parallel, then synthesise.
 
@@ -128,7 +153,7 @@ firecrawl:firecrawl_search
 
 ---
 
-## Phase 2: Triage — rank by impact × effort
+## Phase 2: Triage — rank by impact × effort  [HIGH freedom]
 
 Build an improvement backlog. For each finding:
 
@@ -150,7 +175,7 @@ Sort the backlog: Critical first, then by impact ÷ effort (quick wins above har
 
 ---
 
-## Phase 3: Plan the improvement sprint
+## Phase 3: Plan the improvement sprint  [HIGH freedom]
 
 For the top 5–10 items, map each to specific code:
 
@@ -166,7 +191,7 @@ Present the plan to the user. Get confirmation before making changes.
 
 ---
 
-## Phase 4: Implement fixes
+## Phase 4: Implement fixes  [LOW freedom — surgical]
 
 Work through the approved list one by one, following
 `workflow-coding-discipline` principles:
@@ -181,7 +206,7 @@ Work through the approved list one by one, following
 
 ---
 
-## Phase 5: Verify each fix
+## Phase 5: Verify each fix  [LOW freedom — run exactly]
 
 After each fix, drive the specific flow that was broken:
 
@@ -211,7 +236,7 @@ sentry:update_issue
 
 ---
 
-## Phase 6: Improvement report
+## Phase 6: Improvement report  [LOW freedom — this shape]
 
 ```markdown
 ## Post-Launch Improvement Report — [App] — [Date]

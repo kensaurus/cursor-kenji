@@ -9,18 +9,42 @@ license: MIT
 
 # Database Optimization Skill
 
+**Degree of freedom: MIXED.** Which query/index/N+1 to fix `[HIGH freedom]`;
+existing-index probes and EXPLAIN ANALYZE `[LOW freedom — run exactly]`.
+
+## How to reason
+
+1. **Observe** — EXPLAIN ANALYZE / `pg_stat_statements` / existing `pg_indexes`
+2. **Interpret** — seq scan vs N+1 vs over-fetch vs missing pagination
+3. **Classify** — add-index / eager-load / narrow-select / paginate / leave-alone
+4. **Severity** — write-path timeout outranks a 200ms list page
+
+## Worked example
+
+> **Observe:** `/feed` p95 2.4s; Prisma logs 81 queries; `pg_indexes` has no `idx_posts_user_created`.
+> **Interpret:** `findMany` posts then per-row `user.findUnique` — N+1; `ORDER BY created_at` is a seq scan.
+> **Classify:** eager-load `include: { author }` + composite index `(user_id, created_at DESC)`.
+> **Verify:** EXPLAIN ANALYZE → Index Scan; query count 2; p95 < 200ms. Did not add a duplicate index.
+
+## Self-critique before reporting
+
+- **Existing first** — listed `pg_indexes` / migrations before `CREATE INDEX`
+- **EXPLAIN** — the claimed winner has ANALYZE output, not intuition
+- **No duplicate index** — the proposed name was queried and absent
+- **Right owner** — schema consistency → `audit-db-schema`; RLS access → `plan-rls-audit`
+
 Systematic approach to identifying and fixing database performance issues.
 
 ## When to Use
 
 - Slow page loads (database bottleneck)
 - Query timeout errors
-- N+1 query problems
+- N+1 queries
 - Schema design review
 - Index optimization
 - Migration planning
 
-## CRITICAL: Check Existing First
+## CRITICAL: Check Existing First  [LOW freedom — run exactly]
 
 **Before ANY optimization, verify current state:**
 
@@ -46,7 +70,7 @@ SELECT 1 FROM pg_indexes WHERE indexname = 'your_proposed_index';
 
 **Why:** Duplicate indexes waste storage and slow writes. Always verify before adding.
 
-## Performance Investigation
+## Performance Investigation  [HIGH freedom]
 
 ### 1. Identify Slow Queries
 
@@ -94,7 +118,7 @@ LIMIT 20;
 | Over-fetching | Slow response | Select only needed fields |
 | No Pagination | Memory issues | Add cursor/offset pagination |
 
-## N+1 Query Fix
+## N+1 Query Fix  [HIGH freedom]
 
 **Problem: Fetching related data in loop**
 ```typescript
@@ -136,7 +160,7 @@ const { data: posts } = await supabase
  `)
 ```
 
-## Index Optimization
+## Index Optimization  [HIGH freedom]
 
 ### When to Add Indexes
 
@@ -199,7 +223,7 @@ model Post {
 }
 ```
 
-## Query Optimization Patterns
+## Query Optimization Patterns  [HIGH freedom]
 
 ### Select Only Needed Fields
 
@@ -278,7 +302,7 @@ const [posts, count] = await db.$transaction([
 ])
 ```
 
-## Schema Design Best Practices
+## Schema Design Best Practices  [HIGH freedom]
 
 ### Normalization vs Denormalization
 
@@ -335,7 +359,7 @@ const posts = await db.post.findMany({
 })
 ```
 
-## Supabase-Specific Optimizations
+## Supabase-Specific Optimizations  [HIGH freedom]
 
 ### RLS Performance
 
@@ -376,7 +400,7 @@ Deno.serve(async (req) => {
 })
 ```
 
-## Query Analysis
+## Query Analysis  [LOW freedom — run exactly]
 
 ### EXPLAIN ANALYZE
 
@@ -403,7 +427,7 @@ LIMIT 20;
 | Memory usage | < 256MB | Add LIMIT, pagination |
 | Connection count | < pool size | Use connection pooling |
 
-## Optimization Checklist
+## Optimization Checklist  [LOW freedom — do not skip]
 
 - [ ] Queries logged and monitored
 - [ ] Indexes on filtered/joined columns

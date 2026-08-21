@@ -10,11 +10,36 @@ license: MIT
 
 # Doc Co-Authoring Workflow
 
+**Degree of freedom: MIXED.** What to ask and what to keep `[HIGH freedom]`;
+the three-stage order, six-step section loop, and Reader Testing
+`[LOW freedom — run exactly]`.
+
  a structured workflow for guiding users through collaborative document creation. Act as an active guide, walking users through three stages: Context Gathering, Refinement & Structure, and Reader Testing.
 
 > **Guiding principle — orient the reader before the mechanism.** Even a spec, PRD, or RFC should *open* by answering what this is, why it exists, and who it's for — in plain language — before diving into detail. That's the same reader-first instinct this workflow's Reader Testing stage enforces at the end; apply it from the first sentence. See `docs-writer` for the full "write for the reader's mental model first" rule.
 
-## When to Offer This Workflow
+## How to reason
+
+1. **Observe** — doc type, audience, desired impact, template or existing draft
+2. **Interpret** — what the next reader will lack that the authors already know
+3. **Classify** — offer the workflow / work freeform / start at the highest-unknown section
+4. **Test** — predict reader questions; a fresh instance must answer them from the doc alone
+
+## Worked example
+
+> **Observe:** "write a PRD for billing v2"; no audience named; a Slack thread already rejected a usage-only model.
+> **Interpret:** that rejection is oral — a pasted PRD will fail when a reader (or a fresh agent) lacks it.
+> **Classify:** offer the three stages; Context Gathering first (eng + finance; impact = stop re-arguing usage-only).
+> **Do not** draft the PRD in the first reply.
+
+## Self-critique before reporting
+
+- **Reader-first open** — what / why / who before mechanism
+- **Fresh-instance test ran** — an author reread is not Reader Testing
+- **User owns the doc** — they confirm impact; you do not ship unreviewed
+- **Right owner** — INDEX.md / rejected alternatives → `docs-adr`; README prose → `docs-writer`
+
+## When to Offer This Workflow  [HIGH freedom]
 
 **Trigger conditions:**
 - User mentions writing documentation: "write a doc", "draft a proposal", "create a spec", "write up"
@@ -32,7 +57,7 @@ Explain that this approach helps ensure the doc works well when others read it (
 
 If user declines, work freeform. If user accepts, proceed to Stage 1.
 
-## Stage 1: Context Gathering
+## Stage 1: Context Gathering  [HIGH freedom]
 
 **Goal:** Close the gap between what the user knows and what Claude knows, enabling smart guidance later.
 
@@ -108,7 +133,7 @@ Ask if there's any more context they want to provide at this stage, or if it's t
 
 If user wants to add more, let them. When ready, proceed to Stage 2.
 
-## Stage 2: Refinement & Structure
+## Stage 2: Refinement & Structure  [LOW freedom — run the six steps]
 
 **Goal:** Build the document section by section through brainstorming, curation, and iterative refinement.
 
@@ -218,7 +243,7 @@ Provide any final suggestions.
 
 Ask if ready to move to Reader Testing, or if they want to refine anything else.
 
-## Stage 3: Reader Testing
+## Stage 3: Reader Testing  [LOW freedom — run exactly]
 
 **Goal:** Test the document with a fresh Claude (no context bleed) to verify it works for readers.
 
@@ -309,7 +334,7 @@ Loop back to refinement for any problematic sections.
 
 When Reader Claude consistently answers questions correctly and doesn't surface new gaps or ambiguities, the doc is ready.
 
-## Final Review
+## Final Review  [LOW freedom — do not skip]
 
 When Reader Testing passes:
 Announce the doc has passed Reader Claude testing. Before completion:

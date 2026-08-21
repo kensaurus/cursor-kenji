@@ -11,6 +11,10 @@ license: MIT
 
 # Documentation Writer Skill
 
+**Degree of freedom: MIXED.** Voice and structure `[HIGH freedom]`;
+pre-documentation checks and the verification statement
+`[LOW freedom — run exactly]`.
+
 Create clear, useful documentation for developers.
 
 ## Core principle — write for the reader's mental model first
@@ -35,7 +39,28 @@ Rules that follow from this:
 
 Everything else in this skill (templates, API docs, comments) serves this principle — structure and polish never substitute for orienting the reader first.
 
-## MANDATORY: Pre-Documentation Checks
+## How to reason
+
+1. **Observe** — existing README/docs, the code being documented, the audience
+2. **Interpret** — which silent reader questions (what / why / who / how / when) are unanswered
+3. **Classify** — README / API reference / comments / architecture — match the repo's pattern
+4. **Verify** — signatures and examples match the code you read
+
+## Worked example
+
+> **Observe:** "document createUser"; `src/users.ts` is `createUser({ email, role }) → Promise<User>`; README links `docs/api.md` with signature tables.
+> **Interpret:** the reader needs the signature, errors, and a copy-paste call — not another project README.
+> **Classify:** API reference in the existing table pattern.
+> **Write only after:** "Pre-documentation check: existing docs read: README.md, docs/api.md; pattern: signature tables; code verified: src/users.ts"
+
+## Self-critique before reporting
+
+- **Pre-doc check stated** — existing docs and code listed, not assumed
+- **First screen** — what / why / who in plain language
+- **Examples run** — copy-pasteable; signatures match the file you read
+- **Right owner** — visual README makeover → `enhance-readme`; docs/code drift plan → `plan-docs-sync`; long-form collab → `docs-coauthor`
+
+## MANDATORY: Pre-Documentation Checks  [LOW freedom — run exactly]
 
 **BEFORE writing any documentation, you MUST:**
 
@@ -70,7 +95,7 @@ Before writing docs, state:
 
 ---
 
-## README Template
+## README Template  [HIGH freedom]
 
 ```markdown
 # Project Name
@@ -157,7 +182,7 @@ MIT
 
 ---
 
-## Newcomer on-ramp (novel or jargon-heavy projects)
+## Newcomer on-ramp (novel or jargon-heavy projects)  [HIGH freedom]
 
 When a project introduces its own concepts, the reader can't parse the feature list until they know the vocabulary. Add a compact **building-blocks glossary** high in the README — plain meaning + how the reader actually uses each thing. This is the single highest-leverage block for making docs land with non-experts:
 
@@ -179,7 +204,7 @@ Guidelines:
 
 ---
 
-## Documentation Types
+## Documentation Types  [HIGH freedom]
 
 ### 1. API Documentation
 
@@ -300,7 +325,7 @@ function calculateTotal(
 
 ---
 
-## Writing Guidelines
+## Writing Guidelines  [HIGH freedom]
 
 ### Be Concise
 
@@ -372,7 +397,7 @@ Lead with the plain-language version; put the precise term in parentheses or rig
 
 ---
 
-## Documentation Checklist
+## Documentation Checklist  [LOW freedom — do not skip]
 
 ### README
 - [ ] Opens by answering **what / why / who** in the first screen (plain language)
@@ -404,7 +429,7 @@ Lead with the plain-language version; put the precise term in parentheses or rig
 
 ---
 
-## Helpful Diagrams
+## Helpful Diagrams  [HIGH freedom]
 
 ### Mermaid Flowchart
 
@@ -432,7 +457,7 @@ sequenceDiagram
 
 ---
 
-## Keep Docs Updated
+## Keep Docs Updated  [HIGH freedom]
 
 ```markdown
 # In PR template:

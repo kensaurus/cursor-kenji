@@ -10,6 +10,8 @@ license: MIT
 
 # enhance-agent-guardrails — Guardrails-as-Code Against AI Regressions
 
+**Degree of freedom: MIXED.** Gap-map judgment `[HIGH freedom]`; plant-and-check, CI wiring, and "never weaken an existing check" `[LOW freedom — run exactly]`.
+
 AI agents ship the visible 80% fast and skip the 20% that keeps a repo safe. Studies in
 2026 put ~45% of AI-generated code shipping OWASP Top-10 issues, ~2.74× more security
 findings per PR, and repeated production disasters from unguarded destructive actions.
@@ -21,9 +23,30 @@ installs those gates so the next fast session can't quietly reintroduce old clas
 > (CI), plus policy files that steer the agent up front. Additive and reversible — never
 > weaken an existing check to make the setup "pass".
 
+## How to reason
+
+1. **Detect** — hooks, CI, rules, scanners already present
+2. **Map** — which AI failure class is unguarded
+3. **Install** — additive only; pin versions; don't duplicate
+4. **Prove** — a planted finding is blocked, then removed
+
+## Worked example
+
+> **Detect:** husky + lint-staged; no gitleaks; CI runs typecheck only.
+> **Map:** secrets and SAST unguarded; tests not a merge gate.
+> **Install:** gitleaks pre-commit + CI; semgrep CI; keep existing typecheck.
+> **Prove:** scratch file with a fake AWS key is blocked; file deleted; no history rewrite.
+
+## Self-critique before reporting
+
+- **Additive** — no existing check was weakened to make setup pass
+- **Bites** — plant-and-check blocked; planted value never committed
+- **Pinned** — scanner versions are not `latest`
+- **Right owner** — leaked-secret rotation → `plan-secrets-audit`; gate bypass → `audit-gate-logic`; gate sprawl → `housekeep-gates`
+
 ---
 
-## Phase 0 — Detect stack and existing protection
+## Phase 0 — Detect stack and existing protection  [HIGH freedom]
 
 ```bash
 # Ecosystem + CI
@@ -40,7 +63,7 @@ extend it.
 
 ---
 
-## Phase 1 — Research current practice
+## Phase 1 — Research current practice  [HIGH freedom]
 
 Follow `/research`: current-year guidance on AI-code guardrails (VibeSec / OWASP), and the
 current invocation for the scanners you'll wire (gitleaks, semgrep, osv-scanner/`npm audit`,
@@ -48,7 +71,7 @@ socket). Pin tool versions rather than floating `latest`.
 
 ---
 
-## Phase 2 — Gap map (which failure classes are unguarded)
+## Phase 2 — Gap map (which failure classes are unguarded)  [HIGH freedom]
 
 Map the documented AI failure classes to the repo's current coverage and pick what to add:
 
@@ -64,7 +87,7 @@ Map the documented AI failure classes to the repo's current coverage and pick wh
 
 ---
 
-## Phase 3 — Install the guardrails
+## Phase 3 — Install the guardrails  [HIGH freedom]
 
 Install only the missing pieces. Keep each additive and clearly named.
 
@@ -95,7 +118,7 @@ Install only the missing pieces. Keep each additive and clearly named.
 
 ---
 
-## Phase 4 — Verify the guards actually bite
+## Phase 4 — Verify the guards actually bite  [LOW freedom — run exactly]
 
 A guardrail you didn't test is a guardrail that doesn't work.
 
@@ -108,7 +131,7 @@ A guardrail you didn't test is a guardrail that doesn't work.
 
 ---
 
-## Phase 5 — Report + handoff
+## Phase 5 — Report + handoff  [LOW freedom — do not skip]
 
 ```markdown
 ## Agent Guardrails — report
