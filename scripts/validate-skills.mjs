@@ -14,8 +14,9 @@
  *   - `description` has balanced quoted trigger phrases and no truncation scar
  *   - (warn) `description` stays below 315 chars so edits retain budget headroom
  *   - (warn) SKILL.md body <= 500 lines (move detail to references/)
- *   - first-party audit-, plan-, and test- family bodies declare
- *     Degree of freedom, a Worked example, and a Self-critique rubric
+ *   - first-party families on the prompt require-list declare Degree of
+ *     freedom plus heading-level `## Worked example` and `## Self-critique`
+ *     (a table cell that names the technique does not count)
  */
 import { readdirSync, existsSync, readFileSync, statSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -135,11 +136,11 @@ for (const group of groups) {
       if (!/\bDegree of freedom\b/i.test(body)) {
         errors.push(`${id}: missing T1 "Degree of freedom" declaration`);
       }
-      if (!/\bWorked example\b/i.test(body)) {
-        errors.push(`${id}: missing T3 "Worked example"`);
+      if (!/^## Worked example\b/m.test(body)) {
+        errors.push(`${id}: missing T3 "## Worked example" heading`);
       }
-      if (!/\bSelf-critique\b/i.test(body)) {
-        errors.push(`${id}: missing T4 "Self-critique" rubric`);
+      if (!/^## Self-critique\b/m.test(body)) {
+        errors.push(`${id}: missing T4 "## Self-critique" heading`);
       }
     }
   }

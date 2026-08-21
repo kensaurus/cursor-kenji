@@ -108,6 +108,27 @@ Upgrade an *existing* skill's prompt (not its behavior) with
 House limits: description ≤320 chars, body <500 lines, `name` matches dir.
 Never write the retired layout alias (use `audit-responsive`).
 
+## How to reason
+
+1. **Observe** — the intended trigger, stance, and existing neighbor skills
+2. **Interpret** — new skill vs prompt-only upgrade of an existing one
+3. **Classify** — family, freedom register, T1–T6 that must be born in the file
+4. **Severity** — a missing trigger or a wrong family is a routing bug
+
+## Worked example
+
+> **Observe:** user wants a skill for "pin down glossary terms before coding."
+> **Interpret:** that is `docs-domain-modeling`, not a new unprefixed name.
+> **Classify:** do not author `glossary`; update the existing skill or stop.
+> **If truly new:** `docs-<topic>`, T1 under H1, one T3, T4 rubric, description carries the trigger.
+
+## Self-critique before reporting
+
+- **Name matches dir** and the family-first convention
+- **T1–T4 present as headings/register**, not only mentioned in a table
+- **Description** carries distinct triggers; no clone of a neighbor
+- **Right owner** — prompt-only upgrade of an existing skill → `enhance-skill-prompts`
+
 ### Anatomy of a Skill
 
 Every skill consists of a required SKILL.md file and optional bundled resources:

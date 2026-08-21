@@ -6,6 +6,16 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.29.1] — 2026-08-21
+
+### Fixed
+
+- **T3/T4 headings** — `meta-skill-creator` and `enhance-skill-prompts`
+  had T1–T6 tables/phrases but no `## Worked example` / `## Self-critique`.
+  `test-exploratory` and `workflow-release-prep` promoted T4 to `##`.
+- **Validator** — T3/T4 now require those H2 headings so a table mention
+  cannot pass the gate.
+
 ## [1.29.0] — 2026-08-21
 
 ### Added
