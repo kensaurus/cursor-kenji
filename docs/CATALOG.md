@@ -29,14 +29,19 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (141)
+## Skills (142)
 
 ### Enhance
 
+#### `enhance-readability`
+**Triggers:** "hard to read", "too dense", "reading level", "cognitive load", "turn this prose into a table", "CPL", "CJK line length"
+**What it does:** Information-design pass for *comprehension* — Cognitive Load Theory + Gestalt across six channels (text, separation, grouping, icons/graphics, deadspace, tone). Measures CPL (80 Latin / 40 CJK). Generates a visual only when it reduces load. Breakpoints stay on `audit-responsive`; looks-good stays on `enhance-web-ui`.
+**Related:** `enhance-web-ui`, `audit-responsive`, `audit-accessibility`, `plan-antislop`, `audit-uiux-design-system`
+
 #### `enhance-web-ui`
 **Triggers:** "make this page nicer", "more polished", "more beautiful", "less crowded", "better laid out", "typography", "visual hierarchy", "empty/dead space", "fades", "microinteractions", "density"
-**What it does:** Composition before decoration — fix hierarchy, grouping, alignment, rhythm. Subtract clutter, group related items, soften scroll cuts, animate purposefully. Generic across web stacks.
-**Related:** `enhance-web-ux`, `audit-responsive`, `audit-uiux-design-system`, `design-frontend`
+**What it does:** Composition before decoration — fix hierarchy, grouping, alignment, rhythm. Subtract clutter, group related items, soften scroll cuts, animate purposefully. Generic across web stacks. Understanding / reading measure → `enhance-readability`.
+**Related:** `enhance-web-ux`, `enhance-readability`, `audit-responsive`, `audit-uiux-design-system`, `design-frontend`
 
 #### `enhance-web-ux`
 **Triggers:** "enhance this page", "make /xxx better", "fix UX of /xxx", "improve information density", "icons all look the same", "buttons wrap to 2 lines", "empty columns"
@@ -783,7 +788,7 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 
 ---
 
-## Commands (53)
+## Commands (54)
 
 Commands fall into two groups: **standalone** (full playbook in the file) and **pointer** (thin slash entry delegating to a skill).
 
@@ -813,7 +818,8 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/refactor` | `workflow-refactor` | Analyze → split → extract → verify behavior |
 | `/review-code` | `audit-code-review` | Agent review + manual checklist (renamed from `/review` to avoid Claude Code's built-in `/review`) |
 | `/test` | `test-unit`, `test-qa`, `test-exploratory`, `mobile-emulator-test` | Type check → unit → integration → E2E / exploratory |
-| `/uiux` | `audit-responsive`, `audit-ui-states`, `audit-uiux-design-system`, `audit-ux`, `enhance-web-ui`, `enhance-web-ux` | Audit + enhance UI/UX |
+| `/uiux` | `audit-responsive`, `audit-ui-states`, `audit-uiux-design-system`, `audit-ux`, `enhance-readability`, `enhance-web-ui`, `enhance-web-ux` | Audit + enhance UI/UX |
+| `/readability` | `enhance-readability` | Comprehension — CPL, Gestalt grouping, visuals that cut verbosity |
 | `/responsive-audit` | `audit-responsive` | Linearized layout / breakpoint IA — desktop is not a wide phone |
 | `/skill-conflicts` | `audit-skill-conflicts` | Pack self-audit — contradictions, trigger overlap, stale refs |
 | `/gate-logic` | `audit-gate-logic` | CI gate logic — silent bypass, ratchet gaming, conflicting conditions |

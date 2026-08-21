@@ -1,10 +1,10 @@
 ---
 name: enhance-web-ui
 description: >
-  Polish an existing page's hierarchy, spacing, typography, composition,
-  and visual personality using repo conventions and references. Use when
-  "make this page polished/premium", "less crowded", or "better visual
-  hierarchy". Flow/IA → enhance-web-ux. Breakpoints → audit-responsive.
+  Polish an existing page's hierarchy, spacing, type, and visual
+  personality. Use when "make this page polished/premium", "less crowded",
+  or "better visual hierarchy". Understood / CPL → enhance-readability.
+  Flow/IA → enhance-web-ux. Breakpoints → audit-responsive.
 license: MIT
 ---
 

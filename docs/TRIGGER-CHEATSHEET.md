@@ -162,6 +162,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "emails go to spam", "set up SPF/DKIM", "check email deliverability", "handle bounces" | `enhance-email-deliverability` |
 | "make this landing page look premium", "anti-slop design", "portfolio design" | `enhance-web-landing` |
 | "redesign this page", "remove AI slop", "make this look hand-crafted" | `enhance-web-redesign` |
+| "hard to read", "too dense", "reading level", "cognitive load", "turn this prose into a table" | `enhance-readability` |
 | "make this page nicer", "better layout", "improve spacing", "polish UI" | `enhance-web-ui` |
 | "improve UX", "this page feels bad", "fix user flow", "better information density" | `enhance-web-ux` |
 | "add 3D", "WebGL hero", "Three.js scene", "cinematic scroll", "GSAP animation" | `enhance-web-web3d` |

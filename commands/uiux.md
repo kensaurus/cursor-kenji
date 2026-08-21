@@ -25,6 +25,7 @@ This command is a thin entry point. Pick the right skill for the goal:
 
 **Enhance (apply)**
 
+- **`enhance-readability`** — understood (CPL, Gestalt grouping, deadspace, visuals that cut verbosity). Prefer `/readability` when that is the symptom.
 - **`enhance-web-ui`** — composition, hierarchy, spacing, type on an existing product page.
 - **`enhance-web-ux`** — flows and semantic data wiring; "this page feels AI-generated".
 - **`enhance-web-landing`** — marketing / portfolio greenfield.
