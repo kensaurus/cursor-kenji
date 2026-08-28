@@ -39,6 +39,12 @@ export function useFeatures(filters: Filters) {
 }
 ```
 
+## Next.js 16 caching
+
+Caching is explicit: `'use cache'` + `cacheComponents` (static shell / dynamic
+holes). Do not assume implicit `fetch` caching. Turbopack is default for
+dev and build. React Compiler: `reactCompiler: true`.
+
 ## Server Component Prefetching
 
 ```tsx

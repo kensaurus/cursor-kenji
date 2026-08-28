@@ -29,7 +29,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (142)
+## Skills (143)
 
 ### Enhance
 
@@ -73,9 +73,14 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **What it does:** Theme-aware hero + tour grid + optional autoplay GIF via playwright-cli. Captures live screenshots at 1600×1000 in dark and light mode with `<picture>` auto theme-swap.
 **Related:** `docs-writer`, `plan-docs-sync`, `test-playwright`
 
+#### `enhance-web-instant-nav`
+**Triggers:** "instant navigation", "prerender next page", "speculation rules", "early hints", "back button reloads", "second page is slow", "prefetch links"
+**What it does:** Apply-now Speculation Rules (prefetch/prerender with a GET-side-effect safety contract), bfcache eligibility, cross-document View Transitions, 103 Early Hints. First-load CWV stays on `audit-performance`.
+**Related:** `audit-performance`, `audit-bundle-size`, `audit-accessibility`, `enhance-pwa`
+
 #### `enhance-web-seo`
 **Triggers:** "improve SEO", "add meta tags", "fix search ranking", "add structured data", "sitemap", "canonical URLs", "Open Graph", "Google indexing", "rich results", "SEO audit", "why is my site not ranking"
-**What it does:** Full SEO audit and fix for any web app. Checks meta tags, OG/Twitter Card, JSON-LD structured data, robots.txt, sitemap, canonical URLs, heading hierarchy, image alt text, and Core Web Vitals (LCP, CLS) via Playwright. Researches current Google guidelines, applies fixes, verifies with Playwright.
+**What it does:** Full SEO audit and fix for any web app. Checks meta tags, OG/Twitter Card, JSON-LD structured data, robots.txt, sitemap, canonical URLs, heading hierarchy, and image alt text. Records CWV field p75; hands LCP/INP/CLS root cause to `audit-performance`, JS weight to `audit-bundle-size`, instant nav to `enhance-web-instant-nav`.
 **Related:** `audit-performance`, `audit-bundle-size`, `enhance-web-ui`, `plan-aso`
 
 #### `enhance-email-deliverability`
@@ -366,9 +371,9 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Related:** `audit-code-review`, `plan-data-integrity`, `plan-test-coverage`, `test-visual-regression`, `audit-gate-logic`, `burndown-full`
 
 #### `audit-performance`
-**Triggers:** "slow page", "LCP/INP/CLS", "optimize performance", "Web Vitals", "lighthouse score"
-**What it does:** Audit-and-fix runtime performance (Core Web Vitals, slow code, load time). JS payload → `audit-bundle-size`. Concurrent breaking point → `test-load`. Timeouts/retries → `audit-resilience`.
-**Related:** `audit-bundle-size`, `test-load`, `audit-resilience`, `backend-db-performance`
+**Triggers:** "slow page", "LCP/INP/CLS", "optimize performance", "Web Vitals", "lighthouse score", "fetchpriority", "bfcache"
+**What it does:** Audit-and-fix runtime performance (Core Web Vitals, loading priority, long tasks). JS payload → `audit-bundle-size`. Instant navigations (implement) → `enhance-web-instant-nav`. Concurrent breaking point → `test-load`. Timeouts/retries → `audit-resilience`.
+**Related:** `audit-bundle-size`, `enhance-web-instant-nav`, `test-load`, `audit-resilience`, `backend-db-performance`
 
 #### `audit-security`
 **Triggers:** "review security", "check vulnerabilities", "OWASP", "security headers"
@@ -788,7 +793,7 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 
 ---
 
-## Commands (54)
+## Commands (55)
 
 Commands fall into two groups: **standalone** (full playbook in the file) and **pointer** (thin slash entry delegating to a skill).
 
@@ -818,8 +823,9 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/refactor` | `workflow-refactor` | Analyze → split → extract → verify behavior |
 | `/review-code` | `audit-code-review` | Agent review + manual checklist (renamed from `/review` to avoid Claude Code's built-in `/review`) |
 | `/test` | `test-unit`, `test-qa`, `test-exploratory`, `mobile-emulator-test` | Type check → unit → integration → E2E / exploratory |
-| `/uiux` | `audit-responsive`, `audit-ui-states`, `audit-uiux-design-system`, `audit-ux`, `enhance-readability`, `enhance-web-ui`, `enhance-web-ux` | Audit + enhance UI/UX |
+| `/uiux` | `audit-responsive`, `audit-ui-states`, `audit-uiux-design-system`, `audit-ux`, `enhance-readability`, `enhance-web-instant-nav`, `enhance-web-ui`, `enhance-web-ux` | Audit + enhance UI/UX |
 | `/readability` | `enhance-readability` | Comprehension — CPL, Gestalt grouping, visuals that cut verbosity |
+| `/instant-nav` | `enhance-web-instant-nav` | Speculation Rules, bfcache, View Transitions, 103 Early Hints |
 | `/responsive-audit` | `audit-responsive` | Linearized layout / breakpoint IA — desktop is not a wide phone |
 | `/skill-conflicts` | `audit-skill-conflicts` | Pack self-audit — contradictions, trigger overlap, stale refs |
 | `/gate-logic` | `audit-gate-logic` | CI gate logic — silent bypass, ratchet gaming, conflicting conditions |

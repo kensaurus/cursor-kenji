@@ -6,6 +6,8 @@ alwaysApply: false
 
 # Tailwind & Styling Conventions
 
+Performance (LCP images, INP, bfcache) → `web-performance.mdc`.
+
 ## Design Tokens
 - Use CSS variables from `globals.css` (e.g., `hsl(var(--primary))`)
 - Use semantic color names: `bg-primary`, `text-muted-foreground`, `border-input`

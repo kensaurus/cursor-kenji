@@ -1,0 +1,42 @@
+---
+description: Always-on web performance guardrails (LCP priority, budgets, INP, bfcache). Apply to any Next.js/React web project.
+globs: ["app/**", "src/**", "components/**", "pages/**"]
+alwaysApply: true
+---
+
+# Web performance guardrails
+
+## Budgets (fail the PR, not the build)
+
+- Field p75: LCP ≤ 2.5 s · INP ≤ 200 ms · CLS ≤ 0.1 · TTFB ≤ 800 ms
+- Initial JS per route ≤ 170 KB gz (marketing) / ≤ 300 KB gz (app)
+- ≤ 3 third-party scripts on any route; none synchronous in `<head>`
+
+## LCP rules (non-negotiable)
+
+- The LCP image is never `loading="lazy"`; it gets `priority` (`next/image`) or `fetchpriority="high"` + preload
+- LCP content is server-rendered and in the HTML — not a CSS background, not client-fetched
+- Every `<img>/<video>/<iframe>` has dimensions or `aspect-ratio`
+
+## Rendering
+
+- Server Components by default; `'use client'` only at interactive leaves
+- Slow data goes behind `<Suspense>` with a sized skeleton; never block the shell
+- React Compiler is on (`reactCompiler: true`); do not hand-write `memo`/`useMemo`/`useCallback` without Profiler evidence
+
+## Responsiveness (INP)
+
+- No task > 50 ms in an input handler; yield with `scheduler.yield()` / `startTransition`
+- No synchronous layout reads in handlers
+- Third-party scripts: `<Script strategy="lazyOnload">` or consent-gated; embeds use facades
+
+## Navigation
+
+- No `unload` listeners (bfcache); use `pagehide`
+- Speculation Rules `prefetch` (moderate) for in-site links; prerender only high-probability pages; never speculate side-effect URLs
+- Fonts via `next/font` (fallback metrics + subsetting); `font-display: swap`
+
+## Measure before and after
+
+- `web-vitals/attribution` in prod; Lighthouse CI budget in CI; field p75 is the source of truth
+- First-load diagnosis → `audit-performance`; implement instant nav → `enhance-web-instant-nav`

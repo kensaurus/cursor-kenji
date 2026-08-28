@@ -1,10 +1,10 @@
 ---
 name: audit-performance
 description: >
-  Audit and optimize application runtime performance (Core Web Vitals, slow
-  code, load time). Use when "slow page", "LCP/INP/CLS", or "optimize
-  performance". JS payload → audit-bundle-size. Concurrent breaking point →
-  test-load. Timeouts/retries → audit-resilience.
+  Audit runtime performance (CWV, load priority). Use when "slow page",
+  "LCP/INP/CLS", "fetchpriority", "early hints", "speculation rules",
+  "bfcache", or "long tasks". JS payload → audit-bundle-size. Instant
+  nav implement → enhance-web-instant-nav. Breaking point → test-load.
 license: MIT
 ---
 
@@ -13,7 +13,7 @@ license: MIT
 **Degree of freedom: MIXED** — what to optimize `[HIGH freedom]`;
 measure-first Sentry/vitals and `EXPLAIN` `[LOW freedom — run exactly]`.
 
-> **Audit-and-fix exception.** Measure, then optimize. JS payload → `audit-bundle-size`. Breaking point → `test-load`. Timeouts/retries → `audit-resilience`.
+> **Audit-and-fix exception.** Measure, then optimize. JS payload → `audit-bundle-size`. Instant navigations → `enhance-web-instant-nav`. Breaking point → `test-load`. Timeouts/retries → `audit-resilience`.
 
 ## How to reason
 
@@ -87,6 +87,32 @@ firecrawl:firecrawl_search
 }
 ```
 
+### Field Data (source of truth)  [LOW freedom — run exactly]
+
+Lab (Lighthouse) is for diagnosis; **field** decides pass/fail.
+
+1. CrUX / PageSpeed Insights field tab for the origin and top 5 URLs by
+   traffic — record p75 LCP / INP / CLS (mobile first).
+2. `web-vitals/attribution` in the app (not the base build): it names the
+   LCP element, the INP interaction target, and the CLS-shifting node.
+3. Lighthouse CI with a `budget.json` (see `references/loading-priority-2026.md`
+   §Budgets). Fail the PR on regression, not on absolute score.
+
+Record all three in the report's "Production Metrics" block before touching code.
+
+### Verification protocol  [LOW freedom — run exactly]
+
+```bash
+# Field (source of truth): CrUX / PSI field tab → p75 LCP, INP, CLS
+# Lab, repeatable, budgeted:
+npx @lhci/cli autorun --config=lighthouserc.json
+# Early Hints present?
+curl -sv https://example.com/ 2>&1 | grep -E "< HTTP/.* 103"
+# Speculation: DevTools → Application → Speculative loads
+# bfcache:     DevTools → Application → Back/forward cache → Test
+# LCP element: web-vitals/attribution → onLCP(({attribution}) => attribution.element)
+```
+
 ---
 
 ## Performance Targets
@@ -101,9 +127,11 @@ firecrawl:firecrawl_search
 
 ### Other Key Metrics
 
-- **TTFB** (Time to First Byte): <200ms
-- **FCP** (First Contentful Paint): <1.8s
-- **TTI** (Time to Interactive): <3.8s
+- **TTFB**: <800ms field p75 (Google threshold); aim <200ms at the edge
+- **FCP**: <1.8s
+- **Long tasks**: none >50ms on the critical interaction path (INP driver)
+- **LCP resource load delay**: <100ms (gap between TTFB and the LCP image request starting — usually "image not discoverable / not preloaded")
+- **bfcache**: eligible on every content page (DevTools → Application → Back/forward cache)
 
 ---
 
@@ -138,12 +166,55 @@ npx source-map-explorer 'dist/**/*.js'
 - [ ] Responsive `srcSet` for different screen sizes
 - [ ] Image CDN used (Cloudinary, imgix, Vercel Image Optimization)
 
+### Loading Priority & Speculation  [HIGH freedom on which to apply, LOW freedom on the LCP rules]
+
+Deep syntax: `references/loading-priority-2026.md`. Instant-nav implementation → `enhance-web-instant-nav`.
+
+**LCP element (find it first with `web-vitals/attribution` or DevTools → Performance → LCP)**
+- [ ] LCP image is **not** `loading="lazy"` — lazy on the LCP image is an automatic Critical finding
+- [ ] LCP image has `fetchpriority="high"` (Next.js: `<Image priority />`, which also injects the preload)
+- [ ] LCP image is discoverable from HTML — not a CSS `background-image`, not injected by client JS, not behind a hydration boundary
+- [ ] `<link rel="preload" as="image" imagesrcset imagesizes>` when the LCP image is responsive and not already preloaded by the framework
+- [ ] Non-critical images: `loading="lazy" decoding="async"`; `<picture>` AVIF → WebP → JPEG fallback
+
+**Fonts**
+- [ ] `font-display: swap` (or `optional` for non-brand text); fallback metrics set (`size-adjust`, `ascent-override`) so swap causes no CLS — `next/font` does this automatically, verify it's actually used
+- [ ] Preload only the above-fold weight(s); subset to used unicode ranges; self-host
+
+**Early Hints (103)**
+- [ ] Origin/CDN sends `103 Early Hints` with `preconnect` for the image/font CDN and `preload` for the LCP image + critical CSS. Verify: `curl -sv https://site/ 2>&1 | grep -i "< HTTP/.* 103"`
+- [ ] Node: `res.writeEarlyHints({ link: [...] })`; otherwise configure at the CDN
+
+**Speculation Rules (next-navigation speed)**
+- [ ] `<script type="speculationrules">` present with `prefetch` document rules at `moderate` eagerness for in-site links
+- [ ] `prerender` only for high-probability next pages (pagination, "next article", product detail); eagerness `moderate`/`conservative`
+- [ ] Excluded from speculation: logout, cart/checkout, auth, anything with side effects on GET, URLs with `?` unless `expects_no_vary_search` is set
+- [ ] Server ignores side-effects when `Sec-Purpose: prefetch;prerender` is present; analytics/ads guarded by `document.prerendering` + `prerenderingchange`
+- [ ] Full implementation → `enhance-web-instant-nav`
+
+**bfcache**
+- [ ] No `unload` listeners (use `pagehide`); no `Cache-Control: no-store` on HTML; no open WebSocket / IndexedDB transaction at `pagehide`
+- [ ] Verified green in DevTools → Application → Back/forward cache → "Test back/forward cache"
+
+**Render strategy (Next.js 16 / React 19)**
+- [ ] Server Components by default; `'use client'` only at interactive leaves
+- [ ] Slow data wrapped in `<Suspense>` so the shell streams; static shell + dynamic holes (`cacheComponents` / `'use cache'`) instead of blocking the whole route
+- [ ] React Compiler enabled (`reactCompiler: true`) **before** any manual `memo`/`useMemo`/`useCallback` — manual memo only where Profiler proves the Compiler missed it
+
+**INP (responsiveness)**
+- [ ] No task >50ms on tap/click/keypress paths; break work with `scheduler.yield()` (fallback `setTimeout(0)`) or `startTransition`
+- [ ] No synchronous layout reads (`offsetHeight`, `getBoundingClientRect`) inside input handlers
+- [ ] `content-visibility: auto` + `contain-intrinsic-size` on long off-screen sections
+- [ ] Third-party scripts: `async`/`defer`, Next `<Script strategy="lazyOnload">` (or `"worker"` via Partytown where safe), consent-gated, facades for embeds (lite-youtube, static map image → iframe on click)
+
+**CLS**
+- [ ] Every `<img>`, `<video>`, `<iframe>`, ad slot has `width`/`height` or `aspect-ratio`
+- [ ] Late-arriving UI (banners, toasts, cookie bars) reserves space or overlays — never pushes content
+
 ### React Performance (if applicable)
 
+- [ ] React Compiler on; manual memo only with Profiler evidence (see Loading Priority & Speculation)
 - [ ] No unnecessary re-renders (React DevTools Profiler)
-- [ ] `memo()` on expensive components that receive stable props
-- [ ] `useMemo()` for expensive computations
-- [ ] `useCallback()` for callbacks passed to memoized children
 - [ ] Long lists virtualized (react-window, @tanstack/react-virtual)
 - [ ] No inline object/array creation in JSX props
 - [ ] Context providers scoped narrowly (not wrapping entire app for local state)
@@ -254,6 +325,9 @@ context7:resolve-library-id
 
 | Issue | Solution | Impact |
 |-------|----------|--------|
+| LCP image lazy / not prioritized | `fetchpriority="high"` + preload; remove `loading="lazy"` from LCP | High (−300 to −800 ms LCP) |
+| Fast first page, slow second | Speculation Rules `prefetch` (moderate) | High (next-nav TTFB ≈ 0) |
+| Manual memo everywhere | Enable React Compiler | High (INP; delete redundant memo) |
 | Large bundle | Code split routes, lazy load heavy libs | High |
 | Slow images | WebP + lazy load + responsive | High |
 | No caching | Add Cache-Control headers | High |
@@ -273,6 +347,7 @@ context7:resolve-library-id
 3. **Severity justified** — Critical = poor vital or live-path p95
 4. **Right owner** — JS payload → `audit-bundle-size`; breaking point → `test-load`; timeouts → `audit-resilience`
 5. **No-false-safety** — no `memo`/`useMemo` without a measured re-render; measure again after the fix
+6. **LCP named** — prove which element is LCP before recommending image fixes (no attribution data = guess, not audit)
 
 ## Output: Performance Audit Report
 

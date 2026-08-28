@@ -48,7 +48,8 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "works locally but not in prod", "audit our environments", "config drift", "check env var config" | `audit-env-parity` |
 | "hosting bill is high", "cut infra costs", "audit cloud spend", "reduce Supabase/Vercel costs" | `audit-infra-cost` |
 | "audit my skills", "conflicting skills", "wrong skill triggered", "which skills overlap" | `audit-skill-conflicts` |
-| "performance audit", "optimize performance", "slow page", "Web Vitals" | `audit-performance` |
+| "performance audit", "optimize performance", "slow page", "Web Vitals", "fetchpriority", "bfcache" | `audit-performance` |
+| "instant navigation", "prerender next page", "speculation rules", "early hints", "back button reloads", "second page is slow" | `enhance-web-instant-nav` |
 | "audit against realworld", "compare to realworld", "conduit conformance", "full-stack gap check", "what's missing to reach production" | `audit-realworld` |
 | "resilience audit", "is this production-ready", "will it survive real traffic", "retries/timeouts/idempotency", "the 80% problem" | `audit-resilience` |
 | "audit backend architecture", "which pattern should I use", "is my backend production-grade", "am I over-engineering", "sync vs event-driven", "cache-aside/CQRS/saga/db-per-service", "microservices resilience review" | `audit-backend-architecture` |

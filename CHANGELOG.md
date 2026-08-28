@@ -6,6 +6,31 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.31.0] — 2026-08-29
+
+### Added
+
+- **`enhance-web-instant-nav`** — Speculation Rules (prefetch/prerender with
+  a safety contract), bfcache fixes, cross-document View Transitions, 103
+  Early Hints. Slash `/instant-nav`. First-load CWV stays on
+  `audit-performance`.
+- **`web-performance.mdc`** project rule — always-on budgets, LCP priority,
+  INP yield, no-`unload`.
+- `audit-performance` §Loading Priority & Speculation, field-data Step 0,
+  verification protocol, and `references/loading-priority-2026.md`.
+
+### Changed
+
+- `audit-performance`, `audit-bundle-size`: React Compiler first; manual
+  memo only with Profiler evidence.
+- `plan-perf-audit` scope: Navigation layer and loading-priority lines.
+- `enhance-web-seo` §1d hands CWV fixes to `audit-performance`.
+- `perf-monitor` agent: LCP-lazy, slow-second-page, bfcache, INP rows.
+- Stack currency: Next.js 15 → 16.x (15 LTS EOL 2026-10-21; monthly
+  security releases noted in `/update-deps`).
+- `check-skill-count` now ratchets the README Project Rules count against
+  `rules/project-starter/*.mdc`.
+
 ## [1.30.0] — 2026-08-21
 
 ### Added

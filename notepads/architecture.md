@@ -14,7 +14,7 @@ Copy this file to your project and fill in the details. Then reference it in con
 # Project Architecture
 
 ## Stack
-- **Frontend:** React 19 + Next.js 15 (App Router)
+- **Frontend:** React 19 + Next.js 16 (App Router)
 - **Styling:** Tailwind v4 + shadcn/ui
 - **State:** TanStack Query (server), Zustand (client), nuqs (URL)
 - **Database:** Supabase (PostgreSQL)

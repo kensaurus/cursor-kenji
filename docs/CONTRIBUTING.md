@@ -202,7 +202,7 @@ One-line description of what this command does.
 
 ### When to Update
 
-- Library API changed (React 19, Next.js 15+, etc.)
+- Library API changed (React 19, Next.js 16+, etc.)
 - New patterns emerged as best practice
 - Missing coverage for common use case
 - Code examples have bugs or are outdated

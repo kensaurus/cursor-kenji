@@ -101,25 +101,12 @@ const images = await page.evaluate(() =>
 
 ### 1d. Core Web Vitals
 
-```javascript
-// Measure LCP
-const lcp = await new Promise(resolve => {
-  new PerformanceObserver(list =>
-    resolve(list.getEntries().at(-1)?.startTime)
-  ).observe({ type: 'largest-contentful-paint', buffered: true });
-  setTimeout(() => resolve(null), 5000);
-});
-const cls = await page.evaluate(() => {
-  let clsScore = 0;
-  new PerformanceObserver(list => {
-    for (const entry of list.getEntries())
-      if (!entry.hadRecentInput) clsScore += entry.value;
-  }).observe({ type: 'layout-shift', buffered: true });
-  return new Promise(r => setTimeout(() => r(clsScore), 2000));
-});
-```
-
-Thresholds: LCP < 2.5 s ✅ / 2.5–4 s ⚠ / > 4 s ❌. CLS < 0.1 ✅ / 0.1–0.25 ⚠ / > 0.25 ❌.
+CWV is a ranking input (INP replaced FID in March 2024). Measure field p75 via
+CrUX/PSI. Do **not** fix CWV here — hand off:
+- LCP / INP / CLS root cause → `audit-performance` §Loading Priority & Speculation
+- JS weight → `audit-bundle-size`
+- Instant navigations → `enhance-web-instant-nav`
+Record before/after p75 in this skill's re-measure step.
 
 ---
 
