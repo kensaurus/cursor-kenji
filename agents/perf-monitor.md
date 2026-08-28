@@ -1,6 +1,6 @@
 ---
 name: perf-monitor
-description: Performance audit when code may affect speed or bundle size. Triggers on "slow", "laggy", "optimize", "bundle size", or after perf-sensitive changes.
+description: Performance audit when code may affect speed or bundle size. Triggers on "slow", "laggy", "optimize", "bundle size", "fetchpriority", "prerender", "back button slow", or after perf-sensitive changes.
 ---
 
 ## When Invoked
@@ -46,6 +46,10 @@ npx bundlephobia [new-package-name]
 | Inline objects in JSX | Re-renders children | `useMemo` or extract |
 | Large `node_modules` import | Bundle bloat | Tree-shake or lazy load |
 | Unoptimized images | Slow LCP | `next/image` with `sizes` |
+| LCP > 2.5s but image is small | `loading="lazy"` on hero / not preloaded | remove lazy, `fetchpriority="high"`, `<Image priority>` |
+| Fast first page, slow second page | no prefetch/prerender | Speculation Rules `prefetch` moderate → `enhance-web-instant-nav` |
+| Back button reloads the page | bfcache blocked (`unload`, `no-store`) | `pagehide`, drop `no-store` on HTML |
+| INP > 200ms on click | long task in handler / hydration | `scheduler.yield()`, React Compiler, split handler |
 | No pagination | Memory/network | Add cursor pagination |
 | `SELECT *` | Over-fetching | Select specific fields |
 

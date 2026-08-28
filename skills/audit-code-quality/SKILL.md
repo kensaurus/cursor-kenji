@@ -76,7 +76,7 @@ const filtered = useMemo(() => items.filter(i => i.active), [items])
 
 #### `useEffect` for data fetching → Server Components or TanStack Query
 ```tsx
-// Fix (Next.js 15 Server Component)
+// Fix (Next.js 16 Server Component)
 async function DataDisplay() {
  const data = await db.getData()
  return <div>{data.name}</div>

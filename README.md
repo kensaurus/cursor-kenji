@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Ready-made playbooks for your AI coding editor.</strong><br/>
-  142 agent skills · 54 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
+  143 agent skills · 55 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
   <em>You talk in plain English. The matching expert recipe runs itself.</em>
 </p>
 
@@ -29,7 +29,7 @@ Your AI editor is smart, but without a recipe it **guesses**. Sometimes that gue
 
 You do **not** need to memorize skill names. Talking like a human is enough.
 
-It ships **142 Cursor agent skills**, 54 slash commands, and 6 subagents — tuned for React / Next.js / Supabase, useful on almost any stack. Works in [Cursor](https://cursor.com), [Claude Code](https://www.anthropic.com/claude-code), and (with a lighter install) Codex + Gemini CLI. Brand new? Read the **[plain-language guide →](docs/GETTING-STARTED.md)**.
+It ships **143 Cursor agent skills**, 55 slash commands, and 6 subagents — tuned for React / Next.js / Supabase, useful on almost any stack. Works in [Cursor](https://cursor.com), [Claude Code](https://www.anthropic.com/claude-code), and (with a lighter install) Codex + Gemini CLI. Brand new? Read the **[plain-language guide →](docs/GETTING-STARTED.md)**.
 
 ### Install (30 seconds)
 
@@ -55,6 +55,7 @@ That merge-installs skills **and** slash commands (and agents/rules) into every 
 | *"is this production-ready?"* | `audit-resilience` + `audit-realworld` | Timeouts, retries, parity checks |
 | *"make this page less AI-looking"* | `enhance-web-ui` / `enhance-web-ux` | Cleaner layout, real content hierarchy |
 | *"this is too dense / hard to read"* | `enhance-readability` | CPL, Gestalt grouping, a table that replaces the prose |
+| *"second page is slow / back button reloads"* | `enhance-web-instant-nav` | Speculation Rules, bfcache, Early Hints |
 | *"desktop looks like a phone"* | `audit-responsive` | Unstack the layout at 375 / 768 / 1440 |
 | *"what happens when this list is empty?"* | `audit-ui-states` | Empty / loading / error / offline matrix |
 | *"why do our emails go to spam?"* | `enhance-email-deliverability` | SPF/DKIM/DMARC + bounce hygiene |
@@ -95,7 +96,7 @@ Full menu with every skill name → **[Every skill](#every-skill-in-plain-englis
 | **Rule** | A house rule the AI always obeys | Drop a `.mdc` into your project |
 | **MCP server** | A phone line to your database / GitHub / browser | Copy a template + paste your keys |
 
-Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **154** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
+Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **155** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
 
 ### How the recipes fit together (the loop)
 
@@ -132,13 +133,13 @@ The whole kit, at a glance:
 
 | | Count | What it does |
 |:--|------:|:-------------|
-| **Skills** | 142 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
+| **Skills** | 143 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
 | **Cursor Skills** | 12 | IDE tools (canvas, hooks, rules, PR splitter) |
-| **Commands** | 54 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
+| **Commands** | 55 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
 | **Subagents** | 6 | Background helpers (code-reviewer, debugger, db-migrator…) |
 | **Completion hook** | 1 | Opt-in stop gate: continues only unfinished durable closure state |
 | **MCP Servers** | 16 | Supabase · GitHub · Sentry · Playwright · AWS · Slack |
-| **Project Rules** | 6 | Drop-in `.mdc` for `.cursor/rules/` (plus 3 global, 5 RN bundle optional) |
+| **Project Rules** | 7 | Drop-in `.mdc` for `.cursor/rules/` (plus 3 global, 5 RN bundle optional) |
 | **Notepads** | 2 | Context templates (architecture, design tokens) |
 | **Shell Aliases** | 8 | `newskill`, `cursor-sync`, `gc`, `gp` |
 
@@ -152,7 +153,7 @@ Scroll the **family counts**, then the **full list**. You don't memorize names �
 
 <!-- SKILL-INDEX:START -->
 
-_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **154 skills** listed below._
+_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **155 skills** listed below._
 
 #### Skill families at a glance
 
@@ -160,7 +161,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 |:-------|------:|:----------------|
 | 🔍 Audit — inspect; some then fix | **30** | Check the codebase — security, UX, analytics, IAP, the skill pack… |
 | 📋 Plan — audit first, change only after you approve | **20** | Write a fix plan you approve before any code changes |
-| 🎨 Enhance — improve what already exists | **16** | Polish UI, forms, motion, SEO, PWA, email deliverability |
+| 🎨 Enhance — improve what already exists | **17** | Polish UI, forms, motion, SEO, PWA, email deliverability |
 | ✨ Design — build something new | **10** | Create new UI, APIs, emails, themes from scratch |
 | 🧱 Backend — server & data patterns | **5** | Auth, caching, queues, realtime, observability |
 | 📱 Mobile — React Native / Capacitor | **5** | RN screens, emulators, Capacitor, App Store prep |
@@ -178,7 +179,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | 🤝 Third-party (upstream-maintained) | **3** | Vendored upstream skills (Emil, UI/UX Pro Max, Vercel WIG) |
 | 🧩 Core & cross-cutting | **4** | Close everything, burndown, research, handoff |
 | 🖱️ Cursor IDE skills | **12** | Canvas, hooks, rules, PR splitter, CLI helpers |
-| **Total** | **154** | |
+| **Total** | **155** | |
 
 #### Full list (every skill)
 
@@ -206,7 +207,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `audit-llm-security` | Read-only OWASP LLM Top 10 audit of app-facing AI: prompt injection, data leakage, unsafe output/agency, RAG risks, misinformation, and… |
 | `audit-monetization-iap` | Read-only audit of mobile IAP and subscriptions — StoreKit 2, Play Billing, or RevenueCat — for server receipt validation, restore,… |
 | `audit-payment-system` | Read-only audit for payment/money-movement systems, scope-gated so a Stripe-Checkout site and an in-house ledger each see only relevant… |
-| `audit-performance` | Audit and optimize application runtime performance (Core Web Vitals, slow code, load time) |
+| `audit-performance` | Audit runtime performance (CWV, load priority) |
 | `audit-realworld` | Read-only full-stack conformance audit against RealWorld ("Conduit"): formal API spec, shared E2E suite, and closest-stack reference |
 | `audit-resilience` | Read-only production-resilience audit: timeouts, bounded retries, circuit breakers, idempotency, rate limits, graceful degradation, PII |
 | `audit-responsive` | Audit-and-fix linearized mobile layouts at every breakpoint — desktop is not a wide phone |
@@ -242,7 +243,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `plan-test-coverage` | User-story-driven test coverage audit and plan — no test writing in this pass |
 | `plan-uiux-unification` | Non-destructive UI/UX and design-system audit that emits a unification burndown — no code until each phase is approved |
 
-### 🎨 Enhance — improve what already exists (16)
+### 🎨 Enhance — improve what already exists (17)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -256,6 +257,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `enhance-readme` | Enhance an existing README with a theme-aware hero, feature tour, screenshots/GIF, accurate badges, and synced content |
 | `enhance-skill-prompts` | Upgrade an existing SKILL.md prompt (not its behavior) to 2026 practice: degrees of freedom, structured CoT, one worked example,… |
 | `enhance-web-forms` | Build or upgrade web forms to production quality: accessible structure, schema-driven validation, client↔server parity |
+| `enhance-web-instant-nav` | Instant in-site nav: Speculation Rules, View Transitions, bfcache, 103 Early Hints |
 | `enhance-web-landing` | Build landing pages, portfolios, and marketing sites that don't look AI-generated |
 | `enhance-web-redesign` | Upgrade an existing site/app to premium quality |
 | `enhance-web-seo` | Audit and fix SEO for any web app |
@@ -690,7 +692,7 @@ Every skill has two labels: a **family** (its `<prefix>-<topic>` name) and a **l
 
 ---
 
-## Commands (54)
+## Commands (55)
 
 Commands are shortcuts for the things you do constantly. Type `/` in chat to see them all.
 
@@ -714,6 +716,8 @@ Commands are shortcuts for the things you do constantly. Type `/` in chat to see
 | `/refactor` | Long files | Modular split |
 | `/mcp-guide` | MCP workflow | Tool reference (renamed to avoid Claude Code's built-in `/mcp`) |
 | `/uiux` | UI review | Design-system enforcement |
+| `/readability` | Dense / hard to read | CPL, Gestalt grouping, visuals that cut verbosity |
+| `/instant-nav` | Fast first page, slow next | Speculation Rules, bfcache, Early Hints |
 | `/responsive-audit` | Desktop looks like a phone | Breakpoint / linearized-layout audit |
 | `/skill-conflicts` | Wrong skill fired / just added skills | Pack contradictions, overlapping triggers, stale refs |
 | `/thirdparty-web-interface-guidelines` | Vercel UI audit | Review files against [Web Interface Guidelines](https://vercel.com/design/guidelines) |
@@ -774,6 +778,8 @@ cp ~/cursor-kenji/rules/project-starter/*.mdc your-project/.cursor/rules/
 | `typescript.mdc` | No `any`, Zod, ActionResult |
 | `components.mdc` | Primitives, Server Components, a11y |
 | `tailwind.mdc` | Tokens, mobile-first |
+| `data-fetching.mdc` | TanStack Query, RSC prefetch, `'use cache'` |
+| `web-performance.mdc` | LCP priority, INP yield, bfcache, budgets |
 | `git.mdc` | Conventional commits, no secrets |
 
 Global rules in this repo: `full-stack-ship-discipline.mdc`, `composer-2.5-execution.mdc`, `skill-workflows.mdc`.
@@ -813,9 +819,9 @@ Where everything lives:
 
 ```
 cursor-kenji/
-├── skills/           # 142 Agent Skills (SKILL.md each)
+├── skills/           # 143 Agent Skills (SKILL.md each)
 ├── skills-cursor/    # 12 Cursor-specific skills
-├── commands/         # 54 slash commands
+├── commands/         # 55 slash commands
 ├── agents/           # 6 subagents
 ├── hooks/            # opt-in completion stop gate
 ├── rules/            # Global + project-starter rules
@@ -867,7 +873,7 @@ A box of ready-made recipes for your AI editor ([Agent Skills](https://agentskil
 `npx @kensaurus/cursor-kenji --all` for skills **and** slash commands. `npx skills add kensaurus/cursor-kenji` installs skills only. Restart Cursor after install. Re-check with `npx @kensaurus/cursor-kenji --verify`.
 
 **How many skills?**  
-**142** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**154** total). Counts come from the filesystem and stay synced via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
+**143** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**155** total). Counts come from the filesystem and stay synced via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
 
 **How do skills trigger?**  
 You talk normally. Cursor matches your words to each skill's YAML `description`. To force one: *"use \`audit-security\` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).

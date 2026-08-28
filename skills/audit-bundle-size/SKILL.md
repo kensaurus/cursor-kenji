@@ -137,6 +137,13 @@ For each chunk or entry point, record:
 | Material UI / Ant Design full import | Full icon library loaded | High |
 | `react-icons` full package | 50+ MB raw, huge when not tree-shaken | High |
 
+**Also check:**
+- [ ] React Compiler on (delete manual memo it makes redundant — smaller bundle, fewer bugs)
+- [ ] Barrel imports routed through `experimental.optimizePackageImports` / direct paths (icon libs, lodash, date libs)
+- [ ] Route prefetch is deliberate — Next.js 16 prefetch is conservative by default; `<Link prefetch>` only on likely-next routes, and don't double-prefetch what Speculation Rules already cover
+
+Below-fold widgets → `dynamic()` with a Suspense skeleton; navigation prefetch/prerender → `enhance-web-instant-nav`.
+
 ---
 
 ## Phase 3: Research current alternatives  [HIGH freedom]

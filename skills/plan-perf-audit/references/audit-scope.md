@@ -3,10 +3,11 @@
 ## Layers
 
 ### Web frontend
-- **CWV:** LCP, CLS, INP — Lighthouse / web-vitals / RUM (not guessed)
+- **CWV:** LCP, CLS, INP — Lighthouse / web-vitals / RUM (not guessed). Loading priority: LCP element identified via attribution; not lazy; fetchpriority/preload; font fallback metrics; 103 Early Hints presence.
 - **Bundle:** total + per-route, code-split gaps, duplicate deps, lazy-load, tree-shaking
-- **Render:** unnecessary re-renders, missing memo, unstable keys, un-virtualized lists, main-thread blocking work
+- **Render:** React Compiler enabled; unnecessary re-renders, manual memo only with Profiler evidence, unstable keys, un-virtualized lists, main-thread blocking work
 - **Assets:** image format/size, lazy-load, third-party scripts, compression/CDN
+- **Navigation:** Speculation Rules (prefetch/prerender coverage + exclusions), bfcache eligibility per page type, cross-document View Transitions, Next.js prefetch discipline. Next-navigation p75 measured with web-vitals `onLCP` on soft/hard navs.
 
 ### Mobile / React Native
 - Cold start / TTI (target <2s mid-tier), Hermes, JS bundle size, re-renders, JSI/native for heavy work, lazy feature bundles, list virtualization, image caching
@@ -37,7 +38,7 @@ Supabase MCP: slow query logs, advisors. Sentry MCP: Web Vitals, slow transactio
 
 ## Research-backed fixes (propose, don't implement)
 
-**React:** route `lazy()`, `React.memo`/`useCallback`/`useMemo`, `react-window`, `startTransition`; SSR/hydration caveats.
+**React:** React Compiler enabled; route `lazy()`, manual `memo`/`useCallback`/`useMemo` only with Profiler evidence, `react-window`, `startTransition`; SSR/hydration caveats.
 
 **RN:** Hermes, JSI for heavy work, lazy feature bundles, cold start <2s mid-tier.
 

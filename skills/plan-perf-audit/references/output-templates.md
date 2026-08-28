@@ -5,6 +5,7 @@
 | Layer | Metric | Tool | Current | Target | `[NEEDS PROFILING]` |
 |-------|--------|------|---------|--------|---------------------|
 | Web CWV | LCP / CLS / INP | Lighthouse/RUM | … | … | |
+| Navigation | 2nd-page LCP p75 / bfcache hit rate | web-vitals + DevTools | … | … | |
 | Bundle | initial JS KB | analyzer | … | budget | |
 | RN | cold start ms | profiler | … | <2000 | |
 | API | p95 ms | Sentry/logs | … | … | |

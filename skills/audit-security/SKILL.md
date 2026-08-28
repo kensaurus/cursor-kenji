@@ -17,7 +17,8 @@ exploit PoCs.
 > **Audit-and-fix exception.** May fix inline. Plan-only burndown → `plan-security-audit`.
 
 OWASP static review (injection, headers, deps). Session / route×gate /
-`getSession()` → `audit-auth-flows`.
+`getSession()` → `audit-auth-flows`. Next.js 16: grep `middleware.ts` **and**
+`proxy.ts` (the Aug-2026 security line included a proxy-bypass class).
 
 ## How to reason
 

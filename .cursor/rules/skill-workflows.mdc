@@ -93,6 +93,8 @@ with `/goal`.
 | Task | Skill |
 |------|-------|
 | SEO (meta, OG, JSON-LD, sitemap) | `enhance-web-seo` |
+| Instant in-site nav (Speculation Rules, bfcache, Early Hints) | `enhance-web-instant-nav` |
+| Information design / reading measure (CPL, Gestalt) | `enhance-readability` |
 | PWA (manifest, service worker, offline) | `enhance-pwa` |
 | UI polish & layout | `enhance-web-ui` |
 | UX & information architecture | `enhance-web-ux` |

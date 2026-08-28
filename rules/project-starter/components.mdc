@@ -6,6 +6,8 @@ alwaysApply: false
 
 # Component Conventions
 
+Performance (LCP images, INP, bfcache) → `web-performance.mdc`.
+
 ## Reuse First
 - ALWAYS check `@/components/ui/` before creating any UI element
 - Import existing primitives: Button, Card, Input, Dialog, etc.

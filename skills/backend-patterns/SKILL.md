@@ -65,7 +65,9 @@ cat supabase/config.toml 2>/dev/null
 
 **Why:** Backend changes have wide impact. Understand existing architecture first.
 
-## Server Actions (Next.js 15+)  [HIGH freedom]
+## Server Actions (Next.js 16+)  [HIGH freedom]
+
+Next.js 16: Turbopack default; `'use cache'` + `cacheComponents`; `reactCompiler: true`; `middleware.ts` → `proxy.ts` (grep both). Instant navigations → `enhance-web-instant-nav`.
 
 ### Basic Pattern
 ```tsx
@@ -137,7 +139,7 @@ import { after } from 'next/server'
 export async function createOrder(formData: FormData) {
  const order = await db.order.create({ data: { ... } })
 
- // Run after response sent (Next.js 15)
+ // Run after response sent (Next.js 16)
  after(async () => {
  await sendOrderConfirmation(order.id)
  await updateInventory(order.items)

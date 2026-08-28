@@ -18,6 +18,7 @@ const skillsDir = join(repoRoot, "skills");
 const cursorSkillsDir = join(repoRoot, "skills-cursor");
 const commandsDir = join(repoRoot, "commands");
 const agentsDir = join(repoRoot, "agents");
+const projectRulesDir = join(repoRoot, "rules", "project-starter");
 const readmePath = join(repoRoot, "README.md");
 const catalogPath = join(repoRoot, "docs", "CATALOG.md");
 const promotionPath = join(repoRoot, "docs", "PROMOTION.md");
@@ -57,6 +58,12 @@ const commandCount = readdirSync(commandsDir, { withFileTypes: true })
 const agentCount = readdirSync(agentsDir, { withFileTypes: true })
   .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
   .length;
+
+const projectRuleCount = existsSync(projectRulesDir)
+  ? readdirSync(projectRulesDir, { withFileTypes: true }).filter(
+      (entry) => entry.isFile() && entry.name.endsWith(".mdc"),
+    ).length
+  : 0;
 
 /** @param {string} src */
 function applyReadmeRules(src) {
@@ -149,6 +156,11 @@ function applyReadmeRules(src) {
       name: "whats inside subagents",
       re: /\| \*\*Subagents\*\* \| \d+ \|/g,
       to: `| **Subagents** | ${agentCount} |`,
+    },
+    {
+      name: "whats inside project rules",
+      re: /\| \*\*Project Rules\*\* \| \d+ \|/g,
+      to: `| **Project Rules** | ${projectRuleCount} |`,
     },
     {
       name: "subagent tree comment",

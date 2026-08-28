@@ -23,7 +23,7 @@ Orient to any repo in under 5 minutes. Read first, explain second.
 
 ## Worked example
 
-> **Read:** `package.json` is Next.js 15 + Supabase; `src/app/(app)/*` has dashboard, billing, settings; latest migration adds `organizations`.
+> **Read:** `package.json` is Next.js 16 + Supabase; `src/app/(app)/*` has dashboard, billing, settings; latest migration adds `organizations`.
 > **Map:** B2B dashboard; session via middleware + `getUser()`; run `pnpm dev`.
 > **Gap:** no README scripts section; `.env.example` lists `STRIPE_SECRET_KEY`.
 > **Brief:** purpose + stack + route map + 4 tables + auth + `pnpm dev` + env names + "start in `src/lib/billing`".

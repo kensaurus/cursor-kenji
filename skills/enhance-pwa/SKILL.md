@@ -166,7 +166,7 @@ VitePWA({
 
 ### Next.js (next-pwa or built-in)
 
-Next.js 15+ has experimental PWA support. For stable Workbox integration:
+Next.js 16+ has experimental PWA support. For stable Workbox integration:
 ```bash
 npm install @ducanh2912/next-pwa
 ```
