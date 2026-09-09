@@ -14,6 +14,9 @@ on:
       - ".mcp.json"
       - "llms.txt"
       - "SECURITY.md"
+      - "README.md"
+      - "package.json"
+      - "docs/**"
   push:
     branches: [main]
 
@@ -41,6 +44,8 @@ jobs:
         run: node scripts/scan-secrets.mjs --self-test
       - name: MCP pin check
         run: node scripts/check-mcp-pins.mjs
+      - name: Living-docs fact check
+        run: node scripts/check-docs-facts.mjs
       - name: Skill cross-ref check (doubled prefixes / stale aliases)
         run: node scripts/check-skill-refs.mjs --self-test && node scripts/check-skill-refs.mjs
       - name: Install smoke test (files preserved, --skill works)

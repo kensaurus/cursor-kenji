@@ -1,6 +1,6 @@
 #!/bin/sh
 # Validate skills + keep derived skill counts in sync on every commit.
-# Enable once per clone:  git config core.hooksPath .githooks  (npm run prepare does this)
+# Enable once per clone:  git config core.hooksPath .githooks
 
 command -v node >/dev/null 2>&1 || { echo "pre-commit: node not found, skipping checks"; exit 0; }
 
@@ -17,7 +17,7 @@ if ! node scripts/validate-skills.mjs; then
 fi
 
 # 2. Keep derived counts in sync (auto-fix + re-stage all touched files, never block).
-COUNT_FILES="README.md docs/CATALOG.md docs/PROMOTION.md package.json"
+COUNT_FILES="README.md docs/CATALOG.md docs/PROMOTION.md package.json .cursor-plugin/plugin.json llms.txt docs/GETTING-STARTED.md docs/README.md"
 if ! node scripts/check-skill-count.mjs >/dev/null 2>&1; then
   echo "pre-commit: skill count drifted — auto-fixing…"
   node scripts/check-skill-count.mjs --fix

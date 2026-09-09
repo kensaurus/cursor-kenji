@@ -42,6 +42,9 @@ jobs:
       - name: MCP pin check
         run: node scripts/check-mcp-pins.mjs
 
+      - name: Living-docs fact check
+        run: node scripts/check-docs-facts.mjs
+
       - name: Skill cross-ref check
         run: node scripts/check-skill-refs.mjs --self-test && node scripts/check-skill-refs.mjs
 

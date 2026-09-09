@@ -276,6 +276,16 @@ const promotionResult = applyFileRules(promotionPath, "docs/PROMOTION.md", [
     to: `Title: ${count} Cursor AI Skills That Match`,
   },
   {
+    name: "promotion reddit title count",
+    re: /\d+ Cursor AI skills/g,
+    to: `${count} Cursor AI skills`,
+  },
+  {
+    name: "promotion reddit body that",
+    re: /\d+ agent skills that/g,
+    to: `${count} agent skills that`,
+  },
+  {
     name: "promotion subagents",
     re: /\d+ subagents/g,
     to: `${agentCount} subagents`,
