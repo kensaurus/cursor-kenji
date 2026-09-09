@@ -1,4 +1,4 @@
-# Contributing to cursor_kenji
+# Contributing to cursor-kenji
 
 Guide for adding, updating, and maintaining skills and commands.
 
@@ -112,10 +112,10 @@ After using this skill:
 
 ### 3. Quality Checklist
 
-Every skill MUST have:
+Every **first-party** (Kenji-authored) skill MUST have:
 
 - [ ] **Frontmatter** with `name` and `description` (include trigger keywords)
-- [ ] **"Check Existing First"** section at the top
+- [ ] **"Check Existing First"** section at the top (skip for `thirdparty-*`)
 - [ ] **Production-ready code examples** (no placeholders)
 - [ ] **TypeScript** in all code examples (strict, no `any`)
 - [ ] **Related Skills** section for cross-referencing
@@ -167,9 +167,14 @@ touch commands/my-command.md
 
 ### 2. Structure
 
-Commands are plain markdown (no frontmatter). They're triggered via `/my-command` in Cursor.
+Commands are markdown with YAML frontmatter (`description`, optional `argument-hint`). They're triggered via `/my-command` in Cursor.
 
 ```markdown
+---
+description: "One-line summary of what this command does"
+argument-hint: "[optional hint]"
+---
+
 # Command Title
 
 ## Purpose
@@ -270,7 +275,7 @@ docs(skills): add cross-references to enhance-web-web3d
 |---------|------------|---------|
 | Skill name | lowercase-hyphen | `data-visualization` |
 | Command name | lowercase | `commit.md` |
-| Directory | lowercase-hyphen | `skills/mobile-first/` |
+| Directory | lowercase-hyphen | `skills/design-mobile-first/` |
 | Code identifiers | Follow TypeScript conventions | `useMediaQuery`, `ButtonProps` |
 
 ---
@@ -320,14 +325,14 @@ When adding a new skill, also update:
 - `docs/GETTING-STARTED.md` / README use-case table if a newcomer would type that phrase
 
 Then say **"audit my skills"** (`audit-skill-conflicts`) so overlapping descriptions and stale handoffs get caught. Per-file spec lint (`npm run validate:skills`) cannot see those. `npm run check:skill-refs` fails CI on doubled-prefix typos (`mobile-mobile-*`) and stale `audit-responsive-layout` aliases.
-- Brief description
 
 ### Updating README.md
 
 When adding a new skill:
-1. Add to the appropriate category table in README
-2. Update the skill count in the file tree
-3. Add to "What's Inside" tree if it's a new directory
+
+1. Run `npm run gen:skill-index` (do not hand-edit the `<!-- SKILL-INDEX -->` block)
+2. Run `npm run check:skills` (or `npm run fix:skills`) so counts stay derived
+3. Add CATALOG / TRIGGER-CHEATSHEET rows as above
 
 Third-party skills: also update [THIRD-PARTY-SKILLS.md](./THIRD-PARTY-SKILLS.md).
 

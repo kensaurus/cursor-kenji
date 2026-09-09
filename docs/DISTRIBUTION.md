@@ -8,8 +8,8 @@ Where cursor-kenji is published and how users find it.
 |---------|---------|
 | **npm** (full pack) | `npx @kensaurus/cursor-kenji --all` |
 | **skills.sh** (skills only) | `npx skills add kensaurus/cursor-kenji` |
-| **Clone** | `git clone … && node bin/install.mjs --all` |
-| **Git clone** | `git clone https://github.com/kensaurus/cursor-kenji.git && ./install.sh` |
+| **Clone (four tools)** | `git clone … && node bin/install.mjs --all` |
+| **Clone (Cursor + Claude)** | `git clone https://github.com/kensaurus/cursor-kenji.git && ./install.sh` |
 
 `npx skills add --all` is **not** the same as `npx @kensaurus/cursor-kenji --all`. The skills CLI `--all` means “every skill to every detected agent”. The kenji installer `--all` means Cursor + Claude Code + Codex + Gemini, including slash commands.
 
@@ -25,7 +25,7 @@ Current npm version: see [npm package page](https://www.npmjs.com/package/@kensa
 | **cursor.directory** | https://cursor.directory/plugins/cursor-kenji | Submitted — pending security scan |
 | **skills.sh index** | https://skills.sh | [Issue #1499](https://github.com/vercel-labs/skills/issues/1499) — awaiting merge |
 | **awesome-cursorrules** | https://github.com/PatrickJS/awesome-cursorrules | [PR #320](https://github.com/PatrickJS/awesome-cursorrules/pull/320) — awaiting merge |
-| **Agent Skills spec** | https://agentskills.io | [Issue #432](https://github.com/agentskills/agentskills/issues/432) — showcase request |
+| **Agent Skills spec** | https://agentskills.io | [Issue #432](https://github.com/agentskills/agentskills/issues/432) closed 2026-06-30 — no listing confirmation |
 | **Enterprise DNA Skills dir** | https://enterprisedna.co/directories/submit | Submitted (Skills category; email draft) |
 
 Track submission URLs and review status in [PROMOTION.md](PROMOTION.md).
@@ -63,7 +63,7 @@ Claude Code 2.1.139+ provides the equivalent independent continuation evaluator
 through `/goal`; the `complete-everything` skill includes the recommended goal
 condition.
 
-MCP templates live in the repo under `mcp/` — copy `mcp/mcp.json.template` to `~/.cursor/mcp.json` and fill `YOUR_*` placeholders. See [mcp/README.md](../mcp/README.md).
+MCP templates live in the repo under `mcp/` — copy `mcp/mcp.json.template` to `~/.cursor/mcp.json` and set `FIRECRAWL_API_KEY`, `CONTEXT7_API_KEY`, `SUPABASE_ACCESS_TOKEN`, and `SUPABASE_PROJECT_REF` in the environment. Slack/Notion in the full template still use `YOUR_*`. See [mcp/README.md](../mcp/README.md).
 
 ## Maintainer release path
 

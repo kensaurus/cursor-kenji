@@ -263,4 +263,4 @@ firecrawl + context7 + github + notion + slack + memory
 | AWS servers fail | Run `aws sts get-caller-identity` to verify credentials |
 | Slow startup | Remove servers you don't use (each spawns a process) |
 
-**Performance tip:** Only enable servers you actively use. Each server is a background process. The essential 5 is a good baseline; add others as needed.
+**Performance tip:** Only enable servers you actively use. Each server is a background process. The essential three (Firecrawl + Context7 + Supabase) is a good baseline; add others as needed.

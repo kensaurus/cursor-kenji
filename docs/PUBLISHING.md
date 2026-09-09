@@ -22,7 +22,7 @@ No long-lived `NPM_TOKEN` is required when OIDC is configured.
 npm test
 ```
 
-This runs skill spec validation, count sync, README skill-index sync, secret-scanner self-test, MCP pin check, completion-gate tests, and install smoke test.
+This runs skill spec validation, count sync, README skill-index sync, secret-scanner self-test, MCP pin check, docs-facts check, completion-gate tests, and install smoke test.
 
 4. Update derived counts if needed: `npm run fix:skills`
 
@@ -30,7 +30,8 @@ This runs skill spec validation, count sync, README skill-index sync, secret-sca
 
 ```bash
 # Tag must match package.json version
-gh release create v1.4.2 --title "v1.4.2" --notes "$(cat <<'EOF'
+TAG="v$(node -p "require('./package.json').version")"
+gh release create "$TAG" --title "$TAG" --notes "$(cat <<EOF
 ## Summary
 - …
 

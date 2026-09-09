@@ -1,6 +1,6 @@
 # Third-Party Skills
 
-Upstream-maintained agent skills vendored into cursor_kenji. Each uses the **`thirdparty-`** directory prefix so they are visually distinct from Kenji-curated skills in `lsskills`, README tables, and agent skill lists.
+Upstream-maintained agent skills vendored into cursor-kenji. Each uses the **`thirdparty-`** directory prefix so they are visually distinct from Kenji-curated skills in `lsskills`, README tables, and agent skill lists.
 
 ## Current inventory
 
@@ -25,13 +25,7 @@ Companion slash command (installed by `./install.sh`):
 
 `./install.sh` copies all `skills/*/` to `~/.cursor/skills/`, syncs to `~/.agents/skills/`, and installs commands to `~/.cursor/commands/` — including the three `thirdparty-*` skills and `/thirdparty-web-interface-guidelines`.
 
-`./install.sh` copies all `skills/*/` to `~/.cursor/skills/` and reports:
-
-```text
-[+] Installed 112 skills to ~/.cursor/skills
-[+] Third-party skills: 3 (prefixed thirdparty-*)
-[+] Installed 36 commands to ~/.cursor/commands
-```
+`./install.sh` (Cursor + Claude) and `npx @kensaurus/cursor-kenji --all` copy `skills/*/` including the three `thirdparty-*` skills. Current skill and command counts come from `npm run check:skills`, not a hardcoded installer transcript.
 
 Third-party skills ship in the same pipeline as Kenji-curated skills — no separate install step.
 
@@ -125,7 +119,7 @@ npx uipro-cli@latest init --ai cursor
 rsync -a --exclude __pycache__ \
   .cursor/skills/ui-ux-pro-max/data \
   .cursor/skills/ui-ux-pro-max/scripts \
-  ~/cursor_kenji/skills/thirdparty-ui-ux-pro-max/
+  ~/cursor-kenji/skills/thirdparty-ui-ux-pro-max/
 # Merge SKILL.md; fix paths to thirdparty-ui-ux-pro-max
 ```
 

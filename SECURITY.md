@@ -12,7 +12,8 @@ Email or open a **private** [GitHub Security Advisory](https://github.com/kensau
 |----------|---------|---------|
 | `~/.cursor/mcp.json` | Your personal MCP config with real API keys | **Never** |
 | `.env` (gitignored) | Local publish tokens (`NPM_TOKEN`) for maintainers | **Never** |
-| `mcp/mcp.json.template` | Placeholders (`YOUR_*`) for copy-paste | Yes — templates only |
+| `mcp/mcp.json.template` | Essential servers (`firecrawl`, `context7`, `supabase`) via `${env:…}` | Yes — no live keys |
+| `mcp/mcp-full.json.template` | Full suite; Slack/Notion still use `YOUR_*` placeholders | Yes — templates only |
 | Repo root `.mcp.json` | Shared example using `${ENV}` refs | Yes — **no literal secrets** |
 
 Real keys live only on your machine. Forks must not commit filled MCP configs.
@@ -21,7 +22,7 @@ Real keys live only on your machine. Forks must not commit filled MCP configs.
 
 MCP templates pin semver versions in [`mcp/pinned-versions.json`](mcp/pinned-versions.json). When copying a template:
 
-1. Replace every `YOUR_*` placeholder or `${ENV}` variable with env vars — not inline secrets in tracked project files.
+1. Set `FIRECRAWL_API_KEY`, `CONTEXT7_API_KEY`, `SUPABASE_ACCESS_TOKEN`, and `SUPABASE_PROJECT_REF` in the environment (or Cursor `envFile`). Replace `YOUR_*` only on Slack/Notion in the full template. Never commit live keys.
 2. Prefer pinned `@version` over `@latest` when adding servers manually.
 3. AWS servers use `uvx` with PyPI packages documented in `mcp/pinned-versions.json` (legacy `awslabs.s3-mcp-server` / `lambda-mcp-server` names are **not** valid on PyPI).
 
@@ -32,8 +33,10 @@ This repo runs `scripts/scan-secrets.mjs` on staged files before commit. It bloc
 Enable hooks after clone:
 
 ```bash
-npm run prepare   # sets core.hooksPath → .githooks
+git config core.hooksPath .githooks
 ```
+
+This is clone-only. There is no `prepare` script — consumer `npm install` must not mutate git config.
 
 ## npm publish (maintainers)
 

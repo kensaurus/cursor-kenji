@@ -1,37 +1,35 @@
-<p align="center">
-  <img src="https://img.shields.io/badge/Cursor_AI-Skills_&_Tools-6366f1?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0ibTEyIDMtMS45IDEyLjRMMTguMSA2LjYgMi4yIDEzLjRsMTEuNSAxLjFMNy45IDIxeiIvPjwvc3ZnPg==&logoColor=white" alt="Cursor AI Skills" />
-</p>
+<div align="center">
 
-<h1 align="center">cursor-kenji</h1>
+# cursor-kenji
 
-<p align="center">
-  <strong>Ready-made playbooks for your AI coding editor.</strong><br/>
-  143 agent skills · 55 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents<br/><br/>
-  <em>You talk in plain English. The matching expert recipe runs itself.</em>
-</p>
+**You say the job. The playbook runs.**
 
-<p align="center">
+143 agent skills · 55 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents — for React / Next.js / Supabase, usable on almost any stack.
+
+<p>
   <a href="https://www.npmjs.com/package/@kensaurus/cursor-kenji"><img src="https://img.shields.io/npm/v/@kensaurus/cursor-kenji?style=flat-square&color=cb3837&logo=npm" alt="npm version" /></a>
   <img src="https://img.shields.io/github/license/kensaurus/cursor-kenji?style=flat-square&color=444" alt="License" />
 </p>
 
----
+<a href="docs/GETTING-STARTED.md" title="First-time guide">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/hero-dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/hero-light.png">
+    <img alt="You say fix this bug and ship it — workflow-fix-and-ship triages, tests, verifies, and opens the PR" src="docs/screenshots/hero-dark.png" width="100%">
+  </picture>
+</a>
 
-## Explain it like I'm five
+<sub>↑ what happens after install · follows your GitHub theme · not a hosted app</sub>
 
-Your AI editor is smart, but without a recipe it **guesses**. Sometimes that guess is great. Sometimes it invents a half-broken button and calls it done.
+</div>
 
-**cursor-kenji** is a big box of **recipes** (we call them *skills*). Install once. After that:
+**Why it exists** — Coding agents skip the unglamorous parts: interview you first, write the failing test, watch production, refuse “done” with leftovers. These playbooks don’t skip.
 
-1. You type something normal — *"check my security"*, *"make this form nicer"*, *"ship this feature"*.
-2. Cursor picks the matching recipe.
-3. The AI follows that recipe step by step, instead of freestyling.
+**Who it’s for** — People shipping in Cursor, Claude Code, Codex CLI, or Gemini CLI. Tuned for React / Next.js / Supabase. Works on other stacks.
 
-You do **not** need to memorize skill names. Talking like a human is enough.
+**What it’s not** — A Cursor replacement, a prompt paste-bin, or 155 names to memorize. Install once. Talk like a teammate.
 
-It ships **143 Cursor agent skills**, 55 slash commands, and 6 subagents — tuned for React / Next.js / Supabase, useful on almost any stack. Works in [Cursor](https://cursor.com), [Claude Code](https://www.anthropic.com/claude-code), and (with a lighter install) Codex + Gemini CLI. Brand new? Read the **[plain-language guide →](docs/GETTING-STARTED.md)**.
-
-### Install (30 seconds)
+## Install (30 seconds)
 
 ```bash
 npx @kensaurus/cursor-kenji --all
@@ -41,95 +39,99 @@ That merge-installs skills **and** slash commands (and agents/rules) into every 
 
 > Skills only (no `/commands`)? `npx skills add kensaurus/cursor-kenji` — Vercel skills CLI, project-local by default (`-g` for `~/.cursor/skills`). Its `--all` means “all skills to all agents”, not Cursor+Claude+Codex+Gemini.
 >
-> No Cursor yet? **[Download it](https://cursor.com)**. See [manual install](#manual-install).
+> No Cursor yet? **[Download it](https://cursor.com)**. Flag list and clone install → [Quick Start](#quick-start). Brand new? **[Plain-language guide →](docs/GETTING-STARTED.md)**.
 
-### What should I say? (use cases)
+## What should I say?
 
 | You say… | What kicks in | What you get |
 |:---------|:--------------|:-------------|
-| *"orient me"* / *"what's in this repo?"* | `workflow-onboard` | A short tour of the codebase |
-| *"grill me before I build"* | `workflow-grilling` | One question at a time until you're truly aligned |
+| *"orient me"* | `workflow-onboard` | A short tour of the codebase |
+| *"grill me before I build"* | `workflow-grilling` | One question at a time until you're aligned |
 | *"build this feature"* | `workflow-build-feature` | Spec → tests → code → smoke → PR |
 | *"fix this bug and ship it"* | `workflow-fix-and-ship` | Debug → fix → verify → PR → deploy |
 | *"audit my security"* | `audit-security` | OWASP-style findings with file:line |
 | *"is this production-ready?"* | `audit-resilience` + `audit-realworld` | Timeouts, retries, parity checks |
-| *"make this page less AI-looking"* | `enhance-web-ui` / `enhance-web-ux` | Cleaner layout, real content hierarchy |
-| *"this is too dense / hard to read"* | `enhance-readability` | CPL, Gestalt grouping, a table that replaces the prose |
-| *"second page is slow / back button reloads"* | `enhance-web-instant-nav` | Speculation Rules, bfcache, Early Hints |
-| *"desktop looks like a phone"* | `audit-responsive` | Unstack the layout at 375 / 768 / 1440 |
-| *"what happens when this list is empty?"* | `audit-ui-states` | Empty / loading / error / offline matrix |
-| *"why do our emails go to spam?"* | `enhance-email-deliverability` | SPF/DKIM/DMARC + bounce hygiene |
-| *"can we recover if the DB dies?"* | `plan-backup-dr` | RPO/RTO + restore-drill plan (approve first) |
-| *"why did the wrong skill trigger?"* | `audit-skill-conflicts` | Overlapping descriptions / stale handoffs in the pack |
-| *"is my chatbot safe?"* | `audit-llm-security` | Prompt injection, leaks, unscoped tools |
-| *"are we tracking the right events?"* | `audit-analytics` | Funnel holes, taxonomy, consent gating |
-| *"check our privacy / store labels"* | `plan-privacy-compliance` | Collection vs claimed — approve before edits |
-| *"optimize the App Store listing"* | `plan-aso` | Keywords + screenshots, plan only |
-| *"make the forms accessible"* | `enhance-web-forms` | Labels, validation, keyboard-friendly |
-| *"plan a security hardening pass"* | `plan-security-audit` | A burndown **you** approve before edits |
-| *"monkey test the app"* / *"guest vs logged in"* | `test-exploratory` | Wander twice, then a guest/auth diff table |
 | *"complete everything"* | `complete-everything` | No parked leftovers — judge verifies "done" |
 | *"ship it and watch it"* | `workflow-ship-and-observe` | Deploy → verify live → observe / rollback |
 
-### Highest-impact combo pipelines
+Highest-impact combo: `monkey-test as guest and logged-in, ticket every real bug, then lock a Playwright pass on the worst ones` → `test-exploratory` → `workflow-feedback-to-closure` → `test-playwright`.
 
-You almost never want a single skill. Copy one of these into chat:
+Full menu → [Every skill](#every-skill-in-plain-english). Trigger phrases → [docs/CATALOG.md](docs/CATALOG.md). Combos → [docs/CATALOG.md — Skill Composition](docs/CATALOG.md#skill-composition-patterns).
 
-| You want… | Paste this | What it chains |
-|:----------|:-----------|:---------------|
-| **Find real breaks, then lock them** | `monkey-test as guest and logged-in, ticket every real bug, then lock a Playwright pass on the worst ones` | `test-exploratory` → `workflow-feedback-to-closure` → `test-playwright` |
-| **Pre-release with a live identity probe** | `wander the app as guest vs logged-in, then run the quality gate` | `test-exploratory` → `workflow-quality-gate` |
-| **Build a feature end-to-end** | `build this feature` | `workflow-build-feature` |
-| **Fix a bug and ship it** | `fix this bug and ship it` | `workflow-fix-and-ship` |
-| **Close a plan with nothing parked** | `complete everything` | `complete-everything` |
-| **Ship and watch it** | `ship it and watch it` | `workflow-ship-and-observe` |
+## Tour
 
-Full menu with every skill name → **[Every skill](#every-skill-in-plain-english)** below. Combos with trigger phrases → **[docs/CATALOG.md — Skill Composition](docs/CATALOG.md#skill-composition-patterns)**.
+Four rooms. Same rule: you talk, a named playbook runs.
 
-### The five toys in the box
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <a href="docs/GETTING-STARTED.md#a-typical-session">
+        <img alt="workflow-grilling — one question at a time before any code" src="docs/screenshots/grill-dark.png" width="100%">
+      </a>
+      <br>
+      <sub><b>Grill</b> · <code>workflow-grilling</code> — one question at a time until you share a decision log</sub>
+    </td>
+    <td width="50%" align="center">
+      <a href="docs/CATALOG.md#workflow-build-feature">
+        <img alt="workflow-build-feature — spec, failing test, code, PR" src="docs/screenshots/build-dark.png" width="100%">
+      </a>
+      <br>
+      <sub><b>Build</b> · <code>workflow-build-feature</code> — spec → failing test → code → smoke → PR</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <a href="docs/CATALOG.md#audit-security">
+        <img alt="audit-security findings with file and line" src="docs/screenshots/audit-dark.png" width="100%">
+      </a>
+      <br>
+      <sub><b>Audit</b> · <code>audit-security</code> — OWASP-style findings with file:line, not a vibe check</sub>
+    </td>
+    <td width="50%" align="center">
+      <a href="docs/CATALOG.md#workflow-ship-and-observe">
+        <img alt="workflow-ship-and-observe — live revision then a watch window" src="docs/screenshots/ship-dark.png" width="100%">
+      </a>
+      <br>
+      <sub><b>Ship</b> · <code>workflow-ship-and-observe</code> — confirm the live SHA, watch, rollback if it breaks</sub>
+    </td>
+  </tr>
+</table>
 
-| Thing | Kid explanation | How you use it |
-|:------|:----------------|:---------------|
-| **Skill** | A recipe for one job | Just describe the job in chat |
-| **Command** | A shortcut button | Type `/commit`, `/pr`, `/plan` |
-| **Subagent** | A helper who peels off to do one task | Say *"review this PR"* |
+## The building blocks
+
+| Thing | What it is | How you use it |
+|:------|:-----------|:---------------|
+| **Skill** | A playbook for one job | Describe the job in chat |
+| **Command** | A shortcut | Type `/commit`, `/pr`, `/plan` |
+| **Subagent** | A helper that peels off one task | Say *"review this PR"* |
 | **Rule** | A house rule the AI always obeys | Drop a `.mdc` into your project |
-| **MCP server** | A phone line to your database / GitHub / browser | Copy a template + paste your keys |
+| **MCP server** | A connection to your database / GitHub / browser | Copy a template + set env vars |
 
 Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **155** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
 
-### How the recipes fit together (the loop)
+## How it works
 
-You almost never run one skill alone. Think of a simple loop — **look → change → prove → ship** — with seatbelts on the whole time:
+Look → change → prove → ship, with guardrails on the whole time:
 
 ```text
    Orient          Assess           Change           Prove            Ship
 (get to know) → (measure first) → (build/fix) → (test for real) → (go live)
-      │                                                                      │
-      └──────────────────── findings loop back ←─────────────────────────────┘
-                              ▲
-                     Guardrails always on
-              (rules · hooks · "are we actually done?")
 ```
 
-| Stage | Kid version | Skill families |
-|:------|:------------|:---------------|
-| **Orient** | Walk around the house before rearranging furniture | `workflow-onboard`, `/research` |
-| **Assess** | Look carefully — maybe take notes, don't smash walls yet | `audit-*`, `plan-*`, `/grill-me` (the AI interviews *you* until aligned) |
-| **Change** | Build new things or improve old ones | `design-*`, `enhance-*`, `backend-*`, `housekeep-design` |
-| **Prove** | Kick the tires. Don't say "done" unless it really is | `test-*`, `complete-everything`, `completion-judge` |
-| **Ship** | Put it in the world and watch it | `workflow-ship-and-observe`, `deploy-*`, `debug-*` |
-| **Guardrails** | Seatbelts that stay on between sessions | rules, completion hook, `enhance-agent-guardrails`, `/handoff` (carry state to the next session) |
+| Stage | Skill families |
+|:------|:---------------|
+| **Orient** | `workflow-onboard`, `/research` |
+| **Assess** | `audit-*`, `plan-*`, `/grill-me` |
+| **Change** | `design-*`, `enhance-*`, `backend-*`, `housekeep-design` |
+| **Prove** | `test-*`, `complete-everything`, `completion-judge` |
+| **Ship** | `workflow-ship-and-observe`, `deploy-*`, `debug-*` |
+| **Guardrails** | rules, completion hook, `enhance-agent-guardrails`, `/handoff` |
 
-Rule of thumb: **assess before you change, prove before you ship, never skip a stage.**
+Assess before you change. Prove before you ship.
 
-Highest-impact prove loop: **wander as guest + logged-in → ticket real bugs → lock them** (`test-exploratory` → `workflow-feedback-to-closure` → `test-playwright`). Copy-paste phrases live in [What should I say?](#what-should-i-say-use-cases).
-
----
+The 20 `plan-*` skills audit first and wait for your approval. See [docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md).
 
 ## What's Inside
-
-The whole kit, at a glance:
 
 | | Count | What it does |
 |:--|------:|:-------------|
@@ -138,18 +140,122 @@ The whole kit, at a glance:
 | **Commands** | 55 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
 | **Subagents** | 6 | Background helpers (code-reviewer, debugger, db-migrator…) |
 | **Completion hook** | 1 | Opt-in stop gate: continues only unfinished durable closure state |
-| **MCP Servers** | 16 | Supabase · GitHub · Sentry · Playwright · AWS · Slack |
-| **Project Rules** | 7 | Drop-in `.mdc` for `.cursor/rules/` (plus 3 global, 5 RN bundle optional) |
+| **MCP Servers** | 16 | Full template: Supabase · GitHub · Playwright · AWS · Slack (essential is 3) |
+| **Project Rules** | 7 | Drop-in `.mdc` for `.cursor/rules/` (plus 5 global, 5 RN bundle optional) |
 | **Notepads** | 2 | Context templates (architecture, design tokens) |
 | **Shell Aliases** | 8 | `newskill`, `cursor-sync`, `gc`, `gp` |
 
-**Every skill is listed below** — first a family count table, then the full name + one-line summary for each. Trigger phrases → **[docs/CATALOG.md](docs/CATALOG.md)** · quick lookup → **[docs/TRIGGER-CHEATSHEET.md](docs/TRIGGER-CHEATSHEET.md)**.
+Trigger phrases → **[docs/CATALOG.md](docs/CATALOG.md)** · quick lookup → **[docs/TRIGGER-CHEATSHEET.md](docs/TRIGGER-CHEATSHEET.md)**.
+
+---
+
+## Quick Start
+
+| Method | Command | What it installs |
+|:-------|:--------|:-----------------|
+| **npm installer** (full pack) | `npx @kensaurus/cursor-kenji --all` | Skills + commands + agents + rules. `--all` = Cursor + Claude + Codex + Gemini |
+| **skills.sh** (skills only) | `npx skills add kensaurus/cursor-kenji` | `SKILL.md` folders only. Default is the current project; add `-g` for `~/.cursor/skills`. Does **not** write `~/.cursor/commands` |
+| **Clone** | `git clone … && ./install.sh` | Same as the npm installer (`--cursor --claude` with no args) |
+
+**npm installer modes:**
+
+```bash
+npx @kensaurus/cursor-kenji            # merge — add/overwrite this repo's items (Cursor)
+npx @kensaurus/cursor-kenji --auto     # detect installed tools and install to each
+npx @kensaurus/cursor-kenji --claude   # install for Claude Code (~/.claude/) instead
+npx @kensaurus/cursor-kenji --codex    # install for Codex CLI (~/.codex/AGENTS.md + prompts)
+npx @kensaurus/cursor-kenji --gemini   # install for Gemini CLI (~/.gemini/GEMINI.md + commands)
+npx @kensaurus/cursor-kenji --all      # install for all four supported tools in one run
+npx @kensaurus/cursor-kenji --clean    # mirror ~/.cursor to match this repo (backup first)
+npx @kensaurus/cursor-kenji --dry-run  # preview
+npx @kensaurus/cursor-kenji --verify   # hash-check dests against this package (no writes)
+npx @kensaurus/cursor-kenji --skill audit-ux   # single skill
+npx @kensaurus/cursor-kenji --link     # dev: symlink for live skill authoring
+```
+
+More flags (`--restore`, `--only`, `--no-agents-mirror`): `npx @kensaurus/cursor-kenji --help`.
+
+**Use more than one AI tool? Reach for `--auto`.** It checks `~/.cursor`, `~/.claude`, `~/.codex`, and `~/.gemini`, then installs the right files to each one it finds. The bare command stays Cursor-only.
+
+From a clone: `npm run install:cursor` · `node bin/install.mjs --all` · `npm test` validates skills + count + install smoke test.
+
+From any folder: `npx @kensaurus/cursor-kenji --all`. From a clone, `node bin/install.mjs --all` also works (Windows ships `cursor-kenji.cmd` so `npx` from the repo folder works too).
+
+**Optional — [Mushi Mushi](https://github.com/kensaurus/mushi-mushi)** bug-report triage (pairs with `mushi-health`, `test-playwright`):
+
+```bash
+npx skills add kensaurus/mushi-mushi
+```
+
+**After install:** (1) Restart Cursor (2) Copy `mcp/mcp.json.template` → `~/.cursor/mcp.json` and set `FIRECRAWL_API_KEY`, `CONTEXT7_API_KEY`, `SUPABASE_ACCESS_TOKEN`, `SUPABASE_PROJECT_REF` (3) Describe any task — skills match on keywords.
+
+**Authoring skills?** Each skill must pass [Agent Skills spec](https://agentskills.io/specification) validation (`npm run validate:skills`): `name` matches directory, `description` ≤ 320 chars (house budget; spec max 1024), body < 500 lines.
+
+### Claude Code
+
+```bash
+npx @kensaurus/cursor-kenji --claude   # Claude Code only
+npx @kensaurus/cursor-kenji --all      # all four supported tools
+```
+
+All skills, commands, agents, and rules install to Claude Code (`~/.claude/`), with `.mdc` rules installed as `.md`. Skills appear as `/slash-commands`.
+
+From a clone:
+
+```bash
+./install.sh --claude    # Claude Code only
+./install.sh             # Cursor + Claude Code (default)
+```
+
+```bash
+# Inside Claude Code
+/workflow-build-feature
+/debug-error the login endpoint returns 401
+/plan-security-audit
+```
+
+Skills are read from `~/.claude/skills/<name>/SKILL.md`. No restart required when you re-run the installer — Claude Code picks up file changes at the start of each new session.
+
+### Codex CLI & Gemini CLI
+
+Codex CLI and Gemini CLI don't have a skills system yet. Each reads a single global context file instead:
+
+```bash
+npx @kensaurus/cursor-kenji --codex    # Codex CLI
+npx @kensaurus/cursor-kenji --gemini   # Gemini CLI
+```
+
+| | Codex CLI | Gemini CLI |
+|:--|:--|:--|
+| **Rules → context file** | `~/.codex/AGENTS.md` | `~/.gemini/GEMINI.md` |
+| **Portable commands** | `~/.codex/prompts/*.md` | `~/.gemini/commands/*.toml` |
+
+Your `rules/` get merged into that one auto-loaded file (the skill-routing index is skipped). Three standalone playbooks — `plan`, `research`, and `fix-issue` — ship as native prompts/commands. Skills and subagents aren't written out, because neither tool can load them. Existing `AGENTS.md` or `GEMINI.md` is backed up as `.bak-<stamp>` first.
+
+> The bash `install.sh --codex`/`--gemini` delegates to the Node installer (needs Node ≥ 18).
+
+### Manual install
+
+```bash
+git clone https://github.com/kensaurus/cursor-kenji.git && cd cursor-kenji && ./install.sh
+```
+
+<details>
+<summary>One-liner (curl)</summary>
+
+```bash
+curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.sh | bash
+```
+
+</details>
+
+**Keep fresh:** `npx @kensaurus/cursor-kenji --all && npx @kensaurus/cursor-kenji --verify --all` or `git pull && ./install.sh`
 
 ---
 
 ## Every skill, in plain English
 
-Scroll the **family counts**, then the **full list**. You don't memorize names — describe the job in chat and Cursor matches. Want exact trigger phrases? **[docs/CATALOG.md](docs/CATALOG.md)**.
+You don't memorize names — describe the job in chat. Exact trigger phrases → **[docs/CATALOG.md](docs/CATALOG.md)**. Prefix / stage table → **[docs/CATALOG.md — Skill Taxonomy](docs/CATALOG.md#skill-taxonomy)**.
 
 <!-- SKILL-INDEX:START -->
 
@@ -159,31 +265,31 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 
 | Family | Count | In one sentence |
 |:-------|------:|:----------------|
-| 🔍 Audit — inspect; some then fix | **30** | Check the codebase — security, UX, analytics, IAP, the skill pack… |
-| 📋 Plan — audit first, change only after you approve | **20** | Write a fix plan you approve before any code changes |
-| 🎨 Enhance — improve what already exists | **17** | Polish UI, forms, motion, SEO, PWA, email deliverability |
-| ✨ Design — build something new | **10** | Create new UI, APIs, emails, themes from scratch |
-| 🧱 Backend — server & data patterns | **5** | Auth, caching, queues, realtime, observability |
-| 📱 Mobile — React Native / Capacitor | **5** | RN screens, emulators, Capacitor, App Store prep |
-| 📊 Data — charts & pipelines | **2** | Charts, dashboards, ETL / cron jobs |
-| 📚 Docs — write it down clearly | **4** | READMEs, PRDs, RFCs with a reader-first voice |
-| 🧹 Housekeeping — consolidate one drifted register | **3** | Consolidate one drifted register (gates, backlog, or design tokens) |
-| 🔗 Workflows — multi-step recipes | **20** | End-to-end recipes (build, fix, ship, green the repo) |
-| ✅ Test & QA — prove it works | **8** | Unit, Playwright, visual regression, load, red-team |
-| 🚀 Deploy — ship & verify | **2** | npm release + post-deploy smoke tests |
-| 🐛 Debug — find & fix what's broken | **3** | Errors, Sentry, frontend↔backend mismatches |
-| 🔁 Iterate — close the loop after launch | **2** | Post-launch feedback loops and agent-harness iteration |
-| 🦟 Mushi Mushi — bug triage helpers | **2** | Integrate the Mushi Mushi bug-report pipeline |
-| 🛡️ Protocols — session guardrails | **1** | Keep browser automation from freezing |
-| ✍️ Authoring — build skills & MCP | **2** | Author new skills or MCP servers |
-| 🤝 Third-party (upstream-maintained) | **3** | Vendored upstream skills (Emil, UI/UX Pro Max, Vercel WIG) |
-| 🧩 Core & cross-cutting | **4** | Close everything, burndown, research, handoff |
-| 🖱️ Cursor IDE skills | **12** | Canvas, hooks, rules, PR splitter, CLI helpers |
+| Audit — inspect; some then fix | **30** | Check the codebase — security, UX, analytics, IAP, the skill pack… |
+| Plan — audit first, change only after you approve | **20** | Write a fix plan you approve before any code changes |
+| Enhance — improve what already exists | **17** | Polish UI, forms, motion, SEO, PWA, email deliverability |
+| Design — build something new | **10** | Create new UI, APIs, emails, themes from scratch |
+| Backend — server & data patterns | **5** | Auth, caching, queues, realtime, observability |
+| Mobile — React Native / Capacitor | **5** | RN screens, emulators, Capacitor, App Store prep |
+| Data — charts & pipelines | **2** | Charts, dashboards, ETL / cron jobs |
+| Docs — write it down clearly | **4** | READMEs, PRDs, RFCs with a reader-first voice |
+| Housekeeping — consolidate one drifted register | **3** | Consolidate one drifted register (gates, backlog, or design tokens) |
+| Workflows — multi-step recipes | **20** | End-to-end recipes (build, fix, ship, green the repo) |
+| Test & QA — prove it works | **8** | Unit, Playwright, visual regression, load, red-team |
+| Deploy — ship & verify | **2** | npm release + post-deploy smoke tests |
+| Debug — find & fix what's broken | **3** | Errors, Sentry, frontend↔backend mismatches |
+| Iterate — close the loop after launch | **2** | Post-launch feedback loops and agent-harness iteration |
+| Mushi Mushi — bug triage helpers | **2** | Integrate the Mushi Mushi bug-report pipeline |
+| Protocols — session guardrails | **1** | Keep browser automation from freezing |
+| Authoring — build skills & MCP | **2** | Author new skills or MCP servers |
+| Third-party (upstream-maintained) | **3** | Vendored upstream skills (Emil, UI/UX Pro Max, Vercel WIG) |
+| Core & cross-cutting | **4** | Close everything, burndown, research, handoff |
+| Cursor IDE skills | **12** | Canvas, hooks, rules, PR splitter, CLI helpers |
 | **Total** | **155** | |
 
 #### Full list (every skill)
 
-### 🔍 Audit — inspect; some then fix (30)
+### Audit — inspect; some then fix (30)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -218,7 +324,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `audit-ux` | Per-page UX audit using NN/g heuristics, Intuit microcopy, and Google HEART |
 | `audit-ux-journeys` | Cross-page UX audit for user stories, task completion, and information architecture — the layer audit-ux (per-page heuristics) skips |
 
-### 📋 Plan — audit first, change only after you approve (20)
+### Plan — audit first, change only after you approve (20)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -243,7 +349,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `plan-test-coverage` | User-story-driven test coverage audit and plan — no test writing in this pass |
 | `plan-uiux-unification` | Non-destructive UI/UX and design-system audit that emits a unification burndown — no code until each phase is approved |
 
-### 🎨 Enhance — improve what already exists (17)
+### Enhance — improve what already exists (17)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -265,7 +371,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `enhance-web-ux` | NN/g-grounded enhancement of an existing page's flows — not a repo-wide slop audit |
 | `enhance-web-web3d` | Add purposeful 3D/WebGL and scroll choreography to an existing site with Three.js/R3F, GSAP, or Motion |
 
-### ✨ Design — build something new (10)
+### Design — build something new (10)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -280,7 +386,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `design-system` | Build a new design system (tokens, variants, theming) |
 | `design-theme` | Apply cohesive visual themes to artifacts (slides, docs, landing pages) |
 
-### 🧱 Backend — server & data patterns (5)
+### Backend — server & data patterns (5)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -290,7 +396,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `backend-patterns` | Apply backend patterns — queues, caching, rate limits, serverless/edge |
 | `backend-realtime` | Implement real-time features using WebSockets, Supabase Realtime, Server-Sent Events, and live data |
 
-### 📱 Mobile — React Native / Capacitor (5)
+### Mobile — React Native / Capacitor (5)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -300,14 +406,14 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `mobile-rn-performance` | Fix React Native / Expo performance, build, and upgrade issues |
 | `mobile-rn-screen` | Polish an existing React Native screen to feel intentional, native, and human-crafted |
 
-### 📊 Data — charts & pipelines (2)
+### Data — charts & pipelines (2)
 
 | Skill | What it does |
 |:------|:-------------|
 | `data-pipeline` | Wire ETL, ingestion, cron, edge-function, and queue jobs correctly |
 | `data-visualization` | Build interactive, accessible charts, graphs, and data dashboards using Recharts, D3, or Victory |
 
-### 📚 Docs — write it down clearly (4)
+### Docs — write it down clearly (4)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -316,7 +422,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `docs-domain-modeling` | Build and sharpen a project's domain model — a CONTEXT.md glossary and ubiquitous language |
 | `docs-writer` | Write developer docs: README content, API references, code comments, changelog entries |
 
-### 🧹 Housekeeping — consolidate one drifted register (3)
+### Housekeeping — consolidate one drifted register (3)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -324,7 +430,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `housekeep-design` | Apply-now consolidation of a drifted design system into one token/component SSOT |
 | `housekeep-gates` | Apply-now consolidation of accreted CI gates, ratchets, and hooks into one aggregator required check |
 
-### 🔗 Workflows — multi-step recipes (20)
+### Workflows — multi-step recipes (20)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -349,7 +455,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `workflow-ship-and-observe` | Take merged, repository-green code all the way to a verified, monitored production release for any app stack |
 | `workflow-spec-tdd` | Stop vibe-coding with a spec → plan → TDD loop before writing a line |
 
-### ✅ Test & QA — prove it works (8)
+### Test & QA — prove it works (8)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -362,14 +468,14 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `test-unit` | Write unit/integration tests for a named module or change |
 | `test-visual-regression` | Set up Playwright screenshot baselines and CI diffing so UI changes fail pixel-by-pixel instead of by eye |
 
-### 🚀 Deploy — ship & verify (2)
+### Deploy — ship & verify (2)
 
 | Skill | What it does |
 |:------|:-------------|
 | `deploy-npm` | Release an npm package: version, CHANGELOG, publish, verify |
 | `deploy-verify` | Post-deploy smoke test across browser, Sentry, Supabase, Langfuse, and the public web |
 
-### 🐛 Debug — find & fix what's broken (3)
+### Debug — find & fix what's broken (3)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -377,34 +483,34 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `debug-fe-be-integration` | Diagnose and fix frontend↔backend contract failures by tracing client requests, server logs, validation, auth, and responses on both sides |
 | `debug-sentry-monitor` | Operate Sentry: triage/fix unresolved issues, reduce noise, audit instrumentation, and monitor after deploy |
 
-### 🔁 Iterate — close the loop after launch (2)
+### Iterate — close the loop after launch (2)
 
 | Skill | What it does |
 |:------|:-------------|
 | `iterate-agent-harness` | Turn an agent failure—premature stop, false completion, gamed check, missed file, broken handoff—into a durable rule/skill/hook/CI guard… |
 | `iterate-post-launch` | Close the feedback loop for an already-live app: inspect production signals, prioritize top issues, fix, verify live, repeat |
 
-### 🦟 Mushi Mushi — bug triage helpers (2)
+### Mushi Mushi — bug triage helpers (2)
 
 | Skill | What it does |
 |:------|:-------------|
 | `mushi-health` | Pass/fail health check across every Mushi Mushi pipeline component — CLI credentials, API reachability, edge functions, BYOK key pool, QA… |
 | `mushi-integration` | Full end-to-end Mushi Mushi integration smoke test: bug capture → AI triage → story mapping → TDD test generation → approval → execution →… |
 
-### 🛡️ Protocols — session guardrails (1)
+### Protocols — session guardrails (1)
 
 | Skill | What it does |
 |:------|:-------------|
 | `protocol-browser-anti-stall` | Browser-session guardrail for Playwright CLI: use headed, named, isolated sessions; prevent parallel collisions and recover stalls without… |
 
-### ✍️ Authoring — build skills & MCP (2)
+### Authoring — build skills & MCP (2)
 
 | Skill | What it does |
 |:------|:-------------|
 | `meta-mcp-builder` | Scaffold and implement Model Context Protocol (MCP) servers that expose external services, APIs, and data sources as typed tools and… |
 | `meta-skill-creator` | Create or update a pack SKILL.md (frontmatter, house limits, T1–T6) |
 
-### 🤝 Third-party (upstream-maintained) (3)
+### Third-party (upstream-maintained) (3)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -412,7 +518,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `thirdparty-ui-ux-pro-max` | Third-party skill — searchable style catalog, palettes, typography, and UX guidelines via Python scripts |
 | `thirdparty-web-interface-guidelines` | Third-party skill — Vercel Web Interface Guidelines compliance (focus, forms, animation, copy) |
 
-### 🧩 Core & cross-cutting (4)
+### Core & cross-cutting (4)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -421,7 +527,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `handoff` | Compact the current conversation into a handoff document a fresh agent can pick up |
 | `research` | Research current best practices with Context7, Firecrawl, and official docs before a non-trivial change |
 
-### 🖱️ Cursor IDE skills (12)
+### Cursor IDE skills (12)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -442,212 +548,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 
 ---
 
-## Quick Start
-
-Pick whichever fits how you work. The first one covers most people.
-
-| Method | Command | What it installs |
-|:-------|:--------|:-----------------|
-| **npm installer** (full pack) | `npx @kensaurus/cursor-kenji --all` | Skills + commands + agents + rules. `--all` = Cursor + Claude + Codex + Gemini |
-| **skills.sh** (skills only) | `npx skills add kensaurus/cursor-kenji` | `SKILL.md` folders only. Default is the current project; add `-g` for `~/.cursor/skills`. Does **not** write `~/.cursor/commands` |
-| **Clone** | `git clone … && ./install.sh` | Same as the npm installer (`--cursor --claude` with no args) |
-
-**npm installer modes:**
-
-```bash
-npx @kensaurus/cursor-kenji            # merge — add/overwrite this repo's items (Cursor)
-npx @kensaurus/cursor-kenji --auto     # detect installed tools and install to each
-npx @kensaurus/cursor-kenji --claude   # install for Claude Code (~/.claude/) instead
-npx @kensaurus/cursor-kenji --codex    # install for Codex CLI (~/.codex/AGENTS.md + prompts)
-npx @kensaurus/cursor-kenji --gemini   # install for Gemini CLI (~/.gemini/GEMINI.md + commands)
-npx @kensaurus/cursor-kenji --all      # install for all four supported tools in one run
-npx @kensaurus/cursor-kenji --clean    # mirror ~/.cursor to match this repo (backup first)
-npx @kensaurus/cursor-kenji --dry-run  # preview
-npx @kensaurus/cursor-kenji --verify   # hash-check dests against this package (no writes)
-npx @kensaurus/cursor-kenji --skill audit-ux   # single skill
-npx @kensaurus/cursor-kenji --link     # dev: symlink for live skill authoring
-```
-
-**Use more than one AI tool? Reach for `--auto`.** It checks `~/.cursor`, `~/.claude`, `~/.codex`, and `~/.gemini`, then installs the right files to each one it finds. Running the bare command stays Cursor-only, so nothing changes for existing setups.
-
-From a clone: `npm run install:cursor` · `node bin/install.mjs --all` (all tools) · `npm test` validates skills + count + install smoke test.
-
-From any folder: `npx @kensaurus/cursor-kenji --all`. From a clone, `node bin/install.mjs --all` also works (Windows ships `cursor-kenji.cmd` so `npx` from the repo folder works too).
-
-**Optional — [Mushi Mushi](https://github.com/kensaurus/mushi-mushi)** bug-report triage + AI draft PRs (pairs with `mushi-health`, `test-playwright`):
-
-```bash
-npx skills add kensaurus/mushi-mushi
-```
-
-**After install:** (1) Restart Cursor (2) Copy `mcp/mcp.json.template` → `~/.cursor/mcp.json`, fill `YOUR_*` keys (3) Describe any task — skills match on keywords.
-
-**Authoring skills?** Each skill must pass [Agent Skills spec](https://agentskills.io/specification) validation (`npm run validate:skills`): `name` matches directory, `description` ≤ 320 chars (house budget; spec max 1024), body < 500 lines.
-
-### Claude Code
-
-One-click, no clone needed (works on Windows too):
-
-```bash
-npx @kensaurus/cursor-kenji --claude   # Claude Code only
-npx @kensaurus/cursor-kenji --all      # all four supported tools
-```
-
-All skills, commands, agents, and rules install to Claude Code (`~/.claude/`), with `.mdc` rules installed as `.md`. Skills appear as `/slash-commands` — type `/` inside any `claude` session.
-
-From a clone, the bash installer does the same:
-
-```bash
-# Install for Claude Code only
-./install.sh --claude
-
-# Install for both Cursor and Claude Code (default)
-./install.sh
-```
-
-```bash
-# Inside Claude Code — use skills as slash commands
-/workflow-build-feature
-/debug-error the login endpoint returns 401
-/plan-security-audit
-/docs-writer
-```
-
-Skills are read from `~/.claude/skills/<name>/SKILL.md`. No restart required when you re-run the installer — Claude Code picks up file changes at the start of each new session.
-
-### Codex CLI & Gemini CLI
-
-Codex CLI and Gemini CLI don't have a skills system yet. Each reads a single global context file instead, so cursor-kenji maps to exactly what they load:
-
-```bash
-npx @kensaurus/cursor-kenji --codex    # Codex CLI
-npx @kensaurus/cursor-kenji --gemini   # Gemini CLI
-```
-
-| | Codex CLI | Gemini CLI |
-|:--|:--|:--|
-| **Rules → context file** | `~/.codex/AGENTS.md` | `~/.gemini/GEMINI.md` |
-| **Portable commands** | `~/.codex/prompts/*.md` | `~/.gemini/commands/*.toml` |
-
-Your `rules/` get merged into that one auto-loaded file (the skill-routing index is skipped, since nothing here would load it). Three standalone playbooks — `plan`, `research`, and `fix-issue` — ship as native prompts/commands. Skills and subagents aren't written out, because neither tool can load them, so they'd only be dead files. Any existing `AGENTS.md` or `GEMINI.md` is backed up as `.bak-<stamp>` first, and re-running the installer is always safe.
-
-> The bash `install.sh --codex`/`--gemini` delegates to the Node installer (needs Node ≥ 18) so the merge/port logic has a single source of truth.
-
-### Manual install
-
-```bash
-git clone https://github.com/kensaurus/cursor-kenji.git && cd cursor-kenji && ./install.sh
-```
-
-<details>
-<summary>One-liner (curl)</summary>
-
-```bash
-curl -sSL https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/install.sh | bash
-```
-
-</details>
-
-**Keep fresh:** `npx @kensaurus/cursor-kenji --all && npx @kensaurus/cursor-kenji --verify --all` or `git pull && ./install.sh`
-
----
-
-## Workflows
-
-You rarely run just one skill. You **chain** them. The picture at the top ([How the recipes fit together](#how-the-recipes-fit-together-the-loop)) is the whole idea — this section is the same loop with more detail.
-
-### Stage cheat-sheet
-
-| Stage | What you do | Skill families |
-|:------|:------------|:---------------|
-| **Orient** | Get to know the repo before you touch it | `workflow-onboard`, `/research` |
-| **Assess** | Measure, don't guess. `audit-*` may fix inline; `plan-*` only plans until you approve | `audit-*`, `plan-*` |
-| **Change** | Build new (`design-*`) or improve existing (`enhance-*`); merge design drift with `housekeep-design` | `design-*`, `enhance-*`, `backend-*`, `mobile-*` |
-| **Prove** | Tests + the no-false-done trio | `test-*`, `verification-before-completion` → `completion-judge` → `complete-everything` |
-| **Ship & operate** | Release, watch, feed findings back into Assess | `deploy-*`, `debug-*`, `workflow-ship-and-observe` |
-| **Guardrails** | Seatbelts between sessions | rules, completion hook, `enhance-agent-guardrails` |
-
-Specialist audits worth knowing:
-
-- `audit-realworld` — full-stack feature parity
-- `audit-resilience` — timeouts, retries, idempotency, PII (the stuff agents skip)
-- `audit-backend-architecture` — which distributed pattern to adopt vs skip as over-engineering
-- `audit-payment-system` — double-charge, ledgers, webhooks, PCI
-- `audit-ux-journeys` — can users actually find things and finish their stories? (IA + task completion)
-- `audit-llm-security` — prompt injection / unscoped tools on the AI you ship
-- `audit-analytics` — are the funnel events actually firing (and after consent)?
-- `audit-skill-conflicts` — did two skills just start giving opposite advice?
-
-### Start here, by situation
-
-Find the row that sounds like your day, then follow the chain:
-
-| Your situation | Chain (→ hands off to) |
-|:---------------|:-----------------------|
-| New to this repo | `workflow-onboard` → `/research` |
-| Inherited a messy / drifted design system | `audit-uiux-design-system` → `plan-uiux-unification` → **`housekeep-design`** |
-| Make the app feel alive | **`enhance-motion`** (existing app) · `design-motion` (from scratch) |
-| Forms are clunky or inaccessible | **`enhance-web-forms`** → `audit-accessibility` |
-| "Is it production-ready?" | **`audit-resilience`** + **`audit-realworld`** → `workflow-quality-gate` |
-| Backend architecture — which pattern to use / am I over-engineering? | **`audit-backend-architecture`** → `backend-patterns` |
-| Payment flow — double-charge, ledger, webhook, PCI safe? | **`audit-payment-system`** → `audit-security` / `audit-resilience` |
-| Users get lost / can't finish a flow / nav feels wrong | **`audit-ux-journeys`** → `enhance-web-ux` / `audit-ux` |
-| Empty/error screens are blank or raw | **`audit-ui-states`** → `test-visual-regression` |
-| Emails land in spam | **`enhance-email-deliverability`** → `design-email` |
-| Can we restore if the DB dies? | **`plan-backup-dr`** → `plan-data-integrity` |
-| Are we tracking the right events? | **`audit-analytics`** → `plan-privacy-compliance` / `iterate-post-launch` |
-| Prompt injection / is the chatbot safe? | **`audit-llm-security`** → `plan-input-validation` / `plan-llm-cost-guardrails` |
-| Wrong skill fired / just added a batch | **`audit-skill-conflicts`** → `meta-skill-creator` |
-| Stop AI / vibe-coding regressions | **`enhance-agent-guardrails`** → `plan-security-audit` |
-| Close everything, zero deferrals | **`complete-everything`** → `completion-judge` |
-| Ship it and watch it | `workflow-ship-and-observe` → `debug-sentry-monitor` → `workflow-feedback-to-closure` |
-
-### Bundled workflows
-
-Say the phrase, and the whole sequence runs for you:
-
-| Say this | Bundle | What runs |
-|----------|--------|-----------|
-| "complete everything" | `complete-everything` | recover parked work → implement all → full verification → independent judge |
-| "make the repo green" | `workflow-green-repo` | discover gates → enumerate failures → batch fix → prove green |
-| "ship it / go live" | `workflow-ship-and-observe` | preflight → deploy → verify live revision → observe → stable/rollback |
-| "triage this feedback" | `workflow-feedback-to-closure` | gather → dedupe → tickets → fix → verify live → close |
-| "build a feature" | `workflow-build-feature` | spec → TDD → unit → smoke → PR |
-| "fix this and ship" | `workflow-fix-and-ship` | debug → fix → regression → PR → deploy |
-| "is this ready?" | `workflow-quality-gate` | red-team → security → bundle → perf → unit |
-| "is this lint rule wrong?" | `audit-doctrine` | remedy + named token + Tier-D practice (not enforcement) |
-| "prepare this for a PR" | `workflow-release-prep` | review dirty tree → commit → push → PR → babysit (no merge) |
-| "prepare for launch" | `workflow-launch-ready` | SEO + PWA + bundle + i18n + quality gate |
-| "orient me" | `workflow-onboard` | codebase briefing in ~5 min |
-
-### Plan loops (audit only — approve before execution)
-
-These **20 `plan-*` skills** come in grouped loops. Each one audits, then hands you a plan — nothing changes until you approve it. See **[docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md)** for diagrams, slash aliases (`/uiux-plan`, `/capacitor-plan`, …), and how each maps to execution.
-
-| Loop | Skills | When |
-|------|--------|------|
-| Six-skill | uiux → stub → test-coverage → perf ∥ security → docs-sync | Inherited codebase / UI hardening |
-| Pre-launch hardening | input-validation → secrets → RLS → data-integrity → dependency-provenance | Supabase/Stripe, pre-open-source |
-| Observability & spend | error-handling + llm-cost-guardrails | LLM features, Sentry/Langfuse gaps |
-| Mobile gate | capacitor-hardening → mobile-readiness | Capacitor/hybrid pre-store |
-| Privacy & recovery | privacy-compliance + backup-dr | Consumer launch labels; "can we restore" |
-| Growth gate | aeo-readiness + aso | AI citation + store listing conversion |
-
-**One-shot (six-skill plan only):**
-
-```
-Run the six-skill plan loop — no changes until I approve each phase:
-plan-uiux-unification → plan-stub-checker → plan-test-coverage →
-plan-perf-audit + plan-security-audit (parallel) → plan-docs-sync.
-```
-
-More copy-paste recipes (adopt repo, de-slop a page, pre-launch sweep, split PRs) → **[docs/CATALOG.md#skill-composition-patterns](docs/CATALOG.md#skill-composition-patterns)** · New to Cursor? → **[docs/GETTING-STARTED.md](docs/GETTING-STARTED.md)**
-
----
-
 ## How to Use
-
-Four kinds of building blocks, four ways to reach them:
 
 | Primitive | Invoke | Example |
 |:----------|:-------|:--------|
@@ -658,35 +559,11 @@ Four kinds of building blocks, four ways to reach them:
 
 **Force a skill:** *"use `enhance-web-ux` on `/dashboard`"*
 
----
-
-## Skill taxonomy
-
-Every skill has two labels: a **family** (its `<prefix>-<topic>` name) and a **lifecycle stage** (from the loop above). The table below shows which stage each family lives in. For the full entries with trigger phrases, see **[docs/CATALOG.md](docs/CATALOG.md)**.
-
-| Prefix | Stage | Purpose | Examples |
-|:-------|:------|:--------|:---------|
-| `audit-` | 🔍 Assess | Read-only assessments (may fix inline) | `audit-security`, `audit-resilience`, `audit-realworld` |
-| `plan-` | 🔍 Assess | Audit-and-plan burndowns — approve before execute (20) | `plan-stub-checker`, `plan-privacy-compliance`, `plan-backup-dr` |
-| `enhance-` | 🛠️ Change | Improve existing UI/UX/motion/forms/SEO/PWA | `enhance-motion`, `enhance-web-forms`, `enhance-web-ux` |
-| `design-` | 🛠️ Change | New surfaces from scratch | `design-frontend`, `design-motion`, `design-system` |
-| `backend-` | 🛠️ Change | Server patterns & resilience | `backend-patterns`, `backend-observability` |
-| `mobile-` | 🛠️ Change | RN / Capacitor / emulator | `mobile-rn-screen`, `mobile-capacitor-platform` |
-| `docs-` | 🛠️ Change | Documentation | `docs-writer`, `docs-coauthor` |
-| `workflow-` | ♻️ Spans | Multi-phase process bundles | `workflow-build-feature`, `workflow-spec-tdd`, `workflow-housekeep` |
-| `test-` | ✅ Prove | QA and unit tests | `test-exploratory`, `test-playwright`, `test-red-team`, `test-unit` |
-| `deploy-` | 🚀 Ship | Release verify | `deploy-verify`, `deploy-npm` |
-| `debug-` | 🚀 Operate | Failures and integration | `debug-error`, `debug-sentry-monitor` |
-| `mushi-` | 🚀 Operate | Mushi Mushi integration | `mushi-health`, `mushi-integration` |
-| `protocol-` | 🛡️ Guardrail | Session guardrails | `protocol-browser-anti-stall` |
-| `meta-` | ✍️ Author | Author skills/MCP | `meta-skill-creator`, `meta-mcp-builder` |
-| `thirdparty-` | Varies | Upstream-maintained (vendored) | `thirdparty-emil-design-eng`, `thirdparty-ui-ux-pro-max`, `thirdparty-web-interface-guidelines` |
-
-> `housekeep-design` (design-system consolidation) is the execution arm of `plan-uiux-unification`; it lives in the 🛠️ Change stage alongside `enhance-*`.
-
-> **Third-party skills:** prefixed `thirdparty-*` with `ATTRIBUTION.md` — do not add Kenji-specific sections to upstream bodies. Full guide → **[docs/THIRD-PARTY-SKILLS.md](docs/THIRD-PARTY-SKILLS.md)**.
-
-> **Note:** Anthropic `file-docx/pdf/pptx/xlsx` skills are not in this public repo. Keep personal copies in `~/.cursor/skills/` if needed.
+> `housekeep-design` is the execution arm of `plan-uiux-unification`.
+>
+> **Third-party skills:** prefixed `thirdparty-*` with `ATTRIBUTION.md` — see **[docs/THIRD-PARTY-SKILLS.md](docs/THIRD-PARTY-SKILLS.md)**.
+>
+> Anthropic `file-docx/pdf/pptx/xlsx` skills are not in this public repo.
 
 **Cursor-specific skills (12):** `babysit`, `canvas`, `create-hook`, `create-rule`, `create-skill`, `split-to-prs`, … — see [CATALOG.md](docs/CATALOG.md).
 
@@ -694,7 +571,7 @@ Every skill has two labels: a **family** (its `<prefix>-<topic>` name) and a **l
 
 ## Commands (55)
 
-Commands are shortcuts for the things you do constantly. Type `/` in chat to see them all.
+Type `/` in chat to see them all.
 
 | Command | When | What |
 |:--------|:-----|:-----|
@@ -729,8 +606,6 @@ Commands are shortcuts for the things you do constantly. Type `/` in chat to see
 
 ## Subagents (6)
 
-Subagents are focused helpers that peel off to handle one job and report back. Just mention what you need and the right one steps in.
-
 | Agent | Triggers on | Output |
 |:------|:------------|:-------|
 | `code-reviewer` | "review", code changes | Quality, security, types |
@@ -740,33 +615,29 @@ Subagents are focused helpers that peel off to handle one job and report back. J
 | `perf-monitor` | "slow", "optimize" | Perf audit |
 | `completion-judge` | Plan/burndown closure claim | PASS / CONTINUE / BLOCKED against plan, state, diff, and fresh evidence |
 
-Beyond the prompt itself, `complete-everything` leans on two safety nets: a packaged Cursor stop hook that auto-continues any unfinished work, and `completion-judge`, which independently rejects stale or premature "done" claims. On Claude Code 2.1.139+ you can kick off the same run with `/goal` (see the skill for details).
+`complete-everything` also uses a packaged Cursor stop hook. On Claude Code 2.1.139+ you can kick off the same run with `/goal`.
 
 ---
 
 ## MCP servers (16)
 
-MCP servers connect your editor to the outside world — your database, GitHub, a browser, and more. Copy a template and drop in your keys:
-
 ```bash
-cp ~/cursor-kenji/mcp/mcp.json.template ~/.cursor/mcp.json      # essential 5
+cp ~/cursor-kenji/mcp/mcp.json.template ~/.cursor/mcp.json      # essential 3
 cp ~/cursor-kenji/mcp/mcp-full.json.template ~/.cursor/mcp.json  # all 16
 ```
 
-Replace `YOUR_*` placeholders with real keys. Setup details → **[mcp/README.md](mcp/README.md)**
+Set `FIRECRAWL_API_KEY`, `CONTEXT7_API_KEY`, `SUPABASE_ACCESS_TOKEN`, and `SUPABASE_PROJECT_REF` in the environment. Slack/Notion in the full template still use `YOUR_*`. Setup → **[mcp/README.md](mcp/README.md)**
 
 | Tier | Servers | Keys? |
 |:-----|:--------|:------|
-| Essential | Sequential Thinking, Context7, Firecrawl, Supabase, Playwright | Firecrawl + Supabase |
-| Dev | GitHub, Playwright, Postgres, Memory | PAT / conn string |
+| Essential | Firecrawl, Context7, Supabase | Firecrawl + Context7 + Supabase |
+| Dev | GitHub, GitHub Official, Sequential Thinking, Playwright, Postgres, Memory, Chrome DevTools | PAT / conn string |
 | Cloud | AWS Lambda, S3, CloudWatch, Redis | AWS profile / URL |
 | Productivity | Slack, Notion | Bot token / API key |
 
 ---
 
 ## Project rules
-
-Rules are always-on conventions your editor follows inside a project. Copy the starters into any repo:
 
 ```bash
 cp ~/cursor-kenji/rules/project-starter/*.mdc your-project/.cursor/rules/
@@ -782,17 +653,15 @@ cp ~/cursor-kenji/rules/project-starter/*.mdc your-project/.cursor/rules/
 | `web-performance.mdc` | LCP priority, INP yield, bfcache, budgets |
 | `git.mdc` | Conventional commits, no secrets |
 
-Global rules in this repo: `full-stack-ship-discipline.mdc`, `composer-2.5-execution.mdc`, `skill-workflows.mdc`.
+Global rules installed by the pack: `full-stack-ship-discipline.mdc`, `composer-2.5-execution.mdc`, `skill-workflows.mdc`, `senior-engineer.mdc`, `verification-before-completion.mdc`.
 
 > **Plan with a strong model, execute with Composer 2.5.** The 20 `plan-*` skills are authored/reviewed with a stronger reasoning model; `composer-2.5-execution.mdc` constrains how approved plans are implemented.
 
-**Project constitution:** copy [docs/AGENTS.template.md](docs/AGENTS.template.md) to your app repo as `AGENTS.md` for always-on agent discipline.
+**Project constitution:** copy [docs/AGENTS.template.md](docs/AGENTS.template.md) to your app repo as `AGENTS.md`.
 
 ---
 
 ## Shell helpers
-
-If you live in the terminal, these bash aliases speed up authoring and syncing:
 
 ```bash
 source ~/cursor-kenji/shell-aliases/cursor-helpers.sh
@@ -815,8 +684,6 @@ Full definitions in [shell-aliases/cursor-helpers.sh](shell-aliases/cursor-helpe
 
 ## Repository layout
 
-Where everything lives:
-
 ```
 cursor-kenji/
 ├── skills/           # 143 Agent Skills (SKILL.md each)
@@ -835,25 +702,7 @@ cursor-kenji/
 
 ---
 
-## Design principles
-
-A few opinions this project keeps coming back to — and what keeps them honest:
-
-| # | Principle | Enforced by |
-|---|:----------|:------------|
-| 1 | Check existing first | `workflow-housekeep`, `plan-stub-checker` |
-| 2 | CI-validated examples | `workflow-spec-tdd`, skill validation CI |
-| 3 | Modular & composable | `skill-workflows.mdc`, bundled workflows |
-| 4 | Audit before change | 20 `plan-*` skills, `/plan` |
-| 5 | Verify end-to-end | `full-stack-ship-discipline.mdc`, `test-playwright` |
-| 6 | Accessible by default | `audit-accessibility`, project-starter rules |
-| 7 | Performance aware | `audit-performance`, `audit-bundle-size` |
-
----
-
 ## Contributing
-
-Adding your own skill is two steps — write it, then let the checks confirm it's valid:
 
 ```bash
 mkdir -p skills/my-skill && vim skills/my-skill/SKILL.md
@@ -866,58 +715,37 @@ See [CONTRIBUTING.md](CONTRIBUTING.md), [docs/README.md](docs/README.md), [docs/
 
 ## FAQ
 
-**What is cursor-kenji?**  
-A box of ready-made recipes for your AI editor ([Agent Skills](https://agentskills.io) format) — plus slash commands, subagents, and MCP templates for [Cursor](https://cursor.com). One command installs them into `~/.cursor/` and `~/.agents/skills/`.
+**What is cursor-kenji?**
+You say the job in chat; a playbook runs. [Agent Skills](https://agentskills.io) plus slash commands, subagents, and MCP templates. One command installs them into `~/.cursor/` and `~/.agents/skills/`.
 
-**How do I install?**  
-`npx @kensaurus/cursor-kenji --all` for skills **and** slash commands. `npx skills add kensaurus/cursor-kenji` installs skills only. Restart Cursor after install. Re-check with `npx @kensaurus/cursor-kenji --verify`.
+**How do I install?**
+`npx @kensaurus/cursor-kenji --all` for skills **and** slash commands. `npx skills add kensaurus/cursor-kenji` installs skills only. Restart Cursor after install. Re-check with `npx @kensaurus/cursor-kenji --verify --all`.
 
-**How many skills?**  
-**143** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**155** total). Counts come from the filesystem and stay synced via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
+**How many skills?**
+**143** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**155** total). Counts come from the filesystem via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
 
-**How do skills trigger?**  
+**How do skills trigger?**
 You talk normally. Cursor matches your words to each skill's YAML `description`. To force one: *"use \`audit-security\` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).
 
-**What's the difference between `audit-*` and `plan-*`?**  
+**What's the difference between `audit-*` and `plan-*`?**
 `audit-*` looks around and may fix things. `plan-*` only writes a `plan-{name}.md` burndown — **you** approve each phase before any code changes. See [docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md).
 
-**Where do MCP API keys go?**  
-Copy `mcp/mcp.json.template` to `~/.cursor/mcp.json` and fill `YOUR_*` placeholders — never commit real keys. See [SECURITY.md](SECURITY.md) and [mcp/README.md](mcp/README.md).
+**Where do MCP API keys go?**
+Copy `mcp/mcp.json.template` to `~/.cursor/mcp.json` and set the env vars above — never commit real keys. See [SECURITY.md](SECURITY.md) and [mcp/README.md](mcp/README.md).
 
-**Is there machine-readable docs for AI crawlers?**  
-Yes — [llms.txt](llms.txt) at the repo root links to canonical docs surfaces.
+**Is there machine-readable docs for AI crawlers?**
+Yes — [llms.txt](llms.txt) at the repo root.
 
 ---
 
 ## Alternatives
-
-Not quite what you're after? A few good neighbors:
 
 - [awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) — curated rules collections
 - [skills.sh](https://skills.sh) — skills registry (`npx skills add kensaurus/cursor-kenji`)
 - [agentskills.io](https://agentskills.io) — Agent Skills spec + index
 - [npm](https://www.npmjs.com/package/@kensaurus/cursor-kenji) · [Cursor Marketplace](https://cursor.com/marketplace) · [cursor.directory](https://cursor.directory/)
 
-cursor-kenji ships executable skills, MCP configs, commands, and subagents in one installable package — not static rules alone. Full listing status → **[docs/DISTRIBUTION.md](docs/DISTRIBUTION.md)**.
-
----
-
-## Wanna code in the mountains?
-
-Tired of the same desk, same coffee shop, same fluorescent lights?
-
-**[Tsumagoi Work&Camp](https://tsumagoi.kensaur.us)** is a coworking camp at **1,444 m** in Gunma, Japan — real fiber internet, ten camp sites, an open lounge, starlit campfires, and onsen towns (Kusatsu / Manza / Shima) down the road. Bring your laptop. Ship features from a highland ranch. Go for a walk when the build finishes.
-
-<p align="center">
-  <a href="https://tsumagoi.kensaur.us">
-    <img src="https://tsumagoi.kensaur.us/og-image.png" alt="Tsumagoi Work&Camp — mountain coworking camp" width="720" />
-  </a>
-</p>
-
-<p align="center">
-  <a href="https://tsumagoi.kensaur.us"><strong>→ Visit tsumagoi.kensaur.us — peek at the live ranch, sensors, and booking</strong></a><br/>
-  <sub>Built with a stack a lot like what these skills are tuned for. Come say hi.</sub>
-</p>
+cursor-kenji ships executable skills, MCP configs, commands, and subagents in one installable package — not static rules alone. Listing status → **[docs/DISTRIBUTION.md](docs/DISTRIBUTION.md)**.
 
 ---
 

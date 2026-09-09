@@ -1,5 +1,7 @@
 # Skill Pack Enhancement Plan — 2026-07-18
 
+> **Historical / executed.** Written when the pack had 94 skills and 15 commands. Phases in the execution log already shipped. Do not treat the “no edits applied yet” framing or the 94/15 inventory as an open backlog. Current counts come from `npm run check:skills`.
+
 Audit of all 94 skills + 15 commands against current skill-authoring best practice
 (Anthropic Agent Skills docs, Claude 4.5+/5 prompting guidance, the Agent Skills open
 standard). Three parallel read-only sweeps covered every family. **Plan only — no

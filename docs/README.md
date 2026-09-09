@@ -4,7 +4,7 @@ Quick map of `docs/` — start with [GETTING-STARTED.md](GETTING-STARTED.md) if 
 
 | File | Purpose |
 |:-----|:--------|
-| [GETTING-STARTED.md](GETTING-STARTED.md) | Plain-language install, first phrases, and copy-paste combo pipelines |
+| [GETTING-STARTED.md](GETTING-STARTED.md) | First-time install, typical session, first phrases |
 | [CATALOG.md](CATALOG.md) | Full skill/command reference + highest-impact composition patterns |
 | [TRIGGER-CHEATSHEET.md](TRIGGER-CHEATSHEET.md) | "Say X → skill Y" lookup table |
 | [PLAN-LOOPS.md](PLAN-LOOPS.md) | How to chain the 20 `plan-*` skills (grouped loops) |
@@ -16,8 +16,10 @@ Quick map of `docs/` — start with [GETTING-STARTED.md](GETTING-STARTED.md) if 
 | [PROMOTION.md](PROMOTION.md) | Checklist for listing on skills.sh, cursor.directory, etc. |
 | [DISTRIBUTION.md](DISTRIBUTION.md) | Install surfaces, directory listings, discovery links |
 | [PUBLISHING.md](PUBLISHING.md) | Maintainer release guide (OIDC npm publish) |
+| [HOUSEKEEP-REPORT.md](HOUSEKEEP-REPORT.md) | Historical (1.4.2 / 2026-06-24) — not current install truth |
+| [PLAN-SKILL-PACK-ENHANCEMENT.md](PLAN-SKILL-PACK-ENHANCEMENT.md) | Historical executed plan (94-skill inventory) |
 
-Repo root also has [README.md](../README.md) (install + overview), [llms.txt](../llms.txt) (AI/crawler index), [SECURITY.md](../SECURITY.md) (secrets + MCP hygiene), [CONTRIBUTING.md](../CONTRIBUTING.md) (short form), and [CHANGELOG.md](../CHANGELOG.md).
+Repo root also has [README.md](../README.md) (install + overview + capability cards), [llms.txt](../llms.txt) (AI/crawler index), [SECURITY.md](../SECURITY.md) (secrets + MCP hygiene), [CONTRIBUTING.md](../CONTRIBUTING.md) (short form), and [CHANGELOG.md](../CHANGELOG.md). Screenshot sources for the README hero/tour live in [screenshots/](screenshots/).
 
 **Skill count:** run `npm run check:skills` — the number in README, `package.json`, and this catalog is derived from `skills/*/SKILL.md`, not hand-edited.
 

@@ -9,7 +9,8 @@ on a real codebase. Use as format reference when authoring or reviewing plan out
 
 | Sample | Skill | Repo audited |
 |--------|-------|--------------|
-| [plan-antislop.md](plan-audits/cursor-kenji/plan-antislop.md) | `plan-antislop` | cursor-kenji (Jun 2026) |
+| [plan-antislop.md](plan-audits/cursor-kenji/plan-antislop.md) | `plan-antislop` | cursor-kenji (2026-09-09) |
+| [plan-docs-sync.md](plan-audits/cursor-kenji/plan-docs-sync.md) | `plan-docs-sync` | cursor-kenji (2026-09-09) |
 | [plan-aeo-readiness.md](plan-audits/cursor-kenji/plan-aeo-readiness.md) | `plan-aeo-readiness` | cursor-kenji |
 | [plan-dependency-provenance.md](plan-audits/cursor-kenji/plan-dependency-provenance.md) | `plan-dependency-provenance` | cursor-kenji |
 | [plan-secrets-audit.md](plan-audits/cursor-kenji/plan-secrets-audit.md) | `plan-secrets-audit` | cursor-kenji |

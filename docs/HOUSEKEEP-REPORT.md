@@ -1,5 +1,7 @@
 # Housekeep Report — cursor-kenji
 
+> **Historical.** Snapshot from 2026-06-24 / release 1.4.2. Do not treat H2–H5 as current truth. Living install and MCP docs are [README.md](../README.md), [docs/DISTRIBUTION.md](DISTRIBUTION.md), and [mcp/README.md](../mcp/README.md).
+
 **Date:** 2026-06-24 · **Release:** 1.4.2 · **Scope:** npm / cursor.directory submission prep
 
 ## Configuration

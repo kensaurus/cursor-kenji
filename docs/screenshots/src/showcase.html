@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=1600, initial-scale=1" />
+  <title>cursor-kenji — capability preview</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-2: #1c2128;
+      --ink: #e6edf3;
+      --muted: #8b949e;
+      --line: #30363d;
+      --you: #1f6feb;
+      --you-ink: #ffffff;
+      --ok: #3fb950;
+      --warn: #d29922;
+      --chip: #21262d;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+    }
+    [data-theme="light"] {
+      --bg: #f6f8fa;
+      --panel: #ffffff;
+      --panel-2: #f6f8fa;
+      --ink: #1f2328;
+      --muted: #656d76;
+      --line: #d0d7de;
+      --you: #0969da;
+      --you-ink: #ffffff;
+      --ok: #1a7f37;
+      --warn: #9a6700;
+      --chip: #eef2f6;
+      --shadow: 0 18px 50px rgba(31, 35, 40, 0.08);
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 1600px;
+      height: 1000px;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+    }
+    .frame {
+      width: 1600px;
+      height: 1000px;
+      padding: 48px 56px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .brand {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+    .brand span { color: var(--muted); font-weight: 500; }
+    .meta {
+      color: var(--muted);
+      font-size: 18px;
+    }
+    .headline {
+      font-size: 44px;
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      line-height: 1.15;
+      max-width: 18ch;
+    }
+    .sub {
+      margin-top: 10px;
+      font-size: 22px;
+      color: var(--muted);
+      line-height: 1.4;
+      max-width: 42ch;
+    }
+    .grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      min-height: 0;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 28px 30px;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .label {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .bubble {
+      align-self: flex-start;
+      background: var(--you);
+      color: var(--you-ink);
+      border-radius: 16px 16px 16px 4px;
+      padding: 16px 20px;
+      font-size: 26px;
+      font-weight: 650;
+      line-height: 1.3;
+      max-width: 22ch;
+    }
+    .hint {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+    .steps { display: flex; flex-direction: column; gap: 14px; }
+    .step {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 14px;
+      align-items: start;
+      font-size: 22px;
+      line-height: 1.35;
+    }
+    .n {
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      background: var(--chip);
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .n.done { background: #1a7f3722; color: var(--ok); border-color: #3fb95055; }
+    .n.now { background: #1f6feb22; color: var(--you); border-color: #1f6feb66; }
+    .skill {
+      font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+      font-size: 16px;
+      color: var(--you);
+      margin-bottom: 18px;
+    }
+    .loop {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .loop b {
+      background: var(--chip);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 16px;
+      font-weight: 650;
+    }
+    .loop i { color: var(--muted); font-style: normal; }
+    .wide { grid-column: 1 / -1; }
+    .findings { display: flex; flex-direction: column; gap: 12px; }
+    .hit {
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 20px;
+    }
+    .hit code {
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 16px;
+      color: var(--warn);
+    }
+    .ok { color: var(--ok); font-weight: 700; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="frame" id="app"></div>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const theme = params.get("theme") === "light" ? "light" : "dark";
+    const view = params.get("view") || "hero";
+    document.documentElement.dataset.theme = theme;
+
+    const views = {
+      hero: `
+        <div class="top">
+          <div class="brand">cursor-kenji <span>playbooks for your coding agent</span></div>
+          <div class="meta">143 skills · 55 commands · 4 tools</div>
+        </div>
+        <div>
+          <div class="headline">You say the job. The playbook runs.</div>
+          <div class="sub">Not a prompt library. Installed workflows that grill, build, prove, and ship — then refuse to call it done until it is.</div>
+        </div>
+        <div class="grid">
+          <section class="card">
+            <div class="label">You, in chat</div>
+            <div class="bubble">fix this bug and ship it</div>
+            <div class="hint">No skill name required. Talk like a teammate.</div>
+          </section>
+          <section class="card">
+            <div class="label">What kicks in</div>
+            <div class="skill">workflow-fix-and-ship</div>
+            <div class="steps">
+              <div class="step"><div class="n done">1</div><div>Triage the error with evidence</div></div>
+              <div class="step"><div class="n done">2</div><div>Reproduce, then fix with a test</div></div>
+              <div class="step"><div class="n now">3</div><div>Verify in the browser</div></div>
+              <div class="step"><div class="n">4</div><div>Open the PR — you merge</div></div>
+            </div>
+          </section>
+        </div>
+        <div class="loop">
+          <b>Orient</b><i>→</i><b>Assess</b><i>→</i><b>Change</b><i>→</i><b>Prove</b><i>→</i><b>Ship</b>
+        </div>
+      `,
+      grill: `
+        <div class="top">
+          <div class="brand">Before any code</div>
+          <div class="meta">workflow-grilling</div>
+        </div>
+        <div>
+          <div class="headline">It interviews you first.</div>
+          <div class="sub">One question at a time, with a recommended answer, until you and the agent want the same thing.</div>
+        </div>
+        <div class="grid">
+          <section class="card">
+            <div class="label">You</div>
+            <div class="bubble">grill me before I build a referral program</div>
+          </section>
+          <section class="card">
+            <div class="label">The agent</div>
+            <div class="hit">Should the reward fire on signup or first payment?</div>
+            <div class="hit">I’d recommend <b>first payment</b> — it stops signup-farming. Agree?</div>
+            <div class="hint">Looks up the codebase. Only asks decisions. Ends with a decision log.</div>
+          </section>
+        </div>
+      `,
+      build: `
+        <div class="top">
+          <div class="brand">Build the feature</div>
+          <div class="meta">workflow-build-feature</div>
+        </div>
+        <div>
+          <div class="headline">Spec → test → code → PR.</div>
+          <div class="sub">The agent does not jump to implementation. It writes the failing test first, then the code that makes it pass.</div>
+        </div>
+        <div class="grid">
+          <section class="card">
+            <div class="label">You</div>
+            <div class="bubble">build this feature from those decisions</div>
+          </section>
+          <section class="card">
+            <div class="label">The playbook</div>
+            <div class="steps">
+              <div class="step"><div class="n done">1</div><div>Turn the grill log into a spec</div></div>
+              <div class="step"><div class="n done">2</div><div>Write a failing test</div></div>
+              <div class="step"><div class="n now">3</div><div>Implement the smallest change</div></div>
+              <div class="step"><div class="n">4</div><div>Smoke-test, then open a PR</div></div>
+            </div>
+          </section>
+        </div>
+      `,
+      audit: `
+        <div class="top">
+          <div class="brand">Find what’s actually wrong</div>
+          <div class="meta">audit-security · audit-resilience</div>
+        </div>
+        <div>
+          <div class="headline">Findings with file:line.</div>
+          <div class="sub">Not a vibe check. OWASP-style review, timeouts, retries, and “is this production-ready?” — written down so you can act.</div>
+        </div>
+        <section class="card wide">
+          <div class="label">Example output</div>
+          <div class="findings">
+            <div class="hit"><code>app/api/checkout/route.ts:88</code> — webhook handler is not idempotent</div>
+            <div class="hit"><code>lib/auth.ts:41</code> — <code>getSession()</code> used as the only gate</div>
+            <div class="hit"><code>middleware.ts:19</code> — public matcher misses <code>/api/admin/*</code></div>
+          </div>
+        </section>
+      `,
+      ship: `
+        <div class="top">
+          <div class="brand">Ship and watch it</div>
+          <div class="meta">workflow-ship-and-observe</div>
+        </div>
+        <div>
+          <div class="headline">Live revision, then a watch window.</div>
+          <div class="sub">Deploy is not the finish line. The playbook checks the live SHA, watches the stability window, and rolls back if it breaks.</div>
+        </div>
+        <div class="grid">
+          <section class="card">
+            <div class="label">You</div>
+            <div class="bubble">ship it and watch it</div>
+          </section>
+          <section class="card">
+            <div class="label">Done means</div>
+            <div class="steps">
+              <div class="step"><div class="n done">1</div><div>Repository green before deploy</div></div>
+              <div class="step"><div class="n done">2</div><div>Confirm the live revision</div></div>
+              <div class="step"><div class="n now">3</div><div>Observe the window</div></div>
+              <div class="step"><div class="n">4</div><div class="ok">Stable — or rollback / hotfix</div></div>
+            </div>
+          </section>
+        </div>
+      `,
+    };
+
+    document.getElementById("app").innerHTML = views[view] || views.hero;
+  </script>
+</body>
+</html>

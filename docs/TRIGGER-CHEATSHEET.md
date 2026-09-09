@@ -95,7 +95,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 |:-----------------|:------|
 | "publish this package", "release to npm", "ship a new npm version" | `deploy-npm` |
 | "verify deploy", "post-deploy check", "smoke test production", "ship or rollback" | `deploy-verify` |
-| "ship it", "deploy to production", "go live", "roll this out", "promote to prod", "release this" | `workflow-ship-and-observe` |
+| "ship it", "ship it and watch it", "deploy to production", "go live", "roll this out", "promote to prod", "release this" | `workflow-ship-and-observe` |
 | "post-launch polish", "what should I fix next", "iterate on prod feedback", "make it better based on real usage" | `iterate-post-launch` |
 | "triage this feedback", "turn these reports into tickets", "process the bug backlog", "close the loop on QA findings" | `workflow-feedback-to-closure` |
 
@@ -114,7 +114,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "mobile design", "touch UI", "small screen", "swipe", "safe area" | `design-mobile-first` |
 | "add one animation", "hover effect on this button", "isolated micro-interaction" | `design-motion` |
 | "write a PRD", "product requirements", "spec this feature", "what should we build" | `design-prd` |
-| "grill me", "stress-test this plan", "interview me about this", "poke holes in this", "challenge my thinking" | `workflow-grilling` |
+| "grill me", "grill me before I build", "stress-test this plan", "interview me about this", "poke holes in this", "challenge my thinking" | `workflow-grilling` |
 | "pin down terminology", "ubiquitous language", "glossary", "you're using the wrong words" | `docs-domain-modeling` |
 | "UI/UX unification plan", "design system audit plan", "UI burndown", "unify design system", "plan UI overhaul", "audit UI without fixing" | `plan-uiux-unification` |
 | "looks like AI slop", "reads like ChatGPT", "authenticity burndown", "de-slop" | `plan-antislop` |

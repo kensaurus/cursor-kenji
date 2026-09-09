@@ -265,4 +265,4 @@ Every `plan-*` skill shares the same discipline:
 | `workflow-launch-ready` | SEO + PWA + … | Launch week |
 | Core iterate | `/research` → audits → `/plan` → TDD | General improvement |
 
-See [README — Skill Chaining](https://github.com/kensaurus/cursor-kenji#skill-chaining----improve--iterate-any-repo) for more recipes.
+See [README — How it works](../README.md#how-it-works) and [CATALOG — Skill composition](CATALOG.md#skill-composition-patterns) for more recipes.

@@ -60,13 +60,13 @@ Full pack (skills + slash commands): `npx @kensaurus/cursor-kenji --all`. That C
 **Preferred — Trusted Publishing (OIDC):** configured ✅
 
 - Publisher: `kensaurus/cursor-kenji` · workflow `npm-publish.yml` · permission `npm publish`
-- Create a GitHub Release (tag `v1.4.x`) → `.github/workflows/npm-publish.yml` publishes with `--provenance`
+- Create a GitHub Release (tag `vX.Y.Z` matching `package.json`) → `.github/workflows/npm-publish.yml` publishes with `--provenance`
 
 **Fallback — `NPM_TOKEN` secret:** optional; CI uses OIDC when the secret is unset.
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/cursor-kenji
 
-**Status:** [x] Published — `@kensaurus/cursor-kenji@1.19.1` ([npm](https://www.npmjs.com/package/@kensaurus/cursor-kenji))
+**Status:** [x] Published — `@kensaurus/cursor-kenji@1.31.0` verified via `npm view` (2026-09-09)
 
 ---
 
@@ -103,7 +103,7 @@ All skills validate against the [Agent Skills specification](https://agentskills
 
 **Showcase request:** https://github.com/agentskills/agentskills/issues/432
 
-**Status:** [x] Submitted — awaiting showcase listing
+**Status:** [x] Submitted — [Issue #432](https://github.com/agentskills/agentskills/issues/432) closed 2026-06-30 with no listing confirmation. Do not treat as listed.
 
 ---
 
@@ -112,10 +112,10 @@ All skills validate against the [Agent Skills specification](https://agentskills
 ### Reddit (r/cursor, r/ChatGPT, r/webdev)
 
 ```
-Title: I packaged 128 Cursor AI skills so you don't have to build them yourself
+Title: I packaged 143 Cursor AI skills so you don't have to build them yourself
 
 I got tired of writing the same Cursor prompts every time I started a debugging session
-or wanted to polish a UI. So I built cursor-kenji — a collection of 128 agent skills that
+or wanted to polish a UI. So I built cursor-kenji — a collection of 143 agent skills that
 Cursor picks automatically based on what you type.
 
 Say "audit my security" → it runs an OWASP scan.
@@ -135,7 +135,7 @@ GitHub: https://github.com/kensaurus/cursor-kenji
 ### X / Twitter
 
 ```
-I built 128 Cursor agent skills so you don't have to:
+I built 143 Cursor agent skills so you don't have to:
 
 • audit security → OWASP scan runs
 • "make this nicer" → NN/g UX polish
@@ -169,7 +169,7 @@ Mushi Mushi's README already mentions cursor-kenji skills:
 > "Install Mushi skills in your Cursor or Claude Code project"
 > `npx skills add kensaurus/mushi-mushi`
 
-Reciprocal links are live in cursor-kenji's README ("Also by @kensaurus" section).
+Reciprocal links are live in cursor-kenji's README ("More from KENSAURUS" section).
 
 **Optional:** Add a note to Mushi's GitHub Issues template pointing users to cursor-kenji's `debug-sentry-monitor` skill for Sentry triage from Cursor.
 
