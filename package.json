@@ -40,6 +40,8 @@
     "ai-agents",
     "llm-tools",
     "claude",
+    "claude-code",
+    "skills-sh",
     "mcp",
     "nextjs",
     "supabase"
@@ -62,7 +64,10 @@
     "llms.txt",
     "docs/screenshots/",
     "SECURITY.md",
+    "assets/",
+    "skills.sh.json",
     ".cursor-plugin/",
+    ".claude-plugin/",
     ".mcp.json"
   ],
   "engines": {
@@ -75,7 +80,7 @@
     "type": "git",
     "url": "git+https://github.com/kensaurus/cursor-kenji.git"
   },
-  "homepage": "https://github.com/kensaurus/cursor-kenji#readme",
+  "homepage": "https://www.skills.sh/kensaurus/cursor-kenji",
   "bugs": {
     "url": "https://github.com/kensaurus/cursor-kenji/issues"
   },

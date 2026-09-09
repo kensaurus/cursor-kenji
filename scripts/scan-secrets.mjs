@@ -40,6 +40,7 @@ const PATTERNS = [
   { id: 'slack_token', re: /\bxox[baprs]-[0-9A-Za-z-]{10,}\b/g },
   { id: 'supabase_pat', re: /\bsbp_[a-f0-9]{40}\b/g },
   { id: 'private_key_block', re: /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/g },
+  { id: 'fal_key', re: /\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}:[0-9a-f]{32}\b/gi },
 ];
 
 const ALLOWLIST_SUBSTRINGS = [
@@ -140,6 +141,8 @@ function runSelfTest() {
     { text: 'NPM_TOKEN=npm_your_token_here', expect: 0 },
     { text: 'export NPM_TOKEN=npm_abcdefghijklmnopqrstuvwxyz123456', expect: 1 },
     { text: 'sk_test_abc123', expect: 0 },
+    { text: 'FAL_KEY=keyid:keysecret', expect: 0 },
+    { text: 'FAL_KEY=aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee:ffffffffffffffffffffffffffffffff', expect: 1 },
   ];
 
   let failed = 0;

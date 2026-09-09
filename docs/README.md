@@ -13,7 +13,7 @@ Quick map of `docs/` — start with [GETTING-STARTED.md](GETTING-STARTED.md) if 
 | [examples/](examples/) | Sample `plan-*.md` audit outputs |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Skill authoring, validation, PR expectations |
 | [PROMPT-ENHANCEMENT-PLAYBOOK.md](PROMPT-ENHANCEMENT-PLAYBOOK.md) | T1–T6 prompt craft via `enhance-skill-prompts` (how a skill instructs, not what it does) |
-| [PROMOTION.md](PROMOTION.md) | Checklist for listing on skills.sh, cursor.directory, etc. |
+| [PROMOTION.md](PROMOTION.md) | Checklist for listing on skills.sh, cursor.directory, Claude plugin, etc. |
 | [DISTRIBUTION.md](DISTRIBUTION.md) | Install surfaces, directory listings, discovery links |
 | [PUBLISHING.md](PUBLISHING.md) | Maintainer release guide (OIDC npm publish) |
 | [HOUSEKEEP-REPORT.md](HOUSEKEEP-REPORT.md) | Historical (1.4.2 / 2026-06-24) — not current install truth |

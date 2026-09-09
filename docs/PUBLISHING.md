@@ -14,7 +14,7 @@ No long-lived `NPM_TOKEN` is required when OIDC is configured.
 
 ## Pre-release checklist
 
-1. Bump `version` in `package.json` and `.cursor-plugin/plugin.json` (keep in sync)
+1. Bump `version` in `package.json`, `.cursor-plugin/plugin.json`, and `.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json` `metadata.version` (keep in sync)
 2. Add a `[x.y.z]` section to [CHANGELOG.md](../CHANGELOG.md)
 3. Run the full gate:
 
@@ -70,3 +70,14 @@ Prefer fixing CI + OIDC over local publishes.
 ## Optional: Cursor Marketplace
 
 Official marketplace submission uses the same repo — [`.cursor-plugin/plugin.json`](../.cursor-plugin/plugin.json) at the root. Submit at https://cursor.com/marketplace/publish after each meaningful release; Cursor reviews manually.
+
+## Optional: Claude Code plugin
+
+This repo is already a marketplace: `.claude-plugin/marketplace.json` + `.claude-plugin/plugin.json`. Users can add it with `/plugin marketplace add kensaurus/cursor-kenji`.
+
+To apply to Anthropic’s **community** catalog (separate from this repo marketplace):
+
+1. `claude plugin validate .` (and `claude plugin validate . --strict`)
+2. Submit the public GitHub URL at https://platform.claude.com/plugins/submit
+
+Do not claim community-catalog listing until that page shows the plugin.

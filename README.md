@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="assets/logo.png" width="72" height="72" alt="cursor-kenji mark">
+
 # cursor-kenji
 
 **You say the job. The playbook runs.**
@@ -8,6 +10,7 @@
 
 <p>
   <a href="https://www.npmjs.com/package/@kensaurus/cursor-kenji"><img src="https://img.shields.io/npm/v/@kensaurus/cursor-kenji?style=flat-square&color=cb3837&logo=npm" alt="npm version" /></a>
+  <a href="https://www.skills.sh/kensaurus/cursor-kenji"><img src="https://skills.sh/b/kensaurus/cursor-kenji" alt="skills.sh installs" /></a>
   <img src="https://img.shields.io/github/license/kensaurus/cursor-kenji?style=flat-square&color=444" alt="License" />
 </p>
 
@@ -39,7 +42,7 @@ That merge-installs skills **and** slash commands (and agents/rules) into every 
 
 > Skills only (no `/commands`)? `npx skills add kensaurus/cursor-kenji` — Vercel skills CLI, project-local by default (`-g` for `~/.cursor/skills`). Its `--all` means “all skills to all agents”, not Cursor+Claude+Codex+Gemini.
 >
-> No Cursor yet? **[Download it](https://cursor.com)**. Flag list and clone install → [Quick Start](#quick-start). Brand new? **[Plain-language guide →](docs/GETTING-STARTED.md)**.
+> No Cursor yet? **[Download it](https://cursor.com)**. Claude Code plugin: `/plugin marketplace add kensaurus/cursor-kenji` then `/plugin install cursor-kenji@cursor-kenji`. Flag list and clone install → [Quick Start](#quick-start). Brand new? **[Plain-language guide →](docs/GETTING-STARTED.md)**.
 
 ## What should I say?
 
@@ -156,6 +159,7 @@ Trigger phrases → **[docs/CATALOG.md](docs/CATALOG.md)** · quick lookup → *
 | **npm installer** (full pack) | `npx @kensaurus/cursor-kenji --all` | Skills + commands + agents + rules. `--all` = Cursor + Claude + Codex + Gemini |
 | **skills.sh** (skills only) | `npx skills add kensaurus/cursor-kenji` | `SKILL.md` folders only. Default is the current project; add `-g` for `~/.cursor/skills`. Does **not** write `~/.cursor/commands` |
 | **Clone** | `git clone … && ./install.sh` | Same as the npm installer (`--cursor --claude` with no args) |
+| **Claude Code plugin** | `/plugin marketplace add kensaurus/cursor-kenji` then `/plugin install cursor-kenji@cursor-kenji` | This repo as a marketplace. Not the Anthropic community catalog until they list it |
 
 **npm installer modes:**
 
@@ -719,7 +723,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md), [docs/README.md](docs/README.md), [docs/
 You say the job in chat; a playbook runs. [Agent Skills](https://agentskills.io) plus slash commands, subagents, and MCP templates. One command installs them into `~/.cursor/` and `~/.agents/skills/`.
 
 **How do I install?**
-`npx @kensaurus/cursor-kenji --all` for skills **and** slash commands. `npx skills add kensaurus/cursor-kenji` installs skills only. Restart Cursor after install. Re-check with `npx @kensaurus/cursor-kenji --verify --all`.
+`npx @kensaurus/cursor-kenji --all` for skills **and** slash commands. `npx skills add kensaurus/cursor-kenji` installs skills only. Claude Code as a plugin: `/plugin marketplace add kensaurus/cursor-kenji`. Restart Cursor after install. Re-check with `npx @kensaurus/cursor-kenji --verify --all`.
 
 **How many skills?**
 **143** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**155** total). Counts come from the filesystem via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
@@ -741,11 +745,11 @@ Yes — [llms.txt](llms.txt) at the repo root.
 ## Alternatives
 
 - [awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) — curated rules collections
-- [skills.sh](https://skills.sh) — skills registry (`npx skills add kensaurus/cursor-kenji`)
-- [agentskills.io](https://agentskills.io) — Agent Skills spec + index
-- [npm](https://www.npmjs.com/package/@kensaurus/cursor-kenji) · [Cursor Marketplace](https://cursor.com/marketplace) · [cursor.directory](https://cursor.directory/)
+- [skills.sh](https://www.skills.sh/kensaurus/cursor-kenji) — this pack’s live skills page
+- [SkillsMP](https://skillsmp.com/creators/kensaurus/cursor-kenji) — aggregator crawl of this repo
+- [agentskills.io](https://agentskills.io) — Agent Skills spec (not a skill catalog)
 
-cursor-kenji ships executable skills, MCP configs, commands, and subagents in one installable package — not static rules alone. Listing status → **[docs/DISTRIBUTION.md](docs/DISTRIBUTION.md)**.
+cursor-kenji ships executable skills, MCP configs, commands, and subagents in one installable package — not static rules alone. What is actually listed vs submitted → **[docs/DISTRIBUTION.md](docs/DISTRIBUTION.md)**.
 
 ---
 

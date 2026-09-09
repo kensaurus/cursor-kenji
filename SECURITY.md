@@ -11,7 +11,7 @@ Email or open a **private** [GitHub Security Advisory](https://github.com/kensau
 | Location | Purpose | Commit? |
 |----------|---------|---------|
 | `~/.cursor/mcp.json` | Your personal MCP config with real API keys | **Never** |
-| `.env` (gitignored) | Local publish tokens (`NPM_TOKEN`) for maintainers | **Never** |
+| `.env` (gitignored) | Local maintainer secrets (`NPM_TOKEN`, `FAL_KEY`) | **Never** |
 | `mcp/mcp.json.template` | Essential servers (`firecrawl`, `context7`, `supabase`) via `${env:…}` | Yes — no live keys |
 | `mcp/mcp-full.json.template` | Full suite; Slack/Notion still use `YOUR_*` placeholders | Yes — templates only |
 | Repo root `.mcp.json` | Shared example using `${ENV}` refs | Yes — **no literal secrets** |
@@ -28,7 +28,7 @@ MCP templates pin semver versions in [`mcp/pinned-versions.json`](mcp/pinned-ver
 
 ## Pre-commit protection
 
-This repo runs `scripts/scan-secrets.mjs` on staged files before commit. It blocks common patterns (GitHub PATs, npm tokens, Stripe live keys, AWS access keys, private key blocks). Placeholders like `ghp_your_token_here` and `YOUR_*` are allowed.
+This repo runs `scripts/scan-secrets.mjs` on staged files before commit. It blocks common patterns (GitHub PATs, npm tokens, Stripe live keys, AWS access keys, private key blocks, fal.ai `keyid:keysecret` pairs). Placeholders like `ghp_your_token_here`, `keyid:keysecret`, and `YOUR_*` are allowed.
 
 Enable hooks after clone:
 

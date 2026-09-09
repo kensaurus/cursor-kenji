@@ -1,0 +1,30 @@
+{
+  "name": "cursor-kenji",
+  "displayName": "cursor-kenji",
+  "description": "You say the job; the playbook runs. 143 agent skills, 55 slash commands, 6 subagents, and MCP templates for React / Next.js / Supabase — also works in Claude Code.",
+  "version": "1.31.0",
+  "author": {
+    "name": "kensaurus",
+    "email": "kensaurus@gmail.com"
+  },
+  "homepage": "https://www.skills.sh/kensaurus/cursor-kenji",
+  "repository": "https://github.com/kensaurus/cursor-kenji",
+  "license": "MIT",
+  "keywords": [
+    "agent-skills",
+    "claude-code",
+    "cursor",
+    "nextjs",
+    "supabase"
+  ],
+  "skills": ["./skills"],
+  "commands": ["./commands"],
+  "agents": [
+    "./agents/code-reviewer.md",
+    "./agents/completion-judge.md",
+    "./agents/db-migrator.md",
+    "./agents/debugger.md",
+    "./agents/deploy-checker.md",
+    "./agents/perf-monitor.md"
+  ]
+}

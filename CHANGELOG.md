@@ -6,6 +6,19 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+### Added
+
+- Brand mark (`assets/logo.svg` + PNG/OG/favicon). Geometric spine + first-line tick; fal.ai candidates were generated and rejected when they drifted.
+- Claude Code marketplace manifests: `.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json`.
+- Static landing page in `site/` (canonical stay on skills.sh until an owned host is live).
+- `FAL_KEY` documented in `.env.example`; secret scanner now flags fal key-id:secret pairs.
+
+### Changed
+
+- `package.json` homepage is the live skills.sh page.
+- Cursor plugin manifest: `displayName`, `logo`, `category`, homepage.
+- Distribution / promotion docs: Claude plugin install, localskills reject, Show HN draft. No fake “listed” claims.
+
 ## [1.31.0] — 2026-08-29
 
 ### Added

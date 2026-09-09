@@ -2,7 +2,9 @@
 
 Checklist for external listings and launch copy. Repo-side requirements (plugin manifest, docs, npm OIDC) are done. External listings may take manual review.
 
-**Tracking:** [DISTRIBUTION.md](DISTRIBUTION.md) · Maintainer releases: [PUBLISHING.md](PUBLISHING.md)
+**Do not invent “listed” status.** Live vs submitted vs login-blocked is in [DISTRIBUTION.md](DISTRIBUTION.md). Maintainer releases: [PUBLISHING.md](PUBLISHING.md).
+
+**Human gates left (2026-09-09):** cursor.directory security-agent unflag (listing still `noindex`); Skills Directory submit is blocked by *their* Supabase auth (HTTP 402 egress quota); philipbankier / travisvn awesome lists need ≥10 GitHub stars. Cursor Marketplace + explainx + AgenticSkills are submitted and awaiting *their* review — not listed yet. Claude community catalog: submit at https://platform.claude.com/plugins/submit after this repo’s `.claude-plugin/` is on `main`.
 
 ---
 
@@ -15,7 +17,7 @@ Checklist for external listings and launch copy. Repo-side requirements (plugin 
 - The site auto-detects skills from `skills/*/SKILL.md`, rules from `rules/`, agents from `agents/`, MCP config from `.mcp.json`
 - No extra config needed — the repo structure matches the Open Plugins standard
 
-**Status:** [x] Submitted — https://cursor.directory/plugins/cursor-kenji (pending security scan)
+**Status:** Page exists — https://cursor.directory/plugins/cursor-kenji — still **flagged / hidden** (`robots: noindex`, banner: “Hidden from the directory pending manual review”). Signed in with Google (`kensaurus@gmail.com`) 2026-09-09. Description, homepage (skills.sh), and keywords updated via **Edit your plugin** (POST `/plugins/cursor-kenji/edit` → 200). Component inventory on that page is still their older import (76 skills / 14 rules / 5 agents / 5 MCP). A full GitHub re-scan (234 components including skill bodies) was **rejected HTTP 413** — too large for their submit endpoint. Not discoverable in browse until they unflag it.
 
 ---
 
@@ -32,7 +34,7 @@ Full pack (skills + slash commands): `npx @kensaurus/cursor-kenji --all`. That C
 
 **Issue opened:** https://github.com/vercel-labs/skills/issues/1499
 
-**Status:** [x] Submitted — awaiting index merge
+**Status:** **Live** — https://www.skills.sh/kensaurus/cursor-kenji (verified 2026-09-09: HTTP 200, “2.9K total installs”). Their crawler still shows a higher skill count than this repo’s 155 because it keeps old rename slugs. Issue #1499 is leftover; the repo page is already indexed.
 
 ---
 
@@ -78,7 +80,7 @@ Full pack (skills + slash commands): `npx @kensaurus/cursor-kenji --all`. That C
 
 Submit the GitHub repo URL; Cursor reviews manually.
 
-**Status:** [x] Submitted — publisher application received (awaiting Cursor review)
+**Status:** **Submitted, not listed.** Signed in with Google (`kensaurus@gmail.com`) via Cursor authenticator 2026-09-09. Publisher application sent from https://cursor.com/marketplace/publish (org/handle `kensaurus`, contact `kensaurus@gmail.com`, repo `https://github.com/kensaurus/cursor-kenji`). Confirmation page: “Thanks for applying” / they will follow up at marketplace-publishing@cursor.com. Do not treat as listed until a marketplace plugin page exists.
 
 ---
 
@@ -91,7 +93,7 @@ Submit the GitHub repo URL; Cursor reviews manually.
 **One-liner description:**
 > 143 Cursor agent skills for React/Next.js/Supabase — installs in one command.
 
-**Status:** [x] Submitted via fallback form at enterprisedna.co/directories/submit (Skills directory; email draft to directories@enterprisedna.co)
+**Status:** Re-checked 2026-09-09. cursorlist.com is a **`.cursorrules` dump**, not a skill-pack catalog. “Submit Rule” goes to a Youform for individual rule files. **Not submitted** — listing a 155-skill pack there would be the wrong category. Do not treat as listed.
 
 ---
 
@@ -107,63 +109,147 @@ All skills validate against the [Agent Skills specification](https://agentskills
 
 ---
 
-## Launch copy drafts
+## 8. AgenticSkills directory (not the spec site)
 
-### Reddit (r/cursor, r/ChatGPT, r/webdev)
+**URL:** https://agenticskills.io/submit
+
+Different site from the Agent Skills *spec* at agentskills.io. Curated catalog (selected, not crawled).
+
+**Submitted 2026-09-09** via the public form (name `cursor-kenji`, repo URL, category Web Development, author kenji, contact `kensaurus@gmail.com` from https://kensaur.us/yen-yen/privacy). UI said “Skill Submitted!” and linked https://github.com/Korona7x17/agenticskills/issues/158 — that issue URL returns **404** to the public GitHub API, so treat as **submitted, not listed**, until a public catalog page exists.
+
+**Do not** use their “Submit MCP” form — this pack is MCP *templates*, not a server.
+
+---
+
+## 9. VoltAgent / awesome-agent-skills
+
+**URL:** https://github.com/VoltAgent/awesome-agent-skills
+
+**Status:** [x] PR opened — https://github.com/VoltAgent/awesome-agent-skills/pull/1034 (open 2026-09-09)
+
+---
+
+## 10. spencerpauly / awesome-cursor-skills
+
+**URL:** https://github.com/spencerpauly/awesome-cursor-skills
+
+**Status:** [x] PR opened — https://github.com/spencerpauly/awesome-cursor-skills/pull/72 (open 2026-09-09). Entry says we are **not** on Cursor Marketplace.
+
+---
+
+## 11. Skills Directory / explainx / Awesome Skills
+
+| Site | Submit path | Status 2026-09-09 |
+|------|-------------|-------------------|
+| https://www.skillsdirectory.com/submit | GitHub OAuth (Supabase) | Sign-in attempted 2026-09-09. Their auth project returned **HTTP 402** (`exceed_egress_quota`). No listing (`/skills/kensaurus-cursor-kenji` is a 404 page). Retry after *they* restore Auth. |
+| https://explainx.ai/submit | dashboard after magic link | **Submitted, pending review** (dashboard: Skills 1, live 0). Not publicly listed yet. |
+| https://awesomeskill.ai/ | crawl + blog “submit to the directory” | No public submit form found. No search hit for this pack. |
+
+---
+
+## 12. philipbankier / awesome-agent-skills
+
+**URL:** https://github.com/philipbankier/awesome-agent-skills
+
+CONTRIBUTING requires **≥10 GitHub stars**. This repo had **9** on 2026-09-09. Do not open a PR until that bar is met.
+
+---
+
+## 13. MCP catalogs (do not submit)
+
+Official MCP Registry, Smithery, mcp.so, PulseMCP, and AgenticSkills “Submit MCP” are for **MCP servers** (`server.json`, a runnable package or remote URL). This repo ships `mcp/*.json.template` only. Submitting would be false.
+
+---
+
+## 15. Claude Code plugin (this repo + community catalog)
+
+**This repo is already a marketplace.** Users do not wait for Anthropic:
 
 ```
-Title: I packaged 143 Cursor AI skills so you don't have to build them yourself
+/plugin marketplace add kensaurus/cursor-kenji
+/plugin install cursor-kenji@cursor-kenji
+```
 
-I got tired of writing the same Cursor prompts every time I started a debugging session
-or wanted to polish a UI. So I built cursor-kenji — a collection of 143 agent skills that
-Cursor picks automatically based on what you type.
+Validate before any catalog submit:
 
-Say "audit my security" → it runs an OWASP scan.
-Say "make this page nicer" → it applies NN/g heuristics.
-Say "can we recover if the DB dies?" → a restore plan you approve first.
-Say "commit my changes" → it writes a proper conventional commit.
+```bash
+claude plugin validate .
+```
 
-Install in one line:
-npx skills add kensaurus/cursor-kenji
+**Community catalog (separate):** https://platform.claude.com/plugins/submit — public GitHub URL. Review pins a SHA into `anthropics/claude-plugins-community`. **Not listed** until that catalog shows `cursor-kenji`. Do not treat local marketplace install as official listing.
 
-Covers: React, Next.js, Supabase, TypeScript, React Native, Capacitor, debugging,
-testing, deploy, privacy, ASO, MCP, and more. MIT licensed.
+---
 
-GitHub: https://github.com/kensaurus/cursor-kenji
+## 16. Do not submit
+
+| Surface | Why |
+|---------|-----|
+| Official MCP Registry / Smithery / mcp.so / PulseMCP / AgenticSkills “Submit MCP” | This pack ships MCP *templates*, not a server |
+| cursorlist.com | `.cursorrules` dump, wrong category |
+| ClawHub | Not a skill-pack catalog for this repo |
+| **localskills `--target cursor`** | Writes `.cursor/rules/{slug}.mdc`, not Cursor skills. Wrong installer for this pack |
+| travisvn / philipbankier awesome lists | Star gate (≥10). This repo had **9** on 2026-09-09 |
+| cursor.directory full re-scan | Their endpoint returned HTTP 413 on a 234-component body |
+
+---
+
+## Launch copy drafts
+
+### Show HN / technical post (preferred angle)
+
+Do not lead with “143 skills”. Lead with the completion gate.
+
+```
+Title: Show HN: a completion gate that refuses “done” while unchecked work remains
+
+Coding agents call the work done when the diff compiles. This pack’s
+complete-everything loop writes a durable checklist, keeps going through
+phase checkpoints, and a second agent (completion-judge) reads the tree
+and the evidence — not the model’s confidence.
+
+Install: npx @kensaurus/cursor-kenji --all
+skills.sh: https://www.skills.sh/kensaurus/cursor-kenji
+```
+
+### Reddit (r/cursor, r/ClaudeAI) — short
+
+```
+Title: Playbooks that will not call a PR done
+
+I got tired of agents skipping the interview, the failing test, and the
+live check. cursor-kenji is installable playbooks: you say the job, a
+named skill runs, and “done” has to survive a judge.
+
+npx @kensaurus/cursor-kenji --all
+https://github.com/kensaurus/cursor-kenji
 ```
 
 ### X / Twitter
 
 ```
-I built 143 Cursor agent skills so you don't have to:
+You say the job. The playbook runs.
 
-• audit security → OWASP scan runs
-• "make this nicer" → NN/g UX polish
-• "can we recover if the DB dies?" → restore plan
-• "commit" → proper conventional commit message
+Not a prompt paste-bin. A completion gate that keeps going until the
+checklist is empty.
 
-One install, 143 skills auto-activate:
-npx skills add kensaurus/cursor-kenji
-
-→ github.com/kensaurus/cursor-kenji
+npx @kensaurus/cursor-kenji --all
 ```
 
-### dev.to / Hashnode article outline
+### Article outline (one piece, not a listicle)
 
 ```
-Title: 143 Cursor AI Skills That Match on Keywords
+Title: Agents lie about “done.” Make them prove it.
 
-1. The problem: writing the same prompts over and over
-2. What Cursor skills are and how they work
-3. What's in cursor-kenji (143 skills, 55 commands, 6 subagents)
-4. How to install (one line)
-5. Demo: 5 skills in action with example prompts
-6. How to add your own skills
+1. The gap: 3.6k npm downloads, almost no stars — people install, they don’t bookmark
+2. What a completion gate actually checks (state file, not vibes)
+3. One session: grill → spec → failing test → PR → judge
+4. Install paths (npm / skills.sh / Claude plugin) and what each omits
+5. What this pack is not (hosted app, MCP server, Marketplace-listed)
 ```
 
 ---
 
-## 8. Cross-promote via Mushi Mushi
+## 14. Cross-promote via Mushi Mushi
 
 Mushi Mushi's README already mentions cursor-kenji skills:
 > "Install Mushi skills in your Cursor or Claude Code project"

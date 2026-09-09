@@ -1,0 +1,281 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Audit",
+      "description": "Inspect the repo; some skills then fix.",
+      "skills": [
+        "audit-accessibility",
+        "audit-analytics",
+        "audit-auth-flows",
+        "audit-backend-architecture",
+        "audit-bundle-size",
+        "audit-cicd",
+        "audit-code-quality",
+        "audit-code-review",
+        "audit-codemod-safety",
+        "audit-db-schema",
+        "audit-doctrine",
+        "audit-env-parity",
+        "audit-fe-api",
+        "audit-gate-logic",
+        "audit-i18n",
+        "audit-infra-cost",
+        "audit-langfuse-llm",
+        "audit-llm-security",
+        "audit-monetization-iap",
+        "audit-payment-system",
+        "audit-performance",
+        "audit-realworld",
+        "audit-resilience",
+        "audit-responsive",
+        "audit-security",
+        "audit-skill-conflicts",
+        "audit-ui-states",
+        "audit-uiux-design-system",
+        "audit-ux",
+        "audit-ux-journeys"
+      ]
+    },
+    {
+      "title": "Plan",
+      "description": "Audit first. Change only after you approve.",
+      "skills": [
+        "plan-aeo-readiness",
+        "plan-antislop",
+        "plan-aso",
+        "plan-backup-dr",
+        "plan-capacitor-hardening",
+        "plan-data-integrity",
+        "plan-dependency-provenance",
+        "plan-docs-sync",
+        "plan-error-handling",
+        "plan-input-validation",
+        "plan-llm-cost-guardrails",
+        "plan-mobile-readiness",
+        "plan-perf-audit",
+        "plan-privacy-compliance",
+        "plan-rls-audit",
+        "plan-secrets-audit",
+        "plan-security-audit",
+        "plan-stub-checker",
+        "plan-test-coverage",
+        "plan-uiux-unification"
+      ]
+    },
+    {
+      "title": "Enhance",
+      "description": "Improve what already exists.",
+      "skills": [
+        "enhance-agent-guardrails",
+        "enhance-arch-boundaries",
+        "enhance-capacitor-ui",
+        "enhance-email-deliverability",
+        "enhance-motion",
+        "enhance-pwa",
+        "enhance-readability",
+        "enhance-readme",
+        "enhance-skill-prompts",
+        "enhance-web-forms",
+        "enhance-web-instant-nav",
+        "enhance-web-landing",
+        "enhance-web-redesign",
+        "enhance-web-seo",
+        "enhance-web-ui",
+        "enhance-web-ux",
+        "enhance-web-web3d"
+      ]
+    },
+    {
+      "title": "Design",
+      "description": "Build something new.",
+      "skills": [
+        "design-api",
+        "design-canvas",
+        "design-email",
+        "design-frontend",
+        "design-generative-art",
+        "design-mobile-first",
+        "design-motion",
+        "design-prd",
+        "design-system",
+        "design-theme"
+      ]
+    },
+    {
+      "title": "Backend",
+      "description": "Server and data patterns.",
+      "skills": [
+        "backend-db-performance",
+        "backend-error-handling",
+        "backend-observability",
+        "backend-patterns",
+        "backend-realtime"
+      ]
+    },
+    {
+      "title": "Mobile",
+      "description": "React Native and Capacitor.",
+      "skills": [
+        "mobile-capacitor-platform",
+        "mobile-emulator-start",
+        "mobile-emulator-test",
+        "mobile-rn-performance",
+        "mobile-rn-screen"
+      ]
+    },
+    {
+      "title": "Data",
+      "description": "Charts and pipelines.",
+      "skills": [
+        "data-pipeline",
+        "data-visualization"
+      ]
+    },
+    {
+      "title": "Docs",
+      "description": "Write it down clearly.",
+      "skills": [
+        "docs-adr",
+        "docs-coauthor",
+        "docs-domain-modeling",
+        "docs-writer"
+      ]
+    },
+    {
+      "title": "Housekeep",
+      "description": "Consolidate one drifted register.",
+      "skills": [
+        "housekeep-backlog",
+        "housekeep-design",
+        "housekeep-gates"
+      ]
+    },
+    {
+      "title": "Workflows",
+      "description": "Multi-step recipes.",
+      "skills": [
+        "workflow-build-feature",
+        "workflow-coding-discipline",
+        "workflow-environment-ready",
+        "workflow-feature-flag",
+        "workflow-feedback-to-closure",
+        "workflow-fix-and-ship",
+        "workflow-git-commit",
+        "workflow-green-repo",
+        "workflow-grilling",
+        "workflow-housekeep",
+        "workflow-launch-ready",
+        "workflow-merge-conflicts",
+        "workflow-onboard",
+        "workflow-parallel-agents",
+        "workflow-pr",
+        "workflow-quality-gate",
+        "workflow-refactor",
+        "workflow-release-prep",
+        "workflow-ship-and-observe",
+        "workflow-spec-tdd"
+      ]
+    },
+    {
+      "title": "Test",
+      "description": "Prove it works.",
+      "skills": [
+        "test-exploratory",
+        "test-load",
+        "test-mutation",
+        "test-playwright",
+        "test-qa",
+        "test-red-team",
+        "test-unit",
+        "test-visual-regression"
+      ]
+    },
+    {
+      "title": "Deploy",
+      "description": "Ship and verify.",
+      "skills": [
+        "deploy-npm",
+        "deploy-verify"
+      ]
+    },
+    {
+      "title": "Debug",
+      "description": "Find and fix what is broken.",
+      "skills": [
+        "debug-error",
+        "debug-fe-be-integration",
+        "debug-sentry-monitor"
+      ]
+    },
+    {
+      "title": "Iterate",
+      "description": "Close the loop after launch.",
+      "skills": [
+        "iterate-agent-harness",
+        "iterate-post-launch"
+      ]
+    },
+    {
+      "title": "Mushi",
+      "description": "Bug-report triage helpers.",
+      "skills": [
+        "mushi-health",
+        "mushi-integration"
+      ]
+    },
+    {
+      "title": "Protocols",
+      "description": "Session guardrails.",
+      "skills": [
+        "protocol-browser-anti-stall"
+      ]
+    },
+    {
+      "title": "Authoring",
+      "description": "Build skills and MCP servers.",
+      "skills": [
+        "meta-mcp-builder",
+        "meta-skill-creator"
+      ]
+    },
+    {
+      "title": "Third-party",
+      "description": "Upstream-maintained skills.",
+      "skills": [
+        "thirdparty-emil-design-eng",
+        "thirdparty-ui-ux-pro-max",
+        "thirdparty-web-interface-guidelines"
+      ]
+    },
+    {
+      "title": "Core",
+      "description": "Cross-cutting closure and research.",
+      "skills": [
+        "burndown-full",
+        "complete-everything",
+        "handoff",
+        "research"
+      ]
+    },
+    {
+      "title": "Cursor IDE",
+      "description": "Cursor-specific skills (hooks, canvas, rules, PR splitter).",
+      "skills": [
+        "babysit",
+        "canvas",
+        "create-hook",
+        "create-rule",
+        "create-skill",
+        "create-subagent",
+        "migrate-to-skills",
+        "shell",
+        "split-to-prs",
+        "statusline",
+        "update-cli-config",
+        "update-cursor-settings"
+      ]
+    }
+  ]
+}

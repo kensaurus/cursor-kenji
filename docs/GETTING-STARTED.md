@@ -42,6 +42,13 @@ cd cursor-kenji
 
 From a clone you can also run `node bin/install.mjs --all`. Re-check anytime with `npx @kensaurus/cursor-kenji --verify --all`.
 
+**Claude Code as a plugin** (this repo as a marketplace — not the Anthropic community catalog until they list it):
+
+```
+/plugin marketplace add kensaurus/cursor-kenji
+/plugin install cursor-kenji@cursor-kenji
+```
+
 ---
 
 ## Step 3: Restart Cursor
@@ -140,7 +147,7 @@ Yes — delete the folder from `~/.cursor/skills/`.
 Yes. See [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 **Does this work with Claude, Codex, or Gemini?**
-Yes. `npx @kensaurus/cursor-kenji --all` installs the full pack for Cursor and Claude Code, and ports rules plus a few commands to Codex CLI and Gemini CLI. Skills-only: `npx skills add kensaurus/cursor-kenji`. Cursor models still read the same skill text.
+Yes. `npx @kensaurus/cursor-kenji --all` installs the full pack for Cursor and Claude Code, and ports rules plus a few commands to Codex CLI and Gemini CLI. Skills-only: `npx skills add kensaurus/cursor-kenji`. Claude Code plugin: `/plugin marketplace add kensaurus/cursor-kenji`. Cursor models still read the same skill text.
 
 **Is it free?**
 Yes, MIT licensed.
