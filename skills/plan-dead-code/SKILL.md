@@ -49,15 +49,25 @@ skill's finding.
 
 ## How to reason (every candidate)
 
-1. **Observe** — which tool reported it, at what path, in which mode
+1. **Observe** — which tool reported it, at what path, in which mode.
+   Unsure? `npx knip --trace-export <name>` / `--trace-file <path>` shows
+   exactly where Knip looked
 2. **Interpret** — is it unreferenced, or referenced in a way the tool
    cannot see? (dynamic import, string route, generated types, Deno)
-3. **Classify** — proven-dead / config-gap / intentional-public / needs-owner
-4. **Severity** — deleting a dynamically-imported module is a runtime
-   break that typecheck and unit tests both pass
+3. **Classify** — `kill` / `keep-config` / `keep-tagged` / `chain` /
+   `needs-owner`, per
+   [`references/preservation-contract.md`](references/preservation-contract.md)
+4. **Severity × effort** — an unused dependency with an open advisory
+   outranks an unused type; a barrel explaining forty findings is one
+   M-effort fix, not forty S-effort ones
 
 Skipping **Interpret** is what turns a cleanup into an outage. A tool
 finding is evidence, not a verdict.
+
+**Report chain heads, not chain members.** One dead file explains its own
+exports *and* the packages only it imported. Those are children of that
+row, not rows of their own — otherwise a three-item plan reads as
+twenty-seven and the phasing is wrong.
 
 ## Worked example
 
@@ -143,6 +153,11 @@ already add.
 recipes for Vite+React+Supabase, Next.js App Router, and monorepos are in
 [`references/knip-config.md`](references/knip-config.md).
 
+**Gate before Phase 2.** Hints clean, *and* unresolved imports plus unlisted
+dependencies both explained. If either is still in the dozens, the config is
+not done — the resolver is failing, not the code. Triaging findings from a
+misconfigured run is how false positives become deletions.
+
 ---
 
 ## Phase 2 — Baseline the module graph  [LOW freedom — run exactly]
@@ -165,9 +180,11 @@ the list of unused files right trickles down into the other issue types":
 4. **Unused dependencies**
 
 Scope with `--files`, `--exports`, `--dependencies` to read one class at a
-time. `--production` excludes test files, config files, stories and
+time, and `--max-show-issues <n>` to keep a first pass readable.
+`--production` excludes test files, config files, stories and
 devDependencies; `--strict` additionally isolates workspaces to direct
-dependencies.
+dependencies. `--reporter json` is what the baseline numbers come from —
+never a hand count.
 
 **Build the keep-working list.** For every finding, ask what would break.
 Named suspects, each needing a positive reason to keep:
@@ -187,7 +204,14 @@ hint** when a tag becomes unnecessary, so the exemption cannot rot.
 ## Phase 3 — The seven surfaces Knip cannot see  [MIXED — greps run exactly]
 
 Knip owns the module graph. These are the classes a vibe-coded repo
-accumulates that it will never report. Count each; fix nothing.
+accumulates that it will never report. Count each; fix nothing. Exact
+commands, false positives, and the fix column are in
+[`references/residue-greps.md`](references/residue-greps.md).
+
+> **Run the bundle-leak check even if you skip the rest of this phase:**
+> `npm run build && rg -l "service_role|SUPABASE_SERVICE_ROLE" dist`. A hit
+> is a live credential in shipped output — stop the pass and go to
+> `plan-secrets-audit`.
 
 **3a. Unused variables and imports inside files.** Knip explicitly does
 not do this. Baseline with `tsc --noEmit` under `noUnusedLocals` +
@@ -284,12 +308,17 @@ migrations route to `plan-data-integrity` and `db-migrator`.
 | Env drift (missing / unused) | env diff | |
 | Unused indexes / orphan tables / functions | `supabase inspect` | |
 
-**4b. Keep/kill list** — one row per finding:
-`path:line | class | evidence | verdict | risk | what must keep working`
+**4b. Keep/kill list** — one row per **chain head**:
+`path:line | class | evidence | verdict | sev | effort | children | what must keep working`
 
 Verdicts: `kill` · `keep-tagged` (`@public`/`@internal`/`@alias`) ·
-`keep-config` (config gap, fix the config) · `needs-owner` (a human must
-decide). Never guess `kill` to shrink the list.
+`keep-config` (config gap, fix the config) · `chain` (child of another row) ·
+`needs-owner` (a human must decide). Never guess `kill` to shrink the list,
+and never leave a keep row without naming its remedy — a keep with no remedy
+is an `ignore` in disguise, and the next session will delete it.
+
+A filled example table, with the severity and effort rubric, is in
+[`references/output-templates.md`](references/output-templates.md).
 
 **4c. Phased burndown** — ordered so each phase's verification is
 meaningful, cheapest-to-review first, and the pre-approved file list going
@@ -338,13 +367,18 @@ cause so execution fixes one thing instead of forty.
 
 ## Output format
 
+Full template: [`references/output-templates.md`](references/output-templates.md).
+
 1. **Config diff** — what `knip.json` changed and which hint each resolved
 2. **Before/after finding counts** — first run vs configured run (the honest
    measure of how much was never dead)
 3. **Baseline table** — 4a, fully populated
-4. **Keep/kill list** — 4b, grouped by class
-5. **Phased burndown** — 4c with risk per phase
-6. **Ratchet proposal** — 4d
-7. **Handoffs** — per the self-critique owner list
+4. **Keep/kill list** — 4b, chain heads only, grouped by class
+5. **Root causes** — 4e, the barrels and dumping grounds behind the counts
+6. **Phased burndown** — 4c with risk and "what must keep working" per phase
+7. **Ratchet proposal** — 4d
+8. **Handoffs** — per the self-critique owner list
 
-Plan only. Deletion begins in `housekeep-dead-code`, after approval.
+Plan only. Deletion begins in `housekeep-dead-code`, after approval. The
+non-negotiables for this pass are in
+[`references/preservation-contract.md`](references/preservation-contract.md).

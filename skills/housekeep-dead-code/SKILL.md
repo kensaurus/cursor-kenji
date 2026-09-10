@@ -214,29 +214,39 @@ move a number; never widen a type to `any` to remove a suppression.
 
 ### C9 · Dead schema  [HUMAN GATE — do not proceed unasked]
 
+Full playbook: [`references/supabase-hygiene.md`](references/supabase-hygiene.md).
+
 **Ask the human to name the target database and wait for their reply.** Do
 not infer it from `.env`, a linked project ref, or anything said earlier in
-the session. Then, in this order: retire in code → verify zero usage over a
-stated window → author a reversible migration.
+the session. Then: retire in code → verify zero usage across a valid stats
+window → author a reversible migration.
 
-- Orphan tables/columns/functions and unused indexes go to `db-migrator`
-  as a reviewed migration; safety judgment stays with
-  `plan-data-integrity`
-- Undeployed/never-invoked Edge Functions can be removed from the repo
-  independently of any SQL
-- Regenerate types (`supabase gen types`) in the same commit as the schema
-  change so they cannot drift
+Three traps that make a "dead" object alive, all covered in the reference:
+
+- **In-database callers.** An RPC used only by an RLS policy, a trigger, or
+  a `pg_cron` job has zero client references and is load-bearing. Check
+  `pg_policies`, `pg_trigger`, and `pg_proc.prosrc` before believing a grep.
+- **External callers.** An Edge Function targeted by a Stripe or GitHub
+  webhook is never in your `functions.invoke()` grep.
+- **Young statistics.** `pg_stat_*` counts from `stats_reset`; a staging
+  database with no traffic makes everything look unused.
+
+Tables drop in **two steps** — rename to `_deprecated_<name>` first (errors
+surface immediately, data intact, rollback is another rename), drop a release
+later. Regenerate types in the same commit. Migrations go to `db-migrator`;
+safety judgment stays with `plan-data-integrity`.
 
 **Never author or run a `DROP` against production in this skill.** Index
-drops are reversible; column and table drops destroy data. If the target
-is unconfirmed, stop and ask.
+drops are reversible; column and table drops destroy data.
 
 ---
 
 ## Phase 2 — Install the ratchet  [LOW freedom — the point of the whole pass]
 
 Cleanup without a gate regrows within weeks. This is the deliverable that
-makes the pass durable.
+makes the pass durable. Full config — scripts, tsconfig, ESLint flat config,
+lint-staged, the job, aggregator wiring, and the Supabase types-drift guard —
+is in [`references/ratchet-ci.md`](references/ratchet-ci.md).
 
 **2a. Script it** so humans, hooks, and CI run one definition — the same
 flags, or "passes locally" stops predicting CI:
@@ -271,8 +281,27 @@ change.
 **2d. Ratchet the other counts too** — duplication %, suppression count,
 `console.*` count. A number with no gate is a number that grows back.
 
-**2e. Optional local hook** — `lint-staged` for the residue greps. Keep it
-identical to the CI command so "passes locally" predicts CI.
+**2e. Local hooks** — `lint-staged` runs ESLint per file; Knip is repo-wide
+and belongs in **pre-push**, not pre-commit. Either way the hook calls the
+same npm script CI calls, so "passes locally" predicts CI.
+
+---
+
+## Phase 3 — Prove the ratchet bites  [LOW freedom — run both probes]
+
+A gate nobody tested is a gate nobody has.
+
+- **Fresh-clone probe** — deletions can pass locally on a warm
+  `node_modules` and fail on a clean install:
+  ```
+  git clone . /tmp/dc-probe && cd /tmp/dc-probe && npm ci \
+    && npm run typecheck && npm test && npm run build && npm run knip
+  ```
+- **Deliberate-violation probe** — on a scratch branch, add
+  `export const zz = 1` to any file and push. The `dead-code` job **and** the
+  aggregator must go red. If the aggregator stays green, it is counting a
+  skipped job as success — that is `housekeep-gates` Phase 1. Delete the
+  branch after.
 
 ---
 
@@ -317,8 +346,9 @@ identical to the CI command so "passes locally" predicts CI.
    `ignore*` entry, `--exclude`, narrowed `--include`, `--workspace` scope,
    `--no-exit-code`, `rules: warn` downgrade, or disabled compiler/lint
    flag was used to move a number
-7. **Ratchet live** — script + CI job + aggregator wiring exist and the
-   baseline is the post-cleanup number
+7. **Ratchet live** — script + CI job + aggregator wiring exist, the
+   baseline is the post-cleanup number, and both probes ran (fresh clone
+   green, deliberate violation red)
 8. **Schema gated** — no `DROP` without a confirmed target and a reviewed
    reversible migration
 9. **Restores recorded** — every false positive is written back into
@@ -337,16 +367,18 @@ identical to the CI command so "passes locally" predicts CI.
 - [ ] False positives written back as config/tags, not `ignore`
 - [ ] `knip` script + CI job with `--max-issues` at the new count
 - [ ] Job wired into the one aggregator gate; other counts ratcheted
+- [ ] Fresh-clone probe green; deliberate-violation probe red
 - [ ] Full verification ladder re-run after the last edit
 - [ ] Before/after numbers reported against the plan's baseline
 
 ## Output format
 
-1. **Per-category log** — category | items removed | commit | verification result
+1. **Per-category log** — category | plan rows applied | items removed | new chain items surfaced | gate result | commit SHA
 2. **Baseline vs now** — every metric from the plan's 4a table, before → after
 3. **False positives** — item | why it was live | config/tag written back
 4. **Ratchet** — scripts, CI job, aggregator wiring, pinned numbers
-5. **Deferred** — what was left and why (owner, risk, or missing coverage)
+5. **Probe evidence** — fresh clone | deliberate violation | bundle leak
+6. **Deferred** — what was left and why (owner, risk, or missing coverage)
 6. **Handoffs** — duplication → `workflow-refactor`; migrations →
    `db-migrator`; leftover parked items → `housekeep-backlog`; gate
    consolidation → `housekeep-gates`

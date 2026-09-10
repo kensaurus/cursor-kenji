@@ -1,0 +1,84 @@
+# Residue grep pack
+
+What Knip cannot see: junk *inside* live files, plus assets, env, and
+duplication. `plan-dead-code` records the counts; `housekeep-dead-code`
+applies the fix column. Adjust `src` to the detected source directory.
+
+**Counting convention.** Use `rg -o … | wc -l` for a repo total of *matches*.
+`rg -c` prints per-file counts of matching *lines*, so two `console.log` calls
+on one line count once — fine for triage, wrong for a ratchet. Pick one and
+keep it: the baseline and the post-cleanup number must be produced by the same
+command or the ratchet compares nothing.
+
+| Class | Count command | Fix (housekeep only) |
+|---|---|---|
+| Debug logging | `rg -o "console\.(log\|debug\|info)\(" src --glob '!**/*.{test,spec}.*' \| wc -l` | Delete, or route through the project's existing logger. **Never add a logger to satisfy this pass.** `console.error/warn` in catch blocks stay. |
+| `debugger` | `rg -n "^\s*debugger;?\s*$" src` | Delete |
+| Focused tests | `rg -n "\b(it\|test\|describe)\.only\(" src tests e2e 2>/dev/null` | Remove the **modifier**. `.only` silently disables the rest of its file, so the suite may go red — that is a bug it was hiding |
+| Skipped tests | `rg -n "\b(it\|test\|describe)\.(skip\|todo)\(\|\bx(it\|describe)\(" src tests e2e 2>/dev/null` | Do not delete the test → un-skip and fix, or register rows in `housekeep-backlog` |
+| Commented-out code | `rg -n "^\s*//\s*(const\|let\|var\|import\|export\|return\|if \(\|for \(\|await \|function\|\}\|<[A-Za-z])" src` | Delete the block. Git is the archive; "keep for reference" is not a reason |
+| Placeholders | `rg -n -i "your logic here\|implement me\|lorem ipsum\|placeholder text\|TODO: implement" src` | Wire or delete. If the control is user-visible → `plan-stub-checker` |
+| TODO / FIXME / HACK | `rg -o "TODO\|FIXME\|HACK\|XXX" src \| wc -l` | Count only → `housekeep-backlog` |
+| Orphan versions | `rg --files src \| rg -i "(v2\|v3\|new\|old\|copy\|backup\|final\|tmp)\.(tsx?\|css)$"` | Confirm which one the router/imports actually use; delete the rest. The survivor keeps its original name |
+| Dumping grounds | see script below | >15 exports: split by domain, or inline single-caller helpers |
+| `@ts-ignore` / `@ts-expect-error` | `rg -o "@ts-ignore\|@ts-expect-error" src \| wc -l` | Fix the type, or convert to `@ts-expect-error <reason>` — it self-expires, and TS reports it once the error is gone |
+| `eslint-disable` | `rg -o "eslint-disable\|biome-ignore" src \| wc -l` | Per-line with a reason, or fix. File-level disables are removed and the file fixed |
+| `any` | `rg -o ":\s*any\b\|as any\b\|<any>" src \| wc -l` | Ratchet metric. Fix only where it hides a real bug this pass. **Never widen a type to remove a suppression** |
+| Empty catch | `rg -n -U "catch\s*(\([^)]*\))?\s*\{\s*\}" src` | Log + rethrow, or one line saying why swallowing is correct |
+| Orphan assets | see script below | Delete. Confirm no reference from CSS, `index.html`, or storage seeds first |
+| Env drift | see script below | Add missing keys to `.env.example`; remove declared-but-unreferenced. **Names only — never print values** |
+| Duplication | `npx jscpd src --min-tokens 50 --min-lines 5 --reporters console` | Behavior-preserving → `workflow-refactor`, never bundled with a deletion commit |
+| Bundle leak | `npm run build && rg -l "service_role\|SUPABASE_SERVICE_ROLE" dist` | **Any hit stops the pass** → `plan-secrets-audit` immediately |
+
+The bundle-leak row is not dead-code hygiene — it is the one check here that
+can find a live credential in shipped output. Run it even if the rest of
+Phase 3 is skipped.
+
+## Dumping grounds
+
+An AI-written `lib/utils.ts` accretes helpers nobody deletes. Rank by export
+count so the barrel itself becomes the finding:
+
+```bash
+for f in $(rg --files src | rg "(utils|helpers)/.*\.tsx?$|lib/utils\.tsx?$"); do
+  echo "$(rg -c '^export ' "$f" 2>/dev/null || echo 0) $f"
+done | sort -rn
+```
+
+If one file explains twenty unused-export findings, that is **one M-effort
+fix**, not twenty S-effort ones. Report the barrel.
+
+## Orphan assets
+
+```bash
+for f in $(find public -type f ! -name "*.md" 2>/dev/null); do
+  b=$(basename "$f")
+  rg -q --fixed-strings "$b" src index.html 2>/dev/null || echo "orphan: $f ($(du -h "$f" | cut -f1))"
+done
+```
+
+Repeat for `src/assets` against `src`. Because the loop searches `src`, fonts
+referenced only from a CSS `@font-face` count as used.
+
+**Known false positive:** hashed or templated references
+(`` `/img/${slug}.png` ``, Vite's `new URL('./x.png', import.meta.url)`) never
+match a basename scan. A directory reached only by template string is
+`needs-owner`, not dead.
+
+## Env drift
+
+Both directions matter: referenced-but-undeclared breaks production;
+declared-but-unreferenced is dead config.
+
+```bash
+rg -o "import\.meta\.env\.[A-Z0-9_]+" src | sed 's/.*env\.//' | sort -u  > /tmp/env-used
+rg -o "process\.env\.[A-Z0-9_]+"      src | sed 's/.*env\.//' | sort -u >> /tmp/env-used
+sort -u -o /tmp/env-used /tmp/env-used
+rg -o "^[A-Z0-9_]+" .env.example | sort -u > /tmp/env-declared
+
+echo "referenced, not declared:"; comm -23 /tmp/env-used /tmp/env-declared
+echo "declared, not referenced:"; comm -13 /tmp/env-used /tmp/env-declared
+```
+
+Any `VITE_` / `NEXT_PUBLIC_` key whose value is not meant for the browser is a
+secrets finding, not an env-hygiene one → `plan-secrets-audit`.

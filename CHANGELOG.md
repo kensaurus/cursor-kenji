@@ -6,6 +6,72 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.33.0] — 2026-09-10
+
+A second independent implementation of the dead-code pair was written against
+the same base commit. Comparing the two surfaced material worth keeping — and
+two bugs worth not keeping. Ported the former as reference files; rejected the
+latter after checking both against the knip 6.35.1 source.
+
+### Added
+
+- `plan-dead-code/references/residue-greps.md` — the grep pack as a table with
+  a count command and a fix column per class, plus the false positives that
+  matter: hashed and template-string asset references, and the counting
+  convention (`rg -o … | wc -l` for matches vs `rg -c` for lines — mixing them
+  makes a ratchet compare nothing). Adds a **bundle-leak probe**
+  (`rg -l "service_role" dist`) that stops the pass and routes to
+  `plan-secrets-audit`; it is the one check here that can find a live
+  credential in shipped output.
+- `plan-dead-code/references/output-templates.md` — a filled
+  `plan-dead-code.md` with the chain-head row discipline, worked severity ×
+  effort rubric, and a root-causes section so the report names the barrel
+  rather than its forty symptoms.
+- `plan-dead-code/references/preservation-contract.md` — the plan-only
+  non-negotiables and the five verdict buckets, matching the
+  `plan-perf-audit` convention.
+- `housekeep-dead-code/references/ratchet-ci.md` — scripts, tsconfig
+  (`noUnusedLocals` enabled *during* the cascade, not after),
+  `eslint-plugin-unused-imports` flat config, why Knip belongs in pre-push
+  rather than pre-commit, the aggregator's `jq` result check that makes a
+  skipped job fail, and a Supabase types-drift CI guard.
+- `housekeep-dead-code/references/supabase-hygiene.md` — the schema arm in
+  full. Three traps a client-side grep cannot see: RPCs called only from an
+  RLS policy, trigger, or `pg_cron` job; Edge Functions targeted by external
+  webhooks; and `pg_stat_*` counters too young to mean anything (check
+  `stats_reset`). Tables drop in two steps — rename to `_deprecated_<name>`,
+  drop a release later — because a rename is reversible.
+
+### Changed
+
+- `plan-dead-code` — chain-head reporting is now explicit (a dead file's
+  exports and sole-use dependencies are children of that row, not rows of
+  their own, or a three-item plan reads as twenty-seven); severity is paired
+  with S/M/L effort; adds the verified `--trace-export` / `--trace-file` /
+  `--max-show-issues` flags; and adds a second gate before triage — unresolved
+  imports and unlisted dependencies both explained, not just hints clean.
+- `housekeep-dead-code` — new Phase 3 proves the ratchet bites: a fresh-clone
+  probe (deletions can pass on a warm `node_modules` and fail on `npm ci`) and
+  a deliberate-violation probe that must turn the aggregator red, not just the
+  job.
+
+### Rejected from the ported material
+
+Both were checked against the knip 6.35.1 source rather than its docs:
+
+- `knip:ci: "knip --production … --treat-config-hints-as-errors"` — inert.
+  Knip sets `isDisableConfigHints = --no-config-hints || isProduction`, so the
+  flag cannot fire on a production run. It belongs on the default-mode script.
+- `rules: { classMembers: "warn" }` in the recommended config — silently
+  exempts that issue type from the gate, because `--max-issues` totals only
+  rules set to `error`. `ratchet-ci.md` now documents this as the quietest
+  ratchet bypass instead of shipping it as a default.
+- `$schema: ".../knip@latest/schema.json"` — floats a major version in a file
+  whose own text says not to float `latest`. Pinned to `knip@6`.
+- `-W` as shorthand for `--workspace`, and a "<50 scans, >5 pages" threshold
+  for `supabase inspect db unused-indexes` — neither is in the source or the
+  docs. Dropped rather than repeated.
+
 ## [1.32.0] — 2026-09-10
 
 Dead-code cleanup was one line inside `workflow-housekeep` (§2d, "npx knip
