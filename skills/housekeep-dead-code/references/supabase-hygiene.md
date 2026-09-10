@@ -68,8 +68,11 @@ That third block is the one people skip. **An RPC called only from an RLS
 policy, a trigger, or a `pg_cron` job has zero client references and is
 fully alive.** Deleting it silently breaks authorization.
 
-CLI equivalents where available: `supabase inspect db unused-indexes`,
-`seq-scans`, `table-record-counts`, `index-sizes`, `table-sizes`.
+CLI equivalents, documented at the time of writing: `supabase inspect db
+unused-indexes`, `seq-scans`, `table-sizes`, `index-sizes`, `cache-hit`,
+`bloat`. The set has changed across CLI releases, so confirm with
+`supabase inspect db --help` before scripting any of them; the SQL above is
+the version-independent path.
 
 ## 3. Cross-reference → candidates
 

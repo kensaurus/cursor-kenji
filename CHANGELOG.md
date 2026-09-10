@@ -6,6 +6,19 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.33.1] — 2026-09-10
+
+### Changed
+
+- `housekeep-dead-code/references/supabase-hygiene.md` — dropped
+  `supabase inspect db table-record-counts` from the CLI-equivalents line. It
+  rested on a single low-confidence doc extraction from a page that
+  redirected, and never appeared in the observability guide's documented set;
+  a wrong subcommand name in a command position is worse than no name. The
+  line now lists only the six confirmed subcommands, says the set has changed
+  across releases, and points at `supabase inspect db --help` plus the
+  version-independent SQL above it.
+
 ## [1.33.0] — 2026-09-10
 
 A second independent implementation of the dead-code pair was written against
