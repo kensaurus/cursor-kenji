@@ -125,7 +125,7 @@ Look → change → prove → ship, with guardrails on the whole time:
 |:------|:---------------|
 | **Orient** | `workflow-onboard`, `/research` |
 | **Assess** | `audit-*`, `plan-*`, `/grill-me` |
-| **Change** | `design-*`, `enhance-*`, `backend-*`, `housekeep-design` |
+| **Change** | `design-*`, `enhance-*`, `backend-*`, `housekeep-*` |
 | **Prove** | `test-*`, `complete-everything`, `completion-judge` |
 | **Ship** | `workflow-ship-and-observe`, `deploy-*`, `debug-*` |
 | **Guardrails** | rules, completion hook, `enhance-agent-guardrails`, `/handoff` |
@@ -565,7 +565,10 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 
 **Force a skill:** *"use `enhance-web-ux` on `/dashboard`"*
 
-> `housekeep-design` is the execution arm of `plan-uiux-unification`.
+> **Plan → apply pairs.** `housekeep-design` is the execution arm of
+> `plan-uiux-unification`; `housekeep-dead-code` is the execution arm of
+> `plan-dead-code`. The `plan-*` half audits and stops; the `housekeep-*`
+> half changes the repo only against an approved list.
 >
 > **Third-party skills:** prefixed `thirdparty-*` with `ATTRIBUTION.md` — see **[docs/THIRD-PARTY-SKILLS.md](docs/THIRD-PARTY-SKILLS.md)**.
 >
@@ -602,6 +605,7 @@ Type `/` in chat to see them all.
 | `/readability` | Dense / hard to read | CPL, Gestalt grouping, visuals that cut verbosity |
 | `/instant-nav` | Fast first page, slow next | Speculation Rules, bfcache, Early Hints |
 | `/responsive-audit` | Desktop looks like a phone | Breakpoint / linearized-layout audit |
+| `/deadcode` | Repo full of unused files/exports/deps | Configured Knip baseline, then delete by category behind a shrink-only ratchet |
 | `/skill-conflicts` | Wrong skill fired / just added skills | Pack contradictions, overlapping triggers, stale refs |
 | `/thirdparty-web-interface-guidelines` | Vercel UI audit | Review files against [Web Interface Guidelines](https://vercel.com/design/guidelines) |
 | `/*-plan` (21 aliases) | Audit before changing | Thin pointers to the `plan-*` skills (`/uiux-plan`, `/privacy-plan`, `/backup-plan`, `/aso-plan`, …) — audit + plan only. See [CATALOG](docs/CATALOG.md#pointer-delegates-to-skill) |
