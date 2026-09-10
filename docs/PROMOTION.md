@@ -68,7 +68,7 @@ Full pack (skills + slash commands): `npx @kensaurus/cursor-kenji --all`. That C
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/cursor-kenji
 
-**Status:** [x] Published — `@kensaurus/cursor-kenji@1.32.0` verified via `npm view` (2026-09-10)
+**Status:** [ ] 1.32.0 pending — tag `v1.32.0` pushed, GitHub Release not yet created, so the OIDC workflow has not fired. `npm view` still returns 1.31.0. Last verified publish: `@kensaurus/cursor-kenji@1.31.0`.
 
 ---
 
