@@ -68,7 +68,7 @@ Full pack (skills + slash commands): `npx @kensaurus/cursor-kenji --all`. That C
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/cursor-kenji
 
-**Status:** [ ] Pending — `@kensaurus/cursor-kenji@1.33.1` not on the registry yet; the GitHub Release that triggers the OIDC workflow has not been created. Registry serves 1.33.0.
+**Status:** [x] Published — `@kensaurus/cursor-kenji@1.33.1` via OIDC run [34436911214](https://github.com/kensaurus/cursor-kenji/actions/runs/34436911214); `npm view … version` returns `1.33.1` and `dist-tags.latest` is `1.33.1` (2026-09-10)
 
 ---
 
