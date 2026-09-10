@@ -6,7 +6,7 @@
 
 **You say the job. The playbook runs.**
 
-143 agent skills · 55 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents — for React / Next.js / Supabase, usable on almost any stack.
+145 agent skills · 57 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents — for React / Next.js / Supabase, usable on almost any stack.
 
 <p>
   <a href="https://www.npmjs.com/package/@kensaurus/cursor-kenji"><img src="https://img.shields.io/npm/v/@kensaurus/cursor-kenji?style=flat-square&color=cb3837&logo=npm" alt="npm version" /></a>
@@ -30,7 +30,7 @@
 
 **Who it’s for** — People shipping in Cursor, Claude Code, Codex CLI, or Gemini CLI. Tuned for React / Next.js / Supabase. Works on other stacks.
 
-**What it’s not** — A Cursor replacement, a prompt paste-bin, or 155 names to memorize. Install once. Talk like a teammate.
+**What it’s not** — A Cursor replacement, a prompt paste-bin, or 157 names to memorize. Install once. Talk like a teammate.
 
 ## Install (30 seconds)
 
@@ -110,7 +110,7 @@ Four rooms. Same rule: you talk, a named playbook runs.
 | **Rule** | A house rule the AI always obeys | Drop a `.mdc` into your project |
 | **MCP server** | A connection to your database / GitHub / browser | Copy a template + set env vars |
 
-Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **155** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
+Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **157** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
 
 ## How it works
 
@@ -132,15 +132,15 @@ Look → change → prove → ship, with guardrails on the whole time:
 
 Assess before you change. Prove before you ship.
 
-The 20 `plan-*` skills audit first and wait for your approval. See [docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md).
+The 21 `plan-*` skills audit first and wait for your approval. See [docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md).
 
 ## What's Inside
 
 | | Count | What it does |
 |:--|------:|:-------------|
-| **Skills** | 143 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
+| **Skills** | 145 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
 | **Cursor Skills** | 12 | IDE tools (canvas, hooks, rules, PR splitter) |
-| **Commands** | 55 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
+| **Commands** | 57 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
 | **Subagents** | 6 | Background helpers (code-reviewer, debugger, db-migrator…) |
 | **Completion hook** | 1 | Opt-in stop gate: continues only unfinished durable closure state |
 | **MCP Servers** | 16 | Full template: Supabase · GitHub · Playwright · AWS · Slack (essential is 3) |
@@ -263,21 +263,21 @@ You don't memorize names — describe the job in chat. Exact trigger phrases →
 
 <!-- SKILL-INDEX:START -->
 
-_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **155 skills** listed below._
+_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **157 skills** listed below._
 
 #### Skill families at a glance
 
 | Family | Count | In one sentence |
 |:-------|------:|:----------------|
 | Audit — inspect; some then fix | **30** | Check the codebase — security, UX, analytics, IAP, the skill pack… |
-| Plan — audit first, change only after you approve | **20** | Write a fix plan you approve before any code changes |
+| Plan — audit first, change only after you approve | **21** | Write a fix plan you approve before any code changes |
 | Enhance — improve what already exists | **17** | Polish UI, forms, motion, SEO, PWA, email deliverability |
 | Design — build something new | **10** | Create new UI, APIs, emails, themes from scratch |
 | Backend — server & data patterns | **5** | Auth, caching, queues, realtime, observability |
 | Mobile — React Native / Capacitor | **5** | RN screens, emulators, Capacitor, App Store prep |
 | Data — charts & pipelines | **2** | Charts, dashboards, ETL / cron jobs |
 | Docs — write it down clearly | **4** | READMEs, PRDs, RFCs with a reader-first voice |
-| Housekeeping — consolidate one drifted register | **3** | Consolidate one drifted register (gates, backlog, or design tokens) |
+| Housekeeping — consolidate or clear one drifted register | **4** | Consolidate one drifted register (gates, backlog, design tokens, dead code) |
 | Workflows — multi-step recipes | **20** | End-to-end recipes (build, fix, ship, green the repo) |
 | Test & QA — prove it works | **8** | Unit, Playwright, visual regression, load, red-team |
 | Deploy — ship & verify | **2** | npm release + post-deploy smoke tests |
@@ -289,7 +289,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | Third-party (upstream-maintained) | **3** | Vendored upstream skills (Emil, UI/UX Pro Max, Vercel WIG) |
 | Core & cross-cutting | **4** | Close everything, burndown, research, handoff |
 | Cursor IDE skills | **12** | Canvas, hooks, rules, PR splitter, CLI helpers |
-| **Total** | **155** | |
+| **Total** | **157** | |
 
 #### Full list (every skill)
 
@@ -328,7 +328,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `audit-ux` | Per-page UX audit using NN/g heuristics, Intuit microcopy, and Google HEART |
 | `audit-ux-journeys` | Cross-page UX audit for user stories, task completion, and information architecture — the layer audit-ux (per-page heuristics) skips |
 
-### Plan — audit first, change only after you approve (20)
+### Plan — audit first, change only after you approve (21)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -338,6 +338,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `plan-backup-dr` | Audit whether a project can actually recover from data loss — not just whether backups exist — then emit a phased DR plan |
 | `plan-capacitor-hardening` | Plan-only Capacitor/Ionic native-layer security audit: WebView, token storage, deep links/OAuth, cleartext traffic, exported activities |
 | `plan-data-integrity` | Audit a project for destructive-operation and migration safety gaps, then produce a phased safeguard plan |
+| `plan-dead-code` | Configuration-first dead-code audit — Knip baseline for unused files, exports and deps, plus duplication, debug residue, suppression debt,… |
 | `plan-dependency-provenance` | Audit dependencies for hallucinated or slopsquatted packages, supply-chain risk, and licensing gaps, then a remediation plan |
 | `plan-docs-sync` | Audit documentation against actual code behavior and plan corrections — no rewrites in this pass |
 | `plan-error-handling` | Audit silent failures and observability gaps (Sentry/Langfuse), then a phased plan — no implementation |
@@ -426,11 +427,12 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `docs-domain-modeling` | Build and sharpen a project's domain model — a CONTEXT.md glossary and ubiquitous language |
 | `docs-writer` | Write developer docs: README content, API references, code comments, changelog entries |
 
-### Housekeeping — consolidate one drifted register (3)
+### Housekeeping — consolidate or clear one drifted register (4)
 
 | Skill | What it does |
 |:------|:-------------|
 | `housekeep-backlog` | Apply-now inventory of parked work — unfinished plans, deferred phases, TODO/FIXME, skipped tests, open findings — into a living BACKLOG.md… |
+| `housekeep-dead-code` | Apply-now dead-code removal by category — one commit each, typecheck and tests between, bisect on red, then install the Knip ratchet so it… |
 | `housekeep-design` | Apply-now consolidation of a drifted design system into one token/component SSOT |
 | `housekeep-gates` | Apply-now consolidation of accreted CI gates, ratchets, and hooks into one aggregator required check |
 
@@ -454,7 +456,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | `workflow-parallel-agents` | Run multiple agents in parallel via git worktrees, cloud agents, or multi-model comparison |
 | `workflow-pr` | Manage an existing PR lifecycle — review, bot feedback, conflicts, merge |
 | `workflow-quality-gate` | Pre-release quality gate: test-red-team, audit-security, audit-bundle-size, audit-performance, test-unit |
-| `workflow-refactor` | Apply a scoped behavior-preserving refactor: map dependencies, change structure, run affected tests |
+| `workflow-refactor` | Scoped behavior-preserving refactor: map dependencies, change structure, run affected tests |
 | `workflow-release-prep` | Apply-now: take the local working tree to a merge-ready PR against main — review, self-critique, split if needed, commit, push, open PR,… |
 | `workflow-ship-and-observe` | Take merged, repository-green code all the way to a verified, monitored production release for any app stack |
 | `workflow-spec-tdd` | Stop vibe-coding with a spec → plan → TDD loop before writing a line |
@@ -573,7 +575,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 
 ---
 
-## Commands (55)
+## Commands (57)
 
 Type `/` in chat to see them all.
 
@@ -602,7 +604,7 @@ Type `/` in chat to see them all.
 | `/responsive-audit` | Desktop looks like a phone | Breakpoint / linearized-layout audit |
 | `/skill-conflicts` | Wrong skill fired / just added skills | Pack contradictions, overlapping triggers, stale refs |
 | `/thirdparty-web-interface-guidelines` | Vercel UI audit | Review files against [Web Interface Guidelines](https://vercel.com/design/guidelines) |
-| `/*-plan` (20 aliases) | Audit before changing | Thin pointers to the `plan-*` skills (`/uiux-plan`, `/privacy-plan`, `/backup-plan`, `/aso-plan`, …) — audit + plan only. See [CATALOG](docs/CATALOG.md#pointer-delegates-to-skill) |
+| `/*-plan` (21 aliases) | Audit before changing | Thin pointers to the `plan-*` skills (`/uiux-plan`, `/privacy-plan`, `/backup-plan`, `/aso-plan`, …) — audit + plan only. See [CATALOG](docs/CATALOG.md#pointer-delegates-to-skill) |
 
 **RN monorepo bundle:** copy `commands/native-rn-monorepo/` + `rules/native-rn-monorepo/` into your project (iOS builds on CI, not locally).
 
@@ -659,7 +661,7 @@ cp ~/cursor-kenji/rules/project-starter/*.mdc your-project/.cursor/rules/
 
 Global rules installed by the pack: `full-stack-ship-discipline.mdc`, `composer-2.5-execution.mdc`, `skill-workflows.mdc`, `senior-engineer.mdc`, `verification-before-completion.mdc`.
 
-> **Plan with a strong model, execute with Composer 2.5.** The 20 `plan-*` skills are authored/reviewed with a stronger reasoning model; `composer-2.5-execution.mdc` constrains how approved plans are implemented.
+> **Plan with a strong model, execute with Composer 2.5.** The 21 `plan-*` skills are authored/reviewed with a stronger reasoning model; `composer-2.5-execution.mdc` constrains how approved plans are implemented.
 
 **Project constitution:** copy [docs/AGENTS.template.md](docs/AGENTS.template.md) to your app repo as `AGENTS.md`.
 
@@ -690,9 +692,9 @@ Full definitions in [shell-aliases/cursor-helpers.sh](shell-aliases/cursor-helpe
 
 ```
 cursor-kenji/
-├── skills/           # 143 Agent Skills (SKILL.md each)
+├── skills/           # 145 Agent Skills (SKILL.md each)
 ├── skills-cursor/    # 12 Cursor-specific skills
-├── commands/         # 55 slash commands
+├── commands/         # 57 slash commands
 ├── agents/           # 6 subagents
 ├── hooks/            # opt-in completion stop gate
 ├── rules/            # Global + project-starter rules
@@ -726,7 +728,7 @@ You say the job in chat; a playbook runs. [Agent Skills](https://agentskills.io)
 `npx @kensaurus/cursor-kenji --all` for skills **and** slash commands. `npx skills add kensaurus/cursor-kenji` installs skills only. Claude Code as a plugin: `/plugin marketplace add kensaurus/cursor-kenji`. Restart Cursor after install. Re-check with `npx @kensaurus/cursor-kenji --verify --all`.
 
 **How many skills?**
-**143** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**155** total). Counts come from the filesystem via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
+**145** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**157** total). Counts come from the filesystem via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
 
 **How do skills trigger?**
 You talk normally. Cursor matches your words to each skill's YAML `description`. To force one: *"use \`audit-security\` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).

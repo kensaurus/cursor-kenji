@@ -102,6 +102,7 @@ with `/goal`.
 | Coherent motion on an existing design system (2026 stack) | `enhance-motion` |
 | Consolidate a drifted design system into one token SSOT | `housekeep-design` |
 | Consolidate accreted CI gates into one aggregator | `housekeep-gates` |
+| Delete proven-dead code by category, then ratchet it | `housekeep-dead-code` |
 | Inventory parked work into a living BACKLOG.md (do not implement) | `housekeep-backlog` |
 | Mechanically-enforced architecture boundaries | `enhance-arch-boundaries` |
 | Production-quality forms (a11y, validation, states, multi-step) | `enhance-web-forms` |
@@ -130,6 +131,7 @@ with `/goal`.
 | Secrets & key-scope audit (rotate vs relocate, no rotation) | `plan-secrets-audit` |
 | Data-integrity & destructive-op audit (no migrations/tokens) | `plan-data-integrity` |
 | Dependency provenance & slopsquatting audit (no install) | `plan-dependency-provenance` |
+| Dead-code audit — Knip config, baseline, ratchet plan (no deletions) | `plan-dead-code` |
 | LLM cost guardrails & quota-abuse audit (no limits added) | `plan-llm-cost-guardrails` |
 | Answer-engine / AEO citation readiness audit (no edits) | `plan-aeo-readiness` |
 | App Store / Play submission readiness audit (no manifest edits) | `plan-mobile-readiness` |

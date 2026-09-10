@@ -38,6 +38,8 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "can our CI gates be bypassed", "audit the quality-gate logic", "is our coverage ratchet sound", "why did a regression pass CI", "check for conflicting workflows", "we have too many overlapping checks" | `audit-gate-logic` |
 | "is this lint rule wrong", "the ratchet banned a legitimate pattern", "audit our guardrail doctrine", "appease the regex" | `audit-doctrine` |
 | "clean up our CI checks", "we have three lint jobs", "make one quality gate", "consolidate the workflows" | `housekeep-gates` |
+| "find dead code", "is this code used", "unused exports", "unused files", "run knip", "why is this file here" | `plan-dead-code` |
+| "delete the dead code", "remove unused files", "wire up Knip", "stop dead code coming back" | `housekeep-dead-code` |
 | "what's left behind", "inventory TODOs", "consolidate the backlog", "parked work register" | `housekeep-backlog` |
 | "audit i18n", "fix translations", "the Japanese feels like Google Translate", "hardcoded strings" | `audit-i18n` |
 | "audit LLM quality", "check Langfuse", "audit prompts", "check AI quality", "check traces" | `audit-langfuse-llm` |
@@ -250,7 +252,7 @@ Highest-impact combo: `test-exploratory` → `workflow-feedback-to-closure` → 
 | "commit my changes", "write a commit message" | `workflow-git-commit` |
 | "resolve the conflicts", "fix this merge", "the rebase is stuck" | `workflow-merge-conflicts` |
 | `/handoff` (user-invoked only) — compact the session into a handoff doc | `handoff` |
-| "clean up the repo", "update README", "update dependencies", "remove dead code" | `workflow-housekeep` |
+| "clean up the repo", "update README", "update dependencies", "delete the log files" | `workflow-housekeep` |
 | "I'm new to this repo", "orient me", "explain this codebase", "catch me up" | `workflow-onboard` |
 | "run agents in parallel", "best-of-N", "compare approaches", "multi-model" | `workflow-parallel-agents` |
 | "create a PR", "write pull request", "manage PR review", "merge PR" | `workflow-pr` |

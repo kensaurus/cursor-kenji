@@ -46,8 +46,8 @@ Full pack (skills + slash commands): `npx @kensaurus/cursor-kenji --all`. That C
 
 **PR copy:**
 ```markdown
-- [cursor-kenji](https://github.com/kensaurus/cursor-kenji) — ready-made AI playbooks your editor auto-triggers: 143 agent skills,
-  55 slash commands, 6 subagents, and MCP configs for React/Next.js/Supabase development.
+- [cursor-kenji](https://github.com/kensaurus/cursor-kenji) — ready-made AI playbooks your editor auto-triggers: 145 agent skills,
+  57 slash commands, 6 subagents, and MCP configs for React/Next.js/Supabase development.
   `npx skills add kensaurus/cursor-kenji`
 ```
 
@@ -68,7 +68,7 @@ Full pack (skills + slash commands): `npx @kensaurus/cursor-kenji --all`. That C
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/cursor-kenji
 
-**Status:** [x] Published — `@kensaurus/cursor-kenji@1.31.0` verified via `npm view` (2026-09-09)
+**Status:** [x] Published — `@kensaurus/cursor-kenji@1.32.0` verified via `npm view` (2026-09-10)
 
 ---
 
@@ -91,7 +91,7 @@ Submit the GitHub repo URL; Cursor reviews manually.
 - https://enterprisedna.co/directories/submit (alternative submission form)
 
 **One-liner description:**
-> 143 Cursor agent skills for React/Next.js/Supabase — installs in one command.
+> 145 Cursor agent skills for React/Next.js/Supabase — installs in one command.
 
 **Status:** Re-checked 2026-09-09. cursorlist.com is a **`.cursorrules` dump**, not a skill-pack catalog. “Submit Rule” goes to a Youform for individual rule files. **Not submitted** — listing a 155-skill pack there would be the wrong category. Do not treat as listed.
 

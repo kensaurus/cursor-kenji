@@ -156,7 +156,7 @@ Yes, MIT licensed.
 
 ## Get help
 
-- [PLAN-LOOPS.md](PLAN-LOOPS.md) — how to chain the 20 planning skills
+- [PLAN-LOOPS.md](PLAN-LOOPS.md) — how to chain the 21 planning skills
 - [AGENTS.template.md](AGENTS.template.md) — project constitution for your app repo
 - [GitHub Issues](https://github.com/kensaurus/cursor-kenji/issues)
 - [GitHub Discussions](https://github.com/kensaurus/cursor-kenji/discussions)

@@ -1,10 +1,10 @@
 ---
 name: workflow-refactor
 description: >
-  Apply a scoped behavior-preserving refactor: map dependencies, change
-  structure, run affected tests. Use when "refactor this", "reduce
-  duplication", or "improve readability". Repo-wide anti-pattern cleanup
-  → audit-code-quality. Mechanical repo-wide transform → burndown-full /
+  Scoped behavior-preserving refactor: map dependencies, change structure,
+  run affected tests. Use when "refactor this", "reduce duplication",
+  "improve readability". Dead code → plan-dead-code. Repo-wide
+  anti-patterns → audit-code-quality. Bulk transform → burndown-full /
   audit-codemod-safety.
 license: MIT
 ---
@@ -20,6 +20,11 @@ behavior-preserving checks and affected tests `[LOW freedom — run exactly]`.
 2. **Interpret** — duplication vs needed variation
 3. **Classify** — extract / inline / rename / stop (behavior would change)
 4. **Severity** — a public API change is not this skill
+
+Everything here **preserves behavior**. Removing code is a different
+contract: `plan-dead-code` proves it unreachable and `housekeep-dead-code`
+deletes it against an approved list. Duplication findings arrive here from
+those skills; deletions do not leave from here.
 
 ## Worked example
 
@@ -128,7 +133,7 @@ Before refactoring, state:
 | **God Object** | One class/component does everything | Split by responsibility |
 | **Primitive Obsession** | Using strings/numbers where a type would be safer | Create domain types |
 | **Shotgun Surgery** | One change requires editing many files | Consolidate related logic |
-| **Dead Code** | Unreachable or unused code | Delete it (git has history) |
+| **Dead Code** | Unreachable or unused code | Not this skill — proving it dead is `plan-dead-code`, deleting it is `housekeep-dead-code`. Note it and move on |
 
 ---
 

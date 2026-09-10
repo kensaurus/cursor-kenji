@@ -20,6 +20,7 @@ Never install a suspect package to "check".
 | **plan-dependency-provenance** (this) | Slopsquatting / SBOM / license plan |
 | `plan-security-audit` | OWASP umbrella burndown |
 | `workflow-housekeep` | Apply dependency updates after approval |
+| `plan-dead-code` | Unimported deps + unreachable source (graph fact) |
 
 ## How to reason (every plan item)
 
@@ -107,7 +108,10 @@ who published it, when, and under what license?*
 
 ### E · Bloat & blast radius
 - **Transitive depth** — direct vs total; duplicate libs.
-- **Unused dependencies** — declared but never imported.
+- **Unused dependencies** — declared but never imported. Flag the *manifest
+  fact* here; the module-graph proof and removal belong to `plan-dead-code`
+  → `housekeep-dead-code`. Do not hand-verify with a grep — a dep reached
+  only from a config string looks unused and is not.
 
 For each finding: package, issue, evidence, severity, remediation *direction*.
 
@@ -138,7 +142,7 @@ For each finding: package, issue, evidence, severity, remediation *direction*.
 1. **evidenced-not-assumed** — registry resolve (or "none found"), not vibe
 2. **plan-only** — no install/add/remove/update to "check"
 3. **phase justified** — squat/non-existent is Phase 1, not de-bloat
-4. **right-owner** — routine bumps → `/update-deps`; bundle trim → `audit-bundle-size`
+4. **right-owner** — routine bumps → `/update-deps`; bundle trim → `audit-bundle-size`; unimported deps + dead source → `plan-dead-code`
 5. **no-false-safety** — exists ≠ safe; license is a finding
 
 ---

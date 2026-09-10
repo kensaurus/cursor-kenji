@@ -6,8 +6,44 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.32.0] — 2026-09-10
+
+Dead-code cleanup was one line inside `workflow-housekeep` (§2d, "npx knip
+(if available) or npx ts-prune") — no config, no production mode, no fix
+ordering, no ratchet, and `ts-prune` has been in maintenance mode with its
+author pointing at Knip. Everything else a vibe-coded repo accretes
+(duplication, debug residue, suppression debt, orphan assets, env drift,
+dead schema) was scattered across five skills as prose with no tool behind
+it. This adds the plan→apply pair that owns it.
+
 ### Added
 
+- **`plan-dead-code`** — configuration-first dead-code audit. Authors
+  `knip.json` and resolves every configuration hint *before* trusting a
+  finding, because on a first run most findings are misconfiguration, not
+  dead code. Baselines both `--production` and default runs and reads
+  findings files → unresolved → exports → deps (unused files cascade into
+  phantom export and dependency findings). Builds a keep-working list for
+  glob-imported routes, generated Supabase types, Deno Edge Functions, and
+  deliberate `@public` API, then counts the seven surfaces Knip cannot see:
+  unused locals, `jscpd` duplication, debug residue, suppression debt,
+  orphan assets, env drift, dead schema. Emits `plan-dead-code.md` and
+  **deletes nothing**. Slash `/deadcode-plan`.
+- **`housekeep-dead-code`** — the execution arm. Deletes per the approved
+  keep/kill list one category per commit with typecheck, tests, and build
+  between each, and a bisect-the-batch rule on red: files
+  (`--fix-type files --allow-remove-files`, pre-reviewed list only) →
+  exports/types → unused-locals cascade (`remove-unused-vars`, then re-run
+  Knip) → dependencies → residue → assets → suppressions. Duplication is
+  measured and ratcheted but handed to `workflow-refactor`, since fixing it
+  preserves behavior rather than removing code. Then installs the ratchet:
+  `knip` script, CI job pinned at `--max-issues <today>` and only ever
+  lowered, wired into the single aggregator gate per `housekeep-gates`.
+  Slash `/deadcode`.
+- `plan-dead-code/references/knip-config.md` — `knip.json` recipes for
+  Vite + React + Supabase, Next.js App Router, and monorepos, each line
+  annotated with the `ignore` it replaces; tag usage (`@public`,
+  `@internal`, `@alias`); companion-tool table; and the ratchet CI job.
 - Brand mark (`assets/logo.svg` + PNG/OG/favicon). Geometric spine + first-line tick; fal.ai candidates were generated and rejected when they drifted.
 - Claude Code marketplace manifests: `.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json`.
 - Static landing page in `site/` (canonical stay on skills.sh until an owned host is live).
@@ -15,6 +51,25 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ### Changed
 
+- **`workflow-housekeep` §2d now hands off instead of sweeping.** It keeps
+  dead *artifacts* (logs, `.bak`, build output, committed screenshots) —
+  things dead by inspection — and routes unused source files, exports,
+  types, and dependencies to the new pair. The `ts-prune` recommendation is
+  gone. Trigger phrase "remove dead code" moved off this skill.
+- `plan-dependency-provenance` — boundary drawn: it owns the *manifest*
+  fact (does the package exist, is it licensed); the module-graph proof and
+  removal of unimported deps go to `plan-dead-code`. Warns against
+  hand-verifying with grep, since a dep reached only from a config string
+  looks unused and is not.
+- `plan-antislop` §3 — boundary drawn against provable unreachability:
+  commented-out scaffolding and guards that can't trigger stay slop
+  findings (a taste judgment), while counts and deletion move to
+  `plan-dead-code`.
+- `test-mutation` — "delete dead code" now routes to the pair rather than
+  `workflow-housekeep`.
+- `workflow-refactor` — the "Dead Code → delete it" smell row was the last
+  open side door around the approval contract; it now routes to the pair.
+  Duplication findings arrive there; deletions do not leave from there.
 - `package.json` homepage is the live skills.sh page.
 - Cursor plugin manifest: `displayName`, `logo`, `category`, homepage.
 - Distribution / promotion docs: Claude plugin install, localskills reject, Show HN draft. No fake “listed” claims.

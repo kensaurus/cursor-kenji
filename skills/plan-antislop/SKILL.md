@@ -20,6 +20,7 @@ license: MIT
 | **plan-antislop** (this) | Authenticity / slop burndown (plan only) |
 | `enhance-web-ui` / `enhance-web-ux` | Apply polish after the plan |
 | `plan-uiux-unification` | Design-system + IA unification |
+| `plan-dead-code` | Provably unreachable code, deps, duplication |
 
 ## How to reason (every plan item)
 
@@ -135,6 +136,12 @@ Working code that no engineer would have left as-is:
 
 This overlaps `audit-code-quality` — here the lens is specifically *"looks
 auto-generated"*, not general correctness. Flag, don't fix.
+
+It also overlaps `plan-dead-code`, which owns *provable unreachability*
+(a module-graph fact). Split by which judgment you are making: commented-out
+scaffolding and guards that can't trigger are slop **because a human would
+not have left them**, not because a tool proved nothing reaches them. Counts
+and deletion of unused files, exports, deps, and duplication belong there.
 
 ### 4 · Structure & IA slop
 

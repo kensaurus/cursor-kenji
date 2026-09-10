@@ -18,7 +18,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 | `mobile-` | Change | Native / React Native / emulator / Capacitor |
 | `data-` | Change | Data visualization & pipeline correctness |
 | `docs-` | Change | Documentation authoring |
-| `housekeep-` | Change | Apply-now consolidation of **one** drifted register (gates / backlog / design tokens) |
+| `housekeep-` | Change | Apply-now consolidation of **one** drifted register (gates / backlog / design tokens / dead code) |
 | `iterate-` | Operate | Close the loop after launch (post-launch feedback, agent-harness iteration) |
 | `test-` | Prove | Write/run tests & QA |
 | `deploy-` | Ship | Release & post-deploy verification |
@@ -29,7 +29,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (143)
+## Skills (145)
 
 ### Enhance
 
@@ -107,6 +107,11 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Triggers:** "clean up our CI checks", "consolidate the workflows", "we have three lint jobs", "make one quality gate", "fix the required checks", "/housekeep-gates"
 **What it does:** Apply-now execution arm of `audit-gate-logic`. Builds one aggregator job that `needs:` every real check and fails on failed **or skipped** dependencies, makes that job the only required status check, ports unique value from duplicate losers then **deletes** them (not disable), restores hook/CI parity, and normalizes ratchets to auto-tighten with reviewed resets. Proves consolidation with deliberate-violation + skip-path probes. Net enforcement strictly ≥ before. Branch-protection changes always get explicit confirmation.
 **Related:** `audit-gate-logic`, `audit-cicd`, `enhance-agent-guardrails`, `workflow-green-repo`, `test-mutation`, `enhance-arch-boundaries`, `audit-doctrine`
+
+#### `housekeep-dead-code`
+**Triggers:** "delete the dead code", "remove unused files", "remove unused exports", "wire up Knip", "clean up dead code", "/deadcode"
+**What it does:** Apply-now execution arm of `plan-dead-code`. Deletes per the approved keep/kill list one category per commit — files (`--fix-type files --allow-remove-files`, pre-reviewed list only, JSON-diffed before the fix) → exports/types → unused-locals cascade (piped `eslint … -f json | remove-unused-vars`, then re-run Knip) → dependencies → residue → assets → suppressions — with typecheck, tests, and build between each, and a bisect-the-batch rule on red. Then installs the ratchet: `knip` script, CI job pinned at `--max-issues <today>` (lowered only), wired into the one aggregator gate. Duplication is measured and ratcheted but handed to `workflow-refactor`. Names every way a count can drop without code leaving — `ignore*`, `--exclude`, `--no-exit-code`, a `rules: warn` downgrade — and refuses all of them, plus commenting-out, deleting a skipped test, and any `DROP` without a human-named target.
+**Related:** `plan-dead-code`, `housekeep-gates`, `workflow-refactor`, `workflow-housekeep`, `burndown-full`, `db-migrator`, `plan-data-integrity`, `workflow-green-repo`
 
 #### `housekeep-backlog`
 **Triggers:** "what's left behind", "inventory TODOs", "consolidate the backlog", "parked work register", "living BACKLOG.md", "/housekeep-backlog"
@@ -201,6 +206,11 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Triggers:** "is my migration safe", "could I lose data", "agent might delete prod", "destructive operations", "safe schema changes"
 **What it does:** Destructive-op and migration safety audit — unguarded DELETE/DROP, backfill-before-drop, backup blast radius (same-volume wipe), overprivileged agent/CI tokens, confirmation gates. Emits `plan-data-integrity.md` — **no migrations/tokens until approved**. Restore drills / RPO/RTO → `plan-backup-dr`. Source-code transforms → `audit-codemod-safety`.
 **Related:** `plan-backup-dr`, `plan-secrets-audit`, `plan-rls-audit`, `audit-db-schema`, `db-migrator`, `audit-codemod-safety`
+
+#### `plan-dead-code`
+**Triggers:** "find dead code", "is this code used", "unused exports", "unused files", "unused dependencies", "run knip", "audit dead code", "/deadcode-plan"
+**What it does:** Configuration-first dead-code audit. Authors `knip.json` and resolves every configuration hint **before** trusting a single finding — on a first vibe-coded run most findings are misconfiguration, not dead code — then baselines both `--production` and default runs, reading files → unresolved → exports → deps because unused files cascade. Builds a keep-working list for glob-imported routes, generated types, Deno Edge Functions and deliberate `@public` API, then counts the seven surfaces Knip cannot see: unused locals, jscpd duplication, debug residue (`console.*`, `.only`), suppression debt, orphan assets, env drift, dead schema. Emits `plan-dead-code.md` — baseline, keep/kill list with evidence, phases, ratchet — and **deletes nothing**.
+**Related:** `housekeep-dead-code`, `plan-stub-checker`, `plan-antislop`, `plan-dependency-provenance`, `audit-code-quality`, `enhance-arch-boundaries`, `plan-test-coverage`, `audit-db-schema`
 
 #### `plan-dependency-provenance`
 **Triggers:** "check my dependencies", "slopsquatting", "is this package real", "supply chain audit", "license check", "SBOM", "did the AI hallucinate a package"
@@ -793,7 +803,7 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 
 ---
 
-## Commands (55)
+## Commands (57)
 
 Commands fall into two groups: **standalone** (full playbook in the file) and **pointer** (thin slash entry delegating to a skill).
 
@@ -847,6 +857,8 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/integrity-plan` | `plan-data-integrity` | Data-integrity + destructive-op safeguard plan (plan only) |
 | `/error-plan` | `plan-error-handling` | Error-handling + observability audit (plan only) |
 | `/deps-plan` | `plan-dependency-provenance` | Dependency provenance + slopsquatting audit (plan only) |
+| `/deadcode-plan` | `plan-dead-code` | Dead-code audit + Knip baseline and ratchet plan (plan only) |
+| `/deadcode` | `plan-dead-code`, `housekeep-dead-code` | Audit then delete by category behind a ratchet |
 | `/cost-plan` | `plan-llm-cost-guardrails` | LLM cost guardrails audit (plan only) |
 | `/aeo-plan` | `plan-aeo-readiness` | Answer-engine / AEO readiness audit (plan only) |
 | `/mobile-plan` | `plan-mobile-readiness` | App Store / Play submission audit (plan only) |
@@ -1017,6 +1029,9 @@ After approval: `backend-patterns`, `db-migrator`, `backend-observability`, prov
 
 #### Accreted gates → one aggregator
 `audit-gate-logic` (Phase 2.5 archaeology) → `housekeep-gates` (consolidate, delete losers, prove)
+
+#### Dead weight → proven dead → ratcheted
+`plan-test-coverage` (lock behavior first) → `plan-dead-code` (config, baseline, keep/kill) → `housekeep-dead-code` (delete by category, install `--max-issues`) → `housekeep-gates` (one aggregator). Duplication → `workflow-refactor`. Schema drops → `plan-data-integrity` / `db-migrator`.
 
 #### Parked work → living register → execute
 `housekeep-backlog` (inventory + diff) → `complete-everything` / `burndown-full` (one plan or one mechanical change). Decisions → `docs-adr`. Flag debt → `workflow-feature-flag`.

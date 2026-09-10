@@ -3,9 +3,9 @@ name: workflow-housekeep
 description: >
   Apply repository maintenance: sync README, remove confirmed dead
   artifacts, and safely update dependencies. Use when "housekeep",
-  "clean up repo", "update README", "update dependencies", or "remove
-  dead code". Parked-work inventory → housekeep-backlog. Design-system
-  drift → housekeep-design.
+  "clean up repo", "update README", or "update dependencies". Unused
+  files/exports/deps → plan-dead-code. Parked work → housekeep-backlog.
+  Design drift → housekeep-design.
 license: MIT
 ---
 
@@ -33,7 +33,7 @@ delete-only-after-proof and dependency bump commands `[LOW freedom — run exact
 - **Proven unused** — imports, refs, config, git history checked
 - **README matches** — scripts and paths in the README actually exist
 - **Tests after bump** — dependency update was not a silent break
-- **Right owner** — parked work → `housekeep-backlog`; token SSOT → `housekeep-design`; CI gates → `housekeep-gates`
+- **Right owner** — unused files/exports/deps → `plan-dead-code`; parked work → `housekeep-backlog`; token SSOT → `housekeep-design`; CI gates → `housekeep-gates`
 
 Full-cycle repository maintenance: documentation sync, dead file removal, dependency updates, and research-driven cleanup.
 Works with **any project** — auto-detects tech stack, package manager, and structure.
@@ -56,6 +56,13 @@ Works with **any project** — auto-detects tech stack, package manager, and str
 > Unfinished plans, TODOs, skipped tests → `housekeep-backlog`. This skill
 > does README / dead files / deps. A housekeep pass may *schedule* a
 > backlog regeneration; it does not invent the register.
+
+> **Module-graph dead code is a different skill.**
+> This skill deletes *artifacts* — logs, `.bak` files, build output,
+> committed screenshots — things dead by inspection. **Unused source
+> files, exports, types, and dependencies belong to `plan-dead-code`
+> (audit) and `housekeep-dead-code` (delete + ratchet)**, because proving
+> those dead needs a configured module graph, not a `rg` pass.
 
 ---
 
@@ -265,23 +272,23 @@ Check existing .gitignore covers:
 - dependencies node_modules/ __pycache__/ target/
 ```
 
-### 2d. Find Dead Exports / Unused Code
+### 2d. Dead Exports / Unused Code → hand off
 
-For TypeScript/JavaScript projects:
+**Do not run a dead-code sweep from this skill.** Unused source files,
+exports, types, and dependencies are a module-graph question: on a first
+run most findings are misconfiguration, and deleting them is how a cleanup
+becomes an outage.
 
-```
-Run: npx knip (if available) or npx ts-prune
-```
+| Stack | Owner |
+|-------|-------|
+| TypeScript / JavaScript | `plan-dead-code` → `housekeep-dead-code` (`/deadcode`) |
+| Python | `vulture` — same discipline: baseline and review before deleting |
 
-For Python:
-```
-Run: vulture . (if available)
-```
+`ts-prune` is in maintenance mode; its author points to Knip. Do not add it
+to a project.
 
-If these tools aren't available, do a manual check:
-- Find all exported functions/components
-- Check if each has at least one import elsewhere
-- Flag unused exports for review
+What this skill still owns here: noting that the handoff is needed, and
+scheduling it. Record the finding and move on.
 
 ---
 

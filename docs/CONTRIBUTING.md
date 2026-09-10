@@ -28,7 +28,7 @@ when it is the distinctive word (`/housekeep-gates`).
 | `design-` | Create new visual/API surfaces |
 | `docs-` | Write or co-author documentation |
 | `enhance-` | Improve existing web/mobile UI, UX, SEO, readability, email deliverability |
-| `housekeep-` | Apply-now consolidation of **one** drifted register (gates / backlog / design tokens) |
+| `housekeep-` | Apply-now consolidation of **one** drifted register (gates / backlog / design tokens / dead code) |
 | `iterate-` | Close the loop after launch (post-launch feedback, agent-harness iteration) |
 | `meta-` | Skills and MCP authoring |
 | `mobile-` | React Native, Capacitor, emulator |
@@ -38,8 +38,8 @@ when it is the distinctive word (`/housekeep-gates`).
 
 `workflow-housekeep` stays in `workflow-` — it is a multi-phase repo cleanup,
 not one-register consolidation. That is why "housekeep" appears at the
-**front** on `housekeep-gates` / `housekeep-backlog` / `housekeep-design` and
-at the **back** on `workflow-housekeep`.
+**front** on `housekeep-gates` / `housekeep-backlog` / `housekeep-design` /
+`housekeep-dead-code` and at the **back** on `workflow-housekeep`.
 
 **Documented unprefixed exceptions** (do not rename without a dedicated
 migration):

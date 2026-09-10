@@ -37,6 +37,7 @@ flowchart LR
 | 1b | `plan-antislop` *(optional)* | AI slop across prose, visual, code, structure | After UI plan or pre-launch authenticity pass |
 | 2 | `plan-stub-checker` | Dead buttons, fake data, unwired handlers | UI plan or when "nothing works" |
 | 3 | `plan-test-coverage` | Story→test matrix, fake-green, gaps | **Stub wiring approved** — lock behavior in tests |
+| 3b | `plan-dead-code` *(optional)* | Unused files/exports/deps, duplication, residue, ratchet | **After 3** — deleting before behavior is locked has no safety net |
 | 4a | `plan-perf-audit` | Measured perf burndown (web/RN/API/DB) | Parallel with 4b after tests are specced |
 | 4b | `plan-security-audit` | OWASP + Supabase RLS-first | Parallel with 4a |
 | 5 | `plan-docs-sync` | Docs vs code drift | **Last** — docs describe shipped reality |
@@ -60,6 +61,7 @@ flowchart LR
 | `plan-secrets-audit` | provider dashboards, Vercel/AWS env, `audit-security`, `create-hook` |
 | `plan-data-integrity` | `db-migrator`, `backend-patterns`, infra config, `create-hook`, `plan-backup-dr` |
 | `plan-dependency-provenance` | `workflow-housekeep`, `create-hook`, `/update-deps`, `audit-security` |
+| `plan-dead-code` | `housekeep-dead-code`, `workflow-refactor`, `housekeep-gates`, `db-migrator` |
 | `plan-llm-cost-guardrails` | `backend-patterns`, `audit-langfuse-llm`, `backend-observability`, `audit-llm-security` |
 | `plan-aeo-readiness` | `enhance-web-seo`, `docs-writer`, `enhance-web-landing` |
 | `plan-mobile-readiness` | `mobile-capacitor-platform`, `enhance-capacitor-ui`, `plan-stub-checker`, `mobile-emulator-test`, `plan-privacy-compliance`, `plan-aso` |
@@ -70,13 +72,14 @@ flowchart LR
 
 **Verify every execution phase:** `test-playwright` (live user paths) + `deploy-verify` (prod smoke). Optional live identity probe (does not replace red-team): `test-exploratory` as guest then logged-in, then ticket via `workflow-feedback-to-closure`.
 
-## Plan skill map (20 skills — pick loops, don't run all at once)
+## Plan skill map (21 skills — pick loops, don't run all at once)
 
 | Group | Skills | When |
 |-------|--------|------|
 | **Six-skill loop** | uiux → stub → test-coverage → perf ∥ security → docs | Inherited codebase, UI/IA hardening |
 | **Authenticity** | `plan-antislop` | "Feels AI-generated" — after UI plan or pre-launch |
 | **Pre-launch hardening** | security spine + `plan-dependency-provenance` | Supabase/Stripe apps, vibe-coded repos, pre-open-source |
+| **Dead weight** | `plan-dead-code` → `housekeep-dead-code` | AI-assisted repo that accreted unused files/exports/deps; run **after** tests lock behavior |
 | **Observability & spend** | `plan-error-handling` + `plan-llm-cost-guardrails` | Sentry/Langfuse gaps, LLM features shipping |
 | **Mobile gate** | `plan-capacitor-hardening` + `plan-mobile-readiness` | Capacitor/hybrid pre-store; native-layer security + paperwork |
 | **Privacy & recovery** | `plan-privacy-compliance` + `plan-backup-dr` | Consumer launch labels + "can we restore" |
@@ -180,6 +183,7 @@ Slash aliases: `/capacitor-plan`, `/mobile-plan`, `/privacy-plan`, `/backup-plan
 | `/integrity-plan` | `plan-data-integrity` |
 | `/error-plan` | `plan-error-handling` |
 | `/deps-plan` | `plan-dependency-provenance` |
+| `/deadcode-plan` | `plan-dead-code` |
 | `/cost-plan` | `plan-llm-cost-guardrails` |
 | `/aeo-plan` | `plan-aeo-readiness` |
 | `/mobile-plan` | `plan-mobile-readiness` |

@@ -48,6 +48,7 @@
         "plan-backup-dr",
         "plan-capacitor-hardening",
         "plan-data-integrity",
+        "plan-dead-code",
         "plan-dependency-provenance",
         "plan-docs-sync",
         "plan-error-handling",
@@ -145,9 +146,10 @@
     },
     {
       "title": "Housekeep",
-      "description": "Consolidate one drifted register.",
+      "description": "Consolidate or clear one drifted register.",
       "skills": [
         "housekeep-backlog",
+        "housekeep-dead-code",
         "housekeep-design",
         "housekeep-gates"
       ]
