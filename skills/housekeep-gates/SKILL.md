@@ -39,6 +39,7 @@ This is the execution arm of `audit-gate-logic`, the same way
 | `enhance-agent-guardrails` | *Installs* new guard classes, not accreted-gate cleanup |
 | `workflow-green-repo` | Make the repo green — does not redesign the gate graph |
 | `housekeep-backlog` | Parked-work register — not CI gates |
+| `housekeep-dead-code` | Owns the dead-code `--max-issues` ratchet that joins this aggregator |
 
 ## How to reason
 
