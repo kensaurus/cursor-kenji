@@ -6,6 +6,59 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.34.0] — 2026-09-12
+
+A prompt audit of the shipped surface (rules, agents, commands, skills)
+against current-model behaviour: instructions written for older, less
+steerable models were rewritten at normal volume, facts that had rotted were
+corrected, and text the agent cannot act on (memory of previous projects,
+"production test" scores) was removed. No skill changed name, trigger, scope,
+or stance; no `[LOW freedom]` step lost its exactness.
+
+### Changed
+
+- `skills/backend-patterns` — the Edge Function example uses `Deno.serve`;
+  the `deno.land/std@0.168.0/http/server` import it carried is deprecated.
+- `agents/perf-monitor` — `npx bundle-phobia <pkg>`; `npx bundlephobia`
+  resolves to a package with no CLI and silently does nothing.
+- `agents/deploy-checker` — `npm audit --omit=dev` (`--production` is the
+  deprecated spelling).
+- `agents/db-migrator` — migration files come from `supabase migration new`
+  (14-digit timestamp) instead of a hand-written 8-digit date prefix that
+  cannot order two same-day migrations.
+- `agents/debugger` — dropped "don't explain before acting" and "ship first,
+  explain after", which contradicted the agent's own required output format
+  (root cause, evidence, verification, prevention).
+- `commands/update-deps` — the dated Next.js cadence paragraph ("15 LTS ends
+  2026-10-21, current line 16.3.x") is now a check-at-run-time instruction;
+  the codemod advice and the `next lint` removal stay.
+- `commands-portable/research` §7 — re-synced with `skills/research`: "plan
+  before writing code". The portable copy still said "think step-by-step",
+  which reasoning models already do and which had drifted from the skill.
+- `skills/audit-langfuse-llm` — model examples are tier-based (frontier /
+  small) instead of pinned IDs that age; its prompt-improvement suggestions
+  recommend the provider's native reasoning mode and `max_tokens` rather than
+  "Think step by step" text and word caps in the prompt.
+- `skills/enhance-web-landing` — register pass: removed eighteen
+  "(mandatory)" tags and the all-caps shouting, the three "most-tested AI tell
+  / #1 violated rule in production tests" grader lines, the cross-project
+  palette and serif rotation rules (the agent has no memory of previous
+  projects), and the one-project "Marrow" references. Every rule and its
+  reason is unchanged; the copy-length limits on page content stay because
+  they constrain the page, not the reply.
+- Seventeen skills — "CRITICAL:" / "MANDATORY:" / "BEFORE X, you MUST:" step
+  headings read at normal volume; the `[LOW freedom — run exactly]` tag
+  already carries the weight.
+- `skills/design-canvas` — "CRITICAL Requirements" → "Quality bar".
+- `rules/composer-2.5-execution.mdc` — title and intro no longer pin
+  Composer 2.5 or a "200k window"; the body already said it binds any
+  implementation model. Filename kept for installer and doc compatibility.
+- `rules/shell-first-search.md` — dropped the "Windows hang history" / "this
+  Windows host" incident wording from a rule that ships to every consumer.
+- `docs/PLAN-LOOPS.md` — the execution rule has been on-demand since v1.15.0,
+  not `alwaysApply: true` as the doc claimed; the planning model is no longer
+  pinned to Opus 4.8.
+
 ## [1.33.1] — 2026-09-10
 
 ### Changed

@@ -44,7 +44,7 @@ Systematic approach to identifying and fixing database performance issues.
 - Index optimization
 - Migration planning
 
-## CRITICAL: Check Existing First  [LOW freedom — run exactly]
+## Check existing first  [LOW freedom — run exactly]
 
 **Before ANY optimization, verify current state:**
 

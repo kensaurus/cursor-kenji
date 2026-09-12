@@ -36,7 +36,7 @@ Build scalable, maintainable design systems with consistent tokens, variants, an
 - **A11y + dark** — focus, disabled, and dark variants exist
 - **Right owner** — drifted existing system → `housekeep-design`; plan-only unification → `plan-uiux-unification`
 
-## CRITICAL: Check Existing First  [LOW freedom — run exactly]
+## Check existing first  [LOW freedom — run exactly]
 
 **Before creating ANY design system components, verify:**
 

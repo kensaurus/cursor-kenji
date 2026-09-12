@@ -44,7 +44,7 @@ full error handling patterns for full-stack applications.
 - Debugging error propagation
 - Adding error monitoring
 
-## CRITICAL: Check Existing First  [LOW freedom — run exactly]
+## Check existing first  [LOW freedom — run exactly]
 
 **Before adding ANY error handling, verify:**
 

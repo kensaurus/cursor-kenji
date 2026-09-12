@@ -66,7 +66,7 @@ Grep(pattern: "openai|OpenAI|anthropic|Anthropic|@google/generative-ai|gemini|co
 Grep(pattern: "langchain|LangChain|@langchain|vercel/ai|ai/core|createOpenAI|createAnthropic", glob: "*.{ts,js,py}")
 ```
 
-Record: providers, frameworks, model name strings (`gpt-4.1`, `claude-opus-4-8`, `gemini-2.5-pro`).
+Record: providers, frameworks, and the exact model ID strings in use, with each one's tier (frontier, mid, or small).
 
 ### 0c. Map AI Features
 
@@ -77,7 +77,7 @@ SemanticSearch(query: "Where are LLM/AI features called in the codebase?", targe
 Build a feature map:
 | Feature | File(s) | Provider | Model | Traced? |
 |---------|---------|----------|-------|---------|
-| _e.g. Chat_ | `app/api/chat/route.ts` | OpenAI | gpt-4.1 | Yes |
+| _e.g. Chat_ | `app/api/chat/route.ts` | OpenAI | `<model id>` (frontier) | Yes |
 
 ### 0d. Detect Eval and Prompt Management Setup
 
@@ -224,7 +224,7 @@ Build a cost table from generation details (model, tokens, latency, cost):
 |---------|-------|------------------|-------------------|-------------|----------------|
 
 **Red flags:**
-- Expensive model (gpt-4.1, claude-opus-4-8) used for simple classification/extraction → **recommend cheaper model** (e.g. gpt-4.1-mini, claude-haiku-4-5)
+- Frontier-tier model (Opus-class, GPT-5-class) used for simple classification/extraction → **recommend the provider's small tier** (Haiku-class, mini-class)
 - High input token counts → **check for unnecessary context stuffing**
 - Output tokens much larger than needed → **add max_tokens or response format constraints**
 - High latency on user-facing features → **consider streaming, caching, or smaller model**

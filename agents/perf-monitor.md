@@ -15,8 +15,8 @@ description: Performance audit when code may affect speed or bundle size. Trigge
 ```bash
 # Check if new dependencies were added
 git diff package.json | grep "+"
-# Estimate impact
-npx bundlephobia [new-package-name]
+# Estimate impact (bundle-phobia-cli; the `bundlephobia` package has no CLI)
+npx bundle-phobia <new-package-name>
 ```
 
 ### Component Render Performance

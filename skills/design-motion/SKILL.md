@@ -36,7 +36,7 @@ Create purposeful, performant animations that enhance UX without overwhelming us
 - **Reduced-motion proven** — a reduce setting was actually tested
 - **Right owner** — app-wide coherent motion pass → `enhance-motion`
 
-## CRITICAL: Check Existing First  [LOW freedom — run exactly]
+## Check existing first  [LOW freedom — run exactly]
 
 **Before adding ANY animation, verify:**
 

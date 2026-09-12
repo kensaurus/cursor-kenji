@@ -187,7 +187,7 @@ Generate a new theme with:
 
 After generating, show it for review before applying.
 
-## CRITICAL: Check Existing First  [LOW freedom — run exactly]
+## Check existing first  [LOW freedom — run exactly]
 
 **Before applying ANY theme, verify:**
 

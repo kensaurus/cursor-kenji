@@ -40,7 +40,7 @@ Design scalable, maintainable backend architectures using modern patterns and be
 > stack-agnostic — adapt ORMs, client libraries, and deploy targets to your detected
 > ecosystem.
 
-## CRITICAL: Check Existing First  [LOW freedom — run exactly]
+## Check existing first  [LOW freedom — run exactly]
 
 **Before implementing ANY backend pattern, verify:**
 
@@ -210,7 +210,6 @@ export const usersRouter = createTRPCRouter({
 ### Basic Function
 ```tsx
 // supabase/functions/process-webhook/index.ts
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const corsHeaders = {
@@ -218,7 +217,7 @@ const corsHeaders = {
  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-serve(async (req) => {
+Deno.serve(async (req) => {
  // Handle CORS preflight
  if (req.method === 'OPTIONS') {
  return new Response('ok', { headers: corsHeaders })

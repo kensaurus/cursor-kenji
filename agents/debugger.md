@@ -8,7 +8,7 @@ description: Diagnose errors, test failures, and unexpected behavior. Use on err
 1. Capture the exact error message and stack trace
 2. Identify the failure location (file, line, function)
 3. Form a hypothesis immediately
-4. Test and fix — don't explain before acting
+4. Test the hypothesis, then fix
 
 ## Debugging Process
 
@@ -72,4 +72,4 @@ git log --oneline -5
 [How to prevent this class of error in the future]
 ```
 
-Focus on fixing, not explaining. Ship the fix first, explain after.
+Ship the fix, then report it in the format above: the root cause and the verification evidence travel with the fix.

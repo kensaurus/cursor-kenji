@@ -63,7 +63,7 @@ Example queries by weakness type:
 - Missing guardrails: `"LLM safety guardrails system prompt best practices [current year]"`
 - No few-shot: `"few-shot prompting examples for <TASK_TYPE> [current year]"`
 - Vague instructions: `"structured output prompt engineering chain-of-thought [current year]"`
-- Wrong model: `"<TASK_TYPE> model selection GPT-4o-mini vs GPT-4o vs Claude [current year]"`
+- Wrong model: `"<TASK_TYPE> model selection small tier vs frontier tier <PROVIDER> [current year]"`
 
 Scrape the top 1-2 results for concrete patterns:
 
@@ -83,8 +83,8 @@ Apply the researched improvements. Common enhancement patterns:
 - **Add output format**: "Respond in JSON with the following schema: {...}"
 - **Add guardrails**: "If the user asks about [off-topic], respond with [refusal]."
 - **Add few-shot examples**: Include 2-3 input/output pairs for complex tasks
-- **Add chain-of-thought**: "Think step by step before answering."
-- **Constrain output length**: "Keep your response under [N] words/tokens."
+- **Use native reasoning**: turn on the provider's reasoning mode (Anthropic adaptive thinking plus `effort`, OpenAI reasoning models) instead of adding "Think step by step" to the prompt — reasoning models already do it, and on the rest the phrase mostly lengthens output.
+- **Shape the output**: name the audience and the format; cap length with `max_tokens` in the request rather than a word count in the prompt, which starves reasoning on hard inputs.
 - **Add grounding instructions**: "Only use information from the provided context. If unsure, say so."
 
 **Step 3: Create the new version**

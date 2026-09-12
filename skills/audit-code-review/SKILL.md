@@ -32,9 +32,9 @@ Bulk transform semantics → `audit-codemod-safety`.
 > **Severity:** Critical — must fix before merge.
 > **Finding:** `[id]/route.ts` | add ownership check | blocking
 
-## MANDATORY: Pre-Review Checks  [LOW freedom — run exactly]
+## Pre-review checks  [LOW freedom — run exactly]
 
-**BEFORE reviewing code, you MUST:**
+**Before reviewing code:**
 
 ### 1. Read Relevant Documentation
 ```

@@ -38,7 +38,7 @@ Create beautiful, accessible, and interactive data visualizations for dashboards
 Product-event coverage ("are we tracking the right events?") is `audit-analytics`,
 not this skill. Empty/loading chart frames are `audit-ui-states`.
 
-## CRITICAL: Check Existing First  [LOW freedom — run exactly]
+## Check existing first  [LOW freedom — run exactly]
 
 **Before creating ANY visualization, verify:**
 

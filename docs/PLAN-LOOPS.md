@@ -232,10 +232,10 @@ matrix, multi-lens coverage (not just line %), fake-green detection. Plan only.
 
 These `plan-*` skills are designed for a **two-model workflow**:
 
-1. **Plan** — author and review the `plan-*.md` burndown with a stronger reasoning model (e.g. Opus 4.8). Planning is where architecture and scope decisions live.
-2. **Execute** — hand the approved plan to Composer 2.5 for implementation, one burndown item at a time.
+1. **Plan** — author and review the `plan-*.md` burndown with the strongest reasoning model available. Planning is where architecture and scope decisions live.
+2. **Execute** — hand the approved plan to a fast implementation model (Cursor Composer, or Claude Code in execution mode), one burndown item at a time.
 
-The execution handoff is governed by **`composer-2.5-execution.mdc`** (`alwaysApply: true` — it rides along automatically on every Composer run). It is tuned to Composer 2.5's known failure modes:
+The execution handoff is governed by **`composer-2.5-execution.mdc`** (on-demand since v1.15.0: it attaches on `plan-*.md` and `plans/**` paths or when referenced — it is not always-on). It targets the known failure modes of fast implementation models:
 
 - **Anti-reward-hacking** — satisfy intent, never narrow/skip/`.only` tests or silence errors to go green
 - **Anti-feature-deletion** — never simplify away working code/routes/props to pass checks

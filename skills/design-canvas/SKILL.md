@@ -93,7 +93,7 @@ Pure order and restraint. Grid-based precision, bold photography, dramatic negat
 
 ## Quality Standards
 
-**CRITICAL Requirements:**
+**Quality bar:**
 - Work must appear meticulously crafted
 - Every detail should look labored over with care
 - Composition, spacing, color choices must show expert-level craftsmanship
@@ -118,7 +118,7 @@ When requested:
 1. **Design Philosophy** (.md) - 4-6 paragraphs describing the aesthetic movement
 2. **Visual Artifact** (.pdf or .png) - Museum-quality visual design
 
-## CRITICAL: Check Existing First  [LOW freedom — run exactly]
+## Check existing first  [LOW freedom — run exactly]
 
 **Before creating ANY visual design, verify:**
 

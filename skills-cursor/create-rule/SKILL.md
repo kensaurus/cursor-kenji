@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 Create project rules in `.cursor/rules/` to provide persistent context for the AI agent.
 
-## CRITICAL: Check Existing First
+## Check existing first
 
 **Before creating ANY rule, verify:**
 

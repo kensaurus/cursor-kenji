@@ -37,9 +37,9 @@ Systematic approach to debugging errors and unexpected behavior. Works with any 
 - **Green loop** — the same command was re-run and passed
 - **Right owner** — FE↔BE mismatch → `debug-fe-be-integration`; Sentry backlog → `debug-sentry-monitor`
 
-## MANDATORY: Pre-Debug Checks
+## Pre-debug checks
 
-**BEFORE debugging, you MUST:**
+**Before debugging:**
 
 ### 1. Read Relevant Documentation
 ```

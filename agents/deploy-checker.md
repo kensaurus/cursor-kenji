@@ -50,7 +50,7 @@ grep -r "process.env\." --include="*.tsx" --include="*.ts" -l | grep -v "server\
 
 ### 6. Dependency Check
 ```bash
-npm audit --production 2>&1 | tail -5
+npm audit --omit=dev 2>&1 | tail -5
 ```
 - No critical vulnerabilities
 

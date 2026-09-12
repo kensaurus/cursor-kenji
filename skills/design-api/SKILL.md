@@ -37,9 +37,9 @@ Design clean, consistent, and developer-friendly APIs.
 - **Lists paginate** — no unbounded `GET /resources`
 - **Right owner** — live 4xx/5xx repro → `debug-fe-be-integration`; product scope still fuzzy → `design-prd`
 
-## MANDATORY: Pre-Design Checks  [LOW freedom — run exactly]
+## Pre-design checks  [LOW freedom — run exactly]
 
-**BEFORE designing any API, you MUST:**
+**Before designing any API:**
 
 ### 1. Check Existing API Documentation
 ```

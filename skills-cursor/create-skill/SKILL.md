@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 This skill guides you through creating effective Agent Skills for Cursor. Skills are markdown files that teach the agent how to perform specific tasks: reviewing PRs using team standards, generating commit messages in a preferred format, querying database schemas, or any specialized workflow.
 
-## CRITICAL: Check Existing First
+## Check existing first
 
 **Before creating ANY skill, verify:**
 

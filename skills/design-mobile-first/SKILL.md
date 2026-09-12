@@ -38,7 +38,7 @@ at 1440, stretched buttons). That is `audit-responsive`.
 - **Real device** — not emulator-or-resize only
 - **Right owner** — linearized 1440 desktop → `audit-responsive`; hybrid native chrome → `enhance-capacitor-ui`
 
-## CRITICAL: Check Existing First  [LOW freedom — run exactly]
+## Check existing first  [LOW freedom — run exactly]
 
 **Before ANY mobile optimization, verify:**
 

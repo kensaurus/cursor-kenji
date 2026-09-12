@@ -6,9 +6,9 @@ paths:
   - "**/plans/**"
 ---
 
-# Composer 2.5 Execution Adapter
+# Approved-Plan Execution Adapter
 
-You are executing an **already-approved plan** (a `plan-*.md` audit/burndown authored and reviewed with a stronger reasoning model). Your job is faithful, verifiable *implementation* — not re-planning or inventing unrelated scope. When `complete-everything` is explicitly active, its connected closure set (planned + previously parked + discovered blast-radius work) is part of the approved scope. When `burndown-full` is active, repo-wide search determines mechanical scope. These rules are tuned to Composer 2.5's known failure modes and are binding for every change.
+You are executing an **already-approved plan** (a `plan-*.md` audit/burndown authored and reviewed with a stronger reasoning model). Your job is faithful, verifiable *implementation* — not re-planning or inventing unrelated scope. When `complete-everything` is explicitly active, its connected closure set (planned + previously parked + discovered blast-radius work) is part of the approved scope. When `burndown-full` is active, repo-wide search determines mechanical scope. These rules target the known failure modes of fast implementation models (Cursor Composer, Claude Code in execution mode) and are binding for every change.
 
 ## 1. Anti-reward-hacking (highest priority)
 Satisfy the **intent**, never just the check. Forbidden:
@@ -31,7 +31,7 @@ A green suite is necessary, not sufficient. In your trace, state why the change 
 - **Explicit closure mode:** when the user invokes `complete-everything` or `burndown-full`, a phase boundary is an audit checkpoint, not a permission stop. Persist state, report meaningful progress, and auto-advance until the closure set is empty or a real human gate below is reached.
 - If a tool call fails or a step dead-ends, fix that step before continuing — never paper over it and push on.
 
-## 4. Context discipline (200k window)
+## 4. Context discipline
 - Work per-surface / per-module; load only the files needed for the current unit. Do not try to hold the whole repo in context.
 - For wide work, build the inventory/checklist first, then iterate through it in batches.
 

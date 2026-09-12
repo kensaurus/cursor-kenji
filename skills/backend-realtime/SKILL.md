@@ -36,7 +36,7 @@ Implement live, collaborative features using WebSockets, Supabase Realtime, and 
 > (`@/lib/supabase/client`, `'use client'`). Adapt import paths and row types to
 > the detected stack.
 
-## CRITICAL: Check Existing First  [LOW freedom — run exactly]
+## Check existing first  [LOW freedom — run exactly]
 
 **Before implementing ANY real-time feature, verify:**
 

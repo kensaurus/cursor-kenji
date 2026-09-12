@@ -61,7 +61,7 @@ Validation gates before adopting:
 - **Tested:** example code is testable
 - **Compatible:** does not conflict with other pinned dependencies
 
-### 7 — For complex changes: think step-by-step
+### 7 — For complex changes: plan before writing code
 
 Before writing code:
 - What existing code must stay identical?

@@ -60,9 +60,9 @@ Everything else in this skill (templates, API docs, comments) serves this princi
 - **Examples run** — copy-pasteable; signatures match the file you read
 - **Right owner** — visual README makeover → `enhance-readme`; docs/code drift plan → `plan-docs-sync`; long-form collab → `docs-coauthor`
 
-## MANDATORY: Pre-Documentation Checks  [LOW freedom — run exactly]
+## Pre-documentation checks  [LOW freedom — run exactly]
 
-**BEFORE writing any documentation, you MUST:**
+**Before writing any documentation:**
 
 ### 1. Read Existing Documentation
 ```

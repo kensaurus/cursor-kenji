@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 This skill guides you through modifying Cursor/VSCode user settings. Use this when the user wants to change editor settings, preferences, configuration, themes, keybindings, or any `settings.json` values.
 
-## CRITICAL: Check Existing First
+## Check existing first
 
 **Before modifying ANY settings, verify:**
 

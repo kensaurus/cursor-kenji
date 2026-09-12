@@ -37,7 +37,7 @@ Create generative, procedural, and mathematical art using code. Transform algori
 - **Controls matter** — each param changes the picture, not just a label
 - **Right owner** — data charts → `data-visualization`; UI illustration → `design-frontend`; WebGL/3D → `enhance-web-web3d`
 
-## CRITICAL: Check Existing First  [LOW freedom — run exactly]
+## Check existing first  [LOW freedom — run exactly]
 
 **Before creating ANY generative art, verify:**
 

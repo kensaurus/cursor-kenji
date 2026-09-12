@@ -42,9 +42,9 @@ those skills; deletions do not leave from here.
 
 Improve code quality without changing external behavior. Research-aware.
 
-## MANDATORY: Pre-Refactoring Checks  [LOW freedom — run exactly]
+## Pre-refactoring checks  [LOW freedom — run exactly]
 
-**BEFORE refactoring any code, you MUST:**
+**Before refactoring any code:**
 
 ### 1. Read Relevant Documentation
 ```

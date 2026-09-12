@@ -22,11 +22,12 @@ ls -la supabase/migrations/ | tail -10
 ## Migration Standards
 
 ### File Naming
-```
-supabase/migrations/YYYYMMDD_description.sql
+```bash
+supabase migration new add_user_profiles
+# → supabase/migrations/<YYYYMMDDHHMMSS>_add_user_profiles.sql
 ```
 
-Example: `20260208_add_user_profiles.sql`
+Let the CLI prefix the 14-digit UTC timestamp so same-day migrations still order correctly; do not hand-write an 8-digit date prefix.
 
 ### Required Elements for Every Table
 

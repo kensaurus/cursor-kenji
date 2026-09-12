@@ -11,9 +11,10 @@ This command is a thin entry point. The full playbook lives in the **`workflow-h
 
 Use `/update-deps` when you want to explicitly trigger dependency review. Otherwise, say "update deps", "fix vulnerabilities", or "what's outdated" and the skill auto-fires.
 
-**Next.js cadence:** 15 LTS ends 2026-10-21. Current line is 16.3.x with
-monthly security releases. Ask: "is there a Next.js security release this
-month?" and prefer `npx @next/codemod@canary upgrade latest` over a blind
-major bump. `next lint` is gone — call ESLint directly.
+**Next.js:** check the current support line and end-of-life before choosing a
+target (`npm view next dist-tags`, https://endoflife.date/nextjs); do not assume
+a version from memory. Ask: "is there a Next.js security release this month?"
+and prefer `npx @next/codemod@canary upgrade latest` over a blind major bump.
+`next lint` was removed in Next 16 — call ESLint directly.
 
 Related: `audit-security` for vulnerability triage, `workflow-git-commit` for the commit-per-update pattern.
