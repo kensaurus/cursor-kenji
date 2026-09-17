@@ -22,7 +22,7 @@ No long-lived `NPM_TOKEN` is required when OIDC is configured.
 npm test
 ```
 
-This runs skill spec validation, count sync, README skill-index sync, secret-scanner self-test, MCP pin check, docs-facts check, completion-gate tests, and install smoke test.
+This runs skill spec validation, count sync, README skill-index sync, secret-scanner self-test, MCP pin check, docs-facts check, skill cross-ref check, completion-gate tests, install smoke test, and the Knip dead-code ratchet (`knip.jsonc`, `--max-issues 0` in default and production mode).
 
 4. Update derived counts if needed: `npm run fix:skills`
 

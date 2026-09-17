@@ -50,3 +50,5 @@ jobs:
         run: node scripts/check-skill-refs.mjs --self-test && node scripts/check-skill-refs.mjs
       - name: Install smoke test (files preserved, --skill works)
         run: node scripts/test-install.mjs
+      - name: Dead-code ratchet (Knip, default + production, max-issues 0)
+        run: npm run -s check:dead-code && npm run -s check:dead-code:prod

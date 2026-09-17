@@ -1,0 +1,19 @@
+{
+  // Dead-code ratchet for the pack's own JS surface. Content reachability
+  // (skills, commands, docs) is gated by check-skill-refs / check-skill-count.
+  // Entries: package.json#bin and #scripts and the workflow `run:` lines are
+  // detected by Knip's npm / github-actions plugins. Listed below are the
+  // files nothing runs by reference but that are shipped or documented tools.
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": [
+    "hooks/completion-gate.mjs",            // referenced from hooks/hooks.json (JSON, not parsed by Knip)
+    "skills/*/scripts/*.mjs",               // helper scripts shipped inside skills; consumers run them
+    "scripts/gen-brand-assets.mjs",         // brand pipeline (maintainer-run; see its usage header)
+    "scripts/gen-brand-candidates.mjs",     // brand pipeline
+    "scripts/shorten-skill-descriptions.mjs" // description-budget rewriter (maintainer-run)
+  ],
+  "project": ["bin/**/*.{js,mjs}", "hooks/**/*.mjs", "scripts/**/*.mjs", "skills/*/scripts/**/*.mjs"],
+  // record-readme-tour.mjs runs inside the consumer's project; these are
+  // their dependencies (documented in the script header), not the pack's.
+  "ignoreDependencies": ["playwright", "@ffmpeg-installer/ffmpeg"]
+}
