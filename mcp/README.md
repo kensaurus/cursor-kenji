@@ -122,7 +122,7 @@ pip install uvx  # or use pipx
 {
   "aws-lambda": {
     "command": "uvx",
-    "args": ["awslabs.lambda-tool-mcp-server@2.0.19"],
+    "args": ["awslabs.lambda-tool-mcp-server@2.1.1"],
     "env": {
       "AWS_PROFILE": "default",
       "AWS_REGION": "ap-northeast-1"
@@ -168,7 +168,7 @@ don't fight over one profile (you lose saved logins):
 {
   "playwright": {
     "command": "npx",
-    "args": ["-y", "@playwright/mcp@0.0.76", "--isolated"]
+    "args": ["-y", "@playwright/mcp@0.0.81", "--isolated"]
   }
 }
 ```

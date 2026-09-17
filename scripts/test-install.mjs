@@ -111,7 +111,15 @@ try {
   // MCP template should be written when none exists.
   expect(existsSync(join(cur, "mcp.json")), "missing mcp.json template");
   const installedMcp = readFileSync(join(cur, "mcp.json"), "utf8");
-  expect(installedMcp.includes("firecrawl-mcp@3.21.3"), "mcp template missing pinned firecrawl");
+  // Pin comes from mcp/pinned-versions.json so a bump there cannot silently
+  // leave the installed template on an old version.
+  const pinnedFirecrawl = JSON.parse(
+    readFileSync(join(repoRoot, "mcp", "pinned-versions.json"), "utf8"),
+  ).npm["firecrawl-mcp"];
+  expect(
+    typeof pinnedFirecrawl === "string" && installedMcp.includes(`firecrawl-mcp@${pinnedFirecrawl}`),
+    `mcp template missing pinned firecrawl (firecrawl-mcp@${pinnedFirecrawl})`,
+  );
   expect(!installedMcp.includes("sequential-thinking"), "essential mcp template still lists sequential-thinking");
   expect(!installedMcp.includes("@playwright/mcp"), "essential mcp template still lists Playwright MCP");
 

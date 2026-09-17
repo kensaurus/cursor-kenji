@@ -19,6 +19,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "is this ready to ship?", "quality gate", "pre-release checklist", "ship-readiness" | `workflow-quality-gate` |
 | "prepare this for a PR", "get my working tree merge-ready", "release prep this branch", "review everything uncommitted and open a PR" | `workflow-release-prep` |
 | "prepare for launch", "launch week", "everything before going live", "pre-launch sweep" | `workflow-launch-ready` |
+| "go to market", "grow users", "increase traffic and visibility", "market this repo", "get this in front of users" | `workflow-gtm` |
 | "I'm new to this repo", "orient me", "explain this codebase", "onboard me" | `workflow-onboard` |
 
 ---
@@ -131,6 +132,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "check my dependencies", "slopsquatting", "is this package real", "supply chain audit", "did the AI hallucinate a package" | `plan-dependency-provenance` |
 | "cap my AI costs", "LLM bill could blow up", "token budget", "runaway agent loop", "per-user AI limits" | `plan-llm-cost-guardrails` |
 | "AEO", "GEO", "do AI engines cite me", "llms.txt", "am I blocking AI crawlers", "ChatGPT visibility" | `plan-aeo-readiness` |
+| "GTM", "go-to-market plan", "get more users", "grow traffic", "should this be freemium", "how do I market this repo" | `plan-gtm` |
 | "App Store ready", "will Google Play reject", "privacy manifest", "data safety form", "pre-submission check" | `plan-mobile-readiness` |
 | "Capacitor app secure", "WebView security", "secure storage tokens", "cleartext traffic", "allowNavigation", "OTA update safe" | `plan-capacitor-hardening` |
 | "find dead buttons", "stub checker", "fake components", "unwired handlers", "dead links", "buttons that do nothing", "stub audit" | `plan-stub-checker` |
@@ -151,6 +153,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 |:-----------------|:------|
 | "help me write a spec", "co-author a doc", "write a proposal", "draft an RFC" | `docs-coauthor` |
 | "write a README", "document this API", "write docs", "create documentation" | `docs-writer` |
+| "launch post", "Show HN post", "Product Hunt listing", "announce this release", "launch copy", "write the launch tweet" | `docs-launch-kit` |
 
 ---
 
@@ -161,6 +164,8 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "make this Capacitor/Ionic app work on all screen sizes" | `enhance-capacitor-ui` |
 | "make it a PWA", "offline support", "service worker", "install prompt", "add to home screen" | `enhance-pwa` |
 | "improve my README", "add screenshots to README", "make README prettier" | `enhance-readme` |
+| "improve onboarding", "users sign up and leave", "time to value", "first-run experience", "activation rate" | `enhance-onboarding` |
+| "pricing page", "improve conversion", "free to paid", "upgrade prompts", "paywall UX", "hero copy" | `enhance-web-conversion` |
 | "improve SEO", "add meta tags", "sitemap", "Open Graph", "Google indexing", "rich results" | `enhance-web-seo` |
 | "emails go to spam", "set up SPF/DKIM", "check email deliverability", "handle bounces" | `enhance-email-deliverability` |
 | "make this landing page look premium", "anti-slop design", "portfolio design" | `enhance-web-landing` |

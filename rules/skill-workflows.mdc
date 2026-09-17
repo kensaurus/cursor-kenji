@@ -21,6 +21,7 @@ for the plan-loop sequences.
 - Pre-release quality check → `workflow-quality-gate`
 - Local working tree → merge-ready PR (do not merge) → `workflow-release-prep`
 - Full launch preparation → `workflow-launch-ready`
+- Take a shipped product to market / grow traffic and visibility → `workflow-gtm` (strategy only → `plan-gtm`)
 - Orient to a new codebase → `workflow-onboard`
 - Post-launch feedback loop → `iterate-post-launch`
 - Deploy and observe / roll back → `workflow-ship-and-observe`

@@ -6,6 +6,85 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.35.0] — 2026-09-17
+
+Go-to-market for a repo that already works. The pack covered how to build,
+prove, and ship a product but had nothing for the part after: who it is for,
+how it is paid for, why signups never come back, where to be found, and how
+to announce a release without a vote ring. Five skills and three commands
+close that gap. Every benchmark quoted was checked against a 2025–2026
+source this week (ChartMogul × Kyle Poyar × ProductLed free-to-paid report,
+Userpilot activation medians, Show HN / Product Hunt author reports, public
+OSS-vendor revenue mix).
+
+### Added
+
+- `plan-gtm` — plan-only go-to-market audit. Greps how the product is sold
+  today (billing SDKs, `isPro` gates, license family, hero/meta positioning,
+  auth providers and steps to first value, analytics + consent,
+  robots/sitemap/llms.txt, registry presence, trust signals), then
+  interviews the founder with `workflow-grilling` rules down a fixed ladder
+  (90-day metric → ICP → numbers → monetization intent → budget → market →
+  alternatives → constraints). Diagnoses in Dunford order, judges the
+  monetization model against 2026 conversion rows (freemium 3–5% good /
+  8–12% great; card-required trial 25–35%; median 8%; OSS cloud carries
+  48–73% of vendor revenue), defines `activated` and one north-star, picks
+  ≤2 channels + 1 loop with caveats. Emits `plan-gtm.md`; changes nothing.
+  Business decisions (model, price, license, ICP) stay with the founder;
+  "unmeasured" is a legal cell value.
+- `workflow-gtm` — execution arm. `plan-gtm` ⏸ approve → `audit-analytics`
+  → `enhance-web-conversion` (+ `enhance-readme` for repo-as-product) →
+  `enhance-onboarding` → `enhance-web-seo` / `plan-aeo-readiness` →
+  `docs-launch-kit` → `iterate-post-launch` weekly. Ends with a GTM
+  scorecard (funnel before/after, skips named, next week's one fix).
+- `enhance-onboarding` — apply-now first session to first value. Defines
+  `activated` as an outcome (never signup or tour end), walks landing →
+  activation as a stranger and counts steps, cuts fields before value
+  (OAuth/magic link, inferred locale, try-before-signup), ships empty-state
+  templates / sample data and a ≤5-item checklist ending at activation,
+  instruments `signup_started → signup_completed → activated →
+  habit_reached` behind the existing consent gate. Defers, never deletes.
+- `enhance-web-conversion` — apply-now message / offer / proof / prompt pass
+  on landing, pricing, and upgrade paths: five-second hero check with a
+  model-matched CTA verb, ≤3 tiers with an anchor and annual toggle,
+  explicit free-tier limits, proof ordered by strength, upgrade prompts only
+  at value moments, checkout and prompt events. Removes dark patterns; adds
+  none. Visual system stays on `enhance-web-landing`.
+- `docs-launch-kit` — versioned `docs/launch/<version>.md`: claims table
+  every sentence must trace to, one problem-first angle, native copy per
+  channel (Show HN, Product Hunt, subreddit-specific Reddit, X/Bluesky/
+  LinkedIn, article outline, user-facing release notes), calendar, UTMs,
+  Results table filled after 7 days. No vote solicitation, no fabricated
+  proof, maker disclosed.
+- Commands `/gtm-plan` → `plan-gtm`, `/gtm` → `workflow-gtm`,
+  `/launch-kit` → `docs-launch-kit`.
+
+### Changed
+
+- `rules/skill-workflows.mdc` — bundle row "take a shipped product to
+  market → `workflow-gtm`".
+- `docs/PLAN-LOOPS.md` — `plan-gtm` in the execute-after-approval table, the
+  plan skill map (22 plan skills), launch gates, slash aliases, and a
+  copy-paste prompt; related-loops row.
+- `docs/CATALOG.md`, `docs/TRIGGER-CHEATSHEET.md`, `skills.sh.json`, README
+  ("What should I say?" row, commands table, plan → apply callout) — the
+  five skills and three commands are listed where their neighbors are.
+- MCP pins re-verified against the registries on 2026-09-17
+  (`mcp/pinned-versions.json`, both templates, `.mcp.json`, `mcp/VERSIONS.md`,
+  `mcp/README.md`): `@upstash/context7-mcp` 3.2.2 → 4.1.1 (v2 SDK, 2026-07-28
+  protocol; stdio flags unchanged), `firecrawl-mcp` 3.21.3 → 3.24.0,
+  `@supabase/mcp-server-supabase` 0.8.2 → 0.12.0 (`--project-ref` /
+  `--read-only` / `--features` still accepted), `chrome-devtools-mcp` 1.3.0 →
+  1.9.0, `@playwright/mcp` 0.0.76 → 0.0.81, `@notionhq/notion-mcp-server`
+  2.4.1 → 2.5.1, `server-sequential-thinking` 2025.12.18 → 2026.8.31,
+  `server-memory` 2026.1.26 → 2026.8.31, `awslabs.lambda-tool-mcp-server`
+  2.0.19 → 2.1.1, `awslabs.aws-api-mcp-server` 1.3.45 → 1.5.5,
+  `awslabs.cloudwatch-mcp-server` 0.0.8 → 0.2.1. `server-github`, `-postgres`,
+  `-redis`, `-slack` had no newer release.
+- `scripts/test-install.mjs` reads the expected firecrawl pin from
+  `mcp/pinned-versions.json` instead of a hard-coded `3.21.3`, so a pin bump
+  cannot pass the pin check and fail the install smoke test for the same fact.
+
 ## [1.34.0] — 2026-09-12
 
 A prompt audit of the shipped surface (rules, agents, commands, skills)

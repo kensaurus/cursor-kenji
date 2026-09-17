@@ -2,7 +2,7 @@
   "mcpServers": {
     "firecrawl": {
       "command": "npx",
-      "args": ["-y", "firecrawl-mcp@3.21.3"],
+      "args": ["-y", "firecrawl-mcp@3.24.0"],
       "env": {
         "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}",
         "FIRECRAWL_NO_SEARCH_FEEDBACK": "1",
@@ -11,13 +11,13 @@
     },
     "context7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@3.2.2", "--api-key", "${CONTEXT7_API_KEY}"]
+      "args": ["-y", "@upstash/context7-mcp@4.1.1", "--api-key", "${CONTEXT7_API_KEY}"]
     },
     "supabase": {
       "command": "npx",
       "args": [
         "-y",
-        "@supabase/mcp-server-supabase@0.8.2",
+        "@supabase/mcp-server-supabase@0.12.0",
         "--project-ref", "${SUPABASE_PROJECT_REF}"
       ],
       "env": {
