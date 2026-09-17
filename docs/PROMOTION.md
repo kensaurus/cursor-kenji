@@ -68,7 +68,7 @@ Full pack (skills + slash commands): `npx @kensaurus/cursor-kenji --all`. That C
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/cursor-kenji
 
-**Status:** Pending — `@kensaurus/cursor-kenji@1.36.2` (dead-code ratchet + remove unused migration script). Previous: `1.36.1` via OIDC run [35219561919](https://github.com/kensaurus/cursor-kenji/actions/runs/35219561919).
+**Status:** [x] Published — `@kensaurus/cursor-kenji@1.36.2` via OIDC run [35224279830](https://github.com/kensaurus/cursor-kenji/actions/runs/35224279830); `npm view … version` returns `1.36.2` and `dist-tags.latest` is `1.36.2` (2026-09-17)
 
 ---
 
