@@ -2,7 +2,7 @@
   "name": "cursor-kenji",
   "displayName": "cursor-kenji",
   "description": "You say the job; the playbook runs. 156 agent skills, 62 slash commands, 6 subagents, and MCP templates for React / Next.js / Supabase — also works in Claude Code.",
-  "version": "1.36.1",
+  "version": "1.36.2",
   "author": {
     "name": "kensaurus",
     "email": "kensaurus@gmail.com"

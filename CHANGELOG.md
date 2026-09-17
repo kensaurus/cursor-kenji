@@ -6,6 +6,43 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.36.2] — 2026-09-17
+
+A `plan-dead-code` → `housekeep-dead-code` pass on the pack's own
+repository, run with the pack's own skills. The JS surface was already
+clean; the deliverable is the gate that keeps it that way.
+
+### Removed
+
+- `scripts/migrate-browser-mcp-to-cli.mjs` — the one-off Playwright MCP →
+  playwright-cli migration script from 1.2x. Nothing ran it (no npm
+  script, workflow, or doc); Knip in default and `--production` mode and a
+  repo-wide reference grep agreed. The CHANGELOG line that introduced it
+  stays as history; git keeps the file.
+
+### Added
+
+- `knip.jsonc` and `npm run check:dead-code` / `check:dead-code:prod`
+  (`npx -y knip@6.36.0 --max-issues 0`, config hints as errors on the
+  default run). Entries come from `package.json` bin/scripts and the
+  workflow `run:` lines via Knip's plugins, plus the shipped helper scripts
+  and the three maintainer-run brand/description tools nothing invokes by
+  reference. The two consumer-side imports of
+  `skills/enhance-readme/scripts/record-readme-tour.mjs` (`playwright`,
+  `@ffmpeg-installer/ffmpeg`) are the single written-back false positive.
+  Appended to `npm test` and to the existing job in `validate.yml` and
+  `npm-publish.yml` — no new parallel check. Baseline 0 / 0; the number
+  only ever goes down. Probes: an unreferenced `scripts/zz-probe.mjs` fails
+  the gate; a fresh clone passes `npm test`.
+- `docs/examples/plan-audits/cursor-kenji/plan-dead-code.md` — the audit
+  (stack, baseline, surfaces Knip cannot see, keep/kill list with evidence,
+  ratchet) that approved the deletion and the config.
+
+### Changed
+
+- `docs/PUBLISHING.md` — the `npm test` gate list names the dead-code
+  ratchet.
+
 ## [1.36.1] — 2026-09-17
 
 ### Fixed
