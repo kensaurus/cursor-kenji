@@ -137,6 +137,7 @@ runs ~3× the 9% average; only 24–34% of PLG companies track PQLs/activation.
 | AI citations | third-party publishers earn 6.5× more citations than owned domains | geoaura 2026 |
 | SaaS referral rate / referred conversion | 4.75% avg / 7.86%, top quartile 12%+ | bloop.plus |
 | "Powered by" badge | 0.5–3% conversion, ~100% exposure; value-before-signup lifts referred conversion 2–5× | nativeviralloop |
+| Warm invites (user-sent, named recipient) | 10–25% accept → signup | nativeviralloop |
 
 - https://hub.causo.ai/guides/show-hn-launch-playbook-technical-founders-2026
 - https://hub.causo.ai/guides/product-hunt-vs-hacker-news-vs-betalist-2026

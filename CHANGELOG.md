@@ -6,6 +6,16 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.36.1] — 2026-09-17
+
+### Fixed
+
+- `plan-gtm/references/benchmarks-2026.md` — added the "warm invites
+  10–25%" row (nativeviralloop) that `enhance-growth-loops` already quoted.
+  The completion judge caught the number as untraceable against the
+  reference file's own rule ("quote a number only with its row here"); the
+  source was in the research all along, the row was not.
+
 ## [1.36.0] — 2026-09-17
 
 The six follow-ups named in the 1.35.0 report, built in one closure pass:
