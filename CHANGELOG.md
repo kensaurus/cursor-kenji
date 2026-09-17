@@ -6,6 +6,73 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.36.0] — 2026-09-17
+
+The six follow-ups named in the 1.35.0 report, built in one closure pass:
+pricing, growth loops, comparison pages, registry listing, the weekly loop,
+and lifecycle email. `plan-gtm` and `workflow-gtm` now hand off to them by
+name, so the go-to-market sequence has an owner for every step from "what
+to charge" to "what did last week's post do".
+
+### Added
+
+- `plan-pricing` — plan-only pricing and packaging audit: inventory of
+  plans/gates/metering/price points/trial logic/cost, value-metric scoring
+  (value connection, fairness, predictability, scalability, billability)
+  simulated on historical accounts, ≤3 good-better-best tiers with a
+  right-hand anchor and an enterprise "from" price, free boundary just before
+  the activation event's repeat, price corridor via Van Westendorp →
+  Gabor-Granger → MaxDiff → conjoint. Emits `plan-pricing.md` with a
+  grandfathering row; changes no price, plan enum, Stripe object, or copy.
+  Command `/pricing-plan`.
+- `enhance-growth-loops` — apply-now badge / shareable artifact / template /
+  invite / referral loops, one K-factor per loop; rewards granted
+  idempotently on the referred user's *activation*; invites user-initiated
+  and single-send with recipient opt-out; badge removable on paid.
+- `docs-comparison-pages` — ≤5 honest "X vs Y" / "alternatives to" /
+  "migrate from" pages per pass from facts fetched and dated this session;
+  fixed shape including "where the alternative wins"; `lastVerified` +
+  `reviewEvery` freshness contract; refuses bulk generation.
+- `audit-registry-listing` — read-only audit of README first ten lines,
+  npm/PyPI metadata and `npm pack --dry-run` contents, GitHub description /
+  topics / social preview, plugin and skills.sh manifests, and a timed
+  clean-profile install. Findings with an owner skill per row.
+- `iterate-gtm-weekly` — thirty-minute weekly loop: funnel by source this
+  week vs last, launch Results tables filled, largest *absolute* loss named,
+  last experiment attributed with a number, exactly one experiment and one
+  post chosen from a levers-by-step table, scorecard row appended. Command
+  `/gtm-weekly`.
+- `enhance-lifecycle-email` — event-driven sequences (welcome, activation
+  nudge, setup stall, habit, trial expiry split by activated vs stalled,
+  limit reached, win-back, dunning) with triggers, exits, idempotent
+  `(user, sequence, step)` sends, per-email transactional/marketing
+  classification, unsubscribe and suppression, quiet hours, daily cap, and
+  `email_*` events. Timers only as the fallback for silence.
+
+### Changed
+
+- `plan-gtm` — phased burndown names the new owners: Phase 1 adds
+  `audit-registry-listing` for repo-as-product; Phase 2 adds
+  `enhance-lifecycle-email`; Phase 3 uses `docs-comparison-pages`; Phase 4
+  adds `enhance-growth-loops` and hands the loop to `iterate-gtm-weekly`;
+  Phase 5 starts with `plan-pricing`. Neighbor table extended.
+- `workflow-gtm` — sequence, step sections, scorecard, and worked example
+  route through the same owners; Step 7 is `iterate-gtm-weekly`
+  (`iterate-post-launch` keeps production defects).
+- `plan-gtm/references/benchmarks-2026.md` — new sections for pricing
+  research / value metric and lifecycle email, each row with its URL.
+- `docs/CATALOG.md`, `docs/TRIGGER-CHEATSHEET.md`, `docs/PLAN-LOOPS.md` (23
+  plan skills, `/pricing-plan` alias, execute-after-approval rows),
+  `skills.sh.json`, README ("What should I say?" and commands rows) — the
+  six skills and two commands listed with their neighbors.
+
+### Fixed
+
+- The five 1.35.0 GTM skills and the README skill index carried
+  double-encoded arrows (`â†’` for `→`) in their descriptions — a shell
+  encoding slip during the description trim. Re-encoded to UTF-8; the
+  installed copies refresh on `--auto`.
+
 ## [1.35.0] — 2026-09-17
 
 Go-to-market for a repo that already works. The pack covered how to build,

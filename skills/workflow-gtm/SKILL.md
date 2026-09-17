@@ -1,10 +1,10 @@
 ---
 name: workflow-gtm
 description: >
-  Take a shipped repo to market: plan-gtm audit + interview â†’ approval â†’
-  measure â†’ message â†’ activate â†’ be found â†’ launch â†’ weekly loop.
+  Take a shipped repo to market: plan-gtm audit + interview → approval →
+  measure → message → activate → be found → launch → weekly loop.
   Use when "go to market", "grow users", "increase traffic and visibility".
-  Strategy only â†’ plan-gtm. Technical pre-launch sweep â†’
+  Strategy only → plan-gtm. Technical pre-launch sweep →
   workflow-launch-ready.
 license: MIT
 ---
@@ -35,7 +35,7 @@ never shipped.
 > **Scope:** Next.js + Supabase kakeibo app, live, ~200 signups/month, no paid tier yet.
 > **Gate:** `plan-gtm.md` approved Phases 1–3; Phase 5 (monetize) parked until activation ≥ 30%.
 > **Sweep:** analytics → hero → onboarding → SEO/AEO → launch kit for v2.1; skip pricing.
-> **Scorecard:** activation unmeasured → 22% → 34% after onboarding; weekly loop on Mondays via `iterate-post-launch`.
+> **Scorecard:** activation unmeasured → 22% → 34% after onboarding; weekly loop on Mondays via `iterate-gtm-weekly`.
 
 ## Self-critique before reporting
 
@@ -53,16 +53,21 @@ never shipped.
 1. PLAN      → plan-gtm                 (inventory, interview, plan-gtm.md)  ── STOP for approval
 2. MEASURE   → audit-analytics          (Visit→Signup→Activated→Paid events, consent-gated)
 3. MESSAGE   → enhance-web-conversion   (hero, CTA, proof; pricing only if Phase 5 approved)
-             → enhance-readme           (README as landing page, when the repo is the product)
+             → enhance-readme           (README as landing page, when the repo is the product;
+                                         audit-registry-listing first for the findings)
 4. ACTIVATE  → enhance-onboarding       (activation event, cut steps, templates, checklist)
-5. BE FOUND  → enhance-web-seo          (meta, sitemap, schema, comparison pages)
+             → enhance-lifecycle-email  (activation nudges keyed to the same events)
+5. BE FOUND  → enhance-web-seo          (meta, sitemap, schema)
+             → docs-comparison-pages    ("X vs Y" / alternatives pages, ≤5, dated facts)
              → plan-aeo-readiness       (AI-engine citation plan; approve, then enhance-web-seo)
 6. LAUNCH    → docs-launch-kit          (per-channel kit for this release)
-7. LOOP      → iterate-post-launch      (weekly: read the funnel, pick the next fix)
+             → enhance-growth-loops     (badge / share / referral, one K per loop)
+7. LOOP      → iterate-gtm-weekly       (weekly: funnel by source, one experiment, one post)
 ```
 
 Steps 3–6 run only for phases the founder approved. Mobile store products add
-`plan-aso` beside Step 5.
+`plan-aso` beside Step 5. Phase 5 (monetize) runs `plan-pricing` → approval →
+`enhance-web-conversion` (pricing) + `enhance-lifecycle-email` (trial expiry).
 
 ---
 
@@ -82,33 +87,37 @@ Goal: every funnel cell measurable, consent-gated, one taxonomy. Include the
 ## Step 3: Message (read enhance-web-conversion, enhance-readme)  [HIGH freedom]
 
 > Read the `enhance-web-conversion` skill and follow it. For repo-as-product,
-> also read `enhance-readme`.
+> run `audit-registry-listing` for findings, then `enhance-readme`.
 
 Hero carries the positioning statement; one CTA; real proof.
 
-## Step 4: Activate (read enhance-onboarding)  [HIGH freedom]
+## Step 4: Activate (read enhance-onboarding, enhance-lifecycle-email)  [HIGH freedom]
 
-> Read the `enhance-onboarding` skill and follow it.
+> Read the `enhance-onboarding` skill and follow it. Then read
+> `enhance-lifecycle-email` for the activation nudges keyed to the same events.
 
 Report steps before/after and the `activated` event firing.
 
-## Step 5: Be found (read enhance-web-seo, plan-aeo-readiness)  [HIGH freedom]
+## Step 5: Be found (read enhance-web-seo, docs-comparison-pages, plan-aeo-readiness)  [HIGH freedom]
 
-> Read `enhance-web-seo` and follow it. Then read `plan-aeo-readiness`; its
-> plan is approved before its fixes run.
+> Read `enhance-web-seo` and follow it. Read `docs-comparison-pages` for the
+> ≤5 bottom-funnel pages. Then read `plan-aeo-readiness`; its plan is approved
+> before its fixes run.
 
-## Step 6: Launch (read docs-launch-kit)  [LOW freedom — hand off]
+## Step 6: Launch (read docs-launch-kit, enhance-growth-loops)  [LOW freedom — hand off]
 
-> Read the `docs-launch-kit` skill and follow it.
+> Read the `docs-launch-kit` skill and follow it. If the plan named a loop,
+> read `enhance-growth-loops`.
 
-One kit per release; UTMs on every link.
+One kit per release; UTMs on every link; one K per loop.
 
-## Step 7: Loop (read iterate-post-launch)  [LOW freedom — hand off]
+## Step 7: Loop (read iterate-gtm-weekly)  [LOW freedom — hand off]
 
-> Read the `iterate-post-launch` skill and follow it.
+> Read the `iterate-gtm-weekly` skill and follow it.
 
 Weekly review, five lines: funnel by source · activation cohort · top
-drop-off step · one experiment shipped · one launch or post. Pick one fix.
+drop-off step · one experiment shipped · one launch or post. Production
+defects stay on `iterate-post-launch`.
 
 ---
 
@@ -139,7 +148,7 @@ Goal metric · ICP · Model · Budget
 | 4 Activate | | `enhance-onboarding` | |
 | 5 Be found | | `enhance-web-seo`, `plan-aeo-readiness` | |
 | 6 Launch | | `docs-launch-kit` | |
-| 7 Loop | scheduled <day> | `iterate-post-launch` | |
+| 7 Loop | scheduled <day> | `iterate-gtm-weekly` | |
 
 ### Next week's one fix
 ```

@@ -64,7 +64,8 @@ flowchart LR
 | `plan-dead-code` | `housekeep-dead-code`, `workflow-refactor`, `housekeep-gates`, `db-migrator` |
 | `plan-llm-cost-guardrails` | `backend-patterns`, `audit-langfuse-llm`, `backend-observability`, `audit-llm-security` |
 | `plan-aeo-readiness` | `enhance-web-seo`, `docs-writer`, `enhance-web-landing` |
-| `plan-gtm` | `workflow-gtm` → `audit-analytics`, `enhance-web-conversion`, `enhance-onboarding`, `enhance-web-seo`, `plan-aeo-readiness`, `docs-launch-kit`, `iterate-post-launch` |
+| `plan-gtm` | `workflow-gtm` → `audit-analytics`, `enhance-web-conversion`, `enhance-onboarding`, `enhance-lifecycle-email`, `enhance-web-seo`, `docs-comparison-pages`, `plan-aeo-readiness`, `docs-launch-kit`, `enhance-growth-loops`, `iterate-gtm-weekly`; repo-as-product `audit-registry-listing` → `enhance-readme` |
+| `plan-pricing` | `enhance-web-conversion` (pricing page), `audit-payment-system`, `enhance-lifecycle-email` (trial expiry), `audit-analytics` |
 | `plan-mobile-readiness` | `mobile-capacitor-platform`, `enhance-capacitor-ui`, `plan-stub-checker`, `mobile-emulator-test`, `plan-privacy-compliance`, `plan-aso` |
 | `plan-capacitor-hardening` | `mobile-capacitor-platform`, `plan-secrets-audit`, `plan-input-validation`, `mobile-emulator-test` |
 | `plan-privacy-compliance` | `audit-analytics`, `plan-error-handling`, `plan-rls-audit`, `enhance-email-deliverability` |
@@ -73,7 +74,7 @@ flowchart LR
 
 **Verify every execution phase:** `test-playwright` (live user paths) + `deploy-verify` (prod smoke). Optional live identity probe (does not replace red-team): `test-exploratory` as guest then logged-in, then ticket via `workflow-feedback-to-closure`.
 
-## Plan skill map (22 skills — pick loops, don't run all at once)
+## Plan skill map (23 skills — pick loops, don't run all at once)
 
 | Group | Skills | When |
 |-------|--------|------|
@@ -85,7 +86,7 @@ flowchart LR
 | **Mobile gate** | `plan-capacitor-hardening` + `plan-mobile-readiness` | Capacitor/hybrid pre-store; native-layer security + paperwork |
 | **Privacy & recovery** | `plan-privacy-compliance` + `plan-backup-dr` | Consumer launch labels + "can we restore" |
 | **Growth gate** | `plan-aeo-readiness` + `plan-aso` | AI citation / GEO + store listing conversion |
-| **Go-to-market** | `plan-gtm` → `workflow-gtm` | Shipped product, no growth plan: model fit, positioning, activation, channels |
+| **Go-to-market** | `plan-gtm` → `workflow-gtm` · monetize: `plan-pricing` | Shipped product, no growth plan: model fit, positioning, activation, channels; then what to charge |
 
 ## Pre-launch hardening loop (security + supply chain)
 
@@ -160,6 +161,7 @@ Independent of the six-skill and hardening loops — run when you're about to sh
 | Store listing / ASO | `plan-aso` | Keywords, screenshots, ratings |
 | AI citation / GEO | `plan-aeo-readiness` | "Do ChatGPT/Perplexity cite me?", llms.txt, crawler block |
 | Go-to-market | `plan-gtm` | "How do I get users?", freemium vs trial, positioning, activation, launch channels |
+| Pricing | `plan-pricing` | "What should I charge?", value metric, tiers, corridor, Van Westendorp → Gabor-Granger |
 
 **Capacitor hybrid apps:** run `plan-capacitor-hardening` **before** `plan-mobile-readiness` — native-layer gaps are invisible to web-only review.
 
@@ -172,7 +174,7 @@ Cross-hand: bundle secrets → plan-secrets-audit; deep-link input → plan-inpu
 Stop after planning.
 ```
 
-Slash aliases: `/capacitor-plan`, `/mobile-plan`, `/privacy-plan`, `/backup-plan`, `/aso-plan`, `/aeo-plan`, `/gtm-plan`
+Slash aliases: `/capacitor-plan`, `/mobile-plan`, `/privacy-plan`, `/backup-plan`, `/aso-plan`, `/aeo-plan`, `/gtm-plan`, `/pricing-plan`
 
 Copy-paste (go-to-market, plan only):
 
@@ -198,6 +200,7 @@ workflow-gtm applies anything.
 | `/cost-plan` | `plan-llm-cost-guardrails` |
 | `/aeo-plan` | `plan-aeo-readiness` |
 | `/gtm-plan` | `plan-gtm` |
+| `/pricing-plan` | `plan-pricing` |
 | `/mobile-plan` | `plan-mobile-readiness` |
 | `/capacitor-plan` | `plan-capacitor-hardening` |
 | `/stub-plan` | `plan-stub-checker` |
@@ -276,7 +279,7 @@ Every `plan-*` skill shares the same discipline:
 | **Mobile gate** | `plan-capacitor-hardening` / `plan-mobile-readiness` | Capacitor pre-store, native security |
 | **Privacy & recovery** | `plan-privacy-compliance` / `plan-backup-dr` | Consumer launch labels; restore capability |
 | **Growth gate** | `plan-aeo-readiness` / `plan-aso` | AI citation; store listing conversion |
-| **Go-to-market** | `plan-gtm` → `workflow-gtm` | Shipped, works, nobody comes: model fit, positioning, activation, channels |
+| **Go-to-market** | `plan-gtm` → `workflow-gtm` → `iterate-gtm-weekly` | Shipped, works, nobody comes: model fit, positioning, activation, channels; `plan-pricing` when it is time to charge |
 | `workflow-quality-gate` | `test-red-team` | Ship/no-ship verdict with fixes |
 | Live identity probe (optional) | `test-exploratory` | Guest vs logged-in wander + diff — run before the quality gate, not instead of it |
 | `workflow-launch-ready` | SEO + PWA + … | Launch week |

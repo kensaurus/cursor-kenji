@@ -4,7 +4,7 @@ description: >
   Apply-now conversion pass for landing, pricing, and upgrade paths: hero
   matched to positioning, one CTA, real proof, tier packaging with anchor and
   annual toggle, upgrade prompts at value moments. Use when "pricing page",
-  "improve conversion", "free to paid", "paywall UX". Visual build â†’
+  "improve conversion", "free to paid", "paywall UX". Visual build →
   enhance-web-landing.
 license: MIT
 ---

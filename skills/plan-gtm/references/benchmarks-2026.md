@@ -1,7 +1,9 @@
 # GTM benchmarks and sources (verified 2026-09-17)
 
-Shared by `plan-gtm`, `enhance-onboarding`, `enhance-web-conversion`,
-`docs-launch-kit`. Quote a number only with its row here; if a row is
+Shared by `plan-gtm`, `plan-pricing`, `enhance-onboarding`,
+`enhance-web-conversion`, `enhance-lifecycle-email`, `enhance-growth-loops`,
+`docs-launch-kit`, `docs-comparison-pages`, `audit-registry-listing`,
+`iterate-gtm-weekly`. Quote a number only with its row here; if a row is
 missing, write **unmeasured** or **no benchmark** in the plan.
 
 ## Free-to-paid by model
@@ -70,6 +72,41 @@ runs ~3× the 9% average; only 24–34% of PLG companies track PQLs/activation.
   the button when true. — https://kompassify.com/blog/pricing-page-best-practices
 - Underpricing attracts the curious, not the committed: one indie raise
   £9 → £19 moved month-3 retention 42% → 67%. — https://www.indiehackers.com/post/i-underpriced-my-saas-for-4-months-and-it-almost-broke-me-not-the-way-you-think-a0ae21a1e6
+
+## Pricing research and value metric
+
+- Order of methods: Van Westendorp (acceptable range; directional) →
+  Gabor-Granger (revenue-maximizing point on one tier) → MaxDiff (rank
+  features for tier placement) → conjoint (price bundles). —
+  https://thesaaslibrary.com/pricing-research-methods-saas-founders/
+- Value metric = the unit the price attaches to; "subscription vs usage" is
+  a payment cadence question, not the metric. A good metric is understandable
+  by the buyer, estimable before signing, and diverges from cost. 41% of
+  software buyers cite unpredictable cost as the primary objection to
+  usage pricing (2025 survey). — https://softwarepricing.com/blog/value-metric-decision/
+- Score candidates on value connection, fairness/familiarity, predictability,
+  scalability, billability; simulate on historical accounts. —
+  https://www.pacepricing.com/blog/the-ultimate-guide-to-value-metrics-for-b2b-saas-pricing-monetization ·
+  https://enablism.com/resources/value-metrics-for-b2b-pricing/ ·
+  https://www.getmonetizely.com/articles/how-to-choose-the-right-saas-pricing-metric-with-value-metric-examples
+
+## Lifecycle email
+
+- Behavior-triggered sequences vs calendar drips: vendor-reported ~3–4× the
+  click-through and up to ~30% higher conversion (Userpilot, Customer.io,
+  Bessemer citations); no independent primary study — treat as direction. —
+  https://www.digitalapplied.com/blog/saas-customer-onboarding-email-sequence-2026-crm-playbook ·
+  https://ustechautomations.com/resources/blog/automate-saas-free-trial-onboarding-activation-2026
+- Timers are the fallback for users with no signal; exit the sequence the
+  moment the goal event fires; split expiry messaging by activated vs
+  stalled. — https://www.getfluxly.com/blog/lifecycle-email-automation-saas
+- 70–85% of trial-to-paid conversions happen in the second half of the
+  trial; sequences that stop on day 7 of 14 under-perform. Cadence:
+  activation push days 1–3, value reinforcement 4–10, conversion CTA 11–14. —
+  https://www.growthspreeofficial.com/blogs/b2b-saas-trial-to-paid-conversion-rate-benchmarks-2026-by-trial-type-acv-length-credit-card
+- Users without the core activation action inside 48 h carry the highest
+  churn probability — the day-2 nudge is the highest-leverage single email. —
+  https://ustechautomations.com/resources/blog/automate-saas-free-trial-onboarding-activation-2026
 
 ## Open-source monetization
 

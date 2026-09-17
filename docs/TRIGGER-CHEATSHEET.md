@@ -31,6 +31,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "audit accessibility", "WCAG audit", "check a11y", "check keyboard nav" | `audit-accessibility` |
 | "reduce bundle size", "why is the bundle so big", "tree shaking", "code splitting" | `audit-bundle-size` |
 | "code smell", "anti-pattern", "naming conventions", "tech debt" | `audit-code-quality` |
+| "audit our npm listing", "README as landing page", "GitHub topics", "why nobody finds the package", "check the tarball" | `audit-registry-listing` |
 | "code review", "review this PR", "review this function" | `audit-code-review` |
 | "did this codemod break anything", "audit this bulk refactor", "verify the migration mod", "check the mass find-replace" | `audit-codemod-safety` |
 | "audit database schema", "check my DB design", "naming conventions in DB" | `audit-db-schema` |
@@ -100,6 +101,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "verify deploy", "post-deploy check", "smoke test production", "ship or rollback" | `deploy-verify` |
 | "ship it", "ship it and watch it", "deploy to production", "go live", "roll this out", "promote to prod", "release this" | `workflow-ship-and-observe` |
 | "post-launch polish", "what should I fix next", "iterate on prod feedback", "make it better based on real usage" | `iterate-post-launch` |
+| "weekly growth review", "what should we do this week for growth", "GTM check-in", "growth standup" | `iterate-gtm-weekly` |
 | "triage this feedback", "turn these reports into tickets", "process the bug backlog", "close the loop on QA findings" | `workflow-feedback-to-closure` |
 
 ---
@@ -133,6 +135,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "cap my AI costs", "LLM bill could blow up", "token budget", "runaway agent loop", "per-user AI limits" | `plan-llm-cost-guardrails` |
 | "AEO", "GEO", "do AI engines cite me", "llms.txt", "am I blocking AI crawlers", "ChatGPT visibility" | `plan-aeo-readiness` |
 | "GTM", "go-to-market plan", "get more users", "grow traffic", "should this be freemium", "how do I market this repo" | `plan-gtm` |
+| "pricing strategy", "what should I charge", "value metric", "seat vs usage", "are we underpriced" | `plan-pricing` |
 | "App Store ready", "will Google Play reject", "privacy manifest", "data safety form", "pre-submission check" | `plan-mobile-readiness` |
 | "Capacitor app secure", "WebView security", "secure storage tokens", "cleartext traffic", "allowNavigation", "OTA update safe" | `plan-capacitor-hardening` |
 | "find dead buttons", "stub checker", "fake components", "unwired handlers", "dead links", "buttons that do nothing", "stub audit" | `plan-stub-checker` |
@@ -154,6 +157,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "help me write a spec", "co-author a doc", "write a proposal", "draft an RFC" | `docs-coauthor` |
 | "write a README", "document this API", "write docs", "create documentation" | `docs-writer` |
 | "launch post", "Show HN post", "Product Hunt listing", "announce this release", "launch copy", "write the launch tweet" | `docs-launch-kit` |
+| "comparison page", "vs page", "alternatives to", "competitor page", "migration guide from" | `docs-comparison-pages` |
 
 ---
 
@@ -166,6 +170,8 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "improve my README", "add screenshots to README", "make README prettier" | `enhance-readme` |
 | "improve onboarding", "users sign up and leave", "time to value", "first-run experience", "activation rate" | `enhance-onboarding` |
 | "pricing page", "improve conversion", "free to paid", "upgrade prompts", "paywall UX", "hero copy" | `enhance-web-conversion` |
+| "referral program", "viral loop", "powered by badge", "get users to invite", "growth loop" | `enhance-growth-loops` |
+| "onboarding emails", "trial expiry emails", "drip sequence", "win-back email", "lifecycle email" | `enhance-lifecycle-email` |
 | "improve SEO", "add meta tags", "sitemap", "Open Graph", "Google indexing", "rich results" | `enhance-web-seo` |
 | "emails go to spam", "set up SPF/DKIM", "check email deliverability", "handle bounces" | `enhance-email-deliverability` |
 | "make this landing page look premium", "anti-slop design", "portfolio design" | `enhance-web-landing` |

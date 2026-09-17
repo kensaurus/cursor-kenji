@@ -29,7 +29,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (150)
+## Skills (156)
 
 ### Enhance
 
@@ -77,6 +77,16 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Triggers:** "improve onboarding", "users sign up and leave", "time to value", "first-run experience", "activation rate", "empty state templates"
 **What it does:** Apply-now first-session pass: defines the `activated` event as the first real outcome (not signup or tour end), walks landing → activation as a stranger and counts steps, cuts fields and screens before value (OAuth/magic link, inferred locale, try-before-signup), adds empty-state templates or sample data and a ≤5-item checklist that ends at activation, instruments `signup_started → signup_completed → activated → habit_reached` behind the app's consent gate. Judged against median B2B activation 37% and TTV over 24 h collapsing activation below 25%. Defers fields — deletes nothing.
 **Related:** `plan-gtm`, `enhance-web-ux`, `audit-ui-states`, `enhance-web-forms`, `audit-analytics`, `enhance-web-conversion`, `design-email`, `test-playwright`
+
+#### `enhance-growth-loops`
+**Triggers:** "referral program", "viral loop", "powered by badge", "get users to invite", "growth loop", "share button that brings users"
+**What it does:** Apply-now growth loops on an existing product, one or two at a time, each with its own K-factor: powered-by badge on free-plan output (0.5–3% conversion, near-total exposure; removable on paid), shareable artifact pages rendered logged-out with a one-tap "try it" into the ungated path, template galleries, invite flows inside the value moment, referral credit granted idempotently on the *referred user's activation* (SaaS referral rate ~4.75%, referred conversion ~7.9%). Value before signup on every landing side (2–5× referred conversion). Events `badge_*`, `share_*`, `invite_*`, `referral_*`, `loop_signup { loop }`. Anti-spam rules: user-initiated single-send invites with recipient opt-out, rate limits, per-referrer caps, no pre-checked "invite all".
+**Related:** `plan-gtm`, `enhance-onboarding`, `enhance-web-conversion`, `backend-patterns`, `audit-analytics`, `enhance-web-seo`, `test-playwright`
+
+#### `enhance-lifecycle-email`
+**Triggers:** "onboarding emails", "trial expiry emails", "drip sequence", "win-back email", "lifecycle email", "activation nudge email", "dunning emails"
+**What it does:** Apply-now lifecycle email driven by product events, with timers only as the fallback for silence. Sequence table: welcome, activation nudge (no `activated` within TTV × 3), setup stall, habit (day-3/7 keyed to what they built), trial expiry at −3d / −1d / 0 / +3d **split by activated vs stalled** (help, not a discount, for an empty account), limit-reached upgrade, win-back, dunning. Every email names its trigger and exit; sends keyed `(user, sequence, step)` so retries cannot double-send; transactional vs marketing classified per email with one-click unsubscribe and suppression list; quiet hours and a daily cap; events `email_sent … email_converted { goal_event }`. Behavior-triggered sends report roughly 3× the click-through of calendar drips (vendor-reported). Uses the ESP already in the repo. Templates → `design-email`; inbox placement → `enhance-email-deliverability`.
+**Related:** `enhance-onboarding`, `design-email`, `enhance-email-deliverability`, `data-pipeline`, `plan-privacy-compliance`, `iterate-gtm-weekly`, `audit-analytics`
 
 #### `enhance-web-conversion`
 **Triggers:** "pricing page", "improve conversion", "free to paid", "upgrade prompts", "paywall UX", "hero copy", "call to action"
@@ -262,6 +272,11 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **What it does:** Plan-only go-to-market audit of a shipped repo. Step A greps how the product is sold today — billing SDKs and `isPro` gates, license family, README/hero/meta positioning, auth providers and steps to first value, analytics SDK and consent, robots/sitemap/llms.txt, registry and directory presence, trust signals, real numbers or **unmeasured**. Step B interviews the founder with `workflow-grilling` rules (one question, a recommended answer, facts never asked) down a fixed ladder: 90-day metric → ICP → current numbers → monetization intent → budget → market → alternatives → constraints. Step C diagnoses in Dunford order (alternatives → attributes → value → customers → category), judges the monetization model against 2026 free-to-paid benchmarks (freemium 3–5% good / 8–12% great; card-required trial 25–35%; OSS cloud carries 48–73% of vendor revenue), defines `activated` and one north-star, picks ≤2 channels + 1 loop with 2026 caveats (Show HN 5–30k visits on a hit; Product Hunt 1–2% B2B signup). Emits `plan-gtm.md` with a decision log, positioning statement, funnel table, and a five-phase burndown mapped to execution skills. **Changes nothing.**
 **Related:** `workflow-gtm`, `enhance-web-conversion`, `enhance-onboarding`, `docs-launch-kit`, `enhance-web-seo`, `plan-aeo-readiness`, `audit-analytics`, `plan-aso`, `enhance-readme`, `iterate-post-launch`, `workflow-grilling`
 
+#### `plan-pricing`
+**Triggers:** "pricing strategy", "what should I charge", "value metric", "seat vs usage", "are we underpriced", "pricing tiers", "/pricing-plan"
+**What it does:** Plan-only pricing and packaging audit. Inventories plans, gates, metering, price points, trial logic, per-action cost, and owned willingness-to-pay evidence (upgrade/downgrade events, "too expensive" in support). Scores candidate value metrics 1–5 on value connection, fairness, predictability, scalability, billability and simulates them on real historical accounts; picks one primary metric ("our customer receives more value when ___ increases") and adds a usage component only where a variable cost is uncovered. Designs ≤3 good-better-best tiers from the outside in with a recommended middle, right-hand anchor, enterprise "from" price, free boundary just before the activation event's repeat, annual stated as months free. Price corridor via Van Westendorp → Gabor-Granger → MaxDiff → conjoint, in that order. Emits `plan-pricing.md` with a grandfathering row. **No prices, plan enums, Stripe objects, or copy change.**
+**Related:** `plan-gtm`, `enhance-web-conversion`, `audit-payment-system`, `audit-monetization-iap`, `plan-llm-cost-guardrails`, `audit-analytics`, `docs-coauthor`
+
 #### `plan-capacitor-hardening`
 **Triggers:** "Capacitor app secure", "harden hybrid app", "WebView security", "secure storage tokens", "deep link OAuth", "cleartext traffic", "allowNavigation", "exported activity", "OTA update safe"
 **What it does:** Capacitor four-pillar native audit (Data, Auth/Deep-Link, Network, WebView) + OTA store-policy — Keychain vs localStorage, PKCE, App/Universal Links, dev config in prod. Invisible to web-only review. Emits `plan-capacitor-hardening.md`.
@@ -424,6 +439,11 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Triggers:** "API audit", "frontend API", "API mismatch", "request optimization", "API contract", "network requests"
 **What it does:** Audit frontend API calls against backend implementation. Validates endpoints exist, parameters match, types align, caching configured, error handling present. Uses Sentry MCP for production API errors.
 **Related:** `debug-fe-be-integration`, `design-api`
+
+#### `audit-registry-listing`
+**Triggers:** "audit our npm listing", "README as landing page", "GitHub topics", "why nobody finds the package", "social preview", "npm description", "check the tarball"
+**What it does:** Read-only audit of every surface a stranger sees before the repo. README first ten lines (outcome sentence, who it is for, install one-liner, one screenshot — not a count), badges that are live, quickstart ≤5 steps; registry metadata (name, description ≤140 chars, keywords, homepage, repository, license, engines) and `npm pack --dry-run` / build listing for missing promises or leaked `.env*`, keys, screenshots, 10 MB+ assets; GitHub description, ≥5 topics, 1280×640 social preview, releases, `SECURITY.md`; plugin / skills.sh manifests in version and description sync with honest listing status; a timed clean-profile install to first success. Findings with evidence and an owner skill per row; changes nothing.
+**Related:** `enhance-readme`, `docs-writer`, `deploy-npm`, `plan-gtm`, `docs-launch-kit`, `plan-aso`
 
 #### `audit-realworld`
 **Triggers:** "audit against realworld", "compare my app to realworld", "conduit conformance", "is my full-stack app complete", "full-stack gap check", "what's missing to reach production"
@@ -626,6 +646,11 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **What it does:** Closes the post-ship improvement loop. Pulls Sentry top errors (with Seer AI root-cause), Supabase slow-query and API logs, advisor warnings, and a live Playwright walkthrough into a ranked improvement backlog (impact × effort). Implements the approved fixes full-stack and verifies each one live. Resolves confirmed Sentry issues.
 **Related:** `test-red-team`, `deploy-verify`, `debug-sentry-monitor`, `workflow-fix-and-ship`, `test-playwright`, `audit-analytics`
 
+#### `iterate-gtm-weekly`
+**Triggers:** "weekly growth review", "what should we do this week for growth", "GTM check-in", "growth standup", "/gtm-weekly"
+**What it does:** Thirty-minute weekly loop after `workflow-gtm`. Pulls Visit → Signup → Activated → Habit → Paid → Refer by source, this week vs last; fills launch-kit Results tables older than 7 days; names the step with the largest *absolute* loss; attributes last week's experiment with a number (or "unmeasured"); chooses exactly one experiment (metric + stop date, owner skill from a levers-by-step table) and one post; appends a scorecard row and schedules next week. Production defects stay on `iterate-post-launch`; blind funnel cells go to `audit-analytics` first.
+**Related:** `workflow-gtm`, `iterate-post-launch`, `audit-analytics`, `enhance-onboarding`, `enhance-web-conversion`, `enhance-lifecycle-email`, `enhance-growth-loops`, `docs-comparison-pages`, `docs-launch-kit`
+
 #### `deploy-npm`
 **Triggers:** "publish this package", "release to npm", "ship a new npm version"
 **What it does:** End-to-end release workflow for a Changesets + GitHub Actions + npm Trusted Publisher (OIDC) monorepo with per-package GitHub Releases.
@@ -768,9 +793,9 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 
 #### `workflow-gtm`
 **Triggers:** "go to market", "grow users", "increase traffic and visibility", "market this repo", "get this in front of users", "/gtm"
-**What it does:** Go-to-market sequence for a product that already works. Step 1 runs `plan-gtm` (inventory + founder interview + `plan-gtm.md`) and **stops for approval**; approved phases then run in the order that compounds: measure (`audit-analytics`) → message (`enhance-web-conversion`, `enhance-readme` when the repo is the product) → activate (`enhance-onboarding`) → be found (`enhance-web-seo`, `plan-aeo-readiness`) → launch (`docs-launch-kit`) → weekly loop (`iterate-post-launch`). Ends with a GTM scorecard: funnel table before/after, each step's status or skip reason, next week's one fix. Technical launch readiness (PWA, bundle, quality gate) stays on `workflow-launch-ready`.
-**Chain:** `plan-gtm` ⏸ → `audit-analytics` → `enhance-web-conversion` → `enhance-onboarding` → `enhance-web-seo` / `plan-aeo-readiness` → `docs-launch-kit` → `iterate-post-launch`
-**Related:** `plan-gtm`, `audit-analytics`, `enhance-web-conversion`, `enhance-onboarding`, `enhance-web-seo`, `plan-aeo-readiness`, `docs-launch-kit`, `iterate-post-launch`, `workflow-launch-ready`, `plan-aso`
+**What it does:** Go-to-market sequence for a product that already works. Step 1 runs `plan-gtm` (inventory + founder interview + `plan-gtm.md`) and **stops for approval**; approved phases then run in the order that compounds: measure (`audit-analytics`) → message (`enhance-web-conversion`; repo-as-product: `audit-registry-listing` then `enhance-readme`) → activate (`enhance-onboarding`, `enhance-lifecycle-email`) → be found (`enhance-web-seo`, `docs-comparison-pages`, `plan-aeo-readiness`) → launch (`docs-launch-kit`, `enhance-growth-loops`) → weekly loop (`iterate-gtm-weekly`). Monetize phase: `plan-pricing` ⏸ approve → `enhance-web-conversion` (pricing) + `enhance-lifecycle-email` (trial expiry). Ends with a GTM scorecard: funnel table before/after, each step's status or skip reason, next week's one fix. Technical launch readiness (PWA, bundle, quality gate) stays on `workflow-launch-ready`.
+**Chain:** `plan-gtm` ⏸ → `audit-analytics` → `enhance-web-conversion` → `enhance-onboarding` + `enhance-lifecycle-email` → `enhance-web-seo` / `docs-comparison-pages` / `plan-aeo-readiness` → `docs-launch-kit` + `enhance-growth-loops` → `iterate-gtm-weekly`
+**Related:** `plan-gtm`, `plan-pricing`, `audit-analytics`, `audit-registry-listing`, `enhance-web-conversion`, `enhance-onboarding`, `enhance-lifecycle-email`, `enhance-web-seo`, `docs-comparison-pages`, `plan-aeo-readiness`, `docs-launch-kit`, `enhance-growth-loops`, `iterate-gtm-weekly`, `workflow-launch-ready`, `plan-aso`
 
 ---
 
@@ -780,6 +805,11 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 **Triggers:** "launch post", "Show HN post", "Product Hunt listing", "announce this release", "launch copy", "write the launch tweet", "/launch-kit"
 **What it does:** Writes `docs/launch/<version>.md` from the repo's real features: a claims table (claim → source → verified) that every sentence must trace to, one problem-first angle, native copy per channel (Show HN title + first comment in sober technical tone; Product Hunt tagline ≤60 chars + gallery + maker comment; subreddit-specific Reddit posts with the rules quoted; X/Bluesky/LinkedIn hook + demo; dev.to/blog article outline with canonical URL; user-facing release notes), a launch calendar (existing users → Show HN Tue–Thu 12–17 UTC → communities → Product Hunt a week later → article), UTM links per channel, and a Results table filled after 7 days. No vote solicitation, no fabricated proof, maker disclosed. Launch is a cadence — one kit per meaningful release.
 **Related:** `plan-gtm`, `enhance-readme`, `docs-writer`, `plan-antislop`, `enhance-web-seo`, `iterate-post-launch`, `deploy-npm`
+
+#### `docs-comparison-pages`
+**Triggers:** "comparison page", "vs page", "alternatives to", "competitor page", "migration guide from", "X vs Y page"
+**What it does:** Writes ≤5 honest bottom-funnel pages per pass — `<product> vs <alt>`, `<alt> alternatives`, `migrate from <alt>` — from facts fetched and dated this session (competitor pricing/limits with URL + date in a source block; product facts from the repo). Fixed shape: two-sentence verdict, 6–10-row table with checked-on dates, where the alternative wins, where this product wins with a real artifact, migration steps and code, 3–5 objection FAQs, sources. Frontmatter `lastVerified` + `reviewEvery: 90d` and a visible "checked on" line; a page past review is re-verified or unpublished. Comparison pages took 78% of clicks from 28% of pages in one 162-page test; bulk templated batches are the Google scaled-content target, so this skill refuses them. Meta/schema → `enhance-web-seo`.
+**Related:** `plan-gtm`, `enhance-web-seo`, `plan-aeo-readiness`, `docs-writer`, `plan-antislop`, `docs-launch-kit`, `test-playwright`
 
 #### `docs-writer`
 **Triggers:** "write documentation", "README", "API docs", "document this", "create docs", "architecture docs"
@@ -829,7 +859,7 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 
 ---
 
-## Commands (60)
+## Commands (62)
 
 Commands fall into two groups: **standalone** (full playbook in the file) and **pointer** (thin slash entry delegating to a skill).
 
@@ -890,6 +920,8 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/gtm-plan` | `plan-gtm` | Go-to-market audit + founder interview → phased GTM plan (plan only) |
 | `/gtm` | `workflow-gtm` | Plan → approve → measure → message → activate → be found → launch → weekly loop |
 | `/launch-kit` | `docs-launch-kit` | Versioned launch kit — Show HN, Product Hunt, Reddit, X/LinkedIn, article, release notes, calendar, UTMs |
+| `/pricing-plan` | `plan-pricing` | Value metric, tiers, price corridor, research plan (plan only) |
+| `/gtm-weekly` | `iterate-gtm-weekly` | Weekly funnel read → one experiment → one post → scorecard row |
 | `/mobile-plan` | `plan-mobile-readiness` | App Store / Play submission audit (plan only) |
 | `/capacitor-plan` | `plan-capacitor-hardening` | Capacitor native-layer security audit (plan only) |
 | `/privacy-plan` | `plan-privacy-compliance` | Privacy / GDPR / APPI / store-label audit (plan only) |
@@ -930,7 +962,7 @@ These are the loops that move a product the most. Paste the phrase; the pack cha
 | Fix a bug and ship it | `workflow-fix-and-ship` | debug → fix → smoke → PR → deploy |
 | Pre-release quality check | `workflow-quality-gate` | (optional explore) → red-team → security → bundle → perf → unit tests |
 | Full launch preparation | `workflow-launch-ready` | SEO + PWA + bundle + i18n + quality gate + deploy + iterate |
-| Take a shipped product to market | `workflow-gtm` | plan-gtm ⏸ approve → analytics → conversion → onboarding → SEO/AEO → launch kit → weekly loop |
+| Take a shipped product to market | `workflow-gtm` | plan-gtm ⏸ approve → analytics → conversion → onboarding + lifecycle email → SEO / comparison pages / AEO → launch kit + loops → `iterate-gtm-weekly` |
 | Green the whole repository (authorized) | `workflow-green-repo` | discover gates → enumerate failures → batch fix → prove green from scratch |
 | Deploy to production and observe | `workflow-ship-and-observe` | preflight → deploy → verify live revision → observe → stable/rollback |
 | Feedback → tracked → verified closed | `workflow-feedback-to-closure` | gather → dedupe → tickets → fix → verify live → close |
@@ -961,8 +993,10 @@ workflow-ship-and-observe
 
 workflow-gtm
   └─ plan-gtm (inventory + interview) ⏸ approve
-     → audit-analytics → enhance-web-conversion → enhance-onboarding
-     → enhance-web-seo / plan-aeo-readiness → docs-launch-kit → iterate-post-launch
+     → audit-analytics → enhance-web-conversion → enhance-onboarding (+ enhance-lifecycle-email)
+     → enhance-web-seo / docs-comparison-pages / plan-aeo-readiness
+     → docs-launch-kit (+ enhance-growth-loops) → iterate-gtm-weekly
+     monetize: plan-pricing ⏸ approve → enhance-web-conversion (pricing)
 
 workflow-feedback-to-closure
   └─ gather → dedupe → durable tickets → fix (workflow-fix-and-ship /
@@ -1009,7 +1043,7 @@ After approval: `backend-patterns`, `db-migrator`, `backend-observability`, prov
 `plan-capacitor-hardening` → `plan-mobile-readiness` (Capacitor pre-store) · `plan-privacy-compliance` · `plan-aso` · `plan-aeo-readiness` → `enhance-web-seo` / `docs-writer`
 
 #### Go-to-market loop (shipped product, wants users)
-`plan-gtm` → founder approval per phase → `audit-analytics` (measure) → `enhance-web-conversion` (hero, pricing) → `enhance-onboarding` (activation) → `enhance-web-seo` + `plan-aeo-readiness` (be found) → `docs-launch-kit` (launch) → `iterate-post-launch` weekly · repo-as-product adds `enhance-readme` · mobile adds `plan-aso`
+`plan-gtm` → founder approval per phase → `audit-analytics` (measure) → `enhance-web-conversion` (hero) → `enhance-onboarding` + `enhance-lifecycle-email` (activate) → `enhance-web-seo` + `docs-comparison-pages` + `plan-aeo-readiness` (be found) → `docs-launch-kit` + `enhance-growth-loops` (launch) → `iterate-gtm-weekly` · monetize: `plan-pricing` → `enhance-web-conversion` (pricing) · repo-as-product adds `audit-registry-listing` → `enhance-readme` · mobile adds `plan-aso`
 
 #### Stub & Wiring Audit
 `plan-stub-checker` → user approval → `debug-fe-be-integration` → `workflow-fix-and-ship` → `test-playwright`

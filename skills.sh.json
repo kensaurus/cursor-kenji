@@ -28,6 +28,7 @@
         "audit-payment-system",
         "audit-performance",
         "audit-realworld",
+        "audit-registry-listing",
         "audit-resilience",
         "audit-responsive",
         "audit-security",
@@ -57,6 +58,7 @@
         "plan-llm-cost-guardrails",
         "plan-mobile-readiness",
         "plan-perf-audit",
+        "plan-pricing",
         "plan-privacy-compliance",
         "plan-rls-audit",
         "plan-secrets-audit",
@@ -74,6 +76,8 @@
         "enhance-arch-boundaries",
         "enhance-capacitor-ui",
         "enhance-email-deliverability",
+        "enhance-growth-loops",
+        "enhance-lifecycle-email",
         "enhance-motion",
         "enhance-onboarding",
         "enhance-pwa",
@@ -143,6 +147,7 @@
       "skills": [
         "docs-adr",
         "docs-coauthor",
+        "docs-comparison-pages",
         "docs-domain-modeling",
         "docs-launch-kit",
         "docs-writer"
@@ -221,6 +226,7 @@
       "description": "Close the loop after launch.",
       "skills": [
         "iterate-agent-harness",
+        "iterate-gtm-weekly",
         "iterate-post-launch"
       ]
     },

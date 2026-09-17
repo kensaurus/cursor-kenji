@@ -4,7 +4,7 @@ description: >
   Plan-only GTM audit: detect monetization model, positioning, activation
   funnel, SEO/AEO and distribution, interview the founder one question at a
   time, emit a phased plan. Use when "GTM", "go-to-market", "get more users",
-  "grow traffic", "should this be freemium". Execute â†’ workflow-gtm.
+  "grow traffic", "should this be freemium". Execute → workflow-gtm.
 license: MIT
 ---
 
@@ -29,9 +29,13 @@ phased burndown mapped to execution skills. **Change nothing until approved.**
 |---|---|
 | **plan-gtm** (this) | Strategy: who, why-us, how-paid, which channels, what to measure |
 | `workflow-gtm` | Executes the approved phases in order |
+| `plan-pricing` | Value metric, tiers, price points — after this skill picks the model |
 | `enhance-web-conversion` | Hero, pricing page, upgrade prompts (apply) |
 | `enhance-onboarding` | First-session activation (apply) |
-| `docs-launch-kit` | Launch posts and calendar (apply) |
+| `enhance-lifecycle-email` / `enhance-growth-loops` | Nudges and loops (apply) |
+| `docs-launch-kit` / `docs-comparison-pages` | Launch posts; "X vs Y" pages (apply) |
+| `audit-registry-listing` | README / npm / GitHub surface for repo-as-product |
+| `iterate-gtm-weekly` | The weekly loop after Phase 4 |
 | `enhance-web-seo` / `plan-aeo-readiness` | Classic search / AI-engine citation |
 | `audit-analytics` | Whether the funnel is instrumented at all |
 | `plan-aso` | App Store / Play listing (mobile) |
@@ -233,11 +237,11 @@ keep / tune / switch — why, with the benchmark row it is judged against.
 | # | Area | Gap | Evidence | Sev | Direction |
 
 ## Phased burndown
-- **Phase 1 — Measure & message** → `audit-analytics`, `enhance-web-conversion` (hero), `enhance-readme`
-- **Phase 2 — Activate** → `enhance-onboarding`, `audit-ui-states`, `enhance-web-forms`
-- **Phase 3 — Be found** → `enhance-web-seo`, `plan-aeo-readiness`, `docs-writer` (comparison / answer pages)
-- **Phase 4 — Launch & loop** → `docs-launch-kit`, `iterate-post-launch` (weekly review)
-- **Phase 5 — Monetize** → `enhance-web-conversion` (pricing, upgrade prompts), `audit-payment-system`
+- **Phase 1 — Measure & message** → `audit-analytics`, `enhance-web-conversion` (hero), `enhance-readme`; repo-as-product adds `audit-registry-listing`
+- **Phase 2 — Activate** → `enhance-onboarding`, `audit-ui-states`, `enhance-web-forms`, `enhance-lifecycle-email` (activation nudges)
+- **Phase 3 — Be found** → `enhance-web-seo`, `plan-aeo-readiness`, `docs-comparison-pages`
+- **Phase 4 — Launch & loop** → `docs-launch-kit`, `enhance-growth-loops`, `iterate-gtm-weekly`
+- **Phase 5 — Monetize** → `plan-pricing` (approve first), `enhance-web-conversion` (pricing, upgrade prompts), `enhance-lifecycle-email` (trial expiry), `audit-payment-system`
 
 ## 30 / 60 / 90
 | Day | Metric | Target | Owner skill |
@@ -264,6 +268,6 @@ Approve a phase → `workflow-gtm` runs it and re-reads the funnel table.
 - **`workflow-gtm`** — executes the approved phases.
 - **Growth gate** — pairs with `plan-aeo-readiness`, `plan-aso` in `docs/PLAN-LOOPS.md`.
 - **`audit-analytics`** — run first when the funnel table is all "unmeasured".
-- **`iterate-post-launch`** — the weekly loop after Phase 4.
+- **`iterate-gtm-weekly`** — the weekly loop after Phase 4 (`iterate-post-launch` keeps production bugs).
 
 > Plan with a strong model; execute with `composer-2.5-execution.mdc`.
