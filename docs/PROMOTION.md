@@ -68,7 +68,7 @@ Full pack (skills + slash commands): `npx @kensaurus/cursor-kenji --all`. That C
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/cursor-kenji
 
-**Status:** Pending — `@kensaurus/cursor-kenji@1.36.3` (command-surface pass: `/plan` → `/plan-mode`, collision guard covers all four hosts). Previous: `1.36.2` via OIDC run [35224279830](https://github.com/kensaurus/cursor-kenji/actions/runs/35224279830).
+**Status:** [x] Published — `@kensaurus/cursor-kenji@1.36.3` via OIDC run [35725729170](https://github.com/kensaurus/cursor-kenji/actions/runs/35725729170); `npm view … version` returns `1.36.3` and `dist-tags.latest` is `1.36.3` (2026-09-22)
 
 ---
 
