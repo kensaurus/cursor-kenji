@@ -39,16 +39,16 @@ Extract:
 
 ### 4 — Verify
 
-Run in order and fix any failure before continuing:
+Run the project's real checks, in the order its manifest or CI uses them, and fix any failure before continuing. These names are examples — skip any script the repo does not define:
 
 ```bash
 npm run typecheck       # or: npx tsc --noEmit
 npm run lint
 npm run build
-npm run test:unit       # or: npx vitest run
+npm test                # or the unit command the repo actually ships
 ```
 
-If the fix touches a UI flow, manually verify the user-visible path works end-to-end.
+If the fix touches a UI flow, verify the user-visible path works end-to-end.
 
 ### 5 — Commit
 

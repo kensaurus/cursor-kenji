@@ -184,7 +184,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 #### `workflow-grilling` *(adapted from mattpocock/skills, MIT)*
 **Triggers:** "grill me", "stress-test this plan", "interview me about this", "poke holes in this", "challenge my thinking"
-**What it does:** Relentless one-question-at-a-time interview until shared understanding is reached. Recommends an answer with each question, looks up facts itself, puts every decision to the user, and writes no code until confirmed. Ends with a compact decision log to feed `design-prd` or `/plan`.
+**What it does:** Relentless one-question-at-a-time interview until shared understanding is reached. Recommends an answer with each question, looks up facts itself, puts every decision to the user, and writes no code until confirmed. Ends with a compact decision log to feed `design-prd` or `/plan-mode`.
 **Related:** `docs-domain-modeling`, `design-prd`, `workflow-spec-tdd`
 
 #### `docs-domain-modeling` *(adapted from mattpocock/skills, MIT)*
@@ -512,7 +512,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 #### `audit-ux`
 **Triggers:** "UX audit", "usability review", "heuristic evaluation", "content audit", "UX quality", "check cognitive load", "audit microcopy"
-**What it does:** Research-driven UX audit — Nielsen Norman Group's 10 heuristics, Laws of UX, Intuit Content Design, Google HEART metrics. playwright-cli for live walkthrough, Firecrawl for research, Sequential Thinking for complex flow analysis. Per-page experience lens — for cross-page journeys use `audit-ux-journeys`; for linearized desktop / breakpoint layout use `audit-responsive`.
+**What it does:** Research-driven UX audit — Nielsen Norman Group's 10 heuristics, Laws of UX, Intuit Content Design, Google HEART metrics. playwright-cli for live walkthrough, Firecrawl for research. Per-page experience lens — for cross-page journeys use `audit-ux-journeys`; for linearized desktop / breakpoint layout use `audit-responsive`.
 **Related:** `audit-ux-journeys`, `audit-responsive`, `audit-uiux-design-system`, `audit-accessibility`, `enhance-web-ux`
 
 #### `audit-ux-journeys`
@@ -867,9 +867,9 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 
 | Command | File | Quick Reference |
 |---------|------|-----------------|
-| `/plan` | `plan.md` | Plan Mode — research codebase, clarify, produce approved plan before coding |
-| `/fix-issue` | `fix-issue.md` | Fetch GitHub issue → find code → implement fix → open PR |
-| `/mcp-guide` | `mcp-guide.md` | MCP-powered dev workflow reference (renamed from `/mcp` to avoid Claude Code's built-in `/mcp`) |
+| `/plan-mode` | `plan-mode.md` | Research, clarify, and approve a plan before coding (renamed from `/plan`; host `/plan` enters Plan mode) |
+| `/fix-issue` | `fix-issue.md` | Fetch GitHub issue → `debug-error` / `workflow-fix-and-ship` → PR |
+| `/mcp-guide` | `mcp-guide.md` | Essential MCP set plus playwright-cli (renamed from `/mcp`; host `/mcp` manages servers) |
 
 ### Pointer (delegates to skill)
 
@@ -882,13 +882,13 @@ Commands fall into two groups: **standalone** (full playbook in the file) and **
 | `/ship-and-observe` | `workflow-ship-and-observe` | Deploy, verify the live revision, observe the stability window, roll back if needed |
 | `/feedback-to-closure` | `workflow-feedback-to-closure` | Feedback → deduped durable tickets → fix → production-verified closure |
 | `/commit` | `workflow-git-commit` | One conventional commit from an already-scoped change; no push |
-| `/debug-issue` | `debug-error` | Hypothesis-driven debugging with runtime evidence (renamed from `/debug` to avoid Claude Code's bundled `/debug`) |
+| `/debug-issue` | `debug-error` | Hypothesis, then runtime evidence (renamed from `/debug`; host `/debug` is the bundled debugger) |
 | `/pr` | `workflow-pr` | Validate and open/manage PR from an already-committed branch |
 | `/release-prep` | `workflow-release-prep` | Dirty working tree → reviewed, merge-ready PR — do not merge |
 | `/readme` | `enhance-readme`, `docs-writer` | Visual showcase + content sync |
 | `/refactor` | `workflow-refactor` | Analyze → split → extract → verify behavior |
 | `/review-code` | `audit-code-review` | Agent review + manual checklist (renamed from `/review` to avoid Claude Code's built-in `/review`) |
-| `/test` | `test-unit`, `test-qa`, `test-exploratory`, `mobile-emulator-test` | Type check → unit → integration → E2E / exploratory |
+| `/test` | `test-unit`, `test-playwright`, `test-qa`, `test-exploratory`, `test-visual-regression`, `test-load`, `mobile-emulator-test` | Route to the test skill that matches the target |
 | `/uiux` | `audit-responsive`, `audit-ui-states`, `audit-uiux-design-system`, `audit-ux`, `enhance-readability`, `enhance-web-instant-nav`, `enhance-web-ui`, `enhance-web-ux` | Audit + enhance UI/UX |
 | `/readability` | `enhance-readability` | Comprehension — CPL, Gestalt grouping, visuals that cut verbosity |
 | `/instant-nav` | `enhance-web-instant-nav` | Speculation Rules, bfcache, View Transitions, 103 Early Hints |

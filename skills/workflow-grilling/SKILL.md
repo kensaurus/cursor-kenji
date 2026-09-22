@@ -67,4 +67,4 @@ tree, resolving dependencies between decisions one by one.
 
 Close the session with a compact decision log: each decision on one line, in the
 user's confirmed vocabulary. This log is the input to the spec or plan that
-follows — offer to carry it into `design-prd` or `/plan`.
+follows — offer to carry it into `design-prd` or `/plan-mode`.

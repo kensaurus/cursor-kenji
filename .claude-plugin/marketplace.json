@@ -6,13 +6,13 @@
   },
   "metadata": {
     "description": "Playbooks your coding agent runs from a plain-English request.",
-    "version": "1.36.2"
+    "version": "1.36.3"
   },
   "plugins": [
     {
       "name": "cursor-kenji",
       "source": ".",
-      "description": "145 agent skills, 57 slash commands, 6 subagents. Install: /plugin install cursor-kenji@cursor-kenji",
+      "description": "156 agent skills, 62 slash commands, 6 subagents. Install: /plugin install cursor-kenji@cursor-kenji",
       "homepage": "https://www.skills.sh/kensaurus/cursor-kenji",
       "repository": "https://github.com/kensaurus/cursor-kenji",
       "license": "MIT",

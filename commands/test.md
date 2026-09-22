@@ -5,7 +5,7 @@ argument-hint: "[target or flow]"
 
 # /test
 
-> Type check → lint → unit → integration → E2E → coverage. Verify quality before committing.
+> Pick the test skill that matches the target. Do not run one generic suite and call it done.
 
 This command is a thin entry point. Pick the right skill for the target:
 

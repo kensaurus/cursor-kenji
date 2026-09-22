@@ -283,6 +283,6 @@ Every `plan-*` skill shares the same discipline:
 | `workflow-quality-gate` | `test-red-team` | Ship/no-ship verdict with fixes |
 | Live identity probe (optional) | `test-exploratory` | Guest vs logged-in wander + diff — run before the quality gate, not instead of it |
 | `workflow-launch-ready` | SEO + PWA + … | Launch week |
-| Core iterate | `/research` → audits → `/plan` → TDD | General improvement |
+| Core iterate | `/research` → audits → `/plan-mode` → TDD | General improvement |
 
 See [README — How it works](../README.md#how-it-works) and [CATALOG — Skill composition](CATALOG.md#skill-composition-patterns) for more recipes.

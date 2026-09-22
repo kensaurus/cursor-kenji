@@ -7,6 +7,8 @@ argument-hint: "[task or feature]"
 
 Task / feature: $ARGUMENTS
 
+Named `plan-mode`, not `plan`: Gemini CLI ships a built-in `/plan` that switches to Plan mode, so a `plan.toml` of ours would shadow it. This prompt is the procedure. Use the host's own Plan mode to switch modes.
+
 ---
 
 ## When to use

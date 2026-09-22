@@ -13,5 +13,5 @@ user. Do not write any code or edit any files until the user confirms.
 If the session surfaces vocabulary worth keeping, apply the **`docs-domain-modeling`**
 skill to capture it in `CONTEXT.md` (and ADRs where warranted) as you go.
 
-Related: `/plan` to turn the confirmed decisions into an implementation plan,
+Related: `/plan-mode` to turn the confirmed decisions into an implementation plan,
 `design-prd` to turn them into a spec.

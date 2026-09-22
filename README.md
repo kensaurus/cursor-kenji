@@ -107,7 +107,7 @@ Four rooms. Same rule: you talk, a named playbook runs.
 | Thing | What it is | How you use it |
 |:------|:-----------|:---------------|
 | **Skill** | A playbook for one job | Describe the job in chat |
-| **Command** | A shortcut | Type `/commit`, `/pr`, `/plan` |
+| **Command** | A shortcut | Type `/commit`, `/pr`, `/plan-mode` |
 | **Subagent** | A helper that peels off one task | Say *"review this PR"* |
 | **Rule** | A house rule the AI always obeys | Drop a `.mdc` into your project |
 | **MCP server** | A connection to your database / GitHub / browser | Copy a template + set env vars |
@@ -236,7 +236,7 @@ npx @kensaurus/cursor-kenji --gemini   # Gemini CLI
 | **Rules → context file** | `~/.codex/AGENTS.md` | `~/.gemini/GEMINI.md` |
 | **Portable commands** | `~/.codex/prompts/*.md` | `~/.gemini/commands/*.toml` |
 
-Your `rules/` get merged into that one auto-loaded file (the skill-routing index is skipped). Three standalone playbooks — `plan`, `research`, and `fix-issue` — ship as native prompts/commands. Skills and subagents aren't written out, because neither tool can load them. Existing `AGENTS.md` or `GEMINI.md` is backed up as `.bak-<stamp>` first.
+Your `rules/` get merged into that one auto-loaded file (the skill-routing index is skipped). Three standalone playbooks — `plan-mode`, `research`, and `fix-issue` — ship as native prompts/commands. Skills and subagents aren't written out, because neither tool can load them. Existing `AGENTS.md` or `GEMINI.md` is backed up as `.bak-<stamp>` first.
 
 > The bash `install.sh --codex`/`--gemini` delegates to the Node installer (needs Node ≥ 18).
 
@@ -603,13 +603,13 @@ Type `/` in chat to see them all.
 | `/green-repo` | Whole-repo debt cleanup (authorized) | Drive typecheck/lint/test/build to green from a fresh run |
 | `/ship-and-observe` | Deploy to production | Verify the live revision, observe the stability window, roll back if needed |
 | `/feedback-to-closure` | Incoming reports/QA/Sentry | Dedupe into durable tickets → fix → production-verified closure |
-| `/plan` | Before coding | Research + approved plan |
+| `/plan-mode` | Before coding | Research + approved plan (`/plan` is the host mode switch) |
 | `/commit` | After coding | Lint, typecheck, commit |
 | `/pr` | Ready to ship | Push + open PR |
 | `/fix-issue [#]` | Bug reports | Issue → fix → PR |
-| `/debug-issue` | Tricky bugs | Instrumented debugging |
+| `/debug-issue` | Tricky bugs | Hypothesis, then runtime evidence |
 | `/review-code` | Before merge | Agent + manual review |
-| `/test` | Before commit | Test suite + coverage |
+| `/test` | Before commit | Route to the matching test skill |
 | `/update-deps` | Maintenance | Safe dep updates |
 | `/research` | Before coding | Firecrawl doc research |
 | `/readme` | End of session | Sync READMEs |

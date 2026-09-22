@@ -6,6 +6,60 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.36.3] — 2026-09-22
+
+A command-surface pass. `/plan` became a host built-in in three of the four
+supported tools while we still shipped a file of that name, and four commands
+still promised tools the pack stopped shipping. The collision guard now covers
+every install target instead of Claude Code only.
+
+### Changed
+
+- **`/plan` → `/plan-mode`, in both command sets.** Claude Code, the Cursor CLI,
+  and Gemini CLI each ship a built-in `/plan` that enters Plan mode, so
+  `commands/plan.md` duplicated it and `commands-portable/plan.md` shadowed it
+  as `~/.gemini/commands/plan.toml`. Both are renamed; the file is the
+  procedure, the built-in is the mode switch. Natural-language triggers are
+  unchanged. **Restart the host after updating** — Claude Code and Cursor
+  register `commands/` at session start.
+- **`commands/mcp-guide`** — describes the actual default template (Firecrawl,
+  Context7, Supabase) and headed `playwright-cli`. Sequential Thinking and the
+  Playwright MCP are full-template only, so nothing routes to them by default.
+- **`commands/fix-issue`** — dropped a `SemanticSearch` call and the hardcoded
+  `npm run test:unit`. Diagnosis routes to `debug-error`, the ship loop to
+  `workflow-fix-and-ship`, and verification runs the repo's own checks.
+- **`commands/debug-issue`** — no longer claims Sequential Thinking is part of
+  `debug-error`; notes that `/debug` is a built-in in both hosts.
+- **`commands/test`** — tagline matches the body: route to the matching test
+  skill rather than run one generic suite.
+- **`commands-portable/research`** — resynced with `skills/research`: repo
+  first, docs for the pinned version, no implementation until asked.
+- **`docs/CATALOG.md` `audit-ux`** and **`skills/plan-uiux-unification`** —
+  stopped listing Sequential Thinking as available; the skills never called it.
+- **`.claude-plugin/marketplace.json`** — listing said 145 skills and 57
+  commands; the real counts are 156 and 62.
+
+### Fixed
+
+- **The reserved-command guard only covered one of four hosts.** It scanned
+  `commands/` against a Claude Code list, so a `commands-portable/` name could
+  collide with a Gemini CLI built-in unnoticed — which is exactly how `/plan`
+  survived there. `scripts/validate-skills.mjs` now scans both directories
+  against the documented built-ins and aliases of Claude Code, the Cursor CLI,
+  and Gemini CLI. Probe: a `commands-portable/tools.md` fails the gate.
+- **The count ratchet skipped both Claude Code manifests.** `.claude-plugin/`
+  was never checked, which is how its listing drifted 11 skills and 5 commands
+  behind. `scripts/check-skill-count.mjs` now covers `plugin.json` and
+  `marketplace.json`.
+
+### Known issue
+
+- Codex CLI deprecated custom prompts and stopped loading `~/.codex/prompts`
+  (0.117.0), which is where `--codex` writes the portable playbooks. Its merged
+  `~/.codex/AGENTS.md` rules are unaffected. Choosing a replacement surface
+  touches [ADR 0001](docs/adr/0001-custom-npm-installer-ships-four-tools.md) and
+  is deliberately not bundled into this release.
+
 ## [1.36.2] — 2026-09-17
 
 A `plan-dead-code` → `housekeep-dead-code` pass on the pack's own

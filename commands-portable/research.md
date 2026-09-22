@@ -7,95 +7,83 @@ argument-hint: "[topic or question]"
 
 Topic / question: $ARGUMENTS
 
+Do not implement until the user asks or approves. This prompt is the tool-agnostic copy of the `research` skill for hosts that cannot load skills.
+
 ---
 
 ## Steps
 
-### 1 — Understand codebase context
+### 1 — Understand the codebase first
 
-Before external research:
-- Read `package.json` / `Cargo.toml` / `pyproject.toml` to discover the tech stack and pinned versions.
-- Find and read existing implementations related to the topic (`grep -rn '<topic>'`).
-- Formulate specific research questions.
+Before any external search:
 
-### 2 — Check official docs
+- Read the dependency manifest (`package.json`, `Cargo.toml`, `pyproject.toml`, `go.mod`) for exact names and versions.
+- Read the existing implementation related to the topic. Read the whole file, not a snippet.
+- Write the current state, the gap, and the specific questions.
 
-For every library or framework involved:
-1. Find the canonical docs URL for the pinned version.
-2. Query docs with the specific question.
-3. Note the version the docs cover — confirm it matches the project's pinned version.
+### 2 — Official docs for the pinned version
 
-### 3 — Web research (if needed)
+For every library involved:
 
-Use three angles:
-- **Broad search:** `site:docs.<library>.dev <topic>` or `<library> <topic> best practices`
-- **Deep read:** target the exact page most likely to have the answer
-- **Discovery:** `<library> <topic> changelog OR migration OR breaking` to catch version-specific gotchas
+1. If Context7 (or another docs MCP) is connected, query it for this version.
+2. Otherwise open the canonical docs URL for the pinned version, not "latest" in general.
+3. Note which version the page covers.
+
+### 3 — Web research when docs are not enough
+
+If Firecrawl is connected, use it: broad search, then scrape the two or three best official pages, then a discovery search for a real implementation. If it is not connected, use the host's web search and page fetch the same three ways.
+
+Angles: best practices, a production implementation, and common mistakes. Prefer `site:` on the official docs host.
 
 ### 4 — Gap analysis
 
-After collecting sources, answer:
-- What is definitively confirmed? (with source URL)
-- What is uncertain or contradicted across sources?
-- What is missing and needs a fallback or assumption?
+- What this repo already does that matches the docs
+- What is missing or contradicted
+- What to keep, replace, or reject (deprecated API, CVE, untyped, conflicts with this repo)
 
-### 5 — Fallback: targeted search
+### 5 — Decide
 
-If official docs and reading don't resolve it:
-- Search `<library> <version> <specific question> github issue OR stackoverflow OR discussion`
-- Prefer primary sources (official repo issues, changelogs) over blog posts.
+Trust, in order: official docs for the pinned version, the maintainer changelog, a vendor engineering post, the official repo's issues, then a dated community article with working code.
 
-### 6 — Synthesize & decide
+Reject a pattern that uses a deprecated API, has a known vulnerability, skips errors, or needs a large rewrite for an unclear gain.
 
-Trust hierarchy:
-1. Official docs for the pinned version (highest)
-2. Official changelog / migration guide
-3. Official repo issues / discussions
-4. Popular community resources with verifiable code
-5. Blog posts / tutorials (verify code runs)
+### 6 — Plan, then stop
 
-Validation gates before adopting:
-- **Fresh:** documented for the version in use (not a deprecated API)
-- **Secure:** no known CVEs, no exposed secrets
-- **Typed:** types available or wrappable
-- **Tested:** example code is testable
-- **Compatible:** does not conflict with other pinned dependencies
-
-### 7 — For complex changes: plan before writing code
-
-Before writing code:
-- What existing code must stay identical?
-- What is the minimal surface of change?
-- What could go wrong and how would you detect it?
-
-### 8 — Apply to codebase
-
-Only after completing the above:
-- State the decision and rationale.
-- List exact files to change and what each change achieves.
-- Begin implementation per the approved plan.
+For a non-trivial change, list the files, the before/after, the risks, and how to verify. Do not edit the repo in this step.
 
 ---
 
-## Output template
+## Output
 
 ```
-## Research Summary: <topic>
+## Research: <topic>
 
-**Pinned version:** X.Y.Z
-**Confirmed answer:** <one sentence>
-**Source(s):** <URL>, <URL>
-**Version caveat (if any):** <e.g., API changed in vX.Y>
-**Decision:** <what we will do and why>
-**Rejected alternatives:** <what we considered and why not>
+### Context
+- Pinned versions: ...
+- Current implementation: ...
+
+### Findings
+...
+
+### Recommended approach
+...
+
+### Gap analysis
+- Keep / replace / missing: ...
+
+### Implementation plan
+1. path — change — risk
+
+### Sources
+- URL — what it provided
 ```
 
 ---
 
-## Pre-implementation checklist
+## Checklist
 
-- [ ] Docs read for the exact pinned version (not latest)
-- [ ] No deprecated APIs used
-- [ ] Types confirmed available
-- [ ] Existing tests still pass with this approach
-- [ ] No new dependency added without checking existing libraries first
+- [ ] Repo files were read before the first external search
+- [ ] Docs match the pinned version
+- [ ] At least one official source backs the recommendation
+- [ ] The plan names concrete files
+- [ ] No code was changed

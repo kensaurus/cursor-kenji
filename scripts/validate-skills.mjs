@@ -146,31 +146,62 @@ for (const group of groups) {
   }
 }
 
-// ---- Command-name collisions with Claude Code built-ins / bundled skills ----
-// Claude Code merges commands into skills: commands/<x>.md creates /<x>. If <x>
-// matches a built-in command, Claude shows a duplicate; if it matches a bundled
-// skill, our file silently overrides Claude's. Reserve both sets so a colliding
-// command name fails CI instead of shipping (see 1.8.3 /mcp,/review,/debug fix).
-const CLAUDE_RESERVED = new Set([
-  // built-in commands
-  "add-dir", "agents", "bug", "clear", "compact", "config", "cost", "doctor", "exit",
-  "export", "help", "hooks", "ide", "init", "install-github-app", "login", "logout",
-  "mcp", "memory", "migrate-installer", "model", "output-style", "permissions",
-  "pr-comments", "release-notes", "resume", "review", "security-review", "status",
-  "terminal-setup", "todos", "usage", "vim",
-  // bundled skills
-  "code-review", "batch", "debug", "loop", "claude-api", "run", "verify", "run-skill-generator",
+// ---- Command-name collisions with host built-ins ----
+// A file name becomes a slash command on every target:
+//   commands/<x>.md          → /<x> in Cursor and Claude Code (Claude merges
+//                              commands into the skill namespace)
+//   commands-portable/<x>.md → ~/.gemini/commands/<x>.toml → /<x> in Gemini CLI,
+//                              and ~/.codex/prompts/<x>.md for Codex
+// A name that matches a host built-in ships as a duplicate entry, or silently
+// overrides the host's own command. Reserve every documented built-in so a
+// collision fails CI (1.8.3 renamed /mcp, /review, /debug; 2026-09-22 renamed
+// /plan, which had become a built-in in three of the four hosts).
+//
+// Snapshot 2026-09-22 — primary names and documented aliases from:
+//   https://code.claude.com/docs/en/commands
+//   https://cursor.com/docs/cli/reference/slash-commands
+//   https://geminicli.com/docs/reference/commands/
+// Names since dropped from those tables (migrate-installer, todos) stay
+// reserved so an older host does not regress.
+const RESERVED_COMMANDS = new Set([
+  "about", "add-dir", "advisor", "agents", "android", "app", "artifacts", "ask",
+  "auth", "auto-mode-setup", "auto-run", "autocompact", "autofix-pr", "background",
+  "bashes", "batch", "bedrock", "bg", "branch", "btw", "bug", "cd", "chat",
+  "checkpoint", "checkup", "chrome", "claude-api", "clear", "code-review", "color",
+  "commands", "compact", "compress", "config", "context", "continue", "copy",
+  "copy-conversation-id", "copy-request-id", "cost", "cursor", "dataviz", "debug",
+  "deep-research", "design", "design-login", "design-sync", "desktop", "diff",
+  "dir", "directory", "docs", "doctor", "editor", "effort", "exit", "export",
+  "extensions", "fast", "feedback", "fewer-permission-prompts", "focus", "fork",
+  "goal", "heapdump", "help", "hooks", "ide", "import", "init", "insights",
+  "install-github-app", "install-slack-app", "ios", "keybindings", "line-numbers",
+  "list-agents", "login", "logout", "logs", "loop", "max-mode", "mcp", "memory",
+  "migrate-installer", "mobile", "model", "new", "new-chat", "newchat", "open",
+  "output-style", "passes", "permissions", "plan", "plugin", "policies", "powerup",
+  "pr-comments", "privacy", "privacy-settings", "proactive", "quit", "radio",
+  "rate-limit-options", "rc", "recap", "release-notes", "reload-plugins",
+  "reload-skills", "remote-control", "remote-env", "rename", "reset", "restore",
+  "resume", "review", "rewind", "routines", "run", "run-everything",
+  "run-skill-generator", "sandbox", "schedule", "scroll-speed", "security-review",
+  "settings", "setup-bedrock", "setup-github", "setup-terminal", "setup-vertex",
+  "sh", "share", "shell", "shells", "show-thinking", "simplify", "skill-doctor",
+  "skills", "stats", "status", "status-indicators", "statusline", "stickers",
+  "stop", "subtask", "summarize", "tasks", "team-onboarding", "teleport",
+  "terminal-setup", "theme", "todos", "tools", "tui", "ultraplan", "ultrareview",
+  "undo", "update", "update-config", "upgrade", "usage", "usage-credits", "verify",
+  "vim", "voice", "web-setup", "workflow-authoring", "workflows",
 ]);
-const cmdDir = join(repoRoot, "commands");
 const commandNames = [];
-if (existsSync(cmdDir)) {
-  for (const f of readdirSync(cmdDir)) {
-    if (!f.endsWith(".md")) continue;
+for (const group of ["commands", "commands-portable"]) {
+  const dir = join(repoRoot, group);
+  if (!existsSync(dir)) continue;
+  for (const f of readdirSync(dir)) {
+    if (!f.endsWith(".md") || f === "README.md") continue;
     const cmd = f.slice(0, -3);
-    commandNames.push(cmd);
-    if (CLAUDE_RESERVED.has(cmd)) {
+    if (group === "commands") commandNames.push(cmd);
+    if (RESERVED_COMMANDS.has(cmd)) {
       errors.push(
-        `commands/${f}: '/${cmd}' collides with a Claude Code built-in/bundled command — rename it (e.g. /${cmd}-guide)`,
+        `${group}/${f}: '/${cmd}' collides with a built-in in Cursor, Claude Code, Codex, or Gemini CLI — rename it (e.g. /${cmd}-guide)`,
       );
     }
   }

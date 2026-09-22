@@ -77,7 +77,7 @@ The defects are *packaging, consistency, and always-on token cost* — not writi
 3. **Dual-runtime paths.** `~/.cursor/skills/…` hardcoded in 4 workflow bundles
    (~20 lines) and 14 of 15 commands; only `commands/burndown-full.md` gives both
    runtimes. Fix: refer to skills by bare name ("Read the `test-red-team` skill and
-   follow it") — resolves in any runtime. `commands/plan.md` is 100 % Cursor-UI
+   follow it") — resolves in any runtime. `commands/plan.md` (now `commands/plan-mode.md`; `/plan` is a host built-in) is the Plan-mode procedure
    (Shift+Tab, `.cursor/plans/`) — add a Claude Code section or mark Cursor-only.
 4. **Command frontmatter.** Only 4/15 commands have YAML frontmatter. Add
    `description` (+ `argument-hint` where applicable) so both Cursor and Claude Code
@@ -221,7 +221,7 @@ All 44 `~/.cursor/skills/<name>/SKILL.md` references in the 4 workflow bundles a
 the commands now refer to skills by bare name (`Read the \`X\` skill and follow it`),
 which resolves in any runtime; the redundant `(path)` parentheticals were dropped.
 `commands/plan.md` gained a runtime note (Shift+Tab works in both Cursor and Claude
-Code; `.cursor/plans/` is Cursor-only). **Left intentionally:** script-execution
+Code; `.cursor/plans/` is Cursor-only). Later renamed to `commands/plan-mode.md` because host `/plan` enters Plan mode. **Left intentionally:** script-execution
 paths (`thirdparty-ui-ux-pro-max/scripts/search.py`, `enhance-readme/scripts/*.mjs`)
 and the `ATTRIBUTION.md` install-path docs — these are real per-runtime file paths,
 not skill references, and the ui-ux-pro-max ATTRIBUTION explicitly asks to preserve

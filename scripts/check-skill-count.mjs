@@ -24,6 +24,8 @@ const catalogPath = join(repoRoot, "docs", "CATALOG.md");
 const promotionPath = join(repoRoot, "docs", "PROMOTION.md");
 const packagePath = join(repoRoot, "package.json");
 const pluginPath = join(repoRoot, ".cursor-plugin", "plugin.json");
+const claudePluginPath = join(repoRoot, ".claude-plugin", "plugin.json");
+const marketplacePath = join(repoRoot, ".claude-plugin", "marketplace.json");
 const llmsPath = join(repoRoot, "llms.txt");
 const gettingStartedPath = join(repoRoot, "docs", "GETTING-STARTED.md");
 const docsReadmePath = join(repoRoot, "docs", "README.md");
@@ -316,6 +318,26 @@ const pluginResult = applyFileRules(pluginPath, ".cursor-plugin/plugin.json", [
   },
 ]);
 
+// Both Claude Code manifests advertise the inventory in prose. They are the
+// marketplace listing, so a stale count there is a public claim.
+const claudeCountRules = [
+  {
+    name: "claude plugin inventory",
+    re: /\d+ agent skills, \d+ slash commands, \d+ subagents/g,
+    to: `${count} agent skills, ${commandCount} slash commands, ${agentCount} subagents`,
+  },
+];
+const claudePluginResult = applyFileRules(
+  claudePluginPath,
+  ".claude-plugin/plugin.json",
+  claudeCountRules,
+);
+const marketplaceResult = applyFileRules(
+  marketplacePath,
+  ".claude-plugin/marketplace.json",
+  claudeCountRules,
+);
+
 const llmsResult = applyFileRules(llmsPath, "llms.txt", [
   {
     name: "llms inventory",
@@ -356,6 +378,8 @@ const allMismatches = [
   ...promotionResult.mismatches,
   ...packageResult.mismatches,
   ...pluginResult.mismatches,
+  ...claudePluginResult.mismatches,
+  ...marketplaceResult.mismatches,
   ...llmsResult.mismatches,
   ...gettingStartedResult.mismatches,
   ...docsReadmeResult.mismatches,
@@ -367,6 +391,8 @@ if (fix) {
   if (promotionResult.src) writeFileSync(promotionPath, promotionResult.src);
   if (packageResult.src) writeFileSync(packagePath, packageResult.src);
   if (pluginResult.src) writeFileSync(pluginPath, pluginResult.src);
+  if (claudePluginResult.src) writeFileSync(claudePluginPath, claudePluginResult.src);
+  if (marketplaceResult.src) writeFileSync(marketplacePath, marketplaceResult.src);
   if (llmsResult.src) writeFileSync(llmsPath, llmsResult.src);
   if (gettingStartedResult.src) writeFileSync(gettingStartedPath, gettingStartedResult.src);
   if (docsReadmeResult.src) writeFileSync(docsReadmePath, docsReadmeResult.src);
