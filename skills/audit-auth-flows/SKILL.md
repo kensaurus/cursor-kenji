@@ -1,10 +1,10 @@
 ---
 name: audit-auth-flows
 description: >
-  Read-only audit of app-layer auth — route×gate matrix, session lifecycle,
-  OAuth, and provider traps (getSession vs getUser, middleware-as-only-gate,
-  CVE-2025-29927). Use when "audit our auth", "check middleware protection".
-  RLS → plan-rls-audit. OWASP checklist → audit-security.
+  Read-only audit of app-layer auth: route×gate matrix, session lifecycle,
+  OAuth, provider traps (getSession vs getUser, middleware-only gates,
+  CVE-2025-29927). Use when "audit our auth" or "check middleware protection".
+  RLS → plan-rls-audit.
 license: MIT
 effort: high
 ---
@@ -30,7 +30,7 @@ missed the point. Defense in depth: edge + route handler / server action
 
 ## How to reason in this audit
 
-For every potential finding, reason in this order before recording it:
+Every finding is recorded in this shape, in this order:
 
 1. **Observe** — what does the code/probe actually show? (quote the line or the response)
 2. **Interpret** — what does that mean for who can reach what? (don't assume intent)

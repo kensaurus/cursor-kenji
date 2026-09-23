@@ -1,10 +1,10 @@
 ---
 name: workflow-launch-ready
 description: >
-  Full launch preparation sweep for a new app or major release. Use when "prepare for
-  launch", "launch week", "everything before going live", "is the app launch-ready?",
-  "pre-launch sweep", or "ship it to the world". Local working-tree PR
-  prep → workflow-release-prep.
+  Launch-preparation sweep for a new app or major release. Use when "prepare
+  for launch", "launch week", "everything before going live", "is the app
+  launch-ready?", or "pre-launch sweep". Working tree to a PR →
+  workflow-release-prep.
 license: MIT
 ---
 

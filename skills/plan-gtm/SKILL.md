@@ -1,10 +1,10 @@
 ---
 name: plan-gtm
 description: >
-  Plan-only GTM audit: detect monetization model, positioning, activation
-  funnel, SEO/AEO and distribution, interview the founder one question at a
-  time, emit a phased plan. Use when "GTM", "go-to-market", "get more users",
-  "grow traffic", "should this be freemium". Execute → workflow-gtm.
+  Plan-only GTM audit: monetization, positioning, activation funnel, SEO/AEO,
+  distribution, and a founder interview. Use when "GTM", "go-to-market", "get
+  more users", "grow traffic", or "should this be freemium". Execute →
+  workflow-gtm.
 license: MIT
 effort: high
 ---

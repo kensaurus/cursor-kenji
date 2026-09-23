@@ -20,8 +20,9 @@ purpose.
 | [0005](0005-one-pack-is-skills-commands-agents-rules.md) | One pack is skills + commands + agents + rules | Accepted | Do not split the npm package by artifact type |
 | [0006](0006-effort-routing-by-skill-family.md) | Effort routing by skill family | Accepted | `effort: high` for audit/plan/judge/security/architecture/debug, `low` for mechanical work, omitted (medium) for implementation; no prose thinking scaffolds |
 | [0007](0007-one-model-effort-routed.md) | One model, effort-routed | Accepted | Retires "plan with a strong model, execute with Composer 2.5"; rule renamed `approved-plan-execution.mdc`; guardrails unchanged |
-| [0008](0008-auto-invocable-roster-budget.md) | Auto-invocable roster budget | Accepted | `validate-skills` fails above `ROSTER_MAX_CHARS`; `commands/*.md` are `/`-only except an allowlist; skills keep the auto-route |
+| [0008](0008-auto-invocable-roster-budget.md) | Auto-invocable roster budget | Accepted; measure superseded by 0010 | `commands/*.md` are `/`-only except an allowlist; skills keep the auto-route |
 | [0009](0009-retire-sequential-thinking-server.md) | Retire the Sequential Thinking MCP server | Accepted | Removed from the full template and pins; depth is set with effort |
+| [0010](0010-measure-the-skill-listing-like-the-client.md) | Measure the skill listing like the client | Accepted | `validate-skills` counts `- name: description` per listed entry and ratchets `LISTING_MAX_CHARS`; full descriptions on Opus 5.5 need `skillListingBudgetFraction` 0.02 |
 
 ## Conventions
 

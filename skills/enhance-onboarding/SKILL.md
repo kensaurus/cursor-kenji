@@ -1,11 +1,10 @@
 ---
 name: enhance-onboarding
 description: >
-  Apply-now activation pass: define the activation event, cut
-  steps before first value, add empty-state templates, sample data, a short
-  checklist; instrument signup→activated→habit. Use when "improve
-  onboarding", "users sign up and leave", "time to value", "activation rate".
-  One route → enhance-web-ux.
+  Activation pass: define the activation event, cut steps to first value, add
+  templates, sample data, a short checklist, and signup → activated events.
+  Use when "improve onboarding", "users sign up and leave", "time to value",
+  or "activation rate".
 license: MIT
 ---
 

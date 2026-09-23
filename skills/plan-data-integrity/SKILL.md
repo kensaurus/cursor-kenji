@@ -1,10 +1,10 @@
 ---
 name: plan-data-integrity
 description: >
-  Audit a project for destructive-operation and migration safety gaps, then produce a
-  phased safeguard plan. Use when "is my migration safe", "could I lose data",
-  "my agent might delete prod", or "safe schema changes". Restore drills and RPO/RTO
-  belong to plan-backup-dr. Source transforms → audit-codemod-safety.
+  Plan-only audit of destructive-operation and migration safety. Use when "is
+  my migration safe", "could I lose data", "my agent might delete prod", or
+  "safe schema changes". Restore drills, RPO/RTO → plan-backup-dr. Code
+  transforms → audit-codemod-safety.
 license: MIT
 effort: high
 ---

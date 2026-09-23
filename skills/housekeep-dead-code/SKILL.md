@@ -1,10 +1,10 @@
 ---
 name: housekeep-dead-code
 description: >
-  Apply-now dead-code removal by category — one commit each, typecheck and
-  tests between, bisect on red, then install the Knip ratchet so it cannot
-  grow back. Use when "delete the dead code", "remove unused files", "wire
-  up Knip". Audit first → plan-dead-code. README/deps → workflow-housekeep.
+  Remove dead code by category — one commit each, typecheck and tests between,
+  bisect on red — then add a Knip ratchet. Use when "delete the dead code",
+  "remove unused files", or "wire up Knip". Audit first → plan-dead-code.
+  README/deps → workflow-housekeep.
 license: MIT
 ---
 

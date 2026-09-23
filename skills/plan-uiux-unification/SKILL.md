@@ -1,10 +1,9 @@
 ---
 name: plan-uiux-unification
 description: >
-  Non-destructive UI/UX and design-system audit that emits a unification
-  burndown — no code until each phase is approved. Use when "audit UI without
-  fixing", "UI burndown", or "IA audit before redesign". Apply-now token cleanup
-  → housekeep-design. Per-page heuristics → audit-ux.
+  Plan-only UI/UX and design-system audit that emits a unification burndown;
+  no code until a phase is approved. Use when "audit UI without fixing", "UI
+  burndown", or "IA audit before redesign". Apply now → housekeep-design.
 license: MIT
 effort: high
 ---
@@ -117,6 +116,7 @@ Output short **design-system spec** (current state + proposed enhancements).
 
 Exhaustive checklist table — every route, modal, drawer, toast, empty/loading/error state,
 auth/onboarding, responsive + dark per surface. Mark audited only after Phase 3 review.
+
 Delegate an inventory pass to a subagent only when it is sizeable, independent of the others, and its raw output (glob lists, token-grep counts) has no place in the plan; brief it with the exact commands and the columns to return. It edits nothing, like this pass. Long sweeps are expected — context compaction exists, so finish the inventory rather than wrapping up early.
 
 See inventory template in `references/output-templates.md`.

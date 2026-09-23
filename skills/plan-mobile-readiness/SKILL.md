@@ -1,11 +1,9 @@
 ---
 name: plan-mobile-readiness
 description: >
-  Plan-only App Store/Google Play submission audit for Capacitor/React
-  Native: manifests, permissions, privacy forms, signing/config, listing
-  prerequisites. Use when "ready for App Store?", "will Google Play
-  reject this?", or "pre-submission check". Native security →
-  plan-capacitor-hardening.
+  Plan-only App Store / Google Play submission audit for Capacitor and React
+  Native: manifests, permissions, privacy forms, signing. Use when "ready for
+  App Store?", "will Google Play reject this?", or "pre-submission check".
 license: MIT
 effort: high
 ---

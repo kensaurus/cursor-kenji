@@ -1,10 +1,10 @@
 ---
 name: research
 description: >
-  Research current best practices with Context7, Firecrawl, and official docs
-  before a non-trivial change. Use when /research, look up current docs, what
-  does the industry recommend, or before implementing anything unfamiliar.
-  Produce a gap analysis and file-mapped plan; do not implement until asked.
+  Research current practice with Context7, Firecrawl, and official docs before
+  a non-trivial change: gap analysis and a file-mapped plan, no
+  implementation. Use when "look up current docs", "what does the industry
+  recommend", or before anything unfamiliar.
 license: MIT
 effort: high
 ---

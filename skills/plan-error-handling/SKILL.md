@@ -1,10 +1,9 @@
 ---
 name: plan-error-handling
 description: >
-  Audit silent failures and observability gaps (Sentry/Langfuse), then a
-  phased plan — no implementation. Use when "errors aren't showing in
-  Sentry", "things fail silently", or "empty catch blocks". Apply
-  patterns → backend-error-handling.
+  Plan-only audit of silent failures and observability gaps (Sentry,
+  Langfuse). Use when "errors aren't showing in Sentry", "things fail
+  silently", or "empty catch blocks". Apply patterns → backend-error-handling.
 license: MIT
 effort: high
 ---

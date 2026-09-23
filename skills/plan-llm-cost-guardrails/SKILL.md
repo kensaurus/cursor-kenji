@@ -1,10 +1,10 @@
 ---
 name: plan-llm-cost-guardrails
 description: >
-  Audit an LLM-powered app for runaway-cost and quota-abuse exposure, then produce a
-  phased guardrail plan. Use when the user says "cap my AI costs", "my LLM bill could blow
-  up", "rate limit my AI", "token budget", "runaway agent loop", or is hardening LLM
-  features before launch.
+  Plan-only audit of an LLM app's runaway-cost and quota-abuse exposure. Use
+  when "cap my AI costs", "my LLM bill could blow up", "rate limit my AI",
+  "token budget", "runaway agent loop", or hardening LLM features before
+  launch.
 license: MIT
 effort: high
 ---

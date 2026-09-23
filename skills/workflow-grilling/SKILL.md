@@ -1,10 +1,10 @@
 ---
 name: workflow-grilling
-description: >-
-  Grill the user relentlessly about a plan, decision, or idea — one question at a
-  time — until shared understanding is reached. Use when the user says "grill me",
-  "stress-test this plan", "interview me about this", "poke holes in this",
-  "challenge my thinking", or before committing to a non-trivial design.
+description: >
+  Interview the user about a plan, decision, or idea one question at a time
+  until you agree. Use when "grill me", "stress-test this plan", "interview me
+  about this", "poke holes in this", "challenge my thinking", or before a
+  non-trivial design.
 license: MIT
 effort: high
 ---

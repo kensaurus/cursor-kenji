@@ -1,5 +1,9 @@
 ---
-description: Guard execution of an approved plan or burndown: forbid reward hacking and feature deletion; require checkpoints, context discipline, safe terminal use, and fresh verification. Applies to approved plan-*.md, complete-everything, and burndown-full runs, whatever model runs them.
+description: >-
+  Guard execution of an approved plan or burndown: forbid reward hacking and
+  feature deletion; require checkpoints, context discipline, safe terminal
+  use, and fresh verification. Applies to approved plan-*.md,
+  complete-everything, and burndown-full runs, whatever model runs them.
 alwaysApply: false
 paths:
   - "**/plan-*.md"

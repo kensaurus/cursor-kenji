@@ -1,11 +1,10 @@
 ---
 name: complete-everything
 description: >
-  Explicit closure mode for one approved plan: implement unfinished items
-  plus connected deferrals, verify every acceptance criterion, require
-  completion-judge PASS. Use when "complete everything", "don't defer",
-  "fix out of scope too", or a plan was falsely marked done. One
-  repo-wide pattern → burndown-full.
+  Closure mode for one approved plan: finish every open item and connected
+  deferral, verify each acceptance criterion, require completion-judge PASS.
+  Use when "complete everything", "don't defer", "fix out of scope too", or a
+  plan was falsely marked done.
 ---
 
 # Complete Everything
@@ -134,6 +133,12 @@ Verify: typecheck=`...` lint=`...` test=`...` build=`...` e2e=`...|none`
 - <timestamp or milestone>: <command/result or decision/rationale>
 ```
 
+A ladder rung the repo cannot run (no typecheck, no build, no UI) is written
+`- [-] <rung> — n/a: <evidence it is absent>` when the Phase 0 baseline shows
+it is missing. `[-]` means not applicable, never passed. The Stop hook skips a
+`[-]` line only when it carries an `n/a:` reason, and completion-judge checks
+that reason.
+
 Mirror the milestones in the runtime's native task list when available. The
 state file wins after context compaction: re-read it before each milestone and
 before any completion claim.
@@ -143,13 +148,15 @@ before any completion claim.
 Instruction text alone cannot reliably prevent premature stops. Use the host's
 continuation mechanism in addition to the state file:
 
-- **Cursor:** the packaged `stop` hook reads
-  `.cursor/complete-everything-state.md` and submits a follow-up only while
+- **Cursor and Claude Code:** the packaged Stop hook reads
+  `.cursor/complete-everything-state.md` and continues the turn only while
   actionable unchecked items remain. It ignores completed states, errored or
   aborted turns, and human-gate-only states. On Claude Code it keeps a small
-  counter in `.cursor/completion-gate.count.json` (leave it in place; it is
-  gitignored). If hooks are disabled, continue manually from the state file;
-  do not lower the completion contract.
+  counter in `.cursor/completion-gate.count.json` (leave it in place and keep
+  it out of commits, like the state file), and the client labels each block "Stop hook error
+  occurred" — that is the gate working, not a failure. If hooks are
+  disabled, continue manually from the state file; do not lower the
+  completion contract.
 - **Claude Code 2.1.139+:** start the run with:
 
   ```text

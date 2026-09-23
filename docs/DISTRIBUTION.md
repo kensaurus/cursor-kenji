@@ -56,10 +56,14 @@ Track submission URLs and review status in [PROMOTION.md](PROMOTION.md).
 | Channel | Cursor skills | Claude Code | Commands | Agents | Rules | Completion hook | MCP config |
 |---------|:------:|:-----------:|:--------:|:------:|:-----:|:---------------:|:----------:|
 | `npx skills add kensaurus/cursor-kenji` | Yes (project `.agents/skills` by default; `-g` → `~/.cursor/skills`) | only with `-a claude-code` | No | No | No | No | No |
-| `npx @kensaurus/cursor-kenji` (`--claude` / `--all` / `--auto`) | Yes | Yes (`--claude` / `--all` / `--auto`) | Yes | Yes | Yes | Cursor only | Template copy if missing |
-| `./install.sh` (clone) | Yes | Yes | Yes | Yes | Yes | Cursor only | Template copy if missing |
-| Cursor Marketplace / cursor.directory | Yes | No | Yes | Yes | Yes | Plugin stop hook | `.mcp.json` at repo root |
-| Claude Code `/plugin marketplace add kensaurus/cursor-kenji` | No | Yes (plugin-namespaced skills) | Yes | Yes | No | No | No |
+| `npx @kensaurus/cursor-kenji` (`--claude` / `--all` / `--auto`) | Yes | Yes (`--claude` / `--all` / `--auto`) | Yes | Yes | Yes | Cursor + Claude Code | Template copy if missing |
+| `./install.sh` (clone) | Yes | Yes | Yes | Yes | Yes | Cursor + Claude Code | Template copy if missing |
+| Cursor Marketplace / cursor.directory | Yes | No | Yes | Yes | Yes | Plugin stop hook (`hooks/cursor-hooks.json`) | `.mcp.json` at repo root |
+| Claude Code `/plugin marketplace add kensaurus/cursor-kenji` | No | Yes (plugin-namespaced skills) | Yes | Yes | No | Plugin Stop hook (`hooks/hooks.json`) | No |
+
+Use one Claude Code channel for the completion hook: the plugin's Stop hook
+and the one `--claude` merges into `~/.claude/settings.json` run the same
+gate, so installing both blocks twice per stop and halves the loop cap.
 
 Re-check a kenji install without writing: `npx @kensaurus/cursor-kenji --verify` (add `--all` to include Claude/Codex/Gemini dests). Extra personal files are allowed; missing or hash-mismatched packaged files fail.
 

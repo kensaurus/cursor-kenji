@@ -1,10 +1,10 @@
 ---
 name: design-frontend
 description: >
-  Create a new production-grade UI from scratch — not a polish pass. Use
-  when "build this UI", "design this page", or "new dashboard layout".
-  Polish existing → enhance-web-ui. Landing → enhance-web-landing.
-  Redesign existing → enhance-web-redesign.
+  Create a new production-grade UI from scratch, not a polish pass. Use when
+  "build this UI", "design this page", or "new dashboard layout". Polish →
+  enhance-web-ui. Landing → enhance-web-landing. Redesign →
+  enhance-web-redesign.
 license: MIT
 ---
 
@@ -135,6 +135,7 @@ Undirected drafts land on the same few defaults; the check is concrete only when
 - [ ] Monospace eyebrow labels on a non-code product
 - [ ] Pill-shaped (fully rounded) buttons as the house button
 - [ ] Three equal cards in a row as the default section layout
+
 Extend this list with whatever the first draft used instead.
 
 ---

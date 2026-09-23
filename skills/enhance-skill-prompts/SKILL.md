@@ -1,11 +1,10 @@
 ---
 name: enhance-skill-prompts
 description: >
-  Upgrade an existing SKILL.md prompt (not its behavior) to 2026 practice:
-  degrees of freedom, structured CoT, one worked example, self-critique
-  rubric, term consistency. Use when "enhance this skill's prompts",
-  "upgrade skill authoring", or "apply the prompt playbook". New skill
-  from scratch → meta-skill-creator.
+  Upgrade how an existing SKILL.md instructs, not what it does: freedom, a
+  classification contract, one worked example, an evidence rubric, effort. Use
+  when "enhance this skill's prompts", "upgrade skill authoring", or "apply
+  the prompt playbook".
 license: MIT
 effort: high
 ---
@@ -55,8 +54,8 @@ reference it. It defines what a finding must contain, not how to think:
 reasoning depth comes from `effort:` (T7), and generic "think step by
 step" or "double-check" prose is dead weight on Opus 5.5.
 
-**T3 — Exactly one worked example.** Few-shot + CoT: the chain AND the
-output shape on a realistic case. Put it right after the scaffold.
+**T3 — Exactly one worked example.** The chain AND the output shape on a
+realistic case, labeled illustrative. Put it right after the T2 frame.
 
 **T4 — Self-critique rubric before output.** Explicit, answerable checks
 (evidenced-not-assumed, reproducible, severity-justified, right-owner,
@@ -105,13 +104,13 @@ that run unattended add one line saying when the turn may end.
 ## How to reason
 
 1. **Observe** — existing H1 register, phases, examples, body length
-2. **Interpret** — which of T1–T6 are missing vs already present as headings
+2. **Interpret** — which of T1–T8 are missing vs already present as headings or keys
 3. **Classify** — apply / skip-with-reason / stop (would change behavior)
 4. **Severity** — a trigger or stance change is an invalid edit
 
 ## Worked example
 
-> **Observe:** `meta-skill-creator` has T1 and a T1–T6 table; no `## Worked example`.
+> **Observe:** `meta-skill-creator` has T1 and a technique table; no `## Worked example`.
 > **Interpret:** the table mention is not T3; the agent still has no few-shot.
 > **Classify:** add one `## Worked example` + `## Self-critique` after the table; do not rewrite Anatomy or frontmatter.
 > **Invariant:** description triggers unchanged; still "create a pack SKILL.md".

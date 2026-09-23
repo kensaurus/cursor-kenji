@@ -1,10 +1,9 @@
 ---
 name: workflow-build-feature
 description: >
-  Build a feature end to end: spec-tdd → implement → test-unit →
-  playwright → PR. Use when "build a feature" or "implement this
-  end-to-end". Spec/TDD loop only → workflow-spec-tdd. One bug →
-  workflow-fix-and-ship. Plan closure → complete-everything.
+  Build a feature end to end: spec and TDD, implement, unit tests, Playwright
+  check, PR. Use when "build a feature" or "implement this end-to-end".
+  Spec/TDD loop only → workflow-spec-tdd. One bug → workflow-fix-and-ship.
 license: MIT
 ---
 
@@ -60,6 +59,7 @@ Key outputs:
 - Written spec (what it does, what it doesn't do, acceptance criteria)
 - File-mapped implementation plan (which files to create/edit)
 - A RED failing test that encodes the acceptance criteria
+
 When the ask is loosely specified, read the relevant routes, schema, tests, and sibling features broadly before writing the spec, so it is grounded in what the repo does rather than the first plausible reading.
 
 **Do not write implementation code until the spec and RED test exist.**

@@ -201,11 +201,13 @@ to study:
 
 - The **"Degree of freedom: MIXED — declared per phase"** header (T1) and
   the per-phase `[HIGH]` / `[LOW]` tags.
+- The `effort: high` frontmatter key and its teaching comment (T7).
 - The **"How to reason in this audit"** Observe → Interpret → Classify →
-  Severity scaffold (T2), placed once.
+  Severity classification contract (T2), placed once: the shape every
+  finding is recorded in, not a thinking instruction.
 - The **worked example** block showing that chain on a real matcher-hole
   finding (T3).
-- The **"Self-critique before reporting"** rubric (T4).
+- The **"Self-critique before reporting"** evidence rubric (T4).
 - The `getSession` grep promoted to an explicit **[LOW freedom — run
   exactly]** step, plus labeled P5 probes (T1 on the fragile bits).
 
@@ -218,6 +220,10 @@ comments before shipping a live SKILL.md — they are teaching annotations.
 ---
 
 ## Part 4 — Rollout (listed skills only)
+
+Parts 4 and 5 record the original T1–T6 rollout (2026-06). The Opus 5.5
+pass (1.37.0, 2026-09) added T7 and T8 and rewrote T2, T4, and T6 across
+the pack; new work follows Parts 1–3.
 
 Enhance in waves. After each wave, run `npm run validate:skills` and
 spot-check behavior on one skill per wave against a real repo.

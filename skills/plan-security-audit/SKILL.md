@@ -1,10 +1,10 @@
 ---
 name: plan-security-audit
 description: >
-  OWASP Top 10 + Supabase-first hardening burndown. Use when "security audit
-  plan", "OWASP audit", "hardening plan", or "security burndown". App-layer
-  auth flows → audit-auth-flows. Table RLS → plan-rls-audit. Key rotation →
-  plan-secrets-audit. App LLM attacks → audit-llm-security.
+  Plan-only OWASP Top 10 and Supabase-first hardening burndown. Use when
+  "security audit plan", "OWASP audit", "hardening plan", or "security
+  burndown". Auth flows → audit-auth-flows. RLS → plan-rls-audit. Keys →
+  plan-secrets-audit.
 license: MIT
 effort: high
 ---
@@ -83,6 +83,7 @@ Read `references/preservation-contract.md`. Acknowledge in output #1.
 ```
 
 Sentry MCP: security-related production errors. Firecrawl: current OWASP + Supabase patterns.
+
 Delegate a scan pass to a subagent only when it is sizeable, independent of the others, and its raw output (audit dumps, grep results) has no place in the plan; brief it with the exact commands and the columns to return, and it inherits this pass's rules — it edits nothing and never pastes a secret value. Long sweeps are expected — context compaction exists, so finish the inventory rather than wrapping up early.
 
 ---

@@ -1,10 +1,10 @@
 ---
 name: debug-fe-be-integration
 description: >
-  Diagnose and fix frontend↔backend contract failures by tracing client
-  requests, server logs, validation, auth, and responses on both sides.
-  Use for API 4xx/5xx, mismatched payloads, validation failures, or
-  "frontend and backend disagree". Single-layer errors → debug-error.
+  Diagnose and fix frontend↔backend contract failures by tracing requests,
+  server logs, validation, auth, and responses on both sides. Use for API
+  4xx/5xx, mismatched payloads, or "frontend and backend disagree". One layer
+  → debug-error.
 license: MIT
 effort: high
 ---
@@ -161,11 +161,7 @@ If the project has separate FE and BE Sentry projects, check both:
 
 ### 2b. Read Backend Terminal Logs
 
-Read the terminal files for the running backend process:
-
-```
 Read the output of the terminal running the backend (`npm run dev` or equivalent) — in Cursor, `terminals/*.txt`; in Claude Code, the shell or log file you started it from.
-```
 
 Look for errors in the last 3-5 minutes:
 - `4xx` errors (400, 401, 403, 404, 422)

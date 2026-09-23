@@ -1,6 +1,10 @@
 ---
 name: backend-realtime
-description: Implement real-time features using WebSockets, Supabase Realtime, Server-Sent Events, and live data. Use when user wants "real-time", "live updates", "WebSocket", "notifications", "chat", "collaborative", "presence", "live data", or "instant sync".
+description: >
+  Implement real-time features with WebSockets, Supabase Realtime, or
+  Server-Sent Events. Use when "real-time", "live updates", "WebSocket",
+  "notifications", "chat", "presence", "collaborative", "live data", or
+  "instant sync".
 license: MIT
 ---
 
@@ -55,7 +59,7 @@ ls -la src/hooks/use*Realtime* src/lib/realtime* 2>/dev/null
 3. **Check Supabase config:**
 ```bash
 rg "createClient|supabaseUrl" --type ts -l
-cat .env* | grep -i SUPABASE
+grep -oh "SUPABASE_[A-Z_]*" .env* 2>/dev/null | sort -u   # names only — never print values
 ```
 
 **Why:** Real-time connections are stateful. Don't create duplicate subscriptions.

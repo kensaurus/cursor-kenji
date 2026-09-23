@@ -2,9 +2,8 @@
 name: test-visual-regression
 description: >
   Set up Playwright screenshot baselines and CI diffing so UI changes fail
-  pixel-by-pixel instead of by eye. Use when "add visual regression tests",
-  "catch UI regressions", or after audit-responsive / audit-ui-states. Functional
-  clicks stay on test-playwright.
+  pixel by pixel instead of by eye. Use when "add visual regression tests" or
+  "catch UI regressions". Functional clicks → test-playwright.
 license: MIT
 ---
 

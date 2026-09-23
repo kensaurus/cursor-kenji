@@ -26,9 +26,10 @@
  *   - every top-level commands/*.md is `disable-model-invocation: true` unless
  *     listed in MODEL_INVOCABLE_COMMANDS; commands-portable/ carries no
  *     Claude-only keys (install.mjs strips portable frontmatter)
- *   - auto-invocable description roster (skills + skills-cursor + top-level
- *     commands + agents, minus disable-model-invocation) <= ROSTER_MAX_CHARS
- *     (ratchet; ADR-0008), warn above ROSTER_TARGET_CHARS
+ *   - the pack's Claude Code skill listing (skills + skills-cursor + top-level
+ *     model-invocable commands, measured as the client measures it) <=
+ *     LISTING_MAX_CHARS, a ratchet (ADR-0010); agent descriptions are
+ *     reported separately
  */
 import { readdirSync, existsSync, readFileSync, statSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -55,15 +56,30 @@ const AGENT_ENUMS = {
   isolation: new Set(["worktree"]),
   color: new Set(["red", "blue", "green", "yellow", "purple", "orange", "pink", "cyan"]),
 };
-// Roster budget (ADR-0008). Every description without
-// `disable-model-invocation: true` rides in the host's skill listing on every
-// request; Claude Code trims that listing to a fixed budget with no
-// user-visible warning (observed in the client, not a documented setting).
-const ROSTER_TARGET_CHARS = 40_000; // warn above (1M-window listing budget)
-const ROSTER_MAX_CHARS = 43_500;    // ratchet: measured post-flip total rounded up to 500; lower, never raise
+// Skill-listing measure (ADR-0010, superseding ADR-0008's measure). Claude
+// Code 2.1.280 lists every model-invocable skill and command as
+// "- name: description" (description + " - " + when_to_use, capped at 1,536),
+// one per line, against contextWindow x chars/token x
+// skillListingBudgetFraction (0.01). It counts 3 chars/token for current
+// models, so a 1M Opus 5.5 session has 30,000 chars, shared with built-in
+// skills (~11k). Over budget the least-used skills show by name only;
+// "skillListingBudgetFraction": 0.02 keeps every pack description.
+// Re-verify at each client release.
+const LISTING_DEFAULT_BUDGET_CHARS = 30_000; // Opus 5.5, 1M context: 1,000,000 x 3 x 0.01
+const LISTING_MAX_CHARS = 39_000;            // ratchet: measured total rounded up to 500; lower, never raise
+const LISTING_DESC_CAP = 1536;
 // Commands are the `/` surface; the skill twin carries the auto-route.
 const MODEL_INVOCABLE_COMMANDS = new Set(["gtm-weekly", "fix-issue", "mcp-guide"]);
-const roster = { skills: 0, "skills-cursor": 0, commands: 0, agents: 0 };
+const listing = { skills: 0, "skills-cursor": 0, commands: 0 };
+let listingEntries = 0;
+let agentDescChars = 0;
+/** One listing line as the client renders it: "- " + name + ": " + text. */
+function listingEntry(name, desc, front) {
+  const whenToUse = fmScalar(front, "when_to_use");
+  const text = whenToUse ? `${desc} - ${whenToUse}` : desc;
+  listingEntries++;
+  return name.length + 4 + Math.min(text.length, LISTING_DESC_CAP);
+}
 
 const errors = [];
 const warnings = [];
@@ -196,7 +212,7 @@ for (const group of groups) {
     }
 
     checkRoutingKeys(id, front, desc);
-    if (desc && fmScalar(front, "disable-model-invocation") !== "true") roster[group] += desc.length;
+    if (desc && fmScalar(front, "disable-model-invocation") !== "true") listing[group] += listingEntry(dir, desc, front);
 
     // body length (warning only)
     const lines = body.split("\n").length;
@@ -342,7 +358,8 @@ function listCommandFiles(dir) {
     const desc = readDescription(front);
     if (!desc) errors.push(`${rel}: missing 'description'`);
     checkRoutingKeys(rel, front, desc, { agent: true });
-    if (desc && fmScalar(front, "disable-model-invocation") !== "true") roster.agents += desc.length;
+    // Agents are described in the Agent tool, not the skill listing.
+    if (desc) agentDescChars += desc.length;
   }
   const commandsDir = join(repoRoot, "commands");
   for (const file of existsSync(commandsDir) ? listCommandFiles(commandsDir) : []) {
@@ -358,7 +375,7 @@ function listCommandFiles(dir) {
     if (topLevel && dmi !== "true" && !MODEL_INVOCABLE_COMMANDS.has(name)) {
       errors.push(`${rel}: add \`disable-model-invocation: true\` — commands are the / surface and the skill twin carries the auto-route (ADR-0008); list it in MODEL_INVOCABLE_COMMANDS only if the model must invoke it`);
     }
-    if (topLevel && desc && dmi !== "true") roster.commands += desc.length;
+    if (topLevel && desc && dmi !== "true") listing.commands += listingEntry(name, desc, front);
   }
   const portableDir = join(repoRoot, "commands-portable");
   for (const file of existsSync(portableDir) ? listCommandFiles(portableDir) : []) {
@@ -369,16 +386,15 @@ function listCommandFiles(dir) {
     }
   }
 }
-const rosterTotal = Object.values(roster).reduce((a, b) => a + b, 0);
-const rosterLine = Object.entries(roster).map(([k, v]) => `${k} ${v}`).join(", ");
-if (rosterTotal > ROSTER_MAX_CHARS) {
-  errors.push(`roster: ${rosterTotal} auto-invocable description chars > ${ROSTER_MAX_CHARS} (${rosterLine}) — flip user-only rituals to disable-model-invocation: true or shorten descriptions; never raise the cap (ADR-0008)`);
-} else if (rosterTotal > ROSTER_TARGET_CHARS) {
-  warnings.push(`roster: ${rosterTotal} auto-invocable description chars > target ${ROSTER_TARGET_CHARS} (${rosterLine})`);
+const listingTotal =
+  Object.values(listing).reduce((a, b) => a + b, 0) + Math.max(0, listingEntries - 1);
+const listingLine = Object.entries(listing).map(([k, v]) => `${k} ${v}`).join(", ");
+if (listingTotal > LISTING_MAX_CHARS) {
+  errors.push(`skill listing: ${listingTotal} chars > ${LISTING_MAX_CHARS} (${listingLine}) — shorten descriptions or flip user-only rituals to disable-model-invocation: true; never raise the cap (ADR-0010)`);
 }
 
 if (asJson) {
-  console.log(JSON.stringify({ total, errors, warnings, roster, rosterTotal }, null, 2));
+  console.log(JSON.stringify({ total, errors, warnings, listing, listingTotal, listingEntries, agentDescChars }, null, 2));
 } else {
   for (const w of warnings) console.warn(`⚠ ${w}`);
   if (errors.length) {
@@ -387,7 +403,9 @@ if (asJson) {
   } else {
     console.log(`✓ All ${total} skills valid against the Agent Skills spec` +
       (warnings.length ? ` (${warnings.length} warning(s)).` : ".") +
-      ` Always-on description roster: ${rosterTotal} chars (~${Math.round(rosterTotal / 4)} tokens per request).`);
+      ` Skill listing: ${listingTotal} chars, ${listingEntries} entries (ratchet ${LISTING_MAX_CHARS};` +
+      ` Claude Code's default budget on a 1M Opus 5.5 session is ${LISTING_DEFAULT_BUDGET_CHARS}, shared with built-ins);` +
+      ` agents ${agentDescChars} chars.`);
   }
 }
 

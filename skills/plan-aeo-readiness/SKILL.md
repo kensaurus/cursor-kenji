@@ -1,10 +1,10 @@
 ---
 name: plan-aeo-readiness
 description: >
-  Audit a site for answer-engine / GEO citation readiness (ChatGPT, Perplexity,
-  AI Overviews), then a phased plan. Use when "AEO", "GEO", "show up in
-  ChatGPT/Perplexity", "AI search visibility", "llms.txt", or "am I blocking AI
-  crawlers". Classic SEO meta/sitemap → enhance-web-seo.
+  Plan-only audit of answer-engine (AEO/GEO) citation readiness for ChatGPT,
+  Perplexity, and AI Overviews. Use when "AEO", "GEO", "show up in
+  ChatGPT/Perplexity", "AI search visibility", "llms.txt", or "am I blocking
+  AI crawlers".
 license: MIT
 effort: high
 ---

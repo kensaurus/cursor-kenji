@@ -1,11 +1,10 @@
 ---
 name: audit-llm-security
 description: >
-  Read-only OWASP LLM Top 10 audit of app-facing AI: prompt injection,
-  data leakage, unsafe output/agency, RAG risks, misinformation, and
-  unbounded spend. Use when "audit LLM security", "prompt injection",
-  "jailbreak my chatbot", or "is my AI safe?". General app security →
-  audit-security.
+  Read-only OWASP LLM Top 10 audit of app-facing AI: prompt injection, data
+  leakage, unsafe output or agency, RAG risks, unbounded spend. Use when
+  "audit LLM security", "prompt injection", "jailbreak my chatbot", or "is my
+  AI safe?".
 license: MIT
 effort: high
 ---

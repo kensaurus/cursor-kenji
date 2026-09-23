@@ -1,10 +1,9 @@
 ---
 name: workflow-merge-conflicts
-description: >-
-  Resolve an in-progress git merge or rebase conflict by tracing each side back
-  to its original intent. Use when the user says "resolve the conflicts", "fix
-  this merge", "the rebase is stuck", or a pull/merge/rebase has left conflict
-  markers in the tree.
+description: >
+  Resolve an in-progress merge or rebase conflict by tracing each side back to
+  its intent. Use when "resolve the conflicts", "fix this merge", "the rebase
+  is stuck", or a pull has left conflict markers in the tree.
 license: MIT
 ---
 

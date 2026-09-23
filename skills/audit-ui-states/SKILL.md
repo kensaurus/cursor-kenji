@@ -1,10 +1,10 @@
 ---
 name: audit-ui-states
 description: >
-  Read-only audit of unhappy-path UI states vibe-coding skips — empty, loading,
-  error, offline, zero-results, permission, overflow — then plan fixes. Use when
-  "check empty/error states", "audit loading states", or "what happens when this
-  fails". Dead buttons → plan-stub-checker; backend timeouts → audit-resilience.
+  Read-only audit of unhappy-path UI states — empty, loading, error, offline,
+  zero-results, permission, overflow — then a fix plan. Use when "check
+  empty/error states", "audit loading states", or "what happens when this
+  fails".
 license: MIT
 effort: high
 ---

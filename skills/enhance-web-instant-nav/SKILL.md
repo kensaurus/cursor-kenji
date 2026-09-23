@@ -1,10 +1,10 @@
 ---
 name: enhance-web-instant-nav
 description: >
-  Instant in-site nav: Speculation Rules, View Transitions, bfcache, 103
-  Early Hints. Use when "instant navigation", "prerender", "early hints",
+  Instant in-site navigation: Speculation Rules, View Transitions, bfcache,
+  103 Early Hints. Use when "instant navigation", "prerender", "early hints",
   "back button reloads", or "second page is slow". First-load CWV →
-  audit-performance. JS weight → audit-bundle-size. SPA → framework prefetch.
+  audit-performance.
 license: MIT
 ---
 

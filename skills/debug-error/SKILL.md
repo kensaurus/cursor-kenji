@@ -1,11 +1,10 @@
 ---
 name: debug-error
 description: >
-  Diagnose one error/bug with hypotheses and runtime evidence before
-  fixing. Use when "debug this error", "investigate this bug", or behavior
-  is unexpected. FE↔BE contract mismatch → debug-fe-be-integration.
-  Sentry backlog/monitoring → debug-sentry-monitor. Bug-to-PR lifecycle →
-  workflow-fix-and-ship.
+  Diagnose one bug with hypotheses and runtime evidence before fixing. Use
+  when "debug this error", "investigate this bug", or behavior is unexpected.
+  FE↔BE mismatch → debug-fe-be-integration. Bug to PR → workflow-fix-and-ship.
+  Sentry backlog → debug-sentry-monitor.
 license: MIT
 effort: high
 ---
@@ -261,9 +260,6 @@ Do NOT apply these as the sole fix:
       that exercises the real bug pattern; if no correct seam exists, document
       that as an architectural finding instead of writing a false-confidence test
 - [ ] Test suite run where one exists, output pasted
-- [ ] Related functionality still works
-- [ ] Edge cases handled
-- [ ] Tests pass (if they exist)
 
 ### Regression Check
 

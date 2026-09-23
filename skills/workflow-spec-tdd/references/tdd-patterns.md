@@ -6,7 +6,6 @@
 
 ```typescript
 // RED: tests written from the input/output pairs; no implementation exists yet.
-// input/output pairs. Do NOT write any implementation yet."
 
 describe('calculateDiscount', () => {
   it('applies 10% for orders over £100', () => {

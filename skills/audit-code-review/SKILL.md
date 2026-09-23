@@ -1,10 +1,9 @@
 ---
 name: audit-code-review
 description: >
-  Review this PR or diff for quality, security, and maintainability. Use when
-  reviewing pull requests, examining a named change set, or the user asks for a
-  code review of current work. Repo-wide anti-patterns → audit-code-quality.
-  Bulk transform semantics → audit-codemod-safety.
+  Review a PR or diff for correctness, security, and maintainability. Use for
+  a pull request, a named change set, or "review my changes". Repo-wide
+  anti-patterns → audit-code-quality. Bulk transforms → audit-codemod-safety.
 license: MIT
 effort: high
 ---
@@ -288,18 +287,3 @@ consequence, and a fix. Style that the linter or the codebase's own
 conventions already cover is not a finding at any tier. Read the surrounding
 code before judging a hunk, and where intent is unclear, ask in the Questions
 section rather than assume.
-
-### DO
-- Be specific and actionable — link to the exact line
-- Explain the "why" behind every suggestion
-- Suggest alternatives, not just problems
-- Acknowledge good work — it reinforces good habits
-- Ask questions when intent is unclear
-- Verify patterns against current best practices (research if unsure)
-
-### DON'T
-- Block on personal style preferences when a linter exists
-- Give vague feedback ("this could be better")
-- Ignore the context/constraints the author worked within
-- Review only the changed lines — read surrounding code too
-- Assume malice — most findings are honest oversights

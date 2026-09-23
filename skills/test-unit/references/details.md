@@ -266,5 +266,3 @@ describe('POST /api/users', () => {
   });
 });
 ```
-
----

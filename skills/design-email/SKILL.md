@@ -1,10 +1,10 @@
 ---
 name: design-email
 description: >
-  Design and implement transactional and marketing email templates. Use when asked to
-  "build an email template", "transactional email", "welcome email", "password reset
-  email", "email design", "React Email", "MJML", "dark mode email", or "email copy
-  review". Inbox / SPF / spam → enhance-email-deliverability.
+  Design and build transactional and marketing email templates. Use when
+  "build an email template", "welcome email", "password reset email", "React
+  Email", "MJML", "dark mode email", or "email copy review". Spam/SPF →
+  enhance-email-deliverability.
 license: MIT
 ---
 

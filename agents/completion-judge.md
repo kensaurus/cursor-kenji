@@ -37,7 +37,9 @@ evidence produces `CONTINUE`, not an inferred pass.
    `TODO`, `FIXME`, `follow-up`, `out of scope`, `later`, `skip`, `optional`,
    `known failure`, `not run`, and unchecked markdown tasks.
 5. Check that the verification ladder matches the blast radius. Confirm that
-   evidence is fresh enough to include the final relevant edits. Run bounded,
+   evidence is fresh enough to include the final relevant edits. A rung marked
+   `[-]` (not applicable) needs an `n/a:` reason you can confirm, such as the
+   config or script it names being absent; otherwise treat it as not run. Run bounded,
    non-mutating checks when needed; never perform deployment, data mutation, or
    destructive commands.
 6. Distinguish pre-existing baseline failures from regressions. A new failure

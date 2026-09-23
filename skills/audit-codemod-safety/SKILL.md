@@ -1,10 +1,10 @@
 ---
 name: audit-codemod-safety
 description: >
-  Read-only audit of a codemod or bulk mechanical transform for
-  behavior-preservation — compiles/lints is not same-behavior. Use when "did
-  this codemod break anything", "audit this bulk refactor", or before merging
-  a mass find-replace. Diff quality → audit-code-review. SQL → plan-data-integrity.
+  Read-only check that a codemod or bulk transform preserved behavior —
+  compiling is not proof. Use when "did this codemod break anything", "audit
+  this bulk refactor", or before merging a mass find-replace. SQL →
+  plan-data-integrity.
 license: MIT
 effort: high
 ---

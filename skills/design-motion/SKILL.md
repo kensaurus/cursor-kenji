@@ -1,10 +1,9 @@
 ---
 name: design-motion
 description: >
-  Design and implement new isolated motion — micro-interactions, page
-  transitions, scroll, hover — with Framer Motion, CSS, or GSAP. Use when adding
-  one animation to a new surface. Existing-app coherent pass → enhance-motion.
-  Do not fire for "motion pass across the app".
+  Build one new animation — micro-interaction, page transition, scroll, or
+  hover — with Framer Motion, CSS, or GSAP. Use when adding one animation to a
+  new surface. A coherent pass across an existing app → enhance-motion.
 license: MIT
 ---
 
@@ -264,35 +263,35 @@ function HeroSection() {
 Options, not a checklist. This skill adds one animation, so pick the single item the purpose needs; unrequested hover, zoom, or reveal effects are scope creep.
 
 ### Buttons
-- [ ] Hover: subtle scale (1.02) + shadow
-- [ ] Active/tap: scale down (0.98)
-- [ ] Loading: spinner + disabled state
-- [ ] Success: checkmark animation
-- [ ] Focus: visible ring animation
+- Hover: subtle scale (1.02) + shadow
+- Active/tap: scale down (0.98)
+- Loading: spinner + disabled state
+- Success: checkmark animation
+- Focus: visible ring animation
 
 ### Forms
-- [ ] Input focus: border color transition
-- [ ] Label float animation on focus
-- [ ] Error shake animation
-- [ ] Success checkmark
-- [ ] Submit button loading state
+- Input focus: border color transition
+- Label float animation on focus
+- Error shake animation
+- Success checkmark
+- Submit button loading state
 
 ### Navigation
-- [ ] Active indicator slides
-- [ ] Dropdown fade + slide
-- [ ] Mobile menu slide from edge
-- [ ] Breadcrumb transitions
+- Active indicator slides
+- Dropdown fade + slide
+- Mobile menu slide from edge
+- Breadcrumb transitions
 
 ### Cards
-- [ ] Hover lift effect
-- [ ] Image zoom on hover
-- [ ] Content reveal on hover
-- [ ] Selection state pulse
+- Hover lift effect
+- Image zoom on hover
+- Content reveal on hover
+- Selection state pulse
 
 ### Modals
-- [ ] Backdrop fade in
-- [ ] Content scale + fade
-- [ ] Exit animation before unmount
+- Backdrop fade in
+- Content scale + fade
+- Exit animation before unmount
 
 ## Accessibility  [LOW freedom — run exactly]
 

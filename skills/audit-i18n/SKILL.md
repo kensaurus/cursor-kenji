@@ -1,9 +1,10 @@
 ---
 name: audit-i18n
 description: >
-  Audit and fix internationalisation for any web or mobile app. Use when asked to "audit
-  i18n", "fix translations", "add locale", "natural language", "translation quality",
-  "hardcoded strings", "localisation", or "the Japanese feels like Google Translate".
+  Audit and fix internationalisation in web or mobile apps. Use when "audit
+  i18n", "fix translations", "add locale", "hardcoded strings",
+  "localisation", "translation quality", or "the Japanese feels like Google
+  Translate".
 license: MIT
 effort: high
 ---

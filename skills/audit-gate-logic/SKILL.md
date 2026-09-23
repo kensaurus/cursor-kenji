@@ -1,10 +1,9 @@
 ---
 name: audit-gate-logic
 description: >
-  Read-only audit of CI gate logic — silent bypass, ratchet gaming,
-  required-but-not, duplicate gates. Use when "can CI be bypassed" or
-  "why did a regression pass CI". Cost → audit-cicd. Consolidation →
-  housekeep-gates. Rule content → audit-doctrine.
+  Read-only audit of CI gate logic: silent bypass, ratchet gaming,
+  required-but-not, duplicate gates. Use when "can CI be bypassed" or "why did
+  a regression pass CI". Cost → audit-cicd. Rule content → audit-doctrine.
 license: MIT
 effort: high
 ---

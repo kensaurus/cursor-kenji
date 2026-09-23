@@ -1,10 +1,10 @@
 ---
 name: enhance-capacitor-ui
 description: >
-  Cross-surface UIUX separation skill for hybrid web apps that ship as PWA + iOS + Android
-  via Capacitor (or Tauri / Expo Web / Ionic / RN-Web). Use when a previous UI/UX sweep
-  "improved one surface and broke the other" — desktop polished but mobile cramped, or
-  mobile native but desktop wastes space.
+  Separate desktop and mobile UI in hybrid apps shipped as PWA + iOS + Android
+  (Capacitor, Tauri, Expo Web, Ionic, RN-Web). Use when a UI sweep "improved
+  one surface and broke the other": desktop polished but mobile cramped, or
+  the reverse.
 license: MIT
 paths:
   - "**/ios/**"

@@ -1,10 +1,10 @@
 ---
 name: mobile-emulator-start
 description: >
-  Boot Android emulator + Metro (Expo / bare RN) in order: inspect IDE
-  terminals, kill stale ports, pick an AVD. Use when "start Metro",
-  "start emulator", "Cannot connect to Expo", or a stuck dev loop. QA
-  on the running emulator → mobile-emulator-test.
+  Boot the Android emulator and Metro (Expo or bare RN) in order: check
+  terminals, kill stale ports, pick an AVD. Use when "start Metro", "start
+  emulator", "Cannot connect to Expo", or a stuck dev loop. QA →
+  mobile-emulator-test.
 license: MIT
 effort: low
 ---

@@ -1,11 +1,10 @@
 ---
 name: iterate-agent-harness
 description: >
-  Turn an agent failure—premature stop, false completion, gamed check,
-  missed file, broken handoff—into a durable rule/skill/hook/CI guard
-  plus regression test. Use when "the agent stopped early again", "it
-  gamed the test", or "add a guard so this doesn't recur". App bugs →
-  workflow-fix-and-ship.
+  Turn an agent failure (premature stop, false completion, gamed check, missed
+  file) into a rule, hook, or CI guard with a regression test. Use when "the
+  agent stopped early again", "it gamed the test", or "add a guard so this
+  doesn't recur".
 license: MIT
 effort: high
 ---
@@ -82,6 +81,7 @@ Before fixing, add something that fails on the captured failure:
   `scripts/test-completion-gate.mjs`, a validation rule) — preferred; or
 - a documented, repeatable scenario with an explicit expected outcome when the
   failure is judgment-based and not mechanically checkable.
+
 For premature-stop and false-completion classes, two guards are mechanical: (1) transcript audit — every claimed action maps to a tool result; (2) turn-ending check — the last paragraph of a turn lists done vs owed, and an owed item with no named blocker means the turn should not have ended. Encode those as the guard rather than a wording tweak.
 
 Confirm the guard actually fails against the current (unfixed) behavior — a

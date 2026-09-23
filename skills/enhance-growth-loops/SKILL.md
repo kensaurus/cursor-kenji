@@ -1,11 +1,10 @@
 ---
 name: enhance-growth-loops
 description: >
-  Apply-now growth loops on an existing product: "powered by" badge, shareable
-  artifacts and templates, invite and referral credit, each with its own
-  K-factor events. Use when "referral program", "viral loop", "powered by
-  badge", "get users to invite". Landing/pricing copy →
-  enhance-web-conversion.
+  Add growth loops to a live product: a "powered by" badge, shareable
+  artifacts, invites and referral credit, each with K-factor events. Use when
+  "referral program", "viral loop", "powered by badge", or "get users to
+  invite".
 license: MIT
 ---
 

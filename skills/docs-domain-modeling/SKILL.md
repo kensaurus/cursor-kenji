@@ -1,10 +1,9 @@
 ---
 name: docs-domain-modeling
-description: >-
-  Build and sharpen a project's domain model — a CONTEXT.md glossary and
-  ubiquitous language. Use when pinning down terminology, or the agent "uses the
-  wrong words". Repo decision-memory system (INDEX.md, rejected alternatives) →
-  docs-adr.
+description: >
+  Build a project's domain model: a CONTEXT.md glossary and ubiquitous
+  language. Use when pinning down terminology, or the agent "uses the wrong
+  words". Decision records (INDEX.md, rejected alternatives) → docs-adr.
 license: MIT
 ---
 

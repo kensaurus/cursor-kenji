@@ -1,10 +1,10 @@
 ---
 name: workflow-environment-ready
 description: >
-  Prove runtimes, installs, tools, services, env names, and repository
-  verification commands work before a long/autonomous run. Use when
-  "preflight the repo", "set up the environment", or tests cannot start.
-  Tests run but fail on code → workflow-green-repo / debug-error.
+  Prove runtimes, installs, tools, services, env names, and the repo's
+  verification commands work before a long run. Use when "preflight the repo",
+  "set up the environment", or tests cannot start. Failing tests →
+  workflow-green-repo.
 license: MIT
 ---
 

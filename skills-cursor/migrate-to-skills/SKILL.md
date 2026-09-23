@@ -118,4 +118,4 @@ If you have the Task tool available, delegate the file work so the main context 
 3. [ ] Summarize the results and tell the user they can ask you to undo the migration
 4. [ ] If asked to undo, reverse the steps to restore the original files
 
-If you don't have the Task tool available, do I–V yourself across both project (`.cursor/`) and user (`~/.cursor/`) directories, then steps 3–4.
+If you don't have the Task tool available, do step 1, then I–V yourself across both project (`.cursor/`) and user (`~/.cursor/`) directories, then steps 3–4.

@@ -1,16 +1,22 @@
-> Teaching copy of `audit-auth-flows` with T1–T6 annotations (`<!-- TECHNIQUE -->`).
+> Teaching copy of `audit-auth-flows` with technique annotations (`<!-- TECHNIQUE -->`).
 > Live shipped file (comments stripped; pack frontmatter unchanged):
 > `skills/audit-auth-flows/SKILL.md`.
 
 ---
 name: audit-auth-flows
 description: >
-  Read-only audit of app-layer auth — route×gate matrix, session lifecycle,
-  OAuth, and provider traps (getSession vs getUser, middleware-as-only-gate,
-  CVE-2025-29927). Use when "audit our auth", "check middleware protection".
-  RLS → plan-rls-audit. OWASP checklist → audit-security.
+  Read-only audit of app-layer auth: route×gate matrix, session lifecycle,
+  OAuth, provider traps (getSession vs getUser, middleware-only gates,
+  CVE-2025-29927). Use when "audit our auth" or "check middleware protection".
+  RLS → plan-rls-audit.
 license: MIT
+effort: high
 ---
+
+<!-- TECHNIQUE: effort routing. A security audit is judgment work, so the
+frontmatter declares `effort: high`; the model default is medium. Claude Code
+honors the key, Cursor ignores it. Mechanical fixed-sequence skills declare
+`effort: low`. Read-only does not mean low: audits are read-only and high. -->
 
 # audit-auth-flows — Middleware is edge routing, not a security boundary
 
@@ -18,11 +24,9 @@ license: MIT
 
 <!-- TECHNIQUE: T1 degree-of-freedom declaration (Anthropic official). The
 skill states its register up front and per phase, so the agent knows where
-to reason freely and where to follow exact steps. Under Claude Code, pair it
-with `effort:` in frontmatter: HIGH-freedom audits run at `effort: high`
-(Opus 5.5 defaults to medium — the register line says where to reason
-freely, the effort key says how deep). This header is the single most
-important addition. -->
+to reason freely and where to follow exact steps. It pairs with the `effort:`
+key above: the register line says where to reason freely; the effort key says
+how deep. This header is the single most important addition. -->
 
 - Phases 0–4 (discovery, judgment): **[HIGH freedom]** — reason about what
   you find; checklists prompt investigation, they are not tick-scripts.

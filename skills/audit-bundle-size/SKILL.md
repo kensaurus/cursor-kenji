@@ -1,10 +1,10 @@
 ---
 name: audit-bundle-size
 description: >
-  Analyse and shrink JavaScript bundle size for any web app. Use when asked to "reduce
-  bundle size", "analyse bundle", "tree shaking", "lazy loading", "code splitting", "slow
-  initial load", "large JS", "chunk size", "build performance", "LCP caused by JS", "why
-  is the bundle so big", or "first load JS too large".
+  Analyse and shrink a web app's JavaScript bundle. Use when "reduce bundle
+  size", "tree shaking", "code splitting", "lazy loading", "slow initial
+  load", "chunk size", "LCP caused by JS", or "why is the bundle so big".
+  Runtime → audit-performance.
 license: MIT
 effort: high
 ---

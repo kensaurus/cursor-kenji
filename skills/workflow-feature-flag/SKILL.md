@@ -1,10 +1,9 @@
 ---
 name: workflow-feature-flag
 description: >
-  Plan and execute a disciplined feature-flag rollout for any app. Use when asked to "add
-  a feature flag", "gradual rollout", "staged release", "kill switch", "dark launch",
-  "flag cleanup", "canary release", "rollback plan", "safe feature release", or "deploy
-  without switching on".
+  Plan and run a feature-flag rollout. Use when "add a feature flag", "gradual
+  rollout", "staged release", "kill switch", "dark launch", "flag cleanup",
+  "canary release", "rollback plan", or "deploy without switching on".
 license: MIT
 ---
 

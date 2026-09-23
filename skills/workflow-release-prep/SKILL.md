@@ -1,11 +1,10 @@
 ---
 name: workflow-release-prep
 description: >
-  Apply-now: take the local working tree to a merge-ready PR against main —
-  review, self-critique, split if needed, commit, push, open PR, drive CI
-  green. Do not merge. Use when "prepare this for a PR", "get my working
-  tree merge-ready". Existing PR → workflow-pr. Product launch →
-  workflow-launch-ready.
+  Take the local working tree to a merge-ready PR against main: review, split
+  if needed, commit, push, open the PR, drive CI green; never merge. Use when
+  "prepare this for a PR" or "get my working tree merge-ready". Existing PR →
+  workflow-pr.
 license: MIT
 effort: high
 ---

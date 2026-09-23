@@ -1,11 +1,10 @@
 ---
 name: enhance-web-conversion
 description: >
-  Apply-now conversion pass for landing, pricing, and upgrade paths: hero
-  matched to positioning, one CTA, real proof, tier packaging with anchor and
-  annual toggle, upgrade prompts at value moments. Use when "pricing page",
-  "improve conversion", "free to paid", "paywall UX". Visual build →
-  enhance-web-landing.
+  Conversion pass for landing, pricing, and upgrade paths: a positioned hero,
+  one CTA, real proof, anchored tiers, upgrade prompts at value moments. Use
+  when "pricing page", "improve conversion", "free to paid", or "paywall UX".
+  Page build → enhance-web-landing.
 license: MIT
 ---
 

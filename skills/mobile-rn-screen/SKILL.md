@@ -1,9 +1,9 @@
 ---
 name: mobile-rn-screen
 description: >
-  Polish an existing React Native screen to feel intentional, native, and human-crafted.
-  Use for "this screen looks off", "feels clunky on iOS", "Android version looks wrong",
-  "jank when scrolling", "button is unreachable", or any RN-specific UX polish pass.
+  Polish an existing React Native screen so it feels native and intentional.
+  Use for "this screen looks off", "feels clunky on iOS", "Android version
+  looks wrong", "jank when scrolling", or "button is unreachable".
 license: MIT
 paths:
   - "**/ios/**"

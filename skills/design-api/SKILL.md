@@ -1,10 +1,9 @@
 ---
 name: design-api
 description: >
-  Design RESTful and GraphQL APIs following current best practices for naming, versioning,
-  error shapes, and auth patterns. Use when the user says "design an API", "create
-  endpoints", "structure my API responses", "plan API architecture", "REST vs GraphQL", or
-  "API contract".
+  Design REST and GraphQL APIs: naming, versioning, error shapes, auth. Use
+  when "design an API", "create endpoints", "structure my API responses",
+  "plan API architecture", "REST vs GraphQL", or "API contract".
 license: MIT
 effort: high
 ---
@@ -43,10 +42,8 @@ Design clean, consistent, and developer-friendly APIs.
 **Before designing any API:**
 
 ### 1. Check Existing API Documentation
-```
-the running backend's docs route (/api-docs, /docs, /swagger, /openapi.json)
-the repo's API README / naming-conventions doc (grep `naming` under docs/ and src/api/)
-```
+- The running backend's docs route (`/api-docs`, `/docs`, `/swagger`, `/openapi.json`)
+- The repo's API README or naming-conventions doc (grep `naming` under `docs/` and `src/api/`)
 
 ### 2. Verify Database Schema
 Use Supabase MCP to understand existing data structure:

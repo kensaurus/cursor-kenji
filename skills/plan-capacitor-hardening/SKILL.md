@@ -2,9 +2,9 @@
 name: plan-capacitor-hardening
 description: >
   Plan-only Capacitor/Ionic native-layer security audit: WebView, token
-  storage, deep links/OAuth, cleartext traffic, exported activities. Use
-  when "is my Capacitor app secure?", "harden my hybrid app", or
-  pre-store hardening. Store readiness → plan-mobile-readiness.
+  storage, deep links and OAuth, cleartext traffic, exported activities. Use
+  when "is my Capacitor app secure?", "harden my hybrid app", or pre-store
+  hardening. Store readiness → plan-mobile-readiness.
 license: MIT
 effort: high
 ---

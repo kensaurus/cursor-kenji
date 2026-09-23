@@ -347,6 +347,26 @@ try {
   expect(!existsSync(join(sandboxClaude, ".claude", "rules", "composer-2.5-execution.md")), "Claude did not prune the renamed rule");
   expect(existsSync(join(cur, "rules", "approved-plan-execution.mdc")), "renamed rule missing after prune");
 
+  // Leftovers from older releases: the renamed /plan command and the
+  // per-project bundle that older installers copied into global commands.
+  // Only the pack's own files go; a user's same-named files stay.
+  const packPlan = '---\ndescription: "Research, clarify requirements, and produce an approved implementation plan before writing code (Cursor Plan Mode)"\n---\n\n# Plan\n';
+  const claudeCmds = join(sandboxClaude, ".claude", "commands");
+  writeFileSync(join(cur, "commands", "plan.md"), packPlan);
+  writeFileSync(join(claudeCmds, "plan.md"), '---\ndescription: "my own planning prompt"\n---\n');
+  mkdirSync(join(cur, "commands", "native-rn-monorepo"), { recursive: true });
+  writeFileSync(join(cur, "commands", "native-rn-monorepo", "rn-verify.md"), marker);
+  mkdirSync(join(claudeCmds, "native-rn-monorepo"), { recursive: true });
+  writeFileSync(join(claudeCmds, "native-rn-monorepo", "rn-verify.md"), marker);
+  writeFileSync(join(claudeCmds, "native-rn-monorepo", "my-note.md"), marker);
+  execFileSync(process.execPath, [installer], { env: { ...process.env, HOME: sandbox, USERPROFILE: sandbox }, stdio: "pipe" });
+  execFileSync(process.execPath, [installer, "--claude"], { env: { ...process.env, HOME: sandboxClaude, USERPROFILE: sandboxClaude }, stdio: "pipe" });
+  expect(!existsSync(join(cur, "commands", "plan.md")), "Cursor did not prune the pack's renamed plan.md");
+  expect(existsSync(join(claudeCmds, "plan.md")), "installer deleted a user-owned plan.md");
+  expect(!existsSync(join(cur, "commands", "native-rn-monorepo")), "Cursor kept the leaked per-project command bundle");
+  expect(!existsSync(join(claudeCmds, "native-rn-monorepo", "rn-verify.md")), "Claude kept a leaked bundle command");
+  expect(existsSync(join(claudeCmds, "native-rn-monorepo", "my-note.md")), "installer deleted a user file inside the bundle folder");
+
   const sandboxDry = join(sandbox, "rename-dry");
   plantOld(join(sandboxDry, ".cursor", "skills"));
   execFileSync(process.execPath, [installer, "--dry-run"], {

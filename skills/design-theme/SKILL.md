@@ -1,6 +1,10 @@
 ---
 name: design-theme
-description: Apply cohesive visual themes to artifacts (slides, docs, landing pages). Provides 11 pre-set themes with colors/fonts. Use when user mentions "apply theme", "color palette", "brand colors", "styling slides", "presentation design", "visual identity", or wants consistent styling across artifacts.
+description: >
+  Apply one of 11 preset themes (colors, fonts) to slides, docs, or landing
+  pages. Use when "apply theme", "color palette", "brand colors", "styling
+  slides", "presentation design", "visual identity", or styling artifacts
+  consistently.
 license: MIT
 ---
 
@@ -184,6 +188,7 @@ Generate a new theme with:
 - 5 color palette (primary, secondary, accent, background, text)
 - Font pairing (heading + body)
 - A descriptive name
+
 Name the fallbacks and avoid them: Inter/Roboto as the pairing, a cream or off-white background, a purple gradient — a custom theme that lands on those is the model's default, not the user's brand.
 
 After generating, show it for review before applying.

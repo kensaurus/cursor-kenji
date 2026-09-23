@@ -2,9 +2,9 @@
 name: plan-privacy-compliance
 description: >
   Plan-only audit mapping real personal-data flows to the privacy policy,
-  GDPR, Japan APPI, and store labels. Use when "privacy compliance",
-  "what data do we collect?", "App Store privacy labels", or a consumer
-  launch. Analytics consent instrumentation → audit-analytics.
+  GDPR, Japan APPI, and store labels. Use when "privacy compliance", "what
+  data do we collect?", "App Store privacy labels", or before a consumer
+  launch.
 license: MIT
 effort: high
 ---

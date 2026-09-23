@@ -1,10 +1,10 @@
 ---
 name: plan-aso
 description: >
-  Audit App Store and Google Play listings for discoverability and conversion —
-  keywords, localized metadata, screenshots, ratings prompts — then emit a
-  prioritized ASO plan. Use when "optimize our store listing", "improve app
-  downloads", or "ASO". Submission mechanics → plan-mobile-readiness. Plan only.
+  Plan-only ASO audit of App Store and Google Play listings: keywords,
+  localized metadata, screenshots, ratings prompts. Use when "optimize our
+  store listing", "improve app downloads", or "ASO". Submission readiness →
+  plan-mobile-readiness.
 license: MIT
 effort: high
 ---

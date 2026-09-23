@@ -1,10 +1,10 @@
 ---
 name: workflow-git-commit
 description: >
-  Create one conventional commit from an already-scoped change: stage
-  named files/hunks, write the message, commit, never push. Use when
-  "commit these files" or "write a commit message". Whole dirty tree to
-  a merge-ready PR → workflow-release-prep.
+  Create one conventional commit from an already-scoped change: stage the
+  named files or hunks, write the message, commit, never push. Use when
+  "commit these files" or "write a commit message". Whole tree to a PR →
+  workflow-release-prep.
 license: MIT
 effort: low
 ---

@@ -1,6 +1,9 @@
 ---
 name: workflow-coding-discipline
-description: Apply behavioral guardrails when writing, editing, refactoring, or debugging code. Use when vibe-coding keeps producing wrong results, or for any task needing "think before coding", "simplicity first", "surgical changes". Adapted from Karpathy's LLM coding observations.
+description: >
+  Guardrails for writing, editing, refactoring, or debugging code: surface
+  assumptions, simplicity first, surgical changes. Use when vibe-coding keeps
+  producing wrong results, or for "think before coding" or "surgical changes".
 license: MIT
 ---
 

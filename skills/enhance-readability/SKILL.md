@@ -1,11 +1,10 @@
 ---
 name: enhance-readability
 description: >
-  Audit and fix how easily content is UNDERSTOOD: CPL/reading level, Gestalt
-  grouping, deadspace, icons or a table that cuts verbosity. Use when "hard
-  to read", "too dense", "reading level", "cognitive load", or "turn this
-  prose into a table". Looks-good → enhance-web-ui. Breakpoints →
-  audit-responsive.
+  Audit and fix how easily content is understood: line length (CPL), reading
+  level, grouping, deadspace, icons or tables that cut verbosity. Use when
+  "hard to read", "too dense", "reading level", "cognitive load", or "turn
+  this prose into a table".
 license: MIT
 ---
 

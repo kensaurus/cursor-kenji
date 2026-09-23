@@ -138,7 +138,7 @@ Skills-only refresh: `npx skills add kensaurus/cursor-kenji` (does not update sl
 No, for most skills. Skills that talk to Sentry, Supabase, or Langfuse tell you when they need API keys.
 
 **Will this slow down Cursor?**
-No. Skill bodies load only when a skill fires. What rides in every request is the one-line description of each skill — about 11k tokens for the full pack — which is why user-only rituals like `/handoff` opt out of that roster. Deleting skills you never use trims it further.
+No. Skill bodies load only when a skill fires. What rides in every request is the one-line description of each skill — about 39k characters for the full pack — which is why user-only rituals like `/handoff` opt out of that listing. On Claude Code, `"skillListingBudgetFraction": 0.02` in `~/.claude/settings.json` keeps every description visible; see [MODEL-AND-EFFORT.md](MODEL-AND-EFFORT.md). Deleting skills you never use trims it further.
 
 **Can I delete skills I don't need?**
 Yes — delete the folder from `~/.cursor/skills/`.

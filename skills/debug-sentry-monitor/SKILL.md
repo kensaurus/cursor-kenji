@@ -1,11 +1,10 @@
 ---
 name: debug-sentry-monitor
 description: >
-  Operate Sentry: triage/fix unresolved issues, reduce noise, audit
-  instrumentation, and monitor after deploy. Use when "check Sentry",
-  "fix Sentry issues", "review production errors", or "improve error
-  tracking". One named bug through PR → workflow-fix-and-ship. Plan-only
-  observability → plan-error-handling.
+  Operate Sentry: triage and fix unresolved issues, cut noise, audit
+  instrumentation, monitor after deploy. Use when "check Sentry", "fix Sentry
+  issues", "review production errors", or "improve error tracking". One bug →
+  workflow-fix-and-ship. Plan-only audit → plan-error-handling.
 license: MIT
 effort: high
 ---
@@ -298,15 +297,6 @@ git log --oneline <previous-release-tag>..<current-release-tag>
 
 Read enough of the chain to say where the bad state originates: the crash-site function, every app-code frame above it, and — for unexpected data — its source (query and schema, state setter, input parsing, cache invalidation). `git log --oneline -20 -- <file>` on the culprit files.
 
-1. **Start from the crash site**: Read the full function where the error was thrown.
-2. **Walk up the call chain**: For each app-code frame in the stacktrace, read the file and function.
-3. **Walk down to the data source**: If the error involves unexpected data, trace where that data comes from:
- - Database query? Read the query, check the schema.
- - React state/props? Find where the state is set.
- - URL param or user input? Check validation/parsing.
- - Cache or store? Check invalidation and staleness.
-4. **Check recent changes**: `git log --oneline -20 -- <file>` on culprit files.
-
 ### 4d. Research Best Practices Before Fixing
 
 For non-trivial bugs, research the correct fix pattern:
@@ -348,11 +338,6 @@ Before writing any fix, state:
 | `?? []` or `?? {}` fallback | Masks data loading issues | Handle loading/error states explicitly |
 | Filtering in `beforeSend` | Muting a real bug | Only filter genuinely external noise |
 | Resolving without deploying | Error recurs next session | Only resolve after fix is committed |
-
-Before applying the fix:
-- Are there other callers of the function you're changing?
-- Will the fix change return type or behavior for other consumers?
-- Does the fix require updating types, tests, or related components?
 
 ---
 

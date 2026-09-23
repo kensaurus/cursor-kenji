@@ -1,10 +1,9 @@
 ---
 name: workflow-spec-tdd
 description: >
-  Stop vibe-coding with a spec → plan → TDD loop before writing a line.
-  Use when "spec first", "TDD", "do it properly", or LLM output keeps
-  being wrong. End-to-end feature through PR → workflow-build-feature.
-  One named bug → workflow-fix-and-ship.
+  A spec → plan → TDD loop before writing a line. Use when "spec first",
+  "TDD", "do it properly", or LLM output keeps being wrong. Feature through PR
+  → workflow-build-feature. One bug → workflow-fix-and-ship.
 license: MIT
 ---
 

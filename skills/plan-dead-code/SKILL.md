@@ -1,11 +1,10 @@
 ---
 name: plan-dead-code
 description: >
-  Configuration-first dead-code audit — Knip baseline for unused files,
-  exports and deps, plus duplication, debug residue, suppression debt,
-  orphan assets, env and schema drift. Emits a ratchet plan; deletes
-  nothing. Use when "find dead code", "is this code used", "unused
-  exports". Apply → housekeep-dead-code.
+  Plan-only dead-code audit: Knip baseline for unused files, exports, and
+  deps, plus duplication, debug residue, suppressions, orphan assets, env
+  drift. Deletes nothing. Use when "find dead code", "is this code used", or
+  "unused exports".
 license: MIT
 effort: high
 ---
@@ -186,6 +185,7 @@ time, and `--max-show-issues <n>` to keep a first pass readable.
 devDependencies; `--strict` additionally isolates workspaces to direct
 dependencies. `--reporter json` is what the baseline numbers come from —
 never a hand count.
+
 Delegate a baseline or residue pass to a subagent only when it is sizeable, independent of the others, and its raw output (Knip JSON, grep dumps) has no place in the plan; brief it with the exact commands and the columns to return. It deletes nothing, like this pass. A handful of greps stays in the main context. Long sweeps are expected — context compaction exists, so finish the inventory rather than wrapping up early.
 
 **Build the keep-working list.** For every finding, ask what would break.

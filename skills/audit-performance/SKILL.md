@@ -1,10 +1,10 @@
 ---
 name: audit-performance
 description: >
-  Audit runtime performance (CWV, load priority). Use when "slow page",
-  "LCP/INP/CLS", "fetchpriority", "early hints", "speculation rules",
-  "bfcache", or "long tasks". JS payload → audit-bundle-size. Instant
-  nav implement → enhance-web-instant-nav. Breaking point → test-load.
+  Audit and fix runtime performance (Core Web Vitals, load priority). Use when
+  "slow page", "LCP/INP/CLS", "fetchpriority", "long tasks", or "bfcache". JS
+  payload → audit-bundle-size. Instant nav → enhance-web-instant-nav. Load
+  limits → test-load.
 license: MIT
 effort: high
 ---

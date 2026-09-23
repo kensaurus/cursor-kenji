@@ -1,11 +1,10 @@
 ---
 name: test-mutation
 description: >
-  Set up and run mutation testing (StrykerJS / mutmut) to measure whether tests
-  assert behavior, not just execute lines. Use when "add mutation testing", "are
-  our tests real", "can our test suite be gamed", or after an agent
-  bulk-generated tests. Coverage plan → plan-test-coverage. Writing tests →
-  test-unit.
+  Run mutation testing (StrykerJS, mutmut) to measure whether tests assert
+  behavior, not just execute lines. Use when "add mutation testing", "are our
+  tests real", "can our test suite be gamed", or after an agent bulk-generated
+  tests.
 license: MIT
 ---
 

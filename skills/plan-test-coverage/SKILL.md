@@ -1,10 +1,10 @@
 ---
 name: plan-test-coverage
 description: >
-  User-story-driven test coverage audit and plan — no test writing in this pass. Use when
-  "test coverage plan", "coverage audit", "traceability matrix", "fake-green tests",
-  "uncovered user stories", "plan tests for critical flows", or "whats not tested".
-  Mutation score / assertion theater → test-mutation.
+  Plan-only, user-story-driven test coverage audit. Use when "test coverage
+  plan", "coverage audit", "traceability matrix", "fake-green tests",
+  "uncovered user stories", "plan tests for critical flows", or "what's not
+  tested". Mutation score → test-mutation.
 license: MIT
 effort: high
 ---
@@ -79,6 +79,7 @@ Read `references/preservation-contract.md`. Acknowledge in output #1.
 ```
 
 Detail: `references/methodology.md`
+
 Delegate an inventory pass to a subagent only when it is sizeable, independent of the others, and its raw output (coverage reports, test listings) has no place in the plan; brief it with the exact commands and the columns to return. It writes no tests, like this pass. Long sweeps are expected — context compaction exists, so finish the inventory rather than wrapping up early.
 
 ---

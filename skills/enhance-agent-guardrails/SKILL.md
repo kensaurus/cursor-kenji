@@ -1,10 +1,10 @@
 ---
 name: enhance-agent-guardrails
 description: >
-  Install guardrails-as-code so AI sessions cannot reintroduce leaked secrets,
+  Install guardrails as code so AI sessions cannot reintroduce leaked secrets,
   injection, or untested code. Use when "set up guardrails", "stop vibe-coding
-  regressions", "add pre-commit security checks". Gate-logic audit →
-  audit-gate-logic. Gate sprawl → housekeep-gates.
+  regressions", or "add pre-commit security checks". Gate audit →
+  audit-gate-logic.
 license: MIT
 ---
 

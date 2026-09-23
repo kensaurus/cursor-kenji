@@ -1,8 +1,8 @@
 ---
 name: meta-skill-creator
 description: >
-  Create or update a pack SKILL.md (frontmatter, house limits, T1–T6).
-  Use when authoring a cursor-kenji skill. Prompt-only upgrade →
+  Create or update a pack SKILL.md (frontmatter, house limits, T1–T8). Use
+  when authoring a cursor-kenji skill. Prompt-only upgrade →
   enhance-skill-prompts. Cursor skill wizard → create-skill.
 license: Apache-2.0
 ---
@@ -10,7 +10,7 @@ license: Apache-2.0
 # Skill Creator
 
 **Degree of freedom: MIXED.** Authoring judgment is `[HIGH freedom]`;
-house limits, frontmatter shape, and the T1–T6 checklist are
+house limits, frontmatter shape, and the T1–T8 checklist are
 `[LOW freedom — do not skip]`.
 
 Guidance for creating effective skills.
@@ -89,7 +89,7 @@ Match the level of specificity to the task's fragility and variability:
 
 Think of Claude as exploring a path: a narrow bridge with cliffs needs specific guardrails (low freedom), while an open field allows many routes (high freedom).
 
-### Prompt techniques (T1–T6)
+### Prompt techniques (T1–T8)
 
 New skills should be *born* with these, not retrofitted later. Full procedure:
 [docs/PROMPT-ENHANCEMENT-PLAYBOOK.md](../../docs/PROMPT-ENHANCEMENT-PLAYBOOK.md).
@@ -99,11 +99,13 @@ Upgrade an *existing* skill's prompt (not its behavior) with
 | # | Technique | One-line rule |
 |---|-----------|---------------|
 | T1 | Degrees of freedom | Declare register under the H1; tag fragile phases LOW, interpretive HIGH |
-| T2 | Structured CoT | One named-stage chain at judgment points (not generic "think step by step") |
-| T3 | One worked example | Few-shot + CoT: reasoning chain and output shape, once |
+| T2 | Classification contract | One named-stage record of what a finding contains, at judgment points; it never steers thinking ("think step by step") |
+| T3 | One worked example | Chain and output shape on one realistic case, labeled illustrative |
 | T4 | Self-critique rubric | Evidence conditions the output must satisfy (a command re-run, a form re-searched, a file listed) — never generic "double-check your work" items, which the model does unprompted |
 | T5 | Terminology consistency | One term per concept |
-| T6 | Conciseness | Cut known context; never trim a LOW-freedom step's exactness |
+| T6 | Conciseness | Cut restatements of trained defaults; never trim a LOW-freedom step's exactness |
+| T7 | Effort declaration | `effort: high` for judgment, `low` for mechanical, omit for implementation (Step 4) |
+| T8 | Volume, shape, communication | Each rule once at normal volume with its reason; outcomes, not choreography; never suppress updates |
 
 House limits: description ≤320 chars (Claude Code caps description + `when_to_use` at 1,536), body <500 lines, `name` matches dir. Every description rides in every request — roughly 168 skills × 300 chars is 12-15k always-on tokens — so a description earns its length by routing, and a ritual nobody should auto-trigger goes `disable-model-invocation: true`.
 Never write the retired layout alias (use `audit-responsive`).
@@ -112,7 +114,7 @@ Never write the retired layout alias (use `audit-responsive`).
 
 1. **Observe** — the intended trigger, stance, and existing neighbor skills
 2. **Interpret** — new skill vs prompt-only upgrade of an existing one
-3. **Classify** — family, freedom register, T1–T6 that must be born in the file
+3. **Classify** — family, freedom register, effort tier, T1–T8 that must be born in the file
 4. **Severity** — a missing trigger or a wrong family is a routing bug
 
 ## Worked example
@@ -252,7 +254,7 @@ When editing the skill, remember that the skill is being created for another ins
 
 #### Update SKILL.md
 
-**Writing Guidelines:** Imperative/infinitive form. Say exactly what you mean at normal volume and give the reason — MUST/NEVER/CRITICAL over-trigger, and hedges ("try to", "if possible") read as permission to under-deliver. State outcomes, constraints, and how to verify; keep numbered exact steps for fragile operations only (destructive commands, auth, migrations, baseline capture). No "think step by step", "be thorough", or "double-check" scaffolds — effort controls thinking and the model self-verifies; keep evidence-grounding rules ("cite the tool result"). For skills that do multi-step work, ask for one line of intent before the first tool call, brief updates on load-bearing findings, and a standalone recap at the end; never suppress updates ("no preamble", "hold findings"). Anti-formatting rules strip structure the reader wanted — say when formatting fits (lists for multifaceted content, prose otherwise). Model-agnostic guardrails stay: no deleting or skipping tests to go green, no weakened assertions, no metric gaming.
+**Writing Guidelines:** Imperative/infinitive form. Say exactly what you mean at normal volume and give the reason — MUST/NEVER/CRITICAL over-trigger, and hedges ("try to", "if possible") read as permission to under-deliver. State outcomes, constraints, and how to verify; keep numbered exact steps for fragile operations only (destructive commands, auth, migrations, baseline capture). No "think step by step", "be thorough", or "double-check" scaffolds — effort controls thinking and the model self-verifies; keep evidence-grounding rules ("cite the tool result"). The always-on verification rule already asks for an intent line, load-bearing notes, and a recap — do not repeat it per skill and never suppress it ("no preamble", "hold findings"); skills that run unattended say when the turn may end. Anti-formatting rules strip structure the reader wanted — say when formatting fits (lists for multifaceted content, prose otherwise). Model-agnostic guardrails stay: no deleting or skipping tests to go green, no weakened assertions, no metric gaming.
 
 ##### Frontmatter
 
@@ -297,6 +299,6 @@ After testing the skill, users may request improvements. Often this happens righ
 ## Related
 
 - `audit-skill-conflicts` — after a batch of skills: contradictions, trigger overlap, stale refs
-- `enhance-skill-prompts` — upgrade an existing skill's prompt (T1–T6), not its behavior
+- `enhance-skill-prompts` — upgrade an existing skill's prompt (T1–T8), not its behavior
 - `meta-mcp-builder` — MCP servers, not SKILL.md
 - `enhance-agent-guardrails` — app-repo policy, not pack authoring

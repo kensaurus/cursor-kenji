@@ -1,6 +1,6 @@
 # 0008. Bound the auto-invocable roster; commands are `/`-only
 
-Status: Accepted            Date: 2026-09-23
+Status: Accepted; decision 1 (the measure) superseded by [0010](0010-measure-the-skill-listing-like-the-client.md)            Date: 2026-09-23
 
 ## Context
 

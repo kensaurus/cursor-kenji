@@ -1,10 +1,10 @@
 ---
 name: audit-accessibility
 description: >
-  Automated WCAG 2.2 accessibility audit using playwright-cli to crawl every
-  page, inject axe-core via eval, test keyboard navigation, check color
-  contrast, ARIA labels, and heading order. Use when "audit accessibility",
-  "check a11y", "WCAG audit", "check keyboard nav", or "test screen reader".
+  WCAG 2.2 audit via playwright-cli: crawl every page, inject axe-core, test
+  keyboard nav, contrast, ARIA labels, heading order. Use when "audit
+  accessibility", "check a11y", "WCAG audit", "check keyboard nav", or "test
+  screen reader".
 license: MIT
 effort: high
 ---
@@ -368,7 +368,6 @@ Light gray text on white background is the most common contrast failure. Flag fi
 | Level AA criteria failed / checked | N / M |
 | axe-core rules passed | N |
 | Keyboard navigable pages | X/Y |
-| Overall compliance | X% (estimated) |
 
 ## 2. AXE-CORE SCAN RESULTS (per page)
 

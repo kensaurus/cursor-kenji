@@ -1,10 +1,9 @@
 ---
 name: plan-stub-checker
 description: >
-  Exhaustive audit for stubs, dead buttons, fake components, unwired handlers,
-  and dead links — then a wiring plan, no implementation. Use when "find dead
-  buttons", "stub checker", "fake components", "unwired handlers", or "dead
-  links". Live QA → test-qa.
+  Plan-only sweep for stubs, dead buttons, fake components, unwired handlers,
+  and dead links, then a wiring plan. Use when "find dead buttons", "stub
+  checker", "fake components", "unwired handlers", or "dead links".
 license: MIT
 effort: high
 ---
@@ -122,6 +121,7 @@ Taxonomy: `references/detection-taxonomy.md`
 Keep **Confirmed** vs **Review required** separate.
 
 Optional live click pass: `protocol-browser-anti-stall` + your own named session (`-s=…`) before playwright-cli.
+
 Delegate a detection pass to a subagent only when it is sizeable, independent of the others, and its raw output (grep dumps, route manifests) has no place in the plan; brief it with the exact commands and the columns to return. It edits nothing, like this pass. Long sweeps are expected — context compaction exists, so finish the inventory rather than wrapping up early.
 
 ---

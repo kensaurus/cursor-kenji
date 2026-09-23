@@ -1,6 +1,10 @@
 ---
 name: enhance-web-landing
-description: Build landing pages, portfolios, and marketing sites that don't look AI-generated. Use when asked for "landing page", "portfolio", "marketing site", "anti-slop", "Awwwards-style", "premium frontend", or when design needs a strong point of view.
+description: >
+  Build landing pages, portfolios, and marketing sites that don't look
+  AI-generated. Use for "landing page", "portfolio", "marketing site",
+  "anti-slop", "Awwwards-style", "premium frontend", or a design that needs a
+  point of view.
 license: MIT
 ---
 

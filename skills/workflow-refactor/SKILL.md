@@ -1,11 +1,10 @@
 ---
 name: workflow-refactor
 description: >
-  Scoped behavior-preserving refactor: map dependencies, change structure,
-  run affected tests. Use when "refactor this", "reduce duplication",
-  "improve readability". Dead code → plan-dead-code. Repo-wide
-  anti-patterns → audit-code-quality. Bulk transform → burndown-full /
-  audit-codemod-safety.
+  Scoped, behavior-preserving refactor: map dependencies, change structure,
+  run affected tests. Use when "refactor this", "reduce duplication", or
+  "improve readability". Dead code → plan-dead-code. Repo-wide smells →
+  audit-code-quality.
 license: MIT
 ---
 

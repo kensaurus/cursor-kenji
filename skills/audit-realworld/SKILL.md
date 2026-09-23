@@ -1,10 +1,10 @@
 ---
 name: audit-realworld
 description: >
-  Read-only full-stack conformance audit against RealWorld ("Conduit"):
-  formal API spec, shared E2E suite, and closest-stack reference. Use when
-  "audit against RealWorld", "Conduit conformance", or "is my full-stack
-  app complete?". General user journeys → audit-ux-journeys.
+  Read-only conformance audit of a full-stack app against RealWorld
+  ("Conduit"): API spec, shared E2E suite, closest-stack reference. Use when
+  "audit against RealWorld", "Conduit conformance", or "is my full-stack app
+  complete?".
 license: MIT
 effort: high
 ---

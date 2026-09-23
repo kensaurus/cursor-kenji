@@ -1,10 +1,9 @@
 ---
 name: plan-backup-dr
 description: >
-  Audit whether a project can actually recover from data loss — not just whether
-  backups exist — then emit a phased DR plan. Use when "can we recover if the DB
-  dies", "audit our backups", "what's our RPO/RTO", or "disaster recovery". Plan
-  only. Destructive-op gates stay on plan-data-integrity.
+  Plan-only audit of whether a project can actually recover from data loss,
+  not just whether backups exist. Use when "can we recover if the DB dies",
+  "audit our backups", "what's our RPO/RTO", or "disaster recovery".
 license: MIT
 effort: high
 ---

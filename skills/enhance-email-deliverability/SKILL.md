@@ -1,10 +1,10 @@
 ---
 name: enhance-email-deliverability
 description: >
-  Audit and fix transactional/marketing deliverability — SPF, DKIM, DMARC,
-  reputation, bounce/complaint handling, list hygiene, unsubscribe compliance —
-  so mail lands in the inbox. Use when "emails go to spam", "set up SPF/DKIM",
-  or "check deliverability". Templates stay on design-email.
+  Audit and fix email deliverability: SPF, DKIM, DMARC, reputation, bounces
+  and complaints, list hygiene, unsubscribe compliance. Use when "emails go to
+  spam", "set up SPF/DKIM", or "check deliverability". Templates →
+  design-email.
 license: MIT
 ---
 

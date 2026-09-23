@@ -2,10 +2,9 @@
 name: docs-adr
 description: >
   Create and maintain lightweight Architecture Decision Records as
-  agent-readable decision memory — what was decided, why, and which
-  alternatives were rejected. Use when "record this decision", "set up ADRs",
-  "the agent keeps suggesting Y again". Docs vs code drift → plan-docs-sync.
-  Session state → handoff.
+  agent-readable decision memory: what was decided, why, and what was
+  rejected. Use when "record this decision", "set up ADRs", or "the agent
+  keeps suggesting Y again".
 license: MIT
 effort: high
 ---

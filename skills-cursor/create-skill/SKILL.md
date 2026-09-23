@@ -251,7 +251,7 @@ Match specificity to the task's fragility:
 - **Effort, not prose, sets thinking.** Leave out "think step by step", "think hard", and "double-check your work"; set `effort:` and state the outcome to verify. Keep evidence rules ("tie every finding to a tool result") — they target fabricated progress, not thinking.
 - **Normal volume, with the reason.** MUST/NEVER/CRITICAL over-trigger; "try to" and "if possible" read as permission to skip. Say it once and say why.
 - **Describe success, not the grader.** State every requirement; leave out how the output will be scored or tested by a reader.
-- **Ask for updates.** One line of intent before the first tool call, a note on load-bearing findings, a standalone recap at the end. A skill that runs unattended also says when the turn may end.
+- **Do not suppress updates.** The always-on verification rule asks for an intent line, load-bearing notes and a recap; never add "no preamble" or "hold findings". A skill that runs unattended says when the turn may end.
 - **Frontend skills name the defaults to avoid** (cream backgrounds, italic accent words, "01/02/03" labels, pill buttons, Inter/Roboto, purple gradients, three equal cards); "avoid a generic look" swaps one default for another.
 
 ---

@@ -1,10 +1,9 @@
 ---
 name: audit-ux
 description: >
-  Per-page UX audit using NN/g heuristics, Intuit microcopy, and Google HEART.
-  Use when evaluating usability, auditing microcopy, checking UX heuristics, or
-  assessing cognitive load. Cross-page flows/IA → audit-ux-journeys.
-  Layout/breakpoints → audit-responsive. Empty/error states → audit-ui-states.
+  Per-page UX audit with NN/g heuristics, microcopy review, and Google HEART.
+  Use when evaluating usability, auditing microcopy, checking UX heuristics,
+  or assessing cognitive load. Cross-page flows/IA → audit-ux-journeys.
 license: MIT
 effort: high
 ---
@@ -79,75 +78,6 @@ One short block in whatever shape fits: product type, the human problem,
 the primary human and their emotional context, the top core tasks, the
 success moment, trust level (money / data / time / reputation), page count,
 auth pattern, locale/i18n, and known latency or error-prone points.
-
-Trace how data flows through the system from the human's perspective:
-
-Search for data-flow entry points: `api/` for API routes, `actions/` for server actions,
-`hooks/use*` for data-fetching hooks, `lib/` for core business logic. Count occurrences
-of `fetch|axios|ky|useSWR|useQuery|trpc` in `*.{ts,tsx}` to map integration points.
-
-Map the pipeline for each core task:
-
-```
-PIPELINE MAP (per core task):
-1. Human input → [form / click / gesture]
-2. Client-side validation → [schema / inline / none]
-3. API call → [endpoint, method, payload]
-4. Server processing → [validation, business logic, side effects]
-5. Database operation → [create / read / update / delete]
-6. Response → [shape, status codes, error format]
-7. Client update → [optimistic / refetch / cache invalidation]
-8. Human feedback → [toast / redirect / inline update / nothing]
-
-Latency-sensitive points: [where slow responses hurt UX]
-Error-prone points: [where failures are most likely]
-Trust-sensitive points: [where wrong data erodes confidence]
-```
-
-### 0c. Map Routes and Information Architecture
-
-Discover routes by framework: `app/**/page.tsx` (Next.js App Router), `pages/**/*.tsx`
-(Next.js Pages Router), `src/routes/` (SvelteKit / Remix), `router.*` (Vue Router /
-React Router config).
-
-Build the information architecture mental model (per-page only):
-
-```
-INFORMATION ARCHITECTURE:
-- Navigation structure: [flat / hierarchical / hub-and-spoke]
-- Depth: [max clicks from landing to deepest page]
-- Cross-links: [can users jump between sections, or must they go back?]
-- Dead ends: [pages with no forward navigation]
-```
-
-### 0d. Identify Emotional Touchpoints
-
-Map the emotional arc of core user journeys:
-
-```
-EMOTIONAL MAP (per core flow):
-- Entry emotion: [anxious / curious / frustrated / neutral]
-- Friction points: [where confusion or anxiety spikes]
-- Confidence builders: [where the product earns trust]
-- Peak moment: [the most positive or negative experience]
-- End emotion: [satisfied / relieved / confused / abandoned]
-```
-
-### 0e. Record Full Discovery
-
-```
-PRODUCT CONTEXT:
-- Type: [SaaS / e-commerce / dashboard / etc.]
-- Human problem solved: [the pain, not the feature]
-- Primary human: [description including emotional context]
-- Core tasks: [list top 3-5]
-- Success moment: [what "done" looks like to the human]
-- Trust level: [what's at stake — money / data / time / reputation]
-- Page count: [N]
-- Auth required: [YES/NO — pattern]
-- Locale/i18n: [YES — languages / NO]
-- Pipeline health: [known latency or error-prone points]
-```
 
 ---
 

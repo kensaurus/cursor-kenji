@@ -1,9 +1,9 @@
 ---
 name: audit-backend-architecture
 description: >
-  Read-only audit and decision advisor for backend architecture, topology-gated by
-  stack. Use when "audit backend architecture", "which pattern should I use", "am I
-  over-engineering", "sync vs event-driven". Mechanical boundary rules →
+  Read-only backend-architecture audit and pattern advisor, gated by stack.
+  Use when "audit backend architecture", "which pattern should I use", "am I
+  over-engineering", or "sync vs event-driven". Enforced boundaries →
   enhance-arch-boundaries.
 license: MIT
 effort: high

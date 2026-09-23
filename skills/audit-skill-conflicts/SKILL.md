@@ -1,10 +1,10 @@
 ---
 name: audit-skill-conflicts
 description: >
-  Read-only audit of an agent-skill pack for contradictory directives, overlapping
+  Read-only audit of a skill pack for contradictory directives, overlapping
   triggers, stale cross-refs, and context bloat. Use when "audit my skills",
   "conflicting skills", "wrong skill triggered", or after adding a batch.
-  Per-file spec → validate:skills. How to write one → meta-skill-creator.
+  Authoring → meta-skill-creator.
 license: MIT
 effort: high
 ---
@@ -110,8 +110,6 @@ delineation, or a chain step no skill owns. This is *pack* coverage, not
 product gaps.
 
 **Context-budget bloat** — Over-broad descriptions (narrow skill, greedy
-triggers). Bodies near the 500-line cap that a 60-line skill could hold.
-**Context-budget bloat** — Over-broad descriptions (narrow skill, greedy
 triggers): descriptions ride in every request, so they are the always-on
 cost. Bodies load only on trigger and cache well; flag a body for dated
 instructions, not for length alone. User-initiated rituals should carry
@@ -173,7 +171,7 @@ dry-run ran.
 ## Related
 
 - `meta-skill-creator` — write a new SKILL.md
-- `enhance-skill-prompts` — upgrade an existing skill's prompt (T1–T6), not its behavior
+- `enhance-skill-prompts` — upgrade an existing skill's prompt (T1–T8), not its behavior
 - `validate:skills` — per-file spec after description edits
 - `enhance-agent-guardrails` — app-repo policy, not pack coherence
 - `plan-docs-sync` — docs vs code

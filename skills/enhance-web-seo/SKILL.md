@@ -1,9 +1,9 @@
 ---
 name: enhance-web-seo
 description: >
-  Audit and fix SEO for any web app. Use when asked to "improve SEO", "add meta tags",
-  "fix search ranking", "add structured data", "sitemap", "canonical URLs", "Open Graph",
-  "Google indexing", "rich results", "SEO audit", or "why is my site not ranking".
+  Audit and fix SEO for a web app. Use when "improve SEO", "SEO audit", "add
+  meta tags", "add structured data", "sitemap", "canonical URLs", "Open
+  Graph", "Google indexing", "rich results", or "why is my site not ranking".
 license: MIT
 ---
 
@@ -147,24 +147,7 @@ Validate each JSON-LD block found in Phase 1a:
 
 ## Phase 3: Research current best practices  [HIGH freedom]
 
-```json
-firecrawl:firecrawl_search
-{
-  Follow `/research`: Context7 for the framework's metadata, sitemap, and robots API; Firecrawl for current Google guidance on CWV, structured data, and rich results, dated to now. Anchor to the framework version actually installed.
-  "limit": 3,
-  "sources": [{ "type": "web" }]
-}
-```
-
-Also check for framework-specific SEO guidance:
-```json
-firecrawl:firecrawl_search
-{
-  "query": "<framework> SEO metadata structured data 2026",
-  "limit": 3,
-  "sources": [{ "type": "web" }]
-}
-```
+Follow `/research`: Context7 for the framework's metadata, sitemap, and robots API; Firecrawl for current Google guidance on CWV, structured data, and rich results, dated to now. Anchor to the framework version actually installed.
 
 ---
 

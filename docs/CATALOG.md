@@ -156,8 +156,8 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Related:** `audit-backend-architecture`, `housekeep-gates`, `docs-adr`, `enhance-agent-guardrails`, `plan-rls-audit`, `plan-secrets-audit`, `audit-doctrine`
 
 #### `enhance-skill-prompts`
-**Triggers:** "enhance this skill's prompts", "upgrade skill authoring", "apply the prompt playbook", "degrees of freedom", "worked example", T1–T6
-**What it does:** Upgrades *how* an existing SKILL.md instructs (degrees of freedom, structured CoT, one worked example, self-critique rubric, term consistency) without changing *what* the skill does. Routing/frontmatter stay put. New skill from scratch → `meta-skill-creator`. Playbook: [PROMPT-ENHANCEMENT-PLAYBOOK.md](PROMPT-ENHANCEMENT-PLAYBOOK.md).
+**Triggers:** "enhance this skill's prompts", "upgrade skill authoring", "apply the prompt playbook", "degrees of freedom", "worked example", T1–T8
+**What it does:** Upgrades *how* an existing SKILL.md instructs (degrees of freedom, a classification contract, one worked example, an evidence rubric, term consistency, effort declaration, normal-volume phrasing) without changing *what* the skill does. Routing stays put; the only frontmatter change is an `effort:` key. New skill from scratch → `meta-skill-creator`. Playbook: [PROMPT-ENHANCEMENT-PLAYBOOK.md](PROMPT-ENHANCEMENT-PLAYBOOK.md).
 **Related:** `meta-skill-creator`, `audit-skill-conflicts`
 
 ---
@@ -834,7 +834,7 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 
 #### `meta-skill-creator` *(Apache-2.0, adapted from Anthropic)*
 **Triggers:** "author a cursor-kenji skill", "SKILL.md format", "skill structure", "skill best practices"
-**What it does:** Guide for creating effective AI agent skills with proper frontmatter, descriptions, progressive disclosure structure, and concise body. New skills inherit T1–T6 (see [PROMPT-ENHANCEMENT-PLAYBOOK.md](PROMPT-ENHANCEMENT-PLAYBOOK.md)).
+**What it does:** Guide for creating effective AI agent skills with proper frontmatter, descriptions, progressive disclosure structure, and concise body. New skills inherit T1–T8, including the `effort:` declaration (see [PROMPT-ENHANCEMENT-PLAYBOOK.md](PROMPT-ENHANCEMENT-PLAYBOOK.md)).
 **Related:** `audit-skill-conflicts`, `enhance-skill-prompts`, `meta-mcp-builder`, `create-skill`
 
 #### `audit-skill-conflicts`

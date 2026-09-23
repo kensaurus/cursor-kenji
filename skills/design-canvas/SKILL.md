@@ -1,6 +1,9 @@
 ---
 name: design-canvas
-description: Create museum-quality visual art in .png and .pdf formats using design philosophy. Use when user asks for poster, visual design, infographic, certificate, badge, banner, social media graphic, print design, or mentions "create artwork", "design graphic", "visual identity", or "print material".
+description: >
+  Create museum-quality visual art as .png or .pdf: posters, infographics,
+  certificates, badges, banners, social graphics, print. Use when "create
+  artwork", "design graphic", "visual identity", or "print material".
 license: Apache-2.0
 ---
 

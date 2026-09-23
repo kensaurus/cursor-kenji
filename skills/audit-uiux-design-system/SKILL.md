@@ -1,11 +1,10 @@
 ---
 name: audit-uiux-design-system
 description: >
-  Audit visual-system coherence: tokens, component variants, color/type/
+  Audit visual-system coherence: tokens, component variants, color, type,
   spacing, dark mode. Use for "design drift", inconsistent UI, or duplicate
-  primitives. Per-page usability → audit-ux. Breakpoints →
-  audit-responsive. Empty/error states → audit-ui-states. Plan-only
-  unification → plan-uiux-unification.
+  primitives. Per-page usability → audit-ux. Plan-only unification →
+  plan-uiux-unification.
 license: MIT
 effort: high
 ---

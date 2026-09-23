@@ -1,11 +1,10 @@
 ---
 name: docs-comparison-pages
 description: >
-  Write honest bottom-funnel pages — "X vs Y", "alternatives to X", "migrate
-  from X" — from verified facts, one unique page each, with a review date so
-  they never rot into spam. Use when "comparison page", "vs page",
-  "alternatives to", "competitor page", "migration guide from". Meta/schema →
-  enhance-web-seo.
+  Write honest "X vs Y", "alternatives to X", and "migrate from X" pages from
+  verified facts, each unique and dated for review. Use when "comparison
+  page", "vs page", "alternatives to", "competitor page", or "migration guide
+  from".
 license: MIT
 effort: high
 ---
@@ -70,8 +69,7 @@ real query; skip alternatives nobody compares against.
 
 ### 2. Verify facts  [LOW freedom — run exactly]
 
-For each alternative: fetch its pricing page, feature/limits page, and docs this session — recognizing the product's name is not knowing its current prices or limits, so fetch even for products you know well
-(Firecrawl or WebFetch); record `URL · fetched date · quote` in a source
+For each alternative: fetch its pricing page, feature/limits page, and docs this session (Firecrawl or WebFetch) — recognizing the product's name is not knowing its current prices or limits, so fetch even for products you know well. Record `URL · fetched date · quote` in a source
 block at the bottom of the page. Product-side facts come from the repo
 (`pricing`, limits, feature flags) with file references. Anything
 unverifiable is omitted, not softened.

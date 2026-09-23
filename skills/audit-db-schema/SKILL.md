@@ -1,10 +1,9 @@
 ---
 name: audit-db-schema
 description: >
-  Audit database schema for consistency, validation, and industry standards. Use
-  when reviewing schema design, naming conventions, constraints, indexes, or
-  migrations. Destructive-op gates → plan-data-integrity. Who-can-read-what RLS
-  → plan-rls-audit. Restore/RPO → plan-backup-dr.
+  Audit a database schema for consistency, constraints, naming, indexes, and
+  migrations. Use when reviewing schema design. Destructive-op gates →
+  plan-data-integrity. RLS → plan-rls-audit. Restore/RPO → plan-backup-dr.
 license: MIT
 effort: high
 ---

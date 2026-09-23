@@ -1,11 +1,10 @@
 ---
 name: enhance-arch-boundaries
 description: >
-  Install mechanically-enforced architecture boundaries (dependency-cruiser /
-  eslint-boundaries) so layer direction, feature isolation, and forbidden
-  imports fail CI. Use when "enforce module boundaries" or "stop
-  spaghetti imports". Advisory audit → audit-backend-architecture.
-  Rule content → audit-doctrine.
+  Enforce architecture boundaries in CI with dependency-cruiser or
+  eslint-boundaries: layer direction, feature isolation, forbidden imports.
+  Use when "enforce module boundaries" or "stop spaghetti imports". Advice
+  only → audit-backend-architecture.
 license: MIT
 effort: high
 ---

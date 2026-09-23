@@ -3,8 +3,8 @@ name: audit-infra-cost
 description: >
   Read-only audit of hosting, database, storage, egress, and serverless spend
   (Supabase, Vercel, S3/R2, edge). Use when "hosting bill is high", "cut infra
-  costs", or a bill jumps. CI minutes → audit-cicd. Model tokens →
-  plan-llm-cost-guardrails. Consumes test-load numbers.
+  costs", or a bill jumps. CI minutes → audit-cicd. LLM tokens →
+  plan-llm-cost-guardrails.
 license: MIT
 effort: high
 ---

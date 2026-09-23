@@ -1,10 +1,10 @@
 ---
 name: backend-observability
 description: >
-  Implement correlated errors, traces, and structured logs with PII
-  redaction. Use when "add logging", "instrument this", "correlate error
-  to trace", or wiring Sentry/Langfuse. Plan-only observability audit →
-  plan-error-handling. Investigate Sentry issues → debug-sentry-monitor.
+  Implement correlated errors, traces, and structured logs with PII redaction.
+  Use when "add logging", "instrument this", "correlate error to trace", or
+  wiring Sentry/Langfuse. Plan-only audit → plan-error-handling. Sentry triage
+  → debug-sentry-monitor.
 license: MIT
 ---
 

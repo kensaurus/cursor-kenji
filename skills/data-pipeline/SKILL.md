@@ -1,6 +1,10 @@
 ---
 name: data-pipeline
-description: Wire ETL, ingestion, cron, edge-function, and queue jobs correctly. Use for "build a pipeline", "sync X into Y", "nightly aggregation", "cron double-counts", "dedupe", "backfill", "the numbers are wrong after a retry". Bakes in idempotency, atomic writes, data contracts, dead-letter, and observability.
+description: >
+  Wire ETL, ingestion, cron, and queue jobs with idempotency, atomic writes,
+  data contracts, and dead-letters. Use for "build a pipeline", "sync X into
+  Y", "cron double-counts", "dedupe", "backfill", or "the numbers are wrong
+  after a retry".
 license: MIT
 ---
 

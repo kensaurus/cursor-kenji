@@ -1,10 +1,10 @@
 ---
 name: test-load
 description: >
-  Design and run a k6/Artillery load profile that measures throughput, latency
-  percentiles, error rate, and the breaking point under concurrent traffic. Use
-  when "load test this", "will it handle launch traffic", or "find the breaking
-  point". Resilience-by-reading-code → audit-resilience. Never hit prod unsigned.
+  Design and run a k6 or Artillery load profile: throughput, latency
+  percentiles, error rate, breaking point. Use when "load test this", "will it
+  handle launch traffic", or "find the breaking point". Code-level resilience
+  → audit-resilience.
 license: MIT
 ---
 

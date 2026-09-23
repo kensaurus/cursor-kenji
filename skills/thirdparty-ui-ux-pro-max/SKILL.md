@@ -3,8 +3,8 @@ name: thirdparty-ui-ux-pro-max
 description: >
   Third-party skill — searchable style catalog, palettes, typography, and UX
   guidelines via Python scripts. Use when the user names ui-ux-pro-max or asks
-  to look up a palette/font pairing from that catalog. Generic UI review →
-  audit-ux / audit-uiux-design-system.
+  for a palette or font pairing from that catalog. Generic UI review →
+  audit-ux.
 ---
 
 # UI UX Pro Max

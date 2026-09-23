@@ -1,10 +1,10 @@
 ---
 name: test-unit
 description: >
-  Write unit/integration tests for a named module or change. Use when
+  Write unit and integration tests for a named module or change. Use when
   "write unit tests" or "add tests for this function". Coverage plan →
-  plan-test-coverage. Mutation score → test-mutation. Story QA →
-  test-qa. This-diff Playwright → test-playwright.
+  plan-test-coverage. Mutation score → test-mutation. Browser check →
+  test-playwright.
 license: MIT
 ---
 
@@ -216,6 +216,8 @@ trivial getters/setters; framework behavior; CSS classes or DOM structure
 ## Step 4: Match the repo's patterns  [HIGH freedom]
 
 Write mocks, component, hook, and route-handler tests in the shape the existing suite uses (Step 0b) and the framework docs describe (Step 1). Generic templates per category live in [references/details.md](references/details.md) for repos with no precedent.
+
+---
 
 ## Step 5: Test Data Management  [HIGH freedom]
 

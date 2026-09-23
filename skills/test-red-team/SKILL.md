@@ -1,10 +1,10 @@
 ---
 name: test-red-team
 description: >
-  Adversarial red-team of a running web, React Native, or Capacitor hybrid app. Use when
-  asked to "red team this app", "attack my app", "break it", "find all the defects",
-  "adversarial test", "pre-launch hardening", "pentest the app", or "full app QA".
-  Naive monkey / guest vs logged-in wander → test-exploratory.
+  Red-team a running web, React Native, or Capacitor app. Use when "red team
+  this app", "attack my app", "break it", "find all the defects", "adversarial
+  test", "pentest the app", "pre-launch hardening", or "full app QA". Monkey
+  test → test-exploratory.
 license: MIT
 effort: high
 ---

@@ -13,6 +13,7 @@ Subagents help you:
 - **Preserve context** by isolating exploration from your main conversation
 - **Specialize behavior** with focused system prompts for specific domains
 - **Reuse configurations** across projects with user-level subagents
+
 Delegate when the track is sizeable and independent, or when its output is verbose and the main context does not need it; launch independent subagents in one message. A handful of tool calls is cheaper inline. Brief each subagent precisely once and commit to the delegation.
 
 ### Inferring from Context

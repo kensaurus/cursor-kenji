@@ -41,7 +41,7 @@ Orient to any repo in under 5 minutes. Read first, explain second.
 
 ## Step 1: Stack & entry points  [LOW freedom — run exactly]
 
-Read these in full (grep finds fragments; the briefing needs the whole file). The table is the floor, not the ceiling: when the repo does not match it (monorepo, unusual framework, no `src/app`), follow what the manifest and top-level tree point to before writing anything:
+Read these (grep finds fragments; the briefing needs the whole file). The table is the floor, not the ceiling: when the repo does not match it (monorepo, unusual framework, no `src/app`), follow what the manifest and top-level tree point to before writing anything:
 
 | File | What to extract |
 |------|-----------------|

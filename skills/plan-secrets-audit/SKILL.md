@@ -1,10 +1,9 @@
 ---
 name: plan-secrets-audit
 description: >
-  Audit the working tree and git history for exposed credentials and mis-scoped
+  Plan-only scan of the working tree and git history for exposed or mis-scoped
   keys, then a rotate-vs-relocate plan. Use when "hardcoded secrets", "did I
-  commit a key", "secret scan", "is my .env safe", or "rotate keys". Do not fire
-  for "RLS audit" or generic "security burndown".
+  commit a key", "secret scan", "is my .env safe", or "rotate keys".
 license: MIT
 effort: high
 ---

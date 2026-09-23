@@ -1,10 +1,10 @@
 ---
 name: audit-analytics
 description: >
-  Read-only audit of product-analytics instrumentation: event taxonomy, funnel
-  completeness, consent-gated firing, dead/duplicate/phantom events. Use when
-  "audit our analytics", "are we tracking the right events", "funnel
-  instrumentation", or before iterate-post-launch. PostHog/Amplitude/Mixpanel/GA4.
+  Read-only audit of product-analytics events (PostHog, Amplitude, Mixpanel,
+  GA4): taxonomy, funnels, consent-gated firing, dead or duplicate events. Use
+  when "audit our analytics", "are we tracking the right events", or "funnel
+  instrumentation".
 license: MIT
 effort: high
 ---

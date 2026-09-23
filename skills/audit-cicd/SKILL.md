@@ -1,9 +1,10 @@
 ---
 name: audit-cicd
 description: >
-  Audit CI/CD pipelines (GitHub Actions) for cost, speed, and safety. Use when the Actions
-  bill is high, Actions minutes, runner cost, slow CI, artifact/cache storage, or "CI/CD /
-  workflow audit". Gate logic (bypass, ratchet gaming, required-but-not) → audit-gate-logic.
+  Audit GitHub Actions CI/CD for cost, speed, and safety. Use when the Actions
+  bill or minutes are high, runners cost too much, CI is slow, cache storage
+  grows, or "CI/CD / workflow audit". Bypass or ratchet gaming →
+  audit-gate-logic.
 license: MIT
 effort: high
 ---

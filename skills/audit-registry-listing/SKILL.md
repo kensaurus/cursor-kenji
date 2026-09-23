@@ -1,11 +1,10 @@
 ---
 name: audit-registry-listing
 description: >
-  Read-only audit of where a repo is discovered: README first screen, npm /
-  PyPI metadata and tarball, GitHub description, topics, social preview,
-  plugin manifests, install one-liner. Use when "audit our npm listing",
-  "README as landing page", "GitHub topics", "why nobody finds the package".
-  Fix → enhance-readme.
+  Read-only audit of where a repo is found: README first screen, npm/PyPI
+  metadata and tarball, GitHub topics, social preview, plugin manifests. Use
+  when "audit our npm listing", "README as landing page", or "why nobody finds
+  the package". Fix → enhance-readme.
 license: MIT
 effort: high
 ---

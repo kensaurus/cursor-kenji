@@ -14,13 +14,12 @@ license: MIT
 session, anti-stall, and live re-test after each fix `[LOW freedom — run exactly]`.
 Driver is **playwright-cli**, never Playwright MCP.
 
-The job is not done when the code compiles. It is done when you have driven
-the live app as a user, found what's broken or clunky, and **fixed it**.
 The job is not done when the code compiles. It is done when you have driven the live app as a user, found what's broken or clunky, and **fixed it** — Check and Act are the deliverable.
 
 > **Plan** = the change you just made. **Do** = already in the code.
 > **Check** = drive the live app (this skill). **Act** = fix every pain
 > point in the same turn.
+
 Your turn ends after Phase 7, or at a BLOCKED item that needs the user's decision — not with PAIN found and unfixed, and not with a fix that has not been re-driven live.
 
 Read `protocol-browser-anti-stall` before any browser action — Rule 0

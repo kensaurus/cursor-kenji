@@ -1,10 +1,10 @@
 ---
 name: plan-dependency-provenance
 description: >
-  Audit dependencies for hallucinated or slopsquatted packages, supply-chain
-  risk, and licensing gaps, then a remediation plan. Use when "check my
-  dependencies", "is this package real", "slopsquatting", "SBOM", or "did the AI
-  hallucinate a package".
+  Plan-only audit of dependencies for hallucinated or slopsquatted packages,
+  supply-chain risk, and license gaps. Use when "check my dependencies", "is
+  this package real", "slopsquatting", "SBOM", or "did the AI hallucinate a
+  package".
 license: MIT
 effort: high
 ---

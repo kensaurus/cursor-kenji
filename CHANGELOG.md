@@ -6,6 +6,79 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.38.0] — 2026-09-23
+
+Follow-through on 1.37. A section-by-section check of the Opus 5.5 plan
+against the repo, run in fresh contexts, found edits that were only half
+applied. Reading the Claude Code client showed its skill-listing budget
+works differently from what ADR-0008 assumed.
+
+### Changed
+
+- **Skill descriptions trimmed.** 137 descriptions were rewritten to about
+  230 chars. The rewrite kept the distinct trigger phrases and the handoffs
+  that separate overlapping triggers, and dropped filler, synonyms, and lists
+  of chained skills. The pack's Claude Code listing drops about 15%, from
+  45,573 to 38,979 chars; every request carries that listing on both hosts.
+- **`validate-skills` measures the listing the way the client does**: one
+  `- name: description` line per model-invocable skill and command, with
+  agents reported separately. It fails above `LISTING_MAX_CHARS` (39,000).
+  ADR-0010 supersedes ADR-0008's measure and corrects its facts:
+  - the budget is 1% of the context window at 3 chars/token for current
+    models, 30,000 chars on a 1M Opus 5.5 session;
+  - built-in skills share that budget;
+  - over budget, the least-used skills show by name only, and nothing is
+    dropped.
+- **Keep every description visible on Claude Code** with
+  `"skillListingBudgetFraction": 0.02` in `~/.claude/settings.json`. The
+  installer prints the installed listing size and this setting; it does not
+  change your settings.
+- **Authoring surfaces say T1–T8**: `enhance-skill-prompts`,
+  `meta-skill-creator`, `audit-skill-conflicts`, CATALOG, and the playbook
+  describe T2 as a classification contract and T4 as an evidence rubric.
+- **`docs/DISTRIBUTION.md`**: the completion-hook column lists Claude Code and
+  the plugin's Stop hook, and warns against running the plugin hook and the
+  `--claude` hook together.
+
+### Fixed
+
+- **Leftovers from 1.37.0's mechanical edits.** In about 30 files a passage
+  was replaced but its old lines stayed under the new ones:
+  - `audit-ux` had a second set of sections 0b–0e;
+  - `audit-security` kept its old vulnerability examples;
+  - `audit-code-review` kept its DO/DON'T lists after the new review rule;
+  - `enhance-web-seo` had broken JSON in its research step;
+  - `debug-error` and `debug-sentry-monitor` repeated checklists;
+  - `tdd-patterns` had an orphan comment;
+  - several paragraphs had fallen into the list or blockquote above them.
+- **`backend-realtime` printed secrets.** It told the agent to `cat .env*`,
+  which prints secret values; it now lists variable names only.
+- **`rules/approved-plan-execution.mdc` had invalid YAML frontmatter**: an
+  unquoted `: ` in the description. A strict parser rejects it, which can
+  drop the rule's `paths:` scope.
+- **Merge installs now prune leftovers from older releases** on both hosts:
+  - the renamed `/plan` command, pruned only while it still carries the
+    pack's description;
+  - the `native-rn-monorepo` command bundle, which older installers copied
+    into the global commands folder, registering ten `native-rn-monorepo:*`
+    commands in every project.
+- **`migrate-to-skills`** skipped creating the skills folders when no
+  subagent tool was available.
+- **`create-skill` and `meta-skill-creator`** told every skill to repeat the
+  always-on update rule. They now say never to suppress it, and to add a
+  turn-end line only for unattended skills.
+- **`audit-auth-flows` and its annotated exemplar** match again: same effort
+  key, same finding-shape wording.
+- **Closure runs could not record a verification rung that does not apply.**
+  In a headless `/complete-everything` probe on a repo with no typecheck or
+  lint, the unchecked rungs made the Stop hook block, and the model invented a
+  `[-]` marker that the hook then skipped with no reason required. The skill
+  now defines `- [-] <rung> — n/a: <evidence>`. The completion gate counts a
+  `[-]` line without an `n/a:` reason as open, and `completion-judge` checks
+  the reason. The skill also notes that Claude Code shows "Stop hook error
+  occurred" for every Stop-hook block; that is the gate working, not a
+  failure.
+
 ## [1.37.1] — 2026-09-23
 
 ### Fixed

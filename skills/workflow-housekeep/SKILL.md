@@ -1,11 +1,10 @@
 ---
 name: workflow-housekeep
 description: >
-  Apply repository maintenance: sync README, remove confirmed dead
-  artifacts, and safely update dependencies. Use when "housekeep",
-  "clean up repo", "update README", or "update dependencies". Unused
-  files/exports/deps → plan-dead-code. Parked work → housekeep-backlog.
-  Design drift → housekeep-design.
+  Repository maintenance: sync the README, remove confirmed dead artifacts,
+  update dependencies safely. Use when "housekeep", "clean up repo", "update
+  README", or "update dependencies". Unused exports → plan-dead-code. Parked
+  work → housekeep-backlog.
 license: MIT
 ---
 

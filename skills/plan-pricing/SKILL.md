@@ -1,11 +1,10 @@
 ---
 name: plan-pricing
 description: >
-  Plan-only pricing and packaging audit: value metric, tiers, price points,
-  free-tier boundary, annual and enterprise anchors, credits, plus a
-  willingness-to-pay research plan. Use when "pricing strategy", "what should
-  I charge", "value metric", "seat vs usage", "are we underpriced". Page →
-  enhance-web-conversion.
+  Plan-only pricing audit: value metric, tiers, price points, free-tier
+  boundary, annual and enterprise anchors, and a willingness-to-pay study. Use
+  when "pricing strategy", "what should I charge", "value metric", "seat vs
+  usage", or "are we underpriced".
 license: MIT
 effort: high
 ---

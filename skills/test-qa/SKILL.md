@@ -1,10 +1,9 @@
 ---
 name: test-qa
 description: >
-  Generic web-app CRUD/story QA fallback when no project-specific skill
-  applies. Use when "QA the app", "test CRUD", or "smoke test". Native →
-  mobile-emulator-test. Identity wander → test-exploratory. Dead controls
-  → plan-stub-checker. Pixel diffs → test-visual-regression.
+  Web-app CRUD and story QA when no project-specific skill applies. Use when
+  "QA the app", "test CRUD", or "smoke test". Native → mobile-emulator-test.
+  Guest vs logged in → test-exploratory. Pixel diffs → test-visual-regression.
 license: MIT
 ---
 

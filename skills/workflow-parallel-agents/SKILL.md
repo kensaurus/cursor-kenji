@@ -121,6 +121,7 @@ Include:
 3. Submit prompt once
 4. Cursor runs all models in parallel
 5. Compare results; Cursor recommends the best
+
 Claude Code: send the same brief to N subagents in one message (different `effort` levels, or a different approach named in each brief); compare the candidates yourself or hand them to a fresh-context reviewer that flags only correctness and requirement gaps.
 
 Best for:
@@ -153,6 +154,7 @@ While implementing feature X locally:
 One agent reviews for security, another for performance:
 - Agent A: "Review `app/api/` for security issues (auth, input validation, RLS)"
 - Agent B: "Review `app/api/` for performance (N+1s, missing indexes, large payloads)"
+
 Each reviewer reports only findings in its lane, with file:line evidence — not style or general cleanups.
 
 ## Worktree Tips  [LOW freedom — run exactly]

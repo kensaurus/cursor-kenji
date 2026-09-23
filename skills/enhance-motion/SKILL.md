@@ -1,10 +1,9 @@
 ---
 name: enhance-motion
 description: >
-  Audit an existing app's design system and motion, then apply a coherent,
-  performant, reduced-motion-safe pass. Use when "motion pass", "animate the
-  app", or "add micro-interactions across the app". One new isolated animation →
-  design-motion.
+  Audit an existing app's motion, then apply one coherent, performant,
+  reduced-motion-safe pass. Use when "motion pass", "animate the app", or "add
+  micro-interactions across the app". One new animation → design-motion.
 license: MIT
 ---
 

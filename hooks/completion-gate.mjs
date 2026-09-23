@@ -29,10 +29,16 @@ function actionableItems(markdown) {
       continue;
     }
 
-    const task = line.match(/^\s*-\s*\[\s\]\s+(.+?)\s*$/);
-    if (!task) continue;
     if (/human gate|blocked on human|blocked on you/i.test(section)) continue;
-    items.push(task[1]);
+    const task = line.match(/^\s*-\s*\[\s\]\s+(.+?)\s*$/);
+    if (task) {
+      items.push(task[1]);
+      continue;
+    }
+    // `[-]` marks a rung that does not apply. It is not a pass, so it only
+    // stops counting as open work when it states why ("n/a: <evidence>").
+    const na = line.match(/^\s*-\s*\[-\]\s+(.+?)\s*$/);
+    if (na && !/\bn\/a:\s*\S/i.test(na[1])) items.push(`${na[1]} (marked [-] without an "n/a: <reason>")`);
   }
 
   return items;

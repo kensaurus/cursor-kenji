@@ -657,7 +657,7 @@ function AnimatedChip({ active }) {
 - [ ] At least one piece of trailing/right-anchored metadata per stacked card row.
 - [ ] Repeated-element `onLayout` measurements within 2dp of each other.
 - [ ] Repeating bug patched at the shared primitive, not every consumer screen.
-- [ ] `rn:typecheck` and `rn:lint` pass on all modified files.
+- [ ] The repo's typecheck and lint scripts (e.g. `rn:typecheck` / `rn:lint` in a monorepo) pass on all modified files.
 - [ ] Android emulator screenshots taken at 360×800, 412×917, 430×932 (or platform equivalent).
 - [ ] iOS CI triggered for any change affecting layout, safe area, or navigation.
 

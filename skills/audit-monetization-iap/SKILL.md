@@ -1,10 +1,10 @@
 ---
 name: audit-monetization-iap
 description: >
-  Read-only audit of mobile IAP and subscriptions — StoreKit 2, Play Billing, or
-  RevenueCat — for server receipt validation, restore, lifecycle sync, grace
-  periods, and entitlements. Use when "audit our IAP", "restore purchases
-  broken", or before a paid app. Web Stripe/ledgers → audit-payment-system.
+  Read-only audit of mobile IAP and subscriptions (StoreKit 2, Play Billing,
+  RevenueCat): receipt validation, restore, lifecycle sync, grace periods,
+  entitlements. Use when "audit our IAP" or "restore purchases broken". Web →
+  audit-payment-system.
 license: MIT
 effort: high
 ---

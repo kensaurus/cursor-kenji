@@ -15,8 +15,9 @@ declare `effort: high`, mechanical ones `effort: low`, implementation
 inherits the default (ADR-0006). There is no "strong planner / fast
 executor" split; approved plans run under `approved-plan-execution.mdc`
 (ADR-0007). Every description without `disable-model-invocation: true`
-rides one always-on roster; `validate-skills` fails above `ROSTER_MAX_CHARS`,
-and commands are `/`-only while skills keep the auto-route (ADR-0008).
+rides Claude Code's skill listing; `validate-skills` measures it the way the
+client does and fails above `LISTING_MAX_CHARS` (ADR-0010), and commands are
+`/`-only while skills keep the auto-route (ADR-0008).
 Reasoning depth is effort, never a reasoning MCP server (ADR-0009). Model
 and host version facts live in the ADRs, not here.
 

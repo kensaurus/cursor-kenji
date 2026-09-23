@@ -34,7 +34,7 @@ The `command` field supports full paths, `~` expansion, and shell-style argument
 
 ## Stdin payload
 
-The command receives a JSON object on stdin. The TypeScript interface is `StatusLinePayload` in `packages/agent-cli/src/hooks/use-status-line.ts`.
+The command receives a JSON object on stdin.
 
 ### Full JSON schema
 

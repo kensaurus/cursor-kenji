@@ -213,6 +213,46 @@ function pruneRenamedRules(rulesDest, label, { renameMdc = false } = {}) {
   }
 }
 
+/** Old command file → new name. A stale copy is pruned only while it still
+ *  carries a description this pack shipped, so a user's own file of the same
+ *  name stays. */
+const RENAMED_COMMANDS = {
+  'plan.md': {
+    to: 'plan-mode.md',
+    descriptions: [
+      'Research, clarify requirements, and produce an approved implementation plan before writing code (Cursor Plan Mode)',
+    ],
+  },
+};
+
+// Merge installs never delete, so leftovers from older releases stay unless
+// pruned: renamed commands, and per-project command bundles that older
+// installers copied into the global commands dir (where they register as
+// /<bundle>:<name> in every project). Only files this pack ships are removed.
+function pruneStaleCommands(commandsDest, label) {
+  if (skillName || (onlyGroups && !onlyGroups.has('commands')) || !commandsDest || !existsSync(commandsDest)) return;
+  for (const [oldName, { to, descriptions }] of Object.entries(RENAMED_COMMANDS)) {
+    const stale = join(commandsDest, oldName);
+    if (!existsSync(stale)) continue;
+    const { description } = parseFrontmatter(readFileSync(stale, 'utf8'));
+    if (!descriptions.includes(description)) continue;
+    if (isDryRun) { console.log(`  [dry-run] prune renamed ${label} command ${oldName} → ${to}`); continue; }
+    rmSync(stale, { force: true });
+  }
+  for (const bundle of PROJECT_RULE_BUNDLES) {
+    const src = resolve(__dir, 'commands', bundle);
+    const dest = join(commandsDest, bundle);
+    if (!existsSync(src) || !existsSync(dest) || !statSync(dest).isDirectory()) continue;
+    for (const f of readdirSync(src)) {
+      const p = join(dest, f);
+      if (!existsSync(p)) continue;
+      if (isDryRun) { console.log(`  [dry-run] prune per-project ${label} command ${bundle}/${f}`); continue; }
+      rmSync(p, { force: true });
+    }
+    if (!isDryRun && readdirSync(dest).length === 0) rmSync(dest, { recursive: true, force: true });
+  }
+}
+
 // ---- target resolution -----------------------------------------------------
 // Backward compatible: a bare invocation still installs Cursor only.
 //   --auto           detect installed tools (~/.cursor, ~/.claude, ~/.codex, ~/.gemini)
@@ -819,6 +859,7 @@ if (wantCursor) {
   }
   pruneRenamedSkills(join(cursorBase, 'skills'), 'Cursor');
   pruneRenamedRules(join(cursorBase, 'rules'), 'Cursor');
+  pruneStaleCommands(join(cursorBase, 'commands'), 'Cursor');
   const hookStatus =
     !onlyGroups || onlyGroups.has('hooks')
       ? installCursorCompletionHook()
@@ -875,6 +916,7 @@ if (wantClaude) {
   const counts = installDirs(claudeBase, { renameMdc: true });
   pruneRenamedSkills(join(claudeBase, 'skills'), 'Claude');
   pruneRenamedRules(join(claudeBase, 'rules'), 'Claude', { renameMdc: true });
+  pruneStaleCommands(join(claudeBase, 'commands'), 'Claude');
   const hookStatus = !onlyGroups || onlyGroups.has('hooks') ? installClaudeCompletionHook() : 'skipped';
 
   if (skillName && counts.copiedDirs + counts.copiedFiles === 0) {
@@ -883,28 +925,43 @@ if (wantClaude) {
   }
 
   if (!isDryRun) {
-    // Every auto-invocable description rides in Claude Code's skill listing on
-    // each request, and the client trims that listing to a fixed budget.
-    const skillsDir = join(claudeBase, 'skills');
-    let rosterChars = 0;
-    for (const d of existsSync(skillsDir) ? readdirSync(skillsDir) : []) {
-      const f = join(skillsDir, d, 'SKILL.md');
-      if (!existsSync(f)) continue;
-      const text = readFileSync(f, 'utf8').replace(/\r\n/g, '\n');
+    // Claude Code lists every model-invocable skill and command as
+    // "- name: description" against 1% of the context window at 3 chars/token
+    // for current models (30,000 chars on a 1M Opus 5.5 session), shared with
+    // built-in skills; over budget the least-used entries drop to name only
+    // (client 2.1.280, ADR-0010).
+    let listingChars = 0;
+    let entries = 0;
+    const addEntry = (name, file) => {
+      const text = readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
       const end = text.startsWith('---') ? text.indexOf('\n---', 3) : -1;
-      if (end === -1) continue;
+      if (end === -1) return;
       const front = text.slice(3, end);
-      if (/^disable-model-invocation:\s*true\s*$/m.test(front)) continue;
+      if (/^disable-model-invocation:\s*true\s*$/m.test(front)) return;
       const lines = front.split('\n');
       const s = lines.findIndex((l) => /^description:/.test(l));
-      if (s === -1) continue;
+      if (s === -1) return;
       const buf = [];
       const head = lines[s].slice('description:'.length).trim();
       if (head && !/^[>|][-+0-9]*$/.test(head)) buf.push(head);
       for (let j = s + 1; j < lines.length && !/^[A-Za-z0-9_-]+:/.test(lines[j]); j++) buf.push(lines[j].trim());
-      rosterChars += buf.join(' ').replace(/\s+/g, ' ').length;
+      const desc = buf.join(' ').replace(/\s+/g, ' ').replace(/^["']|["']$/g, '').trim();
+      listingChars += name.length + 4 + Math.min(desc.length, 1536) + 1;
+      entries++;
+    };
+    const skillsDir = join(claudeBase, 'skills');
+    for (const d of existsSync(skillsDir) ? readdirSync(skillsDir) : []) {
+      const f = join(skillsDir, d, 'SKILL.md');
+      if (existsSync(f)) addEntry(d, f);
     }
-    console.log(`  ~/.claude/skills carries ${rosterChars} chars of auto-invocable skill descriptions (all packs). Claude Code trims its skill listing to a fixed budget; if skills stop auto-routing, mark /-only skills \`disable-model-invocation: true\`.`);
+    const cmdDir = join(claudeBase, 'commands');
+    for (const f of existsSync(cmdDir) ? readdirSync(cmdDir) : []) {
+      const p = join(cmdDir, f);
+      if (f.endsWith('.md') && statSync(p).isFile()) addEntry(f.slice(0, -3), p);
+    }
+    console.log(`  Claude Code skill listing from ~/.claude (all packs): ${entries} entries, ${listingChars} chars.`);
+    console.log('  The default budget is 1% of the context window (30,000 chars on a 1M Opus 5.5 session), shared with built-in skills;');
+    console.log('  over budget the least-used skills show by name only. To keep every description, set "skillListingBudgetFraction": 0.02 in ~/.claude/settings.json.');
   }
 
   results.push({ target: 'Claude Code', base: claudeBase, ...counts, clean, mcpInstalled: false, hookStatus });

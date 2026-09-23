@@ -1,10 +1,10 @@
 ---
 name: plan-input-validation
 description: >
-  Plan-only trust-boundary audit for missing validation, injection, XSS,
-  and forged requests across forms/APIs/webhooks. Use when "validate my
+  Plan-only trust-boundary audit for missing validation, injection, XSS, and
+  forged requests across forms, APIs, and webhooks. Use when "validate my
   inputs", "is my app injection-safe?", "check my forms", or "can someone
-  forge requests?". Apply fixes only after plan approval.
+  forge requests?".
 license: MIT
 effort: high
 ---

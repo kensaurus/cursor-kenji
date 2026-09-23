@@ -1,10 +1,10 @@
 ---
 name: audit-security
 description: >
-  Static OWASP review of app code (injection, headers, deps). Use when "review
-  security" or "check vulnerabilities". Session/route×gate/getSession →
-  audit-auth-flows. Plan-only burndown → plan-security-audit. Table RLS →
-  plan-rls-audit. LLM attacks → audit-llm-security.
+  Audit and fix app code against OWASP (injection, headers, dependencies). Use
+  when "review security" or "check vulnerabilities". Auth gates →
+  audit-auth-flows. Plan-only → plan-security-audit. RLS → plan-rls-audit. LLM
+  → audit-llm-security.
 license: MIT
 effort: high
 ---
@@ -202,64 +202,6 @@ Grep for the sinks, then read each hit in context:
 - **XSS** — `dangerouslySetInnerHTML` / `innerHTML` fed user input without `DOMPurify.sanitize`
 - **IDOR** — a load by `req.params.id` with no owner predicate (`userId: req.user.id`) on the query
 - **Sensitive data exposure** — `res.json(user)`-style whole-record responses instead of an explicit field pick
-
-### SQL Injection
-
-```javascript
-// VULNERABLE
-const query = `SELECT * FROM users WHERE id = '${userId}'`;
-
-// SAFE — parameterized
-const query = 'SELECT * FROM users WHERE id = $1';
-db.query(query, [userId]);
-
-// SAFE — ORM
-User.findById(userId);
-```
-
-### XSS (Cross-Site Scripting)
-
-```jsx
-// VULNERABLE
-<div dangerouslySetInnerHTML={{ __html: userInput }} />
-
-// SAFE — React escapes by default
-<div>{userInput}</div>
-
-// SAFE — sanitize when HTML is genuinely needed
-import DOMPurify from 'dompurify';
-<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(userInput) }} />
-```
-
-### IDOR (Insecure Direct Object Reference)
-
-```javascript
-// VULNERABLE — no ownership check
-app.get('/documents/:id', (req, res) => {
- const doc = db.documents.findById(req.params.id);
- res.json(doc);
-});
-
-// SAFE — verify ownership
-app.get('/documents/:id', (req, res) => {
- const doc = db.documents.findOne({
- where: { id: req.params.id, userId: req.user.id }
- });
- if (!doc) return res.status(404).json({ error: 'Not found' });
- res.json(doc);
-});
-```
-
-### Sensitive Data Exposure
-
-```javascript
-// VULNERABLE — leaking sensitive fields
-res.json(user); // includes passwordHash, tokens, internal IDs
-
-// SAFE — explicit field selection
-const { id, name, email, avatar } = user;
-res.json({ id, name, email, avatar });
-```
 
 ---
 

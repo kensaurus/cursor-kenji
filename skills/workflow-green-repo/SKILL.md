@@ -1,10 +1,9 @@
 ---
 name: workflow-green-repo
 description: >
-  Drive an entire repository to a fully green baseline — typecheck, lint, tests, and build
-  all passing from a clean checkout — when the user has explicitly authorized fixing. Use
-  when "make the repo green", "get CI passing", "fix all the failing tests". Ratchet
-  integrity → audit-gate-logic.
+  Drive a repository to a green baseline — typecheck, lint, tests, and build
+  passing from a clean checkout — when fixing is authorized. Use when "make
+  the repo green", "get CI passing", or "fix all the failing tests".
 license: MIT
 ---
 

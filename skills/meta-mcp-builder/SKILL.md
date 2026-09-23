@@ -1,10 +1,10 @@
 ---
 name: meta-mcp-builder
 description: >
-  Scaffold and implement Model Context Protocol (MCP) servers that expose external
-  services, APIs, and data sources as typed tools and resources for LLM agents. Use when
-  the user says "build an MCP server", "give Claude access to X", "create an MCP tool",
-  "expose my API to an agent", or "AI agent integration".
+  Build Model Context Protocol (MCP) servers that expose services, APIs, and
+  data as typed tools for agents. Use when "build an MCP server", "give Claude
+  access to X", "create an MCP tool", "expose my API to an agent", or "AI
+  agent integration".
 license: MIT
 ---
 
@@ -97,12 +97,6 @@ Under-description is the common failure. State what the tool does, when to use i
 {
  name: 'github_search_issues',
  description: 'Search GitHub issues in one repository by free-text query, state, and labels. Returns up to `limit` issues with title, number, state, and URL; does not return bodies or comments (use github_get_issue for those). For creating an issue use github_create_issue.',
-}
-```
-```typescript
-{
- name: 'github_search_issues',
- description: 'Search GitHub issues by query, state, and labels. Returns issue title, number, and URL.',
 }
 ```
 

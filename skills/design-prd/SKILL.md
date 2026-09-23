@@ -194,7 +194,6 @@ Determine:
 
 When the user describes a feature, sort what is clear from what is unclear before writing anything:
 
-Identify what is clear vs unclear:
 - Clear: problem statement, target user, basic functionality
 - Unclear: scope boundaries, success metrics, edge cases, technical constraints
 
@@ -408,10 +407,6 @@ CREATE TABLE IF NOT EXISTS [table_name] (
 ## Step 5: Iterate  [HIGH freedom]
 
 Present the PRD, take the user's edits, resolve the open questions, and confirm it is ready to save before writing the file.
-1. Ask: "Does this capture what you had in mind?"
-2. Incorporate edits
-3. Resolve open questions
-4. Confirm: "Is this PRD ready to save?"
 
 ---
 

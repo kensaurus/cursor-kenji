@@ -1,10 +1,10 @@
 ---
 name: deploy-verify
 description: >
-  Post-deploy smoke test across browser, Sentry, Supabase, Langfuse, and
-  the public web. Use when "verify deploy", "smoke test production",
-  "post-release check", or "ship or rollback". Deploy + observation loop
-  → workflow-ship-and-observe. npm package release → deploy-npm.
+  Post-deploy smoke test across browser, Sentry, Supabase, Langfuse, and the
+  public web. Use when "verify deploy", "smoke test production", "post-release
+  check", or "ship or rollback". Deploy plus watch →
+  workflow-ship-and-observe.
 license: MIT
 effort: high
 ---

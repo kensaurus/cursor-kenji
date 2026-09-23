@@ -2,7 +2,7 @@
 name: workflow-feedback-to-closure
 description: >
   Turn raw feedback — bug reports, review comments, Sentry, QA, audit output —
-  into deduplicated durable tickets and drive each to verified closure. Use when
+  into deduplicated tickets and drive each to verified closure. Use when
   "triage this feedback", "turn these reports into tickets", "process the bug
   backlog", or "close the loop".
 license: MIT

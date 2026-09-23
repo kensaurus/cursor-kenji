@@ -1,10 +1,9 @@
 ---
 name: housekeep-design
 description: >
-  Apply-now consolidation of a drifted design system into one token/component
-  SSOT. Use after an approved plan-uiux-unification pass, or when "clean up the
+  Consolidate a drifted design system into one token and component source of
+  truth. Use after an approved plan-uiux-unification, or when "clean up the
   design system now", "migrate to one button", or "resolve token conflicts".
-  Plan-only burndown → plan-uiux-unification.
 license: MIT
 ---
 

@@ -1,10 +1,10 @@
 ---
 name: workflow-fix-and-ship
 description: >
-  Complete one bug-fix lifecycle: triage → reproduce → debug-error →
-  regression fix → test-playwright → workflow-pr; optional deploy verify.
-  Use when "fix this bug and close the ticket", "patch this and ship", or
-  a named production error. Multiple reports → workflow-feedback-to-closure.
+  One bug-fix lifecycle: triage, reproduce, debug, regression test, fix, live
+  check, PR, optional deploy verify. Use when "fix this bug and close the
+  ticket", "patch this and ship", or a named production error. Many reports →
+  workflow-feedback-to-closure.
 license: MIT
 ---
 

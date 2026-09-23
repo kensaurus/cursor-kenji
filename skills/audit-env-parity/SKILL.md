@@ -1,10 +1,10 @@
 ---
 name: audit-env-parity
 description: >
-  Read-only audit of config/env parity across dev, staging, and prod — missing
-  or misnamed vars, drifted flags, hardcoded values, secrets reused across
-  environments. Use when "works locally but not in prod", "audit our
-  environments", or "config drift". Local runnability → workflow-environment-ready.
+  Read-only audit of config parity across dev, staging, and prod: missing or
+  misnamed vars, drifted flags, hardcoded values, reused secrets. Use when
+  "works locally but not in prod", "audit our environments", or "config
+  drift".
 license: MIT
 effort: high
 ---

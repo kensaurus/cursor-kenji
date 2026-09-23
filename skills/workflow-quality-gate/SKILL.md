@@ -1,10 +1,9 @@
 ---
 name: workflow-quality-gate
 description: >
-  Pre-release quality gate: test-red-team, audit-security,
-  audit-bundle-size, audit-performance, test-unit. Use when "is this
-  ready to ship?", "quality gate", "pre-release checklist". Gate
-  soundness → audit-gate-logic. Working tree to a PR →
+  Pre-release quality gate across red-team, security, bundle size,
+  performance, and unit tests. Use when "is this ready to ship?", "quality
+  gate", or "pre-release checklist". Working tree to a PR →
   workflow-release-prep.
 license: MIT
 effort: high

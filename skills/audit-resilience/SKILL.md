@@ -1,10 +1,10 @@
 ---
 name: audit-resilience
 description: >
-  Read-only production-resilience audit: timeouts, bounded retries,
-  circuit breakers, idempotency, rate limits, graceful degradation, PII.
-  Use when "resilience audit", "will this survive real traffic?", or
-  "audit retries/timeouts/idempotency". Feature parity → audit-realworld.
+  Read-only production-resilience audit: timeouts, bounded retries, circuit
+  breakers, idempotency, rate limits, graceful degradation, PII in logs. Use
+  when "resilience audit", "will this survive real traffic?", or "audit
+  retries/timeouts/idempotency".
 license: MIT
 effort: high
 ---

@@ -1,11 +1,10 @@
 ---
 name: workflow-gtm
 description: >
-  Take a shipped repo to market: plan-gtm audit + interview → approval →
-  measure → message → activate → be found → launch → weekly loop.
-  Use when "go to market", "grow users", "increase traffic and visibility".
-  Strategy only → plan-gtm. Technical pre-launch sweep →
-  workflow-launch-ready.
+  Take a shipped repo to market: plan-gtm audit and interview, approval, then
+  measure, message, activate, get found, launch, and a weekly loop. Use when
+  "go to market", "grow users", or "increase traffic and visibility". Strategy
+  only → plan-gtm.
 license: MIT
 ---
 

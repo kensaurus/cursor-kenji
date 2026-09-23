@@ -1,10 +1,9 @@
 ---
 name: docs-coauthor
 description: >
-  Co-author structured documents (specs, PRDs, RFCs) through a 3-stage workflow:
-  context gathering, drafting, and reader testing. Use when writing proposals,
-  technical specs, or similar structured content. Repo decision-memory system
-  (INDEX.md, rejected alternatives, agent rules) → docs-adr.
+  Co-author structured documents (specs, PRDs, RFCs, proposals) in three
+  stages: gather context, draft, reader-test. Use when writing a proposal,
+  technical spec, or similar long-form document. Decision records → docs-adr.
 license: MIT
 ---
 

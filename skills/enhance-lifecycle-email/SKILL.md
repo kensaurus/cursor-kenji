@@ -1,11 +1,10 @@
 ---
 name: enhance-lifecycle-email
 description: >
-  Apply-now lifecycle email driven by product events: activation nudges,
-  trial-expiry track split by activated vs stalled, limit-reached upgrade,
-  win-back — with exits, consent, and per-email events. Use when "onboarding
-  emails", "trial expiry emails", "drip sequence", "win-back email". Templates
-  → design-email.
+  Lifecycle email from product events: activation nudges, trial expiry split
+  by activated vs stalled, limit-reached upgrades, win-back, with exits and
+  consent. Use when "onboarding emails", "trial expiry emails", "drip
+  sequence", or "win-back email". Templates → design-email.
 license: MIT
 ---
 

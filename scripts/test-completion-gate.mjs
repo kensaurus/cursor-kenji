@@ -75,6 +75,21 @@ try {
     "gate continued an errored agent turn",
   );
 
+  // `[-]` = not applicable: skipped only with an "n/a:" reason.
+  writeFileSync(
+    join(stateDir, "complete-everything-state.md"),
+    "# State\n\n## Verification ladder\n- [x] tests\n- [-] typecheck — n/a: no tsconfig.json or typecheck script\n",
+  );
+  expect(run().followup_message === undefined, "gate blocked a [-] rung that states its n/a reason");
+  writeFileSync(
+    join(stateDir, "complete-everything-state.md"),
+    "# State\n\n## Verification ladder\n- [x] tests\n- [-] typecheck\n",
+  );
+  expect(
+    run().followup_message?.includes("typecheck"),
+    "gate let a [-] rung through with no n/a reason",
+  );
+
   // Claude Code Stop payload: cwd (possibly a subdirectory), decision output, loop cap.
   const runClaude = (cwd) => JSON.parse(execFileSync(process.execPath, [hook], {
     cwd: repoRoot,

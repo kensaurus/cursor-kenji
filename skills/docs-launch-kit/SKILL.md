@@ -1,11 +1,10 @@
 ---
 name: docs-launch-kit
 description: >
-  Versioned launch kit from the repo's real features: Show HN post, Product
-  Hunt listing, Reddit / X / LinkedIn posts, article outline, release notes,
-  calendar with UTM links. Use when "launch post", "Show HN", "Product Hunt
-  listing", "announce this release", "launch copy". README visuals →
-  enhance-readme.
+  Versioned launch kit from the repo's real features: Show HN, Product Hunt,
+  Reddit/X/LinkedIn posts, release notes, a calendar with UTM links. Use when
+  "launch post", "Show HN", "Product Hunt listing", "announce this release",
+  or "launch copy".
 license: MIT
 ---
 

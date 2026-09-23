@@ -1,10 +1,9 @@
 ---
 name: enhance-web-web3d
 description: >
-  Add purposeful 3D/WebGL and scroll choreography to an existing site
-  with Three.js/R3F, GSAP, or Motion. Use when "add 3D", "WebGL hero",
-  "React Three Fiber", or "scroll-driven 3D". General UI polish →
-  enhance-web-ui. Motion without 3D → enhance-motion.
+  Add purposeful 3D/WebGL and scroll choreography to an existing site with
+  Three.js/R3F, GSAP, or Motion. Use when "add 3D", "WebGL hero", "React Three
+  Fiber", or "scroll-driven 3D". Motion without 3D → enhance-motion.
 license: MIT
 ---
 

@@ -1,11 +1,10 @@
 ---
 name: audit-doctrine
 description: >
-  Read-only audit of custom lint/ratchet doctrine — is each rule right on
-  the merits, not merely enforced. Use when "is this lint rule wrong",
-  "the ratchet banned a legitimate pattern", "audit our guardrail
-  doctrine". Enforcement → audit-gate-logic. Consolidation →
-  housekeep-gates.
+  Read-only audit of custom lint and ratchet rules: is each rule right on the
+  merits, not just enforced. Use when "is this lint rule wrong", "the ratchet
+  banned a legitimate pattern", or "audit our guardrail doctrine". Enforcement
+  → audit-gate-logic.
 license: MIT
 effort: high
 ---
