@@ -55,11 +55,14 @@ MCP/SQL probes `[LOW freedom — run exactly]` (run the query; do not invent a s
 
 ### 0b. Find Supabase Project ID
 
-Take `PROJECT_ID` from `supabase/config.toml` (`project_id`) or the host of
-`SUPABASE_URL` in `.env` / `.env.local`, and confirm it with
+Take `PROJECT_ID` from the host of `SUPABASE_URL` in `.env` / `.env.local`
+(`https://<ref>.supabase.co`; the `project_id` in `supabase/config.toml` is a
+local name, not the ref), and confirm it with
 `supabase:get_project_url`. Call `supabase:list_projects` only when the MCP
-server exposes it (org-scoped setups); a project-scoped server does not.
-Record the `PROJECT_ID` for all subsequent MCP calls.
+server exposes it (started without a project ref). A project-scoped server,
+which is how the pack configures it, does not, and its tools take no
+`project_id`; on an unscoped server, add `"project_id": "<PROJECT_ID>"` to
+each call below.
 
 ### 0c. Detect Schema Source Files
 
@@ -148,7 +151,7 @@ If Supabase:
 ```json
 supabase:search_docs
 {
- "query": "RLS policy performance best practices"
+ "graphql_query": "{ searchDocs(query: \"RLS policy performance best practices\", limit: 3) { nodes { title href content } } }"
 }
 ```
 
@@ -161,7 +164,6 @@ supabase:search_docs
 ```json
 supabase:list_tables
 {
- "project_id": "<PROJECT_ID>",
  "schemas": ["public"],
  "verbose": true
 }
@@ -172,7 +174,6 @@ supabase:list_tables
 ```json
 supabase:execute_sql
 {
- "project_id": "<PROJECT_ID>",
  "query": "SELECT table_name, column_name, data_type, is_nullable, column_default FROM information_schema.columns WHERE table_schema = 'public' ORDER BY table_name, ordinal_position"
 }
 ```
@@ -180,7 +181,6 @@ supabase:execute_sql
 ```json
 supabase:execute_sql
 {
- "project_id": "<PROJECT_ID>",
  "query": "SELECT tc.table_name, tc.constraint_name, tc.constraint_type, kcu.column_name, ccu.table_name AS foreign_table FROM information_schema.table_constraints tc JOIN information_schema.key_column_usage kcu ON tc.constraint_name = kcu.constraint_name LEFT JOIN information_schema.constraint_column_usage ccu ON tc.constraint_name = ccu.constraint_name WHERE tc.table_schema = 'public'"
 }
 ```
@@ -190,7 +190,6 @@ supabase:execute_sql
 ```json
 supabase:execute_sql
 {
- "project_id": "<PROJECT_ID>",
  "query": "SELECT tablename, indexname, indexdef FROM pg_indexes WHERE schemaname = 'public' ORDER BY tablename"
 }
 ```
@@ -200,7 +199,6 @@ supabase:execute_sql
 ```json
 supabase:execute_sql
 {
- "project_id": "<PROJECT_ID>",
  "query": "SELECT tablename, rowsecurity FROM pg_tables WHERE schemaname = 'public' ORDER BY tablename"
 }
 ```
@@ -208,7 +206,6 @@ supabase:execute_sql
 ```json
 supabase:execute_sql
 {
- "project_id": "<PROJECT_ID>",
  "query": "SELECT schemaname, tablename, policyname, permissive, roles, cmd, qual, with_check FROM pg_policies WHERE schemaname = 'public' ORDER BY tablename"
 }
 ```
@@ -218,7 +215,6 @@ supabase:execute_sql
 ```json
 supabase:get_advisors
 {
- "project_id": "<PROJECT_ID>",
  "type": "security"
 }
 ```
@@ -226,7 +222,6 @@ supabase:get_advisors
 ```json
 supabase:get_advisors
 {
- "project_id": "<PROJECT_ID>",
  "type": "performance"
 }
 ```
@@ -459,7 +454,6 @@ WHERE table_schema = 'public' ORDER BY grantee, table_name;
 ```json
 supabase:execute_sql
 {
- "project_id": "<PROJECT_ID>",
  "query": "WITH table_info AS (SELECT t.table_name, EXISTS(SELECT 1 FROM information_schema.columns c WHERE c.table_name = t.table_name AND c.column_name = 'id') AS has_id, EXISTS(SELECT 1 FROM information_schema.columns c WHERE c.table_name = t.table_name AND c.column_name = 'created_at') AS has_created_at, EXISTS(SELECT 1 FROM information_schema.columns c WHERE c.table_name = t.table_name AND c.column_name = 'updated_at') AS has_updated_at, (SELECT rowsecurity FROM pg_tables pt WHERE pt.tablename = t.table_name AND pt.schemaname = 'public') AS rls_enabled, (SELECT COUNT(*) FROM pg_policies p WHERE p.tablename = t.table_name AND p.schemaname = 'public') AS policy_count, (SELECT COUNT(*) FROM pg_indexes i WHERE i.tablename = t.table_name AND i.schemaname = 'public') AS index_count FROM information_schema.tables t WHERE t.table_schema = 'public' AND t.table_type = 'BASE TABLE') SELECT table_name, CASE WHEN has_id THEN 'Y' ELSE 'N' END AS id, CASE WHEN has_created_at THEN 'Y' ELSE 'N' END AS created_at, CASE WHEN has_updated_at THEN 'Y' ELSE 'N' END AS updated_at, CASE WHEN rls_enabled THEN 'Y' ELSE 'N' END AS rls, policy_count AS policies, index_count AS indexes FROM table_info ORDER BY table_name"
 }
 ```

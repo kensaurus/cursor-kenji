@@ -70,10 +70,9 @@ sentry:search_issues
 
 Then pull Supabase logs if the bug may be data-related:
 ```json
-supabase:get_logs
+supabase:query_logs
 {
-  "project_id": "<PROJECT_ID>",
-  "service": "api"
+  "sql": "select timestamp, event_message, log_attributes['request.method'] as method, log_attributes['request.path'] as path, log_attributes['response.status_code'] as status_code from logs where source = 'edge_logs' order by timestamp desc limit 100"
 }
 ```
 

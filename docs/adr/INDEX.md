@@ -23,6 +23,7 @@ purpose.
 | [0008](0008-auto-invocable-roster-budget.md) | Auto-invocable roster budget | Accepted; measure superseded by 0010 | `commands/*.md` are `/`-only except an allowlist; skills keep the auto-route |
 | [0009](0009-retire-sequential-thinking-server.md) | Retire the Sequential Thinking MCP server | Accepted | Removed from the full template and pins; depth is set with effort |
 | [0010](0010-measure-the-skill-listing-like-the-client.md) | Measure the skill listing like the client | Accepted | `validate-skills` counts `- name: description` per listed entry and ratchets `LISTING_MAX_CHARS`; full descriptions on Opus 5.5 need `skillListingBudgetFraction` 0.02 |
+| [0011](0011-routing-rule-keeps-only-name-disambiguation.md) | Routing rule keeps only name disambiguation | Accepted | `skill-workflows.mdc` lists only mappings a skill name gets wrong (3,246 → 1,614 bytes); descriptions carry the rest |
 
 ## Conventions
 

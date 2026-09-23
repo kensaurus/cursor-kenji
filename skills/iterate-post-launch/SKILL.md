@@ -96,27 +96,36 @@ Record per issue: title, frequency (events/users), first/last seen, component.
 ### 1b. Supabase — query performance and API failures
 
 ```json
-supabase:get_logs
+supabase:query_logs
 {
-  "project_id": "<PROJECT_ID>",
-  "service": "api"
+  "sql": "select timestamp, event_message, log_attributes['request.method'] as method, log_attributes['request.path'] as path, log_attributes['response.status_code'] as status_code from logs where source = 'edge_logs' order by timestamp desc limit 100"
 }
 ```
 
 ```json
-supabase:get_logs
+supabase:query_logs
 {
-  "project_id": "<PROJECT_ID>",
-  "service": "postgres"
+  "sql": "select timestamp, event_message, log_attributes['parsed.error_severity'] as error_severity from logs where source = 'postgres_logs' order by timestamp desc limit 100"
 }
 ```
 
 ```json
 supabase:get_advisors
 {
-  "project_id": "<PROJECT_ID>"
+  "type": "security"
 }
 ```
+
+```json
+supabase:get_advisors
+{
+  "type": "performance"
+}
+```
+
+`query_logs` (read-only ClickHouse SQL over one `logs` table, filtered by
+`source`) replaces `get_logs` on current servers. It reads the last 24 hours
+unless you pass `iso_timestamp_start` / `iso_timestamp_end`.
 
 Flag:
 - API: repeated 5xx, slow responses (>1 s), CORS errors, RLS denies
@@ -232,6 +241,9 @@ sentry:update_issue
   "regionUrl": "<REGION_URL>"
 }
 ```
+
+`update_issue` needs the Triage skill on the Sentry MCP connection; if the tool
+is missing, resolve the issue in the Sentry UI instead.
 
 ---
 

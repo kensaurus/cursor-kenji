@@ -466,6 +466,7 @@ Grep: "(bg-white|bg-black|text-white|text-black)" glob "*.tsx" output_mode "coun
 | Focus indicators | [pass/warn/fail] | [details] |
 | Alt text | [pass/warn/fail] | [details] |
 | Semantic HTML | [pass/warn/fail] | [details] |
+```
 
 ---
 

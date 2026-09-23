@@ -126,7 +126,7 @@ grep -r "POWERSYNC_URL\|FIREBASE_DATABASE_URL" .env .env.local 2>/dev/null
 ```
 
 Also list available MCP servers:
-- **supabase** → `list_tables`, `execute_sql`, `apply_migration`, `get_logs`, `get_advisors`
+- **supabase** → `list_tables`, `execute_sql`, `apply_migration`, `query_logs`, `get_advisors`
 - **sentry** → `find_organizations`, `search_issues`, `get_sentry_resource`, `update_issue`
 
 If either MCP is missing, mark that verification path BLOCKED but keep walking.

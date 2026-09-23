@@ -16,7 +16,7 @@ is never deployed, the live API 404s, and the bug masquerades as a UI issue.
 2. **Deploy schema, don't just author it.** Supabase: `apply_migration` /
    `execute_sql` on the confirmed `project_id`, then verify in the same turn
    — re-query `information_schema` / `pg_proc` / `pg_policies`, exercise the
-   surface as `anon` / `authenticated`, check `get_logs` and `get_advisors`.
+   surface as `anon` / `authenticated`, check `query_logs` and `get_advisors`.
    Other stacks: run the real deploy command (`prisma migrate deploy`,
    `drizzle-kit push`, `rails db:migrate`, …) against the confirmed
    environment before the turn ends.

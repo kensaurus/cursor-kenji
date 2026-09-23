@@ -48,7 +48,7 @@ score unbounded paths, phase remediations, emit `plan-llm-cost-guardrails.md`.
 Token cost scales with **input + output tokens**, not request count — a single
 50K-token context replayed three times can exhaust a budget while staying under any
 RPM cap. Vibe-coded AI features ship with no spend cap, no per-user quota, no
-`max_tokens`, no circuit breaker — compounded by prompt-injection cost amplification
+output-token cap, no circuit breaker — compounded by prompt-injection cost amplification
 and forged-webhook quota fraud (the empty-signing-secret bypass class).
 
 This is the *prevention* counterpart to Langfuse observability: Langfuse tells you
@@ -72,7 +72,9 @@ performance, or trace visibility (`plan-error-handling`). This owns *bounded spe
 ### Layer 1 · Limits (token-aware, not request-count)
 - **Token-bucket / quota per (user, model)** — any per-identity limit?
 - **Token-based, not just RPM** — prompt-TPM and output-TPM ceilings.
-- **`max_tokens` / context caps** — bound worst-case cost; truncate RAG context.
+- **Output-token / context caps** — `max_tokens` (Anthropic),
+  `max_completion_tokens` or `max_output_tokens` (OpenAI); bound worst-case
+  cost; truncate RAG context.
 - **Short + long windows** — per-minute burst *and* per-day/month budget.
 - **Tiered limits** — free vs paid wired to Stripe entitlement.
 
@@ -85,10 +87,14 @@ performance, or trace visibility (`plan-error-handling`). This owns *bounded spe
 ### Layer 3 · Fallback chain
 - **Primary → cheaper model → cache → graceful 503.**
 - **Semantic cache** before paid calls.
-- **Model routing by complexity** — flag everything-to-Opus patterns.
+- **Model routing by complexity** — flag patterns that send every call to the most
+  expensive model tier.
 
 ### Cross-cutting
-- **Streaming usage accounting** — `stream_options.include_usage` or spend is invisible.
+- **Streaming usage accounting** — read usage from the stream or spend is
+  invisible: OpenAI Chat Completions sends it only with
+  `stream_options.include_usage`; Anthropic sends it in `message_start` and
+  cumulative `message_delta` events.
 - **Retry discipline** — token-aware backoff.
 - **Abuse vectors** — unauthenticated AI endpoints; hand boundary fixes to
   `plan-input-validation`.

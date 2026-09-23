@@ -65,7 +65,7 @@ Do not mix Kenji "Check Existing First" sections into third-party skill bodies �
 
 Every skill needs a `SKILL.md` with YAML frontmatter:
 
-```markdown
+````markdown
 ---
 name: my-skill-name
 description: Clear description with trigger words. Use when user mentions "keyword1", "keyword2", or wants "specific task".
@@ -109,7 +109,7 @@ After using this skill:
 1. **Check 1** → What to verify
 2. **Check 2** → What to verify
 3. **Check 3** → What to verify
-```
+````
 
 ### 3. Quality Checklist
 

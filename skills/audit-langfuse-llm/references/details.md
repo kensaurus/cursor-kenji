@@ -1,3 +1,4 @@
+```
 ### Improvement Details
 
 **[Prompt Name] — Iteration 1:**
@@ -84,7 +85,7 @@ Apply the researched improvements. Common enhancement patterns:
 - **Add guardrails**: "If the user asks about [off-topic], respond with [refusal]."
 - **Add few-shot examples**: Include 2-3 input/output pairs for complex tasks
 - **Use native reasoning**: turn on the provider's reasoning mode (Anthropic adaptive thinking plus `effort`, OpenAI reasoning models) instead of adding "Think step by step" to the prompt — reasoning models already do it, and on the rest the phrase mostly lengthens output.
-- **Shape the output**: name the audience and the format; cap length with `max_tokens` in the request rather than a word count in the prompt, which starves reasoning on hard inputs.
+- **Shape the output**: name the audience and the format; cap length with the request's output-token limit (`max_tokens` on Anthropic, `max_completion_tokens` or `max_output_tokens` on OpenAI) rather than a word count in the prompt, which starves reasoning on hard inputs.
 - **Add grounding instructions**: "Only use information from the provided context. If unsure, say so."
 
 **Step 3: Create the new version**

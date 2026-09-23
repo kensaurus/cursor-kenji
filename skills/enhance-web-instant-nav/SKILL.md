@@ -78,9 +78,9 @@ Baseline (adjust `where` to the site's IA):
 </script>
 ```
 
-- Eagerness: `conservative` (pointerdown) → `moderate` (hover ~200 ms) → `eager` → `immediate` (list rules only). Default `moderate`.
+- Eagerness: `conservative` (pointer/touch down) → `moderate` (desktop: hover 200 ms or pointerdown; mobile: viewport heuristics) → `eager` (Chrome 143+: desktop hover 10 ms, mobile viewport heuristics) → `immediate` (as soon as the rules load). Left unset, list (`urls`) rules default to `immediate` and document (`where`) rules to `conservative`, so set `moderate` explicitly. `immediate` on document rules is allowed but speculates on every matching link; use it with care.
 - Query strings: `"expects_no_vary_search": "params=(\"utm_source\" \"utm_medium\")"` or exclude `?` URLs
-- Next.js App Router: keep `<Link>` prefetch for RSC payloads; add the block in `app/layout.tsx` via a raw `<script>`. On Next.js 16.3+ evaluate built-in **Instant Navigations** first; if it covers the case, skip prerender rules and keep only prefetch.
+- Next.js App Router: keep `<Link>` prefetch for RSC payloads; add the block in `app/layout.tsx` via a raw `<script>`. On Next.js 16.3+ evaluate **Instant Navigations** first (opt-in: `cacheComponents: true` + `partialPrefetching: true` in `next.config`); if it covers the case, skip prerender rules and keep only prefetch.
 - Chromium-first progressive enhancement. Check caniuse at implementation time — never block on Firefox/Safari.
 
 Syntax depth: `references/speculation-rules.md`.

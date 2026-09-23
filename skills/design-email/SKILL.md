@@ -89,7 +89,7 @@ If templates already exist, walk through each one and check:
 ```json
 firecrawl:firecrawl_search
 {
-  "query": "transactional email design best practices 2026 React Email",
+  "query": "transactional email design best practices [current year] React Email",
   "limit": 3,
   "sources": [{ "type": "web" }]
 }

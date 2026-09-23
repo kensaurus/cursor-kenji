@@ -52,7 +52,7 @@ Collect every incoming signal for this pass and record its source:
 - QA, exploratory, and red-team findings (`test-qa`, `test-exploratory`, `test-red-team`)
 - audit outputs (`audit-*`, `plan-*` reports)
 - PR review comments and bot findings
-- production logs and advisors (`get_logs`, `get_advisors`)
+- production logs and advisors (`query_logs`, `get_advisors`)
 
 Normalize each into a common shape: `{ source, raw, symptom, suspected area,
 severity signal, first/last seen, evidence link }`. Do not fix anything yet.

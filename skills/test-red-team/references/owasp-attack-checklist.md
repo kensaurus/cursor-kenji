@@ -5,7 +5,10 @@ when you need exhaustive payloads or the full OWASP mapping table.
 
 ---
 
-## OWASP Top 10 (2021/2026) — Red-team mapping
+## OWASP Top 10:2021 — Red-team mapping
+
+IDs follow the 2021 edition; check https://owasp.org/www-project-top-ten/ for
+the current edition before citing an ID.
 
 | ID | Name | Red-team action |
 |----|------|----------------|
@@ -166,7 +169,7 @@ file:///etc/passwd
 
 ---
 
-## Performance benchmark thresholds (2026)
+## Performance benchmark thresholds
 
 | Metric | Target | DEFECT threshold |
 |--------|--------|-----------------|

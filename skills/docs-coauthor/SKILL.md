@@ -294,7 +294,7 @@ Loop back to refinement for problematic sections.
 
 The user will need to do the testing manually.
 
-### Step 1: Predict Reader Questions
+### Step 1: Predict Reader Questions with the User
 
 Ask what questions people might ask when trying to discover this document. What would they type into Claude.ai?
 

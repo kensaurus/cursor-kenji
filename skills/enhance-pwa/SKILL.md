@@ -10,7 +10,7 @@ license: MIT
 
 # enhance-pwa — Make It Installable and Offline-Ready
 
-**Degree of freedom: MIXED.** Strategy and prompt timing `[HIGH freedom]`; caching rules, Capacitor bypass, and Lighthouse `[LOW freedom — run exactly]`.
+**Degree of freedom: MIXED.** Strategy and prompt timing `[HIGH freedom]`; caching rules, Capacitor bypass, and the installability check `[LOW freedom — run exactly]`.
 
 **A PWA closes the gap between "website" and "app".** Users can install it to
 their home screen, it loads instantly from cache, and it keeps working when the
@@ -22,14 +22,14 @@ breaking what already works.
 1. **Audit** — manifest, SW, framework plugin already present
 2. **Choose** — caching strategy per asset type; Workbox over raw SW
 3. **Ship** — installable manifest + offline fallback + autoUpdate
-4. **Prove** — Lighthouse PWA ≥ 90; Capacitor bridge not intercepted
+4. **Prove** — DevTools shows no installability errors; offline revisit works; Capacitor bridge not intercepted
 
 ## Worked example
 
 > **Audit:** Next.js app; no manifest link; no SW; also ships Capacitor.
-> **Choose:** Workbox via next-pwa; NetworkFirst APIs; CacheFirst images; skip `capacitor://`.
+> **Choose:** Serwist (Workbox fork) via `@serwist/turbopack`; NetworkFirst APIs; CacheFirst images; skip `capacitor://`.
 > **Ship:** `manifest.webmanifest` + 192/512 icons + `/offline.html`; install prompt after first success.
-> **Prove:** offline revisit of `/` works; Lighthouse PWA ≥ 90; native bridge still functions.
+> **Prove:** offline revisit of `/` works; DevTools Manifest pane shows no installability errors; native bridge still functions.
 
 ## Self-critique before reporting
 
@@ -46,11 +46,11 @@ breaking what already works.
 public/manifest.json or public/manifest.webmanifest  → existing manifest
 public/sw.js or src/sw.ts                             → existing service worker
 vite.config.*   → vite-plugin-pwa already configured?
-next.config.*   → next-pwa already configured?
-package.json    → workbox-*, vite-plugin-pwa, next-pwa, @vite-pwa/nuxt
+next.config.*   → next-pwa or @serwist/* already configured?
+package.json    → workbox-*, serwist, @serwist/*, vite-plugin-pwa, next-pwa, @vite-pwa/nuxt
 ```
 
-Also check the current Lighthouse PWA score via:
+Also check the basics in the page (Lighthouse 12+ has no PWA category):
 ```javascript
 // eval after goto
 const pwaReady = {
@@ -64,7 +64,7 @@ const pwaReady = {
 
 ## Phase 1: Research framework-specific PWA tooling  [HIGH freedom]
 
-Follow `/research`: Context7 for the PWA plugin that matches the framework (`vite-plugin-pwa`, `@ducanh2912/next-pwa`, `@vite-pwa/nuxt`), Firecrawl for current service-worker and offline guidance. Search the plugin name as written and anchor to the framework version actually installed — recognizing a package is not knowing its current API.
+Follow `/research`: Context7 for the PWA plugin that matches the framework (`vite-plugin-pwa`, `@serwist/turbopack` or `@serwist/next`, `@vite-pwa/nuxt`), Firecrawl for current service-worker and offline guidance. Search the plugin name as written and anchor to the framework version actually installed — recognizing a package is not knowing its current API.
 
 ---
 
@@ -149,12 +149,19 @@ VitePWA({
 })
 ```
 
-### Next.js (next-pwa or built-in)
+### Next.js (Serwist, or an existing next-pwa)
 
-Next.js 16+ has experimental PWA support. For stable Workbox integration:
-```bash
-npm install @ducanh2912/next-pwa
-```
+Next.js has no built-in service worker. It ships the `app/manifest.ts` file
+convention, and 16.3 added an experimental `experimental.useOffline` flag that
+detects connectivity and retries requests but does not cache pages. For
+Workbox-style caching the Next.js PWA guide points to Serwist, a Workbox fork:
+`@serwist/turbopack` for Turbopack builds (the `next build` default since
+Next.js 16) or `@serwist/next` for webpack builds. Take the setup for the
+installed Next.js version from the Serwist docs.
+
+`@ducanh2912/next-pwa` is webpack-only (last release 10.2.9, September 2024)
+and its README recommends migrating to `@serwist/next`. Keep it only where a
+repo already uses it, and on Next.js 16+ build with `next build --webpack`:
 
 ```javascript
 // next.config.mjs
@@ -194,12 +201,25 @@ helpful offline page rather than a browser error:
 <button onclick="location.reload()">Try again</button>
 ```
 
-Register it as the fallback in Workbox:
+Register it as the fallback. Workbox's `navigateFallback` answers every
+non-precached navigation with one HTML file, online or not, so it is the SPA
+shell (vite-plugin-pwa defaults it to `index.html`), not an offline page. For
+server-rendered pages, precache `offline.html` and attach it to the
+navigation route:
 ```javascript
-offlineFallback: true,
-// or in workbox config:
-navigationFallback: '/offline.html',
+// workbox (generateSW) options; clear the SPA fallback so this route runs
+navigateFallback: null,
+runtimeCaching: [{
+  urlPattern: ({ request }) => request.mode === 'navigate',
+  handler: 'NetworkFirst', // NetworkOnly if pages carry per-user data
+  options: { cacheName: 'pages', precacheFallback: { fallbackURL: '/offline.html' } },
+}],
+// hand-written service worker: offlineFallback() from workbox-recipes
 ```
+
+With Serwist (Next.js), precache the page through `additionalPrecacheEntries`
+and list it in the `Serwist` constructor's `fallbacks.entries` with a
+`request.destination === 'document'` matcher.
 
 ---
 
@@ -226,7 +246,9 @@ export function triggerInstallPrompt() {
 ```
 
 Show a custom banner with clear benefits ("Install for offline access and faster loads"),
-not just "Add to Home Screen".
+not just "Add to Home Screen". `beforeinstallprompt` fires only in Chromium browsers;
+Safari (including iOS) and Firefox never fire it, so on iOS show Share → Add to
+Home Screen instructions instead.
 
 ---
 
@@ -254,16 +276,14 @@ For the backend, use `web-push` (Node.js) or your platform's push service.
 
 ---
 
-## Phase 7: Verify with Lighthouse (Playwright)  [LOW freedom — do not skip]
+## Phase 7: Verify installability and offline  [LOW freedom — do not skip]
 
-Run Lighthouse via CLI and check the PWA category score:
-```bash
-npx lighthouse http://localhost:3000 \
-  --output json --output-path .playwright-mcp/lh-report.json \
-  --chrome-flags="--headless" 2>&1 | tail -5
-```
+Lighthouse removed its PWA category in v12.0 (April 2024), so there is no PWA
+score to target. Check in Chrome DevTools → Application instead: the
+**Manifest** pane's Installability section must list no errors, and in
+**Service workers** tick **Offline** and reload `start_url`.
 
-Target PWA score: **≥ 90**. Key checks:
+Key checks:
 - [ ] Manifest present and installable
 - [ ] Service worker registered
 - [ ] Works offline (offline page or cached response)
@@ -277,7 +297,7 @@ Target PWA score: **≥ 90**. Key checks:
 ## Guardrails
 
 - **Service worker caching can break deployments** if old caches persist.
-  Use `registerType: 'autoUpdate'` (the new service worker activates and the page reloads on its own) or `'prompt'` (the user is asked to reload) — never a silent background update that keeps serving stale precached code.
+  Use `registerType: 'autoUpdate'` (the new service worker takes control at once; open tabs reload only when the app registers through `virtual:pwa-register`, e.g. `registerSW({ immediate: true })`) or `'prompt'` (the user is asked to reload) — never a silent background update that keeps serving stale precached code.
 - **Never cache auth tokens or sensitive API responses** in the service worker.
 - **Test offline mode manually** via DevTools → Network → Offline before shipping.
 - **Capacitor apps**: confirm the Capacitor bridge still works after adding the

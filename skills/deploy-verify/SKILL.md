@@ -86,14 +86,14 @@ Grep(pattern: "SENTRY_ORG|SENTRY_PROJECT|SENTRY_DSN|SENTRY_AUTH_TOKEN|@sentry/ne
 Grep(pattern: "SUPABASE_URL|NEXT_PUBLIC_SUPABASE_URL|SUPABASE_SERVICE_ROLE_KEY|SUPABASE_ANON_KEY", glob: ".env*")
 ```
 
-To get the project ID for MCP calls:
+The project ref is the subdomain of the Supabase URL
+(`https://<ref>.supabase.co`). Confirm it with `supabase:get_project_url`.
 
-```json
-supabase:list_projects
-{}
-```
-
-Match the detected URL to a project to get `project_id`.
+The pack's Supabase MCP config is project-scoped (`--project-ref`), so its
+tools take no `project_id` and account tools such as `list_projects` are not
+registered. On a server started without a project ref, call
+`supabase:list_projects` to match the URL, then add
+`"project_id": "<PROJECT_ID>"` to each Supabase call below.
 
 ### 0e. Detect Langfuse Integration
 
@@ -140,11 +140,16 @@ Use the detected org slug and project slug from Phase 0c.
 
 ### 1b. Check Recent Releases
 
+`find_releases` is a catalog tool, not a direct one, so call it through `execute_sentry_tool`. If the call is rejected, run `search_sentry_tools` with `"find releases"` to get the current name and schema.
+
 ```json
-sentry:find_releases
+sentry:execute_sentry_tool
 {
- "organizationSlug": "<ORG_SLUG>",
- "projectSlug": "<PROJECT_SLUG>"
+ "name": "find_releases",
+ "arguments": {
+  "organizationSlug": "<ORG_SLUG>",
+  "projectSlug": "<PROJECT_SLUG>"
+ }
 }
 ```
 
@@ -158,9 +163,9 @@ Verify:
 sentry:search_issues
 {
  "organizationSlug": "<ORG_SLUG>",
- "projectSlug": "<PROJECT_SLUG>",
- "query": "is:unresolved firstSeen:>1h",
- "sortBy": "freq"
+ "projectSlugOrId": "<PROJECT_SLUG>",
+ "query": "is:unresolved firstSeen:-1h",
+ "sort": "freq"
 }
 ```
 
@@ -170,9 +175,9 @@ Also check for regressions (previously resolved issues that re-opened):
 sentry:search_issues
 {
  "organizationSlug": "<ORG_SLUG>",
- "projectSlug": "<PROJECT_SLUG>",
+ "projectSlugOrId": "<PROJECT_SLUG>",
  "query": "is:regressed",
- "sortBy": "freq"
+ "sort": "freq"
 }
 ```
 
@@ -209,9 +214,7 @@ Skip this phase if no Supabase integration detected.
 
 ```json
 supabase:list_migrations
-{
- "project_id": "<PROJECT_ID>"
-}
+{}
 ```
 
 Verify:
@@ -220,11 +223,16 @@ Verify:
 
 ### 2b. API Logs (last 30 minutes)
 
+Logs come from `query_logs`: read-only ClickHouse SQL over one `logs` table,
+filtered by `source`. Current Supabase MCP servers, local and hosted, list it
+instead of `get_logs`. Set `iso_timestamp_start` to 30 minutes ago; without
+it the window is the last 24 hours.
+
 ```json
-supabase:get_logs
+supabase:query_logs
 {
- "project_id": "<PROJECT_ID>",
- "service": "api"
+ "sql": "select timestamp, event_message, log_attributes['request.method'] as method, log_attributes['request.path'] as path, log_attributes['response.status_code'] as status_code from logs where source = 'edge_logs' order by timestamp desc limit 100",
+ "iso_timestamp_start": "<ISO_8601_30_MIN_AGO>"
 }
 ```
 
@@ -236,10 +244,20 @@ Check for:
 ### 2c. Edge Function Logs
 
 ```json
-supabase:get_logs
+supabase:query_logs
 {
- "project_id": "<PROJECT_ID>",
- "service": "edge-function"
+ "sql": "select timestamp, event_message, log_attributes['response.status_code'] as status_code, log_attributes['function_id'] as function_id, log_attributes['execution_time_ms'] as execution_time_ms from logs where source = 'function_edge_logs' order by timestamp desc limit 100",
+ "iso_timestamp_start": "<ISO_8601_30_MIN_AGO>"
+}
+```
+
+Boot errors and exceptions print to the console stream, `function_logs`:
+
+```json
+supabase:query_logs
+{
+ "sql": "select timestamp, event_message, log_attributes['level'] as level, log_attributes['function_id'] as function_id from logs where source = 'function_logs' order by timestamp desc limit 100",
+ "iso_timestamp_start": "<ISO_8601_30_MIN_AGO>"
 }
 ```
 
@@ -251,10 +269,10 @@ Check for:
 ### 2d. Auth Logs
 
 ```json
-supabase:get_logs
+supabase:query_logs
 {
- "project_id": "<PROJECT_ID>",
- "service": "auth"
+ "sql": "select timestamp, event_message, log_attributes['level'] as level, log_attributes['status'] as status, log_attributes['path'] as path, log_attributes['error'] as error from logs where source = 'auth_logs' order by timestamp desc limit 100",
+ "iso_timestamp_start": "<ISO_8601_30_MIN_AGO>"
 }
 ```
 
@@ -268,7 +286,6 @@ Check for:
 ```json
 supabase:get_advisors
 {
- "project_id": "<PROJECT_ID>",
  "type": "security"
 }
 ```
@@ -276,7 +293,6 @@ supabase:get_advisors
 ```json
 supabase:get_advisors
 {
- "project_id": "<PROJECT_ID>",
  "type": "performance"
 }
 ```
@@ -290,7 +306,6 @@ Run a quick data integrity check on the most important tables:
 ```json
 supabase:execute_sql
 {
- "project_id": "<PROJECT_ID>",
  "query": "SELECT schemaname, relname, n_dead_tup, last_autovacuum FROM pg_stat_user_tables WHERE n_dead_tup > 10000 ORDER BY n_dead_tup DESC LIMIT 5"
 }
 ```

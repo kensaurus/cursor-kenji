@@ -188,7 +188,7 @@ after sign-out unless the app also checks revocation / uses
 
 **Rotation & timeouts** — rotate on privilege change (login, role
 elevation) to kill fixation; idle timeout and absolute-max lifetime
-both present. 2026 norm: short access tokens, longer **rotated**
+both present. Current norm: short access tokens, longer **rotated**
 refresh tokens with reuse detection, capped absolute session.
 
 **Refresh-token rotation + reuse detection** — official Supabase

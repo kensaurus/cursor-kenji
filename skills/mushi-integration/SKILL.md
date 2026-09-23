@@ -26,7 +26,7 @@ Stages 1–6 probes and DB verifies `[LOW freedom — run exactly]`.
 
 > **Observe:** `mushi test` → `rep_…`; DB still `pending` at 70s; `mushi doctor` was green.
 > **Interpret:** capture wrote; `classify-report` did not.
-> **Classify:** Stage 2 fail — check `get_logs`; do not start story mapping.
+> **Classify:** Stage 2 fail — check `query_logs`; do not start story mapping.
 > **Verify:** summary marks Stage 2 ❌; later stages skipped; `diagnose_setup` next.
 
 ## Self-critique before reporting
@@ -66,7 +66,7 @@ ORDER BY created_at DESC LIMIT 1;
 ```
 
 Expected: a row with `status` = `classified` and a non-null `severity` within ~30 seconds.  
-If still `pending` after 60 s: `classify-report` edge function failed — check `get_logs(service: 'api')`.
+If still `pending` after 60 s: `classify-report` edge function failed — check its console output with `query_logs` on `source = 'function_logs'`.
 
 ---
 

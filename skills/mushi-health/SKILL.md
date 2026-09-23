@@ -26,7 +26,7 @@ Steps 1–6 in order `[LOW freedom — run exactly]`.
 
 > **Observe:** `mushi doctor` green; `mushi deploy check` ✗ `qa-story-runner`; `qa_story_runs` empty for 2h.
 > **Interpret:** first red is the runner; empty cron is downstream.
-> **Classify:** function-down — check `get_logs` for `qa-story-runner`; do not add keys yet.
+> **Classify:** function-down — check `query_logs` for `qa-story-runner`; do not add keys yet.
 > **Verify:** stop at Step 2; fix the runner; continue remaining steps only after it is green.
 
 ## Self-critique before reporting
@@ -46,7 +46,7 @@ Run these checks in order. Stop and fix at the first ❌ before continuing.
 | 2 | API + edge functions | `mushi deploy check` |
 | 3 | Project overview | `mushi status` |
 | 4 | BYOK key pool | `mushi keys list` or MCP `list_byok_keys` |
-| 5 | Supabase logs | Supabase MCP `get_logs` |
+| 5 | Supabase logs | Supabase MCP `query_logs` |
 | 6 | QA cron running | DB query on `qa_story_runs` |
 
 ---
@@ -136,9 +136,12 @@ mushi keys add --provider firecrawl --key fc-...   --label "primary" --priority 
 Use the Supabase MCP (requires `SUPABASE_ACCESS_TOKEN` in MCP config):
 
 ```
-get_logs(service: 'api')
+query_logs(sql: "select timestamp, log_attributes['function_id'] as function_id, log_attributes['level'] as level, event_message from logs where source = 'function_logs' order by timestamp desc limit 100", iso_timestamp_start: "<ISO 8601, 15 min ago>")
 ```
 
+`function_logs` holds console output from inside each function;
+`function_edge_logs` holds the invocations and their status codes.
+`function_id` is the `id` that `list_edge_functions` returns for each slug.
 Look for `ERROR` lines in the last 15 minutes, especially from these
 **Mushi edge functions** (not pack skills):
 - `story-mapper` — Firecrawl timeout or Claude quota

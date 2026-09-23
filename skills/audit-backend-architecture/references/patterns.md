@@ -210,7 +210,7 @@ no router.
 ## 12. Sidecar / service mesh  · Applies: T3
 
 **Purpose.** Offload mTLS, retries, timeouts, L7 routing/traffic-splitting, and telemetry to a mesh
-instead of hand-rolling them in every service. In 2026 prefer **ambient / sidecarless** (e.g. Istio
+instead of hand-rolling them in every service. Prefer **ambient / sidecarless** (e.g. Istio
 ambient: node-level ztunnel for mTLS + optional per-namespace waypoint proxies for L7) over per-pod
 sidecars for net-new clusters.
 **Detect**
@@ -220,7 +220,7 @@ rg -n "istio|linkerd|consul-connect|envoy|ztunnel|waypoint|sidecar|VirtualServic
 **Good.** mTLS + identity-based authz from the mesh; retries/circuit-breaking/traffic-splitting via
 mesh policy; consistent observability; ambient mode for new clusters.
 **Red flags.** Every service hand-rolling mTLS/retries/telemetry; classic per-pod sidecars adopted
-net-new in 2026 without reason; no service identity.
+for a net-new cluster without reason; no service identity.
 **Fix via** `backend-patterns`, `audit-security` (mTLS/zero-trust).
 
 ---

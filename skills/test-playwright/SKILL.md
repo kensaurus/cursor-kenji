@@ -229,10 +229,12 @@ sentry:search_issues
 ```
 
 `analyze_issue_with_seer` on anything that maps to your change. Resolve
-(`update_issue`) only AFTER a verified fix.
+(`update_issue`) only AFTER a verified fix; it needs the Triage skill on the
+Sentry MCP connection, so resolve in the Sentry UI if the tool is missing.
 
-**Supabase** — `list_tables`, `execute_sql`, `get_logs(service: 'api'|'postgres')`,
-`get_advisors`. New ERROR advisors from your change are in scope. Confirm
+**Supabase** — `list_tables`, `execute_sql`, `query_logs` (API:
+`source = 'edge_logs'`; Postgres: `source = 'postgres_logs'`), `get_advisors`.
+New ERROR advisors from your change are in scope. Confirm
 deployed migrations on the remote (`information_schema` / `pg_proc` / `pg_policies`).
 
 **App logs / terminal** — server stack traces that never reached the browser.

@@ -226,7 +226,6 @@ If the error might be data-related:
 ```json
 supabase:execute_sql
 {
- "project_id": "<PROJECT_ID>",
  "query": "SELECT * FROM <TABLE> WHERE <CONDITION> LIMIT 5"
 }
 ```

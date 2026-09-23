@@ -4,7 +4,7 @@
  * PURPOSE: Fail CI on doubled-prefix skill typos (`mobile-mobile-*`), the
  * stale `audit-responsive-layout` alias, renamed-skill leftovers in
  * OLD_ALIASES, and prompt fossils (retired model names, thinking scaffolds,
- * update suppressors). Does not attempt a full unknown-name scan (session
+ * update suppressors, retired MCP tool calls). Does not attempt a full unknown-name scan (session
  * names like `audit-ux-home` collide with that heuristic).
  *
  * USAGE:
@@ -50,6 +50,8 @@ const FOSSIL_PATTERNS = [
   { name: "retired model name", re: /\b(?:claude[- ]?(?:2|3(?:\.[57])?|instant)|gpt-?4o|(?:opus|sonnet|haiku)[- ]4(?:\.\d)?|composer[- ]2\.5)\b/i },
   { name: "thinking scaffold", re: /(?<!["'“‘])(?:\bthink step[- ]by[- ]step\b|\btake a deep breath\b|\bthink (?:harder|less)\b|\bdon'?t overthink\b|\bultrathink\b|<scratchpad>|<thinking>)/i },
   { name: "update suppressor", re: /(?<!["'“‘])(?:\bhold (?:all )?(?:findings|results)\b|\bdon'?t narrate\b|\bno (?:interim|preamble)\b)/i },
+  // Supabase MCP servers hide get_logs once query_logs exists (0.12.0 and hosted).
+  { name: "retired MCP tool", re: /\bsupabase:get_logs\b/ },
 ];
 /** Files that discuss these patterns by name, and vendored upstream text. */
 function fossilAllowed(rel) {
@@ -174,6 +176,8 @@ function main() {
     if (fossilHits.length !== 3) fail.push(`self-test expected 3 fossil hits, got ${fossilHits.length}`);
     const quoted = checkFossils("skills/meta-skill-creator/SKILL.md", 'not generic "think step by step"');
     if (quoted.length) fail.push("self-test flagged a quoted mention of a scaffold");
+    const retiredTool = checkFossils("skills/deploy-verify/SKILL.md", "supabase:get_logs\n{}");
+    if (retiredTool.length !== 1) fail.push("self-test missed a retired Supabase MCP tool call");
     const vendored = checkFossils("skills/thirdparty-web-interface-guidelines/SKILL.md", "No preamble.");
     if (vendored.length) fail.push("self-test flagged vendored upstream text");
     if (fail.length) {

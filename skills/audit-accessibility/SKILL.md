@@ -282,7 +282,7 @@ Test that focus is managed correctly after dynamic updates:
 sentry:search_issues
 {
  "organizationSlug": "<ORG_SLUG>",
- "projectSlug": "<PROJECT_SLUG>",
+ "projectSlugOrId": "<PROJECT_SLUG>",
  "query": "is:unresolved aria OR screenreader OR voiceover OR talkback OR nvda OR jaws OR focus OR tabindex OR keyboard"
 }
 ```
@@ -293,21 +293,24 @@ sentry:search_issues
 sentry:search_issues
 {
  "organizationSlug": "<ORG_SLUG>",
- "projectSlug": "<PROJECT_SLUG>",
+ "projectSlugOrId": "<PROJECT_SLUG>",
  "query": "is:unresolved keydown OR keyup OR keypress OR focusin OR focusout"
 }
 ```
 
 ### 4c. Browser/Device Breakdown
 
-If errors cluster on AT-favored browsers:
+If errors cluster on AT-favored browsers, pull the browser distribution for the issue. `get_issue_tag_values` is a catalog tool, not a direct one, so call it through `execute_sentry_tool`. If the call is rejected, run `search_sentry_tools` with `"issue tag values"` to get the current name and schema.
 
 ```json
-sentry:get_issue_tag_values
+sentry:execute_sentry_tool
 {
- "organizationSlug": "<ORG_SLUG>",
- "issueId": "<ISSUE_ID>",
- "tagKey": "browser"
+ "name": "get_issue_tag_values",
+ "arguments": {
+  "organizationSlug": "<ORG_SLUG>",
+  "issueId": "<ISSUE_ID>",
+  "tagKey": "browser"
+ }
 }
 ```
 

@@ -111,8 +111,8 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Related:** `design-email`, `plan-privacy-compliance`, `audit-analytics`, `backend-patterns`
 
 #### `enhance-pwa`
-**Triggers:** "make it a PWA", "offline support", "install prompt", "push notifications", "service worker", "add to home screen", "background sync", "Lighthouse PWA score", "app-like experience", "installable", "works offline"
-**What it does:** Adds or upgrades PWA features: Web App Manifest, Workbox service worker with per-asset caching strategies (CacheFirst / NetworkFirst / StaleWhileRevalidate), install prompt, push notifications, offline page. Capacitor-compatible. Lighthouse PWA audit before and after.
+**Triggers:** "make it a PWA", "offline support", "install prompt", "push notifications", "service worker", "add to home screen", "background sync", "app-like experience", "installable", "works offline"
+**What it does:** Adds or upgrades PWA features: Web App Manifest, Workbox service worker with per-asset caching strategies (CacheFirst / NetworkFirst / StaleWhileRevalidate), install prompt, push notifications, offline page. Capacitor-compatible. Verifies installability and offline behavior in Chrome DevTools (Lighthouse 12 removed its PWA category).
 **Related:** `enhance-capacitor-ui`, `mobile-capacitor-platform`, `audit-performance`
 
 #### `enhance-motion`
@@ -271,7 +271,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 #### `plan-gtm`
 **Triggers:** "GTM", "go-to-market plan", "get more users", "grow traffic", "should this be freemium", "how do I market this repo", "/gtm-plan"
-**What it does:** Plan-only go-to-market audit of a shipped repo. Step A greps how the product is sold today — billing SDKs and `isPro` gates, license family, README/hero/meta positioning, auth providers and steps to first value, analytics SDK and consent, robots/sitemap/llms.txt, registry and directory presence, trust signals, real numbers or **unmeasured**. Step B interviews the founder with `workflow-grilling` rules (one question, a recommended answer, facts never asked) down a fixed ladder: 90-day metric → ICP → current numbers → monetization intent → budget → market → alternatives → constraints. Step C diagnoses in Dunford order (alternatives → attributes → value → customers → category), judges the monetization model against 2026 free-to-paid benchmarks (freemium 3–5% good / 8–12% great; card-required trial 25–35%; OSS cloud carries 48–73% of vendor revenue), defines `activated` and one north-star, picks ≤2 channels + 1 loop with 2026 caveats (Show HN 5–30k visits on a hit; Product Hunt 1–2% B2B signup). Emits `plan-gtm.md` with a decision log, positioning statement, funnel table, and a five-phase burndown mapped to execution skills. **Changes nothing.**
+**What it does:** Plan-only go-to-market audit of a shipped repo. Step A greps how the product is sold today — billing SDKs and `isPro` gates, license family, README/hero/meta positioning, auth providers and steps to first value, analytics SDK and consent, robots/sitemap/llms.txt, registry and directory presence, trust signals, real numbers or **unmeasured**. Step B interviews the founder with `workflow-grilling` rules (one question, a recommended answer, facts never asked) down a fixed ladder: 90-day metric → ICP → current numbers → monetization intent → budget → market → alternatives → constraints. Step C diagnoses in Dunford order (alternatives → attributes → value → customers → category), judges the monetization model against 2026 free-to-paid benchmarks (freemium 3–5% good / 8–12% great; card-required trial 25–35%; OSS cloud carries 48–73% of vendor revenue), defines `activated` and one north-star, picks ≤2 channels + 1 loop with caveats (Show HN 5–30k visits on a hit; Product Hunt 1–2% B2B signup). Emits `plan-gtm.md` with a decision log, positioning statement, funnel table, and a five-phase burndown mapped to execution skills. **Changes nothing.**
 **Related:** `workflow-gtm`, `enhance-web-conversion`, `enhance-onboarding`, `docs-launch-kit`, `enhance-web-seo`, `plan-aeo-readiness`, `audit-analytics`, `plan-aso`, `enhance-readme`, `iterate-post-launch`, `workflow-grilling`
 
 #### `plan-pricing`
@@ -832,15 +832,12 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 
 ### Meta
 
+The pack self-audit, [`audit-skill-conflicts`](#audit-skill-conflicts), is listed under Audit; run it after adding a batch of skills.
+
 #### `meta-skill-creator` *(Apache-2.0, adapted from Anthropic)*
 **Triggers:** "author a cursor-kenji skill", "SKILL.md format", "skill structure", "skill best practices"
 **What it does:** Guide for creating effective AI agent skills with proper frontmatter, descriptions, progressive disclosure structure, and concise body. New skills inherit T1–T8, including the `effort:` declaration (see [PROMPT-ENHANCEMENT-PLAYBOOK.md](PROMPT-ENHANCEMENT-PLAYBOOK.md)).
 **Related:** `audit-skill-conflicts`, `enhance-skill-prompts`, `meta-mcp-builder`, `create-skill`
-
-#### `audit-skill-conflicts`
-**Triggers:** "audit my skills", "conflicting skills", "wrong skill triggered", "which skills overlap"
-**What it does:** Pack-level coherence (see Audit section). Run after adding a batch of skills.
-**Related:** `meta-skill-creator`
 
 #### `meta-mcp-builder`
 **Triggers:** "MCP", "Model Context Protocol", "AI tools", "LLM integration", "agent tools", "build MCP server"

@@ -224,9 +224,9 @@ Build a cost table from generation details (model, tokens, latency, cost):
 |---------|-------|------------------|-------------------|-------------|----------------|
 
 **Red flags:**
-- Frontier-tier model (Opus-class, GPT-5-class) used for simple classification/extraction → **recommend the provider's small tier** (Haiku-class, mini-class)
+- Frontier-tier model used for simple classification/extraction → **recommend the provider's small tier**
 - High input token counts → **check for unnecessary context stuffing**
-- Output tokens much larger than needed → **add max_tokens or response format constraints**
+- Output tokens much larger than needed → **add an output-token cap or response format constraints**
 - High latency on user-facing features → **consider streaming, caching, or smaller model**
 - Same content sent repeatedly → **implement semantic caching**
 
@@ -310,7 +310,7 @@ Check:
 sentry:search_issues
 {
  "organizationSlug": "<ORG_SLUG>",
- "projectSlug": "<PROJECT_SLUG>",
+ "projectSlugOrId": "<PROJECT_SLUG>",
  "query": "is:unresolved ai OR llm OR openai OR anthropic OR langfuse OR completion OR embedding"
 }
 ```
@@ -329,7 +329,7 @@ If the project stores AI outputs in the database:
 ```json
 supabase:list_tables
 {
- "project_id": "<PROJECT_ID>"
+ "schemas": ["public"]
 }
 ```
 
@@ -338,7 +338,6 @@ Find tables that store AI outputs and verify data landed:
 ```json
 supabase:execute_sql
 {
- "project_id": "<PROJECT_ID>",
  "query": "SELECT id, created_at, <ai_output_column> FROM <table> ORDER BY created_at DESC LIMIT 5"
 }
 ```
@@ -454,6 +453,7 @@ P2 — Improvement opportunity:
 | Prompt | Baseline Score | Iter 1 Score | Iter 2 Score | Iter 3 Score | Final Score | Action Taken |
 |--------|---------------|-------------|-------------|-------------|-------------|--------------|
 | ... | ... | ... | ... | ... | ... | Promoted / Rolled back / Needs manual |
+```
 
 ## Further reading
 

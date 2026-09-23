@@ -82,7 +82,8 @@ Keychain/Keystore. Hybrid-native gaps are invisible if you only review web code.
   Bundle is extractable; move secret-key ops server-side. → `plan-secrets-audit`
 - **Plaintext token storage** — auth tokens in `localStorage`, `@capacitor/preferences`,
   IndexedDB, plain SQLite. Wrong. Use memory-only or **iOS Keychain / Android Keystore**
-  (`@capacitor-community/secure-storage`, `capacitor-secure-storage-plugin`, Identity Vault).
+  (`@aparajita/capacitor-secure-storage`, `capacitor-secure-storage-plugin`; both fall back to
+  plain `localStorage` on web). Ionic Identity Vault: no new sales since 2025-02.
 - **`allowBackup`** (Android) — `android:allowBackup="true"` exfiltrates app data via backups.
 
 ### 2 · Authentication & deep linking
@@ -116,7 +117,9 @@ Keychain/Keystore. Hybrid-native gaps are invisible if you only review web code.
   functionality** (App Store violation independent of security).
 - **Rollback / kill switch** — can a bad update be reverted?
 
-Severity aligned with Cap-go CAP001–010 / AND001–008 where applicable.
+Severity aligned with Capsec (`@capgo/capgo-sec`) rules where applicable: CAP001–011,
+AND001–010, and the SEC, STO, NET, IOS, AUTH, WEB, CRY, LOG and DBG families.
+`npx @capgo/capgo-sec rules` lists the current set.
 
 For each finding: location, gap, exposure, severity, remediation *direction*.
 

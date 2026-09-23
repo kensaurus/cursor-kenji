@@ -25,7 +25,7 @@ Grep: "String" fields without @unique that should be unique (email, slug)
 
 ## Output Template
 
-```markdown
+````markdown
 ## Database Schema Audit Report
 
 **Date:** [date]
@@ -107,4 +107,4 @@ Grep: "String" fields without @unique that should be unique (email, slug)
 3. [ ] Add missing indexes: [list]
 4. [ ] Add updated_at triggers: [tables]
 5. [ ] Re-run `get_advisors` after fixes to verify
-```
+````

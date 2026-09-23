@@ -9,7 +9,7 @@ packages only it imported — those are *children*, listed in the last column,
 never as separate rows. Twenty-seven findings that collapse to three heads is
 a three-row table, and reporting it as twenty-seven inflates the work.
 
-```markdown
+````markdown
 # Dead-Code Audit — <repo>
 
 _Audit-only. Nothing is deleted, fixed, or installed until each phase is approved._
@@ -108,7 +108,7 @@ Duplication 6.2% → ≤4%. Suppressions 23 → ≤15. All shrink-only.
 Approve a phase to run it via `housekeep-dead-code`. `.skip` rows and TODO
 counts → `housekeep-backlog`. Duplication → `workflow-refactor`. Schema drops →
 `plan-data-integrity` then `db-migrator`.
-```
+````
 
 ## Why the table has a Children column
 

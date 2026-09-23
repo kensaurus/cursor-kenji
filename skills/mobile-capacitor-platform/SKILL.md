@@ -24,7 +24,7 @@ major matching, `cap sync`, secrets, and store preflight
 
 > The native-runtime and shipping layer for Capacitor apps. `enhance-capacitor-ui` handles cross-surface *layout architecture*; this skill handles *platform features, native builds, store submission, and migrations*.
 >
-> Distilled from [cap-go/capgo-skills](https://github.com/cap-go/capgo-skills) (48 skills, MIT). For deep per-task playbooks, install the full pack: `npx skills add Cap-go/capgo-skills` or `claude plugin marketplace add Cap-go/capgo-skills`.
+> Distilled from [cap-go/capgo-skills](https://github.com/cap-go/capgo-skills) (MIT). For deep per-task playbooks, install the full pack: `npx skills add Cap-go/capgo-skills` or `claude plugin marketplace add Cap-go/capgo-skills`.
 
 ## How to reason
 
@@ -80,7 +80,7 @@ major matching, `cap sync`, secrets, and store preflight
 - Play Store: target API level current, data-safety form, 16KB page-size alignment for native libs.
 
 ### Security
-- Run a Capacitor security scan (Capsec: `npx capsec scan --ci`) — catches hardcoded secrets, insecure storage, network security, auth weaknesses. Wire into CI to fail on high/critical.
+- Run a Capacitor security scan (Capsec: `npx @capgo/capgo-sec scan --ci`) — catches hardcoded secrets, insecure storage, network security, auth weaknesses. Wire into CI to fail on high/critical.
 
 ## Migrations
 | From | To | Notes |

@@ -74,7 +74,7 @@ Do **not** fire for "write the landing page" (→ `enhance-web-landing`) or
 2. **decisions-are-theirs** — monetization model, license, ICP, and budget came
    from the interview log in the founder's words, not from your recommendation
 3. **one-metric** — the plan names one north-star and one activation event
-4. **two-channels-max** — no plan lists five channels; each has a 2026 caveat
+4. **two-channels-max** — no plan lists five channels; each carries its caveat
 5. **plan-only** — no copy, pricing, route, robots, or license edits
 6. **honest-growth** — no fake scarcity, upvote rings, fabricated testimonials,
    or analytics before consent anywhere in the plan
@@ -175,7 +175,7 @@ number or **unmeasured** in each cell; group by organization for B2B.
 
 ### Channels — pick ≤ 2 primary + 1 loop
 
-| Channel | Best for | 2026 caveat |
+| Channel | Best for | Caveat |
 |---|---|---|
 | Show HN | dev tools, OSS, infra | front page = 5–30k visits, 50–400 signups; >10 points only ~11% of posts; runnable thing, no signup wall, sober human-written post, answer every comment for 2 h |
 | Product Hunt | consumer, design-led SaaS | featured rate ~10%; 1–2% visit→signup for B2B; credibility artifact, not acquisition; relaunch per major version |

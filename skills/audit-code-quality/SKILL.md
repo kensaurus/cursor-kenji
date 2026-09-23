@@ -279,20 +279,20 @@ rg "from '\.\." --type tsx | head -20 # relative imports instead of @/
 
 ## Anti-pattern detection checklist
 
-### React
+### React checks
 - [ ] No `useEffect` for derived state
 - [ ] No index keys in dynamic lists
 - [ ] No objects/arrays in dependency arrays
 - [ ] Components under 300 lines
 - [ ] No prop drilling beyond 2 levels
 
-### TypeScript
+### TypeScript checks
 - [ ] No `any` (use `unknown` + validation)
 - [ ] No unsafe type assertions
 - [ ] Exhaustive switch statements
 - [ ] Zod schemas for all external data
 
-### Architecture
+### Architecture checks
 - [ ] No circular dependencies
 - [ ] Business logic separated from UI
 - [ ] Files under 400 lines

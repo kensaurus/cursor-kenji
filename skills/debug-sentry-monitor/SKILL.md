@@ -51,6 +51,8 @@ Research non-trivial bugs before fixing (Step 4d).
 
 Before making any Sentry MCP calls, discover the project's Sentry setup.
 
+The Sentry MCP lists these tools directly, depending on which Sentry MCP skills (Inspect, Seer, Triage) the connection grants: `find_organizations`, `find_projects`, `search_issues`, `search_events`, `get_sentry_resource`, `analyze_issue_with_seer` (Seer), and `update_issue` (Triage). The other tools this skill uses (`get_issue_breadcrumbs`, `get_issue_tag_values`, `find_releases`) sit in the server's catalog and run through `execute_sentry_tool` with `name` and `arguments`. If a catalog call is rejected, call `search_sentry_tools` with a short description (for example `"find releases"`) to get the current name and argument schema.
+
 ### 0a. Find Organization and Project
 
 First, try to detect from local config files. Search for these (in order):
@@ -185,11 +187,13 @@ Issue the detail calls for one round in a single message so they run in parallel
 For hard-to-diagnose issues, also fetch breadcrumbs:
 
 ```json
-sentry:get_sentry_resource
+sentry:execute_sentry_tool
 {
- "organizationSlug": "<ORG_SLUG>",
- "resourceType": "breadcrumbs",
- "resourceId": "<ISSUE_ID>"
+ "name": "get_issue_breadcrumbs",
+ "arguments": {
+  "organizationSlug": "<ORG_SLUG>",
+  "issueId": "<ISSUE_ID>"
+ }
 }
 ```
 
@@ -207,12 +211,15 @@ sentry:analyze_issue_with_seer
 For understanding issue distribution, check tag values:
 
 ```json
-sentry:get_issue_tag_values
+sentry:execute_sentry_tool
 {
- "organizationSlug": "<ORG_SLUG>",
- "regionUrl": "<REGION_URL>",
- "issueId": "<ISSUE_ID>",
- "tagKey": "browser"
+ "name": "get_issue_tag_values",
+ "arguments": {
+  "organizationSlug": "<ORG_SLUG>",
+  "regionUrl": "<REGION_URL>",
+  "issueId": "<ISSUE_ID>",
+  "tagKey": "browser"
+ }
 }
 ```
 
@@ -280,11 +287,14 @@ From the Sentry issue details, extract:
 ### 4b. Check Release Correlation
 
 ```json
-sentry:find_releases
+sentry:execute_sentry_tool
 {
- "organizationSlug": "<ORG_SLUG>",
- "regionUrl": "<REGION_URL>",
- "projectSlug": "<PROJECT_SLUG>"
+ "name": "find_releases",
+ "arguments": {
+  "organizationSlug": "<ORG_SLUG>",
+  "regionUrl": "<REGION_URL>",
+  "projectSlug": "<PROJECT_SLUG>"
+ }
 }
 ```
 
@@ -445,6 +455,8 @@ sentry:update_issue
 ```
 
 Issue the resolve calls in one message. Performance issues stay unresolved (Step 5).
+
+`update_issue` needs the Triage skill on the Sentry MCP connection. The hosted server's OAuth sign-in leaves Triage unchecked by default; local stdio and `Sentry-Bearer` connections grant it unless narrowed. If the tool is missing, ask the user to reconnect the Sentry MCP with Triage enabled, or to resolve the issues in the Sentry UI.
 
 ---
 

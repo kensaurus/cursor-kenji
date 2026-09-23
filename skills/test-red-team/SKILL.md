@@ -214,7 +214,6 @@ Every mutation surface (create / update / delete / upload). Verify at
 ```json
 supabase:execute_sql
 {
-  "project_id": "<PROJECT_ID>",
   "query": "SELECT * FROM <table> WHERE <col> LIKE 'RT-TEST-%' ORDER BY created_at DESC LIMIT 10"
 }
 ```
@@ -224,12 +223,12 @@ RLS (what the client can actually read/write):
 ```json
 supabase:execute_sql
 {
-  "project_id": "<PROJECT_ID>",
   "query": "SET ROLE authenticated; SELECT * FROM <table> WHERE user_id != auth.uid() LIMIT 5"
 }
 ```
 
-Also `list_tables`, `get_logs(service: 'api'|'postgres')`, `get_advisors`.
+Also `list_tables`, `query_logs` (`source = 'edge_logs'` or
+`'postgres_logs'`), `get_advisors`.
 Unexpected 5xx, unhandled exceptions, RLS denies, and new ERROR advisors
 are pipeline defects.
 
@@ -289,7 +288,7 @@ Capacitor/Android: `adb shell tc qdisc add dev wlan0 root netem delay 300ms`.
 | Payload size | `requests` → list response > 500 KB? |
 | Memory growth | Large list, scroll bottom↔top × 5. Unbounded heap? |
 | Simultaneous requests | Rapid nav. Loading-state races? |
-| Supabase N+1 | `get_logs(service: 'postgres')` after the feature. Repeated identical queries? |
+| Supabase N+1 | `query_logs` on `source = 'postgres_logs'` after the feature. Repeated identical queries? |
 
 Same `get_advisors` as Phase 3: missing indexes, seq scans, bloated RLS =
 Medium–High perf defects.

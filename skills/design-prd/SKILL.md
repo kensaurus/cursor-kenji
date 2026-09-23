@@ -166,7 +166,6 @@ If the feature involves data, check the existing schema:
 ```json
 supabase:list_tables
 {
- "project_id": "<PROJECT_ID>",
  "schemas": ["public"],
  "verbose": true
 }
@@ -177,7 +176,6 @@ Or for specific tables:
 ```json
 supabase:execute_sql
 {
- "project_id": "<PROJECT_ID>",
  "query": "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name = '<RELEVANT_TABLE>' ORDER BY ordinal_position"
 }
 ```
@@ -258,7 +256,7 @@ Reply with selections (e.g., "1B, 2A, 3B")
 
 ### Template
 
-```markdown
+````markdown
 # PRD: [Feature Name]
 
 > **Status:** Draft
@@ -400,7 +398,7 @@ CREATE TABLE IF NOT EXISTS [table_name] (
 
 - [ ] Q1: [Unresolved question]
 - [ ] Q2: [Unresolved question]
-```
+````
 
 ---
 

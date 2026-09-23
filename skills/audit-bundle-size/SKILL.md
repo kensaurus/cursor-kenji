@@ -285,7 +285,7 @@ $PW -s=bundle-check console                       # no new errors
 
 ---
 
-## Quick-reference: size targets (2026)
+## Quick-reference: size targets
 
 | Asset | Target | Review if |
 |-------|--------|-----------|

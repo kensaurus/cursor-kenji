@@ -167,10 +167,11 @@ sentry:search_issues
 sentry:search_events
 {
  "organizationSlug": "<ORG_SLUG>",
- "projectSlugOrId": "<PROJECT_SLUG>",
+ "projectSlug": "<PROJECT_SLUG>",
  "regionUrl": "<REGION_URL>",
- "query": "transaction.op:http.client",
- "sort": "-duration",
+ "dataset": "spans",
+ "query": "span.op:http.client",
+ "sort": "-span.duration",
  "limit": 15
 }
 ```
@@ -229,7 +230,6 @@ If the backend reads from Supabase, verify the DB schema matches what the fronte
 ```json
 supabase:execute_sql
 {
- "project_id": "<PROJECT_ID>",
  "query": "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name = '<TABLE>' ORDER BY ordinal_position"
 }
 ```

@@ -301,7 +301,6 @@ After each mutation:
 ```json
 supabase:execute_sql
 {
- "project_id": "<PROJECT_ID>",
  "query": "SELECT * FROM <table> WHERE <identifying_column> LIKE 'QA-TEST-%' ORDER BY created_at DESC LIMIT 5"
 }
 ```

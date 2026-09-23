@@ -29,7 +29,7 @@ Two lenses:
 
 ## Core principle — start simple, earn every pattern
 
-Each pattern solves a *specific* problem and carries a *specific* cost. The 2026
+Each pattern solves a *specific* problem and carries a *specific* cost. The current
 consensus is **modular-monolith-first**: >90% of systems are well served by a
 well-structured monolith; **premature decomposition is the #1 failure mode**. A
 pattern is "Missing" only if the **measurable trigger** is present — otherwise

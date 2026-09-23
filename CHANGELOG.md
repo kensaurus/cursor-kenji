@@ -6,6 +6,75 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.39.0] — 2026-09-23
+
+Closes the last three open items from the Opus 5.5 pass: the always-on
+routing rule, facts that went stale, and broken markdown. Each fix was
+researched from primary sources (package source, vendor docs, npm) and
+checked by an independent verifier before it was applied.
+
+### Changed
+
+- **`skill-workflows.mdc` halved** (3,246 → 1,614 bytes), ADR-0011. Claude
+  Code loads it in every session. It now lists only the mappings a skill
+  name gets wrong, for example `workflow-release-prep` never merges and
+  `workflow-onboard` is not product onboarding. It also keeps the
+  multi-phase → workflow principle and the six audit-and-fix exceptions.
+  Everything else was already in skill descriptions or the verification
+  rule.
+- **Supabase MCP calls match current servers.** Current servers (the pinned
+  0.12.0 and the hosted one) hide `get_logs` and list `query_logs`, which
+  takes ClickHouse SQL filtered by `source`. The skills now use it, with SQL
+  taken from the server's own per-service queries. The pack's config is
+  project-scoped (`--project-ref`), so calls no longer pass `project_id`,
+  and `list_projects` is described as available only on an unscoped server.
+  Affected: `deploy-verify`, `iterate-post-launch`, `workflow-fix-and-ship`,
+  `workflow-feature-flag`, `mushi-*`, `test-*`, `audit-db-schema`, and the
+  `full-stack-ship-discipline` rule.
+- **Sentry MCP calls match the current server.**
+  - `get_issue_breadcrumbs`, `get_issue_tag_values`, and `find_releases` are
+    catalog tools, reached through `execute_sentry_tool`; `search_sentry_tools`
+    is the fallback.
+  - `update_issue` needs the Triage skill on the connection.
+  - Relative issue-search dates take a sign (`firstSeen:-1h`).
+- **`enhance-pwa`** uses current facts:
+  - Next.js caching goes through Serwist; `@ducanh2912/next-pwa` is
+    webpack-only.
+  - Lighthouse 12 removed its PWA category, so installability is checked in
+    DevTools. `workflow-launch-ready` and the catalog no longer ask for a PWA
+    score.
+  - `navigateFallback` is the SPA shell, not an offline page.
+  - `beforeinstallprompt` fires only in Chromium.
+- **`enhance-web-instant-nav`** gives the current Speculation Rules eagerness
+  defaults and Next.js 16.3 Instant Navigations.
+- **`plan-capacitor-hardening`** names the current Capsec package
+  (`@capgo/capgo-sec`) and its rule families, and says Ionic Identity Vault
+  stopped new sales in 2025-02.
+- **No calendar-stamped advice.**
+  - Search queries use `[current year]`.
+  - "(2026)" labels on current guidance are gone.
+  - A cost tier is named as a tier, not a model.
+  - Token-cap and streaming-usage fields are named per provider.
+  - The OWASP red-team checklist says it maps the 2021 edition.
+
+### Added
+
+- **`scripts/check-md-structure.mjs`**, in `npm test` and CI, fails on a
+  nested or unclosed code fence.
+- **`check-skill-refs` flags `supabase:get_logs`.**
+
+### Fixed
+
+- **13 broken code fences in 10 files.** A nested or unclosed fence rendered
+  the rest of an output template as live markdown. Affected: `design-prd`,
+  `plan-dead-code`, `audit-db-schema`, `audit-langfuse-llm`,
+  `audit-uiux-design-system`, `backend-error-handling`, and
+  `docs/CONTRIBUTING.md`. Duplicate headings in `audit-code-quality`,
+  `docs-coauthor`, and the catalog now have distinct names.
+- **The README said `audit-*` skills may fix things.** It now says they
+  report and stop, except the six audit-and-fix skills, matching
+  `docs/CONTRIBUTING.md`.
+
 ## [1.38.0] — 2026-09-23
 
 Follow-through on 1.37. A section-by-section check of the Opus 5.5 plan

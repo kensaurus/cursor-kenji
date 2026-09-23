@@ -70,8 +70,9 @@ structured data (JSON-LD), and a sitemap entry.
 
 > Read the `enhance-pwa` skill and follow it.
 
-Required: Web App Manifest + service worker with offline fallback. Lighthouse
-PWA score ≥ 90 before launch.
+Required: Web App Manifest + service worker with offline fallback, and no
+installability errors in Chrome DevTools → Application → Manifest (Lighthouse 12
+removed its PWA score).
 
 ---
 

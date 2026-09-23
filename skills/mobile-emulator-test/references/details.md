@@ -206,7 +206,6 @@ Pick the app's primary mutation surface (FAB → "New X", or the equivalent).
 ```text
 supabase:execute_sql
 {
-    "project_id": "<ref>",
     "query": "select id, amount, currency, posted_at, notes
               from <main_table>
               where workspace_id = '<ws>'
@@ -275,7 +274,7 @@ This is the canonical native bug pattern and deserves its own phase.
 
 3. **PostgREST OR-syntax against a non-existent column.** Same shape as
    above but the failure is loud (`column foo does not exist`). Surfaces in
-   `get_logs(service: "postgres")`.
+   `query_logs` on `source = 'postgres_logs'`.
 
 ### Mitigation pattern (works across stacks)
 
@@ -352,8 +351,10 @@ the SDK isn't initialised on this build path — that itself is a finding.
 ### After — resolve what you fixed
 
 ```text
-update_issue(issueId: "<PROJECT>-<NUM>", status: "resolved")
+update_issue(organizationSlug, issueId: "<PROJECT>-<NUM>", status: "resolved")
 ```
+`update_issue` needs the Triage skill on the Sentry MCP connection; if the tool
+is missing, resolve the issue in the Sentry UI instead.
 Resolve only the IDs whose stack-trace + message exactly match the patch
 you shipped this session. Never resolve speculatively — Sentry will
 auto-reopen if the same fingerprint reappears.

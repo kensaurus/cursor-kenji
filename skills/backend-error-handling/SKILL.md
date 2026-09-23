@@ -272,7 +272,6 @@ export function UserForm() {
 - `useActionState` - Form state with Server Actions
 - `useFormStatus` - Pending state in child components
 - `useOptimistic` - Optimistic UI updates
-```
 
 ## React Error Boundaries  [HIGH freedom]
 

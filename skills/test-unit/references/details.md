@@ -20,7 +20,6 @@ If the project uses Supabase, verify test data matches the actual schema:
 ```json
 supabase:execute_sql
 {
-  "project_id": "<PROJECT_ID>",
   "query": "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name = '<TABLE_BEING_TESTED>' ORDER BY ordinal_position"
 }
 ```
