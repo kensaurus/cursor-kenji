@@ -68,7 +68,7 @@ Full pack (skills + slash commands): `npx @kensaurus/cursor-kenji --all`. That C
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/cursor-kenji
 
-**Status:** Pending — `@kensaurus/cursor-kenji@1.39.0` (routing rule halved, MCP tool names and dated facts corrected, markdown fence check). Previous: `1.38.0` via OIDC run [35843161525](https://github.com/kensaurus/cursor-kenji/actions/runs/35843161525).
+**Status:** Published — `@kensaurus/cursor-kenji@1.39.0` via OIDC run [35853156100](https://github.com/kensaurus/cursor-kenji/actions/runs/35853156100) (routing rule halved, MCP tool names and dated facts corrected, markdown fence check). Previous: `1.38.0` via OIDC run [35843161525](https://github.com/kensaurus/cursor-kenji/actions/runs/35843161525).
 
 ---
 
