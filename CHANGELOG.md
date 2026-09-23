@@ -6,6 +6,18 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.37.1] — 2026-09-23
+
+### Fixed
+
+- **`--verify` reported line endings as corruption.** A Windows checkout with
+  `core.autocrlf=true` carries CRLF in the working copy while the npm tarball
+  (built on Linux) is LF, so an install from a clone followed by
+  `npx @kensaurus/cursor-kenji --verify --all` failed on 17 files with
+  "content hash mismatch". `bin/install.mjs` now hashes text files with line
+  endings normalized; the install smoke test plants a CRLF copy and expects
+  `--verify` to pass.
+
 ## [1.37.0] — 2026-09-23
 
 An Opus 5.5 pass. Claude Code 2.1.280 made Claude Opus 5.5 the default model

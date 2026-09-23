@@ -298,8 +298,14 @@ if (skillName) onlyGroups = new Set(['skills']);
 const DIRS = ALL_DIRS.filter((d) => !onlyGroups || onlyGroups.has(d.dest));
 const managedDests = [...new Set(DIRS.map((d) => d.dest))];
 
+// Text files are hashed with line endings normalized: a Windows checkout with
+// core.autocrlf=true carries CRLF while the npm tarball (built on Linux) is
+// LF, and --verify must not report identical content as a mismatch.
+const TEXT_EXT = /\.(md|mdc|mjs|js|cjs|ts|tsx|json|jsonc|txt|toml|ya?ml|sh|cmd|svg|css|html)$/i;
 function fileHash(p) {
-  return createHash('sha256').update(readFileSync(p)).digest('hex');
+  const buf = readFileSync(p);
+  const data = TEXT_EXT.test(p) ? buf.toString('utf8').replace(/\r\n/g, '\n') : buf;
+  return createHash('sha256').update(data).digest('hex');
 }
 
 function walkRelFiles(root) {

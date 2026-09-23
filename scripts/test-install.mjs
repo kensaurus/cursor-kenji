@@ -254,6 +254,14 @@ try {
     env: { ...process.env, HOME: sandbox, USERPROFILE: sandbox },
     stdio: "pipe",
   });
+  // Line endings are not content: a CRLF copy (Windows checkout with
+  // core.autocrlf=true) must verify against the LF source in the npm tarball.
+  const lfSource = readFileSync(join(repoRoot, "skills", "research", "SKILL.md"), "utf8").replace(/\r\n/g, "\n");
+  writeFileSync(skillProbe, lfSource.replace(/\n/g, "\r\n"));
+  execFileSync(process.execPath, [installer, "--verify"], {
+    env: { ...process.env, HOME: sandbox, USERPROFILE: sandbox },
+    stdio: "pipe",
+  });
   writeFileSync(skillProbe, marker);
   let verifyFailed = false;
   try {
