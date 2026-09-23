@@ -5,6 +5,7 @@ description: >
   Use when starting a new feature, documenting requirements, creating specs before
   implementation, or needing clarity on scope and success criteria.
 license: MIT
+effort: high
 ---
 
 # Generate PRD Skill
@@ -18,7 +19,7 @@ informed by codebase analysis and competitive research.
 ## How to reason
 
 1. **Discover** — stack, features, schema, existing PRDs
-2. **Clarify** — 3–5 numbered questions with lettered options
+2. **Clarify** — only what is unclear, numbered with lettered options
 3. **Scope** — P0/P1/P2 plus explicit non-goals
 4. **Specify** — testable requirements, not implementation
 
@@ -32,7 +33,7 @@ informed by codebase analysis and competitive research.
 ## Self-critique before reporting
 
 - **Context recorded** — stack, features, schema, and existing PRDs were listed first
-- **Questions capped** — 3–5, lettered; coding did not start first
+- **Questions minimal** — only what was unclear, lettered; coding did not start first
 - **Testable FRs** — no "should be fast" without a number
 - **Right owner** — ready to implement → `workflow-build-feature`; UI from scratch → `design-frontend`; RLS matrix → `plan-rls-audit`
 
@@ -127,7 +128,7 @@ Additional searches based on feature type:
 | Search / filtering | `search and filter UX patterns faceted search` |
 | Settings / preferences | `settings page UX patterns user preferences` |
 
-Scrape the most relevant result for detailed patterns:
+Scrape the most relevant result for detailed patterns. Competitor rows in section 7 come from fetched pages, not memory — recognizing a product name is not knowing its current feature set; search the name as written:
 
 ```json
 firecrawl:firecrawl_scrape
@@ -191,7 +192,7 @@ Determine:
 
 ## Step 2: Understand the Request  [HIGH freedom]
 
-When the user describes a feature, **DO NOT** start writing immediately.
+When the user describes a feature, sort what is clear from what is unclear before writing anything:
 
 Identify what is clear vs unclear:
 - Clear: problem statement, target user, basic functionality
@@ -212,7 +213,7 @@ If similar functionality already exists, the PRD should extend it rather than du
 
 ### Rules
 
-1. **Limit to 3-5 questions** — only ask what is truly unclear
+1. **Ask only what is truly unclear** — usually a handful; if nothing is, say so and proceed
 2. **Number all questions** (1, 2, 3...)
 3. **Provide lettered options** (A, B, C, D) for easy response
 4. **Make responding easy** — user can reply "1A, 2C, 3B"
@@ -406,7 +407,7 @@ CREATE TABLE IF NOT EXISTS [table_name] (
 
 ## Step 5: Iterate  [HIGH freedom]
 
-After presenting the PRD:
+Present the PRD, take the user's edits, resolve the open questions, and confirm it is ready to save before writing the file.
 1. Ask: "Does this capture what you had in mind?"
 2. Incorporate edits
 3. Resolve open questions
@@ -441,7 +442,7 @@ Target audience: a **junior developer** should understand this.
 ## Anti-Patterns
 
 - Starting to code before asking questions
-- Asking 10+ questions (keep to 3-5)
+- Asking questions the repo or the request already answers
 - Writing implementation details (PRD = WHAT/WHY, not HOW)
 - Vague requirements ("should be fast" -> "response time under 200ms")
 - Skipping competitive research (leads to reinventing the wheel)

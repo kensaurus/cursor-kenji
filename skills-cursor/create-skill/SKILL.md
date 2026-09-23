@@ -9,7 +9,7 @@ This skill guides you through creating effective Agent Skills for Cursor. Skills
 
 ## Check existing first
 
-**Before creating ANY skill, verify:**
+**Before creating a skill, check:**
 
 1. **Check for existing skills:**
 ```bash
@@ -95,7 +95,7 @@ description: Brief description of what this skill does and when to use it
 # Your Skill Name
 
 ## Instructions
-Clear, step-by-step guidance for the agent.
+Outcomes, constraints, and how to verify. Numbered steps only where order is load-bearing (destructive ops, auth, migrations).
 
 ## Examples
 Concrete examples of using this skill.
@@ -107,6 +107,19 @@ Concrete examples of using this skill.
 |-------|--------------|---------|
 | `name` | Max 64 chars, lowercase letters/numbers/hyphens only | Unique identifier for the skill |
 | `description` | Max 320 chars in kenji (spec max 1024), non-empty | Helps agent decide when to apply the skill |
+
+### Optional fields
+
+Cursor ignores keys it does not list; Claude Code honors all of these. Any other key goes under `metadata`.
+
+| Field | Hosts | Use |
+|-------|-------|-----|
+| `disable-model-invocation: true` | Cursor, Claude Code | User-initiated rituals. Also keeps the description out of the always-on skill roster that every request pays for. |
+| `user-invocable: false` | Claude Code | Reference-only skill; hides the `/` entry. |
+| `effort` | Claude Code | `low` / `medium` / `high` / `xhigh` / `max`. Opus 5.5 defaults to `medium`; declare `high` for audit, plan, judge, security, and architecture skills, `low` for mechanical, read-only, or handoff skills. Effort is the thinking control — prose cannot raise or lower it. |
+| `context: fork` + `agent: <name>` | Claude Code | Run in a forked context so the output stays out of the main conversation; `agent: Explore` for read-only inventory. |
+| `model`, `allowed-tools` | Claude Code | Pin a model; restrict tools. |
+| `paths` | Cursor, Claude Code | Globs; the skill applies when matching files are in play. |
 
 ---
 
@@ -210,8 +223,9 @@ Put essential information in SKILL.md; detailed reference material in separate f
 Adapted from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT):
 
 - **No-op test** — if a sentence doesn't change behavior versus the agent's
-  default ("be thorough"), delete the whole sentence. Cure weak intensifiers
-  with a stronger single word (*relentless*), not more prose.
+  default ("be thorough"), delete the whole sentence. Do not swap in an
+  intensifier (*relentless*); on current models emphasis over-triggers — name
+  the concrete behavior and its reason instead.
 - **Positive phrasing** — state the target behavior instead of prohibiting the
   bad one; keep prohibitions only as hard guardrails, paired with what to do
   instead.
@@ -231,6 +245,14 @@ Match specificity to the task's fragility:
 | **High** (text instructions) | Multiple valid approaches, context-dependent | Code review guidelines |
 | **Medium** (pseudocode/templates) | Preferred pattern with acceptable variation | Report generation |
 | **Low** (specific scripts) | Fragile operations, consistency critical | Database migrations |
+
+### 6. Write for current models
+
+- **Effort, not prose, sets thinking.** Leave out "think step by step", "think hard", and "double-check your work"; set `effort:` and state the outcome to verify. Keep evidence rules ("tie every finding to a tool result") — they target fabricated progress, not thinking.
+- **Normal volume, with the reason.** MUST/NEVER/CRITICAL over-trigger; "try to" and "if possible" read as permission to skip. Say it once and say why.
+- **Describe success, not the grader.** State every requirement; leave out how the output will be scored or tested by a reader.
+- **Ask for updates.** One line of intent before the first tool call, a note on load-bearing findings, a standalone recap at the end. A skill that runs unattended also says when the turn may end.
+- **Frontend skills name the defaults to avoid** (cream backgrounds, italic accent words, "01/02/03" labels, pill buttons, Inter/Roboto, purple gradients, three equal cards); "avoid a generic look" swaps one default for another.
 
 ---
 

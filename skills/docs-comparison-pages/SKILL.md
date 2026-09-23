@@ -7,6 +7,7 @@ description: >
   "alternatives to", "competitor page", "migration guide from". Meta/schema →
   enhance-web-seo.
 license: MIT
+effort: high
 ---
 
 # docs-comparison-pages — The pages buyers read last
@@ -69,7 +70,7 @@ real query; skip alternatives nobody compares against.
 
 ### 2. Verify facts  [LOW freedom — run exactly]
 
-For each alternative: fetch its pricing page, feature/limits page, and docs
+For each alternative: fetch its pricing page, feature/limits page, and docs this session — recognizing the product's name is not knowing its current prices or limits, so fetch even for products you know well
 (Firecrawl or WebFetch); record `URL · fetched date · quote` in a source
 block at the bottom of the page. Product-side facts come from the repo
 (`pricing`, limits, feature flags) with file references. Anything
@@ -87,7 +88,7 @@ Shape per page (order may vary, sections may not be skipped):
 6. **FAQ** — 3–5 real objections (→ FAQ JSON-LD via `enhance-web-seo`).
 7. **Sources** — the dated block from step 2.
 
-Voice: first person plural, plain claims, no superlatives. If a paragraph
+Voice: first person plural, plain claims, no superlatives, no mannered prose (throat-clearing openers, stacked hedges, triplets for rhythm, a closing line that restates the paragraph). If a paragraph
 could sit on another vendor's page, rewrite it.
 
 ### 4. Freshness contract  [LOW freedom — run exactly]

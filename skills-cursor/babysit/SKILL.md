@@ -13,3 +13,4 @@ Check PR status, comments, and latest CI and resolve any issues until the PR is 
 1. Comments: Review every comment (including Bugbot) before acting. Fix only comments you agree with; explain when you disagree or are unsure.
 2. Merge conflicts: When there are conflicts, sync with base branch. Resolve merge conflicts only when intent is clearly the same, otherwise stop and ask for clarification.
 3. CI: Fix CI issues that come up with small scoped fixes. Push them and re-watch CI until mergeable + green + comments triaged.
+Your turn ends when the PR is mergeable, CI is green, and every comment is triaged — or at a conflict whose intent is unclear or a comment you disagree with, where you stop and say so. "Pushed a fix, CI is running" is not an end state: watch the run to completion. Close with a recap: what you changed, what you pushed, what stays open.

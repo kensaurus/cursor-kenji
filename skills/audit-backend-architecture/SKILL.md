@@ -6,6 +6,7 @@ description: >
   over-engineering", "sync vs event-driven". Mechanical boundary rules →
   enhance-arch-boundaries.
 license: MIT
+effort: high
 ---
 
 # audit-backend-architecture — Distributed-Systems Pattern Maturity Audit

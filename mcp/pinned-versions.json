@@ -2,7 +2,6 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "description": "Pinned MCP server versions for npx/uvx templates. Bump here, then sync mcp/*.template, .mcp.json, and mcp/README.md. Verified 2026-09-17.",
   "npm": {
-    "@modelcontextprotocol/server-sequential-thinking": "2026.8.31",
     "@modelcontextprotocol/server-github": "2025.4.8",
     "@modelcontextprotocol/server-postgres": "0.6.2",
     "@modelcontextprotocol/server-redis": "2025.4.25",

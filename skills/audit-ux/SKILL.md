@@ -6,6 +6,7 @@ description: >
   assessing cognitive load. Cross-page flows/IA → audit-ux-journeys.
   Layout/breakpoints → audit-responsive. Empty/error states → audit-ui-states.
 license: MIT
+effort: high
 ---
 
 # UX Audit Skill
@@ -57,7 +58,27 @@ Read README, landing page, marketing copy, and any onboarding flows to answer:
 - **What's the success moment?** (The "aha" — when the human gets what they came for)
 - **What's the trust model?** (Does the user trust this product with money? Health data? Business data?)
 
-### 0b. Map the Full Data Pipeline
+### 0b. Map pipeline, routes, and emotional arc
+
+For each core task, trace how data moves from the human's input through
+client validation, the API call, server processing, the database, the
+response, and the client update to the feedback the human sees (`api/`,
+`actions/`, `hooks/use*`, `lib/`, and `fetch|axios|ky|useSWR|useQuery|trpc`
+call sites locate the integration points). Mark the latency-sensitive,
+error-prone, and trust-sensitive points — H1, H5, and H9 findings come from
+there. Discover routes by framework (`app/**/page.tsx`, `pages/**/*.tsx`,
+`src/routes/`, `router.*`) and note nav shape (flat / hierarchical /
+hub-and-spoke), depth, cross-links, and dead ends for the pages in scope;
+cross-page IA belongs to `audit-ux-journeys`. For each core flow, note the
+entry emotion, where confusion or anxiety spikes, where the product earns
+trust, the peak moment (best or worst), and how the flow ends.
+
+### 0c. Record discovery
+
+One short block in whatever shape fits: product type, the human problem,
+the primary human and their emotional context, the top core tasks, the
+success moment, trust level (money / data / time / reputation), page count,
+auth pattern, locale/i18n, and known latency or error-prone points.
 
 Trace how data flows through the system from the human's perspective:
 

@@ -89,7 +89,16 @@ my-mcp-server/
 'do_thing'
 ```
 
-### 2. Concise Descriptions
+### 2. Complete descriptions — a man page, not a slogan
+
+Under-description is the common failure. State what the tool does, when to use it and when not to, what each parameter means, caveats, and what it does not return — three to four sentences or more. Keep behavioral steering ("always prefer this tool") and worked examples out of the description; they constrain exploration and cost tokens on every request, and belong in a skill.
+
+```typescript
+{
+ name: 'github_search_issues',
+ description: 'Search GitHub issues in one repository by free-text query, state, and labels. Returns up to `limit` issues with title, number, state, and URL; does not return bodies or comments (use github_get_issue for those). For creating an issue use github_create_issue.',
+}
+```
 ```typescript
 {
  name: 'github_search_issues',
@@ -193,7 +202,7 @@ server.tool(
 | full API coverage | Agent needs flexibility to compose operations |
 | Workflow tools | Specific task needs multi-step automation |
 
-**Default:** Start with full API coverage, add workflow tools for common patterns.
+**Default:** start with the tools that match the agent's real jobs (workflow-shaped), then add raw-coverage tools only where agents need to compose operations the workflow tools do not cover. Past a few dozen tools, rely on the client's tool search / deferred loading instead of always-loading every schema.
 
 ### Response Formatting
 
@@ -251,6 +260,7 @@ npx @modelcontextprotocol/inspector
 
 - [ ] All tools have clear, descriptive names
 - [ ] All parameters have descriptions
+- [ ] Every description says when not to use the tool and what it does not return
 - [ ] Error messages are actionable
 - [ ] Pagination for list operations
 - [ ] No hardcoded credentials

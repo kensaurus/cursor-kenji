@@ -68,7 +68,7 @@ Full pack (skills + slash commands): `npx @kensaurus/cursor-kenji --all`. That C
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/cursor-kenji
 
-**Status:** [x] Published — `@kensaurus/cursor-kenji@1.36.3` via OIDC run [35725729170](https://github.com/kensaurus/cursor-kenji/actions/runs/35725729170); `npm view … version` returns `1.36.3` and `dist-tags.latest` is `1.36.3` (2026-09-22)
+**Status:** Pending — `@kensaurus/cursor-kenji@1.37.0` (Claude Opus 5.5 pass: effort routing, rule re-baseline, dated-pattern cleanup). Previous: `1.36.3` via OIDC run [35725729170](https://github.com/kensaurus/cursor-kenji/actions/runs/35725729170).
 
 ---
 
@@ -219,6 +219,8 @@ Title: Playbooks that will not call a PR done
 I got tired of agents skipping the interview, the failing test, and the
 live check. cursor-kenji is installable playbooks: you say the job, a
 named skill runs, and “done” has to survive a judge.
+Skills declare effort for Opus 5.5: audits and plans at high, implementation
+at the medium default, handoff at low.
 
 npx @kensaurus/cursor-kenji --all
 https://github.com/kensaurus/cursor-kenji

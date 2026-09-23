@@ -256,7 +256,7 @@ If any step exceeds its budget, log `[TIMEOUT]` and move on.
 
 ## Important Rules
 
-1. **Read the codebase first.** Never test blindly. Phase 0 is mandatory.
+1. **Read the codebase first (Phase 0).** Routes, entities, and auth come from the code, not from guessing at the UI.
 2. **Use playwright-cli** for all browser interaction: `goto`, `snapshot`, `screenshot`, `click`, `fill`, `type`, `press`, `console`, `requests`, `close`, `find`.
 3. **Apply anti-stall protocol** to every interaction. Read `protocol-browser-anti-stall` skill first.
 4. **Screenshot every test step.** Every pass and fail needs visual evidence.

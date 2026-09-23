@@ -35,7 +35,7 @@ Rules that follow from this:
 - **Progressive disclosure.** Newcomer on-ramp first (plain language + one example), reference depth below. A pro scrolls past the primer in two seconds; a newcomer can't skip *to* it if it was never written.
 - **Beat the curse of knowledge.** You know the jargon; the reader may not. Define a term on first use, or add a plain-language glossary when the project leans on 3+ domain terms (pattern below).
 - **Show, don't just tell.** Every abstract capability gets a concrete, copy-pasteable example.
-- **Write the sentence you'd say out loud** to a smart colleague who's never seen the project. If it reads like a brochure or a spec dump, rewrite it until it sounds human.
+- **Write the sentence you'd say out loud** to a smart colleague who's never seen the project. Mannered prose is the anti-pattern — sentences that perform writing instead of saying something: throat-clearing openers, stacked hedges, "it's worth noting", triplets for rhythm, a closing line that restates the paragraph. One plain sentence per idea.
 
 Everything else in this skill (templates, API docs, comments) serves this principle — structure and polish never substitute for orienting the reader first.
 
@@ -84,7 +84,7 @@ Read the actual code being documented to ensure accuracy:
 - Verify example code actually works
 - Confirm database schema matches any data documentation
 
-### 4. Verification Statement (REQUIRED)
+### 4. Verification statement — so the docs rest on files you read, not assumptions
 Before writing docs, state:
 ```
 "Pre-documentation check:
@@ -357,6 +357,8 @@ const logger = createLogger({
 ```
 
 ### Structure Information
+
+Format by content shape: a list, table, or numbered steps when the content is multifaceted (options, parameters, an ordered setup); prose when it is one idea. Headings only where a reader would scan for them.
 
 ```markdown
 # ❌ Wall of text

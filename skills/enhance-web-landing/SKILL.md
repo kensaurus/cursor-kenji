@@ -62,7 +62,7 @@ Ask exactly **one** clarifying question - never a multi-question dump - and only
 If you can confidently infer from context, **do not ask**. Just declare the design read and proceed.
 
 ### 0.D Anti-Default Discipline
-Do not default to: AI-purple gradients, centered hero over dark mesh, three equal feature cards, generic glassmorphism on everything, infinite-loop micro-animations everywhere, Inter + slate-900. These are the LLM defaults. Reach past them deliberately based on the design read.
+Do not default to: AI-purple gradients, centered hero over dark mesh, three equal feature cards, generic glassmorphism on everything, infinite-loop micro-animations everywhere, Inter / Roboto + slate-900, a cream / off-white page background, an italic accent word in every headline, "01 / 02 / 03" numbered section labels, monospace eyebrow labels, pill-shaped buttons on every control. These are the model's defaults; reach past them deliberately based on the design read. After a first pass, add whatever default the result reached for to this list before iterating.
 
 ---
 
@@ -202,7 +202,7 @@ LLMs default to clichés. Override these defaults proactively. Each rule has a c
  - The brand brief literally names a serif font, or
  - The aesthetic family is genuinely editorial / luxury / publication / manuscript / heritage / vintage and you can articulate why this specific serif fits this specific brand
  * For everything else (creative agency, design studio, modern brand, premium consumer, portfolio, lifestyle), **default sans-serif display** (Geist Display, ABC Diatype, Söhne Breit, Cabinet Grotesk Display, Migra Sans, GT Walsheim, Inter Display, PP Neue Montreal). Sans display fonts are not "boring" — they are the default for the same reason black is the default in fashion.
- * **Emphasis rule (related):** When you want to emphasize a word within a headline (the kinetic "and `spatial` design" type move), use **italic or bold of the SAME font**. Do not inject a random serif word into a sans headline (or vice versa) just to add visual interest. Mixed-family emphasis is amateur. Italic/bold emphasis in the same family is the right move.
+ * **Emphasis rule (related):** To emphasize a word inside a headline, use italic or bold of the SAME font — never a serif word dropped into a sans headline (mixed-family emphasis is amateur). Use it once per page at most: an italic accent word in every headline is itself a model default and reads as a tell.
  * **Specifically banned as defaults:** `Fraunces` and `Instrument_Serif` (the two LLM-favorite display serifs).
  * **If a serif is justified** (rare, per the above), choose from this pool by brand fit: PP Editorial New, GT Sectra Display, Cardinal Grotesque, Reckless Neue, Tiempos Headline, Recoleta, Cormorant Garamond, Playfair Display, EB Garamond, IvyPresto, Migra, Editorial Old, Saol Display, Söhne Breit Kursiv, Domaine Display, Canela, Schnyder, Tobias, NB Architekt, ITC Galliard.
 
@@ -290,7 +290,7 @@ LLMs default to "static successful state only." Always implement full cycles:
 Landing pages and portfolios are **visual products**. Text-only pages with fake-screenshot divs are slop.
 
 **Priority order for visual assets:**
-1. **Image-generation tool first.** If any image-gen tool is available in the environment (`generate_image`, MCP image tool, IDE-integrated gen, OpenAI image tools, etc.) you must use it to create section-specific assets: hero photography, product shots, texture backgrounds, mood images. Generate at the right aspect ratio for the section. Do not skip this step because hand-rolled CSS feels faster.
+1. **Image-generation tool first.** When an image-gen tool is available (`generate_image`, an MCP image tool, IDE-integrated gen), use it for section-specific assets — hero photography, product shots, texture backgrounds, mood images — at the section's aspect ratio. Hand-rolled CSS is not a substitute for a real image.
 2. **Real web images second.** When no gen tool is available, use real photography sources. Acceptable defaults:
  * `https://picsum.photos/seed/{descriptive-seed}/{w}/{h}` for placeholder photography (seed should describe the section, e.g. `artisan-cookware-kitchen`)
  * Actual stock or brand URLs when the brief provides them
@@ -360,7 +360,7 @@ Landing pages live on the **first impression**, not the full read. Cut ruthlessl
 
 * **Max 3 lines** of quote body. Never 6. If the original quote is longer → cut it. A landing-page quote is a snippet, not the full review.
 * For very small font sizes (e.g. footer-style testimonials), the line cap can stretch slightly. Spirit: "fits in a glance."
-* **No em-dashes inside the quote text** as design flourish (long pauses, kinetic em-dashes, em-dash-bullets). See Section 9.G - em-dash is completely banned.
+* **No em-dashes inside the quote text** as design flourish (long pauses, kinetic em-dashes, em-dash-bullets) — an em-dash-heavy quote reads as generated, the same tell as in body copy (full rule: `references/details.md` §9.G).
 * Attribution: name + role + (optionally) company. Never name only ("- Sarah").
 * Quote marks: use real typographic quotes ( " " ) or none at all. Not straight ASCII ( " ).
 

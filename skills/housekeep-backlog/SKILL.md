@@ -67,8 +67,9 @@ action.
 
 ## Phase 1 — Discover every source  [LOW freedom — run all]
 
-Miss none. Use workspace Grep/`rg` (not unbounded `find`). Load any
+Use workspace Grep/`rg` (not unbounded `find`). Load any
 existing `BACKLOG.md` first — this run is a regeneration + diff.
+The scans are independent and their raw output is long: run them in one read-only Explore subagent per source class, launched in one message, and bring back only candidate rows (file:line, form, one-line context). Keep Interpret/Classify in the main thread — they need the repo context.
 
 - **Code markers** — `TODO|FIXME|HACK|XXX|WIP|@todo|@deprecated` with
   surrounding context; `git blame` when the age matters

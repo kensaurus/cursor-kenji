@@ -6,6 +6,7 @@ description: >
   "post-release check", or "ship or rollback". Deploy + observation loop
   → workflow-ship-and-observe. npm package release → deploy-npm.
 license: MIT
+effort: high
 ---
 
 # Post-Deploy Verification
@@ -37,11 +38,11 @@ regressions before users do. Works with **any project** — auto-detects configu
 - **Skip honesty** — missing Sentry/Supabase/Langfuse is SKIP, not PASS
 - **Right owner** — npm publish → `deploy-npm`; observe window → `workflow-ship-and-observe`
 
-## Critical Rules
+## Rules
 
 > **Run within 15 minutes of deploy.** The sooner you check, the smaller the blast radius.
 
-> **Parallel where possible.** Sentry, Supabase, and Langfuse checks are independent — run them in parallel to save time.
+> **Parallel where possible.** Sentry, Supabase, and Langfuse checks are independent — issue them in one message (or one subagent each) so they run in parallel. Time matters here: do not spend time that can be avoided.
 
 > **The verdict must be binary.** SHIP, ROLLBACK, or MONITOR (with clear criteria for when MONITOR escalates to ROLLBACK).
 

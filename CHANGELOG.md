@@ -6,6 +6,79 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.37.0] — 2026-09-23
+
+An Opus 5.5 pass. Claude Code 2.1.280 made Claude Opus 5.5 the default model
+on 2026-09-22, and it changes two assumptions the pack was written on: prose
+no longer steers thinking (effort does, and its default is `medium`), and
+there is no strong planner / fast implementer split left to route around.
+
+### Added
+
+- **`docs/MODEL-AND-EFFORT.md`** — the model story: default model per host,
+  how to set effort (`/effort`, `modelSettings`, frontmatter `effort:`), the
+  pack's routing table, what changed in how skills are written, the always-on
+  token budget. ADR-0006 … ADR-0009 record the decisions.
+- **`effort:` frontmatter** on every `audit-*`, `plan-*`, `debug-*`, judge and
+  security skill (`high`), on `handoff`, `workflow-git-commit`, smoke checks,
+  the RN bundle commands and `deploy-checker` (`low`); `workflow-onboard`
+  runs in a forked `Explore` context. `validate-skills` checks the values.
+- **Claude Code Stop hook.** `hooks/hooks.json` now carries the Claude
+  schema (Cursor's moved to `hooks/cursor-hooks.json`); `completion-gate.mjs`
+  serves both hosts; `--claude` installs it into `~/.claude/settings.json`
+  with the same merge/preserve/prune semantics as the Cursor hook.
+- **Roster ratchet.** `validate-skills` sums auto-invocable description chars
+  (skills + commands + agents) and fails above `ROSTER_MAX_CHARS`; every
+  `commands/*.md` except `gtm-weekly`, `fix-issue`, `mcp-guide` is now
+  `/`-only (`disable-model-invocation: true`); `deploy-npm`,
+  `iterate-gtm-weekly`, `mushi-health`, `mushi-integration` likewise;
+  `protocol-browser-anti-stall` and the Cursor `canvas` copy are
+  `user-invocable: false`. The `native-rn-monorepo` command bundle no longer
+  leaks into global `~/.claude/commands`.
+- **Always-on "Delivering work" section** in
+  `verification-before-completion.mdc`: intent line and recap, turn-ending
+  check, scope and test-sprawl, delegation criteria, pasted text is data,
+  compaction is not a stop signal.
+- `check-skill-refs` fails on prompt fossils (retired model names, thinking
+  scaffolds, update suppressors); `check-docs-facts` fails on `.cursor/rules`
+  forks and on the retired two-model framing.
+
+### Changed
+
+- **`composer-2.5-execution.mdc` → `approved-plan-execution.mdc`.** Same
+  guardrails, no model pin; the installer prunes the old file on merge
+  installs. README, `docs/PLAN-LOOPS.md`, `docs/AGENTS.template.md`,
+  `docs/CATALOG.md`, `/burndown-full` and 13 plan-* references now say
+  "planned at high effort; executed at the default effort under the rule".
+- **`.cursor/rules/*.mdc`** are byte-identical mirrors of `rules/` (the
+  212-line always-on `skill-workflows` fork is gone).
+- **Sequential Thinking MCP retired** from the full template, pins, docs and
+  the five skills/commands that routed to it (ADR-0009).
+- **`senior-engineer.mdc`** is `paths:`-scoped to Next.js/Supabase files on
+  Claude Code; `shell-first-search` is an `.mdc` rule Cursor can attach;
+  `project-starter/web-performance.mdc` is glob-attached, not always-on.
+- **Skills, commands, agents, rules**: pressure language and prohibition
+  lists restated at normal volume with reasons; think-tool and self-check
+  scaffolds removed; step choreography on judgment tasks replaced by
+  outcomes and verification; frontend skills name the Opus 5.5 default
+  patterns to avoid; research steps say a recognised name is not current
+  knowledge; closure modes say how a turn may end; `## Critical Rules`
+  headings are `## Rules`.
+- **`docs/PROMPT-ENHANCEMENT-PLAYBOOK.md`** — T2 is a classification
+  contract, not a thinking instruction; T4 is an evidence rubric, not a
+  self-check; T7 declares `effort:`; T8 sets volume, shape and
+  communication. `enhance-skill-prompts`, `meta-skill-creator`,
+  `create-skill`, `create-subagent`, `docs/CONTRIBUTING.md` teach the same.
+- **`llms.txt`, `.claude-plugin/*.json`, README, GETTING-STARTED, CATALOG,
+  PROMOTION** — name the model and the effort routing.
+
+### Fixed
+
+- **`scripts/test-install.mjs`** — the Windows shim test ran `cursor-kenji.cmd`
+  from the cwd, which hardened shells block with
+  `NoDefaultCurrentDirectoryInExePath=1`. The test now clears that variable for
+  the child and also exercises the explicit `.\cursor-kenji.cmd` form.
+
 ## [1.36.3] — 2026-09-22
 
 A command-surface pass. `/plan` became a host built-in in three of the four

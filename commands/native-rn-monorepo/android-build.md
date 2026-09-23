@@ -1,3 +1,7 @@
+---
+description: "Build the Android debug APK locally and confirm BUILD SUCCESSFUL"
+---
+
 # /android-build
 
 Build the Android app in debug mode and verify success.

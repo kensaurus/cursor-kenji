@@ -24,8 +24,9 @@
 - **Backend:** `<Supabase / Postgres / Edge Functions …>`
 - **Payments:** `<Stripe …>`  **Errors:** `<Sentry …>`  **LLM obs:** `<Langfuse …>`
 - **Deploy:** `<Vercel / AWS …>`  **Mobile:** `<Capacitor iOS + Android …>`
-- **AI dev tools:** Cursor + Claude Code. Plan with a strong reasoning model; execute
-  approved plans with disciplined execution rules.
+- **AI dev tools:** Cursor + Claude Code. Plan and audit at high effort;
+  implement at the default effort; verify with a fresh-context judge. Approved
+  plans run under the pack's execution rule.
 
 ## 3. Roadmap (the *when*) — keep current
 
@@ -57,30 +58,38 @@ didn't see* — stop vibing and write the spec. That's context drift; it compoun
 
 ## 5. The build loop (every non-trivial change)
 
-1. **Spec in.** Goal, constraints, acceptance criteria, **files in scope.** Keep the
-   *initial* spec ~30–80 words; add detail in follow-ups, not upfront.
+1. **Spec in.** Goal, constraints, acceptance criteria, **files in scope.** The
+   first spec names those four and stops; detail arrives in follow-ups as each slice needs it.
 2. **Plan.** List files and changes *before* editing. For §1 non-negotiables, run the
    relevant `plan-*` skill first; get an approved burndown.
 3. **Execute one slice.** One reviewable, independently testable unit — not the whole
    feature in one shot.
-4. **Review the diff.** Always. Most AI code is not functionally correct out of the box.
+4. **Review the diff** before it merges — generated code is often subtly wrong, and the diff is where that shows.
 5. **Verify.** Tests/acceptance criteria pass; behavior matches spec.
 6. **Ship.** Conventional commit → PR. Update spec/roadmap in the same change.
 
 **Iterate, don't regenerate.** Tell the agent what to fix; don't start over.
+The same holds for the agent's edits: change the lines that need changing —
+a whole-file rewrite is a regeneration, not an edit.
+
+**Scope.** Deliver what the slice asks. Pre-existing bugs you notice go in the report as
+follow-ups, not in the diff. Add tests where the spec asks or the repo already keeps them;
+scratch checks stay out of the repo.
 
 ---
 
 ## 6. Context discipline (drift & cognitive debt)
 
-- **Fresh context per phase.** New session/context for each plan phase; load what the
-  current phase needs, drop the rest. Long threads summarize and lose fidelity.
+- **Fresh context per phase.** New session for each plan phase, loaded with what that
+  phase needs. The point is review independence, not room: the window is 1M and
+  compaction exists, so never wrap a phase up early to save context.
 - **Cognitive debt is real debt.** Stale `AGENTS.md`, unreviewed diffs, prompts that
   paper over architecture problems, dead context — pay it down like tech debt.
-- **Prefer libraries over rebuilds.** Agents re-implement what libraries already do.
-  Use vetted libraries — but **verify they exist first** (§7). Less code wins.
-- **Use live docs.** Pull current docs (e.g. Context7) for specific library versions;
-  agents skip this unless told.
+- **Prefer libraries over rebuilds.** Use a vetted library where one covers the job —
+  after verifying it exists (§7). Less code wins.
+- **Use live docs.** Pull current docs (e.g. Context7) for the exact library
+  version in the manifest. Recognizing a library's name is not knowing its
+  current API — look it up as written.
 
 ---
 

@@ -18,8 +18,11 @@ license: MIT
 
 <!-- TECHNIQUE: T1 degree-of-freedom declaration (Anthropic official). The
 skill states its register up front and per phase, so the agent knows where
-to reason freely and where to follow exact steps. This header is the single
-most important addition. -->
+to reason freely and where to follow exact steps. Under Claude Code, pair it
+with `effort:` in frontmatter: HIGH-freedom audits run at `effort: high`
+(Opus 5.5 defaults to medium — the register line says where to reason
+freely, the effort key says how deep). This header is the single most
+important addition. -->
 
 - Phases 0–4 (discovery, judgment): **[HIGH freedom]** — reason about what
   you find; checklists prompt investigation, they are not tick-scripts.
@@ -38,13 +41,13 @@ missed the point. Defense in depth: edge + route handler / server action
 
 ## How to reason in this audit
 
-<!-- TECHNIQUE: T2 structured chain-of-thought (not generic "think step by
-step"). Named stages the agent runs BEFORE writing any finding. Placed once,
-referenced by each phase, so it shapes reasoning without bloating every
-section. Extended thinking, when available, handles the rest — this
-scaffolds only the judgment that most needs it. -->
+<!-- TECHNIQUE: T2 named-stage chain (not "think step by step"). Thinking is
+always on for the model and `effort` in frontmatter sets its depth, so this
+is not a reasoning script: it is the record shape every finding carries, so
+no finding can be written without its evidence, its meaning, its bucket, and
+a justified severity. Placed once, referenced by each phase. -->
 
-For every potential finding, reason in this order before recording it:
+Every finding is recorded in this shape, in this order:
 
 1. **Observe** — what does the code/probe actually show? (quote the line or the response)
 2. **Interpret** — what does that mean for who can reach what? (don't assume intent)
@@ -57,10 +60,11 @@ item for Phase 5, not a conclusion.
 
 ## Worked example
 
-<!-- TECHNIQUE: T3 few-shot + CoT combined (the combination beats either
-alone). ONE concrete exemplar that demonstrates the reasoning chain AND the
-output shape at once. This is the highest-leverage single addition to an
-audit skill. -->
+<!-- TECHNIQUE: T3 one worked example, shown in the chain's order AND the
+finding-row shape. Examples pin format — the model matches their length and
+structure — so label it illustrative, keep it realistic, and add a second only
+where it varies the judgment (a different Classify outcome), not a second
+tutorial. The output-format section carries the rest. -->
 
 > **Observe:** `middleware.ts` matcher is `['/dashboard/:path*']`. The route
 > `/api/orders/[id]` has no check in the handler.
@@ -238,9 +242,11 @@ the repo.
 
 ## Self-critique before reporting  [LOW freedom — do not skip]
 
-<!-- TECHNIQUE: T4 self-refinement with an explicit rubric (also where
-"constitutional-style" principle-checking belongs — a rubric the agent
-critiques its own output against, not a buzzword). -->
+<!-- TECHNIQUE: T4 evidence check before output. Opus 5.5 self-verifies
+without being told, so this is not a "double-check your work" step — every
+item names a specific piece of evidence (quote, probe, layer) a finding must
+carry, and findings without it are dropped or downgraded. Add items that
+name evidence; never generic "verify" lines. -->
 
 Challenge every finding against this rubric; drop or downgrade any that fail:
 

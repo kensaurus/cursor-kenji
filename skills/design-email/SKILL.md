@@ -183,7 +183,7 @@ Install if not present:
 npm install react-email @react-email/components
 ```
 
-Base template structure:
+Base template structure (illustrative — swap the indigo button and off-white ground for the brand):
 ```tsx
 // emails/welcome.tsx
 import {

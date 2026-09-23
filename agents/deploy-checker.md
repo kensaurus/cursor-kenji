@@ -1,11 +1,12 @@
 ---
 name: deploy-checker
 description: Pre-deploy validation. Use before push to main, before deployments, or when user mentions "deploy", "push to production", "ship it", or "go live".
+effort: low
 ---
 
 ## When Invoked
 
-Run all checks in sequence. Stop at first critical failure.
+Discover the real commands first (`package.json` scripts, Makefile, CI workflow) and substitute them for the npm defaults below. Run all checks in sequence. Stop at first critical failure.
 
 ## Check Pipeline
 
@@ -32,7 +33,7 @@ npm run lint 2>&1
 
 ### 4. Test Check
 ```bash
-npm run test -- --run 2>&1
+npm test 2>&1   # the repo's test script as CI runs it; add the runner's non-watch flag only if the script watches by default (vitest: `-- --run`)
 ```
 - All tests must pass
 - Note any skipped tests

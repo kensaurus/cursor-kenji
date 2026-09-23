@@ -1,3 +1,8 @@
+---
+description: "Tail logcat scoped to this app's PID and summarize crashes, bridge errors, and ANRs"
+effort: low
+---
+
 # /android-logcat
 
 Tail Android logcat scoped to this app and surface anything

@@ -1,6 +1,7 @@
 ---
 description: "Inventory parked work into one living BACKLOG.md — regenerate and diff, do not implement"
 argument-hint: "[optional path to an existing BACKLOG.md]"
+disable-model-invocation: true
 ---
 
 # Housekeep Backlog

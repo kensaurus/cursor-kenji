@@ -1,6 +1,7 @@
 ---
 description: "Install mechanically-enforced architecture boundaries that fail CI on spaghetti imports"
 argument-hint: "[confirmed layer model]"
+disable-model-invocation: true
 ---
 
 # Architecture Boundaries

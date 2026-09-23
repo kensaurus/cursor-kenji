@@ -10,9 +10,10 @@ Quick map of `docs/` — start with [GETTING-STARTED.md](GETTING-STARTED.md) if 
 | [PLAN-LOOPS.md](PLAN-LOOPS.md) | How to chain the 23 `plan-*` skills (grouped loops) |
 | [THIRD-PARTY-SKILLS.md](THIRD-PARTY-SKILLS.md) | Vendored upstream skills (`thirdparty-*`), attribution, update policy |
 | [AGENTS.template.md](AGENTS.template.md) | Project constitution template (mission / stack / roadmap / agent discipline) |
+| [MODEL-AND-EFFORT.md](MODEL-AND-EFFORT.md) | Default model per host, how to set effort, the pack's effort routing table, what changed for Opus 5.5 |
 | [examples/](examples/) | Sample `plan-*.md` audit outputs |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Skill authoring, validation, PR expectations |
-| [PROMPT-ENHANCEMENT-PLAYBOOK.md](PROMPT-ENHANCEMENT-PLAYBOOK.md) | T1–T6 prompt craft via `enhance-skill-prompts` (how a skill instructs, not what it does) |
+| [PROMPT-ENHANCEMENT-PLAYBOOK.md](PROMPT-ENHANCEMENT-PLAYBOOK.md) | T1–T8 prompt craft via `enhance-skill-prompts` (how a skill instructs, not what it does; T7 = effort declaration, T8 = volume and shape) |
 | [PROMOTION.md](PROMOTION.md) | Checklist for listing on skills.sh, cursor.directory, Claude plugin, etc. |
 | [DISTRIBUTION.md](DISTRIBUTION.md) | Install surfaces, directory listings, discovery links |
 | [PUBLISHING.md](PUBLISHING.md) | Maintainer release guide (OIDC npm publish) |

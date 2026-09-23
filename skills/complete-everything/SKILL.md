@@ -35,10 +35,6 @@ state-file ticks, verification ladder, and completion-judge
 - **Judge** — `completion-judge` ran; CONTINUE loops back
 - **Right owner** — one mechanical pattern → `burndown-full`; dirty-tree PR → `workflow-release-prep`
 
-## Mission (verbatim)
-
-> fix and test thoroughly on all the plan - do not defer anything. make sure proper full test is done after enhancement - also fix all out of scope.
-
 ## Completion contract
 
 Drive the approved outcome through implementation, repair, and verification in
@@ -72,6 +68,7 @@ Only these may block execution:
 
 Ask one precise question immediately when blocked. Effort, context length, an
 uncertain implementation approach, or a failing test are not blockers.
+Your turn ends in one of two shapes: the Phase 4 report after completion-judge PASS, or a single precise question on a real blocker. It does not end with "should I continue?", with a summary of the remaining items, with "I'll pick this up next", or with a partial ladder run. Before ending your turn, read your last paragraph: if it describes work you could do now, do it.
 
 ## Phase 0 — Recover scope and establish a baseline
 
@@ -149,8 +146,10 @@ continuation mechanism in addition to the state file:
 - **Cursor:** the packaged `stop` hook reads
   `.cursor/complete-everything-state.md` and submits a follow-up only while
   actionable unchecked items remain. It ignores completed states, errored or
-  aborted turns, and human-gate-only states. If hooks are disabled, continue
-  manually from the state file; do not lower the completion contract.
+  aborted turns, and human-gate-only states. On Claude Code it keeps a small
+  counter in `.cursor/completion-gate.count.json` (leave it in place; it is
+  gitignored). If hooks are disabled, continue manually from the state file;
+  do not lower the completion contract.
 - **Claude Code 2.1.139+:** start the run with:
 
   ```text
@@ -169,8 +168,7 @@ Work in small, independently verifiable milestones. For each item:
    file until its acceptance evidence exists.
 2. Read the relevant implementation and tests. Preserve existing public
    behavior unless the approved plan explicitly changes it.
-3. Implement the root-cause fix. Do not delete features, narrow behavior,
-   weaken tests, blanket-update snapshots, or silence errors to get green.
+3. Implement the root-cause fix with surgical edits — change the lines the fix needs, not whole files. Do not delete features, narrow behavior, weaken tests, blanket-update snapshots, or silence errors to get green.
 4. Add or update tests whenever behavior, contracts, or error handling change.
 5. Run the cheapest focused validation. Repair failures before moving on.
 6. Append newly discovered connected work to **Discovered while closing** and
@@ -178,9 +176,7 @@ Work in small, independently verifiable milestones. For each item:
 7. Tick the item only after recording its evidence.
 
 If the approach is uncertain, use the `research` skill, record the decision and
-source, then implement. If a large task has separable read-only inventory or
-test work, use bounded subagents while the main agent retains the closure set
-and integrates the results.
+source, then implement. Delegate to a subagent only a sizeable, independent track — a read-only inventory, a test run whose output you do not need in your context, or parallel verification — never a handful of tool calls. Brief it once with everything it needs, launch independent subagents in one message, and keep the closure set and integration in the main agent.
 
 ### Required routing by change signal
 

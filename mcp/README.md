@@ -7,7 +7,7 @@ Model Context Protocol (MCP) servers extend Cursor's AI with external tools and 
 | File | Description |
 |------|-------------|
 | `mcp.json.template` | **Essential** — Firecrawl (authenticated) + Context7 + Supabase. Prefer Cursor plugins for Context7 / Supabase / Sentry / Stripe when those are already connected. |
-| `mcp-full.json.template` | **Full suite** — optional extras including sequential-thinking, Playwright MCP fallback, AWS, GitHub, Slack, Notion |
+| `mcp-full.json.template` | **Full suite** — optional extras: Playwright MCP fallback, Chrome DevTools, AWS, GitHub, Postgres, Redis, Slack, Notion, Memory |
 
 Copy your preferred template:
 
@@ -35,7 +35,7 @@ Claude Code live config (`~/.claude.json`) uses `${NAME}` (no `env:` prefix). Ne
 | **Context7** | Yes (API key) | Live library documentation. Skip this stdio server if the Context7 Cursor plugin is already connected. |
 | **Supabase** | Yes | Direct DB access, auth, storage, migrations. Skip if the Supabase Cursor plugin is already connected. |
 
-**Not in the default template:** Sequential Thinking (optional reasoning; add from the full template when a research pass needs it) and Playwright MCP (skills use **headed `playwright-cli`**, not the MCP).
+**Not in the default template:** Playwright MCP (skills use **headed `playwright-cli`**, not the MCP). Reasoning depth is set with effort (`/effort`, or a skill's `effort:` frontmatter), not with a reasoning server — see ADR-0009.
 
 Chrome DevTools MCP is in the full template — attach to Chrome with `--remote-debugging-port=9222` (see below).
 

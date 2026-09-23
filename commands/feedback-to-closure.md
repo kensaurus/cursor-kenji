@@ -1,6 +1,7 @@
 ---
 description: "Turn raw feedback (reports, Sentry, reviews, QA/audit findings) into deduplicated durable tickets and drive each to production-verified closure"
 argument-hint: "[feedback source or batch]"
+disable-model-invocation: true
 ---
 
 # Feedback → Closure

@@ -216,13 +216,19 @@ function applyReadmeRules(src) {
   return { src, mismatches };
 }
 
-/** @param {string} path @param {string} label @param {Array<{name: string, re: RegExp, to: string}>} rules */
+/** @param {string} path @param {string} label @param {Array<{name: string, re: RegExp, to: string, required?: boolean}>} rules */
 function applyFileRules(path, label, rules) {
   if (!existsSync(path)) return { src: "", mismatches: [] };
   let src = readFileSync(path, "utf8");
   const mismatches = [];
-  for (const { name, re, to } of rules) {
-    for (const hit of src.match(re) || []) {
+  for (const { name, re, to, required } of rules) {
+    const hits = src.match(re) || [];
+    // A `required` rule guards a public listing: if a copy edit removes the
+    // anchor phrase, the count silently stops being checked there.
+    if (required && hits.length === 0) {
+      mismatches.push({ file: label, name, hit: "(anchor phrase missing)", to });
+    }
+    for (const hit of hits) {
       if (hit !== to) mismatches.push({ file: label, name, hit, to });
     }
     src = src.replace(re, to);
@@ -315,6 +321,7 @@ const pluginResult = applyFileRules(pluginPath, ".cursor-plugin/plugin.json", [
     name: "plugin description",
     re: /\d+ Cursor agent skills, \d+ slash commands, \d+ subagents/g,
     to: `${count} Cursor agent skills, ${commandCount} slash commands, ${agentCount} subagents`,
+    required: true,
   },
 ]);
 
@@ -325,6 +332,7 @@ const claudeCountRules = [
     name: "claude plugin inventory",
     re: /\d+ agent skills, \d+ slash commands, \d+ subagents/g,
     to: `${count} agent skills, ${commandCount} slash commands, ${agentCount} subagents`,
+    required: true,
   },
 ];
 const claudePluginResult = applyFileRules(
@@ -343,6 +351,7 @@ const llmsResult = applyFileRules(llmsPath, "llms.txt", [
     name: "llms inventory",
     re: /\d+ agent skills, \d+ slash commands, \d+ subagents/g,
     to: `${count} agent skills, ${commandCount} slash commands, ${agentCount} subagents`,
+    required: true,
   },
   {
     name: "llms plan count",

@@ -6,6 +6,7 @@ description: >
   up", "rate limit my AI", "token budget", "runaway agent loop", or is hardening LLM
   features before launch.
 license: MIT
+effort: high
 ---
 
 # LLM Cost-Guardrail Audit + Remediation Plan
@@ -101,7 +102,7 @@ performance, or trace visibility (`plan-error-handling`). This owns *bounded spe
 2. **Test each against Layers 1–3.**
 3. **Score** = worst-case spend × reachability.
 4. **Phase** — Layer 1 caps and daily kill switch first.
-5. **Emit `plan-llm-cost-guardrails.md`. End the turn.**
+5. **Emit `plan-llm-cost-guardrails.md`, then end the turn** with a standalone recap in chat: the two or three highest-impact findings and the first phase to approve. The file is the deliverable — write it before the recap.
 
 ---
 
@@ -166,4 +167,4 @@ Simulate a runaway in test env after Phase 1; confirm cap holds before bill move
 - **Execution:** `backend-patterns`, `audit-langfuse-llm`, `backend-observability`.
 - **Verify:** sandbox load/abuse test — caps, breakers, fallback trip before spend escapes.
 
-> Plan with a strong model; execute with `composer-2.5-execution.mdc`.
+> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model.

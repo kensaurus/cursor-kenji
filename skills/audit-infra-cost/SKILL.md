@@ -6,6 +6,7 @@ description: >
   costs", or a bill jumps. CI minutes → audit-cicd. Model tokens →
   plan-llm-cost-guardrails. Consumes test-load numbers.
 license: MIT
+effort: high
 ---
 
 # audit-infra-cost — Hosting spend without hurting reliability
@@ -62,7 +63,9 @@ Enumerate billed resources and, if the provider exposes it, the breakdown:
 - CDN, per-seat / per-project fees
 
 Note each pricing model (per-request, per-GB, per-hour, tiered) — that is
-where the leak hides.
+where the leak hides. Pricing tiers change: fetch the provider's current
+pricing page rather than quoting tiers from memory; a remembered price is
+not evidence for a saving estimate.
 
 ---
 

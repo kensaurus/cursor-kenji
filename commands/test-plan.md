@@ -1,6 +1,8 @@
 ---
 description: "User-story-driven test coverage audit + plan — no tests written until approved"
 argument-hint: "[path or scope]"
+disable-model-invocation: true
+effort: high
 ---
 
 # Test Coverage Plan

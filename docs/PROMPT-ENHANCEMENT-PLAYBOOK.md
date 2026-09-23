@@ -28,8 +28,10 @@ Never write `audit-responsive-layout` — the live name is `audit-responsive`.
 
 ## Part 1 — The technique set (what "good" looks like in 2026)
 
-Six techniques, each with the evidence, where it applies, and the trap to
+Eight techniques, each with the evidence, where it applies, and the trap to
 avoid. Apply only where it fits — Phase 0 of each enhancement decides which.
+T7 and T8 date from the Opus 5.5 pass (2026-09): effort is the only thinking
+control, and instructions are followed literally.
 
 ### T1 — Declare & match degrees of freedom  *(Anthropic official — highest leverage)*
 
@@ -42,44 +44,51 @@ fragile steps.
 - **Trap:** over-constraining an interpretive audit (kills judgment) or
   under-constraining a fragile sequence (agent improvises a break). Both fail.
 
-### T2 — Structured chain-of-thought at judgment points  *(structured CoT)*
+### T2 — Classification contract at judgment points  *(what counts, not how to think)*
 
-A named-stage reasoning chain the agent runs *before* concluding — e.g.
-**Observe → Interpret → Classify → Severity** for audits. Placed once near
-the top, referenced by each phase.
+A named-stage record every conclusion must carry — e.g.
+**Observe → Interpret → Classify → Severity** for audits: the evidence, what
+it means, which bucket, and a justified severity. Placed once near the top,
+referenced by each phase. It defines what a finding must contain; the model's
+own thinking (always on, depth set by `effort:`) does the reasoning.
 
 - **Applies to:** any skill with real judgment (triage, severity, root-cause,
   winner-selection). That's every `audit-*` and most `plan-*`.
-- **Plan-family scaffold:** **Propose → Risk → Keep-working → Phase**
+- **Plan-family contract:** **Propose → Risk → Keep-working → Phase**
   (what to change, what it risks, what must stay working, which burndown
   phase). Plan skills stay plan-only.
-- **Trap:** generic "think step by step" sprinkled everywhere. It bloats
-  context and duplicates extended thinking. Scaffold *only* the genuine
-  judgments.
+- **Trap:** any line that steers thinking itself — "think step by step",
+  "reason carefully", "double-check" — bloats context and does nothing on
+  Opus 5.5; effort is the only thinking control (T7).
 
-### T3 — One few-shot + CoT worked example  *(combination beats either alone)*
+### T3 — One worked example, labeled illustrative  *(few-shot + chain on a real case)*
 
-A single concrete example that demonstrates the reasoning chain AND the
-output shape on a realistic case. Usually the highest-value single edit to
-an audit skill.
+A single concrete example that demonstrates the classification chain AND
+the output shape on a realistic case, introduced as *one illustration*.
+Usually the highest-value single edit to an audit skill.
 
 - **Applies to:** every skill producing structured findings / output.
-- **Trap:** more than one or two examples — burns context for diminishing
-  return. One good exemplar is the target.
+- **Trap:** an unlabeled single example becomes the gold output — the model
+  copies its shape, severity, and phrasing onto cases that differ. Label it,
+  and add a second only where it varies the judgment. More than two burns
+  context for diminishing return.
 
-### T4 — Self-critique rubric before output  *(self-refinement)*
+### T4 — Evidence rubric before output  *(what a finding must prove)*
 
-An explicit rubric the agent challenges its own output against before
-reporting: evidenced-not-assumed, reproducible, severity-justified,
-right-owner, no-false-safety.
+An explicit acceptance bar each finding clears before it is reported:
+evidenced-not-assumed (quoted line or probe), reproducible, severity
+justified, right owner, no false safety. The model re-checks its own work
+unprompted, so this is not a "double-check" pass — each line names the
+evidence it is checked against (a tool result, a rendered rect, a header, a
+CI run).
 
 - **Applies to:** all `audit-*` and `test-*`. Plan skills run T4 before
   presenting the burndown. This is also where principle-based
   ("constitutional-style") checking belongs — a concrete rubric, *not* a
   buzzword. Constitutional AI is a training method; as a prompt it degrades
-  to exactly this rubric-driven self-check.
-- **Trap:** vague "double-check your work". The rubric must be specific and
-  answerable.
+  to exactly this rubric-driven check.
+- **Trap:** a line that only says "verify your work" or "double-check". If a
+  rubric item names no evidence, cut it.
 
 ### T5 — Terminology consistency  *(Anthropic official)*
 
@@ -92,11 +101,51 @@ One term per concept throughout a skill. Unify synonym drift
 
 ### T6 — Conciseness pass  *(the context window is a shared public good)*
 
-Cut context the agent already has; collapse redundancy. Net tokens should
-usually *drop* even after adding T2+T3, because most skills over-explain.
+Cut restatements of what the model does by default and instructions written
+for an older model; keep author-only context and the reason beside each
+rule. The unit of cruft is a dated instruction, never a byte count. Net
+tokens usually *drop* even after adding T2+T3, because most skills
+over-explain.
 
-- **Trap:** never trade a fragile step's exactness for brevity. Low-freedom
-  steps stay verbatim.
+- **Trap:** justifying a cut by length alone, or trading a fragile step's
+  exactness for brevity. Low-freedom steps stay verbatim.
+
+### T7 — Declare effort  *(Opus 5.5: effort is the only thinking control)*
+
+Declare `effort:` in frontmatter by family: audit / plan / judge / security /
+architecture / debug → `high` (`xhigh` only for the hardest planning, with a
+measured reason); mechanical, read-only, formatting, handoff, inventory →
+`low`; ordinary implementation → omit (Opus 5.5 defaults to `medium`, which
+matches Opus 5 at high in about half the tokens). A read-only inventory
+skill may add `context: fork` + `agent: Explore` to keep the main context
+clean. Claude Code reads the key; Cursor ignores it; `validate-skills`
+checks the value.
+
+- **Applies to:** all skills, commands, and agents shipped to Claude Code.
+- **Trap:** `high` everywhere by habit (double the tokens for work the
+  default already does well), or steering depth with prose ("think harder",
+  "don't overthink") — on Opus 5.5 that prose does nothing.
+
+### T8 — Volume, shape, and communication  *(literal instruction following)*
+
+Each rule once, at normal volume, with its reason — no MUST / NEVER /
+CRITICAL markers, no "be thorough", no update suppressors ("no preamble",
+"don't narrate", "hold findings"). State the success condition instead of a
+prohibition list. Numbered steps only for fragile sequences (destructive
+ops, auth, migrations, baseline capture); judgment phases get outcomes,
+constraints, and how to verify. The always-on verification rule already
+asks for an intent line, load-bearing notes and a standalone recap, so a
+skill adds only what is specific to it: unattended skills say when the turn
+may end.
+
+- **Applies to:** all skills; the frontend exception is that design
+  direction works best as *named* default patterns to avoid (cream
+  background, italic accent word in headlines, "01 / 02 / 03" section
+  labels, monospace labels, pill buttons, Inter / Roboto, purple gradients,
+  three equal cards) — "avoid a generic AI look" swaps one default for
+  another.
+- **Trap:** restating the always-on contract in every skill (thirty copies
+  to reconcile), or "fixing" emphasis by swapping in a stronger word.
 
 ### Explicitly NOT adopted (and why)
 
@@ -121,10 +170,12 @@ housekeep/deploy/migration = fragile). List the judgment points (→ T2/T3)
 and the fragile steps (→ T1 LOW). Note whether it already has an example.
 *Output the classification before editing.*
 
-**Step 1 — Apply techniques where they fit.** In this order: T1 (declare
-freedom) → T2 (add the reasoning scaffold, once) → T3 (insert one worked
-example) → T4 (add the self-critique rubric) → T5 (unify terms) → T6
-(trim). Skip any technique that doesn't fit and record why.
+**Step 1 — Apply techniques where they fit.** In this order: T7 (declare
+effort, delete prose thinking-steers) → T1 (declare freedom) → T2 (add the
+classification contract, once) → T3 (insert one worked example, labeled
+illustrative) → T4 (add the evidence rubric) → T5 (unify terms) → T8
+(volume, shape, communication) → T6 (trim). Skip any technique that doesn't
+fit and record why.
 
 **Step 2 — Verify invariants (the edit is invalid if any breaks):**
 
@@ -134,7 +185,8 @@ example) → T4 (add the self-critique rubric) → T5 (unify terms) → T6
   unchanged in substance.
 - House limits → description ≤320 chars, body <500 lines, name matches dir.
 - Frontmatter untouched except a genuine within-budget description
-  improvement. This pass's default is **frontmatter untouched**.
+  improvement or a T7 `effort:` declaration. `name` and description triggers
+  never change.
 
 **Step 3 — Report the diff, don't silently rewrite.** Classification, which
 techniques applied/skipped, before/after of each section, invariant check.
@@ -249,8 +301,10 @@ First-party `audit-*` / `plan-*` / `test-*` families, plus the factory
 | # | Technique | Applies to | One-line rule | Trap |
 |---|-----------|-----------|---------------|------|
 | T1 | Degrees of freedom | all | Declare register; tag fragile steps LOW, interpretive HIGH | Over/under-constraining |
-| T2 | Structured CoT | judgment skills | One named-stage chain, referenced not repeated | Generic "think step by step" everywhere |
-| T3 | Few-shot + CoT example | output skills | Exactly one worked example, reasoning + output shape | More than 1–2 examples |
-| T4 | Self-critique rubric | audit/test (+ plan before burndown) | Specific answerable rubric before output | Vague "double-check" |
+| T2 | Classification contract | judgment skills | One named-stage record of what a finding contains, referenced not repeated | Any line that steers thinking ("think step by step") |
+| T3 | Worked example | output skills | Exactly one, labeled illustrative, chain + output shape | Unlabeled example becomes the gold output |
+| T4 | Evidence rubric | audit/test (+ plan before burndown) | Each line names the evidence it is checked against | Generic "double-check" |
 | T5 | Terminology consistency | all | One term per concept | (none; do it last) |
-| T6 | Conciseness | all | Cut known context; net tokens drop | Trimming a fragile step's exactness |
+| T6 | Conciseness | all | Cut restatements of trained defaults; keep author-only context and reasons | Justifying a cut by length; trimming a fragile step's exactness |
+| T7 | Effort declaration | all (Claude Code) | `effort: high` for judgment, `low` for mechanical, omit for implementation; delete prose thinking-steers | `high` by habit |
+| T8 | Volume, shape, communication | all | Rule once, normal volume, with reason; outcomes not choreography; no update suppressors | Copying the always-on contract into every skill |

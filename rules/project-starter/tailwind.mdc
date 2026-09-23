@@ -41,8 +41,8 @@ className={cn(
 - Keep transitions under 300ms for interactions
 - Only animate `transform` and `opacity` (GPU-accelerated)
 
-## Anti-patterns
-- No inline styles (`style={{}}`) — use Tailwind classes
-- No `!important` — fix specificity instead
-- No arbitrary values unless truly one-off (prefer design tokens)
-- No duplicating existing component styles — extend the component
+## Keep styles in the system
+- Styling lives in Tailwind classes, not `style={{}}`
+- Fix specificity at its source; `!important` hides the conflict
+- Arbitrary values (`w-[347px]`) only for a true one-off; anything reused becomes a token
+- Extend an existing component's variants rather than re-declaring its classes elsewhere

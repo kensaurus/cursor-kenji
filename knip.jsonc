@@ -6,7 +6,7 @@
   // files nothing runs by reference but that are shipped or documented tools.
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "entry": [
-    "hooks/completion-gate.mjs",            // referenced from hooks/hooks.json (JSON, not parsed by Knip)
+    "hooks/completion-gate.mjs",            // referenced from hooks/hooks.json and hooks/cursor-hooks.json (JSON, not parsed by Knip)
     "skills/*/scripts/*.mjs",               // helper scripts shipped inside skills; consumers run them
     "scripts/gen-brand-assets.mjs",         // brand pipeline (maintainer-run; see its usage header)
     "scripts/gen-brand-candidates.mjs",     // brand pipeline

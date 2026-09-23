@@ -38,7 +38,7 @@ If a project's own rules contradict any guideline below, the project rules win.
 
 ## 1. Think Before Coding  [HIGH freedom]
 
-**Don't assume. Don't hide confusion. Surface tradeoffs.**
+**State your assumptions. Say when you're confused. Surface tradeoffs.**
 
 Before writing code:
 
@@ -76,6 +76,8 @@ When editing existing code:
 - Don't refactor things that aren't broken.
 - Match existing style, even if you'd do it differently.
 - If you notice unrelated dead code or smells, **mention them** — don't delete or fix them in the same change.
+- Add tests where the task asks for them or where the repo already keeps that kind of test; scratch scripts and one-off checks stay out of the repo.
+- Edit in place — change the lines the task needs, don't rewrite the file around them.
 
 When your changes create orphans:
 
@@ -99,7 +101,7 @@ Transform imperative tasks into verifiable goals:
 | "Refactor X" | "Ensure tests pass before and after" |
 | "Make it work" | "Define what 'work' means as a verifiable check, then verify" |
 
-For multi-step tasks, state a brief plan before starting:
+For multi-step tasks, say in one line what you are about to do before the first tool call, then list the steps with the check that proves each:
 
 ```
 1. [Step] → verify: [check]

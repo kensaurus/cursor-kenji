@@ -1,6 +1,8 @@
 ---
 description: "Agent review pass plus manual checklist for correctness, security, performance, and accessibility"
 argument-hint: "[path or PR]"
+disable-model-invocation: true
+effort: high
 ---
 
 # /review-code

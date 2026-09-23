@@ -4,7 +4,7 @@
  *
  *   node scripts/check-docs-facts.mjs
  */
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -78,6 +78,27 @@ if (planLoops.includes("#skill-chaining----improve--iterate-any-repo")) {
 
 if (gettingStarted.includes("#more-from-kensaurus") && !/^## More from KENSAURUS/m.test(readme)) {
   errors.push("README.md: missing ## More from KENSAURUS (GETTING-STARTED links to it)");
+}
+
+// Repo-local Cursor rules are mirrors of rules/. They load for every Cursor
+// session in this repo, so a fork means the pack's own agents run on stale rules.
+const localRules = join(root, ".cursor", "rules");
+for (const name of existsSync(localRules) ? readdirSync(localRules) : []) {
+  if (!name.endsWith(".mdc")) continue;
+  if (!existsSync(join(root, "rules", name))) {
+    errors.push(`.cursor/rules/${name}: no rules/${name} to mirror — delete it or add the canonical file`);
+    continue;
+  }
+  if (read(`.cursor/rules/${name}`) !== read(`rules/${name}`)) {
+    errors.push(`.cursor/rules/${name} differs from rules/${name} — copy rules/${name} over it (mirror, not fork)`);
+  }
+}
+
+// One model plans and executes at different effort levels. Fail if the retired
+// two-model framing returns to the living docs; CHANGELOG keeps the history.
+for (const [label, text] of [["README.md", readme], ["docs/PLAN-LOOPS.md", planLoops], ["docs/GETTING-STARTED.md", gettingStarted]]) {
+  const m = text.match(/execute with Composer 2\.5|fast implementation model|Composer 2\.5/i);
+  if (m) errors.push(`${label}: retired two-model framing '${m[0]}' — describe effort routing (plan at high, execute at medium, judge fresh at high)`);
 }
 
 if (errors.length) {

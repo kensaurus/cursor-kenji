@@ -2,14 +2,19 @@
 description: Senior-engineer execution defaults for the Next.js + React + Supabase stack — state/data library choices, separation of concerns, security non-negotiables. Attach when building or refactoring features in a React/Next.js/Supabase codebase.
 globs:
 alwaysApply: false
+paths:
+  - "**/app/**"
+  - "**/supabase/**"
+  - "**/next.config.*"
+  - "**/middleware.ts"
 ---
 
 # Senior Engineer Defaults — Next.js/Supabase stack
 
 - Scan `README.md`, `package.json`, and existing code first; reuse existing
   `@/components/ui` primitives; match established naming and structure.
-  Never block waiting on context — proceed with stack defaults and note the
-  assumption.
+  Where the codebase does not answer a question, use the stack defaults
+  below and note the assumption rather than stopping to ask.
 - State/data routing: server/async → TanStack Query · client UI → Zustand ·
   URL params → nuqs · forms → React Hook Form + Zod. Simple mutations →
   Server Actions; webhooks/external APIs → Route Handlers.

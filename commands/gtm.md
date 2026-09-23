@@ -1,6 +1,7 @@
 ---
 description: "Take a shipped repo to market: plan → approve → measure → message → activate → be found → launch → weekly loop"
 argument-hint: "[product url or repo path, optional 'phase N' to execute an approved phase]"
+disable-model-invocation: true
 ---
 
 # GTM

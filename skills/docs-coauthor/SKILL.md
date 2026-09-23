@@ -199,7 +199,7 @@ Based on what they've selected, ask if there's anything important missing for th
 
 ### Step 5: Drafting
 
-Use `str_replace` to replace the placeholder text for this section with the actual drafted content.
+Replace only this section's placeholder with the drafted content — an in-place edit, never a reprint of the whole document.
 
 Announce the [SECTION NAME] section will be drafted now based on what they've selected.
 
@@ -211,14 +211,14 @@ Provide a note: Instead of editing the doc directly, ask them to indicate what t
 ### Step 6: Iterative Refinement
 
 As user provides feedback:
-- Use `str_replace` to make edits (never reprint the whole doc)
+- Edit in place, surgically — never reprint the whole doc
 - If user edits doc directly and asks to read it: mentally note the changes they made and keep them in mind for future sections (this shows their preferences)
 
 **Continue iterating** until user is satisfied with the section.
 
 ### Quality Checking
 
-After 3 consecutive iterations with no substantial changes, ask if anything can be removed without losing important information.
+When iterations stop producing substantial changes, ask if anything can be removed without losing important information.
 
 When section is done, confirm [SECTION NAME] is complete. Ask if ready to move to the next section.
 
@@ -229,7 +229,7 @@ When section is done, confirm [SECTION NAME] is complete. Ask if ready to move t
 As approaching completion (80%+ of sections done), announce intention to re-read the entire document and check for:
 - Flow and consistency across sections
 - Redundancy or contradictions
-- Anything that feels like "slop" or generic filler
+- Mannered prose — sentences that perform writing instead of saying something: throat-clearing openers, stacked hedges, "it's worth noting", triplets for rhythm, a closing line that restates the paragraph. One plain sentence per idea; a list or table where the content is multifaceted, prose where it is one idea
 - Whether every sentence carries weight
 
 Read entire document and provide feedback.
@@ -266,7 +266,7 @@ Generate 5-10 questions that readers would realistically ask.
 
 Announce that these questions will be tested with a fresh Claude instance (no context from this conversation).
 
-For each question, invoke a sub-agent with just the document content and the question.
+For each question, invoke a sub-agent with just the document content and the question. The questions are independent — launch all the sub-agents in one message so they run in parallel, and brief each once, precisely.
 
 Summarize what Reader Claude got right/wrong for each question.
 
@@ -367,7 +367,3 @@ Announce document completion. Provide a few final tips:
 - Throughout, if context is missing on something mentioned, proactively ask
 - Don't let gaps accumulate - address them as they come up
 
-**Quality over Speed:**
-- Don't rush through stages
-- Each iteration should make meaningful improvements
-- The goal is a document that actually works for readers

@@ -6,6 +6,7 @@ description: >
   environments. Use when "works locally but not in prod", "audit our
   environments", or "config drift". Local runnability → workflow-environment-ready.
 license: MIT
+effort: high
 ---
 
 # audit-env-parity — Environments that agree

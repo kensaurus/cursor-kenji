@@ -1,6 +1,8 @@
 ---
 description: "Capacitor native-layer security audit — plan only, no config edits until approved"
 argument-hint: "[app path or scope]"
+disable-model-invocation: true
+effort: high
 ---
 
 # Capacitor Hardening Plan

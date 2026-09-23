@@ -6,6 +6,7 @@ description: >
   user flows", "IA audit", "can users find X", "navigation audit", or "funnel
   drop-off". Full DS burndown → plan-uiux-unification.
 license: MIT
+effort: high
 ---
 
 # audit-ux-journeys — User-Story, Task-Completion & IA Audit
@@ -18,7 +19,7 @@ can *find* the feature, checkout takes nine steps with two dead ends, and nav
 follows the database schema. `audit-ux` judges **pages**; this skill judges
 **paths and structure**.
 
-The 2026 consensus: a UX audit is **not personal taste**. Derive stories from
+A UX audit is **not personal taste**. Derive stories from
 the product, walk the journeys, audit IA against mental models, and ground
 findings in behavioral evidence when it exists. Pre-launch: qualitative
 walkthroughs, *labeled as assumptions*.
@@ -182,7 +183,7 @@ rg -n -i "gtag|googletagmanager|G-[A-Z0-9]{6,}|posthog|clarity\.ms|hotjar|amplit
 
 Language discipline: neutral, behavior-grounded observations ("3 of 5
 walkthrough runs backtracked at X"), never accusatory. One observation per
-finding, one paragraph max.
+finding, in the length the evidence needs.
 
 **Forbidden:** presenting `[judgment]` as data; re-auditing per-page
 heuristics/microcopy that `audit-ux` owns; inventing personas unmoored from the

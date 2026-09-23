@@ -5,6 +5,7 @@ description: >
   "publish this package", "release to npm", or "ship a new npm version".
   Running-app production deploy → workflow-ship-and-observe.
 license: MIT
+disable-model-invocation: true
 ---
 
 # deploy-npm — Full release workflow
@@ -140,14 +141,7 @@ gh pr checks <pr-number>
 gh run watch <run-id> --exit-status
 ```
 
-**Typical fix loops** (be ready for these):
-1. **`Build & Test` fails on test** → run the failing test locally: `pnpm --filter <pkg> test`; fix; commit; push.
-2. **`typecheck` fails but tests pass** → some helper type leaked. Look for inline `import('...')` type annotations and switch to named `import type { X } from '...'` (eslint rule `@typescript-eslint/consistent-type-imports`).
-3. **`lint` fails on `next lint`** in any app on Next.js ≥ 15.5 → `next lint` was removed. Replace with `eslint . --ext .ts,.tsx` in `package.json` and add `eslint` + the workspace eslint-config to `devDependencies`.
-4. **`lint` fails on `// eslint-disable-next-line unknown-rule`** under ESLint 10 → remove the directive. ESLint 10 treats unknown-rule disables as errors.
-5. **`Check bundle sizes` fails** → bump the limit in the package's `size-limit` config in `package.json`, but only after confirming the growth is from intentional new code (run `pnpm --filter <pkg> exec size-limit --why` locally).
-6. **Docs build (Nextra) fails with Zod `expected nonoptional, received undefined → at children`** → patch `nextra-theme-docs/dist/schemas.js` to mark `children: reactNode.optional()` in `LayoutPropsSchema`, register the patch in root `package.json` `pnpm.patchedDependencies`.
-7. **MDX build error like "import statement after heading"** → move every `import ... from '...'` to the top of the MDX file, before headings or JSX.
+**Typical fix loops.** Version-specific CI recipes from past releases (Next.js `next lint` removal, ESLint 10 unknown-rule directives, Nextra schema patch, `size-limit` bumps, MDX import order) live in [`references/example-mushi-mushi.md`](references/example-mushi-mushi.md) — read the matching entry when a check fails. Bump a `size-limit` only after confirming the growth is intentional (`pnpm --filter <pkg> exec size-limit --why`).
 
 **CodeQL informational findings**: The `CodeQL` (GitHub Advanced Security) summary check often shows alerts that pre-existed but get re-flagged because the PR is large. The `CodeQL (javascript-typescript)` workflow run itself is what actually gates merge. Don't conflate the two.
 
@@ -393,7 +387,7 @@ gh run view <run-id> --log | grep -E "🦋.*info publishing|warn.*already publis
 - Repo publishes a single package, not a monorepo → skip Phase 8's per-package stubs.
 - Repo doesn't use OIDC Trusted Publisher → drop the OIDC gotchas section, but **never** add a long-lived `NPM_TOKEN` without flagging the security trade-off to the user first.
 
-When in doubt, prefer the workflow-dispatch path (Phase 6) over re-merging or rewriting history — `workflow_dispatch` is idempotent for changeset publish (already-published versions become warnings, not errors).
+To re-trigger a publish, use the workflow-dispatch path (Phase 6) rather than re-merging or rewriting history — `workflow_dispatch` is idempotent for changeset publish (already-published versions become warnings, not errors).
 
 ---
 

@@ -6,7 +6,7 @@ license: MIT
 
 # Parallel Agents & Worktrees
 
-**Degree of freedom: MIXED.** What to split and which model `[HIGH freedom]`;
+**Degree of freedom: MIXED.** What to split, how to brief, and which model or effort `[HIGH freedom]`;
 isolated worktrees and no shared-file writes `[LOW freedom — run exactly]`.
 
 ## How to reason
@@ -31,15 +31,23 @@ isolated worktrees and no shared-file writes `[LOW freedom — run exactly]`.
 - **Right owner** — one sequential feature → `workflow-build-feature`
 
 ## Why Run Agents in Parallel?  [HIGH freedom]
-- **Compare approaches**: Same prompt across 3 models → pick the best result
+- **Compare approaches**: same brief to several agents (Cursor: different models; Claude Code: subagents, optionally at different `effort`) → pick the best result
 - **Isolate work**: Each agent edits its own files without conflicts
 - **Delegate background tasks**: Offload bug fixes, tests, docs while you work on something else
 - **Speed**: Multiple independent tasks done simultaneously
 
+## When delegation pays  [HIGH freedom]
+
+Delegate when a track is independent, sizeable, and can run beside the others, or when its output is verbose and you do not need it in the main context (log reads, wide exploration, a full test run). A handful of tool calls is cheaper to do yourself than to brief.
+
+Brief each delegate once and precisely — goal, files, constraints, the done-check, and what to report back — then commit to the delegation: do not redo its work in parallel. Launch independent agents in one message so they run at the same time; integrate results one at a time.
+
+Claude Code: each delegate is a subagent (built-in `Explore` for read-only work; a general agent or one from `agents/` for edits). A subagent that writes files gets `isolation: worktree` in its agent frontmatter, or its own `git worktree add`, so two delegates never own the same path. Cursor: the worktree and cloud options below.
+
 ## Git Worktrees (Local Parallel Agents)  [LOW freedom — run exactly]
 
 ### How It Works
-Cursor creates isolated git worktrees for each agent. Each has its own:
+Cursor creates an isolated git worktree per agent from the agent dropdown; in Claude Code the equivalent is `isolation: worktree` on the subagent (see above). Each has its own:
 - File system (changes don't affect other agents)
 - Build/test environment
 - Branch
@@ -105,6 +113,7 @@ Include:
 - File paths if known
 - Acceptance criteria
 - Any constraints ("don't change the API contract")
+- A time signal when the run is clocked: "Time matters here: do not spend time that can be avoided." Delegates weight it.
 
 ## Running Multiple Models on the Same Prompt  [LOW freedom — run exactly]
 1. Open agent dropdown
@@ -112,6 +121,7 @@ Include:
 3. Submit prompt once
 4. Cursor runs all models in parallel
 5. Compare results; Cursor recommends the best
+Claude Code: send the same brief to N subagents in one message (different `effort` levels, or a different approach named in each brief); compare the candidates yourself or hand them to a fresh-context reviewer that flags only correctness and requirement gaps.
 
 Best for:
 - Architecturally significant decisions
@@ -143,6 +153,7 @@ While implementing feature X locally:
 One agent reviews for security, another for performance:
 - Agent A: "Review `app/api/` for security issues (auth, input validation, RLS)"
 - Agent B: "Review `app/api/` for performance (N+1s, missing indexes, large payloads)"
+Each reviewer reports only findings in its lane, with file:line evidence — not style or general cleanups.
 
 ## Worktree Tips  [LOW freedom — run exactly]
 - Each worktree needs its own `node_modules` if deps differ

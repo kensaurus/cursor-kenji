@@ -6,6 +6,7 @@ description: >
   Use when "resilience audit", "will this survive real traffic?", or
   "audit retries/timeouts/idempotency". Feature parity → audit-realworld.
 license: MIT
+effort: high
 ---
 
 # audit-resilience — The "80% Problem" Non-Functional Audit

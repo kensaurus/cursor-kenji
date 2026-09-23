@@ -1,6 +1,8 @@
 ---
 description: "Measure-don't-guess performance audit + optimization plan — no fixes until approved"
 argument-hint: "[url or scope]"
+disable-model-invocation: true
+effort: high
 ---
 
 # Performance Audit Plan

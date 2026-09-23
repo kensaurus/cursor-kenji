@@ -111,3 +111,160 @@ python -m pytest -k "test_format"
 - [ ] Tests are deterministic (no random, no time-dependent without fakes)
 - [ ] Test data uses factories (no hardcoded shared state)
 - [ ] Coverage gaps from Sentry addressed
+
+## Testing patterns by category
+
+Generic templates for repos with no precedent. Prefer the shape the existing suite already uses.
+
+### Pure Functions
+
+```typescript
+describe('formatCurrency', () => {
+  it('should format positive amounts', () => {
+    expect(formatCurrency(1234.5)).toBe('$1,234.50');
+  });
+  it('should handle zero', () => {
+    expect(formatCurrency(0)).toBe('$0.00');
+  });
+  it('should handle negative amounts', () => {
+    expect(formatCurrency(-100)).toBe('-$100.00');
+  });
+  it('should handle very large numbers', () => {
+    expect(formatCurrency(999999999.99)).toBe('$999,999,999.99');
+  });
+});
+```
+
+### Async Functions
+
+```typescript
+describe('fetchUser', () => {
+  it('should return user data for valid id', async () => {
+    const user = await fetchUser('123');
+    expect(user).toEqual({ id: '123', name: 'John Doe' });
+  });
+  it('should throw for non-existent user', async () => {
+    await expect(fetchUser('invalid')).rejects.toThrow('User not found');
+  });
+  it('should handle network timeout', async () => {
+    vi.useFakeTimers();
+    const promise = fetchUser('123');
+    vi.advanceTimersByTime(30000);
+    await expect(promise).rejects.toThrow('timeout');
+    vi.useRealTimers();
+  });
+});
+```
+
+### Mocking
+
+```typescript
+// Vitest
+import { vi } from 'vitest';
+vi.mock('./emailService', () => ({
+ sendEmail: vi.fn().mockResolvedValue({ success: true }),
+}));
+
+// Jest
+jest.mock('./emailService');
+
+// MSW (API mocking — preferred for HTTP)
+import { http, HttpResponse } from 'msw';
+import { setupServer } from 'msw/node';
+
+const server = setupServer(
+ http.get('/api/users/:id', ({ params }) => {
+ return HttpResponse.json({ id: params.id, name: 'Test User' });
+ })
+);
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+```
+
+### React Components (Testing Library)
+
+```tsx
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
+describe('LoginForm', () => {
+ it('should submit with valid credentials', async () => {
+ const onSubmit = vi.fn();
+ const user = userEvent.setup();
+ render(<LoginForm onSubmit={onSubmit} />);
+ await user.type(screen.getByLabelText(/email/i), 'test@example.com');
+ await user.type(screen.getByLabelText(/password/i), 'password123');
+ await user.click(screen.getByRole('button', { name: /sign in/i }));
+ await waitFor(() => {
+ expect(onSubmit).toHaveBeenCalledWith({
+ email: 'test@example.com', password: 'password123',
+ });
+ });
+ });
+
+ it('should show validation error for invalid email', async () => {
+ const user = userEvent.setup();
+ render(<LoginForm onSubmit={vi.fn()} />);
+ await user.type(screen.getByLabelText(/email/i), 'invalid');
+ await user.click(screen.getByRole('button', { name: /sign in/i }));
+ expect(screen.getByText(/valid email/i)).toBeInTheDocument();
+ });
+
+ it('should disable submit button while loading', () => {
+ render(<LoginForm onSubmit={vi.fn()} isLoading />);
+    expect(screen.getByRole('button', { name: /sign in/i })).toBeDisabled();
+  });
+});
+```
+
+### Custom Hooks
+
+```typescript
+import { renderHook, act } from '@testing-library/react';
+
+describe('useCounter', () => {
+  it('should start with initial value', () => {
+    const { result } = renderHook(() => useCounter(10));
+    expect(result.current.count).toBe(10);
+  });
+  it('should increment', () => {
+    const { result } = renderHook(() => useCounter(0));
+    act(() => result.current.increment());
+    expect(result.current.count).toBe(1);
+  });
+  it('should not go below zero', () => {
+    const { result } = renderHook(() => useCounter(0));
+    act(() => result.current.decrement());
+    expect(result.current.count).toBe(0);
+  });
+});
+```
+
+### API Route Handlers (Next.js / Node)
+
+```typescript
+describe('POST /api/users', () => {
+  it('should create user with valid data', async () => {
+    const req = new Request('http://localhost/api/users', {
+      method: 'POST',
+      body: JSON.stringify({ name: 'Test', email: 'test@example.com' }),
+    });
+    const response = await POST(req);
+    const data = await response.json();
+    expect(response.status).toBe(201);
+    expect(data).toMatchObject({ name: 'Test', email: 'test@example.com' });
+  });
+  it('should return 422 for invalid email', async () => {
+    const req = new Request('http://localhost/api/users', {
+      method: 'POST',
+      body: JSON.stringify({ name: 'Test', email: 'invalid' }),
+    });
+    const response = await POST(req);
+    expect(response.status).toBe(422);
+  });
+});
+```
+
+---

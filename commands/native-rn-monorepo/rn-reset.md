@@ -1,3 +1,8 @@
+---
+description: "Full React Native cache reset (Metro, Watchman, node_modules, Gradle) for stale-state symptoms"
+effort: low
+---
+
 # /rn-reset
 
 Full reset of React Native caches when builds misbehave with
@@ -16,8 +21,7 @@ Symptoms that warrant this command:
   dependency change
 - Hermes crashes that don't reproduce on a fresh checkout
 
-If symptoms are NOT cache-related, do NOT run this — it's slow and
-destructive.
+Run this only for cache-related symptoms — it is slow and destructive.
 
 ## Steps
 

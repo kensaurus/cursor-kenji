@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "hooks": {
+    "stop": [
+      {
+        "command": "node hooks/completion-gate.mjs",
+        "timeout": 5,
+        "loop_limit": 12,
+        "failClosed": false
+      }
+    ]
+  }
+}

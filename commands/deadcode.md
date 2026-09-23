@@ -1,6 +1,7 @@
 ---
 description: "Find dead code with a configured Knip baseline, then delete it by category behind a ratchet"
 argument-hint: "[optional path, workspace, or 'apply' to execute an already-approved plan]"
+disable-model-invocation: true
 ---
 
 # Dead Code

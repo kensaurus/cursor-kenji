@@ -64,6 +64,8 @@ rg "cn\(|clsx\(|twMerge" --type tsx | head -5
 
 ## Design Tokens  [HIGH freedom]
 
+Face and ground are choices, not defaults: Inter/Roboto/Arial, a cream/off-white page, and a purple-gradient primary are the fallbacks to name and avoid. Add `--font-sans` / `--font-display` tokens for the faces you pick.
+
 ### CSS Custom Properties
 ```css
 /* globals.css */

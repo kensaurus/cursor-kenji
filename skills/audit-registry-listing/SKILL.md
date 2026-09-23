@@ -7,6 +7,7 @@ description: >
   "README as landing page", "GitHub topics", "why nobody finds the package".
   Fix → enhance-readme.
 license: MIT
+effort: high
 ---
 
 # audit-registry-listing — The registry is the landing page
@@ -54,7 +55,7 @@ Do **not** fire for "make the README prettier" → `enhance-readme`.
 ## Self-critique before reporting
 
 - **Evidence** — every finding quotes the line, field, or `npm pack` output
-- **Stranger test** — the ten-line verdict was made without repo knowledge (fresh model or fresh reader)
+- **Stranger test** — the ten-line verdict comes from a fresh-context subagent given only the README's first ten lines and the registry card, nothing else from the repo; this is the one place delegation pays here, because once you have read the repo your own read is no longer a stranger's
 - **No fixes applied** — findings and owners only
 - **Right owner** — visuals → `enhance-readme`; prose → `docs-writer`; `files` → `deploy-npm`; store → `plan-aso`
 

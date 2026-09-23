@@ -26,13 +26,14 @@
  *   copied into ~/.cursor/skills (Claude still gets the portable copies).
  *   RENAMED_SKILLS prunes old skill directories after a rename so existing
  *   installs do not keep two near-identical copies. Honors --dry-run; skipped
- *   when --skill is scoped.
+ *   when --skill is scoped. RENAMED_RULES does the same for renamed rule files.
  *
  * Claude Code paths:
  *   ~/.claude/skills/    — global skills, appear as /slash-commands
  *   ~/.claude/commands/  — custom slash commands
  *   ~/.claude/agents/    — subagent definitions
  *   ~/.claude/rules/     — rules (.mdc sources installed as .md)
+ *   ~/.claude/settings.json — merged completion Stop hook (same script as Cursor)
  */
 
 import {
@@ -114,6 +115,7 @@ What gets installed (Claude Code, with --claude or --all):
   ~/.claude/commands/     ← custom slash commands
   ~/.claude/agents/       ← subagent definitions
   ~/.claude/rules/        ← rules (.mdc installed as .md)
+  ~/.claude/settings.json ← merged completion Stop hook (preserves existing hooks)
 
 What gets installed (Codex CLI / Gemini CLI — no skills system):
   ~/.codex/AGENTS.md      ← rules merged into one context file (auto-loaded)
@@ -194,6 +196,23 @@ function pruneRenamedSkills(skillsDest, label) {
   }
 }
 
+/** Old rule file → new rule file. Pruned in ~/.cursor/rules (.mdc) and
+ *  ~/.claude/rules (.md) on merge installs, mirroring RENAMED_SKILLS. */
+const RENAMED_RULES = {
+  'composer-2.5-execution.mdc': 'approved-plan-execution.mdc',
+};
+
+function pruneRenamedRules(rulesDest, label, { renameMdc = false } = {}) {
+  if (skillName || (onlyGroups && !onlyGroups.has('rules')) || !rulesDest) return;
+  for (const [oldName, newName] of Object.entries(RENAMED_RULES)) {
+    const file = renameMdc ? oldName.replace(/\.mdc$/, '.md') : oldName;
+    const stale = join(rulesDest, file);
+    if (!existsSync(stale)) continue;
+    if (isDryRun) { console.log(`  [dry-run] prune renamed ${label} rule ${file} → ${newName}`); continue; }
+    rmSync(stale, { force: true });
+  }
+}
+
 // ---- target resolution -----------------------------------------------------
 // Backward compatible: a bare invocation still installs Cursor only.
 //   --auto           detect installed tools (~/.cursor, ~/.claude, ~/.codex, ~/.gemini)
@@ -235,9 +254,10 @@ const ALL_DIRS = [
   { src: 'rules',         dest: 'rules'    },
 ];
 
-// Per-project rule bundles: copied into a specific repo's .cursor/rules by the
-// user (see each bundle's README), never into global ~/.cursor/rules or
-// ~/.claude/rules where their always/glob rules would fire in every project.
+// Per-project bundles: copied into a specific repo's .cursor/rules and
+// .cursor/commands by the user (see each bundle's README), never into the
+// global dirs — their always/glob rules would fire in every project, and a
+// global commands copy registers the bundle's README.md as /<bundle>:README.
 const PROJECT_RULE_BUNDLES = new Set(['native-rn-monorepo', 'project-starter']);
 
 // ---- restore mode ----------------------------------------------------------
@@ -339,7 +359,7 @@ function listInstallItems({ renameMdc = false, skipCursorBuiltins = false } = {}
       }
       const itemSrc = join(srcPath, item);
       const isDir = statSync(itemSrc).isDirectory();
-      if (dest === 'rules' && isDir && PROJECT_RULE_BUNDLES.has(item)) continue;
+      if (isDir && PROJECT_RULE_BUNDLES.has(item) && (dest === 'rules' || dest === 'commands')) continue;
       if (!renameMdc && dest === 'rules' && !isDir && item.endsWith('.md')) continue;
       let outName = item;
       if (renameMdc && dest === 'rules' && !isDir && item.endsWith('.mdc')) {
@@ -479,8 +499,8 @@ const RULES_EXCLUDE = new Set(['skill-workflows.mdc']);
 const RULES_ORDER = [
   'senior-engineer.mdc',
   'full-stack-ship-discipline.mdc',
-  'composer-2.5-execution.mdc',
-  'shell-first-search.md',
+  'approved-plan-execution.mdc', // renamed from composer-2.5-execution.mdc
+  'shell-first-search.mdc',      // was .md; now agent-requested in Cursor too
 ];
 
 // Strip a leading `--- ... ---` YAML frontmatter block, returning the body.
@@ -510,6 +530,11 @@ function parseFrontmatter(text) {
 // idempotent, so re-running the installer produces byte-identical output.
 function buildMergedRules(toolLabel, loadPath) {
   const rulesDir = resolve(__dir, 'rules');
+  for (const name of RULES_ORDER) {
+    if (!existsSync(join(rulesDir, name))) {
+      throw new Error(`RULES_ORDER names a missing rule: rules/${name} — update the list after a rename`);
+    }
+  }
   const files = readdirSync(rulesDir)
     .filter((f) => (f.endsWith('.md') || f.endsWith('.mdc'))
       && !RULES_EXCLUDE.has(f)
@@ -622,6 +647,52 @@ function installCursorCompletionHook() {
   return writeManagedFile(configPath, JSON.stringify(config, null, 2) + '\n');
 }
 
+// Claude Code reads Stop hooks from ~/.claude/settings.json. Same script,
+// Claude schema; the managed entry is replaced idempotently and user hooks
+// in other groups are preserved.
+function installClaudeCompletionHook() {
+  const sourceScript = resolve(__dir, 'hooks', 'completion-gate.mjs');
+  const hookDir = join(claudeBase, 'cursor-kenji-hooks');
+  const destScript = join(hookDir, 'completion-gate.mjs');
+  const settingsPath = join(claudeBase, 'settings.json');
+  if (!existsSync(sourceScript)) return 'source-missing';
+
+  if (isDryRun) {
+    console.log(`  [dry-run] ${sourceScript} → ${destScript}`);
+  } else {
+    mkdirSync(hookDir, { recursive: true });
+    place(sourceScript, destScript, false);
+  }
+
+  let settings = {};
+  if (existsSync(settingsPath)) {
+    try {
+      settings = JSON.parse(readFileSync(settingsPath, 'utf8'));
+    } catch {
+      console.warn(`  [!] Skipped completion hook: ${settingsPath} is not valid JSON.`);
+      return 'skipped-invalid-config';
+    }
+  }
+  if (!settings || typeof settings !== 'object' || Array.isArray(settings)) settings = {};
+  if (!settings.hooks || typeof settings.hooks !== 'object' || Array.isArray(settings.hooks)) settings.hooks = {};
+
+  const managedMarker = /cursor-kenji-hooks[\\/]completion-gate\.mjs/;
+  const existing = Array.isArray(settings.hooks.Stop) ? settings.hooks.Stop : [];
+  const preserved = existing
+    .map((group) => ({
+      ...group,
+      hooks: (Array.isArray(group?.hooks) ? group.hooks : []).filter(
+        (h) => !managedMarker.test(String(h?.command ?? '')),
+      ),
+    }))
+    .filter((group) => group.hooks.length > 0);
+  settings.hooks.Stop = [
+    ...preserved,
+    { hooks: [{ type: 'command', command: `node "${destScript.replace(/\\/g, '/')}"`, timeout: 5 }] },
+  ];
+  return writeManagedFile(settingsPath, JSON.stringify(settings, null, 2) + '\n');
+}
+
 // Install a context-file tool (Codex / Gemini). `spec` describes its layout.
 function installContextTool(spec) {
   const { label, base, rulesFile, rulesLoadPath, commandsDir, commandExt, render } = spec;
@@ -691,7 +762,14 @@ if (isVerifyOnly) {
       if (existsSync(hookSrc)) recordVerify(hookSrc, hookDest, 'Cursor completion-gate.mjs');
     }
   }
-  if (wantClaude) verifyTarget(claudeBase, { renameMdc: true }, 'Claude');
+  if (wantClaude) {
+    verifyTarget(claudeBase, { renameMdc: true }, 'Claude');
+    if (!onlyGroups || onlyGroups.has('hooks')) {
+      const hookSrc = resolve(__dir, 'hooks', 'completion-gate.mjs');
+      const hookDest = join(claudeBase, 'cursor-kenji-hooks', 'completion-gate.mjs');
+      if (existsSync(hookSrc)) recordVerify(hookSrc, hookDest, 'Claude completion-gate.mjs');
+    }
+  }
   if (wantCodex) {
     verifyContextTool({
       label: 'Codex CLI (OpenAI)',
@@ -734,6 +812,7 @@ if (wantCursor) {
     assertNoCursorBuiltins(cursorSkills);
   }
   pruneRenamedSkills(join(cursorBase, 'skills'), 'Cursor');
+  pruneRenamedRules(join(cursorBase, 'rules'), 'Cursor');
   const hookStatus =
     !onlyGroups || onlyGroups.has('hooks')
       ? installCursorCompletionHook()
@@ -789,13 +868,40 @@ if (wantClaude) {
   const clean = isClean ? backupAndWipe(claudeBase) : null;
   const counts = installDirs(claudeBase, { renameMdc: true });
   pruneRenamedSkills(join(claudeBase, 'skills'), 'Claude');
+  pruneRenamedRules(join(claudeBase, 'rules'), 'Claude', { renameMdc: true });
+  const hookStatus = !onlyGroups || onlyGroups.has('hooks') ? installClaudeCompletionHook() : 'skipped';
 
   if (skillName && counts.copiedDirs + counts.copiedFiles === 0) {
     console.error(`✗ Skill '${skillName}' not found in skills/ or skills-cursor/.`);
     process.exit(1);
   }
 
-  results.push({ target: 'Claude Code', base: claudeBase, ...counts, clean, mcpInstalled: false });
+  if (!isDryRun) {
+    // Every auto-invocable description rides in Claude Code's skill listing on
+    // each request, and the client trims that listing to a fixed budget.
+    const skillsDir = join(claudeBase, 'skills');
+    let rosterChars = 0;
+    for (const d of existsSync(skillsDir) ? readdirSync(skillsDir) : []) {
+      const f = join(skillsDir, d, 'SKILL.md');
+      if (!existsSync(f)) continue;
+      const text = readFileSync(f, 'utf8').replace(/\r\n/g, '\n');
+      const end = text.startsWith('---') ? text.indexOf('\n---', 3) : -1;
+      if (end === -1) continue;
+      const front = text.slice(3, end);
+      if (/^disable-model-invocation:\s*true\s*$/m.test(front)) continue;
+      const lines = front.split('\n');
+      const s = lines.findIndex((l) => /^description:/.test(l));
+      if (s === -1) continue;
+      const buf = [];
+      const head = lines[s].slice('description:'.length).trim();
+      if (head && !/^[>|][-+0-9]*$/.test(head)) buf.push(head);
+      for (let j = s + 1; j < lines.length && !/^[A-Za-z0-9_-]+:/.test(lines[j]); j++) buf.push(lines[j].trim());
+      rosterChars += buf.join(' ').replace(/\s+/g, ' ').length;
+    }
+    console.log(`  ~/.claude/skills carries ${rosterChars} chars of auto-invocable skill descriptions (all packs). Claude Code trims its skill listing to a fixed budget; if skills stop auto-routing, mark /-only skills \`disable-model-invocation: true\`.`);
+  }
+
+  results.push({ target: 'Claude Code', base: claudeBase, ...counts, clean, mcpInstalled: false, hookStatus });
 }
 
 // ---- Codex CLI (context file + prompt ports) -------------------------------
@@ -851,8 +957,9 @@ if (isDryRun) {
       console.log(`✓ Skills synced to ${join(agentsBase, 'skills')} (${agentsCount} skills — Cursor UI path)`);
     }
     if (r.mcpInstalled) console.log(`✓ MCP template written to ${join(r.base, 'mcp.json')} — edit it to add your API keys.`);
-    if (r.target === 'Cursor' && r.hookStatus && !r.hookStatus.startsWith('skip')) {
-      console.log(`✓ Opt-in completion gate ${r.hookStatus} in ${join(r.base, 'hooks.json')}.`);
+    if (r.hookStatus && !r.hookStatus.startsWith('skip')) {
+      const where = r.target === 'Cursor' ? 'hooks.json' : 'settings.json';
+      console.log(`✓ Opt-in completion gate ${r.hookStatus} in ${join(r.base, where)}.`);
     }
   }
   if (linkFallbacks) console.log(`  (note: ${linkFallbacks} file(s) copied instead of linked — symlinks need elevated rights on this OS)`);

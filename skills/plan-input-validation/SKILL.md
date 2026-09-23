@@ -6,6 +6,7 @@ description: >
   inputs", "is my app injection-safe?", "check my forms", or "can someone
   forge requests?". Apply fixes only after plan approval.
 license: MIT
+effort: high
 ---
 
 # Input-Validation & Trust-Boundary Audit + Hardening Plan
@@ -105,7 +106,7 @@ This skill owns the *boundary where untrusted data enters*.
 2. **Test each.** For every boundary: validated? sanitized? authenticated?
 3. **Score.** Severity = reachability × impact.
 4. **Phase** into shippable groups mapped to execution skills.
-5. **Emit `plan-input-validation.md`. End the turn. Do not edit code.**
+5. **Emit `plan-input-validation.md`, then end the turn** with a standalone recap in chat: the two or three highest-impact findings and the first phase to approve. The file is the deliverable — write it before the recap. **Do not edit code.**
 
 ---
 
@@ -175,6 +176,4 @@ fixtures (real signed events) not mocked payloads.
   `audit-fe-api`.
 - **Verify:** `test-red-team` + Stripe CLI signed webhook fixtures.
 
-> Plan with a strong model; execute with `composer-2.5-execution.mdc` riding
-> along. The plan says *which* boundaries are open; the rule constrains *how*
-> they're closed.
+> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model. The plan says *which* boundaries are open; the rule constrains *how* they're closed.

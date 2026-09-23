@@ -50,7 +50,7 @@ To apply styling to a slide deck or other artifact:
 
 ## Themes Available
 
-The following 10 themes are available:
+The following 11 themes are available:
 
 ### 1. Ocean Depths
 Professional and calming maritime theme
@@ -184,6 +184,7 @@ Generate a new theme with:
 - 5 color palette (primary, secondary, accent, background, text)
 - Font pairing (heading + body)
 - A descriptive name
+Name the fallbacks and avoid them: Inter/Roboto as the pairing, a cream or off-white background, a purple gradient — a custom theme that lands on those is the model's default, not the user's brand.
 
 After generating, show it for review before applying.
 

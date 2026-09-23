@@ -5,12 +5,16 @@ description: >
   and network shape. Use when "API audit", "FE-BE contract", or "review frontend
   API integration". Live 4xx/5xx reproduction → debug-fe-be-integration.
 license: MIT
+effort: high
 ---
 
 # Frontend API Audit Skill
 
 **Degree of freedom: MIXED** — Steps 0, 1, 3–6 `[HIGH freedom]`; Step 2
 Sentry queries and schema SQL `[LOW freedom — run exactly]`.
+
+Read-only. Present findings; the Phase 6 snippets are the fix shape to
+recommend, not edits to make in this pass.
 
 ## How to reason
 

@@ -34,7 +34,7 @@ existing-type/boundary probes `[LOW freedom — run exactly]`.
 - **Layered** — boundary + action result + toast, not toast-only
 - **Right owner** — plan-only observability audit → `plan-error-handling`; live Sentry triage → `debug-sentry-monitor`
 
-full error handling patterns for full-stack applications.
+Layered error handling for full-stack apps: one action-result shape, boundaries, and toasts.
 
 ## When to Use
 

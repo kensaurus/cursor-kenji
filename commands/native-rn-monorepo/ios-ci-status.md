@@ -1,3 +1,8 @@
+---
+description: "Check the latest iOS CI run status and whether the TestFlight upload step ran"
+effort: low
+---
+
 # /ios-ci-status
 
 Check the status of the most recent iOS CI build.

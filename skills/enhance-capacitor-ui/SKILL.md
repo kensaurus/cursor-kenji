@@ -62,7 +62,7 @@ predictable, reviewable change instead of a regression.
 
 ---
 
-## Critical Rules
+## Rules
 
 > **Three orthogonal axes — never conflate them.**
 > 1. **Form factor** (compact / medium / expanded) = how much screen space

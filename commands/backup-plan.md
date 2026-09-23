@@ -1,6 +1,8 @@
 ---
 description: "Backup and disaster-recovery capability audit — plan only, no infra changes until approved"
 argument-hint: "[path or scope]"
+disable-model-invocation: true
+effort: high
 ---
 
 # Backup & DR Plan

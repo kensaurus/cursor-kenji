@@ -1,6 +1,8 @@
 ---
 description: "LLM cost guardrails & quota-abuse audit — plan only, no limits added until approved"
 argument-hint: "[path or scope]"
+disable-model-invocation: true
+effort: high
 ---
 
 # LLM Cost Guardrails Plan

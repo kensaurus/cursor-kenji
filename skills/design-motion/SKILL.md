@@ -259,7 +259,9 @@ function HeroSection() {
 }
 ```
 
-## Micro-Interactions Checklist
+## Micro-interaction reference
+
+Options, not a checklist. This skill adds one animation, so pick the single item the purpose needs; unrequested hover, zoom, or reveal effects are scope creep.
 
 ### Buttons
 - [ ] Hover: subtle scale (1.02) + shadow

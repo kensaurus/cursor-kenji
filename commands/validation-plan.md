@@ -1,6 +1,8 @@
 ---
 description: "Input-validation & trust-boundary audit — plan only, no hardening until approved"
 argument-hint: "[path or scope]"
+disable-model-invocation: true
+effort: high
 ---
 
 # Input Validation Plan

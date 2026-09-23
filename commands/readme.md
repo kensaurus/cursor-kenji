@@ -1,5 +1,6 @@
 ---
 description: "End-of-session README sync — detect convention, smart change detection, stale-reference cleanup, visual showcase"
+disable-model-invocation: true
 ---
 
 # /readme

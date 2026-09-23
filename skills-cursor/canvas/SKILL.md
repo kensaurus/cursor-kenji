@@ -10,6 +10,7 @@ metadata:
   surfaces:
     - ide
 disable-model-invocation: true
+user-invocable: false
 ---
 A canvas is a single `.canvas.tsx` file the IDE compiles so the user can open it beside the chat. Follow the workflow below in order.
 
@@ -38,7 +39,7 @@ The trigger is **user intent**, not response shape. Ask: would the user benefit 
 
 ### 2. Write the canvas
 
-**Location.** Canvases live at `/Users/<user>/.cursor/projects/<workspace>/canvases/<name>.canvas.tsx`. The IDE only detects canvases written directly inside that exact directory — subfolders, alternate extensions, and other locations are not picked up. For a new canvas, always use the write file tool to create the `.canvas.tsx` file at that exact path; do not stop after telling the user the path or showing code in chat. Treat that managed `canvases/` directory as pre-provisioned by Cursor itself: write the canvas file directly there and do **not** spend turns creating the directory with `mkdir` or checking whether it exists before writing. Listing its contents for other purposes (e.g. checking for existing canvases) is fine. If you can't determine the workspace directory from absolute paths already in your environment (terminals, transcripts, recently-viewed files), list `~/.cursor/projects/` rather than guessing. Use a descriptive kebab-case filename ending in `.canvas.tsx`; preserve acronym capitalization and lowercase the rest.
+**Location.** Canvases live at `~/.cursor/projects/<workspace>/canvases/<name>.canvas.tsx`. The IDE only detects canvases written directly inside that exact directory — subfolders, alternate extensions, and other locations are not picked up. For a new canvas, always use the write file tool to create the `.canvas.tsx` file at that exact path; do not stop after telling the user the path or showing code in chat. Treat that managed `canvases/` directory as pre-provisioned by Cursor itself: write the canvas file directly there and do **not** spend turns creating the directory with `mkdir` or checking whether it exists before writing. Listing its contents for other purposes (e.g. checking for existing canvases) is fine. If you can't determine the workspace directory from absolute paths already in your environment (terminals, transcripts, recently-viewed files), list `~/.cursor/projects/` rather than guessing. Use a descriptive kebab-case filename ending in `.canvas.tsx`; preserve acronym capitalization and lowercase the rest.
 
 **File rules:**
 - Exactly one `.canvas.tsx` file per canvas. Never create helper files, style files, or supporting modules.
@@ -48,7 +49,7 @@ The trigger is **user intent**, not response shape. Ask: would the user benefit 
 
 **Component discovery:** prefer built-in `cursor/canvas` components over hand-rolled markup. The full public surface (components, hooks, prop types, tokens) is declared in `~/.cursor/skills-cursor/canvas/sdk/index.d.ts` and its sibling `.d.ts` files — read them when you need exact exports, prop shapes, or hook signatures rather than guessing. Referencing an export that does not exist is the most common runtime error.
 
-Apply the Canvas generation policy below as you write, and complete its pre-delivery self-check (section 6) before returning the canvas.
+Apply the design guidance below as you write, and complete its pre-delivery self-check before returning the canvas.
 
 ## Design guidance
 
@@ -71,6 +72,7 @@ These specific patterns produce low-quality output. If 2+ are present, redesign.
 - **Rainbow coloring** — a different color on every element. Most elements are neutral; color is used sparingly with purpose.
 - **Giant text** — font sizes above H1 (24px), or bold text stuffed in CardHeader.
 - **Decorative borders** — colored borders on every element. Borders are structural (subtle stroke tokens), not decorative.
+- **Borrowed defaults** — italic accent words in headings, "01/02/03" numbered section labels, monospace for non-code labels, pill-shaped buttons or chips. Stock patterns, not choices.
 
 ### Pre-delivery self-check
 
@@ -90,7 +92,7 @@ Both can apply at once; one or two sentences total is enough. Skip the intro for
 
 ## Troubleshooting
 
-If a canvas appears blank or missing, the most common cause is that it was not written under `/Users/<user>/.cursor/projects/<workspace>/canvases/` exactly — re-save it to that path. Do not debug this by trying to create the managed directory manually; focus on correcting the file path instead. Users can click the canvas file path in the response to open it, just like any other file path in Cursor. When present, the canvas server writes a `<name>.canvas.status.json` sidecar after each build with `status`, `diagnostics`, or `error` fields you can read; the file is best-effort and may not exist, so don't block on it.
+If a canvas appears blank or missing, the most common cause is that it was not written under `~/.cursor/projects/<workspace>/canvases/` exactly — re-save it to that path. Do not debug this by trying to create the managed directory manually; focus on correcting the file path instead. Users can click the canvas file path in the response to open it, just like any other file path in Cursor. When present, the canvas server writes a `<name>.canvas.status.json` sidecar after each build with `status`, `diagnostics`, or `error` fields you can read; the file is best-effort and may not exist, so don't block on it.
 
 ## Good example
 

@@ -1,12 +1,14 @@
 {
-  "version": 1,
   "hooks": {
-    "stop": [
+    "Stop": [
       {
-        "command": "node hooks/completion-gate.mjs",
-        "timeout": 5,
-        "loop_limit": 12,
-        "failClosed": false
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/completion-gate.mjs\"",
+            "timeout": 5
+          }
+        ]
       }
     ]
   }

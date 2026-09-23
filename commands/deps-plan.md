@@ -1,6 +1,8 @@
 ---
 description: "Dependency provenance & slopsquatting audit — plan only, no install until approved"
 argument-hint: "[path or scope]"
+disable-model-invocation: true
+effort: high
 ---
 
 # Dependency Provenance Plan

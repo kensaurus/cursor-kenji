@@ -79,7 +79,11 @@ function parseSkill(dir, name) {
   }
   description = description.replace(/^["']|["']$/g, "").replace(/\s+/g, " ").trim();
 
-  return { name, summary: summarize(description) };
+  // Roster flags: a user-only ritual leaves the always-on description roster;
+  // a reference-only skill is hidden from the / menu.
+  const slashOnly = /^disable-model-invocation:\s*true\s*$/m.test(block);
+  const refOnly = /^user-invocable:\s*false\s*$/m.test(block);
+  return { name, summary: summarize(description), slashOnly, refOnly };
 }
 
 /** First sentence / clause of the description, before the trigger list; capped. */
@@ -114,7 +118,10 @@ function familyOf(name) {
 }
 
 function renderGroup(title, items) {
-  const lines = items.map((s) => `| \`${s.name}\` | ${s.summary} |`);
+  const lines = items.map((s) => {
+    const tag = s.refOnly ? " _(reference only)_" : s.slashOnly ? ` — \`/${s.name}\` only` : "";
+    return `| \`${s.name}\` | ${s.summary}${tag} |`;
+  });
   return [
     `### ${title} (${items.length})`,
     "",
@@ -154,6 +161,8 @@ function build() {
   parts.push(
     `_Auto-generated from each skill's \`SKILL.md\` — run \`npm run gen:skill-index\` after adding a skill. **${total} skills** listed below._`,
   );
+  parts.push("");
+  parts.push("_Skills marked `/name only` are user-invoked rituals; `reference only` skills are loaded by other skills; every other skill auto-routes from a plain request._");
   parts.push("");
   parts.push("#### Skill families at a glance");
   parts.push("");

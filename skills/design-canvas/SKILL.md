@@ -52,7 +52,7 @@ Create a VISUAL PHILOSOPHY that will be expressed through:
 
 **Guidelines:**
 - Avoid redundancy
-- Emphasize craftsmanship repeatedly
+- Emphasize craftsmanship once, concretely — say what makes this piece look labored over, not as a refrain
 - Leave creative space for interpretation
 
 ### Step 2: Canvas Creation  [HIGH freedom]

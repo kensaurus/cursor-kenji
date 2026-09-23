@@ -166,7 +166,7 @@ Important behavior:
 - Exit code `2`: block the action, same as returning deny
 - Other non-zero exit codes: fail open by default unless `failClosed: true`
 
-Always make hook scripts executable after creating them.
+Make hook scripts executable after creating them (`chmod +x`): a non-executable script errors, and by default that fails open, so the hook silently does nothing.
 
 ## Prompt Hooks
 

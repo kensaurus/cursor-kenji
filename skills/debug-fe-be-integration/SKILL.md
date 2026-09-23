@@ -6,6 +6,7 @@ description: >
   Use for API 4xx/5xx, mismatched payloads, validation failures, or
   "frontend and backend disagree". Single-layer errors → debug-error.
 license: MIT
+effort: high
 ---
 
 # Frontend-Backend Integration Debug Skill
@@ -108,6 +109,8 @@ STACK DISCOVERY:
 
 ### 1a. Firecrawl — Integration Debugging
 
+Search the framework and validation library as written — recognizing the name is not knowing its current API or error shape.
+
 ```json
 firecrawl:firecrawl_search
 {
@@ -161,7 +164,7 @@ If the project has separate FE and BE Sentry projects, check both:
 Read the terminal files for the running backend process:
 
 ```
-Read: terminals/*.txt — find the terminal running the backend (npm run dev, etc.)
+Read the output of the terminal running the backend (`npm run dev` or equivalent) — in Cursor, `terminals/*.txt`; in Claude Code, the shell or log file you started it from.
 ```
 
 Look for errors in the last 3-5 minutes:
@@ -262,7 +265,7 @@ For each error, provide:
 
 ### 4b. Backend Enhancements
 
-For each error, consider backend improvements:
+For each error, consider backend improvements — as recommendations in the report. Apply the fix for the contract failure at hand; the robustness enhancements ship only when the user asks, and every edit is surgical.
 
 ```markdown
 ### Backend Enhancement: [Endpoint]

@@ -6,6 +6,7 @@ description: >
   "bfcache", or "long tasks". JS payload → audit-bundle-size. Instant
   nav implement → enhance-web-instant-nav. Breaking point → test-load.
 license: MIT
+effort: high
 ---
 
 # Performance Audit Skill
@@ -14,6 +15,7 @@ license: MIT
 measure-first Sentry/vitals and `EXPLAIN` `[LOW freedom — run exactly]`.
 
 > **Audit-and-fix exception.** Measure, then optimize. JS payload → `audit-bundle-size`. Instant navigations → `enhance-web-instant-nav`. Breaking point → `test-load`. Timeouts/retries → `audit-resilience`.
+> When fixing: change only the measured bottleneck and re-measure it; log other slow paths you notice as follow-ups, not fixes. Edit the existing file in place rather than rewriting it. Add a perf test only where the repo already keeps them or the task asks; scratch measurements stay out of the repo.
 
 ## How to reason
 
@@ -335,7 +337,7 @@ context7:resolve-library-id
 | Missing indexes | Add database indexes | High |
 | Unoptimized fonts | Subset + preload + font-display:swap | Medium |
 | No compression | Enable gzip/brotli | Medium |
-| Expensive re-renders | React.memo + useMemo | Medium |
+| Expensive re-renders | React Compiler first; manual memo only with Profiler evidence | Medium |
 | Layout shifts | Set explicit width/height on images/embeds | Medium |
 
 ---

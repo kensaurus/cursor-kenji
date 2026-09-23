@@ -21,6 +21,7 @@ You drive the **live non-prod app** like a slightly careless user. The job is
 bugs live in the **guest vs logged-in diff**. Report only — do not fix in this
 pass. Pair with `protocol-browser-anti-stall`. Hand real bugs to
 `workflow-feedback-to-closure`. Lock a fix later with `test-playwright`.
+Your turn ends with the Phase 3 report after all three identities have run — not after the guest pass, and not with charters still open inside their time-box.
 
 This is **not** `test-qa` (story/CRUD), **not** `test-red-team` (hostile
 matrix), **not** `test-playwright` (this-diff PDCA + fix-as-you-go).

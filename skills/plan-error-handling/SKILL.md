@@ -6,6 +6,7 @@ description: >
   Sentry", "things fail silently", or "empty catch blocks". Apply
   patterns → backend-error-handling.
 license: MIT
+effort: high
 ---
 
 # Error-Handling & Observability Audit + Fix Plan
@@ -111,8 +112,7 @@ For any AI/LLM feature:
 - **Sampling blind spots** — if sampling <100%, note which edge cases may be
   missed.
 
-> Langfuse was acquired by ClickHouse (Jan 2026); if the user self-hosts, flag
-> validating hosting/licensing — a note, not a code finding.
+> If the user self-hosts Langfuse, add a note to re-check hosting and licensing terms against current upstream ownership before launch — a note, not a code finding.
 
 ## Cross-plane
 
@@ -130,7 +130,7 @@ For any AI/LLM feature:
    what's the signal?"* — None / Console-only / Sentry / Langfuse.
 3. **Score.** Severity = blast radius × invisibility.
 4. **Phase** into shippable groups mapped to execution skills.
-5. **Emit `plan-error-handling.md`. End the turn. Do not edit code.**
+5. **Emit `plan-error-handling.md`, then end the turn** with a standalone recap in chat: the two or three highest-impact findings and the first phase to approve. The file is the deliverable — write it before the recap. **Do not edit code.**
 
 ---
 
@@ -203,5 +203,4 @@ Approve a phase to run it. Re-run after to confirm failures are now observable.
   `debug-sentry-monitor`.
 - **Verify:** trigger a controlled failure post-fix; confirm Sentry/Langfuse capture.
 
-> Plan with a strong model; execute with `composer-2.5-execution.mdc` riding
-> along. The plan says *what* is invisible; the rule constrains *how* it's wired.
+> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model. The plan says *what* is invisible; the rule constrains *how* it's wired.

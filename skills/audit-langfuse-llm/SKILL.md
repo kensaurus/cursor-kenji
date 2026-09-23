@@ -7,13 +7,14 @@ description: >
   Jailbreak/OWASP LLM → audit-llm-security. Token caps →
   plan-llm-cost-guardrails.
 license: MIT
+effort: high
 ---
 
 # Langfuse LLM Quality Audit
 
 **Degree of freedom: MIXED** — Phases 0–1, 4 `[HIGH freedom]`; Phases 2–3
 CLI traces and playwright `[LOW freedom — run exactly]`. Read
-`protocol-browser-anti-stall` before any browser step. Never skip Phase 0.
+`protocol-browser-anti-stall` before any browser step. Phase 0 first: Phases 2–3 verify the feature map it produces.
 
 ## How to reason
 

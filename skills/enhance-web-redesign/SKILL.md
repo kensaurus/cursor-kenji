@@ -57,6 +57,9 @@ Before the full audit, scan for the highest-signal "AI-generated look" fingerpri
 - [ ] **Centered-everything** symmetrical layout with no asymmetry or overlap
 - [ ] **Generic `shadow-lg`** pure-black shadows on white cards
 - [ ] **No hover / active / focus states** on interactive elements
+- [ ] **Cream / off-white page background** as the default canvas
+- [ ] **Italic accent word** in every headline
+- [ ] **"01 / 02 / 03" numbered or monospace eyebrow labels** above every section
 
 Kill these first, then run the full audit.
 
@@ -124,9 +127,9 @@ Check for these problems and fix them:
 ### Content
 
 - **Generic names like "John Doe" or "Jane Smith".** Use diverse, realistic-sounding names.
-- **Fake round numbers like `99.99%`, `50%`, `$100.00`.** Use organic, messy data: `47.2%`, `$99.00`, `+1 (312) 847-1928`.
+- **Fake round numbers like `99.99%`, `50%`, `$100.00`.** Use real figures where the repo or brief has them; otherwise label sample values as mock (`<!-- mock -->`) rather than inventing precise-looking ones (same rule as `enhance-web-landing` 4.9).
 - **Placeholder company names like "Acme Corp", "Nexus", "SmartFlow".** Invent contextual, believable brand names.
-- **AI copywriting cliches.** Never use "improve", "clean", "Unleash", "Next-Gen", "Game-changer", "look", "Tapestry", or "In the world of...". Write plain, specific language.
+- **AI copywriting clichés.** "Unleash", "Next-Gen", "Game-changer", "Tapestry", "In the world of…", "Welcome to [Product]" read as generated. Write plain, specific copy that names what the product does.
 - **Exclamation marks in success messages.** Remove them. Be confident, not loud.
 - **"Oops!" error messages.** Be direct: "Connection failed. Please try again."
 - **Passive voice.** Use active voice: "We couldn't save your changes" instead of "Mistakes were made."
@@ -218,7 +221,7 @@ Apply changes in this order for maximum visual impact with minimum risk:
 ## Rules  [LOW freedom — run exactly]
 
 - Work with the existing tech stack. Do not migrate frameworks or styling libraries.
-- Do not break existing functionality. Test after every change.
+- Do not break existing functionality: keep routes, handlers, and states; run the repo's build and checks before reporting.
 - Before importing any new library, check the project's dependency file first.
 - If the project uses Tailwind, check the version (v3 vs v4) before modifying config.
 - If the project has no framework, use vanilla CSS.

@@ -6,6 +6,7 @@ description: >
   can read my data", "lock down my tables". App-layer session/route gates →
   audit-auth-flows.
 license: MIT
+effort: high
 ---
 
 # RLS & Access-Control Audit + Remediation Plan
@@ -145,7 +146,7 @@ severity, and a remediation *direction* (not the SQL — that's execution).
    the deliverable's most useful artifact.
 4. **Phase the burndown.** Critical first (data is exposed *right now*), then
    High, then Med/Low. Each phase maps to an execution skill.
-5. **Emit `plan-rls-audit.md`. End the turn. Do not write or run any SQL.**
+5. **Emit `plan-rls-audit.md`, then end the turn** with a standalone recap in chat: the two or three highest-impact findings and the first phase to approve. The file is the deliverable — write it before the recap. **Do not write or run any SQL.**
 
 ---
 
@@ -228,6 +229,4 @@ cross-check with Supabase's security advisor.
   `audit-security`.
 - **Verify:** Supabase security advisor + a second `plan-rls-audit` pass.
 
-> Plan with a strong model; execute with `composer-2.5-execution.mdc` riding
-> along. The plan says *which* tables are exposed; the rule constrains *how* the
-> migration is allowed to touch them.
+> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model. The plan says *which* tables are exposed; the rule constrains *how* the migration is allowed to touch them.

@@ -38,13 +38,13 @@ delete-only-after-proof and dependency bump commands `[LOW freedom — run exact
 Full-cycle repository maintenance: documentation sync, dead file removal, dependency updates, and research-driven cleanup.
 Works with **any project** — auto-detects tech stack, package manager, and structure.
 
-## Critical Rules  [LOW freedom — do not skip]
+## Rules  [LOW freedom — do not skip]
 
-> **NEVER delete files without confirming they are truly unused.**
-> Check imports, references, git blame, and config entries before removing anything.
+> **Delete a file only after proving it unused.**
+> Check imports, references, git blame, and config entries first — a file that is still imported breaks the build when it goes.
 
-> **NEVER blindly upgrade a major version.**
-> Major bumps may have breaking changes. Research the changelog before upgrading.
+> **Research the changelog before any major-version bump.**
+> Majors carry breaking changes; a blind upgrade turns maintenance into an outage.
 
 > **README must reflect reality, not aspiration.**
 > Only document what currently exists in the codebase.
@@ -361,7 +361,7 @@ firecrawl:firecrawl_search
 }
 ```
 
-Only apply major updates if:
+Recognizing the package is not knowing this major's changes — read the fetched changelog as written rather than answering from memory. Only apply major updates if:
 - The migration is straightforward (no breaking API changes affecting this project)
 - The current major version is EOL or has known security issues
 - The project has tests to verify nothing breaks

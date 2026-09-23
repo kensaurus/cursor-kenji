@@ -34,7 +34,7 @@ correlation ids, PII redaction, and the DoD `[LOW freedom — run exactly]`.
 - **Leveled** — no `console.log` in prod; handled paths are not `error`
 - **Right owner** — plan-only audit → `plan-error-handling`; investigate a Sentry issue → `debug-sentry-monitor`
 
-> The build-time counterpart to your monitoring stack. The Sentry plugin installs the SDK; `debug-sentry-monitor` triages after the fact; `audit-langfuse-llm` audits LLM traces. about instrumenting **correctly while you build** so those tools have signal to work with — and so a 3am incident is debuggable.
+> The build-time counterpart to your monitoring stack. The Sentry plugin installs the SDK; `debug-sentry-monitor` triages after the fact; `audit-langfuse-llm` audits LLM traces. This skill is about instrumenting **correctly while you build** so those tools have signal to work with — and so a 3am incident is debuggable.
 
 ## When this fires
 Adding logging / tracing / metrics to new code, reviewing instrumentation, or fixing "we can't tell what happened in prod." Not for installing an SDK (use the Sentry/Langfuse plugins) or post-hoc triage (use the monitor/audit skills).

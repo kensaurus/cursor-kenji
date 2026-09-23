@@ -6,6 +6,7 @@ description: >
   when "is my Capacitor app secure?", "harden my hybrid app", or
   pre-store hardening. Store readiness → plan-mobile-readiness.
 license: MIT
+effort: high
 ---
 
 # Capacitor Native-Layer Hardening Audit + Remediation Plan
@@ -131,7 +132,7 @@ For each finding: location, gap, exposure, severity, remediation *direction*.
    **Med** (debug flags, allowBackup, weak CSP), **Low** (logging nits).
 3. **Config-vs-production table** — dev-only settings live in prod build.
 4. **Phase** burndown. Production-config leaks and token storage first.
-5. **Emit `plan-capacitor-hardening.md`. End the turn.**
+5. **Emit `plan-capacitor-hardening.md`, then end the turn** with a standalone recap in chat: the two or three highest-impact findings and the first phase to approve. The file is the deliverable — write it before the recap.
 
 ---
 
@@ -210,4 +211,4 @@ Re-audit native files after each phase; verify secure storage + deep-links on re
 - **Execution:** `mobile-capacitor-platform`, `backend-patterns`, `mobile-emulator-test`.
 - **Verify:** real-device secure storage + deep-link test; no dev config in release build.
 
-> Plan with a strong model; execute with `composer-2.5-execution.mdc`.
+> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model.

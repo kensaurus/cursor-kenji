@@ -6,6 +6,7 @@ description: >
   endpoints", "structure my API responses", "plan API architecture", "REST vs GraphQL", or
   "API contract".
 license: MIT
+effort: high
 ---
 
 # API Design Skill
@@ -43,9 +44,8 @@ Design clean, consistent, and developer-friendly APIs.
 
 ### 1. Check Existing API Documentation
 ```
-http://localhost:8080/api-docs (if backend running)
-http://localhost:8080/naming-conventions (naming standards)
-src/api/_api-README.md (frontend API layer docs)
+the running backend's docs route (/api-docs, /docs, /swagger, /openapi.json)
+the repo's API README / naming-conventions doc (grep `naming` under docs/ and src/api/)
 ```
 
 ### 2. Verify Database Schema

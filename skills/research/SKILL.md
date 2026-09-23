@@ -6,6 +6,7 @@ description: >
   does the industry recommend, or before implementing anything unfamiliar.
   Produce a gap analysis and file-mapped plan; do not implement until asked.
 license: MIT
+effort: high
 ---
 
 # research — Production research protocol
@@ -17,6 +18,7 @@ pattern to recommend `[HIGH freedom]`.
 Understand the current repo first. Then fetch version-matched official
 docs. Then map findings back to specific files. **Do not implement until
 the user asks or approves.**
+Recognizing a library, tool, or product name is not knowing its current state. Search the name as written and fetch the installed version's docs even when you think you already know the answer — that is the whole point of this skill.
 
 ## This skill vs neighbors
 
@@ -58,7 +60,7 @@ Before delivering the plan, fail the run if any of these are true:
 
 ---
 
-## Step 1: Understand the Codebase Context (ALWAYS FIRST)
+## Step 1: Understand the codebase context — before any external search
 
 Before any external research, understand what you're working with.
 
@@ -80,7 +82,7 @@ Extract: framework, major libraries, their exact versions.
 
 ### 1b. Read the Existing Implementation
 
-Read the specific file(s) related to the topic being researched. Read the FULL file, not just a snippet. Understand:
+Read the specific file(s) related to the topic being researched, in full — conventions, limitations, and TODOs live outside the obvious lines. Understand:
 
 - What pattern is currently used?
 - What dependencies does it rely on?
@@ -330,7 +332,7 @@ When two authoritative sources recommend different approaches:
 
 ## Step 7: Plan Complex Implementations
 
-Sequential Thinking MCP is **optional** and is not in the default kenji MCP template. If that server is connected, you may use it for multi-file architectural migrations. Otherwise write the same step-by-step plan in the transcript (ordered files, intermediate states, side effects) and continue.
+Plan multi-file architectural migrations directly in the plan: ordered files, intermediate states, side effects. Thinking is native — the Sequential Thinking MCP is not shipped (ADR-0009) and adds nothing here.
 
 Do **not** add Playwright MCP for research or browser checks — use headed `playwright-cli` per `protocol-browser-anti-stall`. Firecrawl stays authenticated; do not switch to the keyless tool subset just to save tokens.
 

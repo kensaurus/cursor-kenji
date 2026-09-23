@@ -7,6 +7,7 @@ description: >
   Audit-only → audit-gate-logic. Rule content → audit-doctrine.
   Pipeline cost → audit-cicd.
 license: MIT
+effort: high
 ---
 
 # housekeep-gates — One required check, defined in code

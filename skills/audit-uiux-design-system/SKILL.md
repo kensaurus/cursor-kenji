@@ -7,6 +7,7 @@ description: >
   audit-responsive. Empty/error states → audit-ui-states. Plan-only
   unification → plan-uiux-unification.
 license: MIT
+effort: high
 ---
 
 # UI Design System Audit Skill
@@ -41,11 +42,16 @@ playwright captures `[LOW freedom — run exactly]`. Read
 
 ## Anti-template
 
-Recommendations must look hand-crafted. Research award-winning sites in the
-domain; vary rhythm (not identical `py-16`); give each control a distinct
-hover/focus/active/disabled; define personality tokens (radius, type voice);
-forbid identical section padding, generic gradients, 3-col icon-title-desc
-as the default, lorem empty states, uniform radius, unadapted stock art.
+Recommendations must name what to avoid, not ask for taste. Research
+award-winning sites in the domain; vary rhythm (not identical `py-16`);
+give each control a distinct hover/focus/active/disabled; define
+personality tokens (radius, type voice). Defaults to call out — extend
+this list from whatever the first draft reached for: identical section
+padding, generic or purple gradients, three equal cards / 3-col
+icon-title-desc as the default, cream or off-white page backgrounds,
+italic accent words in headlines, "01/02/03" numbered section labels,
+monospace labels, pill-shaped buttons everywhere, Inter/Roboto as the
+only type voice, lorem empty states, uniform radius, unadapted stock art.
 
 ---
 
@@ -290,7 +296,7 @@ $PW -s=ds-audit console                                               # check fo
 
 Test at three viewports:
 
-- **Desktop** (1280px)
+- **Desktop** (1440px)
 - **Tablet** (768px)
 - **Mobile** (375px)
 
@@ -298,7 +304,7 @@ Test at three viewports:
 
 | Check | How |
 |-------|-----|
-| Color contrast | 4.5:1 text, 3:1 large text/UI — inspect via screenshot |
+| Color contrast | 4.5:1 text, 3:1 large text/UI — compute from the token pair values (one-line script or the DevTools accessibility pane); the screenshot confirms which pair is in use, it does not measure the ratio |
 | Focus rings | Tab through elements, verify visible focus indicator |
 | Semantic HTML | `Grep: "<nav>|<main>|<section>|<article>|<aside>" glob "*.tsx"` |
 | Alt text | `Grep: "<(img|Image)" glob "*.tsx"` then check for `alt=` |

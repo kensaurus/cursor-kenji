@@ -113,9 +113,9 @@ Work the list in small batches (one gate area or 5–10 related failures):
 6. If a failure is genuinely flaky or needs a real environment you lack, move
    it to the quarantine/exception section with a precise reason — never fake a
    pass. Real environment blockers are the only stop condition.
+7. Edit surgically: change what causes the failure, not the surrounding file. Tests you add exist only to pin the fix or to match what the repo already keeps; scratch scripts used to reproduce stay out of the repo.
 
-Do not pause between batches to ask "continue?" — keep going until the
-worklist is empty. Re-read the state file instead of trusting memory.
+Do not pause between batches to ask "continue?", and do not wrap up because the context is getting long — compaction will happen on a run this size and the state file carries the worklist across it. Keep going until the worklist is empty; re-read the state file instead of trusting memory.
 
 ## Phase 3 — Prove green from scratch  [LOW freedom — run exactly]
 

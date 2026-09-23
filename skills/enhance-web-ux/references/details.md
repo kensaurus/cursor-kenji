@@ -154,7 +154,7 @@ Rules during implementation:
 After every meaningful edit:
 
 ```
-ReadLints on the modified files — fix anything you introduced.
+Lint the modified files (ReadLints in Cursor; the repo's lint script in Claude Code) — fix anything you introduced.
 ```
 
 ---

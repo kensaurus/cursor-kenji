@@ -16,11 +16,12 @@ Driver is **playwright-cli**, never Playwright MCP.
 
 The job is not done when the code compiles. It is done when you have driven
 the live app as a user, found what's broken or clunky, and **fixed it**.
-Agents skip Check and Act — you will not.
+The job is not done when the code compiles. It is done when you have driven the live app as a user, found what's broken or clunky, and **fixed it** — Check and Act are the deliverable.
 
 > **Plan** = the change you just made. **Do** = already in the code.
 > **Check** = drive the live app (this skill). **Act** = fix every pain
 > point in the same turn.
+Your turn ends after Phase 7, or at a BLOCKED item that needs the user's decision — not with PAIN found and unfixed, and not with a fix that has not been re-driven live.
 
 Read `protocol-browser-anti-stall` before any browser action — Rule 0
 (manual & headed), navigation guard, ≤3s waits, fresh `snapshot` after every
@@ -87,7 +88,7 @@ PDCA Progress:
 
 ## Phase 1: Scope the session changes  [HIGH freedom]
 
-Do NOT test the whole app.
+Scope is this session's diff plus its blast radius; full-app coverage belongs to `test-qa`.
 
 1. **Get the diff** (each workspace repo root if needed):
 
@@ -188,7 +189,7 @@ changed. Prefix test data `QA-TEST-` and clean it up.
 
 ## Phase 4: Fix pain points and errors — as you go  [HIGH freedom; re-test = LOW]
 
-The **Act** phase agents skip. Fix the root cause before moving on.
+Fix the root cause before moving on.
 
 1. **Diagnose to root cause** — don't patch symptoms.
    - Frontend → component/hook/state.
@@ -201,7 +202,7 @@ The **Act** phase agents skip. Fix the root cause before moving on.
    - RLS → verify as the client's role (`SET ROLE anon;` / `authenticated;`),
      fix policy, re-verify.
    - Config/env/CORS → fix and note other environments.
-2. **Apply** surgically. `ReadLints` on files you edited.
+2. **Apply** surgically — change the lines the fix needs, not whole files. Run diagnostics on the files you edited (`ReadLints` in Cursor; the repo's lint/typecheck in Claude Code).
 3. **Re-drive the same flow** — green console, 2xx, correct UI, persisted
    data. A fix is not done until re-tested live.
 4. Genuinely out of scope or risky → STOP and surface it; don't silently

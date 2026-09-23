@@ -6,6 +6,7 @@ description: >
   buttons", "stub checker", "fake components", "unwired handlers", or "dead
   links". Live QA → test-qa.
 license: MIT
+effort: high
 ---
 
 # Stub, Dead-Link & Fake-Component Checker + Wiring Plan
@@ -118,9 +119,10 @@ Execute all passes in `references/detection-methodology.md`:
 
 Taxonomy: `references/detection-taxonomy.md`
 
-**Be aggressive in finding, conservative in deleting.** Keep **Confirmed** vs **Review required** separate.
+Keep **Confirmed** vs **Review required** separate.
 
 Optional live click pass: `protocol-browser-anti-stall` + your own named session (`-s=…`) before playwright-cli.
+Delegate a detection pass to a subagent only when it is sizeable, independent of the others, and its raw output (grep dumps, route manifests) has no place in the plan; brief it with the exact commands and the columns to return. It edits nothing, like this pass. Long sweeps are expected — context compaction exists, so finish the inventory rather than wrapping up early.
 
 ---
 
@@ -195,7 +197,7 @@ Each phase independently reviewable + revertible.
 8. Research notes + citations
 9. Open questions / `[NEEDS REAL TARGET]` list
 
-Deliver as markdown or canvas for large repos. **Do not implement wiring** unless user approves in a follow-up.
+Deliver as markdown or canvas for large repos, then end the turn with a standalone recap in chat: the two or three highest-impact stubs and the first phase to approve. The document is the deliverable — write it before the recap. **Do not implement wiring** unless user approves in a follow-up.
 
 ---
 

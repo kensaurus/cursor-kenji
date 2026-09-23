@@ -1,6 +1,8 @@
 ---
 description: "App Store / Play submission-readiness audit — plan only, no manifest edits until approved"
 argument-hint: "[app path or scope]"
+disable-model-invocation: true
+effort: high
 ---
 
 # Mobile Readiness Plan

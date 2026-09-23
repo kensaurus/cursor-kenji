@@ -38,3 +38,4 @@ assets/candidates/
 
 # Closure-loop durable state files (per-run scratch — audit trail, not source)
 .cursor/*-state.md
+.cursor/completion-gate.count.json

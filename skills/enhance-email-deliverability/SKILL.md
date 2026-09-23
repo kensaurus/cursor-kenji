@@ -10,7 +10,7 @@ license: MIT
 
 # enhance-email-deliverability — Inbox placement & lawful send
 
-**Degree of freedom: MIXED — T1 is the priority.** Scoring auth/hygiene
+**Degree of freedom: MIXED.** Scoring auth/hygiene
 `[HIGH freedom]`; DNS/config apply `[LOW freedom — after approval]`.
 Audit-and-fix. Templates stay on `design-email`.
 
@@ -32,8 +32,7 @@ one and placement collapses.
 | `plan-privacy-compliance` | Consent to collect; this owns consent *to send* |
 | `audit-analytics` | Whether open/click events fire (not inbox placement) |
 
-Keep `enhance-*` here (audit-and-fix, same family as `enhance-web-seo`). Do
-**not** steal "build a welcome email" from `design-email`.
+"Build a welcome email" alone → `design-email`; this skill owns inbox placement, not templates.
 
 ## How to reason
 

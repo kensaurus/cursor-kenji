@@ -1,6 +1,7 @@
 ---
 description: "Audit outdated dependencies, research breaking changes, update one at a time, verify each, commit separately"
 argument-hint: "[package]"
+disable-model-invocation: true
 ---
 
 # /update-deps

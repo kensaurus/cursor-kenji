@@ -6,6 +6,7 @@ description: >
   dependencies", "is this package real", "slopsquatting", "SBOM", or "did the AI
   hallucinate a package".
 license: MIT
+effort: high
 ---
 
 # Dependency Provenance & Supply-Chain Audit + Remediation Plan
@@ -83,7 +84,7 @@ who published it, when, and under what license?*
 ## The audit  [HIGH freedom]
 
 ### A · Existence & slopsquatting (the AI-era core)
-- **Resolve every direct dependency** against its registry. Flag any that don't
+- **Resolve every direct dependency** against its registry, including names you recognize — recognizing a name is not knowing its current registry state. Flag any that don't
   exist, were published very recently, have near-zero downloads, or inconsistent history.
 - **Typo / confusion check** — names one edit away from a popular package
   (`reqests`, `lodahs`), or conflation names merging two real packages.
@@ -123,7 +124,7 @@ For each finding: package, issue, evidence, severity, remediation *direction*.
 2. **Resolve & classify.** Checklist A–E. Tag Critical / High / Med / Low.
 3. **Build the provenance table** — key artifact.
 4. **Phase the burndown.** Verify/remove suspect packages first.
-5. **Emit `plan-dependency-provenance.md`. End the turn. Do not install anything.**
+5. **Emit `plan-dependency-provenance.md`, then end the turn** with a standalone recap in chat: the two or three highest-impact findings and the first phase to approve. The file is the deliverable — write it before the recap. **Do not install anything.**
 
 ---
 
@@ -196,5 +197,4 @@ Approve a phase to run it. Re-scan after; add the install-time gate.
   `audit-security`.
 - **Verify:** re-resolve tree; confirm install-time gate is live.
 
-> Plan with a strong model; execute with `composer-2.5-execution.mdc`. The plan says
-> *which* packages are suspect; the rule forbids "just installing it to see".
+> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`). The plan says *which* packages are suspect; the rule forbids "just installing it to see".

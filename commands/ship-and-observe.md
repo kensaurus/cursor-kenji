@@ -1,6 +1,7 @@
 ---
 description: "Take merged, green code to a verified, monitored production release — deploy, confirm the revision is live, smoke-test, observe, and roll back if needed"
 argument-hint: "[environment]"
+disable-model-invocation: true
 ---
 
 # Ship & Observe

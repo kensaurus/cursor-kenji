@@ -22,6 +22,11 @@ cp ~/cursor-kenji/rules/native-rn-monorepo/*.mdc <project>/.cursor/rules/
 
 Rename the files to match the project's existing naming if needed
 (e.g. prefix `rn-monorepo-` to avoid collisions).
+Claude Code reads `.claude/rules/*.md` instead of `.cursor/rules/`.
+Copy the same files there with a `.md` extension; leave `_project`
+without frontmatter so it loads at session start, and translate each
+`globs:` line into `paths:` frontmatter so the target-specific rules
+load only when a matching file is read.
 
 ## Customisation required after install
 

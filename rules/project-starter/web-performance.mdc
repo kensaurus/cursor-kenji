@@ -1,7 +1,7 @@
 ---
-description: Always-on web performance guardrails (LCP priority, budgets, INP, bfcache). Apply to any Next.js/React web project.
+description: Web performance guardrails (LCP priority, budgets, INP, bfcache) for Next.js/React app, page, and component files.
 globs: ["app/**", "src/**", "components/**", "pages/**"]
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Web performance guardrails
@@ -12,7 +12,7 @@ alwaysApply: true
 - Initial JS per route ≤ 170 KB gz (marketing) / ≤ 300 KB gz (app)
 - ≤ 3 third-party scripts on any route; none synchronous in `<head>`
 
-## LCP rules (non-negotiable)
+## LCP rules
 
 - The LCP image is never `loading="lazy"`; it gets `priority` (`next/image`) or `fetchpriority="high"` + preload
 - LCP content is server-rendered and in the HTML — not a CSS background, not client-fetched

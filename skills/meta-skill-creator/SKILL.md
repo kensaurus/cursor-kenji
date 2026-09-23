@@ -101,11 +101,11 @@ Upgrade an *existing* skill's prompt (not its behavior) with
 | T1 | Degrees of freedom | Declare register under the H1; tag fragile phases LOW, interpretive HIGH |
 | T2 | Structured CoT | One named-stage chain at judgment points (not generic "think step by step") |
 | T3 | One worked example | Few-shot + CoT: reasoning chain and output shape, once |
-| T4 | Self-critique rubric | Specific answerable checks before output (plan skills: before the burndown) |
+| T4 | Self-critique rubric | Evidence conditions the output must satisfy (a command re-run, a form re-searched, a file listed) — never generic "double-check your work" items, which the model does unprompted |
 | T5 | Terminology consistency | One term per concept |
 | T6 | Conciseness | Cut known context; never trim a LOW-freedom step's exactness |
 
-House limits: description ≤320 chars, body <500 lines, `name` matches dir.
+House limits: description ≤320 chars (Claude Code caps description + `when_to_use` at 1,536), body <500 lines, `name` matches dir. Every description rides in every request — roughly 168 skills × 300 chars is 12-15k always-on tokens — so a description earns its length by routing, and a ritual nobody should auto-trigger goes `disable-model-invocation: true`.
 Never write the retired layout alias (use `audit-responsive`).
 
 ## How to reason
@@ -150,7 +150,7 @@ skill-name/
 
 Every SKILL.md consists of:
 
-- **Frontmatter** (YAML): Contains `name` and `description` fields. These are the only fields that Claude reads to determine when the skill gets used, thus it is very important to be clear and full in describing what the skill is, and when it should be used.
+- **Frontmatter** (YAML): `name` and `description` route the skill (Claude Code also reads `when_to_use` and `paths`), so the description must say what the skill does and when it fires; the optional keys listed in Step 4 control effort, invocation, and context.
 - **Body** (Markdown): Instructions and guidance for using the skill. Only loaded AFTER the skill triggers (if at all).
 
 #### Bundled Resources (optional)
@@ -252,7 +252,7 @@ When editing the skill, remember that the skill is being created for another ins
 
 #### Update SKILL.md
 
-**Writing Guidelines:** Always use imperative/infinitive form.
+**Writing Guidelines:** Imperative/infinitive form. Say exactly what you mean at normal volume and give the reason — MUST/NEVER/CRITICAL over-trigger, and hedges ("try to", "if possible") read as permission to under-deliver. State outcomes, constraints, and how to verify; keep numbered exact steps for fragile operations only (destructive commands, auth, migrations, baseline capture). No "think step by step", "be thorough", or "double-check" scaffolds — effort controls thinking and the model self-verifies; keep evidence-grounding rules ("cite the tool result"). For skills that do multi-step work, ask for one line of intent before the first tool call, brief updates on load-bearing findings, and a standalone recap at the end; never suppress updates ("no preamble", "hold findings"). Anti-formatting rules strip structure the reader wanted — say when formatting fits (lists for multifaceted content, prose otherwise). Model-agnostic guardrails stay: no deleting or skipping tests to go green, no weakened assertions, no metric gaming.
 
 ##### Frontmatter
 
@@ -263,8 +263,21 @@ Write the YAML frontmatter with `name` and `description`:
  - Include both what the Skill does and specific triggers/contexts for when to use it.
  - Include all "when to use" information here - Not in the body. The body is only loaded after triggering, so "When to Use This Skill" sections in the body are not helpful to Claude.
 
-The only other fields to consider: `license`, and `disable-model-invocation: true`
-for user-invoked skills (see "Invocation — who pays the cost"). Nothing else.
+Other fields, all optional and ignored by hosts that do not know them:
+
+- `effort:` — Opus 5.5 defaults to `medium` (earlier models defaulted to `high`), and effort is its only thinking control; prose like "think step by step" or "double-check" does nothing. Declare it by family:
+
+  | Family | `effort` |
+  |---|---|
+  | audit-*, plan-*, judge/reviewer agents, security, architecture, debug-* | `high` |
+  | the hardest planning only, with a measured gain | `xhigh` |
+  | ordinary implementation (build, enhance, workflow) | omit (medium) |
+  | mechanical / read-only / formatting / handoff / inventory / smoke checks | `low` |
+
+- `disable-model-invocation: true` — user-only rituals (see "Invocation — who pays the cost").
+- `user-invocable: false` — reference-only skills that other skills load (protocols, maps); hidden from the menu, still model-loadable.
+- `context: fork` + `agent: Explore` — a read-only inventory skill that should not fill the main context.
+- `license`.
 
 ##### Body
 

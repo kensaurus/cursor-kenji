@@ -1,6 +1,8 @@
 ---
 description: "Read-only audit of app-layer auth — route×gate matrix, getSession vs getUser, middleware-as-only-gate"
 argument-hint: "[app or auth path]"
+disable-model-invocation: true
+effort: high
 ---
 
 # Auth-Flows Audit

@@ -6,6 +6,7 @@ description: >
   CVE-2025-29927). Use when "audit our auth", "check middleware protection".
   RLS → plan-rls-audit. OWASP checklist → audit-security.
 license: MIT
+effort: high
 ---
 
 # audit-auth-flows — Middleware is edge routing, not a security boundary
@@ -130,7 +131,9 @@ authorization if the check occurs only in middleware, via the internal
 protected; Netlify and Cloudflare Workers were not affected. Workaround
 if unpatched: drop `x-middleware-subrequest` before it hits Next.
 If below the fix → P0 *and* a defense-in-depth finding. Also sweep
-later Next.js auth CVEs (do not treat 29927 as the only one).
+later Next.js auth CVEs against the pinned version — query the GitHub
+advisory database rather than listing CVEs from memory; 29927 is not the
+only one.
 
 **General rule:** any "the framework enforces auth at the edge"
 assumption is a finding, whatever the framework.

@@ -1,3 +1,9 @@
+---
+description: Search-tool fallback when Grep/Glob hang (>30 s on Windows hosts) or are unavailable — kill the PID, retry narrower, fall back to shell grep/ls/find.
+globs:
+alwaysApply: false
+---
+
 # Shell-first search fallback
 
 Cursor's dedicated `Grep` and `Glob` tools are the default for text and

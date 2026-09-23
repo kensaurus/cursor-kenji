@@ -11,10 +11,10 @@ const PINNED = JSON.parse(readFileSync(join(ROOT, 'mcp/pinned-versions.json'), '
 const FILES = ['.mcp.json', 'mcp/mcp.json.template', 'mcp/mcp-full.json.template'];
 
 const ESSENTIAL = ['mcp/mcp.json.template', '.mcp.json'];
-const ESSENTIAL_FORBIDDEN = [
-  '@modelcontextprotocol/server-sequential-thinking',
-  '@playwright/mcp',
-];
+// Retired everywhere (ADR-0009): reasoning depth is set with effort, not a server.
+const FORBIDDEN = ['@modelcontextprotocol/server-sequential-thinking'];
+// Skills drive headed playwright-cli; the MCP stays a full-template extra.
+const ESSENTIAL_FORBIDDEN = ['@playwright/mcp'];
 
 /** @type {string[]} */
 const errors = [];
@@ -24,6 +24,12 @@ for (const rel of FILES) {
 
   if (/@latest\b/.test(text)) {
     errors.push(`${rel}: contains @latest — pin in mcp/pinned-versions.json`);
+  }
+
+  for (const pkg of FORBIDDEN) {
+    if (text.includes(pkg)) {
+      errors.push(`${rel}: ${pkg} is retired (ADR-0009) — remove it`);
+    }
   }
 
   if (ESSENTIAL.includes(rel)) {

@@ -6,6 +6,7 @@ description: >
   Use when "audit payment system", "double charge / idempotency", "ledger /
   reconciliation", "webhook / 3DS / PCI". Mobile IAP → audit-monetization-iap.
 license: MIT
+effort: high
 ---
 
 # audit-payment-system — Money-Movement Correctness & Compliance Audit
@@ -16,8 +17,8 @@ exploit or payment-fraud PoCs** — quote the missing control, never a replay
 or spoof recipe.
 
 Read-only. Assess and prioritize; do not change code. Payment code is a
-STOP-and-confirm surface — findings feed a human-reviewed remediation, ideally
-with a stronger model. Delegations: per-call resilience → **`audit-resilience`**;
+STOP-and-confirm surface — findings feed a human-reviewed remediation run at
+high effort with a fresh-context reviewer. Delegations: per-call resilience → **`audit-resilience`**;
 PCI/secrets/authz → **`audit-security`**; ledger schema → **`audit-db-schema`**;
 outbox/saga *structure* → **`audit-backend-architecture`**; append-only
 integrity → **`plan-data-integrity`**; Stripe integration → the Stripe plugin
@@ -240,7 +241,7 @@ Rules:
 timeouts/retries `audit-resilience` owns; assigning any severity below Critical to a double-charge,
 lost-money, or PAN-exposure finding; recommending a refund/payout saga without compensation logic;
 **writing exploit or payment-fraud PoCs**; **editing payment code** — this skill reports;
-remediation is human-reviewed (route to a stronger model per the composer execution rule).
+remediation is human-reviewed, runs at high effort, and keeps the execution rule's STOP-and-ask on payment code.
 
 ---
 

@@ -1,6 +1,7 @@
 ---
 description: "Review the local working tree, commit, push, open a PR, drive it merge-ready — do not merge"
 argument-hint: "[optional title]"
+disable-model-invocation: true
 ---
 
 # /release-prep

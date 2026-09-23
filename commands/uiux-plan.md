@@ -1,6 +1,8 @@
 ---
 description: "Full UI/UX + design-system unification plan — audit only, no fixes until approved"
 argument-hint: "[path or scope]"
+disable-model-invocation: true
+effort: high
 ---
 
 # UI/UX Unification Plan

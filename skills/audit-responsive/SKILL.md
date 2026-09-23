@@ -6,13 +6,14 @@ description: >
   max-width, breakpoint gaps, or 1440 looks like a phone. Distinct from
   design-mobile-first (touch/mobile-up) and audit-ux-journeys (cross-page IA).
 license: MIT
+effort: high
 ---
 
 # audit-responsive — Layout & breakpoint IA
 
 **Degree of freedom: MIXED** — Phases 0–3 `[HIGH freedom]`; viewport
 screenshot loop `[LOW freedom — run exactly]`; Phase 4 implement only after
-the report (wait if scope is large). Never write the retired layout alias.
+the report (wait if scope is large).
 
 > **Audit-and-fix exception.** Report first; then implement. Not present-then-stop.
 
@@ -188,7 +189,6 @@ Hand off leftover polish (motion, microcopy, token drift) — do not absorb it.
 2. **Repo tokens first** — do not invent a second scale
 3. **Wireframe before CSS** — Phase 3 is the contract
 4. **Right owner** — touch/gestures → `design-mobile-first`; empty states → `audit-ui-states`
-5. **Name** — this skill is `audit-responsive` (not the retired layout alias)
 
 ---
 

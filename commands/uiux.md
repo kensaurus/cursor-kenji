@@ -1,6 +1,7 @@
 ---
 description: "Route to the right UI/UX skill: layout, states, tokens, heuristics, polish, or unification plan"
 argument-hint: "[route, component, or symptom]"
+disable-model-invocation: true
 ---
 
 # /uiux

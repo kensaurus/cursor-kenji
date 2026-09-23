@@ -7,6 +7,7 @@ description: >
   gamed the test", or "add a guard so this doesn't recur". App bugs →
   workflow-fix-and-ship.
 license: MIT
+effort: high
 ---
 
 # iterate-agent-harness — Failure → Durable Guard
@@ -47,8 +48,8 @@ skill converts a single failure into a durable guard plus a regression check.
 
 1. State what happened vs. what should have happened, in one sentence each.
 2. Classify the failure mode (borrow the taxonomy the toolkit already targets):
-   - **premature stop** — quit with actionable work remaining
-   - **false completion** — claimed done without evidence
+   - **premature stop** — quit with actionable work remaining. Shapes to guard: ends the turn with a plan or status report instead of the work; asks a question the repo could answer; stops after a subagent returns without integrating its result; wraps up early believing context is running out (compaction exists — it should not)
+   - **false completion** — claimed done without evidence, including fabricated progress: a "ran", "checked", or "verified" with no matching tool result in the transcript
    - **reward hacking** — satisfied the check, not the intent (skipped test,
      narrowed assertion, `@ts-ignore`, blanket snapshot update)
    - **scope boundary error** — treated the plan/visible list as the full scope
@@ -81,6 +82,7 @@ Before fixing, add something that fails on the captured failure:
   `scripts/test-completion-gate.mjs`, a validation rule) — preferred; or
 - a documented, repeatable scenario with an explicit expected outcome when the
   failure is judgment-based and not mechanically checkable.
+For premature-stop and false-completion classes, two guards are mechanical: (1) transcript audit — every claimed action maps to a tool result; (2) turn-ending check — the last paragraph of a turn lists done vs owed, and an owed item with no named blocker means the turn should not have ended. Encode those as the guard rather than a wording tweak.
 
 Confirm the guard actually fails against the current (unfixed) behavior — a
 guard that passes before the fix proves nothing.

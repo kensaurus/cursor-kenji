@@ -1,6 +1,8 @@
 ---
 description: "Audit a codemod or bulk mechanical transform for behavior-preservation — report only"
 argument-hint: "[diff, PR, or transform description]"
+disable-model-invocation: true
+effort: high
 ---
 
 # Codemod-Safety Audit

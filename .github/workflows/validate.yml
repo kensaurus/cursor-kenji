@@ -46,8 +46,10 @@ jobs:
         run: node scripts/check-mcp-pins.mjs
       - name: Living-docs fact check
         run: node scripts/check-docs-facts.mjs
-      - name: Skill cross-ref check (doubled prefixes / stale aliases)
+      - name: Skill cross-ref check (doubled prefixes / stale aliases / prompt fossils)
         run: node scripts/check-skill-refs.mjs --self-test && node scripts/check-skill-refs.mjs
+      - name: Completion-gate tests (Cursor + Claude Stop payloads)
+        run: node scripts/test-completion-gate.mjs
       - name: Install smoke test (files preserved, --skill works)
         run: node scripts/test-install.mjs
       - name: Dead-code ratchet (Knip, default + production, max-issues 0)

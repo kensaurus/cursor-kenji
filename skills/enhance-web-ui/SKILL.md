@@ -49,7 +49,7 @@ rearranges, subtracts, and stages information before adding decoration.
 
 ---
 
-## Critical Rules
+## Rules
 
 > **Compose before decorating.** Fix hierarchy, grouping, alignment, and rhythm
 > before adding gradients, motion, blur, masks, or shadows.
@@ -143,6 +143,14 @@ rearranges, subtracts, and stages information before adding decoration.
 > 50%+ even when the bounding box is identical; the user reads the active
 > sibling as "weirdly big and clunky". Linear, Stripe Apps, Vercel, M3 all
 > obey this — copy them.
+
+> **Named defaults to avoid when restyling.** Without direction the model
+> reaches for the same few styles: Inter / Roboto, pill-shaped buttons on
+> every control, monospace or "01 / 02 / 03" section labels, a cream /
+> off-white canvas, purple gradients, three equal cards, an italic accent
+> word in headlines. Use the repo's own type, radius, and palette tokens
+> instead; if a first pass lands on one of these, name it in the write-up
+> and replace it.
 
 ---
 

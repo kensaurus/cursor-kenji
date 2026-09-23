@@ -1,6 +1,8 @@
 ---
 description: "App Store / Play listing ASO audit — plan only, no metadata or screenshot edits until approved"
 argument-hint: "[app path or scope]"
+disable-model-invocation: true
+effort: high
 ---
 
 # ASO Plan

@@ -6,6 +6,7 @@ description: >
   migrations. Destructive-op gates → plan-data-integrity. Who-can-read-what RLS
   → plan-rls-audit. Restore/RPO → plan-backup-dr.
 license: MIT
+effort: high
 ---
 
 # Database Schema Audit Skill
@@ -55,13 +56,10 @@ MCP/SQL probes `[LOW freedom — run exactly]` (run the query; do not invent a s
 
 ### 0b. Find Supabase Project ID
 
-
-```json
-supabase:list_projects
-{}
-```
-
-Match the project by name or URL from `.env`, `.env.local`, or `supabase/config.toml`.
+Take `PROJECT_ID` from `supabase/config.toml` (`project_id`) or the host of
+`SUPABASE_URL` in `.env` / `.env.local`, and confirm it with
+`supabase:get_project_url`. Call `supabase:list_projects` only when the MCP
+server exposes it (org-scoped setups); a project-scoped server does not.
 Record the `PROJECT_ID` for all subsequent MCP calls.
 
 ### 0c. Detect Schema Source Files
@@ -270,7 +268,7 @@ WHERE table_schema = 'public' AND column_name ~ '[A-Z]';
 |------|----------|
 | Primary keys | `uuid` with `gen_random_uuid()` or `cuid` |
 | Timestamps | `timestamptz` (NOT `timestamp`) |
-| Money | `numeric(12,2)` or `bigint` (cents) — NEVER `float`/`real` |
+| Money | `numeric(12,2)` or `bigint` (cents) — not `float`/`real` (binary rounding loses cents) |
 | Email | `text` with CHECK constraint or `citext` |
 | Status/enum | Postgres `enum` type or `text` with CHECK |
 | JSON | `jsonb` (NOT `json`) |
@@ -383,7 +381,7 @@ GROUP BY t.table_name HAVING COUNT(i.indexname) <= 1;
 
 | Rule | Standard |
 |------|----------|
-| RLS enabled | EVERY public table has RLS ON |
+| RLS enabled | every public table has RLS on — without it the anon key reads every row |
 | SELECT policy | Exists for every table |
 | INSERT policy | WITH CHECK on user ownership |
 | UPDATE policy | USING + WITH CHECK on ownership |

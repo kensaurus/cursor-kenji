@@ -31,8 +31,7 @@ when 500 people arrive at once.**
 | `backend-db-performance` | Query/index fixes after this names the bottleneck |
 | `plan-llm-cost-guardrails` | Model-token spend, not HTTP concurrency |
 
-**Never production without explicit sign-off and rate caps.** Prefer prod-like
-staging.
+Load against production only with explicit sign-off and rate caps — an uncapped run is a self-inflicted outage. Prefer prod-like staging.
 
 ## How to reason
 
@@ -89,7 +88,7 @@ staging.
 - Bottleneck: DB pool, function concurrency, rate limiter, memory, cold start
 - Correlate Supabase / Sentry / host metrics during the run
 
-Commit the reusable script. Hand capacity numbers to `audit-infra-cost`.
+Keep the reusable script in the repo as a reviewable change (commit only when asked). Hand capacity numbers to `audit-infra-cost`.
 
 ---
 
@@ -102,7 +101,7 @@ Commit the reusable script. Hand capacity numbers to `audit-infra-cost`.
 - [ ] Percentiles, errors, throughput captured
 - [ ] Breaking point + failing resource named
 - [ ] SLO verdict + fix handoff
-- [ ] Script committed
+- [ ] Script in the repo, ready to commit
 
 ## Self-critique before reporting  [LOW freedom — do not skip]
 

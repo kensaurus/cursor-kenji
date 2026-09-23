@@ -1,6 +1,7 @@
 ---
 description: "Make in-site navigation instant — Speculation Rules, bfcache, View Transitions, 103 Early Hints"
 argument-hint: "[route or next-click path]"
+disable-model-invocation: true
 ---
 
 # /instant-nav

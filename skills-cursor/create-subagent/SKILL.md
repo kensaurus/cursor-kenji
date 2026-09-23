@@ -13,6 +13,7 @@ Subagents help you:
 - **Preserve context** by isolating exploration from your main conversation
 - **Specialize behavior** with focused system prompts for specific domains
 - **Reuse configurations** across projects with user-level subagents
+Delegate when the track is sizeable and independent, or when its output is verbose and the main context does not need it; launch independent subagents in one message. A handful of tool calls is cheaper inline. Brief each subagent precisely once and commit to the delegation.
 
 ### Inferring from Context
 
@@ -52,6 +53,18 @@ specific, actionable feedback on quality, security, and best practices.
 | `name` | Unique identifier (lowercase letters and hyphens only) |
 | `description` | When to delegate to this subagent (be specific!) |
 
+### Optional fields (Claude Code)
+
+Claude Code reads the same format from `.claude/agents/` and `~/.claude/agents/` and honors these; Cursor ignores keys it does not know.
+
+| Field | Use |
+|-------|-----|
+| `effort` | `low` / `medium` / `high` / `xhigh` / `max`. Opus 5.5 defaults to `medium`; set `high` for reviewer, judge, security, and architecture agents, `low` for read-only inventory or handoff agents. Prose like "think carefully" does nothing — this is the control. |
+| `model` | Pin a model alias (`opus`, `sonnet`, `haiku`); omit to inherit. |
+| `tools` | Restrict the tool set (read-only reviewers get no edit tools). |
+| `maxTurns` | Cap turns for bounded jobs. |
+| `memory`, `isolation`, `omitClaudeMd` | Persistent memory, worktree isolation, skip loading CLAUDE.md. |
+
 ## Writing Effective Descriptions
 
 The description is **critical** - the AI uses it to decide when to delegate.
@@ -64,7 +77,7 @@ description: Helps with code
 description: Expert code review specialist. Proactively reviews code for quality, security, and maintainability. Use immediately after writing or modifying code.
 ```
 
-Include "use proactively" to encourage automatic delegation.
+Say when delegating pays — a sizeable, independent track, or verbose output the main context does not need. Add "use proactively" only when the agent visibly under-delegates; current models delegate readily, and a blanket booster pulls small tasks into subagents.
 
 ## Example Subagents
 
@@ -83,15 +96,7 @@ When invoked:
 2. Focus on modified files
 3. Begin review immediately
 
-Review checklist:
-- Code is clear and readable
-- Functions and variables are well-named
-- No duplicated code
-- Proper error handling
-- No exposed secrets or API keys
-- Input validation implemented
-- Good test coverage
-- Performance considerations addressed
+Review for correctness and requirement gaps: logic errors, unhandled failure paths, exposed secrets or keys, missing input validation, and behavior the task asked for that is absent. Mention style only where it hides a bug. Tie each finding to a file and line and say what input or state makes it fail.
 
 Provide feedback organized by priority:
 - Critical issues (must fix)
@@ -195,7 +200,7 @@ Write the frontmatter with the required fields (`name` and `description`).
 
 The body becomes the system prompt. Be specific about:
 - What the agent should do when invoked
-- The workflow or process to follow
+- Outcomes, constraints, and how to verify (exact steps only for fragile operations); reviewer and judge agents flag only correctness and requirement gaps
 - Output format and structure
 - Any constraints or guidelines
 
@@ -212,7 +217,7 @@ Use the my-agent subagent to [task description]
 1. **Design focused subagents**: Each should excel at one specific task
 2. **Write detailed descriptions**: Include trigger terms so the AI knows when to delegate
 3. **Check into version control**: Share project subagents with your team
-4. **Use proactive language**: Include "use proactively" in descriptions
+4. **Describe when delegation pays**: the description is what the main agent reads to decide; state the track size and independence it needs, not a blanket "use proactively"
 
 ## Troubleshooting
 

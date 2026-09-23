@@ -1,6 +1,8 @@
 ---
 description: "Research, clarify requirements, and produce an approved implementation plan before writing code"
 argument-hint: "[task or feature]"
+disable-model-invocation: true
+effort: high
 ---
 
 # /plan-mode

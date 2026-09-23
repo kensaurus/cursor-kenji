@@ -25,9 +25,9 @@ is never deployed, the live API 404s, and the bug masquerades as a UI issue.
    the user asked in this turn.
 4. **Edge functions, secrets, RLS, buckets, and cron jobs count as schema** —
    deploy and configure them with the UI change (`verify_jwt`, CORS, keys).
-5. **Never re-ask before deploying schema the user asked to ship; always ask
-   before mutating production data** (`DELETE` / `TRUNCATE` / `UPDATE` on
-   real rows).
+5. **Schema vs data.** Deploy schema the user asked to ship without
+   re-asking — the request was the approval. Ask before mutating production
+   data (`DELETE` / `TRUNCATE` / `UPDATE` on real rows) — it is hard to reverse.
 6. **Do not attach during a present-then-stop pass.** If the active skill is
    `plan-*` or a read-only `audit-*`, emit findings/plan only — do not
    `apply_migration` or deploy until the user approves a phase.

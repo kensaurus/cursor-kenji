@@ -6,6 +6,7 @@ description: >-
   session will focus on.
 disable-model-invocation: true
 license: MIT
+effort: low
 ---
 
 # Handoff

@@ -1,6 +1,7 @@
 ---
 description: "Validate and open or manage a PR from an already-committed branch"
 argument-hint: "[title]"
+disable-model-invocation: true
 ---
 
 # /pr

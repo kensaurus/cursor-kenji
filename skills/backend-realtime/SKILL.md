@@ -281,7 +281,7 @@ function Chat({ initialMessages }: { initialMessages: Message[] }) {
 
 ```tsx
 // app/api/events/route.ts
-export async function GET() {
+export async function GET(request: Request) {
  const encoder = new TextEncoder()
 
  const stream = new ReadableStream({
@@ -300,8 +300,11 @@ export async function GET() {
  send({ type: 'heartbeat', timestamp: Date.now() })
  }, 30000)
 
- // Cleanup on close
- // Note: In production, use proper cleanup mechanism
+ // Cleanup when the client disconnects
+ request.signal.addEventListener('abort', () => {
+ clearInterval(interval)
+ controller.close()
+ })
  },
  })
 

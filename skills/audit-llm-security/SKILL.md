@@ -7,6 +7,7 @@ description: >
   "jailbreak my chatbot", or "is my AI safe?". General app security →
   audit-security.
 license: MIT
+effort: high
 ---
 
 # audit-llm-security — OWASP LLM Top 10

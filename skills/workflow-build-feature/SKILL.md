@@ -48,6 +48,7 @@ catches a class of defects the next phase can't.
 4. SMOKE       → test-playwright (drive the live app as a real user, fix pain points)
 5. PR          → workflow-pr (create PR with test evidence)
 ```
+The turn ends at the Done criteria or at a real gate — a decision only the user can make, a missing credential, a failing service. A phase summary is a progress note, not a stopping point.
 
 ---
 
@@ -59,6 +60,7 @@ Key outputs:
 - Written spec (what it does, what it doesn't do, acceptance criteria)
 - File-mapped implementation plan (which files to create/edit)
 - A RED failing test that encodes the acceptance criteria
+When the ask is loosely specified, read the relevant routes, schema, tests, and sibling features broadly before writing the spec, so it is grounded in what the repo does rather than the first plausible reading.
 
 **Do not write implementation code until the spec and RED test exist.**
 
@@ -70,6 +72,7 @@ Implement against the spec. Rules:
 - One logical change per commit
 - Match the file patterns already in the repo — no new abstractions unless the spec calls for them
 - Full-stack: if the feature reads/writes data, verify the DB migration is applied before the frontend ships (see full-stack-ship-discipline rule)
+- Scope stays where the spec put it. A pre-existing bug you find on the way is a follow-up in the PR description, not part of this change. Scratch scripts and one-off checks stay out of the repo. Edit files surgically — change the lines the feature needs, do not rewrite the file around them.
 
 ---
 

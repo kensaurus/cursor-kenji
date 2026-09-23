@@ -45,7 +45,7 @@ Add login endpoint and token validation middleware
 
 ### Workflow Pattern
 
-Break complex operations into clear steps with checklists:
+Use numbered steps with a checklist only where order is load-bearing (migrations, auth flows, destructive ops, baseline capture). For judgment work, state the outcome, the constraints, and how to verify - the agent's own plan beats a hand-written script:
 
 ```markdown
 Task Progress:
@@ -112,7 +112,7 @@ Gather: purpose, storage location, trigger scenarios, constraints, existing patt
 ### Phase 3: Implementation
 
 1. Create directory structure
-2. Write SKILL.md with frontmatter
+2. Write SKILL.md with frontmatter (`name`, `description`; when the skill also ships to Claude Code, add `effort: high` for audit / plan / security / judge work and `effort: low` for mechanical fixed-sequence work - the model default is medium, Claude Code honors the key, Cursor ignores it)
 3. Create reference files
 4. Create utility scripts if needed
 
@@ -147,11 +147,10 @@ description: Review code for quality, security, and maintainability. Use when re
 
 # Code Review
 
-## Quick Start
-1. Check correctness and edge cases
-2. Verify security
-3. Assess readability
-4. Ensure tests are adequate
+## What a review covers
+Correctness and edge cases, security, readability, and whether the tests
+prove the change. Report each finding as file:line, the defect, and the
+input that triggers it.
 
 ## Additional Resources
 - [STANDARDS.md](STANDARDS.md)
@@ -173,7 +172,7 @@ description: Review code for quality, security, and maintainability. Use when re
 ### Structure
 - [ ] File references are one level deep
 - [ ] Progressive disclosure used appropriately
-- [ ] Workflows have clear steps
+- [ ] Numbered steps only where order is load-bearing; outcomes and constraints elsewhere
 - [ ] No time-sensitive information
 
 ### If Including Scripts

@@ -61,7 +61,7 @@ iOS and Android without forking.
 
 ---
 
-## Critical Rules
+## Rules
 
 > **Compose before decorating.** Fix hierarchy, grouping, alignment,
 > safe-area handling, and touch targets before adding colour, motion, blur,
@@ -140,7 +140,7 @@ RN ENHANCE /<ScreenName>
 ### 1a. Read the screen file
 
 ```
-Glob: apps/mobile/src/screens/**/<ScreenName>.tsx
+Glob: **/screens/**/<ScreenName>.tsx   # adapt to the repo layout (apps/mobile/src, src/screens, app/); same for the api/core/design-tokens reads below
 Read: the screen file in full
 ```
 

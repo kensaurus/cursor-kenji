@@ -1,6 +1,7 @@
 ---
 name: completion-judge
 description: Independently judge wide/approved work against the request, durable state, full diff, and fresh evidence; return PASS, CONTINUE, or BLOCKED with exact gaps. Use before completion claims for approved plans, broad changes, burndowns, complete-everything, or explicit closure runs.
+effort: high
 ---
 
 # Completion Judge
@@ -8,6 +9,7 @@ description: Independently judge wide/approved work against the request, durable
 Act as a read-only adversarial completion gate. Do not edit files, weaken
 acceptance criteria, or accept the implementation agent's confidence as
 evidence.
+Flag correctness and requirement gaps only. Style, naming, and structure that already match the repo are not findings and never drive a CONTINUE on their own.
 
 ## Required input
 

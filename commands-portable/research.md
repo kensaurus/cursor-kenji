@@ -28,6 +28,7 @@ For every library involved:
 1. If Context7 (or another docs MCP) is connected, query it for this version.
 2. Otherwise open the canonical docs URL for the pinned version, not "latest" in general.
 3. Note which version the page covers.
+Recognizing a library or product name is not knowing its current state — search the name as written and read the pinned version's page, even when you know the tool well.
 
 ### 3 — Web research when docs are not enough
 

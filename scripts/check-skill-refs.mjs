@@ -2,9 +2,10 @@
 /**
  * FILE: check-skill-refs.mjs
  * PURPOSE: Fail CI on doubled-prefix skill typos (`mobile-mobile-*`), the
- * stale `audit-responsive-layout` alias, and renamed-skill leftovers in
- * OLD_ALIASES. Does not attempt a full unknown-name scan (session names
- * like `audit-ux-home` collide with that heuristic).
+ * stale `audit-responsive-layout` alias, renamed-skill leftovers in
+ * OLD_ALIASES, and prompt fossils (retired model names, thinking scaffolds,
+ * update suppressors). Does not attempt a full unknown-name scan (session
+ * names like `audit-ux-home` collide with that heuristic).
  *
  * USAGE:
  *   node scripts/check-skill-refs.mjs
@@ -39,6 +40,31 @@ function isOldAliasAllowed(rel) {
     rel === "scripts/check-skill-refs.mjs" ||
     rel.includes("audit-skill-conflicts")
   );
+}
+
+/** Prompt fossils (Anthropic prompt-audit signals, Group 1b/1d). On Opus 5.5
+ *  effort — not prose — controls thinking, update suppressors make it go
+ *  silent, and a retired model name dates every sentence after it. A quoted
+ *  mention ("think step by step" named as an anti-pattern) is not a hit. */
+const FOSSIL_PATTERNS = [
+  { name: "retired model name", re: /\b(?:claude[- ]?(?:2|3(?:\.[57])?|instant)|gpt-?4o|(?:opus|sonnet|haiku)[- ]4(?:\.\d)?|composer[- ]2\.5)\b/i },
+  { name: "thinking scaffold", re: /(?<!["'“‘])(?:\bthink step[- ]by[- ]step\b|\btake a deep breath\b|\bthink (?:harder|less)\b|\bdon'?t overthink\b|\bultrathink\b|<scratchpad>|<thinking>)/i },
+  { name: "update suppressor", re: /(?<!["'“‘])(?:\bhold (?:all )?(?:findings|results)\b|\bdon'?t narrate\b|\bno (?:interim|preamble)\b)/i },
+];
+/** Files that discuss these patterns by name, and vendored upstream text. */
+function fossilAllowed(rel) {
+  return rel.includes("audit-skill-conflicts") || /\/thirdparty-/.test(rel);
+}
+function checkFossils(rel, text) {
+  if (fossilAllowed(rel)) return [];
+  const errors = [];
+  text.split("\n").forEach((line, i) => {
+    for (const { name, re } of FOSSIL_PATTERNS) {
+      const m = line.match(re);
+      if (m) errors.push(`${rel}:${i + 1}: ${name} '${m[0]}' — state the outcome, or set effort: in frontmatter`);
+    }
+  });
+  return errors;
 }
 
 const TICK_RE = /`([a-z][a-z0-9]+(?:-[a-z0-9]+)+)`/g;
@@ -144,6 +170,12 @@ function main() {
       fakeOld,
     );
     if (allowedAudit.length) fail.push("self-test rejected OLD_ALIASES in audit-skill-conflicts");
+    const fossilHits = checkFossils("skills/workflow-spec-tdd/SKILL.md", "Think step by step. Tuned for Composer 2.5. Hold all findings for the end.");
+    if (fossilHits.length !== 3) fail.push(`self-test expected 3 fossil hits, got ${fossilHits.length}`);
+    const quoted = checkFossils("skills/meta-skill-creator/SKILL.md", 'not generic "think step by step"');
+    if (quoted.length) fail.push("self-test flagged a quoted mention of a scaffold");
+    const vendored = checkFossils("skills/thirdparty-web-interface-guidelines/SKILL.md", "No preamble.");
+    if (vendored.length) fail.push("self-test flagged vendored upstream text");
     if (fail.length) {
       for (const f of fail) console.error(`✗ ${f}`);
       process.exit(1);
@@ -158,7 +190,7 @@ function main() {
     for (const file of walkFiles(join(repoRoot, dir))) {
       const rel = relative(repoRoot, file).replaceAll("\\", "/");
       const text = readFileSync(file, "utf8");
-      errors.push(...checkText(rel, text, names));
+      errors.push(...checkText(rel, text, names), ...checkFossils(rel, text));
     }
   }
   const aliasFiles = [];
@@ -182,10 +214,10 @@ function main() {
   }
   if (errors.length) {
     for (const e of errors) console.error(`✗ ${e}`);
-    console.error(`\n✗ ${errors.length} dangling skill-ref(s).`);
+    console.error(`\n✗ ${errors.length} dangling skill-ref(s) / prompt fossil(s).`);
     process.exit(1);
   }
-  console.log("✓ Skill cross-refs resolve (no doubled prefixes or stale responsive aliases).");
+  console.log("✓ Skill cross-refs resolve; no doubled prefixes, stale aliases, retired model names, or thinking scaffolds.");
 }
 
 main();

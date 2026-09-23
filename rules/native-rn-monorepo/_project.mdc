@@ -15,13 +15,13 @@ alwaysApply: true
 > Adjust these paths if your monorepo uses a different layout
 > (e.g. `apps/mobile/{android,ios,src}/` or `packages/web/`).
 
-## Developer environment (CRITICAL)
+## Developer environment (no Mac)
 
-The developer is on **Linux/Windows, NOT macOS**. This means:
+The developer works on Linux/Windows; there is no Mac. This means:
 
-- **iOS cannot be built or tested locally.** Do NOT suggest
-  `xcodebuild`, `pod install`, `xcrun simctl`, Xcode, or any other
-  macOS-only tool for the developer to run locally.
+- iOS cannot be built or tested locally, so `xcodebuild`, `pod install`,
+  `xcrun simctl`, and Xcode are not options to hand the developer;
+  iOS work routes through CI.
 - iOS verification happens entirely on **GitHub Actions CI** with
   macOS runners.
 - iOS distribution happens via **TestFlight** — the developer
@@ -33,18 +33,17 @@ The developer is on **Linux/Windows, NOT macOS**. This means:
   Android compile locally → push → CI builds iOS → TestFlight →
   install on device.
 
-When the developer reports an iOS issue, the diagnostic path is:
-1. Check shared JS for the issue first (90%+ of "iOS bugs" are
-   actually JS/RN issues that also reproduce on Android).
-2. If it's iOS-specific (native bridge, `Podfile`, iOS-only code),
-   edit the file and trigger CI — do not ask the developer to "run
-   pod install" or "open Xcode."
-3. Use `/ios-ci-logs` to diagnose CI failures.
+When the developer reports an iOS issue, look in shared JS first —
+most "iOS bugs" also reproduce on Android, the only place they can be
+verified locally. If it is genuinely iOS-specific (native bridge,
+`Podfile`, iOS-only code), edit the file and trigger CI instead of
+asking the developer to run `pod install` or open Xcode;
+`/ios-ci-logs` reads the failure.
 
 ## Hard rules
 
 - Identify the target before editing. The path tells you which.
-- Do NOT mix patterns across targets:
+- Each target's patterns stay in its own tree:
   - No JSX/React in `android/` or `ios/`
   - No native bridge code in `src/`
   - No `react-native` imports in `web/` (unless `react-native-web`
@@ -62,8 +61,9 @@ When the developer reports an iOS issue, the diagnostic path is:
 
 ## When unsure
 
-If the request is ambiguous about which target it touches, ask
-before editing. A single feature may need parallel changes in
+If the request is ambiguous about which target it touches, read the
+relevant trees first; ask before editing only if the paths still
+don't settle it. A single feature may need parallel changes in
 `src/` (JS) and `android/` + `ios/` (native bridge) — call this out
 explicitly. For iOS native changes, also note that verification
 will require a CI run and explain the wait time.

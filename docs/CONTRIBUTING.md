@@ -70,15 +70,16 @@ Every skill needs a `SKILL.md` with YAML frontmatter:
 name: my-skill-name
 description: Clear description with trigger words. Use when user mentions "keyword1", "keyword2", or wants "specific task".
 license: MIT
+effort: high   # Claude Code only — high for audit/plan/judge/security/debug, low for mechanical work; delete the line for ordinary implementation (medium default)
 ---
 
 # My Skill Name
 
 One-line purpose.
 
-## CRITICAL: Check Existing First
+## Check existing first
 
-**Before ANY action, verify:**
+Look for what already exists before adding anything:
 
 1. **Check for existing patterns:**
 ```bash
@@ -120,7 +121,8 @@ Every **first-party** (Kenji-authored) skill MUST have:
 - [ ] **TypeScript** in all code examples (strict, no `any`)
 - [ ] **Related Skills** section for cross-referencing
 - [ ] **Validation** section with post-implementation checks
-- [ ] **Prompt enhancement (T1–T6)** — freedom declared, one reasoning scaffold, one worked example, self-critique rubric; see [PROMPT-ENHANCEMENT-PLAYBOOK.md](PROMPT-ENHANCEMENT-PLAYBOOK.md) / `enhance-skill-prompts` (existing skills) or `meta-skill-creator` (new)
+- [ ] **Effort declared** where the medium default is wrong: `effort: high` for judgment (audit, plan, judge, security, architecture, debug), `effort: low` for mechanical or read-only work (inventory, formatting, handoff). Claude Code reads it; Cursor ignores it. User-only rituals add `disable-model-invocation: true`; reference-only skills add `user-invocable: false`
+- [ ] **Prompt enhancement (T1–T8)** — freedom declared, one classification contract (what counts as a finding, not how to think), one worked example labeled illustrative, an evidence rubric (not a generic self-check), effort declared, normal volume; see [PROMPT-ENHANCEMENT-PLAYBOOK.md](PROMPT-ENHANCEMENT-PLAYBOOK.md) / `enhance-skill-prompts` (existing skills) or `meta-skill-creator` (new)
 
 ### 4. Description Guidelines
 
@@ -128,7 +130,7 @@ The `description` field is critical — it's how Cursor decides when to use the 
 
 **Rules:**
 - Open with an action verb (`Fix`, `Wire`, `Build`, `Audit`, `Release` …)
-- Keep ≤320 characters (same folding as `scripts/validate-skills.mjs`)
+- Keep ≤320 characters (same folding as `scripts/validate-skills.mjs`) — every description rides in every request, ~168 of them, so each character is always-on context
 - Include 3-6 trigger keywords/phrases users actually type
 - Never write "This skill provides…" or "This skill should be used when…"
 - No AI-tells: avoid `leverage`, `seamless`, `robust`, `powerful`, `elevate`, `cutting-edge`, `delve`, `comprehensive solution`
@@ -148,7 +150,7 @@ description: This comprehensive skill leverages powerful AI capabilities to seam
 - Imperative, direct: "Fix X", "Wire Y", "Run Z"
 - No hedging: ~~"This might help with…"~~ → "Use when…"
 - No filler: ~~"In order to…"~~ → "To…"
-- Body prose: short sentences, bullet points preferred over dense paragraphs
+- Body prose: short sentences. Tables and bullets for reference data (commands, matrices, checklists); prose for behavioral guidance, so each rule keeps its reason beside it
 
 ### 6. Language
 
@@ -167,12 +169,13 @@ touch commands/my-command.md
 
 ### 2. Structure
 
-Commands are markdown with YAML frontmatter (`description`, optional `argument-hint`). They're triggered via `/my-command` in Cursor.
+Commands are markdown with YAML frontmatter (`description`, optional `argument-hint`, `disable-model-invocation: true` on every command except the `MODEL_INVOCABLE_COMMANDS` allowlist, and on Claude Code an optional `effort:` — `low` for mechanical shortcuts, `high` for review and plan pointers). They're triggered via `/my-command` in Cursor and Claude Code.
 
 ```markdown
 ---
 description: "One-line summary of what this command does"
 argument-hint: "[optional hint]"
+disable-model-invocation: true
 ---
 
 # Command Title
@@ -197,7 +200,7 @@ One-line description of what this command does.
 ### 3. Command Design Principles
 
 - **Actionable** — Each step produces a concrete output
-- **Sequential** — Steps build on each other
+- **Sequential where order matters** — numbered steps for fragile sequences (auth, destructive ops, release); judgment steps state the outcome and how to verify it
 - **Verifiable** — Includes a checklist at the end
 - **Self-contained** — Doesn't require external context
 

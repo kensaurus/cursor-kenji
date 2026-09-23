@@ -7,6 +7,7 @@ description: >
   tracking". One named bug through PR → workflow-fix-and-ship. Plan-only
   observability → plan-error-handling.
 license: MIT
+effort: high
 ---
 
 # Sentry Monitor
@@ -37,19 +38,13 @@ Triage, fix, and audit Sentry on any project via the `sentry` MCP. Auto-detects 
 - **Bucket is one** — Noise is not used to mute an app-frame crash
 - **Right owner** — one named bug through PR → `workflow-fix-and-ship`
 
-## Critical Rules
+## Rules
 
-> **NEVER resolve an issue without a verified fix.**
-> Resolving means "this will not happen again." If you cannot prove that, leave it unresolved.
+Resolve an issue only with a verified fix — resolving means "this will not happen again"; if you cannot prove that, leave it unresolved.
 
-> **NEVER apply a band-aid fix.**
-> Wrapping code in try/catch, adding `?.` chains, or guarding with `Array.isArray()` are symptom suppressors.
-> Only use defensive coding *after* fixing the root cause, to harden against truly unpredictable external input.
+No band-aid fixes. try/catch wrappers, `?.` chains, and `Array.isArray()` guards suppress the symptom; use defensive code only after the root cause is fixed, to harden against genuinely unpredictable external input.
 
-> **Understand the WHY before touching any code.**
-
-> **Research before fixing non-trivial bugs.**
-> Use `firecrawl_search` + `firecrawl_scrape` to find best practices for the specific error pattern before implementing a fix.
+Research non-trivial bugs before fixing (Step 4d).
 
 ---
 
@@ -186,7 +181,7 @@ sentry:get_sentry_resource
 }
 ```
 
-Batch up to 4 calls in parallel per round.
+Issue the detail calls for one round in a single message so they run in parallel.
 
 For hard-to-diagnose issues, also fetch breadcrumbs:
 
@@ -273,8 +268,6 @@ Seer provides:
 
 ## Step 4: Root Cause Analysis (for Code Bugs and Data Bugs)
 
-Do NOT skip or shortcut this step.
-
 ### 4a. Read the Full Error Context
 
 From the Sentry issue details, extract:
@@ -302,6 +295,8 @@ git log --oneline <previous-release-tag>..<current-release-tag>
 ```
 
 ### 4c. Trace the Code Path
+
+Read enough of the chain to say where the bad state originates: the crash-site function, every app-code frame above it, and — for unexpected data — its source (query and schema, state setter, input parsing, cache invalidation). `git log --oneline -20 -- <file>` on the culprit files.
 
 1. **Start from the crash site**: Read the full function where the error was thrown.
 2. **Walk up the call chain**: For each app-code frame in the stacktrace, read the file and function.
@@ -353,8 +348,6 @@ Before writing any fix, state:
 | `?? []` or `?? {}` fallback | Masks data loading issues | Handle loading/error states explicitly |
 | Filtering in `beforeSend` | Muting a real bug | Only filter genuinely external noise |
 | Resolving without deploying | Error recurs next session | Only resolve after fix is committed |
-
-### 4g. Check for Side Effects
 
 Before applying the fix:
 - Are there other callers of the function you're changing?
@@ -417,10 +410,7 @@ Service Worker:
 "Failed to register a ServiceWorker",
 ```
 
-**Noise validation**: Before classifying something as noise, verify:
-- The error message does NOT originate from app code
-- There are NO app frames in the stacktrace
-- The error cannot be triggered by a real user action
+**Noise validation**: classify as noise only when the message does not originate from app code, no app frames appear in the stacktrace, and no real user action can trigger it.
 
 ### Code Bug / Data Bug Fixes
 
@@ -428,10 +418,11 @@ Service Worker:
 2. Make invalid state unrepresentable where possible.
 3. Follow project conventions (read README files, existing patterns).
 4. If the fix requires schema changes or infra work, flag for manual follow-up.
+5. Fix the issue at hand, surgically. Unrelated bugs you notice go under "Requires Manual Follow-Up", not in the diff.
 
 ### Performance Fixes
 
-Do NOT attempt. Do NOT resolve. Leave unresolved. Note in the summary.
+Leave performance issues unresolved and list them in the summary — they need profiling and a product decision, not a triage-session fix.
 
 ### Config Gap Fixes
 
@@ -468,7 +459,7 @@ sentry:update_issue
 }
 ```
 
-Batch up to 4 calls in parallel. Do NOT resolve performance issues.
+Issue the resolve calls in one message. Performance issues stay unresolved (Step 5).
 
 ---
 

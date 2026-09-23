@@ -71,7 +71,7 @@ The installer merges into:
 - `~/.cursor/hooks.json` + `~/.cursor/cursor-kenji-hooks/` — safely merged
   opt-in completion gate; inert unless a closure state file has actionable
   unchecked items
-- `~/.claude/skills/`, `~/.claude/commands/`, `~/.claude/agents/`, `~/.claude/rules/` — Claude Code (`npx @kensaurus/cursor-kenji --claude` or `./install.sh --claude`; `.mdc` rules installed as `.md`)
+- `~/.claude/skills/`, `~/.claude/commands/`, `~/.claude/agents/`, `~/.claude/rules/` — Claude Code (`npx @kensaurus/cursor-kenji --claude` or `./install.sh --claude`; `.mdc` rules installed as `.md`); `~/.claude/settings.json` gets the same completion Stop hook, merged
 
 Claude Code 2.1.139+ provides the equivalent independent continuation evaluator
 through `/goal`; the `complete-everything` skill includes the recommended goal

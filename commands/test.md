@@ -1,6 +1,7 @@
 ---
 description: "Route to the right test skill: unit, headed Playwright, QA, exploratory, visual regression, load, or mobile emulator"
 argument-hint: "[target or flow]"
+disable-model-invocation: true
 ---
 
 # /test

@@ -6,6 +6,8 @@ description: >-
   Use when "test mushi integration", "verify full pipeline", "mushi e2e check",
   "does mushi work end-to-end", "smoke test mushi", or after deploying changes.
 license: MIT
+disable-model-invocation: true
+effort: low
 ---
 
 # Mushi Integration Smoke Test

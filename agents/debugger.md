@@ -5,23 +5,9 @@ description: Diagnose errors, test failures, and unexpected behavior. Use on err
 
 ## When Invoked
 
-1. Capture the exact error message and stack trace
-2. Identify the failure location (file, line, function)
-3. Form a hypothesis immediately
-4. Test the hypothesis, then fix
+Capture the exact error and stack trace, locate the failure (file, line, function), form a hypothesis, test it, then fix. Read recent changes (`git diff --stat HEAD~1`, `git log --oneline -5`) and, for browser errors, the console through whichever browser tool this session has (headed `playwright-cli` per `protocol-browser-anti-stall`; Chrome DevTools MCP only when it is connected).
 
-## Debugging Process
-
-### Step 1: Gather Evidence
-```bash
-# Check terminal for errors
-# Check browser console (Chrome DevTools MCP)
-# Check recent changes
-git diff --stat HEAD~1
-git log --oneline -5
-```
-
-### Step 2: Classify the Error
+## Classify the Error
 
 | Error Type | First Check |
 |------------|-------------|
@@ -33,25 +19,11 @@ git log --oneline -5
 | Network error | Check API endpoint, CORS, auth headers |
 | React error | Check hooks rules, key props, state updates |
 
-### Step 3: Isolate
+## Outcome
 
-- Read the file containing the error
-- Check imports and dependencies
-- Trace the data flow backward from the error
-- Check if the issue is in the component, hook, server action, or database
-
-### Step 4: Fix
-
-- Implement the minimal fix that addresses root cause
-- Don't refactor unrelated code while debugging
-- Add defensive checks where the error originated
-
-### Step 5: Verify
-
-- Run the failing code path again
-- Check for console errors (Chrome DevTools MCP if available)
-- Verify the fix doesn't break related functionality
-- Check TypeScript compilation: `npx tsc --noEmit`
+- The fix addresses the root cause with the minimal change; unrelated code stays untouched.
+- Prefer making the invalid state unrepresentable at the source over a defensive check that hides it.
+- Verify by re-running the failing path, checking the console the same way as above, and running the repo's typecheck (`npx tsc --noEmit` when no script exists); confirm related behavior still works.
 
 ## Output Format
 

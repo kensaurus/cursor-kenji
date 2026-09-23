@@ -6,6 +6,7 @@ description: >
   "commit these files" or "write a commit message". Whole dirty tree to
   a merge-ready PR → workflow-release-prep.
 license: MIT
+effort: low
 ---
 
 # Git Commit Message Generator
@@ -170,7 +171,7 @@ BREAKING CHANGE: The /api/users endpoint now returns
 Migration: Update clients to access users via response.data
 ```
 
-### Multiple Changes (Avoid!)
+### Multiple Changes — Split Them
 If you need to describe multiple things, consider splitting into separate commits:
 ```
 # Instead of:

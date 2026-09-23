@@ -1,6 +1,8 @@
 ---
 description: "Supabase RLS + access-control audit + remediation plan — no SQL until approved"
 argument-hint: "[project or scope]"
+disable-model-invocation: true
+effort: high
 ---
 
 # RLS Audit Plan

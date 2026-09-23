@@ -45,7 +45,7 @@ code changes that make the page feel hand-crafted — not template-generated.
 
 ---
 
-## Critical Rules — Read First
+## Rules
 
 > **Replace, don't stack.** When you find an empty column, redundant header, or a duplicated
 > hint row, REPLACE it with semantic data. Never pile new chips on top of a layout that
@@ -78,10 +78,11 @@ code changes that make the page feel hand-crafted — not template-generated.
 > **Verify at three viewports.** Desktop (1440), tablet (1024), narrow (800). Catch
 > wrap / overflow / collision before claiming done.
 
-> **Anti AI-tells:** identical-padding sections, generic 3-column icon-title-description grids,
-> uniform border-radius on everything, every status the same colour, primary colour painted on
-> every clickable element, lorem-ipsum empty states, and stock illustrations are all forbidden.
-> If the page has them, they are part of the work.
+> **Named AI-tells:** identical-padding sections, generic 3-column icon-title-description grids,
+> uniform border-radius on everything (pill-shaped every control), every status the same colour,
+> primary colour painted on every clickable element, lorem-ipsum empty states, stock illustrations,
+> Inter / Roboto as the only face, monospace or "01 / 02 / 03" section labels, a cream / off-white
+> canvas, an italic accent word in every headline. If the page has them, they are part of the work.
 
 > **Screenshots are necessary but not sufficient.** Many of the worst pains
 > are *silent* — wrapper-collapsed tiles, dead conditional slots, the same
@@ -209,7 +210,7 @@ Also identify whether each visual cue is backed by real product state. Badges,
 progress, alerts, disabled states, empty states, and "recent" indicators should
 map to data contracts or domain helpers, not hardcoded component guesses.
 
-### 1d. Inventory primitives + tokens (THIS IS NON-NEGOTIABLE)
+### 1d. Inventory primitives + tokens
 
 ```
 Glob: src/components/ui/*.tsx — Badge, Button, Card, Tooltip, …
@@ -375,7 +376,7 @@ diagnosis, not just an aesthetic preference.
 
 ---
 
-## Step 3 — PAIN INVENTORY (don't hand-wave)  [HIGH freedom]
+## Step 3 — PAIN INVENTORY  [HIGH freedom]
 
 Maintain a single table. Include user-reported pains AND silent ones you discovered.
 
@@ -457,8 +458,7 @@ reach for a raw `<div>` styled inline.
 | 6 | drop the always-on hint row | delete + replace with `Tooltip` on column header `?` glyph | `folder-management.tsx` |
 | 7 | category icon stack | switch on category, render `Icon` + bg tint via token | `getFolderCategory.tsx` |
 
-If a fix would add a new primitive, STOP and ask: "could this be a variant on an existing
-primitive?" Almost always: yes.
+If a fix would add a new primitive, first ask whether it can be a variant of an existing one — it almost always can.
 
 ## Further reading
 

@@ -1,5 +1,5 @@
 ---
-description: Guard execution of approved plan/burndown work: forbid reward hacking and feature deletion; require checkpoints, context discipline, safe terminal use, and fresh verification. Apply to approved plan-*.md, complete-everything, or burndown-full runs; binding for any implementation model.
+description: Guard execution of an approved plan or burndown: forbid reward hacking and feature deletion; require checkpoints, context discipline, safe terminal use, and fresh verification. Applies to approved plan-*.md, complete-everything, and burndown-full runs, whatever model runs them.
 alwaysApply: false
 paths:
   - "**/plan-*.md"
@@ -8,7 +8,7 @@ paths:
 
 # Approved-Plan Execution Adapter
 
-You are executing an **already-approved plan** (a `plan-*.md` audit/burndown authored and reviewed with a stronger reasoning model). Your job is faithful, verifiable *implementation* — not re-planning or inventing unrelated scope. When `complete-everything` is explicitly active, its connected closure set (planned + previously parked + discovered blast-radius work) is part of the approved scope. When `burndown-full` is active, repo-wide search determines mechanical scope. These rules target the known failure modes of fast implementation models (Cursor Composer, Claude Code in execution mode) and are binding for every change.
+You are executing an **already-approved plan** (a `plan-*.md` audit/burndown authored and reviewed at high effort). Your job is faithful, verifiable *implementation* — not re-planning or inventing unrelated scope. When `complete-everything` is explicitly active, its connected closure set (planned + previously parked + discovered blast-radius work) is part of the approved scope. When `burndown-full` is active, repo-wide search determines mechanical scope. These rules guard the failure modes of plan execution — passing the check instead of the intent, quietly widening or narrowing scope, deleting behavior to get green — and bind every change at every effort level.
 
 ## 1. Anti-reward-hacking (highest priority)
 Satisfy the **intent**, never just the check. Forbidden:
@@ -29,10 +29,13 @@ A green suite is necessary, not sufficient. In your trace, state why the change 
 - After each unit: run the relevant tests / typecheck / lint and confirm green.
 - **Default mode:** stop at the plan's phase boundaries for review; do not auto-advance.
 - **Explicit closure mode:** when the user invokes `complete-everything` or `burndown-full`, a phase boundary is an audit checkpoint, not a permission stop. Persist state, report meaningful progress, and auto-advance until the closure set is empty or a real human gate below is reached.
+- **How a closure-mode turn ends:** when the closure set is empty or a STOP condition below is met — not with a progress report while items remain open, not with a question the plan or repo already answers, not with an offer to continue ("want me to keep going?"), and not at a phase boundary. Before ending your turn, re-read your last paragraph: if it promises, offers, or asks, the turn is not over.
 - If a tool call fails or a step dead-ends, fix that step before continuing — never paper over it and push on.
+- Edit surgically: change the lines the item needs; do not rewrite files wholesale.
+- Pre-existing bugs outside the approved scope go in the trace as follow-ups, not into the diff. Add tests only where the plan asks for them or the repo already keeps tests for that surface; scratch checks stay out of the repo.
 
 ## 4. Context discipline
-- Work per-surface / per-module; load only the files needed for the current unit. Do not try to hold the whole repo in context.
+- Work per-surface / per-module; load only the files the current unit needs. Context is large and compaction exists, so do not drop items or wrap up early to save room.
 - For wide work, build the inventory/checklist first, then iterate through it in batches.
 
 ## 5. Terminal caution
@@ -41,7 +44,7 @@ A green suite is necessary, not sufficient. In your trace, state why the change 
 
 ## 6. Verify-before-trust
 - Before each change, state in one line: what behavior must stay identical here — then confirm it does.
-- Surface assumptions; if the plan is ambiguous for this item, ask rather than guess.
+- Surface assumptions; if the plan is ambiguous for this item and the repo does not resolve it, treat it as a STOP condition below — otherwise decide and record the assumption in the trace.
 - Leave a short trace per change (what / why / what was verified) so a human can audit the rollout.
 
 ## 7. Follow the plan's conventions
@@ -50,7 +53,7 @@ A green suite is necessary, not sufficient. In your trace, state why the change 
 ## STOP and ask the human if:
 - A real data/contract/endpoint/target is unknown (don't fabricate a substitute).
 - A fix would change public behavior/API/output not covered by the approved plan.
-- A change touches auth behavior, RLS semantics, secrets/rotation, payments, destructive production-data mutation, or an unconfirmed migration target (consider routing these to a stronger model rather than executing directly).
+- A change touches auth behavior, RLS semantics, secrets/rotation, payments, destructive production-data mutation, or an unconfirmed migration target (when the human clears it, execute at high effort and have a fresh-context reviewer check the diff before merge).
 - Do **not** stop merely because an approved feature requires non-destructive schema DDL on a confirmed target; deploy and verify it under `full-stack-ship-discipline`.
 - The only way to pass is a shortcut that doesn't satisfy the real intent.
 - Tests would need to be deleted, skipped, or weakened to pass.

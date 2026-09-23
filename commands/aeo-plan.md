@@ -1,6 +1,8 @@
 ---
 description: "Answer-engine / AEO & GEO citation-readiness audit — plan only, no edits until approved"
 argument-hint: "[url or scope]"
+disable-model-invocation: true
+effort: high
 ---
 
 # AEO Readiness Plan

@@ -6,6 +6,7 @@ description: >
   "audit our analytics", "are we tracking the right events", "funnel
   instrumentation", or before iterate-post-launch. PostHog/Amplitude/Mixpanel/GA4.
 license: MIT
+effort: high
 ---
 
 # audit-analytics — Product-event instrumentation

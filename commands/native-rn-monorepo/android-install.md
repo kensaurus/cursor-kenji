@@ -1,3 +1,8 @@
+---
+description: "Install the debug build on a connected device or emulator and launch it"
+effort: low
+---
+
 # /android-install
 
 Install the debug build on a connected device or emulator and

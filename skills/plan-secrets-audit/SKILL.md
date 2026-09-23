@@ -6,6 +6,7 @@ description: >
   commit a key", "secret scan", "is my .env safe", or "rotate keys". Do not fire
   for "RLS audit" or generic "security burndown".
 license: MIT
+effort: high
 ---
 
 # Secrets & Key-Scope Audit + Rotation Plan
@@ -108,7 +109,7 @@ Search outside `.env*` and server-only contexts for:
 2. **Check history** for every credential (C).
 3. **Review deploy + hygiene** (D, E).
 4. **Score.** Never-client in client bundle or history = Critical.
-5. **Phase.** **Emit `plan-secrets-audit.md`. End the turn.**
+5. **Phase.** **Emit `plan-secrets-audit.md`, then end the turn** with a standalone recap in chat: the two or three highest-impact findings (type + location + last 4, never the value) and the first phase to approve. The file is the deliverable — write it before the recap.
 
 ---
 
@@ -178,6 +179,4 @@ Add a pre-commit secret scanner (`create-hook`) so this can't regress.
 - **Execution:** provider dashboards, Vercel/AWS env, `audit-security`.
 - **Verify:** re-scan working tree + history; confirm rotated keys are dead.
 
-> Plan with a strong model; execute with `composer-2.5-execution.mdc` riding
-> along. Rotation is irreversible-ish — the plan says *which* keys; the rule
-> constrains *how* and *in what order*.
+> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model. Rotation is irreversible-ish — the plan says *which* keys; the rule constrains *how* and *in what order*.

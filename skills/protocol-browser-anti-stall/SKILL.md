@@ -6,14 +6,13 @@ description: >
   without scripted shortcuts. Read before browser work or when automation
   freezes. Product QA behavior remains with the calling test/audit skill.
 license: MIT
+user-invocable: false
 ---
 
 # Browser Anti-Stall Protocol (playwright-cli)
 
 **Degree of freedom: LOW.** Almost every step is exact. Only "why it
 stalled" and the next hypothesis are `[HIGH freedom]`.
-
-**Apply these rules to EVERY browser action. No exceptions.**
 
 This repo drives browsers with **`playwright-cli`**, not the Playwright MCP. The MCP exposes one
 browser per server and a persistent profile can only be locked by one process at a time, so
@@ -198,7 +197,7 @@ Actionable information beats a silent freeze.
 
 ## 10. Parallel agents  [LOW freedom — run exactly]
 
-Session isolation replaces the old tab-sharing etiquette — each agent gets its own browser:
+Each agent gets its own browser through session isolation:
 
 ```bash
 # agent A                                  # agent B (simultaneously, no conflict)

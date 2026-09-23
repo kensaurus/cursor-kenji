@@ -1,3 +1,8 @@
+---
+description: "Verify locally, push, trigger iOS CI, and watch the run through the TestFlight upload step"
+effort: low
+---
+
 # /rn-ship-ios
 
 End-to-end: verify locally what can be verified, push, trigger iOS

@@ -159,9 +159,7 @@ different cost/benefit and a different stack.
 
 ## Phase 3: Decision Matrix — Pick the Minimal Stack  [HIGH freedom]
 
-GSAP is **100% free for all use since April 2025** (all former Club/bonus
-plugins — ScrollTrigger, SplitText, MorphSVG, etc. — included), so plugin
-licensing is no longer a reason to avoid it.
+GSAP and all of its plugins (ScrollTrigger, SplitText, MorphSVG, …) are free for every use, so licensing does not constrain the choice.
 
 | Use case | Recommended stack | Rationale |
 |----------|-------------------|-----------|
@@ -373,21 +371,19 @@ Strict Mode.
 - Greenfield anti-slop landing page → `enhance-web-landing`.
 - Generic existing-site premium upgrade (no 3D) → `enhance-web-redesign`.
 - UX heuristics / flows / data wiring → `enhance-web-ux`.
-- A hover/drag delight that needs no WebGL → `design-motion` / `design-motion`.
+- A hover/drag delight that needs no WebGL → `design-motion`.
 
 ---
 
 ## Research & Foundation Skills
 
 **Foundation / deeper mechanics (in this repo):**
-- `enhance-web-web3d` — Three.js, R3F, shaders, particle systems (greenfield mechanics).
-- `design-motion` — Framer Motion / Motion, GSAP, CSS animation patterns.
-- `design-motion` — physics-y micro-interactions and delight.
+- `design-motion` — Motion / GSAP / CSS animation patterns and physics micro-interactions.
 - `audit-performance` — Core Web Vitals (LCP/INP/CLS), bundle analysis.
 - `audit-accessibility` — reduced-motion, keyboard, screen-reader compliance.
 
 **Current external anchors:**
-- **GSAP is 100% free since April 2025** (all plugins included). Use `useGSAP()` (`@gsap/react`) for React cleanup/Strict-Mode safety. <https://gsap.com/resources/React/>
+- **GSAP is free for all use, plugins included.** Use `useGSAP()` (`@gsap/react`) for React cleanup/Strict-Mode safety. <https://gsap.com/resources/React/>
 - **R3F performance docs** — WebGL is expensive on weak devices; design for graceful degradation; mutate refs not state in `useFrame`. <https://r3f.docs.pmnd.rs/advanced/scaling-performance>
 - **three.js WebGPURenderer** — production-ready since r171, automatic WebGL2 fallback, `forceWebGL` to test. <https://threejs.org/manual/en/webgpurenderer.html>
 - **"100 Three.js Tips That Actually Improve Performance" (2026)** — <100 draw calls, Draco/KTX2, lazy-load below the fold, dispose everything, profile with stats-gl/renderer.info/Spector.js. <https://www.utsubo.com/blog/threejs-best-practices-100-tips>

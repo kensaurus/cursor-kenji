@@ -6,6 +6,7 @@ description: >
   "start emulator", "Cannot connect to Expo", or a stuck dev loop. QA
   on the running emulator → mobile-emulator-test.
 license: MIT
+effort: low
 ---
 
 # mobile-emulator-start — Metro + Android emulator in a sane order
@@ -127,13 +128,14 @@ adb shell wm size # verify
 Scale factor for coordinate math when screenshots are displayed at ~294px wide in chat:
 
 ```
-device_x = display_x × (1080 / display_image_width_px)
-device_y = display_y × (4000 / display_image_height_px)
+device_x = display_x × (device_width  / display_image_width_px)
+device_y = display_y × (device_height / display_image_height_px)
+# device_width/height from `adb shell wm size` (1080×2400 default, 1080×4000 tall skin)
 ```
 
-Example — button at display position (147, 1200) in a 294×1568-px chat image:
+Example — button at display position (147, 600) in a 294×653-px chat image of the default 1080×2400 device:
 - `device_x = 147 × (1080/294) ≈ 540`
-- `device_y = 1200 × (4000/1568) ≈ 3061`
+- `device_y = 600 × (2400/653) ≈ 2205`
 
 ### D.1 Boot sequence
 

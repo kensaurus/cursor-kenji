@@ -13,10 +13,10 @@ alwaysApply: false
 - Handle errors: `const { data, error } = await supabase.from(...)`
 
 ## RLS
-- Every table MUST have RLS enabled
+- Enable RLS on every table; without it the publishable/anon key reads and writes every row
 - Test policies after creation with Supabase MCP
 - Use `auth.uid()` for user-scoped access
-- Use `EXISTS` subqueries for role-based access (avoid function calls in policies)
+- Role-based access: `EXISTS` / `IN (select …)` subqueries against the membership table, or a `security definer` helper when the policy would otherwise recurse; wrap `auth.uid()` and helper functions as `(select auth.uid())` so Postgres evaluates them once per query, not per row
 
 ## Migrations
 - File naming: `YYYYMMDD_description.sql`

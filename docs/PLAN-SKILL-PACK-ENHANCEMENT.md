@@ -164,7 +164,7 @@ duplicated content to remove, and all five bodies are already under the 500-line
 validator cap.
 
 The residual body size (20–42 KB) is the skill's **operating core**: the
-when-to-fire router, Critical Rules, Workflow Checklist, and numbered step
+when-to-fire router, Rules, Workflow Checklist, and numbered step
 procedure — exactly the material Anthropic guidance keeps in the always-loaded
 body. Reaching the aspirational "~5–8 KB body" would require relocating this
 non-duplicated, load-bearing procedure into refs, forcing a second read to

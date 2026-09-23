@@ -6,6 +6,7 @@ description: >
   ChatGPT/Perplexity", "AI search visibility", "llms.txt", or "am I blocking AI
   crawlers". Classic SEO meta/sitemap → enhance-web-seo.
 license: MIT
+effort: high
 ---
 
 # Answer-Engine Readiness Audit + Citation Plan
@@ -68,8 +69,8 @@ prerequisite — note and hand that layer to `enhance-web-seo`.
 ## The audit  [HIGH freedom]
 
 ### A · Can AI even read the site?
-- **robots.txt** — GPTBot, ClaudeBot, PerplexityBot, Google-Extended allowed?
-- **CDN / Cloudflare** — default now blocks AI bots; verify if site is behind it.
+- **robots.txt** — GPTBot, ClaudeBot, PerplexityBot, Google-Extended, and each engine's other current crawler tokens allowed? Check the engines' published token lists; the set changes.
+- **CDN / Cloudflare** — AI-bot blocking can be on by default; if the site sits behind a CDN, confirm bot access with a live fetch.
 - **SSR vs JS-hidden** — content behind client JS/login/paywall can't be cited.
 - **llms.txt** — present? Recommend describing site structure for AI systems.
 
@@ -99,7 +100,7 @@ prerequisite — note and hand that layer to `enhance-web-seo`.
 2. **Audit content shape & authority** (B, C) per key page.
 3. **Note entity/measurability** (D, E).
 4. **Score** by impact × effort.
-5. **Emit `plan-aeo-readiness.md`. End the turn.**
+5. **Emit `plan-aeo-readiness.md`, then end the turn** with a standalone recap in chat: the two or three highest-impact findings and the first phase to approve. The file is the deliverable — write it before the recap.
 
 ---
 
@@ -162,4 +163,4 @@ Set citation-monitoring baseline before/after so improvement is measured.
 - **Execution:** `enhance-web-seo`, `docs-writer`, `enhance-web-landing`.
 - **Verify:** prompt-test target queries across engines before/after.
 
-> Plan with a strong model; execute with `composer-2.5-execution.mdc`.
+> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model.

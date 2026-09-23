@@ -1,6 +1,8 @@
 ---
 description: "Audit CI/CD gate logic — silent bypass, ratchet gaming, conflicting conditions — report only"
 argument-hint: "[repo or workflow path]"
+disable-model-invocation: true
+effort: high
 ---
 
 # Gate-Logic Audit

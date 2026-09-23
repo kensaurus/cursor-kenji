@@ -58,7 +58,7 @@ CONTRIBUTING.md (code standards)
 Use `Grep` and `SemanticSearch` to find:
 - How similar code is structured elsewhere in the codebase
 - What patterns are already established
-- ALL files that import/depend on the code being refactored
+- Every file that imports or depends on the code being refactored
 
 ### 3. Map the Blast Radius
 
@@ -68,7 +68,7 @@ rg "functionName" --type ts # find all callers
 rg "import.*from.*module" --type ts # find all importers
 ```
 
-List every file that will be affected by the change. If the blast radius is large (10+ files), consider a phased approach.
+List every file that will be affected by the change.
 
 ### 4. Research Modern Patterns (for non-trivial refactors)
 
@@ -96,7 +96,7 @@ firecrawl:firecrawl_scrape
 
 This prevents refactoring FROM one outdated pattern TO another outdated pattern.
 
-### 5. Verification Statement (REQUIRED)
+### 5. Verification Statement
 
 Before refactoring, state:
 ```
@@ -117,6 +117,7 @@ Before refactoring, state:
 3. **Test frequently** — run tests after each change
 4. **Commit often** — easy to revert if something breaks
 5. **Research first** — don't replace old patterns with other old patterns
+6. **Scope holds** — a smell outside the named target is a note in the report, not part of this refactor; a bug you find is a follow-up. Tests added here cover the seam being moved or match what the repo already keeps; scratch checks stay out of the repo. Move code in place rather than rewriting whole files.
 
 ---
 

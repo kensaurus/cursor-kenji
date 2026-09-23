@@ -7,6 +7,7 @@ description: >
   we do this week for growth", "GTM check-in". Production bugs →
   iterate-post-launch.
 license: MIT
+disable-model-invocation: true
 ---
 
 # iterate-gtm-weekly — One number, one fix, one post

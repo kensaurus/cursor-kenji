@@ -7,6 +7,7 @@ description: >
   "the agent keeps suggesting Y again". Docs vs code drift → plan-docs-sync.
   Session state → handoff.
 license: MIT
+effort: high
 ---
 
 # docs-adr — Decision memory the next session can load

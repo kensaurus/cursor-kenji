@@ -214,6 +214,8 @@ workflow-gtm applies anything.
 
 ## Copy-paste prompts
 
+On Claude Code the `plan-*` skills carry `effort: high`, so these prompts need no `/effort` call; if you write a prompt that does not name the skills, run `/effort high` first. Cursor ignores the key — pick the model in its settings.
+
 ### Full six-skill loop (one message, plan only)
 
 ```
@@ -243,22 +245,23 @@ Use plan-test-coverage on this repo. Stories from real routes/handlers, traceabi
 matrix, multi-lens coverage (not just line %), fake-green detection. Plan only.
 ```
 
-## Plan with a strong model, execute with the rule on
+## Plan at high effort, execute at medium, judge in a fresh context
 
-These `plan-*` skills are designed for a **two-model workflow**:
+One model does all three. Claude Opus 5.5 is the Claude Code default and a Cursor agent model, so the split is by effort, not by model:
 
-1. **Plan** — author and review the `plan-*.md` burndown with the strongest reasoning model available. Planning is where architecture and scope decisions live.
-2. **Execute** — hand the approved plan to a fast implementation model (Cursor Composer, or Claude Code in execution mode), one burndown item at a time.
+1. **Plan** — author and review the `plan-*.md` burndown at high effort (the `plan-*` skills declare `effort: high`; on Cursor, pick the model and think hard). Planning is where architecture and scope decisions live.
+2. **Execute** — implement the approved plan at the default effort, one burndown item at a time.
+3. **Judge** — `completion-judge` verifies at high effort in a separate context before any completion claim.
 
-The execution handoff is governed by **`composer-2.5-execution.mdc`** (on-demand since v1.15.0: it attaches on `plan-*.md` and `plans/**` paths or when referenced — it is not always-on). It targets the known failure modes of fast implementation models:
+The execution handoff is governed by **`approved-plan-execution.mdc`** (on-demand: it attaches on `plan-*.md` and `plans/**` paths or when referenced — it is not always-on). Its guardrails never depended on the model:
 
 - **Anti-reward-hacking** — satisfy intent, never narrow/skip/`.only` tests or silence errors to go green
 - **Anti-feature-deletion** — never simplify away working code/routes/props to pass checks
-- **Checkpointing** — one unit at a time, stop at phase boundaries for review
+- **Checkpointing** — one unit at a time, stop at phase boundaries for review (closure modes auto-advance)
 - **Context + terminal discipline** — per-surface loading; dry-run destructive commands
-- **STOP-and-ask** — auth, RLS, secrets, payments, migrations → consider routing back to the stronger model rather than executing directly
+- **STOP-and-ask** — auth, RLS, secrets, payments, migrations → a human clears it, then execute at high effort with a fresh-context review before merge
 
-> The plan says **what** to do; the rule constrains **how** Composer is allowed to do it. They are two layers — keep both.
+> The plan says **what** to do; the rule constrains **how** it is implemented. They are two layers — keep both.
 
 ## Preservation contract (all plan skills)
 

@@ -31,6 +31,8 @@ Examples:
 - `refactor(hooks): extract useDebounce from search component`
 
 ## Rules
+
+- Commit only what the task touched; scratch scripts, ad-hoc test files, and unrelated cleanup stay out (note pre-existing bugs as follow-ups instead)
 - Atomic commits — one logical change per commit
 - Never commit secrets, `.env` files, or API keys
 - Never commit `node_modules/`, `.next/`, build artifacts

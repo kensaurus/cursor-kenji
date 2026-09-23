@@ -6,6 +6,7 @@ description: >
   dies", "audit our backups", "what's our RPO/RTO", or "disaster recovery". Plan
   only. Destructive-op gates stay on plan-data-integrity.
 license: MIT
+effort: high
 ---
 
 # plan-backup-dr — Recovery capability plan
@@ -120,7 +121,7 @@ uploads"), target RPO/RTO, concrete change.
 2. **Findings** — issue | worst-case | severity | evidence
 3. **SPOF map** — shared account/region/provider
 4. **Phased DR plan** — P0/P1/P2 with target RPO/RTO
-5. Await approval. Test restore only into an isolated env.
+5. **Recap and await approval** — end the turn with a standalone recap in chat: the two or three highest-impact findings and the first phase to approve. `plan-backup-dr.md` is the deliverable; write it before the recap. Test restore only into an isolated env.
 
 ## Related
 

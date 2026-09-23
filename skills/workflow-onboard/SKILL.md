@@ -5,6 +5,8 @@ description: >
   "orient me", "explain this codebase", "what does this do?", "onboard me", "first day on
   this project", or "catch me up on the codebase".
 license: MIT
+context: fork
+agent: Explore
 ---
 
 # workflow-onboard — Codebase Orientation
@@ -39,7 +41,7 @@ Orient to any repo in under 5 minutes. Read first, explain second.
 
 ## Step 1: Stack & entry points  [LOW freedom — run exactly]
 
-Read (do not shell-grep unless necessary):
+Read these in full (grep finds fragments; the briefing needs the whole file). The table is the floor, not the ceiling: when the repo does not match it (monorepo, unusual framework, no `src/app`), follow what the manifest and top-level tree point to before writing anything:
 
 | File | What to extract |
 |------|-----------------|
@@ -80,7 +82,7 @@ Produce a structured briefing covering:
 1. **What it is** — one sentence on the product's purpose
 2. **Tech stack** — framework + DB + auth + mobile targets
 3. **Feature map** — top-level routes grouped by capability
-4. **Data model** — key entities and relationships (3-5 tables max)
+4. **Data model** — the entities and relationships the feature map depends on, not the whole schema
 5. **Auth pattern** — how sessions work and who the roles are
 6. **How to run** — exact commands from `package.json` scripts
 7. **Environment** — required env vars (names only) and where to find values

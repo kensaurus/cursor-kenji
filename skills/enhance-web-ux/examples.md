@@ -96,7 +96,7 @@ out on a concrete page.
 ### Step 7 — Implement
 
 Land helpers first; component refactor next; page-level toolbar last. After each diff,
-ReadLints. Comment the *intent* only — e.g.:
+lint the touched files (ReadLints in Cursor; the repo's lint script in Claude Code). Comment the *intent* only — e.g.:
 
 ```tsx
 // Status column widened 64→78px so stacked AI+status chips never collide

@@ -2,6 +2,7 @@
 name: update-cursor-settings
 description: Modify Cursor/VSCode user settings in settings.json. Use when user wants to change editor settings, preferences, themes, font size, tab size, keybindings, or mentions "settings", "preferences", "theme", "font", "format on save", "auto save", or "cursor config".
 disable-model-invocation: true
+effort: low
 ---
 # Updating Cursor Settings
 
@@ -9,7 +10,7 @@ This skill guides you through modifying Cursor/VSCode user settings. Use this wh
 
 ## Check existing first
 
-**Before modifying ANY settings, verify:**
+**Before modifying settings, check:**
 
 1. **Read current settings:**
 ```bash
@@ -101,7 +102,7 @@ If user says "use dark theme" or "change my theme":
 
 ## Important Notes
 
-1. **JSON with Comments**: VSCode/Cursor settings.json supports comments (`//` and `/* */`). When reading, be aware comments may exist. When writing, preserve comments if possible.
+1. **JSON with Comments**: VSCode/Cursor settings.json supports comments (`//` and `/* */`). Parse accordingly and write the comments back; dropping them loses the user's notes.
 
 2. **Restart May Be Required**: Some settings take effect immediately, others require reloading the window or restarting Cursor. Inform the user if a restart is needed.
 
@@ -129,7 +130,7 @@ If user says "use dark theme" or "change my theme":
 
 ## Workflow
 
-1. Read ~/Library/Application Support/Cursor/User/settings.json
+1. Read the settings file for the current OS (path table above)
 2. Parse the JSON content
 3. Add/modify the requested setting(s)
 4. Write the updated JSON back to the file

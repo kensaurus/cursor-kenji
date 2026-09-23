@@ -5,6 +5,7 @@ description: >
   i18n", "fix translations", "add locale", "natural language", "translation quality",
   "hardcoded strings", "localisation", or "the Japanese feels like Google Translate".
 license: MIT
+effort: high
 ---
 
 # audit-i18n — Natural, Human-Sounding Translations
@@ -13,6 +14,13 @@ license: MIT
 Phase 2 key-diff and Phase 4 locale walk `[LOW freedom — run exactly]`.
 
 > **Audit-and-fix exception.** Find bad copy, then fix it. Not present-then-stop.
+>
+> Fix the strings the audit named — extract, rewrite, add the missing key —
+> with surgical edits to the source line and the locale entry; do not
+> reformat or re-key whole translation files, and copy you did not audit
+> stays as it is. Unrelated bugs met on the way go in the report as
+> follow-ups. Add tests only where the repo already tests i18n; the Phase 2
+> key-diff scripts stay out of the commit.
 
 **Translations that read like machine output erode user trust** — especially in
 the user's own language. Find every unnatural, jargon-heavy, or technically
@@ -218,10 +226,11 @@ For each active locale:
 2. Walk the key flows: onboarding, core feature, error states, empty states, settings
 3. Screenshot each screen for visual review
 
-```javascript
-// Set locale via URL or cookie depending on the app
-await page.goto('http://localhost:3000/ja'); // or set cookie
-await snapshot(); // capture the state
+```bash
+PW="npx --yes @playwright/cli@latest"
+$PW -s=i18n open --headed "http://localhost:3000/ja"   # or set the locale cookie, then `goto`
+$PW -s=i18n snapshot                                    # capture the state
+$PW -s=i18n screenshot --filename ".playwright-mcp/i18n-ja-<route>.png"
 ```
 
 Look for:

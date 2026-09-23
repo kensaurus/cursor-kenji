@@ -6,6 +6,7 @@ description: >
   "audit against RealWorld", "Conduit conformance", or "is my full-stack
   app complete?". General user journeys → audit-ux-journeys.
 license: MIT
+effort: high
 ---
 
 # audit-realworld — Full-Stack Gap Audit vs the RealWorld Reference
@@ -99,8 +100,8 @@ RealWorld reference chosen: <stack impl> (spec-compliant? maintained?)
   (`specs/`, Bruno `.bru`, Hurl `.hurl`) with a Postman collection for endpoint
   testing. The hosted API at `api.realworld.show` needs no keys.
 - Fetch the current spec and note the exact endpoint/response/error contracts
-  (summarized in Phase 2). Prefer the live spec over memory in case it has
-  evolved.
+  (summarized in Phase 2). Recognizing RealWorld is not knowing its current
+  endpoint contracts — read the spec as published, not from memory.
 
 ### 1b. Closest-stack reference implementation
 

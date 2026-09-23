@@ -6,6 +6,7 @@ description: >
   initial load", "large JS", "chunk size", "build performance", "LCP caused by JS", "why
   is the bundle so big", or "first load JS too large".
 license: MIT
+effort: high
 ---
 
 # audit-bundle-size — Find and Eliminate Bundle Bloat
@@ -15,6 +16,15 @@ Phase 1 production build + analyser `[LOW freedom — run exactly]`.
 
 > **Audit-and-fix exception.** Measure the payload, then shrink it. Runtime
 > slowness → `audit-performance`.
+>
+> Fix only what the measurement named, in the files it named; a repo-wide
+> dependency sweep the report did not list is a different session. Edit
+> surgically — the offending import, `dynamic()` boundary, or chunk config —
+> rather than rewriting whole files. Pre-existing bugs met on the way go in
+> the report as follow-ups. Add or change tests only where the repo already
+> keeps them for that surface; scratch checks and generated analyser reports
+> (`client.html`, `bundle-report.html`) stay out of the commit. An
+> `ANALYZE=true`-guarded analyser config stays only if the repo already keeps one.
 
 **Every kilobyte of JavaScript the browser must download, parse, and compile
 before showing anything costs real users real time.** A large initial bundle is
@@ -152,7 +162,7 @@ For the largest offenders, check current alternatives:
 ```json
 firecrawl:firecrawl_search
 {
-  "query": "replace <package-name> smaller alternative bundle size 2026",
+  "query": "replace <package-name> smaller alternative bundle size [current year]",
   "limit": 3,
   "sources": [{ "type": "web" }]
 }

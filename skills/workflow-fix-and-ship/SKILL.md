@@ -49,6 +49,7 @@ Triage → fix → verify → ship. Every step leaves evidence.
 5. PR         → workflow-pr
 6. POST-SHIP  → deploy-verify (optional if deploy is immediate)
 ```
+The turn ends at the Done criteria (Phase 6 only when a deploy is in scope) or at a real gate — a decision only the user can make, a missing credential, a failing service. A phase summary is a progress note, not a stopping point.
 
 ---
 
@@ -94,6 +95,8 @@ Rules:
 - Surgical change only — do not refactor unrelated code
 - Add a regression test that would have caught this bug
 - If the fix requires a schema change, apply via Supabase MCP and write the migration file
+- A pre-existing bug you notice on the way is a follow-up in the PR description, not part of this fix
+- The regression test is the only test this change adds unless the repo already keeps others for this path; scratch repro scripts stay out of the repo
 
 ---
 

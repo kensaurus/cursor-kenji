@@ -1,6 +1,7 @@
 ---
 description: "Close every plan-related deferral, implement the full closure set, and prove the result with fresh tests"
 argument-hint: "[plan file or approved outcome]"
+disable-model-invocation: true
 ---
 
 # Complete Everything

@@ -20,14 +20,14 @@ discovery `[LOW freedom — run exactly]`.
 1. **Discover** — tokens, `components/ui`, forbidden patterns
 2. **Reuse** — extend existing components; do not fork a second Button
 3. **Compose** — new surface on those tokens
-4. **Check** — type mins, 44px targets, reduced-motion, no AI clichés
+4. **Check** — type mins, 44px targets, reduced-motion, none of the named defaults in the Anti-Generic list
 
 ## Worked example
 
 > **Discover:** `components/ui/button.tsx` + `globals.css` tokens; `text-xs` min; `rounded-sm`.
 > **Reuse:** settings rows use existing `Button` / `Input`; no new primitive.
 > **Compose:** new `/settings` page — token spacing, `text-sm` body, 44px save.
-> **Check:** no Inter+purple gradient; `prefers-reduced-motion` on any spinner.
+> **Check:** Anti-Generic list clear (no Inter, purple-on-white, or pill buttons); `prefers-reduced-motion` on any spinner.
 
 ## Self-critique before reporting
 
@@ -38,7 +38,7 @@ discovery `[LOW freedom — run exactly]`.
 
 ---
 
-## Phase 1: Design System Discovery (MANDATORY)  [LOW freedom — run exactly]
+## Phase 1: Design System Discovery  [LOW freedom — run exactly]
 
 **Before writing ANY frontend code:**
 
@@ -126,11 +126,16 @@ Spacing: 1=4px, 2=8px, 3=12px, 4=16px, 6=24px, 8=32px
 
 ## Anti-Generic Checklist
 
-Avoid these AI clichés:
-- [ ] Inter/Roboto/Arial fonts
-- [ ] Purple gradients on white
-- [ ] Cookie-cutter card layouts
-- [ ] Same choices every generation
+Undirected drafts land on the same few defaults; the check is concrete only when they are named:
+- [ ] Inter / Roboto / Arial as the display or body face
+- [ ] Purple (violet/indigo) gradient on white
+- [ ] Cream / off-white page background
+- [ ] Italic accent words inside headlines
+- [ ] "01 / 02 / 03" numbered section labels
+- [ ] Monospace eyebrow labels on a non-code product
+- [ ] Pill-shaped (fully rounded) buttons as the house button
+- [ ] Three equal cards in a row as the default section layout
+Extend this list with whatever the first draft used instead.
 
 ---
 

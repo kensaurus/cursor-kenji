@@ -145,7 +145,7 @@ For each signal category that surfaced issues:
 ```json
 firecrawl:firecrawl_search
 {
-  "query": "<framework> <issue-type> fix best practices 2026",
+  "query": "<framework> <issue-type> fix best practices <current year>",
   "limit": 3,
   "sources": [{ "type": "web" }]
 }
@@ -198,7 +198,7 @@ Work through the approved list one by one, following
 
 1. Read the file before editing. Understand the existing pattern.
 2. Make the surgical change. No refactoring unrelated code.
-3. `ReadLints` after each edit. Fix introduced linter errors.
+3. Run the repo's lint/typecheck after each edit (Cursor: `ReadLints`). Fix introduced errors.
 4. For Supabase schema fixes (missing index, RLS policy):
    - Deploy via MCP: `apply_migration` for DDL, `execute_sql` for data fixes
    - Write the matching versioned migration file under `supabase/migrations/`

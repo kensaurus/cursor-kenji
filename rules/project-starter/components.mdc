@@ -9,7 +9,7 @@ alwaysApply: false
 Performance (LCP images, INP, bfcache) → `web-performance.mdc`.
 
 ## Reuse First
-- ALWAYS check `@/components/ui/` before creating any UI element
+- Check `@/components/ui/` before creating any UI element; a second Button or Dialog forks the design system
 - Import existing primitives: Button, Card, Input, Dialog, etc.
 - Use `cn()` from `@/lib/utils` for className composition
 - Use CVA (class-variance-authority) for component variants

@@ -5,6 +5,7 @@ metadata:
   surfaces:
     - cli
 disable-model-invocation: true
+effort: low
 ---
 # Cursor CLI Configuration
 

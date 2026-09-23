@@ -1,6 +1,7 @@
 ---
 description: "Consolidate accreted CI gates into one aggregator required check — apply phase by phase"
 argument-hint: "[archaeology map or workflow path]"
+disable-model-invocation: true
 ---
 
 # Housekeep Gates

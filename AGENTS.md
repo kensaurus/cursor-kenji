@@ -10,6 +10,16 @@ Default install merges; `--clean` is opt-in. Descriptions cap at 320
 chars. Do not submit the Official MCP Registry — we ship templates, not
 a server.
 
+**Model story.** One model, routed by effort: deep-reasoning families
+declare `effort: high`, mechanical ones `effort: low`, implementation
+inherits the default (ADR-0006). There is no "strong planner / fast
+executor" split; approved plans run under `approved-plan-execution.mdc`
+(ADR-0007). Every description without `disable-model-invocation: true`
+rides one always-on roster; `validate-skills` fails above `ROSTER_MAX_CHARS`,
+and commands are `/`-only while skills keep the auto-route (ADR-0008).
+Reasoning depth is effort, never a reasoning MCP server (ADR-0009). Model
+and host version facts live in the ADRs, not here.
+
 `docs/AGENTS.template.md` is the constitution **copied into other
 repos**. Do not treat it as this pack's own agent notes.
 

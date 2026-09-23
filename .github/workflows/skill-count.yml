@@ -4,7 +4,20 @@ on:
   pull_request:
     paths:
       - "skills/**"
+      - "skills-cursor/**"
+      - "commands/**"
+      - "agents/**"
+      - "rules/project-starter/**"
       - "README.md"
+      - "package.json"
+      - "llms.txt"
+      - "docs/CATALOG.md"
+      - "docs/PROMOTION.md"
+      - "docs/GETTING-STARTED.md"
+      - "docs/README.md"
+      - ".cursor-plugin/plugin.json"
+      - ".claude-plugin/plugin.json"
+      - ".claude-plugin/marketplace.json"
       - "scripts/check-skill-count.mjs"
   push:
     branches: [main]

@@ -7,11 +7,12 @@ description: >
   spaghetti imports". Advisory audit → audit-backend-architecture.
   Rule content → audit-doctrine.
 license: MIT
+effort: high
 ---
 
 # enhance-arch-boundaries — Architecture as a fitness function
 
-**Degree of freedom: MIXED — T1 is the priority.** Recovering the model
+**Degree of freedom: MIXED.** Recovering the model
 `[HIGH freedom]`; do-not-invent, shrink-only baseline, and deliberate-violation
 probes `[LOW freedom — run exactly]`.
 

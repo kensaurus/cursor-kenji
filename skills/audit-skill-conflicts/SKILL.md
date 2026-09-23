@@ -6,13 +6,14 @@ description: >
   "conflicting skills", "wrong skill triggered", or after adding a batch.
   Per-file spec → validate:skills. How to write one → meta-skill-creator.
 license: MIT
+effort: high
 ---
 
 # audit-skill-conflicts — Pack coherence, not product QA
 
 **Degree of freedom: MIXED** — Phases 0–1 `[HIGH freedom]`; Phase 2 routing
 dry-run `[LOW freedom]` — skip explicitly if the harness cannot show
-selection. Never write `audit-responsive-layout`.
+selection. The retired `audit-responsive-layout` name appears in your report only as a dangling-reference finding, never as a handoff.
 
 Read-only. Most other `audit-*` skills inspect an app or repository you
 ship. This one inspects **the skill pack it lives in**.
@@ -110,7 +111,13 @@ product gaps.
 
 **Context-budget bloat** — Over-broad descriptions (narrow skill, greedy
 triggers). Bodies near the 500-line cap that a 60-line skill could hold.
-Headroom exists because context is scarce; the pack should respect that.
+**Context-budget bloat** — Over-broad descriptions (narrow skill, greedy
+triggers): descriptions ride in every request, so they are the always-on
+cost. Bodies load only on trigger and cache well; flag a body for dated
+instructions, not for length alone. User-initiated rituals should carry
+`disable-model-invocation: true` (drops the description from the roster;
+Cursor and Claude Code both honor it); reference-only skills
+`user-invocable: false` (Claude Code).
 
 **Convention drift** — Family-placement (audit-and-fix under `enhance-*` is
 OK when called out, like `enhance-email-deliverability`). Inconsistent

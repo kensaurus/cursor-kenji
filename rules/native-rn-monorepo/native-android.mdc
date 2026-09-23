@@ -9,8 +9,9 @@ alwaysApply: false
 Stack: Kotlin first, Java only when required by RN bridge or
 legacy code.
 Build: Gradle (Kotlin DSL where present).
-Min SDK / target SDK / compile SDK: read `android/build.gradle` —
-do NOT change without explicit instruction.
+Min SDK / target SDK / compile SDK: read `android/build.gradle`;
+change them only on explicit instruction — they cascade through AGP,
+Gradle, and every native dependency.
 
 > Adjust `android/` to your repo's actual path (e.g.
 > `apps/mobile/android/`).
@@ -23,10 +24,11 @@ do NOT change without explicit instruction.
   `android/app/src/main/java/<package>/modules/`.
 - Each native module = one `*Module.kt` (extends
   `ReactContextBaseJavaModule`) + one `*Package.kt`.
-- Register packages in `MainApplication.kt` (or via the new RN
-  auto-linking if applicable).
-- Async: Coroutines + Flow. Never `AsyncTask`, never raw `Thread`,
-  never RxJava unless the project already uses it.
+- Register packages in `MainApplication.kt` unless RN autolinking
+  already picks them up.
+- Async: Coroutines + Flow (`AsyncTask` is deprecated since API 30;
+  a raw `Thread` has no lifecycle scope). RxJava only if the project
+  already uses it.
 - Logging: `android.util.Log` with tag = class name. Wrap verbose
   logs in `BuildConfig.DEBUG` checks.
 - Strings: `android/app/src/main/res/values/strings.xml`. No
@@ -37,7 +39,7 @@ do NOT change without explicit instruction.
 - Compose (if used): follow `MaterialTheme` tokens, no raw
   `Color()` literals in screen code.
 
-## Build verification (REQUIRED after any change)
+## Build verification (after any change)
 
 Run `/android-build` or directly:
 
@@ -45,8 +47,8 @@ Run `/android-build` or directly:
 cd android && ./gradlew :app:assembleDebug --console=plain
 ```
 
-Parse the output. If `BUILD FAILED`, fix the first error and
-re-run. Do not declare done without `BUILD SUCCESSFUL`.
+The change is verified only on `BUILD SUCCESSFUL`; on `BUILD FAILED`
+the first error is usually the root cause and later ones cascade.
 
 If you hit `OutOfMemoryError` or metaspace errors, add to
 `android/gradle.properties`:
@@ -58,7 +60,7 @@ org.gradle.parallel=true
 org.gradle.caching=true
 ```
 
-## What NOT to do
+## Boundaries
 
 - Do not add a new native module if the JS-side library can do it.
 - Do not edit `MainActivity.kt` ReactRootView wiring without

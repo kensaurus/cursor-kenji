@@ -53,7 +53,7 @@ CREATE TRIGGER set_updated_at
 -- 5. Indexes on foreign keys and frequently queried columns
 CREATE INDEX idx_table_name_status ON table_name(status);
 
--- 6. RLS — MANDATORY on every table
+-- 6. RLS on every table (Supabase exposes tables through PostgREST; without it every row is readable with the anon key)
 ALTER TABLE table_name ENABLE ROW LEVEL SECURITY;
 
 -- 7. RLS policies
@@ -102,7 +102,7 @@ CREATE INDEX CONCURRENTLY idx_users_email ON users(email);
 ## Post-Migration
 
 1. **Verify** — Query the table to confirm schema
-2. **Update types** — `supabase gen types typescript --local > types/database.types.ts`
+2. **Update types** — `supabase gen types typescript --project-id <ref>` (or `--local` when the local stack is the source of truth), written to the file the app already imports its `Database` type from
 3. **Test RLS** — Query as different user contexts
 4. **Update app code** — Ensure all queries match new schema
 

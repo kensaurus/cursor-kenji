@@ -6,6 +6,7 @@ description: >-
   "stress-test this plan", "interview me about this", "poke holes in this",
   "challenge my thinking", or before committing to a non-trivial design.
 license: MIT
+effort: high
 ---
 
 # Grilling
@@ -52,7 +53,9 @@ tree, resolving dependencies between decisions one by one.
 3. **Facts are yours; decisions are theirs.** If a *fact* can be found by
    exploring the environment (filesystem, git history, docs, running commands),
    look it up instead of asking. *Decisions* belong to the user — put each one to
-   them and wait.
+   them and wait. Before the first question, read the relevant sources broadly —
+   repo, docs, git history, tickets — so the first question is already a
+   decision, not a fact.
 4. **Resolve dependencies in order.** When one decision hinges on another,
    surface the upstream decision first.
 5. **Challenge vague terms.** When the user uses an overloaded or fuzzy word,

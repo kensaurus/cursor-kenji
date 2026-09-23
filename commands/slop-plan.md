@@ -1,6 +1,8 @@
 ---
 description: "AI slop / authenticity / voice audit + de-slop burndown — plan only, no rewrites until approved"
 argument-hint: "[path or scope]"
+disable-model-invocation: true
+effort: high
 ---
 
 # Anti-Slop Plan

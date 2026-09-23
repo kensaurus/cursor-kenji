@@ -1,3 +1,7 @@
+---
+description: "Fetch the latest failed iOS CI run's logs and categorize the failure"
+---
+
 # /ios-ci-logs
 
 Fetch logs from the latest failed iOS CI build and diagnose.
@@ -31,8 +35,7 @@ Fetch logs from the latest failed iOS CI build and diagnose.
    | `EX_BAD_ACCESS` during build | Random Xcode flake — re-run before investigating |
 
 4. Report:
-   - The failed step name and 5–15 lines of the failure context
-     (not the whole log).
+   - The failed step name and the lines around the first real error (not the whole log).
    - Categorized cause (from the table above or a new diagnosis).
    - Concrete fix suggestion. For "random flake" categories,
      suggest re-running before code changes.

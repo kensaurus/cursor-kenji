@@ -1,6 +1,8 @@
 ---
 description: "Dead-code audit — configured Knip baseline plus ratchet plan, delete nothing until approved"
 argument-hint: "[path or workspace]"
+disable-model-invocation: true
+effort: high
 ---
 
 # Dead Code Plan

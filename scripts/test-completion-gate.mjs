@@ -75,6 +75,27 @@ try {
     "gate continued an errored agent turn",
   );
 
+  // Claude Code Stop payload: cwd (possibly a subdirectory), decision output, loop cap.
+  const runClaude = (cwd) => JSON.parse(execFileSync(process.execPath, [hook], {
+    cwd: repoRoot,
+    input: JSON.stringify({ hook_event_name: "Stop", cwd, stop_hook_active: false }),
+    encoding: "utf8",
+  }));
+  rmSync(join(stateDir, "completion-gate.count.json"), { force: true });
+  writeFileSync(join(stateDir, "complete-everything-state.md"), "# State\n\n## Work\n- [ ] implement the next item\n");
+  const sub = join(sandbox, "packages", "web");
+  mkdirSync(sub, { recursive: true });
+  const claudeBlock = runClaude(sub);
+  expect(claudeBlock.decision === "block" && claudeBlock.hookSpecificOutput?.decision === "block", "Claude Stop did not block an actionable state from a subdirectory cwd");
+  expect(claudeBlock.reason?.includes("implement the next item"), "Claude reason omitted the pending item");
+  for (let i = 1; i < 12; i++) runClaude(sandbox);
+  expect(runClaude(sandbox).decision === undefined, "Claude gate did not stand aside after LOOP_LIMIT blocks on an unchanged checklist");
+  writeFileSync(join(stateDir, "complete-everything-state.md"), "# State\n\n## Work\n- [ ] a different item\n");
+  expect(runClaude(sandbox).decision === "block", "a changed checklist did not reset the loop counter");
+  writeFileSync(join(stateDir, "complete-everything-state.md"), "# State\n\n## Work\n- [x] done\n");
+  expect(runClaude(sandbox).decision === undefined, "Claude gate blocked a completed state");
+  expect(runClaude(sandbox).followup_message === undefined, "Claude branch leaked the Cursor output field");
+
   process.stdout.write("✓ completion gate tests passed.\n");
 } finally {
   rmSync(sandbox, { recursive: true, force: true });

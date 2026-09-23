@@ -1,6 +1,8 @@
 ---
 description: "Pricing and packaging audit — value metric, tiers, price corridor, research plan — plan only, no price edits"
 argument-hint: "[product or pricing route]"
+disable-model-invocation: true
+effort: high
 ---
 
 # Pricing Plan

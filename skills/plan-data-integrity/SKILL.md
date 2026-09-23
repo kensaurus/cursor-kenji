@@ -6,6 +6,7 @@ description: >
   "my agent might delete prod", or "safe schema changes". Restore drills and RPO/RTO
   belong to plan-backup-dr. Source transforms → audit-codemod-safety.
 license: MIT
+effort: high
 ---
 
 # Data-Integrity & Destructive-Op Audit + Safeguard Plan
@@ -112,7 +113,7 @@ only question is: *"what here could destroy data, and what stops it?"*
 2. **Trace each to impact.** Reversible? gated? backed up outside blast radius?
 3. **Score.** "Agent can delete prod, backups share volume" = Critical, top of list.
 4. **Phase** — gates and blast-radius separation first.
-5. **Emit `plan-data-integrity.md`. End the turn. Do not edit anything.**
+5. **Emit `plan-data-integrity.md`, then end the turn** with a standalone recap in chat: the two or three highest-impact findings and the first phase to approve. The file is the deliverable — write it before the recap. **Do not edit anything.**
 
 ---
 
@@ -183,6 +184,4 @@ Restore proof is `plan-backup-dr`, never this skill.
 - **Execution:** `db-migrator`, `backend-patterns`, infra config, `create-hook`.
 - **Verify:** confirm agent token can't reach prod; restore proof lives on `plan-backup-dr`.
 
-> Plan with a strong model; execute with `composer-2.5-execution.mdc` riding
-> along. Highest-stakes plan in the set — the plan says *what* can destroy data;
-> the rule forbids the agent from doing it autonomously.
+> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`). Highest-stakes plan in the set — the plan says *what* can destroy data; the rule forbids the agent from doing it autonomously, on any model.

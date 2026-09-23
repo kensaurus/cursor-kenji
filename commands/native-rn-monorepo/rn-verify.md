@@ -1,3 +1,8 @@
+---
+description: "Smoke-compile TypeScript, lint, Android Kotlin/Java, and web typecheck; iOS is verified via CI"
+effort: low
+---
+
 # /rn-verify
 
 Quick compile check across all locally-buildable targets. iOS is

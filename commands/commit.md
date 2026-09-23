@@ -1,6 +1,7 @@
 ---
 description: "Create one conventional commit from an already-scoped change; never push"
 argument-hint: "[message]"
+disable-model-invocation: true
 ---
 
 # /commit

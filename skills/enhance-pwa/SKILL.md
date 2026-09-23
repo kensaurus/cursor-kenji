@@ -64,22 +64,7 @@ const pwaReady = {
 
 ## Phase 1: Research framework-specific PWA tooling  [HIGH freedom]
 
-```json
-firecrawl:firecrawl_search
-{
-  "query": "<framework> PWA service worker offline 2026 vite-plugin-pwa",
-  "limit": 3,
-  "sources": [{ "type": "web" }]
-}
-```
-
-Fetch the official docs for the relevant PWA plugin via Context7:
-```json
-context7:resolve-library-id
-{
-  "libraryName": "vite-plugin-pwa"
-}
-```
+Follow `/research`: Context7 for the PWA plugin that matches the framework (`vite-plugin-pwa`, `@ducanh2912/next-pwa`, `@vite-pwa/nuxt`), Firecrawl for current service-worker and offline guidance. Search the plugin name as written and anchor to the framework version actually installed — recognizing a package is not knowing its current API.
 
 ---
 
@@ -271,19 +256,7 @@ For the backend, use `web-push` (Node.js) or your platform's push service.
 
 ## Phase 7: Verify with Lighthouse (Playwright)  [LOW freedom — do not skip]
 
-```javascript
-// Run Lighthouse via eval
-// (Playwright does not run Lighthouse natively — use Chrome DevTools Protocol)
-const { lhr } = await page.evaluate(() => {
-  return new Promise((resolve) => {
-    // Trigger Lighthouse via CDP if available in the test environment
-    // Otherwise, use the Lighthouse CLI:
-    // npx lighthouse http://localhost:3000 --output json --output-path ./lh-report.json
-  });
-});
-```
-
-Or run Lighthouse via CLI and check the PWA category score:
+Run Lighthouse via CLI and check the PWA category score:
 ```bash
 npx lighthouse http://localhost:3000 \
   --output json --output-path .playwright-mcp/lh-report.json \
@@ -304,9 +277,7 @@ Target PWA score: **≥ 90**. Key checks:
 ## Guardrails
 
 - **Service worker caching can break deployments** if old caches persist.
-  Always use `registerType: 'autoUpdate'` (Workbox prompts the user to reload
-  when a new version is available) rather than silent background updates that
-  serve stale code.
+  Use `registerType: 'autoUpdate'` (the new service worker activates and the page reloads on its own) or `'prompt'` (the user is asked to reload) — never a silent background update that keeps serving stale precached code.
 - **Never cache auth tokens or sensitive API responses** in the service worker.
 - **Test offline mode manually** via DevTools → Network → Offline before shipping.
 - **Capacitor apps**: confirm the Capacitor bridge still works after adding the

@@ -92,6 +92,7 @@ Monitor window: <duration> · thresholds: <error rate / latency / crash-free>
 ## Evidence
 - <step>: <command/result>
 ```
+The state file is the source of truth across context compaction and across the monitoring window; re-read it before each phase and before any claim.
 
 ## Phase 1 — Preflight  [LOW freedom — run exactly]
 

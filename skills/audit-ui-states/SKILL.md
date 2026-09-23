@@ -6,6 +6,7 @@ description: >
   "check empty/error states", "audit loading states", or "what happens when this
   fails". Dead buttons → plan-stub-checker; backend timeouts → audit-resilience.
 license: MIT
+effort: high
 ---
 
 # audit-ui-states — Unhappy-path state matrix
@@ -21,8 +22,6 @@ blank boxes, infinite spinners, raw error objects, and broken overflow.
 in the demo and falls apart the first time a list is empty or a request fails.
 
 > **Present the matrix first. Implement only on approval.**
-
-**Before any browser work, read `protocol-browser-anti-stall`.**
 
 ## This skill vs neighbors
 

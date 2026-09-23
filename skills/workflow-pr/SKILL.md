@@ -83,7 +83,7 @@ Before committing, verify:
 
 ---
 
-## Phase 2: Monitor PR (REQUIRED)  [LOW freedom — run exactly]
+## Phase 2: Monitor PR  [LOW freedom — run exactly]
 
 ### 4. Poll Status
 
@@ -113,7 +113,7 @@ When reviews complete:
  - Reply confirming fix
  - **Mark thread resolved**
 
-3. **Never ignore feedback** - Every comment must be addressed
+3. Address every comment — an unresolved thread fails Gate 2
 
 ### 6. Wait for Re-validation
 

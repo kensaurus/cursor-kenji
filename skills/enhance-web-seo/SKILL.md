@@ -15,7 +15,7 @@ license: MIT
 finds every gap between your app and how search engines see it, then fixes them
 in order of impact.
 
-**Before ANY browser action, read `protocol-browser-anti-stall`.**
+Before browser work, read `protocol-browser-anti-stall` and apply it.
 
 ## How to reason
 
@@ -101,7 +101,7 @@ const images = await page.evaluate(() =>
 
 ### 1d. Core Web Vitals
 
-CWV is a ranking input (INP replaced FID in March 2024). Measure field p75 via
+CWV (LCP, INP, CLS) is a ranking input. Measure field p75 via
 CrUX/PSI. Do **not** fix CWV here — hand off:
 - LCP / INP / CLS root cause → `audit-performance` §Loading Priority & Speculation
 - JS weight → `audit-bundle-size`
@@ -150,7 +150,7 @@ Validate each JSON-LD block found in Phase 1a:
 ```json
 firecrawl:firecrawl_search
 {
-  "query": "Google SEO best practices Core Web Vitals ranking 2026",
+  Follow `/research`: Context7 for the framework's metadata, sitemap, and robots API; Firecrawl for current Google guidance on CWV, structured data, and rich results, dated to now. Anchor to the framework version actually installed.
   "limit": 3,
   "sources": [{ "type": "web" }]
 }

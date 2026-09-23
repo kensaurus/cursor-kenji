@@ -222,6 +222,8 @@ From a clone:
 
 Skills are read from `~/.claude/skills/<name>/SKILL.md`. No restart required when you re-run the installer — Claude Code picks up file changes at the start of each new session.
 
+**Model and effort.** Claude Code 2.1.280+ defaults to Claude Opus 5.5 (`opus` alias). Its effort default is `medium` — the level Anthropic measured at or above Opus 5 `high` on agentic coding, in fewer steps and about half the tokens — and thinking cannot be switched off, so effort is the only thinking control. The top-level `effortLevel` setting does not apply to it; set effort with `/effort <low|medium|high|xhigh|max>`, per-model `modelSettings`, or a skill's `effort:` frontmatter key. Pack convention: audit, plan, judge, debug and security skills at `high`; ordinary implementation at the `medium` default; read-only inventory, formatting, and `/handoff` at `low`. Cursor ignores the `effort:` key. Full story → [docs/MODEL-AND-EFFORT.md](docs/MODEL-AND-EFFORT.md).
+
 ### Codex CLI & Gemini CLI
 
 Codex CLI and Gemini CLI don't have a skills system yet. Each reads a single global context file instead:
@@ -266,6 +268,8 @@ You don't memorize names — describe the job in chat. Exact trigger phrases →
 <!-- SKILL-INDEX:START -->
 
 _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **168 skills** listed below._
+
+_Skills marked `/name only` are user-invoked rituals; `reference only` skills are loaded by other skills; every other skill auto-routes from a plain request._
 
 #### Skill families at a glance
 
@@ -490,7 +494,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 
 | Skill | What it does |
 |:------|:-------------|
-| `deploy-npm` | Release an npm package: version, CHANGELOG, publish, verify |
+| `deploy-npm` | Release an npm package: version, CHANGELOG, publish, verify — `/deploy-npm` only |
 | `deploy-verify` | Post-deploy smoke test across browser, Sentry, Supabase, Langfuse, and the public web |
 
 ### Debug — find & fix what's broken (3)
@@ -506,21 +510,21 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | Skill | What it does |
 |:------|:-------------|
 | `iterate-agent-harness` | Turn an agent failure—premature stop, false completion, gamed check, missed file, broken handoff—into a durable rule/skill/hook/CI guard… |
-| `iterate-gtm-weekly` | Weekly go-to-market review for a shipped product: funnel by source, activation cohort, top drop-off, launch results, then one experiment… |
+| `iterate-gtm-weekly` | Weekly go-to-market review for a shipped product: funnel by source, activation cohort, top drop-off, launch results, then one experiment… — `/iterate-gtm-weekly` only |
 | `iterate-post-launch` | Close the feedback loop for an already-live app: inspect production signals, prioritize top issues, fix, verify live, repeat |
 
 ### Mushi Mushi — bug triage helpers (2)
 
 | Skill | What it does |
 |:------|:-------------|
-| `mushi-health` | Pass/fail health check across every Mushi Mushi pipeline component — CLI credentials, API reachability, edge functions, BYOK key pool, QA… |
-| `mushi-integration` | Full end-to-end Mushi Mushi integration smoke test: bug capture → AI triage → story mapping → TDD test generation → approval → execution →… |
+| `mushi-health` | Pass/fail health check across every Mushi Mushi pipeline component — CLI credentials, API reachability, edge functions, BYOK key pool, QA… — `/mushi-health` only |
+| `mushi-integration` | Full end-to-end Mushi Mushi integration smoke test: bug capture → AI triage → story mapping → TDD test generation → approval → execution →… — `/mushi-integration` only |
 
 ### Protocols — session guardrails (1)
 
 | Skill | What it does |
 |:------|:-------------|
-| `protocol-browser-anti-stall` | Browser-session guardrail for Playwright CLI: use headed, named, isolated sessions; prevent parallel collisions and recover stalls without… |
+| `protocol-browser-anti-stall` | Browser-session guardrail for Playwright CLI: use headed, named, isolated sessions; prevent parallel collisions and recover stalls without… _(reference only)_ |
 
 ### Authoring — build skills & MCP (2)
 
@@ -543,7 +547,7 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 |:------|:-------------|
 | `burndown-full` | Drive a planned mechanical change to 100% repo coverage when a prior run stopped early |
 | `complete-everything` | Explicit closure mode for one approved plan: implement unfinished items plus connected deferrals, verify every acceptance criterion,… |
-| `handoff` | Compact the current conversation into a handoff document a fresh agent can pick up |
+| `handoff` | Compact the current conversation into a handoff document a fresh agent can pick up — `/handoff` only |
 | `research` | Research current best practices with Context7, Firecrawl, and official docs before a non-trivial change |
 
 ### Cursor IDE skills (12)
@@ -551,17 +555,17 @@ _Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` a
 | Skill | What it does |
 |:------|:-------------|
 | `babysit` | Keep an already-open PR merge-ready: triage comments, resolve clear conflicts, fix CI |
-| `canvas` | Create a live React canvas beside chat for standalone analytical artifacts that benefit from visual layout: quantitative/security/… |
-| `create-hook` | Create Cursor hooks |
-| `create-rule` | Create Cursor rules for persistent AI guidance |
-| `create-skill` | Guide users through creating effective Agent Skills for Cursor |
-| `create-subagent` | Create custom subagents for specialized AI tasks |
-| `migrate-to-skills` | Convert 'Applied intelligently' Cursor rules (.cursor/rules/*.mdc) and slash commands (.cursor/commands/*.md) to Agent Skills format… |
-| `shell` | Run the rest of a /shell request as a literal shell command |
-| `split-to-prs` | Split current work into small reviewable PRs |
-| `statusline` | Configure a custom status line in the CLI |
-| `update-cli-config` | View and modify Cursor CLI configuration in ~/.cursor/cli-config.json |
-| `update-cursor-settings` | Modify Cursor/VSCode user settings in settings.json |
+| `canvas` | Create a live React canvas beside chat for standalone analytical artifacts that benefit from visual layout: quantitative/security/… _(reference only)_ |
+| `create-hook` | Create Cursor hooks — `/create-hook` only |
+| `create-rule` | Create Cursor rules for persistent AI guidance — `/create-rule` only |
+| `create-skill` | Guide users through creating effective Agent Skills for Cursor — `/create-skill` only |
+| `create-subagent` | Create custom subagents for specialized AI tasks — `/create-subagent` only |
+| `migrate-to-skills` | Convert 'Applied intelligently' Cursor rules (.cursor/rules/*.mdc) and slash commands (.cursor/commands/*.md) to Agent Skills format… — `/migrate-to-skills` only |
+| `shell` | Run the rest of a /shell request as a literal shell command — `/shell` only |
+| `split-to-prs` | Split current work into small reviewable PRs — `/split-to-prs` only |
+| `statusline` | Configure a custom status line in the CLI — `/statusline` only |
+| `update-cli-config` | View and modify Cursor CLI configuration in ~/.cursor/cli-config.json — `/update-cli-config` only |
+| `update-cursor-settings` | Modify Cursor/VSCode user settings in settings.json — `/update-cursor-settings` only |
 
 <!-- SKILL-INDEX:END -->
 
@@ -658,7 +662,7 @@ Set `FIRECRAWL_API_KEY`, `CONTEXT7_API_KEY`, `SUPABASE_ACCESS_TOKEN`, and `SUPAB
 | Tier | Servers | Keys? |
 |:-----|:--------|:------|
 | Essential | Firecrawl, Context7, Supabase | Firecrawl + Context7 + Supabase |
-| Dev | GitHub, GitHub Official, Sequential Thinking, Playwright, Postgres, Memory, Chrome DevTools | PAT / conn string |
+| Dev | GitHub, GitHub Official, Playwright, Postgres, Memory, Chrome DevTools | PAT / conn string |
 | Cloud | AWS Lambda, S3, CloudWatch, Redis | AWS profile / URL |
 | Productivity | Slack, Notion | Bot token / API key |
 
@@ -680,9 +684,9 @@ cp ~/cursor-kenji/rules/project-starter/*.mdc your-project/.cursor/rules/
 | `web-performance.mdc` | LCP priority, INP yield, bfcache, budgets |
 | `git.mdc` | Conventional commits, no secrets |
 
-Global rules installed by the pack: `full-stack-ship-discipline.mdc`, `composer-2.5-execution.mdc`, `skill-workflows.mdc`, `senior-engineer.mdc`, `verification-before-completion.mdc`.
+Global rules installed by the pack: `full-stack-ship-discipline.mdc`, `approved-plan-execution.mdc`, `skill-workflows.mdc`, `senior-engineer.mdc`, `verification-before-completion.mdc`, `shell-first-search.mdc`.
 
-> **Plan with a strong model, execute with Composer 2.5.** The 23 `plan-*` skills are authored/reviewed with a stronger reasoning model; `composer-2.5-execution.mdc` constrains how approved plans are implemented.
+> **Plan at high effort, execute at medium, judge in a fresh context.** One model does all three — Claude Opus 5.5 is the Claude Code default and a Cursor agent model — so the old strong-planner / fast-implementer split is an effort split. Run the 23 `plan-*` skills at high (`/effort high`, or the skill's `effort:` key on Claude Code); implement approved plans at the medium default under `approved-plan-execution.mdc` (anti-reward-hacking, anti-deletion, checkpoints — model-agnostic); let `completion-judge` verify at high in a separate context. Details → [docs/MODEL-AND-EFFORT.md](docs/MODEL-AND-EFFORT.md).
 
 **Project constitution:** copy [docs/AGENTS.template.md](docs/AGENTS.template.md) to your app repo as `AGENTS.md`.
 

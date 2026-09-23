@@ -6,12 +6,13 @@ description: >
   periods, and entitlements. Use when "audit our IAP", "restore purchases
   broken", or before a paid app. Web Stripe/ledgers → audit-payment-system.
 license: MIT
+effort: high
 ---
 
 # audit-monetization-iap — Store billing & entitlements
 
 **Degree of freedom: MIXED** — Phases 0–1 `[HIGH freedom]`; Phase 2 sandbox
-`[LOW freedom — run exactly]`. Never test against real billing.
+`[LOW freedom — run exactly]`, sandbox only: a real purchase charges a real card and cannot be undone from here.
 
 Read-only. Entitlements must match what users paid for: no unlock-without-pay,
 no paid-but-locked, no double-charge, no lost purchase on reinstall.
@@ -97,7 +98,7 @@ clock-gamed trials.
 
 Exercise: fresh purchase, restore on clean install, cancel → access ends at
 period end, sandbox refund → revoke, trial → convert, interrupted purchase.
-Confirm backend entitlement flips. Never real billing.
+Confirm backend entitlement flips.
 
 ---
 

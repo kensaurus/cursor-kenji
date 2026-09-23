@@ -1,6 +1,7 @@
 ---
 description: "Drive the whole repository to a verified-green baseline — typecheck, lint, tests, build — with authorized fixing of pre-existing debt"
 argument-hint: "[optional package/scope]"
+disable-model-invocation: true
 ---
 
 # Green Repo

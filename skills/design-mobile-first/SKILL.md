@@ -439,8 +439,8 @@ export const metadata = {
  viewport: {
  width: 'device-width',
  initialScale: 1,
- maximumScale: 1, // Prevents zoom on input focus
- userScalable: false,
+ // No maximumScale / userScalable: false — the 16px inputs above already stop iOS focus-zoom,
+ // and disabling pinch-zoom fails WCAG 1.4.4
  viewportFit: 'cover', // For notched devices
  },
  appleWebApp: {

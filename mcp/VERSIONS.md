@@ -8,7 +8,6 @@ Single source of truth: [`pinned-versions.json`](pinned-versions.json). Template
 
 | Package | Pin | Notes |
 |---------|-----|-------|
-| `@modelcontextprotocol/server-sequential-thinking` | 2026.8.31 | |
 | `@modelcontextprotocol/server-github` | 2025.4.8 | full template only |
 | `@modelcontextprotocol/server-postgres` | 0.6.2 | |
 | `@modelcontextprotocol/server-redis` | 2025.4.25 | |

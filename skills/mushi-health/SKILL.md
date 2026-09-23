@@ -6,6 +6,8 @@ description: >-
   Use when "is mushi working", "mushi health check", "check mushi pipeline",
   "mushi deploy check", "pipeline not responding", or right after setup.
 license: MIT
+disable-model-invocation: true
+effort: low
 ---
 
 # Mushi Health Check

@@ -6,6 +6,7 @@ description: >
   "what data do we collect?", "App Store privacy labels", or a consumer
   launch. Analytics consent instrumentation → audit-analytics.
 license: MIT
+effort: high
 ---
 
 # plan-privacy-compliance — Data-flow & legal-surface plan
@@ -135,7 +136,7 @@ policy/text change).
 2. **Findings** — issue | GDPR/APPI/store | severity | evidence
 3. **Store-label diff** — claimed vs actual
 4. **Phased plan** — P0/P1/P2 → executing skill
-5. Await approval.
+5. **Recap and await approval** — end the turn with a standalone recap in chat: the two or three highest-impact findings (collected-but-undisclosed first) and the first phase to approve. `plan-privacy-compliance.md` is the deliverable; write it before the recap.
 
 ## Related
 

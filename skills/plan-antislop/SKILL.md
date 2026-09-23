@@ -6,6 +6,7 @@ description: >
   burndown". One-page UX apply → enhance-web-ux. Visual polish →
   enhance-web-ui.
 license: MIT
+effort: high
 ---
 
 # Anti-Slop Audit + Authenticity Burndown Plan
@@ -182,9 +183,9 @@ The shape of the thing:
      replace symmetrical scaffolding with purpose-driven structure.
    - **Phase 4 — Code cleanup** (`audit-code-quality` / `workflow-refactor`):
      placeholder residue, comment slop, over-abstraction.
-5. **Emit the report.** Write `plan-antislop.md` (template below). End the turn.
+5. **Emit the report.** Write `plan-antislop.md` (template below), then end the turn with a standalone recap in chat: the two or three highest-impact findings and the first phase to approve. The file is the deliverable — write it before the recap.
    **Do not start Phase 1.** Wait for explicit approval per phase — the
-   `composer-2.5-execution.mdc` handoff contract applies.
+   `approved-plan-execution.mdc` handoff contract applies.
 
 ---
 
@@ -277,5 +278,4 @@ Re-run `plan-antislop` after execution to confirm the burndown closed.
 - **Verify:** after execution, `test-playwright` (does it still work?) and a
   second `plan-antislop` pass (did the slop actually drop?).
 
-> Plan with a strong reasoning model; execute with `composer-2.5-execution.mdc`
-> riding along. The plan says *which* slop to remove; the rule constrains *how*.
+> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model. The plan says *which* slop to remove; the rule constrains *how*.

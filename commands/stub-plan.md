@@ -1,6 +1,8 @@
 ---
 description: "Stub / dead-link / fake-component audit + wiring plan — no fixes until approved"
 argument-hint: "[path or scope]"
+disable-model-invocation: true
+effort: high
 ---
 
 # Stub Checker Plan

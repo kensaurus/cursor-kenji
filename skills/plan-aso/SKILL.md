@@ -6,6 +6,7 @@ description: >
   prioritized ASO plan. Use when "optimize our store listing", "improve app
   downloads", or "ASO". Submission mechanics → plan-mobile-readiness. Plan only.
 license: MIT
+effort: high
 ---
 
 # plan-aso — Store listing growth plan
@@ -137,7 +138,7 @@ for `design-frontend`.
 2. **Find findings** — issue | severity | fix
 3. **Install findings** — issue | severity | fix
 4. **Plan** — quick / medium / ongoing
-5. Await approval.
+5. **Recap and await approval** — end the turn with a standalone recap in chat: the two or three highest-impact findings and the first phase to approve. `plan-aso.md` is the deliverable; write it before the recap.
 
 ## Related
 

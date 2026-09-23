@@ -6,6 +6,7 @@ description: >
   contrast, ARIA labels, and heading order. Use when "audit accessibility",
   "check a11y", "WCAG audit", "check keyboard nav", or "test screen reader".
 license: MIT
+effort: high
 ---
 
 # Accessibility Audit
@@ -81,7 +82,7 @@ Record: `APP_URL`, `PAGES`, `CSS_FRAMEWORK`, `COMPONENT_LIB`, `EXISTING_A11Y_TOO
 ```json
 firecrawl:firecrawl_search
 {
- "query": "WCAG 2.2 success criteria checklist web accessibility 2026",
+ "query": "WCAG 2.2 success criteria checklist web accessibility [current year]",
  "limit": 5
 }
 ```
@@ -147,7 +148,9 @@ Apply the `protocol-browser-anti-stall` protocol: wait 2s, snapshot, verify page
 
 ### 2b. Inject and Run axe-core
 
-Use `run-code` to inject axe-core from CDN and run a full scan:
+Use `run-code` to inject axe-core from CDN and run a full scan. The URL pins
+a version so results are reproducible; if the CDN returns 404, look up the
+current axe-core 4.x on cdnjs and substitute it — do not skip the scan:
 
 ```bash
 $PW -s=a11y run-code 'async (page) => { await page.addScriptTag({ url: "https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.10.2/axe.min.js" }); return await page.evaluate(async () => { const r = await axe.run(); return { violations: r.violations.map(v => ({ id: v.id, impact: v.impact, description: v.description, help: v.help, helpUrl: v.helpUrl, nodes: v.nodes.length, targets: v.nodes.slice(0, 3).map(n => n.target[0]) })), passes: r.passes.length, incomplete: r.incomplete.length, inapplicable: r.inapplicable.length }; }); }'
@@ -236,7 +239,7 @@ After each Tab, check:
 - [ ] No focus trap (Tab eventually cycles back to the beginning or reaches the end)
 - [ ] Skip links exist (if there is a large navigation area)
 
-Repeat Tab at least 10-15 times per page to cover the main interactive elements.
+Keep pressing Tab until focus has visited every interactive element on the page or cycled back to the first one; stop early only when a focus trap is found, and record it.
 
 ### 3b. Interactive Element Testing
 
@@ -361,16 +364,18 @@ Light gray text on white background is the most common contrast failure. Flag fi
 | Total violations | N |
 | Critical violations | N |
 | Serious violations | N |
+| Level A criteria failed / checked | N / M |
+| Level AA criteria failed / checked | N / M |
 | axe-core rules passed | N |
 | Keyboard navigable pages | X/Y |
 | Overall compliance | X% (estimated) |
 
 ## 2. AXE-CORE SCAN RESULTS (per page)
 
-| Page | Critical | Serious | Moderate | Minor | Pass | Score |
-|------|----------|---------|----------|-------|------|-------|
-| / | ... | ... | ... | ... | ... | A-F |
-| /about | ... | ... | ... | ... | ... | A-F |
+| Page | Critical | Serious | Moderate | Minor | Pass | Worst level failed (A / AA / none) |
+|------|----------|---------|----------|-------|------|------|
+| / | ... | ... | ... | ... | ... | A / AA / none |
+| /about | ... | ... | ... | ... | ... | A / AA / none |
 
 ## 3. VIOLATIONS BY WCAG CRITERION
 
@@ -388,16 +393,16 @@ Light gray text on white background is the most common contrast failure. Flag fi
 
 ## 4. KEYBOARD NAVIGATION
 
-| Page | Tab Order Logical | Focus Visible | No Focus Trap | Skip Link | Score |
+| Page | Tab Order Logical | Focus Visible | No Focus Trap | Skip Link | Worst level failed |
 |------|-------------------|---------------|---------------|-----------|-------|
-| / | ... | ... | ... | ... | A-F |
+| / | ... | ... | ... | ... | A / AA / none |
 
 ## 5. INTERACTIVE COMPONENTS
 
-| Component | Location | ARIA Roles | Keyboard Operable | Focus Managed | Score |
+| Component | Location | ARIA Roles | Keyboard Operable | Focus Managed | Worst level failed |
 |-----------|----------|------------|-------------------|---------------|-------|
-| Modal | ... | ... | ... | ... | A-F |
-| Dropdown | ... | ... | ... | ... | A-F |
+| Modal | ... | ... | ... | ... | A / AA / none |
+| Dropdown | ... | ... | ... | ... | A / AA / none |
 
 ## 6. SENTRY ASSISTIVE TECHNOLOGY ERRORS
 

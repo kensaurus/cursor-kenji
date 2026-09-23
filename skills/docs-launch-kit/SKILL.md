@@ -83,7 +83,7 @@ never with counts, "excited to announce", or the tech stack.
 
 ### 3. Write per channel  [LOW freedom — formats; HIGH freedom — words]
 
-| Channel | Shape | Rules that matter in 2026 |
+| Channel | Shape | Rules that matter |
 |---|---|---|
 | **Show HN** | `Show HN: <what it does, plainly>` + first comment: why built, how it works, trade-offs, what it does not do, one ask | Official rules: a runnable thing, no signup wall or waitlist, human-written (AI-written posts are removed), never solicit votes; sober tone, no adjectives; answer every comment for 2 h; only ~11% of Show HN posts clear 10 points — the thread is the asset even when the front page misses |
 | **Product Hunt** | tagline ≤60 chars; description; 3–5 gallery images or a 30-s demo; maker first comment; hunter or self-hunt | Featured rate ~10%; 1–2% visit→signup for B2B; credibility and feedback, not acquisition; launch after real users exist; relaunch per major version |
@@ -130,7 +130,7 @@ signup) live in `plan-gtm/references/benchmarks-2026.md`.
 - **No fabricated proof.** Testimonials, numbers, and logos come from the claims table.
 - **Disclose.** The maker posts as the maker.
 - **No cross-post spam.** One native post per channel; respect each community's rules.
-- **Voice check.** If a paragraph could be any product's launch, rewrite or send to `plan-antislop`.
+- **Voice check.** If a paragraph could be any product's launch, or reads as mannered prose (throat-clearing opener, stacked hedges, "excited to announce", triplets for rhythm), rewrite or send to `plan-antislop`.
 
 ## Chains with
 

@@ -38,7 +38,7 @@ from-scratch re-search and the zero-hit gate `[LOW freedom — run exactly]`.
 
 A coding agent is given a plan, generates it, starts executing, and then **stops before the change is actually complete across the codebase**. The user is left with a half-migrated repo. This is not a motivation problem — it is a well-documented set of failure modes in long-horizon LLM agents:
 
-- **Context rot / long-context degradation.** Model reasoning quality drops as the input grows, *even within the advertised window*. Information in the middle of a long context is attended to least reliably ("lost in the middle"). So as execution proceeds, the agent's grip on "what's left to do" erodes.
+- **Compaction.** Long runs get compacted; anything that lived only in the transcript — including "what's left to do" — is gone afterwards. The remaining work has to live in a file.
 - **Premature termination.** When tool outputs and history get pruned or summarized to save context, agents lose task-level awareness ("how many items remain, am I near done?") and declare completion early. The fix shown in the research is to keep a *condensed, persistent record of remaining work* visible at all times.
 - **Plan-as-boundary error.** A plan is a *hypothesis* about scope produced before the repo was fully explored. The real set of affected files is almost always larger than the plan's list (barrels, tests, stories, configs, re-exports, dynamic usages). Treating the plan's file list as the boundary guarantees an incomplete burndown.
 
@@ -128,18 +128,18 @@ Plan originally named: P files
 
 ## Phase 2 — Execute in small batches, persisting progress every batch
 
-Work the checklist top-to-bottom in **batches of 5–10 files**. Small, focused batches keep each step's context tight and avoid overwhelming the model (which is itself a cause of dropped work). For each batch:
+Work the checklist top-to-bottom in small batches (5–10 files is a good default) so every batch is ticked in the state file before the next starts. For each batch:
 
 1. Apply the change to those files. Prefer mechanical, pattern-driven edits so coverage is verifiable rather than judgment-based. Keep edits minimal and consistent with DONE.
 2. **Immediately** flip those lines `[ ]` → `[x]` in `.cursor/burndown-state.md`. Do the bookkeeping per-batch, never deferred — if context is truncated mid-run, an un-ticked completed item is lost work and a ticked incomplete item is a false "done."
 3. Run a fast scoped check on just the touched files if cheap (lint/typecheck the batch). Fix what you broke before moving on.
 4. If you discover new occurrences while editing (a usage the grep missed, a follow-on file), **append them to the "Newly discovered" section** and include them in the burndown — do not silently absorb or skip them.
 
-**Do not stop between batches to ask "should I continue?"** Continue automatically until the worklist is exhausted. If you sense context filling up, **re-read `.cursor/burndown-state.md` to recover the remaining list** rather than trusting memory — the file is precisely there so you don't have to remember.
+Do not stop between batches to ask "should I continue?" — continue until the worklist is exhausted. Compaction may happen mid-run; after any compaction, re-read `.cursor/burndown-state.md` to recover the remaining list rather than trusting memory. A long run is not a reason to wrap up.
 
 ## Phase 3 — Prove completeness (the anti-stop gate)
 
-You may **NOT** report done until every check below passes. This gate is the whole point: completion is defined by verification, not by the agent's sense of having finished.
+Report done only when every check below passes — completion is defined by verification, not by the sense of having finished.
 
 1. **Fresh from-scratch search.** Re-run the Phase 1 `rg` for MATCH across the entire repo *as if starting over*. Expected: **zero** hits, except items explicitly listed under Exceptions (each justified). Any new hit → add to worklist, return to Phase 2.
 2. **Orphan sweep.** Search for things that must move *with* the change: barrel exports, type defs, tests, stories, mocks, docs referencing the old form. A migrated component whose test/story/snapshot still references the old form is **not** done.
@@ -161,15 +161,15 @@ Produce a concise final report:
 - **Intentional exceptions:** each file left unchanged, with reason.
 - **Genuine ambiguities for a human:** anything you could not resolve mechanically. Surface these explicitly — never silently skip an occurrence to reach a clean number.
 
-Leave `.cursor/burndown-state.md` in place (fully ticked) as an audit trail unless the user asks to delete it. Suggest committing the change as one reviewable unit, or splitting mechanical vs. judgment edits into separate commits if that aids review.
+Leave `.cursor/burndown-state.md` in place (fully ticked) as an audit trail unless the user asks to delete it; the Claude Code Stop hook's `.cursor/completion-gate.count.json` is gitignored and stays too. Suggest committing the change as one reviewable unit, or splitting mechanical vs. judgment edits into separate commits if that aids review.
 
 ---
 
 ## Operating principles (keep these in working memory)
 
-- The plan is a hypothesis about scope; the repo is bigger than the plan and bigger than your context window.
+- The plan is a hypothesis about scope; the repo is bigger than the plan and bigger than what you remember of it.
 - The checklist file is your memory; the fresh grep is your source of truth. When they disagree, the grep wins.
 - "I edited the files in the plan" is **not** completion. "A from-scratch search for the old pattern returns zero and the project checks clean" is completion.
 - Whether this MATCH/DONE ratchet itself can be gamed (DONE without evidence, count going down) is `audit-gate-logic`. Whether the transform preserved behavior is `audit-codemod-safety`.
 - Work in small batches and persist progress every batch, so a truncated context never costs progress.
-- Never stop early to ask permission to continue. Only stop for (a) a genuine ambiguity needing a human decision, or (b) a verification failure you cannot resolve — and in both cases, report precisely what's left.
+- Your turn ends in one of two shapes: the Phase 4 report after the gate passed, or a precise statement of what is left and why you cannot resolve it (a genuine ambiguity needing a human decision, or a verification failure you cannot repair). It does not end with "should I continue?", with a summary of the remaining batches, with "I'll pick this up next", or with a partial batch ticked as done. Before ending your turn, read your last paragraph: if it describes work you could do now, do it.

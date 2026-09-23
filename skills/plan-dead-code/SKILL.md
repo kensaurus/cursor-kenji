@@ -7,6 +7,7 @@ description: >
   nothing. Use when "find dead code", "is this code used", "unused
   exports". Apply → housekeep-dead-code.
 license: MIT
+effort: high
 ---
 
 # plan-dead-code — Prove it is dead before anyone deletes it
@@ -185,6 +186,7 @@ time, and `--max-show-issues <n>` to keep a first pass readable.
 devDependencies; `--strict` additionally isolates workspaces to direct
 dependencies. `--reporter json` is what the baseline numbers come from —
 never a hand count.
+Delegate a baseline or residue pass to a subagent only when it is sizeable, independent of the others, and its raw output (Knip JSON, grep dumps) has no place in the plan; brief it with the exact commands and the columns to return. It deletes nothing, like this pass. A handful of greps stays in the main context. Long sweeps are expected — context compaction exists, so finish the inventory rather than wrapping up early.
 
 **Build the keep-working list.** For every finding, ask what would break.
 Named suspects, each needing a positive reason to keep:
@@ -379,6 +381,6 @@ Full template: [`references/output-templates.md`](references/output-templates.md
 7. **Ratchet proposal** — 4d
 8. **Handoffs** — per the self-critique owner list
 
-Plan only. Deletion begins in `housekeep-dead-code`, after approval. The
+Plan only. End the turn with a standalone recap in chat: the two or three highest-impact chain heads and the first phase to approve; the plan file is the deliverable, write it first. Deletion begins in `housekeep-dead-code`, after approval. The
 non-negotiables for this pass are in
 [`references/preservation-contract.md`](references/preservation-contract.md).

@@ -52,7 +52,7 @@ The finished top of the README should read, in this order:
 
 If the project is novel or leans on 3+ domain terms, add `docs-writer`'s plain-language **building-blocks glossary** just under the hero — it's the decoder ring for everything below.
 
-## Critical Rules
+## Rules
 
 > **Use the live production URL when one exists.** It shows real data, no dev banners, and matches what visitors will see if they click through.
 
@@ -62,7 +62,7 @@ If the project is novel or leans on 3+ domain terms, add `docs-writer`'s plain-l
 
 > **Hard limit: 10 MB per image, 25 MB per file in markdown.** Soft target: under 5 MB per image. PNGs at 1600x1000 viewport land around 200–500 KB each.
 
-> **Use `<picture>` with `prefers-color-scheme` media queries** for theme-aware swap. Verified working on github.com README rendering as of 2024+.
+> **Use `<picture>` with `prefers-color-scheme` media queries** for theme-aware swap — github.com renders the `<source>` that matches the viewer's theme.
 
 ---
 
@@ -76,7 +76,7 @@ Copy and track:
 - [ ] Step 3: Generate hero + tour markdown (run scripts/generate-readme-blocks.mjs)
 - [ ] Step 4: Refine captions and weave into README
 - [ ] Step 5: Update tech badges + Tech Stack table to current versions
-- [ ] Step 6: Add .playwright-mcp/ to .gitignore, commit, push
+- [ ] Step 6: Add .playwright-mcp/ to .gitignore and commit (push only when asked)
 - [ ] Step 7 (optional): Record guided-tour GIF (run scripts/record-readme-tour.mjs)
 ```
 
@@ -167,8 +167,10 @@ The generator script picks the hero by looking for these keywords (in order): `h
 Run from the repo root:
 
 ```bash
-node ~/.cursor/skills/enhance-readme/scripts/generate-readme-blocks.mjs --demo-url=https://your-live-demo.example.com/
+node <skill-dir>/scripts/generate-readme-blocks.mjs --demo-url=https://your-live-demo.example.com/
 ```
+
+`<skill-dir>` is the folder this SKILL.md was installed to (`~/.cursor/skills/enhance-readme` in Cursor, `~/.claude/skills/enhance-readme` or the plugin's skills folder in Claude Code).
 
 Optional flags:
 
@@ -250,10 +252,7 @@ Bad caption pattern:
 
 While editing the README, sync the badges and Tech Stack table to actual `package.json` versions. Common drift:
 
-- React 18 → 19
-- TypeScript 5 → 6
-- Vite 6/7 → 8
-- Node prerequisite (Vite 8 requires Node ≥ 20.19)
+- badges still showing the major the project started on (React, TypeScript, Vite, the Node prerequisite) — read the current majors from `package.json` and the lockfile, never from memory
 
 Use shields.io URLs:
 
@@ -300,7 +299,7 @@ The companion script handles everything: launches a headless Chromium, dismisses
 ### 7a. Run the recorder
 
 ```bash
-node ~/.cursor/skills/enhance-readme/scripts/record-readme-tour.mjs \
+node <skill-dir>/scripts/record-readme-tour.mjs \
  --url=https://your-live-demo.example.com/ \
  --out=docs/screenshots/tour.gif
 ```
@@ -494,5 +493,5 @@ The skill is done when:
 - All screenshots are committed under `docs/screenshots/`, total < 10 MB
 - `.playwright-mcp/` is in `.gitignore`
 - Tech badges + Tech Stack table reflect actual `package.json` versions
-- A single conventional-commits commit ships everything together
+- One conventional-commits commit ships the README, screenshots, and badge sync; the optional GIF goes in its own commit (7d)
 - **Optional**: an animated `tour.gif` lives at `docs/screenshots/tour.gif`, autoplays under the static hero, and weighs less than 8 MB

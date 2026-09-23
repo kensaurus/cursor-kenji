@@ -1,6 +1,8 @@
 ---
 description: "Go-to-market audit + founder interview → phased GTM plan — plan only, no edits until approved"
 argument-hint: "[product url, repo path, or goal]"
+disable-model-invocation: true
+effort: high
 ---
 
 # GTM Plan

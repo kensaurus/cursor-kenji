@@ -1,6 +1,8 @@
 ---
 description: "Audit custom lint/ratchet doctrine for content correctness — report only"
 argument-hint: "[repo or rule path]"
+disable-model-invocation: true
+effort: high
 ---
 
 # /doctrine

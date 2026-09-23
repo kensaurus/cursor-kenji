@@ -18,6 +18,7 @@ Driver is **playwright-cli**, never Playwright MCP. Guest-vs-authed wander is
 Full QA of a live webapp as a senior QA engineer preparing a production
 release: user-story-driven coverage, CRUD, data-pipeline integrity, UX, and
 edge cases. This is **not** a page-navigation monkey test.
+Your turn ends after Phase 5 with every discovered route crawled and every CRUD entity proven after refresh — not after the crawl with CRUD still owed, and not with an auth-required page silently skipped instead of marked BLOCKED.
 
 Read `protocol-browser-anti-stall` before any browser step (Rule 0: manual &
 headed). Also `references/playwright-session-coordination.md` in that folder.

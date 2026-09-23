@@ -6,6 +6,7 @@ description: >
   "adversarial test", "pre-launch hardening", "pentest the app", or "full app QA".
   Naive monkey / guest vs logged-in wander → test-exploratory.
 license: MIT
+effort: high
 ---
 
 # test-red-team — Adversarial Full-App Defect Sweep
@@ -18,6 +19,7 @@ A hostile, skeptical pass across UI/UX, data pipeline, security, and
 performance. Default output is a **severity-ranked defect list**, not inline
 fixes (`test-playwright` is the fix-as-you-go PDCA). Offer to fix after the
 report; ask which defects to prioritize.
+Your turn ends with the Phase 7 report and a matrix with no blank cells — each cell PASS, DEFECT, or N-A with a reason — not with the matrix printed and the sweep still owed.
 
 Read `protocol-browser-anti-stall` before any browser action (Rule 0: manual
 & headed) and `references/playwright-session-coordination.md`.
@@ -59,8 +61,7 @@ Read `protocol-browser-anti-stall` before any browser action (Rule 0: manual
 
 ## Coverage model
 
-Do NOT do a blind DOM crawl (`test-qa`) or an unscripted guest-vs-logged-in
-wander (`test-exploratory`). Traverse a **coverage matrix**:
+This is not a blind DOM crawl (`test-qa`) or an unscripted guest-vs-logged-in wander (`test-exploratory`). Traverse a **coverage matrix**:
 
 ```
 feature/capability
@@ -377,7 +378,7 @@ Same columns. Group by severity.
 6. **Secrets by name only.**
 7. **Honest verdict** — untested cells are N-A, not PASS.
 8. **Offer to fix after the report** — then `test-playwright` PDCA.
-9. **MCP schemas first** — check `mcps/<server>/tools/` before any MCP call.
+9. **MCP schemas first** — read the server's tool schema before any MCP call.
 10. **Pure-native iOS/Android out of scope** — say so in the report.
 
 ## Related

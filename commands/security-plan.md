@@ -1,6 +1,8 @@
 ---
 description: "OWASP Top 10 + Supabase security audit + hardening plan — no fixes until approved"
 argument-hint: "[path or scope]"
+disable-model-invocation: true
+effort: high
 ---
 
 # Security Audit Plan

@@ -138,7 +138,7 @@ Skills-only refresh: `npx skills add kensaurus/cursor-kenji` (does not update sl
 No, for most skills. Skills that talk to Sentry, Supabase, or Langfuse tell you when they need API keys.
 
 **Will this slow down Cursor?**
-No. Skills are text files, loaded only when relevant.
+No. Skill bodies load only when a skill fires. What rides in every request is the one-line description of each skill — about 11k tokens for the full pack — which is why user-only rituals like `/handoff` opt out of that roster. Deleting skills you never use trims it further.
 
 **Can I delete skills I don't need?**
 Yes — delete the folder from `~/.cursor/skills/`.
@@ -147,7 +147,7 @@ Yes — delete the folder from `~/.cursor/skills/`.
 Yes. See [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 **Does this work with Claude, Codex, or Gemini?**
-Yes. `npx @kensaurus/cursor-kenji --all` installs the full pack for Cursor and Claude Code, and ports rules plus a few commands to Codex CLI and Gemini CLI. Skills-only: `npx skills add kensaurus/cursor-kenji`. Claude Code plugin: `/plugin marketplace add kensaurus/cursor-kenji`. Cursor models still read the same skill text.
+Yes. `npx @kensaurus/cursor-kenji --all` installs the full pack for Cursor and Claude Code, and ports rules plus a few commands to Codex CLI and Gemini CLI. Skills-only: `npx skills add kensaurus/cursor-kenji`. Claude Code plugin: `/plugin marketplace add kensaurus/cursor-kenji`. Both hosts read the same skill text. On Claude Code the default model is Claude Opus 5.5 and each skill's `effort:` key sets how hard it thinks (audits and plans high, implementation medium); Cursor ignores that key and runs at the model you pick. See [MODEL-AND-EFFORT.md](MODEL-AND-EFFORT.md).
 
 **Is it free?**
 Yes, MIT licensed.

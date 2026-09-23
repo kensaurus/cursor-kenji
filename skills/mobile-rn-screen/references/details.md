@@ -66,7 +66,7 @@ Rules during implementation:
     });
     ```
 
-After every meaningful edit: `npm run rn:typecheck` + `npm run rn:lint` on
+After every meaningful edit: run the repo's typecheck and lint scripts (e.g. `rn:typecheck` / `rn:lint` in a monorepo) on
 modified files. Fix anything you introduced before moving on.
 
 ---
@@ -94,7 +94,7 @@ safe area correct on notched device.
 ### 9c. iOS CI gate
 
 For any change that affects a screen's layout, navigation, or safe-area
-handling, trigger the iOS CI build (`.github/workflows/build-mobile-rn.yml`)
+handling, trigger the repo's iOS CI workflow
 and install via TestFlight. Do NOT claim "iOS verified" from the Android
 emulator alone.
 

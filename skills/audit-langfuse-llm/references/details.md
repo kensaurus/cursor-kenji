@@ -62,7 +62,7 @@ firecrawl:firecrawl_search
 Example queries by weakness type:
 - Missing guardrails: `"LLM safety guardrails system prompt best practices [current year]"`
 - No few-shot: `"few-shot prompting examples for <TASK_TYPE> [current year]"`
-- Vague instructions: `"structured output prompt engineering chain-of-thought [current year]"`
+- Vague instructions: `"prompt engineering specific instructions examples structured output [current year]"`
 - Wrong model: `"<TASK_TYPE> model selection small tier vs frontier tier <PROVIDER> [current year]"`
 
 Scrape the top 1-2 results for concrete patterns:
@@ -99,7 +99,7 @@ This creates a new version with the `experiment` label (not `production` — we 
 
 If prompts are hardcoded in source code:
 1. Read the file containing the prompt
-2. Edit the prompt text using StrReplace
+2. Edit the prompt text in place (StrReplace in Cursor, Edit in Claude Code)
 3. Record the file path and the change for potential rollback
 
 ### 5c. CHECK: Trigger and Verify via Playwright
@@ -192,7 +192,7 @@ Based on the score comparison:
 
 **Score degraded (any eval metric worsened):**
 - If Langfuse-managed: do NOT change labels — the `production` label stays on the old version
-- If hardcoded: revert the source code change using StrReplace
+- If hardcoded: revert the source code change with the same edit tool, using the path and text recorded in 5b step 3
 - Document what went wrong and why
 
 **Repeat the cycle** from Step 5b with a different strategy if the score target has not been met

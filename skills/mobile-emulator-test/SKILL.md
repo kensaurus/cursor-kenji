@@ -38,7 +38,7 @@ refetch loops, and silent error swallows.
 - **Three layers** — no mutation called "tested" on UI toast alone
 - **Right owner** — bring-up only → `mobile-emulator-start`; store/plugins/OTA → `mobile-capacitor-platform`
 
-## Critical Rules
+## Rules
 
 > **Test as a real signed-in user AND as a brand-new guest.**
 > Walk the app the way a paying customer would — sign in, browse every tab,
@@ -361,11 +361,9 @@ adb logcat -d Capacitor:V SystemWebChromeClient:V '*:S' | tail -50
 
 ---
 
-## Phase 1.5: Build-freshness verification (mandatory)  [LOW freedom — run exactly]
+## Phase 1.5: Build-freshness verification  [LOW freedom — run exactly]
 
-> If you skip this phase you WILL waste a debugging session on a stale
-> build. The user's report of "nothing changed" is almost never the patch
-> failing — it is the device running yesterday's bytecode.
+> A "nothing changed" report is almost never the patch failing — it is the device running yesterday's bytecode — so this phase runs before any walk.
 
 The fundamental risk: **three separate caches** can each serve stale code
 to the device. They must each be invalidated explicitly, in order, before

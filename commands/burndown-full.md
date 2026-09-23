@@ -1,6 +1,7 @@
 ---
 description: "Drive a partially-executed plan to 100% coverage across the whole repo — enumerate, batch-execute, prove completeness"
 argument-hint: "[plan file]"
+disable-model-invocation: true
 ---
 
 # Burndown Full
@@ -21,4 +22,4 @@ The plan is a hypothesis about scope, never its limit. The repo is bigger than t
 
 The full playbook lives in the **`burndown-full`** skill.
 
-Related: `composer-2.5-execution` rule for approved-plan execution, `plan-*` skills for audit-only burndowns before changes.
+Related: `approved-plan-execution` rule for approved-plan execution, `plan-*` skills for audit-only burndowns before changes.

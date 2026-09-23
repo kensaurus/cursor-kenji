@@ -7,6 +7,7 @@ description: >
   reject this?", or "pre-submission check". Native security →
   plan-capacitor-hardening.
 license: MIT
+effort: high
 ---
 
 # Mobile Store-Readiness Audit + Pre-Submission Plan
@@ -90,7 +91,7 @@ compliance and rejection-risk*.
 - **Target API level** — meets current store minimum.
 - **Build format & signing** — `.aab`, release-signed, 64-bit, no debuggable.
 - **Crash on older devices** — emulator-only testing isn't enough.
-- **Android closed-testing gate** — 12 testers / 14 days before production.
+- **Android closed-testing gate** — personal developer accounts need a closed test before production (12 testers / 14 days at time of writing); verify the current tester count and duration in Play Console policy at submit time.
 
 ### E · Listing & metadata
 - **Screenshots/icon match build**; metadata limits; content rating/CSAE.
@@ -103,7 +104,7 @@ compliance and rejection-risk*.
 2. **Run A–E**, map to guidelines. **Blocking** vs **Risk**.
 3. **Score & order** by likelihood × launch-delay cost.
 4. **Phase** — privacy + functionality first.
-5. **Emit `plan-mobile-readiness.md`. End the turn.**
+5. **Emit `plan-mobile-readiness.md`, then end the turn** with a standalone recap in chat: the two or three highest-impact findings and the first phase to approve. The file is the deliverable — write it before the recap.
 
 ---
 
@@ -169,4 +170,4 @@ Real older devices + IAP dry-run before submit.
   `mobile-emulator-test` (then real device).
 - **Verify:** real-device crash test + IAP dry-run; Android closed-test gate satisfied.
 
-> Plan with a strong model; execute with `composer-2.5-execution.mdc`.
+> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model.

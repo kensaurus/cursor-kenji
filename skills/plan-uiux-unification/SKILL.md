@@ -6,6 +6,7 @@ description: >
   fixing", "UI burndown", or "IA audit before redesign". Apply-now token cleanup
   → housekeep-design. Per-page heuristics → audit-ux.
 license: MIT
+effort: high
 ---
 
 # UI/UX & Design-System Audit + Unification Plan
@@ -116,6 +117,7 @@ Output short **design-system spec** (current state + proposed enhancements).
 
 Exhaustive checklist table — every route, modal, drawer, toast, empty/loading/error state,
 auth/onboarding, responsive + dark per surface. Mark audited only after Phase 3 review.
+Delegate an inventory pass to a subagent only when it is sizeable, independent of the others, and its raw output (glob lists, token-grep counts) has no place in the plan; brief it with the exact commands and the columns to return. It edits nothing, like this pass. Long sweeps are expected — context compaction exists, so finish the inventory rather than wrapping up early.
 
 See inventory template in `references/output-templates.md`.
 
@@ -172,7 +174,7 @@ P0 = broken/inaccessible/brand-breaking · P3 = cosmetic. Quantify where possibl
 
 ## Phase 6 — Research  [HIGH freedom]
 
-Firecrawl / web for **current year** best practices; cite sources:
+Firecrawl / web for **current year** best practices — search each named standard as written rather than answering from memory; cite sources:
 
 - Token architecture (semantic/layered, W3C DTCG)
 - IA + visual hierarchy · UX writing · anti-AI-slop aesthetics · WCAG 2.2
@@ -202,7 +204,7 @@ Note where this app diverges from research.
 9. Research notes + citations
 10. Open questions / `[NEEDS REAL CONTENT]` list
 
-Deliver as a single markdown doc (or canvas for large repos). **Do not open PRs or edit UI code**
+Deliver as a single markdown doc (or canvas for large repos), then end the turn with a standalone recap in chat: the two or three highest-impact violations and the first phase to approve. The document is the deliverable — write it before the recap. **Do not open PRs or edit UI code**
 unless the user explicitly approves execution in a follow-up.
 
 ---
@@ -225,4 +227,4 @@ unless the user explicitly approves execution in a follow-up.
 | Firecrawl | Phase 6 research, anti-AI-slop patterns, WCAG/token governance |
 | Playwright browser | Optional Phase 3 visual evidence; own named session (`-s=…`) per `protocol-browser-anti-stall` |
 | Context7 | Component library / Tailwind docs when naming canonical primitives |
-| Sequential Thinking | Optional — full MCP template only; otherwise write the IA map or collision analysis out in the transcript |
+| Sequential Thinking | Not needed — the IA map and collision analysis go in the deliverable |

@@ -6,6 +6,7 @@ description: >
   this codemod break anything", "audit this bulk refactor", or before merging
   a mass find-replace. Diff quality → audit-code-review. SQL → plan-data-integrity.
 license: MIT
+effort: high
 ---
 
 # audit-codemod-safety — Compiles and lints is not behaves the same

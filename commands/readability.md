@@ -1,6 +1,7 @@
 ---
 description: "Audit and fix how easily content is understood — CPL, Gestalt grouping, deadspace, visuals that cut verbosity"
 argument-hint: "[route, surface, or dense copy]"
+disable-model-invocation: true
 ---
 
 # /readability

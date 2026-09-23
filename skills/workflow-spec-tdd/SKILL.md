@@ -62,7 +62,7 @@ Skip for: one-line edits, pure formatting, a single obvious fix. Don't ceremony-
 
 ### Phase 1 — Brainstorm (before any code)  [HIGH freedom]
 - List the **hidden assumptions** the naive implementation would make. Each is a future bug.
-- Explore 2–3 approaches; pick one and say why in one line. Prefer the existing repo pattern over a new abstraction.
+- Consider more than one approach before committing; pick one and say why. Prefer the existing repo pattern over a new abstraction.
 - Apply **YAGNI**: build only what the spec needs. No speculative config, flags, or layers.
 
 ### Phase 2 — Spec (the contract)  [HIGH freedom]
@@ -90,7 +90,7 @@ Write a short spec before coding. Template:
 - Migrations / schema / RLS / edge fns touched: [list — deploy in same turn per full-stack-ship-discipline]
 - Risk: [low/med/high per step]
 ```
-For 3+ files or ordering concerns, reason through with the Sequential Thinking MCP if available.
+When steps depend on each other, order them so each leaves the tree green and note the intermediate state and side effects a later step relies on.
 
 ### Phase 4 — TDD (RED → GREEN → REFACTOR)  [LOW freedom — run exactly]
 For each plan step:
@@ -107,6 +107,7 @@ Rules:
 - **No tautological tests.** Expected values come from an independent source of truth (a known-good literal, a worked example, the spec) — never recomputed the same way the code computes them, or the test passes by construction.
 - **The refactor-breaks-test tell.** If a test breaks when you refactor but behavior hasn't changed, it was implementation-coupled — fix the test's seam, don't patch the assertion.
 - Surface-specific runners: web → vitest/jest/playwright; RN → jest + RNTL, `mobile-emulator-test` for device; Capacitor → vitest + `mobile-capacitor-platform` E2E.
+- A pre-existing bug you hit while implementing goes into the spec's "Out of scope" list as a follow-up, not into this loop. Scratch scripts used to explore stay out of the repo; edit files surgically rather than rewriting them.
 
 ### Phase 5 — Self-review (gate before "done")  [LOW freedom — do not skip]
 Run this checklist. If any box fails, you are not done:

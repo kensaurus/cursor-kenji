@@ -73,7 +73,7 @@ the token source file(s). Record it.
 
 ## Phase 1 — Establish the SSOT structure (3-layer tokens)  [HIGH freedom]
 
-Define (or normalize onto) a three-layer token taxonomy — the 2026 standard for
+Define (or normalize onto) a three-layer token taxonomy — the standard shape for
 drift-proof systems:
 
 | Layer | Role | Example |
@@ -143,7 +143,7 @@ plan didn't authorize. Pure de-duplication proceeds.
 
 ## Phase 4 — Migrate all usages (mechanical, per-batch)  [LOW freedom — run exactly]
 
-Work the checklist in batches of 5–10 files. Prefer codemods for coverage you can verify:
+Work the checklist in batches of 5–10 files. Batches are independent: when the sweep is large, launch one subagent per batch in one message, each briefed once with its file list and the canonical forms and returning only the files it changed; keep the Phase 6 zero-hit re-search in the main thread. Prefer codemods for coverage you can verify:
 
 - **Token usages:** replace deprecated names/raw values with the canonical token
   (`rg` → scripted replace, or `eslint --fix` with a custom rule).

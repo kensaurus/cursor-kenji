@@ -6,6 +6,7 @@ description: >
   "stale README", "onboarding docs broken", "doc sync plan", "phantom docs", or "docs out
   of date". Why-we-chose-X / ADRs → docs-adr.
 license: MIT
+effort: high
 ---
 
 # Docs Drift Audit + Sync Plan
@@ -128,6 +129,8 @@ Per drift: before/after correction + "what's still accurate here". **Plan only �
 6. Guardrails/tooling
 7. Research notes + citations
 8. Open questions / `[NEEDS VERIFICATION]` list
+
+End the turn with a standalone recap in chat: the two or three highest-impact drifts and the first sync slice to approve. The report is the deliverable — write it before the recap.
 
 ---
 

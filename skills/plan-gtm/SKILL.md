@@ -6,6 +6,7 @@ description: >
   time, emit a phased plan. Use when "GTM", "go-to-market", "get more users",
   "grow traffic", "should this be freemium". Execute → workflow-gtm.
 license: MIT
+effort: high
 ---
 
 # plan-gtm — Go-to-market audit + interview + plan
@@ -254,6 +255,8 @@ shipped · one launch or post.
 Approve a phase → `workflow-gtm` runs it and re-reads the funnel table.
 ```
 
+End the turn with a standalone recap in chat: the decision log in one line, the two or three highest-impact findings, and Phase 1's first action. The file is the deliverable — write it before the recap.
+
 ## Guardrails
 
 - **Plan only.** Inventory + interview + document.
@@ -270,4 +273,4 @@ Approve a phase → `workflow-gtm` runs it and re-reads the funnel table.
 - **`audit-analytics`** — run first when the funnel table is all "unmeasured".
 - **`iterate-gtm-weekly`** — the weekly loop after Phase 4 (`iterate-post-launch` keeps production bugs).
 
-> Plan with a strong model; execute with `composer-2.5-execution.mdc`.
+> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model.

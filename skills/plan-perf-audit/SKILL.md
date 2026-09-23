@@ -7,6 +7,7 @@ description: >
   plan". Apply runtime fixes → audit-performance. JS bundle-only →
   audit-bundle-size.
 license: MIT
+effort: high
 ---
 
 # Performance Audit + Optimization Plan
@@ -132,6 +133,8 @@ Phases: (1) P0 hot-path wins → (2) structural → (3) polish.
 6. Guardrails/tooling
 7. Research notes + citations
 8. Open questions / `[NEEDS PROFILING]` list
+
+End the turn with a standalone recap in chat: the two or three highest-impact measured issues and the first phase to approve. The plan is the deliverable — write it before the recap.
 
 ---
 

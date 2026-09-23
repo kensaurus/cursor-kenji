@@ -146,7 +146,7 @@ handler or state to "simplify."
 
 ---
 
-## Phase 3 — Accessibility & performance gates (non-negotiable)  [LOW freedom — run exactly]
+## Phase 3 — Accessibility & performance gates  [LOW freedom — run exactly]
 
 - **Reduced motion:** every animation degrades under `prefers-reduced-motion: reduce`.
   Use `useReducedMotion()` (Motion), `motion-safe:`/`motion-reduce:` (Tailwind), or a CSS

@@ -1,6 +1,8 @@
 ---
 description: "Responsive layout & IA audit — desktop is not a wide phone"
 argument-hint: "[path or route scope]"
+disable-model-invocation: true
+effort: high
 ---
 
 # /responsive-audit

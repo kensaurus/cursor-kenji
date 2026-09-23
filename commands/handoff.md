@@ -1,6 +1,7 @@
 ---
 description: "Compact the current conversation into a handoff document for a fresh agent session"
 argument-hint: "[what the next session will focus on]"
+disable-model-invocation: true
 ---
 
 # /handoff

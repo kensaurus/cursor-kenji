@@ -7,6 +7,7 @@ description: >
   Sentry backlog/monitoring → debug-sentry-monitor. Bug-to-PR lifecycle →
   workflow-fix-and-ship.
 license: MIT
+effort: high
 ---
 
 # Debug Error Skill
@@ -80,7 +81,7 @@ Extract: stacktrace, breadcrumbs, tags (browser, OS, URL, release), event freque
 
 If data is involved, verify expectations against reality using Supabase MCP or direct queries.
 
-### 4. Verification Statement (REQUIRED)
+### 4. Verification statement — so the diagnosis rests on what you read and fetched
 
 Before diving into debug, state:
 ```
@@ -180,19 +181,11 @@ the loop after each cut. Done when every remaining element is load-bearing —
 removing any one makes the loop go green. A minimal repro shrinks the hypothesis
 space and becomes the regression test in Phase 6.
 
-### Binary Search (when completely lost)
-
-1. Comment out half the code
-2. Does error still occur?
- - Yes: Bug is in remaining code
- - No: Bug is in commented code
-3. Repeat until isolated
-
 ---
 
-## Phase 3: Research (NEW — research the error pattern before fixing)
+## Phase 3: Research the error pattern before fixing
 
-For non-trivial errors, research the correct fix before implementing:
+For non-trivial errors, research the correct fix before implementing. Recognizing the framework or the error is not knowing its current behavior — search the exact error string and read the current docs even when you think you know the fix:
 
 ```json
 firecrawl:firecrawl_search
@@ -230,21 +223,6 @@ context7:resolve-library-id
 
 ## Phase 4: Identify Root Cause
 
-### Common Error Types
-
-| Error | Likely Cause | First Check |
-|-------|--------------|-------------|
-| `TypeError: Cannot read property 'x' of undefined` | Null/undefined access | Where does the value come from? Fix the producer. |
-| `ReferenceError: x is not defined` | Variable not declared | Check imports, scope, circular dependencies |
-| `SyntaxError` | Invalid code | Check syntax, missing brackets, JSON parsing |
-| `Network Error` | API/connectivity | Check endpoint, CORS, auth, network tab |
-| `CORS Error` | Cross-origin blocked | Check server CORS config, proxy setup |
-| `401 Unauthorized` | Auth issue | Check token expiry, refresh logic, cookie settings |
-| `404 Not Found` | Wrong URL/missing resource | Check route definition, dynamic params, API path |
-| `500 Internal Server Error` | Server-side bug | Check server logs, not frontend code |
-| `Unhandled Promise Rejection` | Missing await or catch | Find the unhandled async chain |
-| `Hydration mismatch` | Server/client render differs | Check for browser-only APIs in SSR, dynamic content |
-
 ### Root Cause Formulation
 
 Before writing any fix, state:
@@ -255,13 +233,6 @@ Before writing any fix, state:
 ---
 
 ## Phase 5: Fix
-
-### Before Fixing
-
-- [ ] Understand WHY it's broken, not just WHERE
-- [ ] Consider if this fix could break something else
-- [ ] Check if other callers of the affected function exist
-- [ ] Verify the fix matches what research recommends
 
 ### Anti-Pattern Checklist
 
@@ -277,6 +248,7 @@ Do NOT apply these as the sole fix:
 2. Make invalid state unrepresentable
 3. Follow existing project conventions
 4. If the fix touches a shared function, verify all callers
+5. Fix this bug only. Pre-existing bugs you notice go in the report as follow-ups, not in the diff. The feedback-loop script stays out of the repo unless it becomes the Phase-6 regression test in a place the repo already keeps tests. Edit surgically; do not rewrite files.
 
 ---
 
@@ -288,7 +260,7 @@ Do NOT apply these as the sole fix:
 - [ ] Minimised repro converted into a regression test at a correct seam — one
       that exercises the real bug pattern; if no correct seam exists, document
       that as an architectural finding instead of writing a false-confidence test
-- [ ] Original bug no longer occurs
+- [ ] Test suite run where one exists, output pasted
 - [ ] Related functionality still works
 - [ ] Edge cases handled
 - [ ] Tests pass (if they exist)
@@ -351,24 +323,4 @@ If the bug was caused by a non-obvious interaction, add a comment explaining the
 **Prevention:**
 - [ ] Monitoring added (if applicable)
 - [ ] Documentation updated (if non-obvious)
-```
-
----
-
-## Quick Debug Commands
-
-```bash
-# Check recent changes to a file
-git log --oneline -20 -- path/to/file.ts
-
-# Find when a bug was introduced
-git bisect start
-git bisect bad HEAD
-git bisect good <known-good-commit>
-
-# Check what changed between two commits
-git diff <commit1>..<commit2> -- path/to/file.ts
-
-# Search for all usages of a function
-rg "functionName" --type ts
 ```

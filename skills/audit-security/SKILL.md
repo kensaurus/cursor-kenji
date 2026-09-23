@@ -6,6 +6,7 @@ description: >
   audit-auth-flows. Plan-only burndown → plan-security-audit. Table RLS →
   plan-rls-audit. LLM attacks → audit-llm-security.
 license: MIT
+effort: high
 ---
 
 # Security Audit Skill
@@ -15,10 +16,11 @@ dependency and secret scans `[LOW freedom — run exactly]`. Never write
 exploit PoCs.
 
 > **Audit-and-fix exception.** May fix inline. Plan-only burndown → `plan-security-audit`.
+> When fixing inline: patch the evidenced sink only, in place; unrelated weaknesses you notice go in the report as findings, not fixes. Add a test only where the repo already keeps security tests or the task asks. Auth behavior, RLS, secrets rotation, payments, and migrations stay STOP-and-confirm.
 
 OWASP static review (injection, headers, deps). Session / route×gate /
 `getSession()` → `audit-auth-flows`. Next.js 16: grep `middleware.ts` **and**
-`proxy.ts` (the Aug-2026 security line included a proxy-bypass class).
+`proxy.ts` — a route gate can live in either file, and the proxy layer has its own bypass class.
 
 ## How to reason
 
@@ -193,6 +195,13 @@ bundle audit # Ruby
 ---
 
 ## Step 4: Common Vulnerability Patterns  [HIGH freedom]
+
+Grep for the sinks, then read each hit in context:
+
+- **SQL injection** — string interpolation into a query (`` `SELECT … ${ ``, `+ userId +`); parameterized or ORM calls pass
+- **XSS** — `dangerouslySetInnerHTML` / `innerHTML` fed user input without `DOMPurify.sanitize`
+- **IDOR** — a load by `req.params.id` with no owner predicate (`userId: req.user.id`) on the query
+- **Sensitive data exposure** — `res.json(user)`-style whole-record responses instead of an explicit field pick
 
 ### SQL Injection
 

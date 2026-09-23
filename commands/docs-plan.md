@@ -1,6 +1,8 @@
 ---
 description: "Documentation drift audit + sync plan — no rewrites until approved"
 argument-hint: "[path or scope]"
+disable-model-invocation: true
+effort: high
 ---
 
 # Docs Sync Plan

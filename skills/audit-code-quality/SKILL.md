@@ -6,6 +6,7 @@ description: >
   "technical debt", or "standardize the codebase". This PR/diff review →
   audit-code-review.
 license: MIT
+effort: high
 ---
 
 # Code Quality Audit
@@ -14,6 +15,14 @@ license: MIT
 greps and Validation `[LOW freedom — run exactly]`.
 
 > **Audit-and-fix exception.** Detect and then fix. Not present-then-stop.
+>
+> Fix the findings you reported, in the files you named; a repo-wide restyle
+> or rename pass the report did not list is a different session. Edit
+> surgically — the offending hook, key, or import — rather than rewriting
+> whole files. Pre-existing bugs met on the way go in the report as
+> follow-ups. Add or change tests only where the task asks or the repo
+> already keeps them for that surface; one-off greps and scratch scripts stay
+> out of the commit.
 
 Repo-wide React/TypeScript anti-patterns plus naming, organisation, and
 pattern consistency. A named PR/diff → `audit-code-review`.
@@ -238,7 +247,7 @@ rg "from '\.\." --type tsx | head -20 # relative imports instead of @/
 # Code Quality Audit
 
 ## Summary
-- Overall score: X/10
+- Verdict: [one line — what blocks, what is drift]
 - Critical findings: X
 
 ## Anti-patterns found
@@ -299,7 +308,7 @@ rg "from '\.\." --type tsx | head -20 # relative imports instead of @/
 
 ## Validation  [LOW freedom — run exactly]
 
-1. Run TypeScript strict: `npx tsc --noEmit`
-2. Run linter: `npx eslint src/`
-3. Confirm no regressions: `npx vitest run`
+1. Typecheck with the repo's own script (`package.json` → `typecheck`, else `tsc --noEmit`)
+2. Lint with the repo's own script — not a generic `eslint src/`
+3. Run the repo's test script and confirm no new failures
 4. Document any enforced standard in `CONTRIBUTING.md` or `.cursor/rules/`

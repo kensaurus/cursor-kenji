@@ -41,7 +41,7 @@ never `--abort` unasked, and run real checks `[LOW freedom — run exactly]`.
    --left-right HEAD...MERGE_HEAD` (or the rebase equivalent) for what each side
    contains.
 
-2. **Find the primary sources for each conflict.** `[HIGH freedom]` Understand deeply why each
+2. **Find the primary sources for each conflict.** `[HIGH freedom]` Understand why each
    change was made and what the original intent was: read the commit messages,
    check the PRs, check the original issues or tickets. Never resolve a hunk on
    textual appearance alone.

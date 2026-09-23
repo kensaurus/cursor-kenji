@@ -28,7 +28,7 @@ Skills drive a **visible** browser with `playwright-cli` (`npx --yes @playwright
 
 ## Not installed by default
 
-Sequential Thinking and the Playwright MCP exist only in `mcp/mcp-full.json.template`. Do not plan on them. A research or debug pass that needs a reasoning scratchpad writes the steps in the transcript.
+Sequential Thinking is not shipped (ADR-0009) and the Playwright MCP exists only in `mcp/mcp-full.json.template`; do not plan on either. Reasoning depth is set by the effort level, not by a scratchpad server or by writing reasoning steps into the transcript.
 
 ## Which one
 

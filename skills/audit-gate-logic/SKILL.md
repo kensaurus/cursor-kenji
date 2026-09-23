@@ -6,6 +6,7 @@ description: >
   "why did a regression pass CI". Cost → audit-cicd. Consolidation →
   housekeep-gates. Rule content → audit-doctrine.
 license: MIT
+effort: high
 ---
 
 # audit-gate-logic — Does the gate actually stop what it claims?

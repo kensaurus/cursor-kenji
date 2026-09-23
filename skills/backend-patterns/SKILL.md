@@ -434,27 +434,19 @@ await inngest.send({
 
 ### Trigger.dev
 ```tsx
-// trigger/jobs.ts
-import { client } from './client'
+// trigger/sync.ts
+import { schedules } from '@trigger.dev/sdk'
 
-export const syncJob = client.defineJob({
+export const syncJob = schedules.task({
  id: 'sync-data',
- name: 'Sync External Data',
- version: '1.0.0',
- trigger: intervalTrigger({ seconds: 3600 }), // Every hour
- run: async (payload, io, ctx) => {
- const data = await io.runTask('fetch-external', async () => {
- return await fetchExternalAPI()
- })
-
- await io.runTask('update-database', async () => {
+ cron: '0 * * * *', // every hour (UTC)
+ run: async () => {
+ const data = await fetchExternalAPI()
  await db.externalData.upsert({
  where: { externalId: data.id },
  create: data,
  update: data,
  })
- })
-
  return { synced: data.length }
  },
 })

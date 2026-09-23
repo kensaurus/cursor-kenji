@@ -1,6 +1,7 @@
 ---
 description: "Write a versioned launch kit — Show HN, Product Hunt, Reddit, X/LinkedIn, article outline, release notes, calendar, UTMs"
 argument-hint: "[version or release, optional channel list]"
+disable-model-invocation: true
 ---
 
 # Launch Kit

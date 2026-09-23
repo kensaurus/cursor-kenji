@@ -2,6 +2,7 @@
 name: statusline
 description: Configure a custom status line in the CLI. Use when the user mentions status line, statusline, statusLine, CLI status bar, prompt footer customization, or wants to add session context above the prompt.
 disable-model-invocation: true
+effort: low
 ---
 # CLI Status Line
 
@@ -45,8 +46,8 @@ The command receives a JSON object on stdin. The TypeScript interface is `Status
   "render_width_chars": 120,
   "cwd": "/Users/me/project",
   "model": {
-    "id": "claude-4-opus",
-    "display_name": "Claude 4 Opus",
+    "id": "claude-opus-5-5",
+    "display_name": "Claude Opus 5.5",
     "param_summary": "(Thinking)",
     "max_mode": true
   },

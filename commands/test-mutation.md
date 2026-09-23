@@ -1,6 +1,7 @@
 ---
 description: "Set up mutation testing to prove tests assert behavior, not just coverage"
 argument-hint: "[paths to mutate]"
+disable-model-invocation: true
 ---
 
 # Mutation Testing

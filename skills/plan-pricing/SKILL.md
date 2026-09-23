@@ -7,6 +7,7 @@ description: >
   I charge", "value metric", "seat vs usage", "are we underpriced". Page →
   enhance-web-conversion.
 license: MIT
+effort: high
 ---
 
 # plan-pricing — What to charge for, then how much
@@ -76,7 +77,7 @@ Do **not** fire for "fix the pricing page" → `enhance-web-conversion`.
 | Trial & free | `trial_ends_at`, downgrade jobs, free-plan limits | model in force |
 | Cost | per-action cost (LLM tokens, storage, compute) | floor for any usage price |
 | Customers | plan distribution, upgrade/downgrade events, churn reasons, "too expensive" in support | willingness-to-pay evidence already owned |
-| Alternatives | the three the founder named in `plan-gtm`; their public prices and metrics | anchor context |
+| Alternatives | the three the founder named in `plan-gtm`; their public prices and metrics, looked up now — recognizing a product is not knowing its current price | anchor context |
 
 ## Step 2 — Value metric  [HIGH freedom]
 
@@ -156,6 +157,8 @@ Enterprise: from … · Free boundary: …
 - **Phase 3 — Billing** → `audit-payment-system`, Stripe products, proration, grandfathering
 - **Phase 4 — Measure** → `audit-analytics` (`pricing_viewed`, `plan_selected`, `checkout_*`), 60-day review
 ```
+
+End the turn with a standalone recap in chat: the proposed metric in one sentence, the price corridor, and the first research step to approve. The file is the deliverable — write it before the recap.
 
 ## Guardrails
 

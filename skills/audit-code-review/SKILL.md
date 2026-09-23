@@ -6,6 +6,7 @@ description: >
   code review of current work. Repo-wide anti-patterns → audit-code-quality.
   Bulk transform semantics → audit-codemod-safety.
 license: MIT
+effort: high
 ---
 
 # Code Review Skill
@@ -107,6 +108,7 @@ Before line-by-line review:
 
 #### Correctness
 - [ ] Logic is correct for all expected inputs
+- [ ] The change does what the PR / task says — a missing requirement, half-implemented path, or silently narrowed scope is a blocking finding
 - [ ] Edge cases handled (null, empty, overflow, concurrent access)
 - [ ] No obvious bugs (off-by-one, wrong operator, missing await)
 - [ ] Error handling is full and appropriate
@@ -137,7 +139,7 @@ Before line-by-line review:
 #### Maintainability
 - [ ] DRY — no duplicated logic that should be shared
 - [ ] Single responsibility — each function/component does one thing
-- [ ] No magic numbers or strings (use constants or enums)
+- [ ] No magic numbers or strings (use constants or union types)
 - [ ] Types are specific (no `any`, no overly broad unions)
 - [ ] Dependencies are appropriate and minimal
 
@@ -212,7 +214,7 @@ fetchData(); // missing await or .catch()
 if (value) // when value could be 0 or ""
 
 // SUGGEST: magic strings
-if (status === 'active') // use constant or enum
+if (status === 'active') // use a constant or union type
 ```
 
 ### React
@@ -277,7 +279,15 @@ SELECT * FROM users -- select only needed columns
 
 ---
 
-## Best Practices for Reviewers
+## What counts as a finding
+
+Blocking findings are correctness bugs, security holes, data-loss paths, and
+gaps between what the change claims and what it does; suggestions and nits
+follow the Feedback Format above. Each finding names the line, the
+consequence, and a fix. Style that the linter or the codebase's own
+conventions already cover is not a finding at any tier. Read the surrounding
+code before judging a hunk, and where intent is unclear, ask in the Questions
+section rather than assume.
 
 ### DO
 - Be specific and actionable — link to the exact line

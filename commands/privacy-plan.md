@@ -1,6 +1,8 @@
 ---
 description: "Privacy / GDPR / APPI / store-label audit — plan only, no policy or SDK edits until approved"
 argument-hint: "[path or scope]"
+disable-model-invocation: true
+effort: high
 ---
 
 # Privacy Compliance Plan

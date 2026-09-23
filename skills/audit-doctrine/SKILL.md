@@ -7,6 +7,7 @@ description: >
   doctrine". Enforcement → audit-gate-logic. Consolidation →
   housekeep-gates.
 license: MIT
+effort: high
 ---
 
 # audit-doctrine — Is the rule right, not merely enforced?
@@ -116,7 +117,10 @@ For each axis, classify:
 
 For each taste rule, check whether Tier-D products ship the pattern it
 rejects. Use `research` / official docs against Stripe, Linear,
-GitHub, Docusaurus, Radix, shadcn. Where a rule bans what Tier-D
+GitHub, Docusaurus, Radix, shadcn — fetch the live page or docs as
+written; recognizing a product is not knowing what it ships today, and a
+from-memory reference is **needs-reference**, not evidence. Where a rule
+bans what Tier-D
 ships, it is a false-positive *candidate* — the burden of proof is on
 the rule. Document the shipping reference for each disagreement. No
 reference → mark **needs-reference**, not a finding.

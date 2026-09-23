@@ -5,6 +5,7 @@ description: >
   bill is high, Actions minutes, runner cost, slow CI, artifact/cache storage, or "CI/CD /
   workflow audit". Gate logic (bypass, ratchet gaming, required-but-not) → audit-gate-logic.
 license: MIT
+effort: high
 ---
 
 # CI/CD Audit Skill
@@ -159,7 +160,10 @@ gh api "repos/<owner>/<repo>/actions/caches" --paginate --jq '.actions_caches[].
   (YAML parses) and that intended jobs skip/run:
   `gh run view <id> --json jobs --jq '.jobs[]|"\(.conclusion // .status)  \(.name)"'`
 
-## Account backstops (one-time, GitHub UI — cannot be set via API)
+## Account backstops (one-time, GitHub UI)
+
+UI-only at the time of writing — check whether the settings API now covers
+them before telling the user it is manual.
 
 - **Default artifact/log retention** → Settings → Actions → General → drop from
   90 days to ~14 (applies to all repos, including future ones).

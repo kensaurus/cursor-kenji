@@ -1,6 +1,8 @@
 ---
 description: "Data-integrity & destructive-op audit — plan only, no migrations or tokens until approved"
 argument-hint: "[path or scope]"
+disable-model-invocation: true
+effort: high
 ---
 
 # Data Integrity Plan

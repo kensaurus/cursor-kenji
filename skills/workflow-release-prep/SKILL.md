@@ -7,6 +7,7 @@ description: >
   tree merge-ready". Existing PR → workflow-pr. Product launch →
   workflow-launch-ready.
 license: MIT
+effort: high
 ---
 
 # workflow-release-prep — Local working tree → merge-ready PR

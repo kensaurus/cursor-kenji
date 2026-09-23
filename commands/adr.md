@@ -1,6 +1,7 @@
 ---
 description: "Create or maintain Architecture Decision Records as agent-readable decision memory"
 argument-hint: "[decision to record]"
+disable-model-invocation: true
 ---
 
 # Architecture Decision Records

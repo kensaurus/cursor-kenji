@@ -6,10 +6,11 @@ disable-model-invocation: true
 # Creating Cursor Rules
 
 Create project rules in `.cursor/rules/` to provide persistent context for the AI agent.
+For one plain-Markdown file that always applies, `AGENTS.md` at the project root does the same job as an `alwaysApply` rule and needs no frontmatter.
 
 ## Check existing first
 
-**Before creating ANY rule, verify:**
+**Before creating a rule, check:**
 
 1. **Check for existing rules:**
 ```bash
@@ -48,7 +49,7 @@ If the user hasn't specified scope, ask:
 If they mentioned specific files and haven't provided concrete patterns, ask:
 - "Which file patterns should this rule apply to?" (e.g., `**/*.ts`, `backend/**/*.py`)
 
-It's very important that we get clarity on the file patterns.
+Get the file patterns right: a wrong glob means the rule never loads, or loads for every file.
 
 Use the AskQuestion tool when available to gather this efficiently.
 
@@ -123,7 +124,9 @@ alwaysApply: false
 - **Under 50 lines**: Rules should be concise and to the point
 - **One concern per rule**: Split large rules into focused pieces
 - **Actionable**: Write like clear internal docs
+- **Normal volume, with the reason**: state each constraint once and say why. MUST/NEVER/CRITICAL over-trigger on current models; "try to" reads as permission to skip
 - **Concrete examples**: Ideally provide concrete examples of how to fix issues
+- **Always-on costs every turn**: an `alwaysApply` rule rides in every request inside the cached prefix. Keep those few, short, and byte-stable (no dates, counters, or generated timestamps); scope the rest with `globs`
 
 ---
 
@@ -178,5 +181,5 @@ alwaysApply: false
 
 - [ ] File is `.mdc` format in `.cursor/rules/`
 - [ ] Frontmatter configured correctly
-- [ ] Content under 500 lines
+- [ ] Content under 50 lines (split larger rules by concern)
 - [ ] Includes concrete examples

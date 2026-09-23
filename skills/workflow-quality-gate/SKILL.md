@@ -7,6 +7,7 @@ description: >
   soundness → audit-gate-logic. Working tree to a PR →
   workflow-release-prep.
 license: MIT
+effort: high
 ---
 
 # workflow-quality-gate — Pre-Release Go/No-Go

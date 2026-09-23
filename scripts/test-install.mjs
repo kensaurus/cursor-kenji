@@ -50,7 +50,9 @@ try {
     .filter((name) => !cursorBuiltinDupes.has(name)).length;
   const repoCursorSkills = repoGeneralSkills + repoCursorExtra;
   const repoClaudeSkills = repoGeneralSkills + countDir(join(repoRoot, "skills-cursor"));
-  const repoCommands = countDir(join(repoRoot, "commands"));
+  // Per-project command bundles (directories) are excluded from global installs.
+  const repoCommands = readdirSync(join(repoRoot, "commands"))
+    .filter((f) => !statSync(join(repoRoot, "commands", f)).isDirectory()).length;
   const repoAgents = countDir(join(repoRoot, "agents"));
   // Per-project rule bundles (directories) are excluded from global installs.
   const repoRuleFiles = readdirSync(join(repoRoot, "rules"))
@@ -81,8 +83,12 @@ try {
     "per-project bundle native-rn-monorepo leaked into global rules");
   expect(!existsSync(join(cur, "rules", "project-starter")),
     "per-project bundle project-starter leaked into global rules");
+  expect(!existsSync(join(cur, "commands", "native-rn-monorepo")),
+    "per-project bundle native-rn-monorepo leaked into global commands");
   expect(!existsSync(join(cur, "rules", "shell-first-search.md")),
     "Claude-only .md rule leaked into Cursor rules");
+  expect(existsSync(join(cur, "rules", "shell-first-search.mdc")),
+    "Cursor should receive shell-first-search.mdc");
   expect(existsSync(join(cur, "cursor-kenji-hooks", "completion-gate.mjs")),
     "missing completion hook script");
 
@@ -205,6 +211,26 @@ try {
     "Claude should receive shell-first-search.md");
   expect(countDir(join(sandbox5, ".claude", "rules")) === repoClaudeRules,
     `claude rules: expected ${repoClaudeRules}, got ${countDir(join(sandbox5, ".claude", "rules"))}`);
+  expect(existsSync(join(sandbox5, ".claude", "cursor-kenji-hooks", "completion-gate.mjs")),
+    "missing Claude completion hook script");
+  const claudeSettingsPath = join(sandbox5, ".claude", "settings.json");
+  expect(existsSync(claudeSettingsPath), "missing ~/.claude/settings.json");
+  const claudeSettings = JSON.parse(readFileSync(claudeSettingsPath, "utf8"));
+  const stopGroups = claudeSettings.hooks?.Stop ?? [];
+  const gateEntries = (groups) => groups.flatMap((g) => g.hooks ?? []).filter((h) => h.command?.includes("completion-gate.mjs"));
+  expect(gateEntries(stopGroups).length === 1, "Claude Stop hook was not registered once");
+  stopGroups.unshift({ hooks: [{ type: "command", command: "node user-owned-stop.mjs" }] });
+  claudeSettings.permissions = { allow: ["Bash(npm test)"] };
+  writeFileSync(claudeSettingsPath, JSON.stringify(claudeSettings, null, 2) + "\n");
+  execFileSync(process.execPath, [installer, "--claude"], {
+    env: { ...process.env, HOME: sandbox5, USERPROFILE: sandbox5 },
+    stdio: "pipe",
+  });
+  const reinstalled = JSON.parse(readFileSync(claudeSettingsPath, "utf8"));
+  expect(reinstalled.permissions?.allow?.[0] === "Bash(npm test)", "installer dropped unrelated settings.json keys");
+  expect((reinstalled.hooks.Stop ?? []).some((g) => (g.hooks ?? []).some((h) => h.command === "node user-owned-stop.mjs")),
+    "installer removed a user-owned Claude Stop hook");
+  expect(gateEntries(reinstalled.hooks.Stop).length === 1, "installer duplicated the Claude completion hook");
 
   // Merge must overwrite same-name skills and commands (not leave stale text).
   const marker = "KENJI-OVERWRITE-PROBE-DO-NOT-SHIP";
@@ -304,6 +330,15 @@ try {
   expect(!existsSync(join(sandboxClaude, ".claude", "skills", oldName)), "Claude did not prune renamed skill");
   expect(existsSync(join(sandboxClaude, ".claude", "skills", "research")), "Claude rename prune removed the new skill");
 
+  // Renamed rule files are pruned on both hosts (RENAMED_RULES).
+  writeFileSync(join(cur, "rules", "composer-2.5-execution.mdc"), marker);
+  writeFileSync(join(sandboxClaude, ".claude", "rules", "composer-2.5-execution.md"), marker);
+  execFileSync(process.execPath, [installer], { env: { ...process.env, HOME: sandbox, USERPROFILE: sandbox }, stdio: "pipe" });
+  execFileSync(process.execPath, [installer, "--claude"], { env: { ...process.env, HOME: sandboxClaude, USERPROFILE: sandboxClaude }, stdio: "pipe" });
+  expect(!existsSync(join(cur, "rules", "composer-2.5-execution.mdc")), "Cursor did not prune the renamed rule");
+  expect(!existsSync(join(sandboxClaude, ".claude", "rules", "composer-2.5-execution.md")), "Claude did not prune the renamed rule");
+  expect(existsSync(join(cur, "rules", "approved-plan-execution.mdc")), "renamed rule missing after prune");
+
   const sandboxDry = join(sandbox, "rename-dry");
   plantOld(join(sandboxDry, ".cursor", "skills"));
   execFileSync(process.execPath, [installer, "--dry-run"], {
@@ -347,11 +382,24 @@ try {
   // and cmd looks in the current directory. The cwd shim must exist and run.
   expect(existsSync(join(repoRoot, "cursor-kenji.cmd")), "missing Windows cwd shim cursor-kenji.cmd");
   if (process.platform === "win32") {
+    // Hardened shells export NoDefaultCurrentDirectoryInExePath=1, which stops
+    // cmd.exe searching the cwd for the shim at all (npx from a clone fails
+    // there regardless of this package). Clear it for the child so the test
+    // exercises the shim the way a standard Windows shell resolves it.
+    const cmdEnv = { ...process.env };
+    delete cmdEnv.NoDefaultCurrentDirectoryInExePath;
     const cmdHelp = execFileSync("cmd.exe", ["/c", "cursor-kenji.cmd", "--help"], {
       cwd: repoRoot,
       encoding: "utf8",
+      env: cmdEnv,
     });
     expect(cmdHelp.includes("cursor-kenji installer"), "cursor-kenji.cmd --help did not run installer");
+    // The explicit-path form must work even under the hardened setting.
+    const cmdHelpExplicit = execFileSync("cmd.exe", ["/c", ".\\cursor-kenji.cmd", "--help"], {
+      cwd: repoRoot,
+      encoding: "utf8",
+    });
+    expect(cmdHelpExplicit.includes("cursor-kenji installer"), ".\\cursor-kenji.cmd --help did not run installer");
   }
 
   // Packed tarball (what npm publish ships) must expose a working bin.

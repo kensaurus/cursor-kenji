@@ -1,6 +1,8 @@
 ---
 description: "Relentless one-question-at-a-time interview to sharpen a plan or design before any code is written"
 argument-hint: "[plan, decision, or idea to stress-test]"
+disable-model-invocation: true
+effort: high
 ---
 
 # /grill-me

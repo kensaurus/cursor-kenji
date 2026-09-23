@@ -1,6 +1,8 @@
 ---
 description: "Error-handling & observability audit (Sentry + Langfuse) — plan only, no fixes until approved"
 argument-hint: "[path or scope]"
+disable-model-invocation: true
+effort: high
 ---
 
 # Error Handling Plan

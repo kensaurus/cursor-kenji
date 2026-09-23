@@ -1,6 +1,8 @@
 ---
 description: "Secrets & key-scope audit (rotate vs relocate) — plan only, no rotation until approved"
 argument-hint: "[path or scope]"
+disable-model-invocation: true
+effort: high
 ---
 
 # Secrets Audit Plan

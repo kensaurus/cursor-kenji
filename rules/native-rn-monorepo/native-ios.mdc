@@ -6,17 +6,17 @@ alwaysApply: false
 
 # Native iOS
 
-The developer does NOT have a Mac. iOS code is written here and
-verified on CI. Do not suggest local Xcode, `pod install`, or
-`xcodebuild` commands.
+The developer has no Mac: iOS code is written here and verified on CI,
+so local Xcode, `pod install`, and `xcodebuild` are not options to
+suggest.
 
 > Adjust `ios/` to your repo's actual path (e.g.
 > `apps/mobile/ios/`).
 
 Stack: Swift first, Obj-C only for RN bridge boilerplate.
 Build: Xcode + CocoaPods on the CI runner.
-Deployment target: read `ios/Podfile` `platform :ios, 'X.Y'` —
-do NOT raise it without checking RN library compatibility.
+Deployment target: read `ios/Podfile` `platform :ios, 'X.Y'`; raise it
+only after checking which RN libraries it breaks.
 
 ## Conventions
 
@@ -37,8 +37,7 @@ do NOT raise it without checking RN library compatibility.
 
 ## Verification (CI only)
 
-After editing iOS files, do NOT ask the developer to run anything
-locally for iOS. Instead:
+After editing iOS files:
 
 1. Make the edit.
 2. Suggest `/rn-verify` to catch JS/Android-side issues.
@@ -49,7 +48,7 @@ Special case: if the change is purely in `Info.plist` strings
 (e.g., adding a permission description), it's worth flagging that
 the change is low-risk but must still go through CI.
 
-## What NOT to do
+## Boundaries
 
 - Do not edit `*.pbxproj` by hand. The developer can't open Xcode
   to fix a corrupted project file.
@@ -58,7 +57,5 @@ the change is low-risk but must still go through CI.
 - Do not change `IPHONEOS_DEPLOYMENT_TARGET` without checking
   which RN libs it breaks.
 - Do not commit `.xcuserstate`, `xcuserdata/`, or `ios/build/`.
-- Do not suggest the developer "test on simulator" or "run from
-  Xcode" — they cannot.
 - Do not claim iOS changes are verified just because TS passed —
   the developer must trigger CI.

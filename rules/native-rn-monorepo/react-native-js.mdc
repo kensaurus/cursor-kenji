@@ -65,7 +65,7 @@ For runtime sanity:
 npx react-native start --reset-cache
 ```
 
-## What NOT to do
+## Boundaries
 
 - Do not commit `.env*` files unless they are the example/template
   (`.env.example`).

@@ -17,6 +17,18 @@
  *   - first-party families on the prompt require-list declare Degree of
  *     freedom plus heading-level `## Worked example` and `## Self-critique`
  *     (a table cell that names the technique does not count)
+ *   - Claude Code routing keys, when present, hold documented values:
+ *     `effort` ∈ low/medium/high/xhigh/max (skills, agents, commands),
+ *     `context` = fork, `agent` only with fork, booleans are true/false,
+ *     agents' `memory`/`isolation`/`color`/`maxTurns` in their sets, `effort`
+ *     never nested under `metadata:`; (warn) `model` pinning a full `claude-*`
+ *     ID; description + when_to_use <= 1536 chars. Cursor ignores these keys.
+ *   - every top-level commands/*.md is `disable-model-invocation: true` unless
+ *     listed in MODEL_INVOCABLE_COMMANDS; commands-portable/ carries no
+ *     Claude-only keys (install.mjs strips portable frontmatter)
+ *   - auto-invocable description roster (skills + skills-cursor + top-level
+ *     commands + agents, minus disable-model-invocation) <= ROSTER_MAX_CHARS
+ *     (ratchet; ADR-0008), warn above ROSTER_TARGET_CHARS
  */
 import { readdirSync, existsSync, readFileSync, statSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -31,9 +43,73 @@ const DESC_MAX = 320;
 const DESC_HEADROOM_WARN = 315;
 const BODY_WARN = 500;
 
+// Claude Code frontmatter extensions (code.claude.com/docs/en/skills →
+// "Frontmatter reference"; sub-agents → "Supported frontmatter fields").
+// Cursor ignores unknown keys, so a bad value here is invisible until a
+// Claude Code session silently loses the routing.
+const EFFORT_LEVELS = new Set(["low", "medium", "high", "xhigh", "max"]);
+const BOOL_KEYS = ["disable-model-invocation", "user-invocable", "background"];
+const CLAUDE_CODE_CAP = 1536; // description + when_to_use
+const AGENT_ENUMS = {
+  memory: new Set(["user", "project", "local"]),
+  isolation: new Set(["worktree"]),
+  color: new Set(["red", "blue", "green", "yellow", "purple", "orange", "pink", "cyan"]),
+};
+// Roster budget (ADR-0008). Every description without
+// `disable-model-invocation: true` rides in the host's skill listing on every
+// request; Claude Code trims that listing to a fixed budget with no
+// user-visible warning (observed in the client, not a documented setting).
+const ROSTER_TARGET_CHARS = 40_000; // warn above (1M-window listing budget)
+const ROSTER_MAX_CHARS = 43_500;    // ratchet: measured post-flip total rounded up to 500; lower, never raise
+// Commands are the `/` surface; the skill twin carries the auto-route.
+const MODEL_INVOCABLE_COMMANDS = new Set(["gtm-weekly", "fix-issue", "mcp-guide"]);
+const roster = { skills: 0, "skills-cursor": 0, commands: 0, agents: 0 };
+
 const errors = [];
 const warnings = [];
 let total = 0;
+
+/** Top-level scalar frontmatter value for `key`, unquoted; null if absent. */
+function fmScalar(front, key) {
+  const m = front.match(new RegExp(`^${key}:[ \\t]*(.*)$`, "m"));
+  return m ? m[1].trim().replace(/^["']|["']$/g, "") : null;
+}
+function frontmatterOf(raw) {
+  const m = raw.replace(/^﻿/, "").replace(/\r\n/g, "\n").match(/^---\n([\s\S]*?)\n---/);
+  return m ? m[1] : null;
+}
+/** Validate Claude Code routing keys — values, not presence. */
+function checkRoutingKeys(id, front, desc, { agent = false } = {}) {
+  const effort = fmScalar(front, "effort");
+  if (effort !== null && !EFFORT_LEVELS.has(effort)) {
+    errors.push(`${id}: effort '${effort}' not one of ${[...EFFORT_LEVELS].join("/")}`);
+  }
+  if (/^metadata:/m.test(front) && /^\s+effort:/m.test(front)) {
+    errors.push(`${id}: effort belongs at the top level of the frontmatter, not under metadata:`);
+  }
+  const context = fmScalar(front, "context");
+  if (context !== null && context !== "fork") errors.push(`${id}: context '${context}' — the only documented value is 'fork'`);
+  if (fmScalar(front, "agent") !== null && context !== "fork") warnings.push(`${id}: 'agent' is ignored without 'context: fork'`);
+  if (context === "fork" && fmScalar(front, "agent") === null) warnings.push(`${id}: context: fork without agent: — Claude Code will use the default subagent, not Explore`);
+  for (const key of BOOL_KEYS) {
+    const v = fmScalar(front, key);
+    if (v !== null && v !== "true" && v !== "false") errors.push(`${id}: ${key} must be true or false (got '${v}')`);
+  }
+  const model = fmScalar(front, "model");
+  if (model !== null && /^claude-/i.test(model)) warnings.push(`${id}: model '${model}' pins a full model ID — use opus/sonnet/haiku/inherit so the pin does not rot`);
+  const whenToUse = fmScalar(front, "when_to_use");
+  if (whenToUse !== null && desc && desc.length + whenToUse.length > CLAUDE_CODE_CAP) {
+    errors.push(`${id}: description + when_to_use ${desc.length + whenToUse.length} chars > ${CLAUDE_CODE_CAP} (Claude Code cap)`);
+  }
+  if (agent) {
+    for (const [key, allowed] of Object.entries(AGENT_ENUMS)) {
+      const v = fmScalar(front, key);
+      if (v !== null && !allowed.has(v)) errors.push(`${id}: ${key} '${v}' not one of ${[...allowed].join("/")}`);
+    }
+    const maxTurns = fmScalar(front, "maxTurns");
+    if (maxTurns !== null && !/^\d+$/.test(maxTurns)) errors.push(`${id}: maxTurns must be an integer`);
+  }
+}
 
 /** Extract the YAML frontmatter description value, folded to a single line. */
 function readDescription(front) {
@@ -118,6 +194,9 @@ for (const group of groups) {
         errors.push(`${id}: description ends in 'i.e.' (truncated)`);
       }
     }
+
+    checkRoutingKeys(id, front, desc);
+    if (desc && fmScalar(front, "disable-model-invocation") !== "true") roster[group] += desc.length;
 
     // body length (warning only)
     const lines = body.split("\n").length;
@@ -243,8 +322,63 @@ for (const name of INTENTIONAL_SKILL_COMMAND_PAIRS) {
   }
 }
 
+// ---- Agents and commands: same routing keys; commands are `/`-only (ADR-0008) ----
+function listCommandFiles(dir) {
+  const out = [];
+  for (const f of readdirSync(dir)) {
+    const p = join(dir, f);
+    if (statSync(p).isDirectory()) out.push(...listCommandFiles(p));
+    else if (f.endsWith(".md") && f !== "README.md") out.push(p);
+  }
+  return out;
+}
+{
+  const agentsDir = join(repoRoot, "agents");
+  for (const f of existsSync(agentsDir) ? readdirSync(agentsDir) : []) {
+    if (!f.endsWith(".md") || f === "README.md") continue;
+    const rel = `agents/${f}`;
+    const front = frontmatterOf(readFileSync(join(agentsDir, f), "utf8"));
+    if (!front) { errors.push(`${rel}: no YAML frontmatter`); continue; }
+    const desc = readDescription(front);
+    if (!desc) errors.push(`${rel}: missing 'description'`);
+    checkRoutingKeys(rel, front, desc, { agent: true });
+    if (desc && fmScalar(front, "disable-model-invocation") !== "true") roster.agents += desc.length;
+  }
+  const commandsDir = join(repoRoot, "commands");
+  for (const file of existsSync(commandsDir) ? listCommandFiles(commandsDir) : []) {
+    const rel = `commands/${file.slice(commandsDir.length + 1).replace(/\\/g, "/")}`;
+    const topLevel = !rel.slice("commands/".length).includes("/");
+    const front = frontmatterOf(readFileSync(file, "utf8"));
+    if (!front) { errors.push(`${rel}: no YAML frontmatter`); continue; }
+    const desc = readDescription(front);
+    if (!desc) errors.push(`${rel}: missing 'description'`);
+    checkRoutingKeys(rel, front, desc);
+    const dmi = fmScalar(front, "disable-model-invocation");
+    const name = rel.replace(/^commands\//, "").replace(/\.md$/, "");
+    if (topLevel && dmi !== "true" && !MODEL_INVOCABLE_COMMANDS.has(name)) {
+      errors.push(`${rel}: add \`disable-model-invocation: true\` — commands are the / surface and the skill twin carries the auto-route (ADR-0008); list it in MODEL_INVOCABLE_COMMANDS only if the model must invoke it`);
+    }
+    if (topLevel && desc && dmi !== "true") roster.commands += desc.length;
+  }
+  const portableDir = join(repoRoot, "commands-portable");
+  for (const file of existsSync(portableDir) ? listCommandFiles(portableDir) : []) {
+    const rel = `commands-portable/${file.slice(portableDir.length + 1).replace(/\\/g, "/")}`;
+    const front = frontmatterOf(readFileSync(file, "utf8")) || "";
+    for (const key of ["effort", "disable-model-invocation", "user-invocable", "context", "agent"]) {
+      if (fmScalar(front, key) !== null) errors.push(`${rel}: Claude-only key '${key}' in portable frontmatter (install.mjs strips it — dead text)`);
+    }
+  }
+}
+const rosterTotal = Object.values(roster).reduce((a, b) => a + b, 0);
+const rosterLine = Object.entries(roster).map(([k, v]) => `${k} ${v}`).join(", ");
+if (rosterTotal > ROSTER_MAX_CHARS) {
+  errors.push(`roster: ${rosterTotal} auto-invocable description chars > ${ROSTER_MAX_CHARS} (${rosterLine}) — flip user-only rituals to disable-model-invocation: true or shorten descriptions; never raise the cap (ADR-0008)`);
+} else if (rosterTotal > ROSTER_TARGET_CHARS) {
+  warnings.push(`roster: ${rosterTotal} auto-invocable description chars > target ${ROSTER_TARGET_CHARS} (${rosterLine})`);
+}
+
 if (asJson) {
-  console.log(JSON.stringify({ total, errors, warnings }, null, 2));
+  console.log(JSON.stringify({ total, errors, warnings, roster, rosterTotal }, null, 2));
 } else {
   for (const w of warnings) console.warn(`⚠ ${w}`);
   if (errors.length) {
@@ -252,7 +386,8 @@ if (asJson) {
     console.error(`\n✗ ${errors.length} error(s) across ${total} skills.`);
   } else {
     console.log(`✓ All ${total} skills valid against the Agent Skills spec` +
-      (warnings.length ? ` (${warnings.length} warning(s)).` : "."));
+      (warnings.length ? ` (${warnings.length} warning(s)).` : ".") +
+      ` Always-on description roster: ${rosterTotal} chars (~${Math.round(rosterTotal / 4)} tokens per request).`);
   }
 }
 

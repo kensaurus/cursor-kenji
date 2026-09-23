@@ -6,6 +6,8 @@
 
 Validated against the [Agent Skills specification](https://agentskills.io/specification) on every commit. npm package: `@kensaurus/cursor-kenji`.
 
+Runs on Claude Opus 5.5 — the Claude Code default since 2.1.280 and a Cursor agent model — with effort routing declared per skill: audit / plan / judge at high, implementation at the medium default, inventory / handoff at low. Prompts do not steer thinking on Opus 5.5; effort does.
+
 ## Install
 
 - [README.md](https://github.com/kensaurus/cursor-kenji/blob/main/README.md): Quick start, install modes, FAQ, skill taxonomy
@@ -18,6 +20,7 @@ Validated against the [Agent Skills specification](https://agentskills.io/specif
 - [docs/TRIGGER-CHEATSHEET.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/TRIGGER-CHEATSHEET.md): Plain lookup table for skill triggers
 - [docs/PLAN-LOOPS.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/PLAN-LOOPS.md): 23 `plan-*` audit skills in grouped loops (approve before execution)
 - [docs/AGENTS.template.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/AGENTS.template.md): Project constitution template for consumer repos
+- [docs/MODEL-AND-EFFORT.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/MODEL-AND-EFFORT.md): Default model per host, how to set effort (`/effort`, `modelSettings`, frontmatter `effort:`), the pack's routing table, what changed for Opus 5.5
 
 ## MCP & security
 

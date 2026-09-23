@@ -1,3 +1,8 @@
+---
+description: "Trigger the iOS GitHub Actions workflow for the pushed branch and report the run URL"
+effort: low
+---
+
 # /ios-ci-trigger
 
 Kick off the iOS build on GitHub Actions. Use after any change that

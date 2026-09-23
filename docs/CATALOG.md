@@ -2,6 +2,8 @@
 
 Skill and command index with trigger phrases.
 
+Effort on Claude Code: each skill's `effort:` key sets how hard Opus 5.5 thinks — audit / plan / judge high, implementation medium, inventory / handoff low; Cursor ignores the key. See [MODEL-AND-EFFORT.md](MODEL-AND-EFFORT.md).
+
 ---
 
 ## Skill Taxonomy
@@ -688,7 +690,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `burndown-full`
 **Triggers:** "finish the burndown", "it stopped halfway", "apply this everywhere", "complete the refactor across all files", "make sure nothing was missed", "ran out of steam", "half-migrated repo", "/burndown-full"
 **What it does:** Drive a planned change to 100% coverage when a prior agent run stopped early. Defines MATCH/DONE searchable patterns, enumerates the full repo-wide worklist (not the plan's file list), executes in small batches with persistent `.cursor/burndown-state.md`, and loops a verification gate (fresh grep → zero hits, typecheck, lint, test, build) until provably complete. Framework-agnostic — discovers project verification commands from package.json/Makefile/AGENTS.md.
-**Related:** `complete-everything`, `composer-2.5-execution`, `audit-gate-logic`, `audit-codemod-safety`, `plan-*` skills (audit-only), `workflow-refactor`
+**Related:** `complete-everything`, `approved-plan-execution`, `audit-gate-logic`, `audit-codemod-safety`, `plan-*` skills (audit-only), `workflow-refactor`
 
 #### `research`
 **Triggers:** "/research", "look up current docs", "what does the industry recommend", "research this before we implement", "current best practices"
@@ -856,6 +858,8 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 | `debugger` | Error, exception, unexpected behavior | Root cause and verified fix |
 | `deploy-checker` | Deploy, ship, production | Pre-deploy readiness verdict |
 | `perf-monitor` | Slow, laggy, optimize | Performance findings and priorities |
+
+On Claude Code each agent's frontmatter `effort:` sets its depth; `completion-judge` and `code-reviewer` run at `high` in a fresh context and flag only correctness and requirement gaps.
 
 ---
 

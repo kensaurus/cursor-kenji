@@ -5,7 +5,7 @@
 ### Phase RED — write a failing test first
 
 ```typescript
-// Tell the agent: "We're doing TDD. Write tests based on these
+// RED: tests written from the input/output pairs; no implementation exists yet.
 // input/output pairs. Do NOT write any implementation yet."
 
 describe('calculateDiscount', () => {
@@ -32,7 +32,7 @@ npx vitest run src/utils/discount.test.ts
 
 ### Phase GREEN — minimal code to pass
 
-Tell the agent: "Write code that makes these tests pass. Do not modify the tests. Keep iterating until all pass."
+Write the minimal code that makes these tests pass without modifying the tests.
 
 ```bash
 npx vitest run --watch src/utils/discount.test.ts
