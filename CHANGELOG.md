@@ -29,7 +29,9 @@ checked by an independent verifier before it was applied.
   project-scoped (`--project-ref`), so calls no longer pass `project_id`,
   and `list_projects` is described as available only on an unscoped server.
   Affected: `deploy-verify`, `iterate-post-launch`, `workflow-fix-and-ship`,
-  `workflow-feature-flag`, `mushi-*`, `test-*`, `audit-db-schema`, and the
+  `workflow-feature-flag`, `workflow-feedback-to-closure`, `mushi-*`,
+  `test-*`, `mobile-emulator-test`, `audit-db-schema`, `audit-fe-api`,
+  `audit-langfuse-llm`, `debug-fe-be-integration`, `design-prd`, and the
   `full-stack-ship-discipline` rule.
 - **Sentry MCP calls match the current server.**
   - `get_issue_breadcrumbs`, `get_issue_tag_values`, and `find_releases` are
@@ -65,15 +67,18 @@ checked by an independent verifier before it was applied.
 
 ### Fixed
 
-- **13 broken code fences in 10 files.** A nested or unclosed fence rendered
+- **13 code-fence errors in 9 files.** A nested or unclosed fence rendered
   the rest of an output template as live markdown. Affected: `design-prd`,
   `plan-dead-code`, `audit-db-schema`, `audit-langfuse-llm`,
   `audit-uiux-design-system`, `backend-error-handling`, and
-  `docs/CONTRIBUTING.md`. Duplicate headings in `audit-code-quality`,
-  `docs-coauthor`, and the catalog now have distinct names.
-- **The README said `audit-*` skills may fix things.** It now says they
-  report and stop, except the six audit-and-fix skills, matching
   `docs/CONTRIBUTING.md`.
+- **Duplicate headings.** The ones in `audit-code-quality` and
+  `docs-coauthor` now have distinct names. The catalog's duplicate
+  `audit-skill-conflicts` entry is now a pointer to its Audit entry.
+- **The README said `audit-*` skills may fix things.** It now says they
+  report and stop by default, names the six audit-and-fix skills, and notes
+  the few others that end with an explicit apply step.
+- **`CITATION.cff`** still said version 1.31.0.
 
 ## [1.38.0] — 2026-09-23
 

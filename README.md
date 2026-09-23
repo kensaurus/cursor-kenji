@@ -759,7 +759,7 @@ You say the job in chat; a playbook runs. [Agent Skills](https://agentskills.io)
 You talk normally. Cursor matches your words to each skill's YAML `description`. To force one: *"use \`audit-security\` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).
 
 **What's the difference between `audit-*` and `plan-*`?**
-`audit-*` reports findings and stops, except six audit-and-fix skills (`audit-responsive`, `audit-code-quality`, `audit-performance`, `audit-security`, `audit-i18n`, `audit-bundle-size`). `plan-*` only writes a `plan-{name}.md` burndown — **you** approve each phase before any code changes. See [docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md).
+`audit-*` reports findings and stops by default. Six audit-and-fix skills (`audit-responsive`, `audit-code-quality`, `audit-performance`, `audit-security`, `audit-i18n`, `audit-bundle-size`) fix what they find, and a few others end with an explicit apply step, such as `audit-langfuse-llm`'s prompt-improvement cycle and `audit-cicd`'s confirmed cache cleanup. `plan-*` only writes a `plan-{name}.md` burndown — **you** approve each phase before any code changes. See [docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md).
 
 **Where do MCP API keys go?**
 Copy `mcp/mcp.json.template` to `~/.cursor/mcp.json` and set the env vars above — never commit real keys. See [SECURITY.md](SECURITY.md) and [mcp/README.md](mcp/README.md).
