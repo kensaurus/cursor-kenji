@@ -28,6 +28,9 @@
 # NOTES:
 # - No rm, mv, or rsync --delete anywhere in this file by design.
 # - plan.tsv is tab-separated so paths may contain commas, spaces, and CJK.
+# - Optional 10th column `exclude`: ';'-separated relative-path substrings cataloged in
+#   place instead of copied (code checkouts, caches). node_modules/.git/__pycache__/
+#   .venv/.next/.cache are always skipped.
 #
 set -u
 MODE="${1:-}"; PLAN="${2:-}"; OUT="${3:-}"; COUNT_ONLY="${4:-}"
@@ -40,6 +43,7 @@ INV="$OUT/inventory.csv"; CNT="$OUT/count-only.csv"; PREVIEW="$OUT/preview.tsv"
 CATALOG="$OUT/catalog.jsonl"; APPLYLOG="$OUT/apply-log.tsv"; VERIFY="$OUT/verify-report.txt"
 RUN="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 DOC_EXT=" pdf doc docx xls xlsx xlsm ppt pptx csv txt md html htm xtx xml data zip jpg jpeg png heic svg gif webp rtf odt ods eml msg "
+ARTIFACT_RE='/(node_modules|\.git|__pycache__|\.venv|\.next|\.cache)/'
 SECRET_RE='credential|keystore|\.p8$|\.p12$|\.pem$|\.key$|\.jks$|mobileprovision|\.cer$|\.der$|certsigningrequest|\.b64$|service-account|client_secret|google-services\.json|googleservice-info|oauth|private-key|backup_code|\.env$|play-publisher|apple-credentials|env-backups|recovery|2fa|mfa|totp|アクセスキー'
 
 if command -v sha256sum >/dev/null 2>&1; then sha() { sha256sum "$1" | awk '{print $1}'; }
@@ -71,7 +75,7 @@ date_token() {  # $1 name, $2 parent name
 # Tab is whitespace to read(1) and collapses empty columns, so plan.tsv is re-separated with \037 first.
 expand_plan() {
   local header=1 source destination entity area project doc_type tags prefix catalog_root
-  while IFS=$'\037' read -r source destination entity area project doc_type tags prefix catalog_root _rest; do
+  while IFS=$'\037' read -r source destination entity area project doc_type tags prefix catalog_root exclude _rest; do
     if [ $header -eq 1 ]; then header=0; continue; fi
     [ -n "$source" ] || continue
     case "$source" in \#*) continue;; esac
@@ -88,10 +92,18 @@ expand_plan() {
       lp="$(lower "$f")"; ext="$(lower "${name##*.}")"; [ "$ext" = "$(lower "$name")" ] && ext=""
       bytes="$(fsize "$f")"
       action=copy; reason=""
+      local excluded=0 pat lrel; lrel="$(lower "$rel")"
+      IFS=';' read -ra _ex <<< "${exclude:-}"
+      for pat in "${_ex[@]}"; do pat="$(lower "$(printf '%s' "$pat" | sed 's/^ *//;s/ *$//')")"; [ -n "$pat" ] && [[ "$lrel" == *"$pat"* ]] && excluded=1; done
       if printf '%s' "$lp" | grep -Eq "$SECRET_RE"; then action=indexed-in-place; reason=secret
+      elif [ $excluded -eq 1 ]; then action=indexed-in-place; reason=excluded
+      elif printf '%s' "$lp" | grep -Eq "$ARTIFACT_RE"; then action=indexed-in-place; reason=artifact
       elif [[ "$DOC_EXT" != *" $ext "* ]]; then action=indexed-in-place; reason=ext
       elif [ "$bytes" -gt $((MAX_MB * 1024 * 1024)) ]; then action=indexed-in-place; reason=size; fi
-      date="$(date_token "$name" "$(basename "$(dirname "$f")")")"
+      # Parent-folder date only inside a folder row; a loose file's parent is the old root.
+      local parentForDate=""
+      if [ -d "$source" ] && [ "$(dirname "$f")" != "$source" ]; then parentForDate="$(basename "$(dirname "$f")")"; fi
+      date="$(date_token "$name" "$parentForDate")"
       newName="$name"
       if [ "$action" = copy ] && [ "$prefix" = yes ]; then
         if ! [[ "$name" =~ ^(20[0-9]{6}|20[0-9]{2}-[0-9]{2}|20[0-9]{2}_) ]] && [[ "$name" != "${entity}_"* ]]; then

@@ -136,6 +136,10 @@ source	destination	entity	area	project	doc_type	tags	prefix	catalog_root
 - `tags` — comma-separated, English plus the person's own language, words
   they would actually type: `acme,invoice,請求書`.
 - `catalog_root` — the owner root that gets a `_ai-catalog.jsonl`.
+- `exclude` (optional 10th column) — `;`-separated relative-path substrings
+  inside a folder row to catalog in place instead of copying: a code
+  checkout beside its own zip, a cache. `node_modules`, `.git`,
+  `__pycache__`, `.venv`, `.next`, `.cache` are always skipped.
 
 Keep dated expense month-folders and app folders exactly as named. Do not
 plan rows for RAW, video, camera-card dumps, or installers; list those
@@ -171,8 +175,10 @@ What the scripts enforce, identically on both platforms:
   `work/count-only.csv` for the untouched folders. `apply` refuses to run
   without it.
 - `dry-run` writes `work/preview.tsv` with one of `copy`,
-  `indexed-in-place` (reason `secret`, `ext`, `size`), or `skipped-exists`
-  per file, plus the proposed name. Nothing on disk changes.
+  `indexed-in-place` (reason `secret`, `excluded`, `artifact`, `ext`,
+  `size`), or `skipped-exists` per file, plus the proposed name. Nothing on
+  disk changes. A folder row that expands to thousands of files is a code
+  checkout to `exclude`, not a document set.
 - `apply` copies only when the destination path is absent, hashes the
   copy, and marks a mismatch `failed` with the source untouched. It never
   calls a delete. It appends `_ai-catalog.jsonl` at each `catalog_root`

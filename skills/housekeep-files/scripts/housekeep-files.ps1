@@ -23,8 +23,10 @@ USAGE:
   .\housekeep-files.ps1 -Mode apply     -Plan plan.tsv -Out work
   .\housekeep-files.ps1 -Mode verify    -Plan plan.tsv -Out work -CountOnly count-only.txt
 
-plan.tsv header (tab-separated):
-  source  destination  entity  area  project  doc_type  tags  prefix  catalog_root
+plan.tsv header (tab-separated; `exclude` is optional):
+  source  destination  entity  area  project  doc_type  tags  prefix  catalog_root  exclude
+  exclude = ';'-separated relative-path substrings to catalog in place instead of copying
+  (code checkouts, caches). node_modules/.git/__pycache__/.venv/.next/.cache are always skipped.
 
 NOTES:
 - There is no Remove-Item, Move-Item, or robocopy in this file by design.
@@ -49,6 +51,7 @@ $DocExt = @('.pdf', '.doc', '.docx', '.xls', '.xlsx', '.xlsm', '.ppt', '.pptx', 
   '.html', '.htm', '.xtx', '.xml', '.data', '.zip', '.jpg', '.jpeg', '.png', '.heic', '.svg', '.gif',
   '.webp', '.rtf', '.odt', '.ods', '.eml', '.msg')
 $SecretRe = 'credential|keystore|\.p8$|\.p12$|\.pem$|\.key$|\.jks$|mobileprovision|\.cer$|\.der$|certsigningrequest|\.b64$|service-account|client_secret|google-services\.json|googleservice-info|oauth|private-key|backup_code|\.env$|play-publisher|apple-credentials|env-backups|recovery|2fa|mfa|totp|アクセスキー'
+$ArtifactRe = '\\(node_modules|\.git|__pycache__|\.venv|\.next|\.cache)\\'
 $DatedNameRe = '^(20\d{6}|20\d{2}-\d{2}|20\d{2}_)'
 $RunStamp = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
 
@@ -144,11 +147,20 @@ function Expand-Plan($rows) {
       $lowerPath = $f.FullName.ToLowerInvariant()
       $ext = $f.Extension.ToLowerInvariant()
       $action = 'copy'; $reason = ''
+      $excluded = $false
+      foreach ($pat in (($row['exclude']) -split ';')) {
+        if ($pat.Trim() -ne '' -and $rel.ToLowerInvariant().Contains($pat.Trim().ToLowerInvariant())) { $excluded = $true; break }
+      }
       if ($lowerPath -match $SecretRe) { $action = 'indexed-in-place'; $reason = 'secret' }
+      elseif ($excluded) { $action = 'indexed-in-place'; $reason = 'excluded' }
+      elseif ($lowerPath -match $ArtifactRe) { $action = 'indexed-in-place'; $reason = 'artifact' }
       elseif ($DocExt -notcontains $ext) { $action = 'indexed-in-place'; $reason = 'ext' }
       elseif ($f.Length -gt ($MaxMB * 1MB)) { $action = 'indexed-in-place'; $reason = 'size' }
 
-      $date = Get-DateToken $f.Name $f.Directory.Name
+      # Parent-folder date only inside a folder row; a loose file's parent is the old root, whose name says nothing about the file.
+      $parentForDate = ''
+      if ($srcItem.PSIsContainer -and $f.Directory.FullName -ne $srcItem.FullName) { $parentForDate = $f.Directory.Name }
+      $date = Get-DateToken $f.Name $parentForDate
       $newName = $f.Name
       if ($action -eq 'copy' -and $row['prefix'] -eq 'yes') {
         $entityTok = $row['entity']
@@ -181,6 +193,8 @@ function Count-Files([string]$Folder) {
 
 New-Item -ItemType Directory -Force -Path $Out | Out-Null
 $Out = (Resolve-Path -LiteralPath $Out).Path
+$Plan = (Resolve-Path -LiteralPath $Plan).Path
+if ($CountOnly) { $CountOnly = (Resolve-Path -LiteralPath $CountOnly).Path }
 $inventoryPath = Join-Path $Out 'inventory.csv'
 $countPath = Join-Path $Out 'count-only.csv'
 $previewPath = Join-Path $Out 'preview.tsv'
