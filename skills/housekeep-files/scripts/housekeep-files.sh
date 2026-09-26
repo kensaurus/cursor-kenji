@@ -52,7 +52,7 @@ else echo "need sha256sum or shasum" >&2; exit 69; fi
 if stat -f%z / >/dev/null 2>&1; then fsize() { stat -f%z "$1"; }; else fsize() { stat -c%s "$1"; }; fi
 lower() { printf '%s' "$1" | tr '[:upper:]' '[:lower:]'; }
 json_esc() { printf '%s' "$1" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\t/\\t/g'; }
-count_files() { [ -d "$1" ] || { echo -1; return; }; find "$1" -type f | wc -l | tr -d ' '; }
+count_files() { [ -d "$1" ] || { echo -1; return; }; find "$1" -type f ! -name desktop.ini ! -name .DS_Store ! -name Thumbs.db | wc -l | tr -d ' '; }
 
 date_token() {  # $1 name, $2 parent name
   local c y m d
@@ -86,6 +86,8 @@ expand_plan() {
       [ -n "$f" ] || continue
       local name rel destDir relDir lp ext action reason bytes date newName cand
       name="$(basename "$f")"
+      # OS / sync-client metadata files are recreated and removed by the client itself; never inventory them.
+      case "$name" in desktop.ini|.DS_Store|Thumbs.db) continue;; esac
       if [ -d "$source" ]; then rel="${f#"$source"/}"; else rel="$name"; fi
       destDir="$destination"; relDir="$(dirname "$rel")"
       [ "$relDir" != "." ] && destDir="$destination/$relDir"

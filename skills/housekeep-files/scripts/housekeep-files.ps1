@@ -137,6 +137,8 @@ function Expand-Plan($rows) {
       $files = @($srcItem)
     }
     foreach ($f in $files) {
+      # OS / sync-client metadata files are recreated and removed by the client itself; never inventory them.
+      if ($f.Name -in @('desktop.ini', '.DS_Store', 'Thumbs.db')) { continue }
       $rel = $f.Name
       if ($srcItem.PSIsContainer) {
         $rel = $f.FullName.Substring($srcItem.FullName.Length).TrimStart('\')
@@ -188,7 +190,7 @@ function Read-CountOnly([string]$Path) {
 }
 function Count-Files([string]$Folder) {
   if (-not (Test-Path -LiteralPath $Folder)) { return -1 }
-  return @(Get-ChildItem -LiteralPath $Folder -Recurse -File -Force).Count
+  return @(Get-ChildItem -LiteralPath $Folder -Recurse -File -Force | Where-Object { $_.Name -notin @('desktop.ini', '.DS_Store', 'Thumbs.db') }).Count
 }
 
 New-Item -ItemType Directory -Force -Path $Out | Out-Null
