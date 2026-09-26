@@ -166,8 +166,10 @@ S="$HOME/.cursor/skills/housekeep-files/scripts/housekeep-files.sh"
 What the scripts enforce, identically on both platforms:
 
 - `inventory` writes `work/inventory.csv` (path, bytes, sha256) for every
-  source file in the plan and `work/count-only.csv` for the untouched
-  folders. `apply` refuses to run without it.
+  source file in the plan — hash for files that will be copied, size only
+  for in-place items so a streaming drive never downloads media — and
+  `work/count-only.csv` for the untouched folders. `apply` refuses to run
+  without it.
 - `dry-run` writes `work/preview.tsv` with one of `copy`,
   `indexed-in-place` (reason `secret`, `ext`, `size`), or `skipped-exists`
   per file, plus the proposed name. Nothing on disk changes.

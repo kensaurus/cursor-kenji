@@ -28,7 +28,7 @@ Never rename inside an app or build folder: `google-services.json`,
 
 | Reason | Rule |
 |---|---|
-| `secret` | path matches `credential`, `keystore`, `.p8`, `.p12`, `.pem`, `.key`, `.jks`, `mobileprovision`, `.cer`, `.der`, `certsigningrequest`, `.b64`, `service-account`, `client_secret`, `google-services.json`, `googleservice-info`, `oauth`, `private-key`, `backup_code`, `.env`, `play-publisher`, `apple-credentials`, `env-backups`, `アクセスキー` |
+| `secret` | path matches `credential`, `keystore`, `.p8`, `.p12`, `.pem`, `.key`, `.jks`, `mobileprovision`, `.cer`, `.der`, `certsigningrequest`, `.b64`, `service-account`, `client_secret`, `google-services.json`, `googleservice-info`, `oauth`, `private-key`, `backup_code`, `.env`, `play-publisher`, `apple-credentials`, `env-backups`, `recovery`, `2fa`, `mfa`, `totp`, `アクセスキー` |
 | `ext` | extension outside the document allowlist: `pdf doc docx xls xlsx xlsm ppt pptx csv txt md html htm xtx xml data zip jpg jpeg png heic svg gif webp rtf odt ods eml msg` |
 | `size` | larger than the cap (default 200 MB) |
 

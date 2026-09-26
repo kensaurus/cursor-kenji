@@ -40,7 +40,7 @@ INV="$OUT/inventory.csv"; CNT="$OUT/count-only.csv"; PREVIEW="$OUT/preview.tsv"
 CATALOG="$OUT/catalog.jsonl"; APPLYLOG="$OUT/apply-log.tsv"; VERIFY="$OUT/verify-report.txt"
 RUN="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 DOC_EXT=" pdf doc docx xls xlsx xlsm ppt pptx csv txt md html htm xtx xml data zip jpg jpeg png heic svg gif webp rtf odt ods eml msg "
-SECRET_RE='credential|keystore|\.p8$|\.p12$|\.pem$|\.key$|\.jks$|mobileprovision|\.cer$|\.der$|certsigningrequest|\.b64$|service-account|client_secret|google-services\.json|googleservice-info|oauth|private-key|backup_code|\.env$|play-publisher|apple-credentials|env-backups|アクセスキー'
+SECRET_RE='credential|keystore|\.p8$|\.p12$|\.pem$|\.key$|\.jks$|mobileprovision|\.cer$|\.der$|certsigningrequest|\.b64$|service-account|client_secret|google-services\.json|googleservice-info|oauth|private-key|backup_code|\.env$|play-publisher|apple-credentials|env-backups|recovery|2fa|mfa|totp|アクセスキー'
 
 if command -v sha256sum >/dev/null 2>&1; then sha() { sha256sum "$1" | awk '{print $1}'; }
 elif command -v shasum >/dev/null 2>&1; then sha() { shasum -a 256 "$1" | awk '{print $1}'; }
@@ -122,7 +122,9 @@ inventory)
   echo "path,bytes,sha256" > "$INV"; n=0
   while IFS=$'\037' read -r action reason src destDir newName entity area project doc_type date tags croot bytes; do
     n=$((n+1)); [ $((n % 50)) -eq 0 ] && echo "hashing $n"
-    printf '"%s",%s,%s\n' "${src//\"/\"\"}" "$bytes" "$(sha "$src")" >> "$INV"
+    # Hash only what will be copied; in-place items are size-checked so a streaming drive is not forced to download them.
+    h=""; [ "$action" = copy ] && h="$(sha "$src")"
+    printf '"%s",%s,%s\n' "${src//\"/\"\"}" "$bytes" "$h" >> "$INV"
   done < <(expand_plan)
   echo "folder,files" > "$CNT"
   while IFS= read -r folder; do printf '"%s",%s\n' "${folder//\"/\"\"}" "$(count_files "$folder")" >> "$CNT"; done < <(read_count_only)
@@ -143,8 +145,9 @@ apply)
   while IFS=$'\037' read -r action reason src destDir newName entity area project doc_type date tags croot bytes; do
     n=$((n+1)); [ $((n % 50)) -eq 0 ] && echo "apply $n"
     esc="${src//\"/\"\"}"
-    sha_src="$(grep -F -- "\"$esc\",$bytes," "$INV" | head -1 | awk -F, '{print $NF}')"
-    [ -n "$sha_src" ] || { echo "source not in inventory: $src" >&2; exit 65; }
+    inv_line="$(grep -F -- "\"$esc\",$bytes," "$INV" | head -1)"
+    [ -n "$inv_line" ] || { echo "source not in inventory (plan changed after inventory?): $src" >&2; exit 65; }
+    sha_src="${inv_line##*,}"   # empty for in-place items, which are never hashed
     canonical="$destDir/$newName"; persist=""
     if [ "$action" = indexed-in-place ]; then persist=indexed-in-place; canonical="$src"; inplace=$((inplace+1))
     elif [ -e "$canonical" ]; then persist=skipped-exists; skipped=$((skipped+1))
@@ -181,8 +184,8 @@ verify)
   : > "$VERIFY"; fail=0; checked=0; copies=0; inplace=0
   echo "verify run $RUN" >> "$VERIFY"
   while IFS= read -r row; do
-    p="$(printf '%s' "$row" | sed -E 's/^"(.*)",[0-9]+,[0-9a-f]+$/\1/' | sed 's/""/"/g')"
-    b="$(printf '%s' "$row" | sed -E 's/^".*",([0-9]+),[0-9a-f]+$/\1/')"
+    p="$(printf '%s' "$row" | sed -E 's/^"(.*)",[0-9]+,[0-9a-f]*$/\1/' | sed 's/""/"/g')"
+    b="$(printf '%s' "$row" | sed -E 's/^".*",([0-9]+),[0-9a-f]*$/\1/')"
     checked=$((checked+1))
     if [ ! -e "$p" ]; then fail=$((fail+1)); echo "MISSING source: $p" >> "$VERIFY"
     elif [ "$(fsize "$p")" != "$b" ]; then fail=$((fail+1)); echo "RESIZED source: $p" >> "$VERIFY"; fi

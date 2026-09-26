@@ -48,7 +48,7 @@ $Utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 $DocExt = @('.pdf', '.doc', '.docx', '.xls', '.xlsx', '.xlsm', '.ppt', '.pptx', '.csv', '.txt', '.md',
   '.html', '.htm', '.xtx', '.xml', '.data', '.zip', '.jpg', '.jpeg', '.png', '.heic', '.svg', '.gif',
   '.webp', '.rtf', '.odt', '.ods', '.eml', '.msg')
-$SecretRe = 'credential|keystore|\.p8$|\.p12$|\.pem$|\.key$|\.jks$|mobileprovision|\.cer$|\.der$|certsigningrequest|\.b64$|service-account|client_secret|google-services\.json|googleservice-info|oauth|private-key|backup_code|\.env$|play-publisher|apple-credentials|env-backups|アクセスキー'
+$SecretRe = 'credential|keystore|\.p8$|\.p12$|\.pem$|\.key$|\.jks$|mobileprovision|\.cer$|\.der$|certsigningrequest|\.b64$|service-account|client_secret|google-services\.json|googleservice-info|oauth|private-key|backup_code|\.env$|play-publisher|apple-credentials|env-backups|recovery|2fa|mfa|totp|アクセスキー'
 $DatedNameRe = '^(20\d{6}|20\d{2}-\d{2}|20\d{2}_)'
 $RunStamp = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
 
@@ -199,7 +199,10 @@ switch ($Mode) {
     foreach ($it in $items) {
       $i++
       if ($i % 50 -eq 0) { Write-Host ("hashing {0}/{1}" -f $i, $items.Count) }
-      $h = Get-Sha256 $it.source
+      # Hash only what will be copied; in-place items (media, secrets, installers) are size-checked
+      # so a streaming cloud drive is not forced to download them.
+      $h = ''
+      if ($it.action -eq 'copy') { $h = Get-Sha256 $it.source }
       $lines += ('"' + $it.source.Replace('"', '""') + '",' + $it.bytes + ',' + $h)
     }
     Write-Utf8Lines $inventoryPath $lines
