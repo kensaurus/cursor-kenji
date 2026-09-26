@@ -310,6 +310,7 @@ const INTENTIONAL_SKILL_COMMAND_PAIRS = new Set([
   "complete-everything",
   "handoff",
   "housekeep-backlog",
+  "housekeep-files",
   "housekeep-gates",
   "research",
   "test-mutation",

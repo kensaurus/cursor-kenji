@@ -6,6 +6,22 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+### Added
+
+- **`housekeep-files`** skill + `/housekeep-files` command: organize a
+  drifted document tree (Downloads, a synced drive) into per-owner homes
+  by copy, not move. Bundled `scripts/housekeep-files.ps1` (Windows
+  PowerShell 5.1+) and `scripts/housekeep-files.sh` (macOS/Linux bash)
+  read the same `plan.tsv` and run inventory (SHA-256 of every source) →
+  dry run → apply → verify. Keys, credentials, media over the size cap,
+  and installers are cataloged in place, never copied. Vague filenames get
+  `{entity}_{area}_{date}_{doc-type}__{original}`; each owner root gets a
+  visible `_ai-catalog.jsonl` and `_SEARCH.md`. `verify` re-checks every
+  source path and size, re-hashes every copy, recounts untouched media
+  folders, and exits non-zero on the first miss. Layout options (root per
+  owner, one root with owners inside, PARA-lite) are offered before the
+  plan is written. Sources in `references/naming-and-catalog.md`.
+
 ## [1.39.0] — 2026-09-23
 
 Closes the last three open items from the Opus 5.5 pass: the always-on

@@ -3,8 +3,8 @@ name: audit-langfuse-llm
 description: >
   PDCA quality audit of LLM features: traces, prompts, costs, evals,
   grounding, hallucination. Use for "audit LLM quality", "check Langfuse",
-  "audit prompts", "check AI quality", "audit AI costs", or "check traces".
-  Jailbreaks → audit-llm-security. Cost caps → plan-llm-cost-guardrails.
+  or "audit AI costs". Jailbreaks → audit-llm-security. Cost caps →
+  plan-llm-cost-guardrails.
 license: MIT
 effort: high
 ---

@@ -160,6 +160,7 @@
         "housekeep-backlog",
         "housekeep-dead-code",
         "housekeep-design",
+        "housekeep-files",
         "housekeep-gates"
       ]
     },

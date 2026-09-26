@@ -31,7 +31,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (156)
+## Skills (157)
 
 ### Enhance
 
@@ -134,6 +134,11 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Triggers:** "delete the dead code", "remove unused files", "remove unused exports", "wire up Knip", "clean up dead code", "/deadcode"
 **What it does:** Apply-now execution arm of `plan-dead-code`. Deletes per the approved keep/kill list one category per commit — files (`--fix-type files --allow-remove-files`, pre-reviewed list only, JSON-diffed before the fix) → exports/types → unused-locals cascade (piped `eslint … -f json | remove-unused-vars`, then re-run Knip) → dependencies → residue → assets → suppressions — with typecheck, tests, and build between each, and a bisect-the-batch rule on red. Then installs the ratchet: `knip` script, CI job pinned at `--max-issues <today>` (lowered only), wired into the one aggregator gate. Duplication is measured and ratcheted but handed to `workflow-refactor`. Names every way a count can drop without code leaving — `ignore*`, `--exclude`, `--no-exit-code`, a `rules: warn` downgrade — and refuses all of them, plus commenting-out, deleting a skipped test, and any `DROP` without a human-named target.
 **Related:** `plan-dead-code`, `housekeep-gates`, `workflow-refactor`, `workflow-housekeep`, `burndown-full`, `db-migrator`, `plan-data-integrity`, `workflow-green-repo`
+
+#### `housekeep-files`
+**Triggers:** "organize my Downloads", "sort my company folders", "file my receipts", "tidy my Drive", "/housekeep-files"
+**What it does:** Apply-now organizer for a drifted document tree (Downloads, a synced drive, receipts in three places). Offers a layout (root per owner / one root with owners inside / PARA-lite), writes a `plan.tsv`, then runs bundled PowerShell and bash twins through inventory (SHA-256 of every source) → dry run → apply → verify. Copies only when the destination is absent, hashes the copy, refuses to copy keys, credentials, media over the cap, or installers (cataloged in place instead), prefixes vague filenames as `{entity}_{area}_{date}_{doc-type}__{original}`, and writes a visible `_ai-catalog.jsonl` + `_SEARCH.md` at each owner root. `verify` re-checks every source path and size, re-hashes every copy, recounts untouched media folders, and exits non-zero on the first miss. No delete, move, or `robocopy /MIR` anywhere.
+**Related:** `workflow-housekeep`, `housekeep-backlog`, `plan-secrets-audit`, `plan-data-integrity`
 
 #### `housekeep-backlog`
 **Triggers:** "what's left behind", "inventory TODOs", "consolidate the backlog", "parked work register", "living BACKLOG.md", "/housekeep-backlog"
@@ -860,7 +865,7 @@ On Claude Code each agent's frontmatter `effort:` sets its depth; `completion-ju
 
 ---
 
-## Commands (62)
+## Commands (63)
 
 Commands fall into two groups: **standalone** (full playbook in the file) and **pointer** (thin slash entry delegating to a skill).
 

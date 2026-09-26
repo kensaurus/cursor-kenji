@@ -12,7 +12,7 @@
     {
       "name": "cursor-kenji",
       "source": ".",
-      "description": "156 agent skills, 62 slash commands, 6 subagents, effort-routed for Claude Opus 5.5. Install: /plugin install cursor-kenji@cursor-kenji",
+      "description": "157 agent skills, 63 slash commands, 6 subagents, effort-routed for Claude Opus 5.5. Install: /plugin install cursor-kenji@cursor-kenji",
       "homepage": "https://www.skills.sh/kensaurus/cursor-kenji",
       "repository": "https://github.com/kensaurus/cursor-kenji",
       "license": "MIT",

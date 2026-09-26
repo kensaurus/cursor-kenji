@@ -2,9 +2,8 @@
 name: plan-test-coverage
 description: >
   Plan-only, user-story-driven test coverage audit. Use when "test coverage
-  plan", "coverage audit", "traceability matrix", "fake-green tests",
-  "uncovered user stories", "plan tests for critical flows", or "what's not
-  tested". Mutation score → test-mutation.
+  plan", "traceability matrix", "fake-green tests", or "what's not tested".
+  Mutation score → test-mutation.
 license: MIT
 effort: high
 ---

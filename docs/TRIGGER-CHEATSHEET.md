@@ -43,6 +43,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "find dead code", "is this code used", "unused exports", "unused files", "run knip", "why is this file here" | `plan-dead-code` |
 | "delete the dead code", "remove unused files", "wire up Knip", "stop dead code coming back" | `housekeep-dead-code` |
 | "what's left behind", "inventory TODOs", "consolidate the backlog", "parked work register" | `housekeep-backlog` |
+| "organize my Downloads", "sort my company folders", "file my receipts", "tidy my Drive" | `housekeep-files` |
 | "audit i18n", "fix translations", "the Japanese feels like Google Translate", "hardcoded strings" | `audit-i18n` |
 | "audit LLM quality", "check Langfuse", "audit prompts", "check AI quality", "check traces" | `audit-langfuse-llm` |
 | "audit LLM security", "prompt injection", "jailbreak my chatbot", "is my AI safe", "OWASP LLM" | `audit-llm-security` |

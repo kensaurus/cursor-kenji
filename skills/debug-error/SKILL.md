@@ -2,9 +2,9 @@
 name: debug-error
 description: >
   Diagnose one bug with hypotheses and runtime evidence before fixing. Use
-  when "debug this error", "investigate this bug", or behavior is unexpected.
-  FE↔BE mismatch → debug-fe-be-integration. Bug to PR → workflow-fix-and-ship.
-  Sentry backlog → debug-sentry-monitor.
+  when "debug this error" or behavior is unexpected. FE↔BE mismatch →
+  debug-fe-be-integration. Bug to PR → workflow-fix-and-ship. Sentry backlog
+  → debug-sentry-monitor.
 license: MIT
 effort: high
 ---
