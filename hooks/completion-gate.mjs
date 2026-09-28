@@ -63,11 +63,18 @@ function inspectWorkspace(root) {
   return pending;
 }
 
-// Cursor caps follow-ups with loop_limit in cursor-hooks.json. Claude Code only
-// suppresses a second Stop on the same turn (stop_hook_active), so the gate
-// counts its own blocks per unchanged checklist and stands aside at the cap.
-const LOOP_LIMIT = 12;
+// Neither runtime bounds an open checklist across turns on its own: Claude Code
+// suppresses only a second Stop on the same turn (stop_hook_active), and
+// Cursor's loop_limit did not stop a checklist that stayed open for hours of
+// user turns. So the gate counts its own blocks per unchanged set of open item
+// titles and stands aside at the cap. Evidence appended after " — " is not
+// part of the title: rewriting it every turn must not restart the count.
+const LOOP_LIMIT = 3;
 const COUNTER_FILE = ".cursor/completion-gate.count.json";
+
+function itemTitle(item) {
+  return item.split(" — ")[0].trim();
+}
 
 // Claude Code sends cwd, which may sit below the workspace root.
 function rootsFromCwd(cwd) {
@@ -83,7 +90,7 @@ function rootsFromCwd(cwd) {
 
 function loopExhausted(root, items) {
   const path = join(root, COUNTER_FILE);
-  const hash = createHash("sha1").update(items.join("\n")).digest("hex");
+  const hash = createHash("sha1").update(items.map(itemTitle).join("\n")).digest("hex");
   let count = 0;
   try {
     const prev = JSON.parse(readFileSync(path, "utf8"));
@@ -117,7 +124,7 @@ const workspaces = roots.flatMap((root) =>
   inspectWorkspace(root).map((state) => ({ root, ...state })),
 );
 if (workspaces.length === 0) pass();
-if (isClaude && workspaces.every((state) => loopExhausted(state.root, state.items))) pass();
+if (workspaces.every((state) => loopExhausted(state.root, state.items))) pass();
 
 const count = workspaces.reduce((total, state) => total + state.items.length, 0);
 const sample = workspaces

@@ -13,6 +13,7 @@ import { fileURLToPath } from "node:url";
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const hook = join(repoRoot, "hooks", "completion-gate.mjs");
+const LOOP_LIMIT = 3;
 const sandbox = mkdtempSync(join(tmpdir(), "cursor-kenji-gate-"));
 const stateDir = join(sandbox, ".cursor");
 mkdirSync(stateDir, { recursive: true });
@@ -103,13 +104,27 @@ try {
   const claudeBlock = runClaude(sub);
   expect(claudeBlock.decision === "block" && claudeBlock.hookSpecificOutput?.decision === "block", "Claude Stop did not block an actionable state from a subdirectory cwd");
   expect(claudeBlock.reason?.includes("implement the next item"), "Claude reason omitted the pending item");
-  for (let i = 1; i < 12; i++) runClaude(sandbox);
+  for (let i = 1; i < LOOP_LIMIT; i++) runClaude(sandbox);
   expect(runClaude(sandbox).decision === undefined, "Claude gate did not stand aside after LOOP_LIMIT blocks on an unchanged checklist");
   writeFileSync(join(stateDir, "complete-everything-state.md"), "# State\n\n## Work\n- [ ] a different item\n");
   expect(runClaude(sandbox).decision === "block", "a changed checklist did not reset the loop counter");
   writeFileSync(join(stateDir, "complete-everything-state.md"), "# State\n\n## Work\n- [x] done\n");
   expect(runClaude(sandbox).decision === undefined, "Claude gate blocked a completed state");
   expect(runClaude(sandbox).followup_message === undefined, "Claude branch leaked the Cursor output field");
+
+  // Cursor: unchanged open titles stand aside after LOOP_LIMIT blocks, and
+  // rewriting an item's evidence after " — " does not restart the count.
+  rmSync(join(stateDir, "completion-gate.count.json"), { force: true });
+  const statePath = join(stateDir, "complete-everything-state.md");
+  writeFileSync(statePath, "# State\n\n## Work\n- [ ] ship the batch — acceptance: deploy still building\n");
+  for (let i = 0; i < LOOP_LIMIT; i++) {
+    expect(run().followup_message?.includes("ship the batch"), `Cursor gate stood aside early, on block ${i + 1}`);
+  }
+  expect(run().followup_message === undefined, "Cursor gate did not stand aside after LOOP_LIMIT blocks on unchanged titles");
+  writeFileSync(statePath, "# State\n\n## Work\n- [ ] ship the batch — acceptance: deploy on the S3 sync step\n");
+  expect(run().followup_message === undefined, "rewriting the evidence after ' — ' restarted the Cursor count");
+  writeFileSync(statePath, "# State\n\n## Work\n- [x] ship the batch\n- [ ] run the judge\n");
+  expect(run().followup_message?.includes("run the judge"), "a changed set of open titles did not reset the Cursor count");
 
   process.stdout.write("✓ completion gate tests passed.\n");
 } finally {
