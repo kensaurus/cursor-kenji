@@ -26,6 +26,8 @@
  *   - every top-level commands/*.md is `disable-model-invocation: true` unless
  *     listed in MODEL_INVOCABLE_COMMANDS; commands-portable/ carries no
  *     Claude-only keys (install.mjs strips portable frontmatter)
+ *   - every shipped .ps1/.psm1/.psd1 is ASCII or starts with a UTF-8 BOM
+ *     (Windows PowerShell 5.1 decodes BOM-less scripts with the ANSI code page)
  *   - the pack's Claude Code skill listing (skills + skills-cursor + top-level
  *     model-invocable commands, measured as the client measures it) <=
  *     LISTING_MAX_CHARS, a ratchet (ADR-0010); agent descriptions are
@@ -387,6 +389,35 @@ function listCommandFiles(dir) {
     }
   }
 }
+// ---- Shipped PowerShell must survive Windows PowerShell 5.1 ----
+// 5.1 decodes a BOM-less script with the ANSI code page: on cp1252 a UTF-8 em
+// dash yields a curly quote that ends the string (parse error); on cp932 a CJK
+// literal turns into mojibake and a pattern silently stops matching.
+{
+  const walk = (dir) => {
+    const out = [];
+    for (const f of existsSync(dir) ? readdirSync(dir) : []) {
+      const p = join(dir, f);
+      if (f === "node_modules" || f === ".git") continue;
+      if (statSync(p).isDirectory()) out.push(...walk(p));
+      else if (/\.ps(m|d)?1$/i.test(f)) out.push(p);
+    }
+    return out;
+  };
+  for (const base of ["skills", "skills-cursor", "hooks", "bin", "scripts", "commands", "rules"]) {
+    for (const file of walk(join(repoRoot, base))) {
+      const bytes = readFileSync(file);
+      const bom = bytes.length >= 3 && bytes[0] === 0xef && bytes[1] === 0xbb && bytes[2] === 0xbf;
+      const at = bytes.findIndex((b) => b > 0x7f);
+      if (at !== -1 && !bom) {
+        const rel = file.slice(repoRoot.length + 1).replace(/\\/g, "/");
+        const line = bytes.subarray(0, at).toString("latin1").split("\n").length;
+        errors.push(`${rel}:${line}: non-ASCII byte in a BOM-less PowerShell script — Windows PowerShell 5.1 reads it as the ANSI code page; write it as ASCII (regex \\uXXXX for CJK)`);
+      }
+    }
+  }
+}
+
 const listingTotal =
   Object.values(listing).reduce((a, b) => a + b, 0) + Math.max(0, listingEntries - 1);
 const listingLine = Object.entries(listing).map(([k, v]) => `${k} ${v}`).join(", ");

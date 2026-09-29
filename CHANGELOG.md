@@ -6,6 +6,14 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.40.0] — 2026-09-29
+
+Ships the `housekeep-files` document organizer, with the Windows script fixed
+so it actually runs on the PowerShell it claims to support. The fix came from
+running the skill on a real Downloads tree: the bundled script would not parse
+under Windows PowerShell 5.1, and an earlier run under a Japanese code page
+had copied an access-key bundle that its secret rule should have refused.
+
 ### Added
 
 - **`housekeep-files`** skill + `/housekeep-files` command: organize a
@@ -21,6 +29,28 @@ All notable additions and changes to cursor-kenji are listed here.
   folders, and exits non-zero on the first miss. Layout options (root per
   owner, one root with owners inside, PARA-lite) are offered before the
   plan is written. Sources in `references/naming-and-catalog.md`.
+
+### Fixed
+
+- **`housekeep-files.ps1` failed or misbehaved on Windows PowerShell 5.1.**
+  The file was UTF-8 without a BOM and held three non-ASCII characters (the
+  `アクセスキー` secret pattern and two em dashes). PowerShell 5.1 decodes a
+  BOM-less script with the ANSI code page. Under cp1252 an em dash becomes a
+  curly quote that ends the string, so the script does not parse. Under cp932
+  it parses, but the CJK pattern turns into mojibake, so a file named for an
+  access key is copied instead of cataloged in place. The script is now pure
+  ASCII, and the pattern is written as a `\uXXXX` regex escape. Verified by
+  running the old and new script natively under 5.1 on a folder holding an
+  `…アクセスキー…zip`: the old one throws a parse error; the new one marks the
+  zip `indexed-in-place:secret`.
+- **Guard:** `validate-skills` fails on any shipped `.ps1`, `.psm1`, or
+  `.psd1` that contains a non-ASCII byte without a UTF-8 BOM, and reports
+  the file and line. Probe: a BOM-less em dash in a scratch `.ps1` fails;
+  the same text with a BOM passes.
+
+If you ran `housekeep-files` on Windows before this release, check each
+`_ai-catalog.jsonl` for `copied-source-kept` rows whose path contains
+`アクセスキー`, and rotate those keys.
 
 ## [1.39.0] — 2026-09-23
 

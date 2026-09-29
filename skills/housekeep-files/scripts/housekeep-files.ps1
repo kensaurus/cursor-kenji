@@ -31,6 +31,9 @@ plan.tsv header (tab-separated; `exclude` is optional):
 NOTES:
 - There is no Remove-Item, Move-Item, or robocopy in this file by design.
 - -LiteralPath everywhere: folder names carry #, spaces, CJK, brackets.
+- Keep this file ASCII. Windows PowerShell 5.1 decodes a BOM-less script with the
+  ANSI code page, so a literal CJK or em-dash character breaks parsing (cp1252) or
+  silently garbles a pattern (cp932). Write non-ASCII as a regex \uXXXX escape.
 - Output files are UTF-8 without BOM so other tools and the bash twin read them.
 #>
 [CmdletBinding()]
@@ -50,7 +53,7 @@ $Utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 $DocExt = @('.pdf', '.doc', '.docx', '.xls', '.xlsx', '.xlsm', '.ppt', '.pptx', '.csv', '.txt', '.md',
   '.html', '.htm', '.xtx', '.xml', '.data', '.zip', '.jpg', '.jpeg', '.png', '.heic', '.svg', '.gif',
   '.webp', '.rtf', '.odt', '.ods', '.eml', '.msg')
-$SecretRe = 'credential|keystore|\.p8$|\.p12$|\.pem$|\.key$|\.jks$|mobileprovision|\.cer$|\.der$|certsigningrequest|\.b64$|service-account|client_secret|google-services\.json|googleservice-info|oauth|private-key|backup_code|\.env$|play-publisher|apple-credentials|env-backups|recovery|2fa|mfa|totp|アクセスキー'
+$SecretRe = 'credential|keystore|\.p8$|\.p12$|\.pem$|\.key$|\.jks$|mobileprovision|\.cer$|\.der$|certsigningrequest|\.b64$|service-account|client_secret|google-services\.json|googleservice-info|oauth|private-key|backup_code|\.env$|play-publisher|apple-credentials|env-backups|recovery|2fa|mfa|totp|\u30A2\u30AF\u30BB\u30B9\u30AD\u30FC'
 $ArtifactRe = '\\(node_modules|\.git|__pycache__|\.venv|\.next|\.cache)\\'
 $DatedNameRe = '^(20\d{6}|20\d{2}-\d{2}|20\d{2}_)'
 $RunStamp = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
@@ -246,7 +249,7 @@ switch ($Mode) {
     foreach ($k in ($counts.Keys | Sort-Object)) { Write-Host ("  {0,-24} {1}" -f $k, $counts[$k]) }
   }
   'apply' {
-    if (-not (Test-Path -LiteralPath $inventoryPath)) { throw "inventory.csv missing under $Out — run -Mode inventory first" }
+    if (-not (Test-Path -LiteralPath $inventoryPath)) { throw "inventory.csv missing under $Out - run -Mode inventory first" }
     $inv = @{}
     foreach ($r in (Import-Csv -LiteralPath $inventoryPath -Encoding UTF8)) { $inv[$r.path] = $r }
     $items = Expand-Plan $rows
@@ -290,7 +293,7 @@ switch ($Mode) {
     Write-Utf8Lines $applyLogPath $log
     Append-Utf8Lines $catalogPath $catalogLines
     $searchMd = @(
-      '# _SEARCH.md — how to find a file here',
+      '# _SEARCH.md - how to find a file here',
       '',
       '1. grep `_ai-catalog.jsonl` in this folder: tags, entity, area, doc_type, date, original_name.',
       '2. Search the prefixed filename: `{entity}_{area}_{date}_{doc_type}__{original name}`.',
