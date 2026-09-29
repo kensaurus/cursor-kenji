@@ -68,7 +68,7 @@ Full pack (skills + slash commands): `npx @kensaurus/cursor-kenji --all`. That C
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/cursor-kenji
 
-**Status:** Pending — `@kensaurus/cursor-kenji@1.40.1` (the completion gate runs once per host and budgets per conversation). Previous: `1.40.0` via OIDC run [36510742813](https://github.com/kensaurus/cursor-kenji/actions/runs/36510742813).
+**Status:** Published — `@kensaurus/cursor-kenji@1.40.1` via OIDC run [36521651014](https://github.com/kensaurus/cursor-kenji/actions/runs/36521651014) (the completion gate runs once per host and budgets per conversation). Previous: `1.40.0` via OIDC run [36510742813](https://github.com/kensaurus/cursor-kenji/actions/runs/36510742813).
 
 ---
 
