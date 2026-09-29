@@ -98,6 +98,8 @@ try {
   const stopHooks = hooksConfig.hooks?.stop ?? [];
   expect(stopHooks.some((entry) => entry.command?.includes("completion-gate.mjs")),
     "completion stop hook was not registered");
+  expect(stopHooks.some((entry) => entry.command?.includes("completion-gate.mjs --host=cursor")),
+    "Cursor completion hook does not declare --host=cursor");
 
   // Reinstall must preserve unrelated user hooks and replace our entry once.
   stopHooks.unshift({ command: "node user-owned-hook.mjs" });
@@ -219,6 +221,8 @@ try {
   const stopGroups = claudeSettings.hooks?.Stop ?? [];
   const gateEntries = (groups) => groups.flatMap((g) => g.hooks ?? []).filter((h) => h.command?.includes("completion-gate.mjs"));
   expect(gateEntries(stopGroups).length === 1, "Claude Stop hook was not registered once");
+  expect(gateEntries(stopGroups)[0].command.endsWith("--host=claude"),
+    "Claude completion hook does not declare --host=claude, so Cursor would run it as a second gate");
   stopGroups.unshift({ hooks: [{ type: "command", command: "node user-owned-stop.mjs" }] });
   claudeSettings.permissions = { allow: ["Bash(npm test)"] };
   writeFileSync(claudeSettingsPath, JSON.stringify(claudeSettings, null, 2) + "\n");

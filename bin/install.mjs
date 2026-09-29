@@ -683,7 +683,7 @@ function installCursorCompletionHook() {
   config.hooks.stop = [
     ...preserved,
     {
-      command: 'node cursor-kenji-hooks/completion-gate.mjs',
+      command: 'node cursor-kenji-hooks/completion-gate.mjs --host=cursor',
       timeout: 5,
       loop_limit: 12,
       failClosed: false,
@@ -695,7 +695,9 @@ function installCursorCompletionHook() {
 
 // Claude Code reads Stop hooks from ~/.claude/settings.json. Same script,
 // Claude schema; the managed entry is replaced idempotently and user hooks
-// in other groups are preserved.
+// in other groups are preserved. Cursor loads this file too (Third-Party
+// Imports), so `--host=claude` lets the script stand aside there when the
+// native Cursor entry exists.
 function installClaudeCompletionHook() {
   const sourceScript = resolve(__dir, 'hooks', 'completion-gate.mjs');
   const hookDir = join(claudeBase, 'cursor-kenji-hooks');
@@ -734,7 +736,7 @@ function installClaudeCompletionHook() {
     .filter((group) => group.hooks.length > 0);
   settings.hooks.Stop = [
     ...preserved,
-    { hooks: [{ type: 'command', command: `node "${destScript.replace(/\\/g, '/')}"`, timeout: 5 }] },
+    { hooks: [{ type: 'command', command: `node "${destScript.replace(/\\/g, '/')}" --host=claude`, timeout: 5 }] },
   ];
   return writeManagedFile(settingsPath, JSON.stringify(settings, null, 2) + '\n');
 }

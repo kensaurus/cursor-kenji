@@ -6,6 +6,25 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+### Fixed
+
+- **The completion gate looped for hours in Cursor.** Cursor also runs Claude
+  Code hooks from `~/.claude/settings.json`, with no `loop_limit`, so every
+  stop was gated twice and the Claude-config copy never stood aside. Each
+  registration now carries `--host=cursor` or `--host=claude`, and inside
+  Cursor the Claude-config copy stands aside when the native entry exists
+  (ADR-0012).
+- **Two agents in one repo restarted each other's loop.** The follow-up budget
+  was one workspace counter. It is now per conversation, kept in
+  `~/.cache/cursor-kenji/completion-gate/`: three follow-ups while none of the
+  items that conversation saw closes. The old
+  `.cursor/completion-gate.count.json` is deleted on the next run.
+- **The gate pushed work that waits on a person.** Items marked
+  `blocked by:`, `blocked on:`, or `waiting on:` no longer gate, and neither
+  does a state file untouched for 24 hours. The follow-up now says how to
+  stand down: mark an item that waits on a person as blocked, leave a
+  checklist another agent owns unchanged, say so in one line, and stop.
+
 ## [1.40.0] — 2026-09-29
 
 Ships the `housekeep-files` document organizer, with the Windows script fixed
