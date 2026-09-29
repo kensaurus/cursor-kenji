@@ -6,6 +6,12 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.40.1] — 2026-09-29
+
+The completion gate stops looping. In Cursor it ran twice on every stop, and
+the copy loaded from the Claude Code config had no cap, so an open checklist
+sent the same follow-up for hours, including to sessions that did not own it.
+
 ### Fixed
 
 - **The completion gate looped for hours in Cursor.** Cursor also runs Claude
