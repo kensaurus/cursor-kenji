@@ -7,7 +7,7 @@
  *
  *   node scripts/test-install.mjs   # exit 0 on pass, 1 on failure
  */
-import { execFileSync, execSync } from "node:child_process";
+import { execFileSync, execSync, spawnSync } from "node:child_process";
 import {
   mkdtempSync,
   rmSync,
@@ -479,6 +479,48 @@ try {
   expect(!existsSync(join(sandbox, ".agents", "skills", "grilling")), "Agents did not prune grilling");
   expect(existsSync(join(cur, "skills", "docs-domain-modeling")), "docs-domain-modeling missing after rename prune");
   expect(existsSync(join(cur, "skills", "workflow-grilling")), "workflow-grilling missing after rename prune");
+
+  // An editor's file watcher or an antivirus scan can hold a just-written file
+  // for a moment; Windows then fails the next copy over it with EPERM. A
+  // preload simulates that lock: a short one must be retried through, and one
+  // that never clears must still fail, with a hint, instead of hanging.
+  if (process.platform === "win32") {
+    const shim = join(sandbox, "lock-shim.cjs");
+    writeFileSync(shim, [
+      'const fs = require("node:fs");',
+      'const { syncBuiltinESMExports } = require("node:module");',
+      "const copy = fs.cpSync;",
+      "let left = Number(process.env.KENJI_TEST_LOCKS); // -1: the lock never clears",
+      "let thrown = 0;",
+      "fs.cpSync = function (...args) {",
+      "  if (left !== 0) {",
+      "    left--; thrown++;",
+      '    throw Object.assign(new Error("EPERM: operation not permitted, copyfile (simulated lock)"), { code: "EPERM" });',
+      "  }",
+      "  return copy.apply(this, args);",
+      "};",
+      "syncBuiltinESMExports();",
+      'process.on("exit", () => process.stderr.write(`lock-shim threw ${thrown}\\n`));',
+    ].join("\n"));
+    const runLocked = (home, locks) => spawnSync(process.execPath, ["--require", shim, installer, "--claude"], {
+      env: { ...process.env, HOME: home, USERPROFILE: home, KENJI_TEST_LOCKS: String(locks) },
+      encoding: "utf8",
+    });
+
+    const sandboxLock = join(sandbox, "lock-brief");
+    const brief = runLocked(sandboxLock, 3);
+    expect(brief.status === 0, `install failed under a brief lock: ${brief.stderr}`);
+    expect(brief.stderr.includes("lock-shim threw 3"), `simulated lock never fired: ${brief.stderr}`);
+    const briefVerify = spawnSync(process.execPath, [installer, "--verify", "--claude"], {
+      env: { ...process.env, HOME: sandboxLock, USERPROFILE: sandboxLock },
+      encoding: "utf8",
+    });
+    expect(briefVerify.status === 0, `install under a brief lock did not verify: ${briefVerify.stdout}${briefVerify.stderr}`);
+
+    const stuck = runLocked(join(sandbox, "lock-stuck"), -1);
+    expect(stuck.status !== 0, "install reported success although every copy was locked");
+    expect(stuck.stderr.includes("another program is holding"), `no lock hint on a stuck lock: ${stuck.stderr}`);
+  }
 
   // Official npm bin is the .js wrapper (Windows cmd-shim friendly).
   expect(existsSync(join(repoRoot, "bin", "kenji.js")), "missing bin/kenji.js");
