@@ -1,12 +1,12 @@
-# Publishing cursor-kenji
+# Publishing kenji
 
-How maintainers ship a new npm version. Consumers who want skills **and** slash commands run `npx @kensaurus/cursor-kenji --all`. `npx skills add kensaurus/cursor-kenji` installs skills only.
+How maintainers ship a new npm version. Consumers who want skills **and** slash commands run `npx @kensaurus/skills --all`. `npx skills add kensaurus/skills` installs skills only.
 
 ## Prerequisites
 
-- Write access to `kensaurus/cursor-kenji`
-- npm package `@kensaurus/cursor-kenji` with **Trusted Publisher** configured:
-  - Repo: `kensaurus/cursor-kenji`
+- Write access to `kensaurus/skills`
+- npm package `@kensaurus/skills` with **Trusted Publisher** configured:
+  - Repo: `kensaurus/skills`
   - Workflow: `npm-publish.yml`
   - Permission: `npm publish`
 
@@ -36,8 +36,8 @@ gh release create "$TAG" --title "$TAG" --notes "$(cat <<EOF
 - …
 
 ## Install
-npx @kensaurus/cursor-kenji --all
-npx @kensaurus/cursor-kenji --verify --all
+npx @kensaurus/skills --all
+npx @kensaurus/skills --verify --all
 EOF
 )"
 ```
@@ -50,11 +50,11 @@ Creating the release triggers [`.github/workflows/npm-publish.yml`](../.github/w
 ## Verify
 
 ```bash
-npm view @kensaurus/cursor-kenji version
-npm view @kensaurus/cursor-kenji bin
+npm view @kensaurus/skills version
+npm view @kensaurus/skills bin
 ```
 
-Confirm the [GitHub Actions publish run](https://github.com/kensaurus/cursor-kenji/actions/workflows/npm-publish.yml) succeeded.
+Confirm the [GitHub Actions publish run](https://github.com/kensaurus/skills/actions/workflows/npm-publish.yml) succeeded.
 
 ## Emergency local publish
 
@@ -73,7 +73,7 @@ Official marketplace submission uses the same repo — [`.cursor-plugin/plugin.j
 
 ## Optional: Claude Code plugin
 
-This repo is already a marketplace: `.claude-plugin/marketplace.json` + `.claude-plugin/plugin.json`. Users can add it with `/plugin marketplace add kensaurus/cursor-kenji`.
+This repo is already a marketplace: `.claude-plugin/marketplace.json` + `.claude-plugin/plugin.json`. Users can add it with `/plugin marketplace add kensaurus/skills`.
 
 To apply to Anthropic’s **community** catalog (separate from this repo marketplace):
 

@@ -51,7 +51,7 @@ jobs:
       - name: Dead-code ratchet (Knip, max-issues 0)
         run: npm run -s check:dead-code && npm run -s check:dead-code:prod
 
-      # OIDC trusted publisher (npm-publish.yml on kensaurus/cursor-kenji) is primary.
+      # OIDC trusted publisher (npm-publish.yml on kensaurus/skills) is primary.
       # NPM_TOKEN secret is optional fallback — only exported when non-empty so OIDC is not blocked.
       - name: Publish with provenance
         run: |

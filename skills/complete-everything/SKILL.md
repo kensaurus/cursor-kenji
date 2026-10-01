@@ -156,7 +156,7 @@ continuation mechanism in addition to the state file:
   conversation gets three follow-ups while none of the items it saw closes;
   closing one restores them, and another agent's edits neither spend nor
   reset them. The counter lives outside the repo, in
-  `~/.cache/cursor-kenji/completion-gate/`. Claude Code labels each block
+  `~/.cache/kenji/completion-gate/`. Claude Code labels each block
   "Stop hook error occurred" — that is the gate working, not a failure. If
   hooks are disabled, continue manually from the state file; do not lower
   the completion contract.

@@ -1,32 +1,39 @@
 # Distribution & discovery
 
-Where cursor-kenji is published and how users find it.
+Where kenji is published and how users find it.
+
+> **Renamed in 2.0.0.** `kensaurus/cursor-kenji` (npm `@kensaurus/cursor-kenji`, plugin
+> `cursor-kenji@cursor-kenji`) became `kensaurus/skills` (npm `@kensaurus/skills`, plugin
+> `kenji@kenji`). Old GitHub URLs redirect; never create a repo named `cursor-kenji` again or the
+> redirect breaks. Why and what was rejected: [ADR-0013](adr/0013-rename-to-kensaurus-skills.md).
 
 ## Install (always works)
 
 | Channel | Command |
 |---------|---------|
-| **npm** (full pack) | `npx @kensaurus/cursor-kenji --all` |
-| **skills.sh** (skills only) | `npx skills add kensaurus/cursor-kenji` |
+| **npm** (full pack) | `npx @kensaurus/skills --all` |
+| **skills.sh** (skills only) | `npx skills add kensaurus/skills` |
 | **Clone (four tools)** | `git clone … && node bin/install.mjs --all` |
-| **Clone (Cursor + Claude)** | `git clone https://github.com/kensaurus/cursor-kenji.git && ./install.sh` |
-| **Claude Code plugin** | `/plugin marketplace add kensaurus/cursor-kenji` then `/plugin install cursor-kenji@cursor-kenji` |
+| **Clone (Cursor + Claude)** | `git clone https://github.com/kensaurus/skills.git && cd skills && ./install.sh` |
+| **Claude Code plugin** | `/plugin marketplace add kensaurus/skills` then `/plugin install kenji@kenji` |
 
-`npx skills add --all` is **not** the same as `npx @kensaurus/cursor-kenji --all`. The skills CLI `--all` means “every skill to every detected agent”. The kenji installer `--all` means Cursor + Claude Code + Codex + Gemini, including slash commands.
+`npx skills add --all` is **not** the same as `npx @kensaurus/skills --all`. The skills CLI `--all` means “every skill to every detected agent”. The kenji installer `--all` means Cursor + Claude Code + Codex + Gemini, including slash commands.
 
-Current npm version: see [npm package page](https://www.npmjs.com/package/@kensaurus/cursor-kenji) or `npm view @kensaurus/cursor-kenji version`.
+Current npm version: see [npm package page](https://www.npmjs.com/package/@kensaurus/skills) or `npm view @kensaurus/skills version`.
 
 ## Official listings
 
 | Directory | URL | Status |
 |-----------|-----|--------|
-| **npm** | https://www.npmjs.com/package/@kensaurus/cursor-kenji | Live — `npm view @kensaurus/cursor-kenji version` |
-| **GitHub** | https://github.com/kensaurus/cursor-kenji | Source of truth. Homepage set to the skills.sh page. 9 stars on 2026-09-09 |
+| **npm** | https://www.npmjs.com/package/@kensaurus/skills | Live from 2.0.0 — `npm view @kensaurus/skills version` |
+| **npm (old name)** | https://www.npmjs.com/package/@kensaurus/cursor-kenji | Deprecated; 1.41.0 forwards the `cursor-kenji` command to `kenji` |
+| **GitHub** | https://github.com/kensaurus/skills | Source of truth. Renamed from `cursor-kenji` on 2026-10-01; old URLs redirect |
 | **Cursor Marketplace** | https://cursor.com/marketplace | **Not listed.** Publisher application submitted 2026-09-09 (awaiting Cursor review) |
-| **Claude Code plugin (this repo)** | `/plugin marketplace add kensaurus/cursor-kenji` | Installable from the public GitHub repo. **Not** in Anthropic’s community catalog until they accept a submit |
+| **Claude Code plugin (this repo)** | `/plugin marketplace add kensaurus/skills` | Installable from the public GitHub repo. Existing `cursor-kenji` installs migrate through the `renames` map. **Not** in Anthropic’s community catalog until they accept a submit |
 | **Claude community marketplace** | https://platform.claude.com/plugins/submit | **Not submitted until this commit is on `main`.** Validate locally with `claude plugin validate .` |
 | **cursor.directory** | https://cursor.directory/plugins/cursor-kenji | Page exists but **flagged / hidden** (`noindex`). Description updated 2026-09-09; full re-scan hit HTTP 413 |
-| **skills.sh** | https://www.skills.sh/kensaurus/cursor-kenji | **Live** (2.9K installs on 2026-09-09). [Issue #1499](https://github.com/vercel-labs/skills/issues/1499) is leftover |
+| **skills.sh** | https://www.skills.sh/kensaurus/skills | New page appears after the first install from the new name; migration of the old listing requested on vercel-labs/skills |
+| **skills.sh (old name)** | https://www.skills.sh/kensaurus/cursor-kenji | Old listing (3.4K installs on 2026-10-01) until the migration request is handled |
 | **SkillsMP** | https://skillsmp.com/creators/kensaurus/cursor-kenji | **Live crawl** — pack page (they report 153 skills; our ratchet is 155). No submit form |
 | **LobeHub** | https://lobehub.com/skills/kensaurus-cursor-kenji-backend-patterns | **Live crawl** of individual skills (no pack page) |
 | **AgenticSkills catalog** | https://agenticskills.io/submit | Form accepted 2026-09-09; **not listed** yet. Review issue URL is not publicly resolvable |
@@ -55,27 +62,27 @@ Track submission URLs and review status in [PROMOTION.md](PROMOTION.md).
 
 | Channel | Cursor skills | Claude Code | Commands | Agents | Rules | Completion hook | MCP config |
 |---------|:------:|:-----------:|:--------:|:------:|:-----:|:---------------:|:----------:|
-| `npx skills add kensaurus/cursor-kenji` | Yes (project `.agents/skills` by default; `-g` → `~/.cursor/skills`) | only with `-a claude-code` | No | No | No | No | No |
-| `npx @kensaurus/cursor-kenji` (`--claude` / `--all` / `--auto`) | Yes | Yes (`--claude` / `--all` / `--auto`) | Yes | Yes | Yes | Cursor + Claude Code | Template copy if missing |
+| `npx skills add kensaurus/skills` | Yes (project `.agents/skills` by default; `-g` → `~/.cursor/skills`) | only with `-a claude-code` | No | No | No | No | No |
+| `npx @kensaurus/skills` (`--claude` / `--all` / `--auto`) | Yes | Yes (`--claude` / `--all` / `--auto`) | Yes | Yes | Yes | Cursor + Claude Code | Template copy if missing |
 | `./install.sh` (clone) | Yes | Yes | Yes | Yes | Yes | Cursor + Claude Code | Template copy if missing |
 | Cursor Marketplace / cursor.directory | Yes | No | Yes | Yes | Yes | Plugin stop hook (`hooks/cursor-hooks.json`) | `.mcp.json` at repo root |
-| Claude Code `/plugin marketplace add kensaurus/cursor-kenji` | No | Yes (plugin-namespaced skills) | Yes | Yes | No | Plugin Stop hook (`hooks/hooks.json`) | No |
+| Claude Code `/plugin marketplace add kensaurus/skills` | No | Yes (plugin-namespaced skills) | Yes | Yes | No | Plugin Stop hook (`hooks/hooks.json`) | No |
 
 Use one Claude Code channel for the completion hook: the plugin's Stop hook
 and the one `--claude` merges into `~/.claude/settings.json` run the same
 gate, so installing both blocks twice per stop and halves the loop cap.
 
-Re-check a kenji install without writing: `npx @kensaurus/cursor-kenji --verify` (add `--all` to include Claude/Codex/Gemini dests). Extra personal files are allowed; missing or hash-mismatched packaged files fail.
+Re-check a kenji install without writing: `npx @kensaurus/skills --verify` (add `--all` to include Claude/Codex/Gemini dests). Extra personal files are allowed; missing or hash-mismatched packaged files fail.
 
 The installer merges into:
 
 - `~/.cursor/skills/` and `~/.agents/skills/` — agent skills (runtime)
 - `~/.cursor/commands/` — slash commands
 - `~/.cursor/agents/` — subagents
-- `~/.cursor/hooks.json` + `~/.cursor/cursor-kenji-hooks/` — safely merged
+- `~/.cursor/hooks.json` + `~/.cursor/kenji-hooks/` — safely merged (2.0.0+ migrates a pre-2.0.0 `cursor-kenji-hooks/`)
   opt-in completion gate; inert unless a closure state file has actionable
   unchecked items
-- `~/.claude/skills/`, `~/.claude/commands/`, `~/.claude/agents/`, `~/.claude/rules/` — Claude Code (`npx @kensaurus/cursor-kenji --claude` or `./install.sh --claude`; `.mdc` rules installed as `.md`); `~/.claude/settings.json` gets the same completion Stop hook, merged
+- `~/.claude/skills/`, `~/.claude/commands/`, `~/.claude/agents/`, `~/.claude/rules/` — Claude Code (`npx @kensaurus/skills --claude` or `./install.sh --claude`; `.mdc` rules installed as `.md`); `~/.claude/settings.json` gets the same completion Stop hook, merged
 
 Claude Code 2.1.139+ provides the equivalent independent continuation evaluator
 through `/goal`; the `complete-everything` skill includes the recommended goal

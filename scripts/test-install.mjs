@@ -24,7 +24,7 @@ import { dirname, join } from "node:path";
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const installer = join(repoRoot, "bin", "install.mjs");
-const sandbox = mkdtempSync(join(tmpdir(), "cursor-kenji-test-"));
+const sandbox = mkdtempSync(join(tmpdir(), "kenji-test-"));
 
 const fail = [];
 const expect = (cond, msg) => { if (!cond) fail.push(msg); };
@@ -89,7 +89,7 @@ try {
     "Claude-only .md rule leaked into Cursor rules");
   expect(existsSync(join(cur, "rules", "shell-first-search.mdc")),
     "Cursor should receive shell-first-search.mdc");
-  expect(existsSync(join(cur, "cursor-kenji-hooks", "completion-gate.mjs")),
+  expect(existsSync(join(cur, "kenji-hooks", "completion-gate.mjs")),
     "missing completion hook script");
 
   const hooksPath = join(cur, "hooks.json");
@@ -213,7 +213,7 @@ try {
     "Claude should receive shell-first-search.md");
   expect(countDir(join(sandbox5, ".claude", "rules")) === repoClaudeRules,
     `claude rules: expected ${repoClaudeRules}, got ${countDir(join(sandbox5, ".claude", "rules"))}`);
-  expect(existsSync(join(sandbox5, ".claude", "cursor-kenji-hooks", "completion-gate.mjs")),
+  expect(existsSync(join(sandbox5, ".claude", "kenji-hooks", "completion-gate.mjs")),
     "missing Claude completion hook script");
   const claudeSettingsPath = join(sandbox5, ".claude", "settings.json");
   expect(existsSync(claudeSettingsPath), "missing ~/.claude/settings.json");
@@ -235,6 +235,52 @@ try {
   expect((reinstalled.hooks.Stop ?? []).some((g) => (g.hooks ?? []).some((h) => h.command === "node user-owned-stop.mjs")),
     "installer removed a user-owned Claude Stop hook");
   expect(gateEntries(reinstalled.hooks.Stop).length === 1, "installer duplicated the Claude completion hook");
+
+  // Upgrading a pre-2.0.0 (cursor-kenji) install: the legacy managed entries are
+  // replaced, user hooks and settings survive, and the orphaned folders go.
+  const sandbox6 = join(sandbox, "legacy-upgrade");
+  const legacyGate = "completion-gate.mjs";
+  for (const tool of [".claude", ".cursor"]) {
+    mkdirSync(join(sandbox6, tool, "cursor-kenji-hooks"), { recursive: true });
+    writeFileSync(join(sandbox6, tool, "cursor-kenji-hooks", legacyGate), "// legacy copy\n");
+  }
+  const legacyClaudeCmd = `node "${join(sandbox6, ".claude", "cursor-kenji-hooks", legacyGate).replace(/\\/g, "/")}" --host=claude`;
+  writeFileSync(join(sandbox6, ".claude", "settings.json"), JSON.stringify({
+    env: { KEEP_ME: "1" },
+    hooks: { Stop: [
+      { hooks: [{ type: "command", command: "node user-owned-stop.mjs" }] },
+      { hooks: [{ type: "command", command: legacyClaudeCmd, timeout: 5 }] },
+    ] },
+  }, null, 2));
+  writeFileSync(join(sandbox6, ".cursor", "hooks.json"), JSON.stringify({
+    version: 1,
+    hooks: { stop: [
+      { command: "node user-owned-cursor-stop.mjs" },
+      { command: "node cursor-kenji-hooks/completion-gate.mjs --host=cursor", timeout: 5 },
+    ] },
+  }, null, 2));
+  for (const args of [[], ["--claude"]]) {
+    execFileSync(process.execPath, [installer, ...args], {
+      env: { ...process.env, HOME: sandbox6, USERPROFILE: sandbox6 },
+      stdio: "pipe",
+    });
+  }
+  const upClaude = JSON.parse(readFileSync(join(sandbox6, ".claude", "settings.json"), "utf8"));
+  const upClaudeGates = gateEntries(upClaude.hooks.Stop ?? []);
+  expect(upClaudeGates.length === 1 && upClaudeGates[0].command.includes("/kenji-hooks/"),
+    `legacy Claude gate not migrated to kenji-hooks: ${JSON.stringify(upClaudeGates)}`);
+  expect(upClaude.env?.KEEP_ME === "1", "legacy upgrade dropped Claude env");
+  expect((upClaude.hooks.Stop ?? []).some((g) => (g.hooks ?? []).some((h) => h.command === "node user-owned-stop.mjs")),
+    "legacy upgrade removed a user-owned Claude Stop hook");
+  const upCursorStop = JSON.parse(readFileSync(join(sandbox6, ".cursor", "hooks.json"), "utf8")).hooks.stop ?? [];
+  const upCursorGates = upCursorStop.filter((e) => String(e.command).includes("completion-gate.mjs"));
+  expect(upCursorGates.length === 1 && upCursorGates[0].command === "node kenji-hooks/completion-gate.mjs --host=cursor",
+    `legacy Cursor gate not migrated to kenji-hooks: ${JSON.stringify(upCursorGates)}`);
+  expect(upCursorStop.some((e) => e.command === "node user-owned-cursor-stop.mjs"), "legacy upgrade removed a user-owned Cursor stop hook");
+  for (const tool of [".claude", ".cursor"]) {
+    expect(!existsSync(join(sandbox6, tool, "cursor-kenji-hooks")), `legacy ${tool}/cursor-kenji-hooks was not removed`);
+    expect(existsSync(join(sandbox6, tool, "kenji-hooks", legacyGate)), `missing ${tool}/kenji-hooks/${legacyGate}`);
+  }
 
   // Merge must overwrite same-name skills and commands (not leave stale text).
   const marker = "KENJI-OVERWRITE-PROBE-DO-NOT-SHIP";
@@ -404,15 +450,15 @@ try {
   expect(existsSync(join(cur, "skills", "workflow-grilling")), "workflow-grilling missing after rename prune");
 
   // Official npm bin is the .js wrapper (Windows cmd-shim friendly).
-  expect(existsSync(join(repoRoot, "bin", "cursor-kenji.js")), "missing bin/cursor-kenji.js");
-  const wrapperHelp = execFileSync(process.execPath, [join(repoRoot, "bin", "cursor-kenji.js"), "--help"], {
+  expect(existsSync(join(repoRoot, "bin", "kenji.js")), "missing bin/kenji.js");
+  const wrapperHelp = execFileSync(process.execPath, [join(repoRoot, "bin", "kenji.js"), "--help"], {
     encoding: "utf8",
   });
-  expect(wrapperHelp.includes("cursor-kenji installer"), "bin/cursor-kenji.js --help did not run installer");
+  expect(wrapperHelp.includes("kenji installer"), "bin/kenji.js --help did not run installer");
 
-  // From a clone on Windows, `npx @kensaurus/cursor-kenji` becomes `cmd /c cursor-kenji`
+  // From a clone on Windows, `npx @kensaurus/skills` becomes `cmd /c kenji`
   // and cmd looks in the current directory. The cwd shim must exist and run.
-  expect(existsSync(join(repoRoot, "cursor-kenji.cmd")), "missing Windows cwd shim cursor-kenji.cmd");
+  expect(existsSync(join(repoRoot, "kenji.cmd")), "missing Windows cwd shim kenji.cmd");
   if (process.platform === "win32") {
     // Hardened shells export NoDefaultCurrentDirectoryInExePath=1, which stops
     // cmd.exe searching the cwd for the shim at all (npx from a clone fails
@@ -420,22 +466,22 @@ try {
     // exercises the shim the way a standard Windows shell resolves it.
     const cmdEnv = { ...process.env };
     delete cmdEnv.NoDefaultCurrentDirectoryInExePath;
-    const cmdHelp = execFileSync("cmd.exe", ["/c", "cursor-kenji.cmd", "--help"], {
+    const cmdHelp = execFileSync("cmd.exe", ["/c", "kenji.cmd", "--help"], {
       cwd: repoRoot,
       encoding: "utf8",
       env: cmdEnv,
     });
-    expect(cmdHelp.includes("cursor-kenji installer"), "cursor-kenji.cmd --help did not run installer");
+    expect(cmdHelp.includes("kenji installer"), "kenji.cmd --help did not run installer");
     // The explicit-path form must work even under the hardened setting.
-    const cmdHelpExplicit = execFileSync("cmd.exe", ["/c", ".\\cursor-kenji.cmd", "--help"], {
+    const cmdHelpExplicit = execFileSync("cmd.exe", ["/c", ".\\kenji.cmd", "--help"], {
       cwd: repoRoot,
       encoding: "utf8",
     });
-    expect(cmdHelpExplicit.includes("cursor-kenji installer"), ".\\cursor-kenji.cmd --help did not run installer");
+    expect(cmdHelpExplicit.includes("kenji installer"), ".\\kenji.cmd --help did not run installer");
   }
 
   // Packed tarball (what npm publish ships) must expose a working bin.
-  const packDir = mkdtempSync(join(tmpdir(), "cursor-kenji-pack-"));
+  const packDir = mkdtempSync(join(tmpdir(), "kenji-pack-"));
   try {
     execSync("npm pack --pack-destination " + JSON.stringify(packDir), {
       cwd: repoRoot,
@@ -446,14 +492,14 @@ try {
     if (tgz) {
       execSync("tar -xzf " + JSON.stringify(tgz), { cwd: packDir, stdio: "pipe" });
       const packedPkg = JSON.parse(readFileSync(join(packDir, "package", "package.json"), "utf8"));
-      expect(packedPkg.bin?.["cursor-kenji"] === "bin/cursor-kenji.js",
-        `packed bin must be bin/cursor-kenji.js, got ${packedPkg.bin?.["cursor-kenji"]}`);
+      expect(packedPkg.bin?.["kenji"] === "bin/kenji.js",
+        `packed bin must be bin/kenji.js, got ${packedPkg.bin?.["kenji"]}`);
       const packedHelp = execFileSync(
         process.execPath,
-        [join(packDir, "package", "bin", "cursor-kenji.js"), "--help"],
+        [join(packDir, "package", "bin", "kenji.js"), "--help"],
         { encoding: "utf8" },
       );
-      expect(packedHelp.includes("cursor-kenji installer"), "packed bin/cursor-kenji.js --help failed");
+      expect(packedHelp.includes("kenji installer"), "packed bin/kenji.js --help failed");
     }
   } finally {
     rmSync(packDir, { recursive: true, force: true });

@@ -1,4 +1,4 @@
-# Contributing to cursor-kenji
+# Contributing to kenji
 
 Thanks for wanting to improve this toolkit. Every contribution — a better skill description, a new command, a bug fix, or a new MCP config — helps everyone who uses Cursor.
 
@@ -9,7 +9,7 @@ Thanks for wanting to improve this toolkit. Every contribution — a better skil
 - [Full contribution guide](docs/CONTRIBUTING.md) — detailed instructions for adding skills, commands, and rules
 - [Skill catalog](docs/CATALOG.md) — full reference with all trigger phrases
 - [AGENTS.template.md](docs/AGENTS.template.md) — copy to consumer projects as root `AGENTS.md`
-- [Open an issue](https://github.com/kensaurus/cursor-kenji/issues) — report a bug or request a skill
+- [Open an issue](https://github.com/kensaurus/skills/issues) — report a bug or request a skill
 
 ---
 
@@ -31,8 +31,8 @@ Thanks for wanting to improve this toolkit. Every contribution — a better skil
 
 ```bash
 # 1. Fork & clone
-git clone https://github.com/<you>/cursor-kenji.git
-cd cursor-kenji
+git clone https://github.com/<you>/skills.git
+cd skills
 
 # 2. Create your skill
 mkdir -p skills/my-new-skill

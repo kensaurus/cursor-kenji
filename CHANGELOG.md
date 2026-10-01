@@ -1,10 +1,55 @@
 # Changelog
 
-All notable additions and changes to cursor-kenji are listed here.
+All notable additions and changes to kenji (`kensaurus/skills`, named `cursor-kenji` before 2.0.0) are listed here.
 
 ---
 
 ## [Unreleased]
+
+## [2.0.0] — 2026-10-01
+
+**cursor-kenji is now kenji: `kensaurus/skills` on GitHub, `@kensaurus/skills`
+on npm, plugin `kenji@kenji`.** Same pack, tool-neutral name. Breaking because
+the plugin ID and the `/cursor-kenji:` slash namespace change (ADR-0013).
+Upgrade steps: README → "Upgrading from cursor-kenji".
+
+### Changed
+
+- **Renamed.** Repo `kensaurus/cursor-kenji` → `kensaurus/skills` (old URLs
+  redirect), npm `@kensaurus/cursor-kenji` → `@kensaurus/skills`, CLI
+  `cursor-kenji` → `kenji`, plugin and marketplace `cursor-kenji` → `kenji`,
+  Windows shim `cursor-kenji.cmd` → `kenji.cmd`.
+- **Existing installs migrate.** The installer replaces a pre-2.0.0
+  completion-gate entry (`cursor-kenji-hooks/`) with `kenji-hooks/`, keeps every
+  other hook and setting, and removes the orphaned folder. `--restore` also
+  reads the legacy `.cursor-kenji-backups/`. Claude plugin installs follow the
+  marketplace `renames` map. `CURSOR_KENJI_GATE_STATE_DIR` and
+  `CURSOR_KENJI_DIR` still work beside `KENJI_GATE_STATE_DIR` and
+  `KENJI_SKILLS_DIR`.
+- **Tool-neutral listing.** Descriptions and keywords name Claude Code, Cursor,
+  Codex CLI, and Gemini CLI; the homepage is the GitHub README until the new
+  skills.sh page is indexed.
+- Ten skill descriptions dropped duplicate trigger phrases to keep the skill
+  listing under its 39,000-character ratchet (ADR-0010). Every routing pointer
+  stays.
+
+### Added
+
+- **`audit-agent-speed`.** Measures, then fixes a slow coding-agent host:
+  transcript-parsing status lines, per-call and blocking Stop hooks, AGENTS.md
+  skipped under a parent CLAUDE.md, un-ignored worktree folders doubling
+  search, global effort and Explore model, worktree pile-up, antivirus,
+  indexer and vendor WMI pollers. Ships
+  `scripts/stop-typecheck.mjs`, an `asyncRewake` Stop hook that typechecks in
+  the background, skips when nothing changed, wakes the agent only on a new
+  error set, and summarizes codegen cascades.
+- Routing rule: agent or machine slow → `audit-agent-speed`; product slow →
+  `audit-performance`.
+
+### Fixed
+
+- `docs/AGENTS.template.md` now says Claude Code skips `AGENTS.md` when a
+  `CLAUDE.md` exists in the repo or any parent folder, and how to load both.
 
 ## [1.40.1] — 2026-09-29
 

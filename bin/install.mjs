@@ -1,22 +1,22 @@
 #!/usr/bin/env node
 /**
- * cursor-kenji installer
+ * kenji installer
  *
  * Usage:
- *   npx @kensaurus/cursor-kenji                  Merge-install into ~/.cursor/ AND ~/.agents/skills/
- *   npx @kensaurus/cursor-kenji --auto           Detect installed tools and install to each
- *   npx @kensaurus/cursor-kenji --claude         Install for Claude Code (~/.claude/) instead
- *   npx @kensaurus/cursor-kenji --codex          Install for Codex CLI (~/.codex/AGENTS.md + prompts)
- *   npx @kensaurus/cursor-kenji --gemini         Install for Gemini CLI (~/.gemini/GEMINI.md + commands)
- *   npx @kensaurus/cursor-kenji --all            Install for all four supported tools
- *   npx @kensaurus/cursor-kenji --clean          Mirror: make target paths match this repo exactly
- *   npx @kensaurus/cursor-kenji --only skills     Install only some groups (csv)
- *   npx @kensaurus/cursor-kenji --skill audit-ux  Install a single skill
- *   npx @kensaurus/cursor-kenji --link           Dev mode: symlink instead of copy
- *   npx @kensaurus/cursor-kenji --restore [stamp] Restore a previous --clean backup
- *   npx @kensaurus/cursor-kenji --dry-run        Preview without changing anything
- *   npx @kensaurus/cursor-kenji --verify         Hash-check dests against this package (no writes)
- *   npx @kensaurus/cursor-kenji --help
+ *   npx @kensaurus/skills                  Merge-install into ~/.cursor/ AND ~/.agents/skills/
+ *   npx @kensaurus/skills --auto           Detect installed tools and install to each
+ *   npx @kensaurus/skills --claude         Install for Claude Code (~/.claude/) instead
+ *   npx @kensaurus/skills --codex          Install for Codex CLI (~/.codex/AGENTS.md + prompts)
+ *   npx @kensaurus/skills --gemini         Install for Gemini CLI (~/.gemini/GEMINI.md + commands)
+ *   npx @kensaurus/skills --all            Install for all four supported tools
+ *   npx @kensaurus/skills --clean          Mirror: make target paths match this repo exactly
+ *   npx @kensaurus/skills --only skills     Install only some groups (csv)
+ *   npx @kensaurus/skills --skill audit-ux  Install a single skill
+ *   npx @kensaurus/skills --link           Dev mode: symlink instead of copy
+ *   npx @kensaurus/skills --restore [stamp] Restore a previous --clean backup
+ *   npx @kensaurus/skills --dry-run        Preview without changing anything
+ *   npx @kensaurus/skills --verify         Hash-check dests against this package (no writes)
+ *   npx @kensaurus/skills --help
  *
  * Why two Cursor paths?
  *   ~/.cursor/skills/   — read by the Cursor agent at runtime
@@ -63,22 +63,22 @@ const has = (...names) => names.some((n) => flags.has(n) || n in opts);
 
 if (has('help', 'h')) {
   console.log(`
-cursor-kenji installer
+kenji installer
 
 Usage:
-  npx @kensaurus/cursor-kenji                   Merge-install into ~/.cursor/ + ~/.agents/skills/
-  npx @kensaurus/cursor-kenji --auto            Detect installed tools and install to each
-  npx @kensaurus/cursor-kenji --claude          Install for Claude Code (~/.claude/) instead
-  npx @kensaurus/cursor-kenji --codex           Install for Codex CLI (~/.codex/AGENTS.md)
-  npx @kensaurus/cursor-kenji --gemini          Install for Gemini CLI (~/.gemini/GEMINI.md)
-  npx @kensaurus/cursor-kenji --all             Install for all four supported tools
-  npx @kensaurus/cursor-kenji --clean           Mirror: wipe and rebuild target paths from this repo
-  npx @kensaurus/cursor-kenji --only skills      Install only some groups (skills,commands,agents,rules,hooks)
-  npx @kensaurus/cursor-kenji --skill <name>     Install one skill by name
-  npx @kensaurus/cursor-kenji --link            Dev mode: symlink repo into ~/.cursor (live edits)
-  npx @kensaurus/cursor-kenji --restore [stamp]  Restore a previous --clean backup (latest if omitted)
-  npx @kensaurus/cursor-kenji --dry-run         Preview without changing anything
-  npx @kensaurus/cursor-kenji --verify          Hash-check dests against this package (no writes)
+  npx @kensaurus/skills                   Merge-install into ~/.cursor/ + ~/.agents/skills/
+  npx @kensaurus/skills --auto            Detect installed tools and install to each
+  npx @kensaurus/skills --claude          Install for Claude Code (~/.claude/) instead
+  npx @kensaurus/skills --codex           Install for Codex CLI (~/.codex/AGENTS.md)
+  npx @kensaurus/skills --gemini          Install for Gemini CLI (~/.gemini/GEMINI.md)
+  npx @kensaurus/skills --all             Install for all four supported tools
+  npx @kensaurus/skills --clean           Mirror: wipe and rebuild target paths from this repo
+  npx @kensaurus/skills --only skills      Install only some groups (skills,commands,agents,rules,hooks)
+  npx @kensaurus/skills --skill <name>     Install one skill by name
+  npx @kensaurus/skills --link            Dev mode: symlink repo into ~/.cursor (live edits)
+  npx @kensaurus/skills --restore [stamp]  Restore a previous --clean backup (latest if omitted)
+  npx @kensaurus/skills --dry-run         Preview without changing anything
+  npx @kensaurus/skills --verify          Hash-check dests against this package (no writes)
 
 Flags:
   --auto              Detect installed tools (~/.cursor, ~/.claude, ~/.codex, ~/.gemini) and
@@ -93,7 +93,7 @@ Flags:
   --only <csv>        Limit to a subset of: skills, commands, agents, rules, hooks.
   --skill <name>      Install a single skill (implies --only skills).
   --link              Symlink (junction on Windows) instead of copying — for repo dev.
-  --restore [stamp]   Copy a backup under <target>/.cursor-kenji-backups/ back into place.
+  --restore [stamp]   Copy a backup under <target>/.kenji-backups/ back into place.
   --dry-run           Show what would happen; make no changes.
   --verify            Read-only: fail if any packaged file is missing or
                       hash-mismatched at the destination (merge-compatible:
@@ -300,10 +300,21 @@ const ALL_DIRS = [
 // global commands copy registers the bundle's README.md as /<bundle>:README.
 const PROJECT_RULE_BUNDLES = new Set(['native-rn-monorepo', 'project-starter']);
 
+// Installed folder names. Releases before 2.0.0 shipped as cursor-kenji and
+// used the legacy names; installs migrate them (ADR-0013).
+const HOOK_DIR = 'kenji-hooks';
+const LEGACY_HOOK_DIR = 'cursor-kenji-hooks';
+const BACKUPS_DIR = '.kenji-backups';
+const LEGACY_BACKUPS_DIR = '.cursor-kenji-backups';
+// Matches the managed completion-gate entry under either folder name.
+const MANAGED_GATE = /(?:cursor-)?kenji-hooks[\\/]completion-gate\.mjs/;
+
 // ---- restore mode ----------------------------------------------------------
 if (has('restore')) {
   const restoreBase = wantClaude && !wantCursor ? claudeBase : cursorBase;
-  const backupsRoot = join(restoreBase, '.cursor-kenji-backups');
+  const backupsRoot = [BACKUPS_DIR, LEGACY_BACKUPS_DIR]
+    .map((dir) => join(restoreBase, dir))
+    .find((dir) => existsSync(dir)) ?? join(restoreBase, BACKUPS_DIR);
   const stamp = typeof opts.restore === 'string'
     ? opts.restore
     : (existsSync(backupsRoot)
@@ -487,7 +498,7 @@ function backupAndWipe(base) {
   let wiped = 0;
   let backupRoot = null;
   const stamp = new Date().toISOString().replace(/[:.]/g, '-');
-  backupRoot = join(base, '.cursor-kenji-backups', stamp);
+  backupRoot = join(base, BACKUPS_DIR, stamp);
   for (const dest of managedDests) {
     const p = join(base, dest);
     if (!existsSync(p)) continue;
@@ -589,10 +600,10 @@ function buildMergedRules(toolLabel, loadPath) {
       const ia = RULES_ORDER.indexOf(a); const ib = RULES_ORDER.indexOf(b);
       return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib) || a.localeCompare(b);
     });
-  const header = `<!-- Generated by cursor-kenji — https://github.com/kensaurus/cursor-kenji
+  const header = `<!-- Generated by kenji — https://github.com/kensaurus/skills
      Merged from rules/. The skill-routing index is omitted (this tool has no skills loader).
      Applies to: ${toolLabel} — loaded automatically from ${loadPath}.
-     Regenerate: npx @kensaurus/cursor-kenji --auto -->\n\n`;
+     Regenerate: npx @kensaurus/skills --auto -->\n\n`;
   const body = files
     .map((f) => stripFrontmatter(readFileSync(join(rulesDir, f), 'utf8')).trim())
     .join('\n\n---\n\n');
@@ -645,9 +656,23 @@ function writeManagedFile(destPath, content) {
 // unless the active workspace has an unfinished durable closure-state file.
 // Existing user hooks are preserved and this managed entry is replaced
 // idempotently on upgrades.
+// The managed entry now points at HOOK_DIR, so a pre-2.0.0 LEGACY_HOOK_DIR copy
+// is orphaned. Remove it only when it holds nothing but the gate script.
+function removeLegacyHookDir(base) {
+  const legacyDir = join(base, LEGACY_HOOK_DIR);
+  if (!existsSync(legacyDir)) return;
+  const entries = readdirSync(legacyDir);
+  if (entries.some((name) => name !== 'completion-gate.mjs')) return;
+  if (isDryRun) {
+    console.log(`  [dry-run] remove legacy ${legacyDir}`);
+    return;
+  }
+  rmSync(legacyDir, { recursive: true, force: true });
+}
+
 function installCursorCompletionHook() {
   const sourceScript = resolve(__dir, 'hooks', 'completion-gate.mjs');
-  const hookDir = join(cursorBase, 'cursor-kenji-hooks');
+  const hookDir = join(cursorBase, HOOK_DIR);
   const destScript = join(hookDir, 'completion-gate.mjs');
   const configPath = join(cursorBase, 'hooks.json');
   if (!existsSync(sourceScript)) return 'source-missing';
@@ -676,21 +701,22 @@ function installCursorCompletionHook() {
   if (!('version' in config)) config.version = 1;
 
   const existing = Array.isArray(config.hooks.stop) ? config.hooks.stop : [];
-  const managedMarker = /cursor-kenji-hooks[\\/]completion-gate\.mjs/;
   const preserved = existing.filter(
-    (entry) => !managedMarker.test(String(entry?.command ?? '')),
+    (entry) => !MANAGED_GATE.test(String(entry?.command ?? '')),
   );
   config.hooks.stop = [
     ...preserved,
     {
-      command: 'node cursor-kenji-hooks/completion-gate.mjs --host=cursor',
+      command: `node ${HOOK_DIR}/completion-gate.mjs --host=cursor`,
       timeout: 5,
       loop_limit: 12,
       failClosed: false,
     },
   ];
 
-  return writeManagedFile(configPath, JSON.stringify(config, null, 2) + '\n');
+  const status = writeManagedFile(configPath, JSON.stringify(config, null, 2) + '\n');
+  removeLegacyHookDir(cursorBase);
+  return status;
 }
 
 // Claude Code reads Stop hooks from ~/.claude/settings.json. Same script,
@@ -700,7 +726,7 @@ function installCursorCompletionHook() {
 // native Cursor entry exists.
 function installClaudeCompletionHook() {
   const sourceScript = resolve(__dir, 'hooks', 'completion-gate.mjs');
-  const hookDir = join(claudeBase, 'cursor-kenji-hooks');
+  const hookDir = join(claudeBase, HOOK_DIR);
   const destScript = join(hookDir, 'completion-gate.mjs');
   const settingsPath = join(claudeBase, 'settings.json');
   if (!existsSync(sourceScript)) return 'source-missing';
@@ -724,13 +750,12 @@ function installClaudeCompletionHook() {
   if (!settings || typeof settings !== 'object' || Array.isArray(settings)) settings = {};
   if (!settings.hooks || typeof settings.hooks !== 'object' || Array.isArray(settings.hooks)) settings.hooks = {};
 
-  const managedMarker = /cursor-kenji-hooks[\\/]completion-gate\.mjs/;
   const existing = Array.isArray(settings.hooks.Stop) ? settings.hooks.Stop : [];
   const preserved = existing
     .map((group) => ({
       ...group,
       hooks: (Array.isArray(group?.hooks) ? group.hooks : []).filter(
-        (h) => !managedMarker.test(String(h?.command ?? '')),
+        (h) => !MANAGED_GATE.test(String(h?.command ?? '')),
       ),
     }))
     .filter((group) => group.hooks.length > 0);
@@ -738,7 +763,9 @@ function installClaudeCompletionHook() {
     ...preserved,
     { hooks: [{ type: 'command', command: `node "${destScript.replace(/\\/g, '/')}" --host=claude`, timeout: 5 }] },
   ];
-  return writeManagedFile(settingsPath, JSON.stringify(settings, null, 2) + '\n');
+  const status = writeManagedFile(settingsPath, JSON.stringify(settings, null, 2) + '\n');
+  removeLegacyHookDir(claudeBase);
+  return status;
 }
 
 // Install a context-file tool (Codex / Gemini). `spec` describes its layout.
@@ -806,7 +833,7 @@ if (isVerifyOnly) {
     }
     if (!onlyGroups || onlyGroups.has('hooks')) {
       const hookSrc = resolve(__dir, 'hooks', 'completion-gate.mjs');
-      const hookDest = join(cursorBase, 'cursor-kenji-hooks', 'completion-gate.mjs');
+      const hookDest = join(cursorBase, HOOK_DIR, 'completion-gate.mjs');
       if (existsSync(hookSrc)) recordVerify(hookSrc, hookDest, 'Cursor completion-gate.mjs');
     }
   }
@@ -814,7 +841,7 @@ if (isVerifyOnly) {
     verifyTarget(claudeBase, { renameMdc: true }, 'Claude');
     if (!onlyGroups || onlyGroups.has('hooks')) {
       const hookSrc = resolve(__dir, 'hooks', 'completion-gate.mjs');
-      const hookDest = join(claudeBase, 'cursor-kenji-hooks', 'completion-gate.mjs');
+      const hookDest = join(claudeBase, HOOK_DIR, 'completion-gate.mjs');
       if (existsSync(hookSrc)) recordVerify(hookSrc, hookDest, 'Claude completion-gate.mjs');
     }
   }
@@ -1016,7 +1043,7 @@ if (isDryRun) {
     if (r.clean && r.clean.backupRoot && !noBackup && r.clean.wiped > 0) {
       console.log(`✓ Backed up previous ${r.base}/{${managedDests.join(',')}} → ${r.clean.backupRoot}`);
     }
-    console.log(`\n✓ cursor-kenji installed for ${r.target} (${mode}) — ${r.copiedDirs} directories and ${r.copiedFiles} files ${verb} to ${r.base}`);
+    console.log(`\n✓ kenji installed for ${r.target} (${mode}) — ${r.copiedDirs} directories and ${r.copiedFiles} files ${verb} to ${r.base}`);
     if (r.target === 'Cursor' && (!onlyGroups || onlyGroups.has('skills'))) {
       const agentsCount = existsSync(join(agentsBase, 'skills')) ? readdirSync(join(agentsBase, 'skills')).length : 0;
       console.log(`✓ Skills synced to ${join(agentsBase, 'skills')} (${agentsCount} skills — Cursor UI path)`);
@@ -1032,7 +1059,7 @@ if (isDryRun) {
   if (dual.length) {
     console.log(`Note: these names exist as both a skill and a /command (the picker may show two /entries): ${dual.join(', ')}`);
   }
-  console.log('Re-check anytime with: npx @kensaurus/cursor-kenji --verify');
+  console.log('Re-check anytime with: npx @kensaurus/skills --verify');
   if (wantCursor) console.log('Restart Cursor to activate skills, commands, and agents.');
   if (wantClaude) console.log('Restart any active claude sessions — skills appear as /slash-commands.');
   if (wantCodex) console.log('Codex CLI loads ~/.codex/AGENTS.md automatically; prompts appear via the / picker.');
