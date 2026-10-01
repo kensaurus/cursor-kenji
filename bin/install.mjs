@@ -94,6 +94,10 @@ Flags:
   --skill <name>      Install a single skill (implies --only skills).
   --link              Symlink (junction on Windows) instead of copying — for repo dev.
   --restore [stamp]   Copy a backup under <target>/.kenji-backups/ back into place.
+  --typecheck-hook [script]
+                      Run from a repo root: add a background typecheck Stop hook
+                      (asyncRewake) to ./.claude/settings.json. Script defaults to
+                      typecheck or type-check. See skill audit-agent-speed.
   --dry-run           Show what would happen; make no changes.
   --verify            Read-only: fail if any packaged file is missing or
                       hash-mismatched at the destination (merge-compatible:
@@ -308,6 +312,62 @@ const BACKUPS_DIR = '.kenji-backups';
 const LEGACY_BACKUPS_DIR = '.cursor-kenji-backups';
 // Matches the managed completion-gate entry under either folder name.
 const MANAGED_GATE = /(?:cursor-)?kenji-hooks[\\/]completion-gate\.mjs/;
+
+// ---- typecheck-hook mode: per-repo background typecheck (audit-agent-speed) --
+// Writes into the current repo only, never a global config: a global Stop hook
+// would run in every repo, including ones without the script.
+if (has('typecheck-hook')) {
+  const repo = process.cwd();
+  const pkgPath = join(repo, 'package.json');
+  if (!existsSync(join(repo, '.git')) || !existsSync(pkgPath)) {
+    console.error('--typecheck-hook: run it from a repo root that has .git and package.json.');
+    process.exit(1);
+  }
+  const scripts = JSON.parse(readFileSync(pkgPath, 'utf8')).scripts ?? {};
+  const script = typeof opts['typecheck-hook'] === 'string'
+    ? opts['typecheck-hook']
+    : ['typecheck', 'type-check'].find((name) => name in scripts);
+  if (!script || !(script in scripts)) {
+    console.error(`--typecheck-hook: package.json has no ${script ? `"${script}"` : '"typecheck" or "type-check"'} script. Pass the name: --typecheck-hook <script>.`);
+    process.exit(1);
+  }
+
+  const source = resolve(__dir, 'skills', 'audit-agent-speed', 'scripts', 'stop-typecheck.mjs');
+  const destScript = join(repo, '.claude', 'hooks', 'stop-typecheck.mjs');
+  const settingsPath = join(repo, '.claude', 'settings.json');
+  let settings = {};
+  if (existsSync(settingsPath)) {
+    try {
+      settings = JSON.parse(readFileSync(settingsPath, 'utf8'));
+    } catch {
+      console.error(`--typecheck-hook: ${settingsPath} is not valid JSON; nothing changed.`);
+      process.exit(1);
+    }
+  }
+  if (!settings.hooks || typeof settings.hooks !== 'object') settings.hooks = {};
+  const managed = /stop-typecheck\.mjs/;
+  const groups = (Array.isArray(settings.hooks.Stop) ? settings.hooks.Stop : [])
+    .map((group) => ({ ...group, hooks: (group?.hooks ?? []).filter((h) => !managed.test(String(h?.command ?? ''))) }))
+    .filter((group) => group.hooks.length > 0);
+  const blocking = groups.flatMap((g) => g.hooks).filter((h) => !h.async && !h.asyncRewake && /typecheck|type-check|tsc\b/.test(String(h.command ?? '')));
+  settings.hooks.Stop = [
+    ...groups,
+    { hooks: [{ type: 'command', command: `node "$CLAUDE_PROJECT_DIR/.claude/hooks/stop-typecheck.mjs" ${script}`, asyncRewake: true, timeout: 600 }] },
+  ];
+
+  if (isDryRun) {
+    console.log(`  [dry-run] ${source} → ${destScript}`);
+  } else {
+    mkdirSync(dirname(destScript), { recursive: true });
+    writeFileSync(destScript, readFileSync(source));
+  }
+  const status = writeManagedFile(settingsPath, JSON.stringify(settings, null, 2) + '\n');
+  console.log(`${isDryRun ? '[dry-run] ' : '✓ '}Background typecheck Stop hook (${script}) → ${settingsPath} (${status})`);
+  for (const h of blocking) {
+    console.log(`  [!] A blocking typecheck Stop hook is still registered: ${h.command}\n      Remove it; the background hook replaces it.`);
+  }
+  process.exit(0);
+}
 
 // ---- restore mode ----------------------------------------------------------
 if (has('restore')) {

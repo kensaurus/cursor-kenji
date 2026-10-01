@@ -282,6 +282,37 @@ try {
     expect(existsSync(join(sandbox6, tool, "kenji-hooks", legacyGate)), `missing ${tool}/kenji-hooks/${legacyGate}`);
   }
 
+  // --typecheck-hook writes a per-repo asyncRewake Stop hook, idempotently,
+  // keeps the user's hooks, flags a blocking typecheck hook, and refuses a
+  // repo with no typecheck script.
+  const repo7 = join(sandbox, "typecheck-repo");
+  mkdirSync(join(repo7, ".git"), { recursive: true });
+  writeFileSync(join(repo7, "package.json"), JSON.stringify({ name: "probe", scripts: { "type-check": "tsc --noEmit" } }));
+  mkdirSync(join(repo7, ".claude"), { recursive: true });
+  writeFileSync(join(repo7, ".claude", "settings.json"), JSON.stringify({
+    permissions: { allow: ["Bash(npm test)"] },
+    hooks: { Stop: [{ hooks: [
+      { type: "command", command: "node user-owned-stop.mjs" },
+      { type: "command", command: "npm run type-check" },
+    ] }] },
+  }));
+  const runHook = () => execFileSync(process.execPath, [installer, "--typecheck-hook"], { cwd: repo7, stdio: "pipe", encoding: "utf8" });
+  const firstRun = runHook();
+  runHook();
+  const s7 = JSON.parse(readFileSync(join(repo7, ".claude", "settings.json"), "utf8"));
+  const s7Hooks = (s7.hooks.Stop ?? []).flatMap((g) => g.hooks ?? []);
+  const bg = s7Hooks.filter((h) => String(h.command).includes("stop-typecheck.mjs"));
+  expect(bg.length === 1 && bg[0].asyncRewake === true && bg[0].command.endsWith(" type-check"),
+    `--typecheck-hook did not register one asyncRewake entry for type-check: ${JSON.stringify(bg)}`);
+  expect(s7Hooks.some((h) => h.command === "node user-owned-stop.mjs"), "--typecheck-hook removed a user-owned Stop hook");
+  expect(s7.permissions?.allow?.[0] === "Bash(npm test)", "--typecheck-hook dropped unrelated settings keys");
+  expect(existsSync(join(repo7, ".claude", "hooks", "stop-typecheck.mjs")), "--typecheck-hook did not copy stop-typecheck.mjs");
+  expect(firstRun.includes("blocking typecheck Stop hook is still registered"), "--typecheck-hook did not flag the blocking typecheck hook");
+  writeFileSync(join(repo7, "package.json"), JSON.stringify({ name: "probe", scripts: {} }));
+  let refused = false;
+  try { runHook(); } catch { refused = true; }
+  expect(refused, "--typecheck-hook accepted a repo with no typecheck script");
+
   // Merge must overwrite same-name skills and commands (not leave stale text).
   const marker = "KENJI-OVERWRITE-PROBE-DO-NOT-SHIP";
   const skillProbe = join(cur, "skills", "research", "SKILL.md");
