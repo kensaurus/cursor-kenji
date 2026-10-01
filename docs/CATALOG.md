@@ -31,7 +31,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (158)
+## Skills (159)
 
 ### Enhance
 
@@ -48,7 +48,12 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 #### `enhance-web-ux`
 **Triggers:** "enhance this page", "make /xxx better", "fix UX of /xxx", "improve information density", "icons all look the same", "buttons wrap to 2 lines", "empty columns"
 **What it does:** Replaces generic / "stacked" UI with semantic data wired to real backend state. Maps every pain point to an NN/g heuristic, fixes at the helper / token level. Verified live at multiple viewports via playwright-cli.
-**Related:** `enhance-web-ui`, `audit-responsive`, `audit-ux`, `audit-uiux-design-system`, `plan-antislop`
+**Related:** `enhance-web-ui`, `enhance-ux-laws`, `audit-responsive`, `audit-ux`, `audit-uiux-design-system`, `plan-antislop`
+
+#### `enhance-ux-laws`
+**Triggers:** "apply UX laws", "too many choices", "hard to tap", "users drop off mid-flow", "CTA doesn't stand out", "no progress indicator"
+**What it does:** Measure-then-fix pass on one screen or flow against seven Laws of UX (Fitts, Hick, Miller, Jakob, Zeigarnik, Goal-Gradient, Von Restorff). A browser probe measures tap targets, competing accents, choice sets, unlabeled fields and progress cues at phone and desktop widths; an eight-check flow walk covers what the DOM cannot show (resume after reload, dead controls, pasted codes). Each law carries its precondition and what it does not say, so it will not cap menus at seven or apply Hick to a lookup list. Progress and resume cues must read real state; drafts never store card numbers or codes. Reports before → after per metric.
+**Related:** `enhance-web-ux`, `audit-ux`, `audit-accessibility`, `enhance-web-forms`, `enhance-onboarding`, `enhance-web-conversion`, `audit-responsive`
 
 #### `enhance-web-landing`
 **Triggers:** "build a landing page", "portfolio", "marketing site", "anti-slop", "Awwwards-style", "premium frontend", "make it not look AI-generated", "taste"

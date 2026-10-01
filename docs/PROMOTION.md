@@ -46,7 +46,7 @@ Full pack (skills + slash commands): `npx @kensaurus/skills --all`. That CLI's `
 
 **PR copy:**
 ```markdown
-- [kensaurus/skills](https://github.com/kensaurus/skills) — ready-made AI playbooks your editor auto-triggers: 158 agent skills,
+- [kensaurus/skills](https://github.com/kensaurus/skills) — ready-made AI playbooks your editor auto-triggers: 159 agent skills,
   63 slash commands, 6 subagents, and MCP configs for React/Next.js/Supabase development.
   `npx skills add kensaurus/skills`
 ```
@@ -68,7 +68,7 @@ Full pack (skills + slash commands): `npx @kensaurus/skills --all`. That CLI's `
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/skills
 
-**Status:** Published — `@kensaurus/skills@2.0.0` by the maintainer on 2026-10-01 (first publish of the new name, so no OIDC run). Before 2.0.1: npmjs.com → `@kensaurus/skills` → Settings → Trusted publishing → GitHub Actions, repo `kensaurus/skills`, workflow `npm-publish.yml`. Last OIDC publish of the old name: `@kensaurus/cursor-kenji@1.40.1`, run [36521651014](https://github.com/kensaurus/skills/actions/runs/36521651014).
+**Status:** Pending — `@kensaurus/skills@2.1.0` (enhance-ux-laws; Miller/Hick guidance corrected). First release through staged publishing: the workflow stages it, the maintainer approves with 2FA. Previous: `2.0.0` published by the maintainer on 2026-10-01 (first publish of the new name).
 
 ---
 
@@ -91,7 +91,7 @@ Submit the GitHub repo URL; Cursor reviews manually.
 - https://enterprisedna.co/directories/submit (alternative submission form)
 
 **One-liner description:**
-> 158 Cursor agent skills for React/Next.js/Supabase — installs in one command.
+> 159 Cursor agent skills for React/Next.js/Supabase — installs in one command.
 
 **Status:** Re-checked 2026-09-09. cursorlist.com is a **`.cursorrules` dump**, not a skill-pack catalog. “Submit Rule” goes to a Youform for individual rule files. **Not submitted** — listing a 155-skill pack there would be the wrong category. Do not treat as listed.
 

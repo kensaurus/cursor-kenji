@@ -6,7 +6,7 @@
 
 **You say the job. The playbook runs.** Agent skills, slash commands, and subagents for **Claude Code, Cursor, Codex CLI, and Gemini CLI**.
 
-158 agent skills · 63 slash commands · 15 MCP servers · 12 Cursor skills · 6 subagents — for React / Next.js / Supabase, usable on almost any stack.
+159 agent skills · 63 slash commands · 15 MCP servers · 12 Cursor skills · 6 subagents — for React / Next.js / Supabase, usable on almost any stack.
 
 <p>
   <a href="https://www.npmjs.com/package/@kensaurus/skills"><img src="https://img.shields.io/npm/v/@kensaurus/skills?style=flat-square&color=cb3837&logo=npm" alt="npm version" /></a>
@@ -30,7 +30,7 @@
 
 **Who it’s for** — People shipping in Cursor, Claude Code, Codex CLI, or Gemini CLI. Tuned for React / Next.js / Supabase. Works on other stacks.
 
-**What it’s not** — A Cursor replacement, a prompt paste-bin, or 170 names to memorize. Install once. Talk like a teammate.
+**What it’s not** — A Cursor replacement, a prompt paste-bin, or 171 names to memorize. Install once. Talk like a teammate.
 
 ## Install (30 seconds)
 
@@ -114,7 +114,7 @@ Four rooms. Same rule: you talk, a named playbook runs.
 | **Rule** | A house rule the AI always obeys | Drop a `.mdc` into your project |
 | **MCP server** | A connection to your database / GitHub / browser | Copy a template + set env vars |
 
-Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **170** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://labs.cloudsecurityalliance.org/research/csa-research-note-slopsquatting-ai-supply-chain-20260419-csa/).
+Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **171** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://labs.cloudsecurityalliance.org/research/csa-research-note-slopsquatting-ai-supply-chain-20260419-csa/).
 
 ## How it works
 
@@ -142,7 +142,7 @@ The 23 `plan-*` skills audit first and wait for your approval. See [docs/PLAN-LO
 
 | | Count | What it does |
 |:--|------:|:-------------|
-| **Skills** | 158 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
+| **Skills** | 159 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
 | **Cursor Skills** | 12 | IDE tools (canvas, hooks, rules, PR splitter) |
 | **Commands** | 63 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
 | **Subagents** | 6 | Background helpers (code-reviewer, debugger, db-migrator…) |
@@ -269,7 +269,7 @@ You don't memorize names — describe the job in chat. Exact trigger phrases →
 
 <!-- SKILL-INDEX:START -->
 
-_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **170 skills** listed below._
+_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **171 skills** listed below._
 
 _Skills marked `/name only` are user-invoked rituals; `reference only` skills are loaded by other skills; every other skill auto-routes from a plain request._
 
@@ -279,7 +279,7 @@ _Skills marked `/name only` are user-invoked rituals; `reference only` skills ar
 |:-------|------:|:----------------|
 | Audit — inspect; some then fix | **32** | Check the codebase — security, UX, analytics, IAP, the skill pack… |
 | Plan — audit first, change only after you approve | **23** | Write a fix plan you approve before any code changes |
-| Enhance — improve what already exists | **21** | Polish UI, forms, motion, SEO, PWA, email deliverability |
+| Enhance — improve what already exists | **22** | Polish UI, forms, motion, SEO, PWA, email deliverability |
 | Design — build something new | **10** | Create new UI, APIs, emails, themes from scratch |
 | Backend — server & data patterns | **5** | Auth, caching, queues, realtime, observability |
 | Mobile — React Native / Capacitor | **5** | RN screens, emulators, Capacitor, App Store prep |
@@ -297,7 +297,7 @@ _Skills marked `/name only` are user-invoked rituals; `reference only` skills ar
 | Third-party (upstream-maintained) | **3** | Vendored upstream skills (Emil, UI/UX Pro Max, Vercel WIG) |
 | Core & cross-cutting | **4** | Close everything, burndown, research, handoff |
 | Cursor IDE skills | **12** | Canvas, hooks, rules, PR splitter, CLI helpers |
-| **Total** | **170** | |
+| **Total** | **171** | |
 
 #### Full list (every skill)
 
@@ -366,7 +366,7 @@ _Skills marked `/name only` are user-invoked rituals; `reference only` skills ar
 | `plan-test-coverage` | Plan-only, user-story-driven test coverage audit |
 | `plan-uiux-unification` | Plan-only UI/UX and design-system audit that emits a unification burndown; no code until a phase is approved |
 
-### Enhance — improve what already exists (21)
+### Enhance — improve what already exists (22)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -382,6 +382,7 @@ _Skills marked `/name only` are user-invoked rituals; `reference only` skills ar
 | `enhance-readability` | Audit and fix how easily content is understood: line length (CPL), reading level, grouping, deadspace, icons or tables that cut verbosity |
 | `enhance-readme` | Enhance an existing README: theme-aware hero, feature tour, screenshots or GIF, accurate badges, synced content |
 | `enhance-skill-prompts` | Upgrade how an existing SKILL.md instructs, not what it does: freedom, a classification contract, one worked example, an evidence rubric,… |
+| `enhance-ux-laws` | Measured fix pass on one screen or flow against seven Laws of UX: Fitts, Hick, Miller, Jakob, Zeigarnik, Goal-Gradient, Von Restorff |
 | `enhance-web-conversion` | Conversion pass for landing, pricing, and upgrade paths: positioned hero, one CTA, real proof, anchored tiers, upgrade prompts at value… |
 | `enhance-web-forms` | Build or upgrade web forms: accessible structure, schema-driven validation, client↔server parity |
 | `enhance-web-instant-nav` | Instant in-site navigation: Speculation Rules, View Transitions, bfcache, 103 Early Hints |
@@ -721,7 +722,7 @@ Full definitions in [shell-aliases/cursor-helpers.sh](shell-aliases/cursor-helpe
 
 ```
 skills/
-├── skills/           # 158 Agent Skills (SKILL.md each)
+├── skills/           # 159 Agent Skills (SKILL.md each)
 ├── skills-cursor/    # 12 Cursor-specific skills
 ├── commands/         # 63 slash commands
 ├── agents/           # 6 subagents
@@ -770,7 +771,7 @@ You say the job in chat; a playbook runs. [Agent Skills](https://agentskills.io)
 `npx @kensaurus/skills --all` for skills **and** slash commands. `npx skills add kensaurus/skills` installs skills only. Claude Code as a plugin: `/plugin marketplace add kensaurus/skills`. Restart Cursor after install. Re-check with `npx @kensaurus/skills --verify --all`.
 
 **How many skills?**
-**158** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**170** total). Counts come from the filesystem via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
+**159** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**171** total). Counts come from the filesystem via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
 
 **How do skills trigger?**
 You talk normally. Cursor matches your words to each skill's YAML `description`. To force one: *"use \`audit-security\` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).

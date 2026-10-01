@@ -6,6 +6,35 @@ All notable additions and changes to kenji (`kensaurus/skills`, named `cursor-ke
 
 ## [Unreleased]
 
+## [2.1.0] — 2026-10-01
+
+UX laws as a measured fix pass, and the Miller misreading removed from the
+pack.
+
+### Added
+
+- **`enhance-ux-laws`.** Measure-then-fix pass on one screen or flow against
+  seven Laws of UX: Fitts, Hick, Miller, Jakob, Zeigarnik, Goal-Gradient and
+  Von Restorff. A browser probe measures tap targets, competing accents,
+  choice sets, unlabeled fields and progress cues at phone and desktop widths;
+  an eight-check flow walk covers what the DOM cannot show (resume after
+  reload, dead controls, pasted codes). Each law states its precondition and
+  what it does not say. Progress and resume cues must read real state, and
+  drafts never store card numbers or one-time codes.
+
+### Changed
+
+- **Miller and Hick read correctly.** `audit-ux` and `enhance-web-ux` no
+  longer cap menus or navigation at seven items: Miller is about what the user
+  must hold in mind, and Hick applies only when options must be weighed, not to
+  known-item lookups. `audit-ux` gains Von Restorff and
+  Goal-Gradient/Zeigarnik rows.
+- **Releases are staged.** `npm-publish.yml` runs `npm stage publish
+  --provenance`; a version goes live only when the maintainer approves it with
+  2FA. CI actions moved to v5 (Node 24).
+- Six skill descriptions dropped duplicate trigger phrases so the listing stays
+  under its 39,000-character ratchet with the new skill (ADR-0010).
+
 ## [2.0.0] — 2026-10-01
 
 **cursor-kenji is now kenji: `kensaurus/skills` on GitHub, `@kensaurus/skills`
