@@ -73,6 +73,8 @@ description: >
 
 Brief purpose statement.
 
+**Degree of freedom: MIXED.** What is judgment `[HIGH freedom]`; what must run exactly `[LOW freedom]`.
+
 ## When to Use
 
 - Trigger phrase 1
@@ -83,15 +85,21 @@ Brief purpose statement.
 1. Step one
 2. Step two
 
-## Related Skills
+## Worked example
 
-- `other-skill` — how it complements this one
+> Illustrative: one input, the classification, and the action taken.
 
-## Validation
+## Self-critique before reporting
 
 - [ ] Check 1
 - [ ] Check 2
+
+## Related Skills
+
+- `other-skill` — how it complements this one
 ```
+
+A skill whose name starts with a family prefix (`audit-`, `plan-`, `data-`, `workflow-`, …) fails `npm test` without the **Degree of freedom** line, `## Worked example`, and `## Self-critique`. Every skill's `description` also counts toward a fixed skill-listing budget ([ADR-0010](docs/adr/0010-measure-the-skill-listing-like-the-client.md)). If a new skill pushes it over, shorten descriptions or mark a user-only ritual `disable-model-invocation: true`; never raise the cap.
 
 See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for the full quality checklist.
 
