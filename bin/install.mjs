@@ -37,13 +37,46 @@
  */
 
 import {
-  existsSync, mkdirSync, cpSync, rmSync, symlinkSync, readdirSync, statSync,
-  readFileSync, writeFileSync,
+  existsSync, mkdirSync, cpSync as cpSyncOnce, rmSync as rmSyncOnce, symlinkSync,
+  readdirSync, statSync, readFileSync, writeFileSync as writeFileSyncOnce,
 } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join, resolve, dirname } from 'node:path';
 import { homedir, platform } from 'node:os';
 import { fileURLToPath } from 'node:url';
+
+// ---- transient Windows file locks -----------------------------------------
+// An open editor watching ~/.cursor or ~/.claude, or an antivirus scan, can
+// hold a file for a moment right after it is written. Windows then fails the
+// next copy over it with EPERM or EBUSY, and one held file used to abort the
+// run with the target half-copied. Retry the same codes graceful-fs retries on
+// Windows, with a bounded backoff (about 2.75 s per file). symlinkSync stays
+// unwrapped: its EPERM means "no symlink privilege" and place() must fall back
+// to a copy at once.
+const LOCK_CODES = new Set(['EPERM', 'EBUSY', 'EACCES']);
+const LOCK_RETRIES = 10;
+const sleepSync = (ms) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+function retryLocked(fn) {
+  if (platform() !== 'win32') return fn;
+  return (...args) => {
+    for (let attempt = 1; ; attempt++) {
+      try {
+        return fn(...args);
+      } catch (err) {
+        if (!LOCK_CODES.has(err.code)) throw err;
+        if (attempt > LOCK_RETRIES) {
+          console.error(`\n  ${err.code}: another program is holding ${err.dest ?? err.path ?? 'a destination file'}.`);
+          console.error('  Usually an open editor (Cursor, VS Code) or an antivirus scan. Close it and run the installer again.\n');
+          throw err;
+        }
+        sleepSync(50 * attempt);
+      }
+    }
+  };
+}
+const cpSync = retryLocked(cpSyncOnce);
+const rmSync = retryLocked(rmSyncOnce);
+const writeFileSync = retryLocked(writeFileSyncOnce);
 
 const __dir = fileURLToPath(new URL('..', import.meta.url));
 const argv = process.argv.slice(2);

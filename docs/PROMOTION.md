@@ -68,7 +68,7 @@ Full pack (skills + slash commands): `npx @kensaurus/skills --all`. That CLI's `
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/skills
 
-**Status:** Pending — `@kensaurus/skills@2.1.0` (enhance-ux-laws; Miller/Hick guidance corrected). First release through staged publishing: the workflow stages it, the maintainer approves with 2FA. Previous: `2.0.0` published by the maintainer on 2026-10-01 (first publish of the new name).
+**Status:** Pending — `@kensaurus/skills@2.1.1` (Windows installs retry a briefly held file). Previous: `2.1.0` (enhance-ux-laws; Miller/Hick guidance corrected), live on 2026-10-01 as the first release through staged publishing: the workflow stages it, the maintainer approves with 2FA. `2.0.0` was published by the maintainer on 2026-10-01 (first publish of the new name).
 
 ---
 

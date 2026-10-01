@@ -6,6 +6,20 @@ All notable additions and changes to kenji (`kensaurus/skills`, named `cursor-ke
 
 ## [Unreleased]
 
+## [2.1.1] — 2026-10-01
+
+### Fixed
+
+- **Installs on Windows survive a briefly held file.** An open editor
+  watching `~/.cursor` or `~/.claude`, or an antivirus scan, can hold a file
+  for a moment right after it is written. Windows then failed the next copy
+  with `EPERM`, which aborted the install and left the target half-copied:
+  Cursor failed three runs in a row on a different `SKILL.md` each time. The
+  installer now retries a copy, write or delete on `EPERM`, `EBUSY` or
+  `EACCES` for up to about 3 seconds per file. If the lock never clears it
+  still fails, and says which file is held and that closing the editor fixes
+  it. Other platforms are unchanged.
+
 ## [2.1.0] — 2026-10-01
 
 UX laws as a measured fix pass, and the Miller misreading removed from the
