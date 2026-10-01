@@ -31,7 +31,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (157)
+## Skills (158)
 
 ### Enhance
 
@@ -482,6 +482,11 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **What it does:** Read-only OWASP LLM Top 10 audit of *app-facing* AI features — injection, disclosure, supply chain, poisoning, unsafe output, excessive agency, system-prompt leak, RAG/embedding, misinformation, unbounded consumption. Quality/evals → `audit-langfuse-llm`. Coding-agent policy → `enhance-agent-guardrails`.
 **Related:** `audit-langfuse-llm`, `plan-llm-cost-guardrails`, `plan-input-validation`, `enhance-agent-guardrails`, `test-red-team`, `audit-security`
 
+#### `audit-agent-speed`
+**Triggers:** "Claude is slow", "CPU is pinned with several agents", "speed up my agent setup", "why are my hooks slow"
+**What it does:** Measures before blaming, then fixes the local side of a slow coding-agent host: transcript-parsing status lines, per-call and blocking Stop hooks (ships an `asyncRewake` background typecheck hook), AGENTS.md not loading under a parent CLAUDE.md, un-ignored worktree folders doubling search, global effort and Explore model, worktree pile-up, antivirus, indexer and vendor WMI pollers. App runtime speed → `audit-performance`.
+**Related:** `audit-performance`, `workflow-environment-ready`, `iterate-agent-harness`, `housekeep-files`
+
 #### `audit-analytics`
 **Triggers:** "audit our analytics", "are we tracking the right events", "funnel instrumentation", "dead events", "consent-gated analytics"
 **What it does:** Read-only product-event audit — intended funnel vs instrumented events, taxonomy consistency, dead/duplicate/phantom fires, PII in properties, consent-gated SDK init. **Run with `plan-privacy-compliance`** when consent is in play. Charts → `data-visualization`.
@@ -840,7 +845,7 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 The pack self-audit, [`audit-skill-conflicts`](#audit-skill-conflicts), is listed under Audit; run it after adding a batch of skills.
 
 #### `meta-skill-creator` *(Apache-2.0, adapted from Anthropic)*
-**Triggers:** "author a cursor-kenji skill", "SKILL.md format", "skill structure", "skill best practices"
+**Triggers:** "author a kenji skill", "SKILL.md format", "skill structure", "skill best practices"
 **What it does:** Guide for creating effective AI agent skills with proper frontmatter, descriptions, progressive disclosure structure, and concise body. New skills inherit T1–T8, including the `effort:` declaration (see [PROMPT-ENHANCEMENT-PLAYBOOK.md](PROMPT-ENHANCEMENT-PLAYBOOK.md)).
 **Related:** `audit-skill-conflicts`, `enhance-skill-prompts`, `meta-mcp-builder`, `create-skill`
 

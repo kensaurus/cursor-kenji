@@ -150,7 +150,9 @@ function cursorGateRegistered(roots) {
 }
 
 function counterDir() {
-  return process.env.CURSOR_KENJI_GATE_STATE_DIR || join(homedir(), ".cache", "cursor-kenji", "completion-gate");
+  // CURSOR_KENJI_GATE_STATE_DIR is the pre-2.0.0 name, still honored. The
+  // default path keeps its pre-rename name on purpose (ADR-0012, ADR-0013).
+  return process.env.KENJI_GATE_STATE_DIR || process.env.CURSOR_KENJI_GATE_STATE_DIR || join(homedir(), ".cache", "cursor-kenji", "completion-gate");
 }
 
 function pruneCounters(dir) {

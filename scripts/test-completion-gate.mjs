@@ -17,7 +17,7 @@ import { fileURLToPath } from "node:url";
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const hook = join(repoRoot, "hooks", "completion-gate.mjs");
 const LOOP_LIMIT = 3;
-const sandbox = mkdtempSync(join(tmpdir(), "cursor-kenji-gate-"));
+const sandbox = mkdtempSync(join(tmpdir(), "kenji-gate-"));
 const stateDir = join(sandbox, ".cursor");
 const statePath = join(stateDir, "complete-everything-state.md");
 const home = join(sandbox, "home");
@@ -25,7 +25,7 @@ const counters = join(sandbox, "counters");
 mkdirSync(stateDir, { recursive: true });
 mkdirSync(join(home, ".cursor"), { recursive: true });
 
-const env = { ...process.env, HOME: home, USERPROFILE: home, CURSOR_KENJI_GATE_STATE_DIR: counters };
+const env = { ...process.env, HOME: home, USERPROFILE: home, KENJI_GATE_STATE_DIR: counters };
 delete env.CURSOR_VERSION;
 
 let conversations = 0;
@@ -143,7 +143,7 @@ try {
   // Cursor runs ~/.claude/settings.json hooks too, with no loop_limit. With the
   // native entry registered, the Claude-config copy stands aside inside Cursor.
   const cursorHooks = join(home, ".cursor", "hooks.json");
-  writeFileSync(cursorHooks, JSON.stringify({ version: 1, hooks: { stop: [{ command: "node cursor-kenji-hooks/completion-gate.mjs --host=cursor" }] } }));
+  writeFileSync(cursorHooks, JSON.stringify({ version: 1, hooks: { stop: [{ command: "node kenji-hooks/completion-gate.mjs --host=cursor" }] } }));
   expect(run({ args: ["--host=claude"] }).followup_message === undefined, "the Claude-config copy gated a Cursor stop twice");
   expect(run({ args: ["--host=cursor"] }).followup_message?.includes("implement the next item"), "the native Cursor copy stopped gating");
   expect(runClaude(sandbox).decision === "block", "the Claude-config copy stopped gating Claude Code itself");

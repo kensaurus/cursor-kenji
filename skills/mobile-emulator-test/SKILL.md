@@ -3,8 +3,7 @@ name: mobile-emulator-test
 description: >
   QA a native Android or Expo dev-client build end to end on the emulator,
   checking UI, Supabase, and Sentry for each CRUD step. Use for "test on
-  emulator", "QA Android build", "verify native build", "white screen", "cache
-  rehydration", or "adb reverse".
+  emulator", "QA Android build", "verify native build", or "white screen".
 license: MIT
 ---
 
