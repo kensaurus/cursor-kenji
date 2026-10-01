@@ -45,6 +45,15 @@ try {
 } catch {
   process.exit(0);
 }
+// Stay silent in a repo without the script rather than waking the agent with
+// the package manager's "missing script" error.
+try {
+  const scripts = JSON.parse(fs.readFileSync(path.join(cwd, "package.json"), "utf8")).scripts ?? {};
+  if (!(script in scripts)) process.exit(0);
+} catch {
+  process.exit(0);
+}
+
 const stateFile = path.join(gitDir, "claude-stop-typecheck.json");
 const lockFile = path.join(gitDir, "claude-stop-typecheck.lock");
 const buildInfo = path.join(gitDir, "claude-stop-typecheck.tsbuildinfo");

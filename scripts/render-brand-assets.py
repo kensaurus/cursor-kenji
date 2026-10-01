@@ -65,7 +65,8 @@ def og(path: Path) -> None:
     x = 340
     d.text((x, 188), "You say the job.", font=title, fill=BONE)
     d.text((x, 268), "The playbook runs.", font=title, fill=BONE)
-    d.text((x, 360), "kenji  ·  143 skills  ·  MIT", font=sub, fill=MUTED)
+    # Tool names, not a count: a count goes stale every release.
+    d.text((x, 360), "kenji skills  ·  Claude Code · Cursor · Codex · Gemini", font=sub, fill=MUTED)
     d.text((x, 540), "npx @kensaurus/skills --all", font=micro, fill=BLUE)
     im.save(path, "PNG")
 
