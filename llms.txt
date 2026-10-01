@@ -31,7 +31,7 @@ Runs on Claude Opus 5.5 — the Claude Code default since 2.1.280 and a Cursor a
 
 - [docs/DISTRIBUTION.md](https://github.com/kensaurus/skills/blob/main/docs/DISTRIBUTION.md): Install channels, directory listings, discovery status
 - [skills.sh listing](https://www.skills.sh/kensaurus/skills): Live installable catalog page (`npx skills add kensaurus/skills`)
-- [SkillsMP pack page](https://skillsmp.com/creators/kensaurus/skills): Aggregator crawl of this repo’s `SKILL.md` files (their count can lag)
+- [SkillsMP pack page](https://skillsmp.com/creators/kensaurus/cursor-kenji): Aggregator crawl of this repo’s `SKILL.md` files (their count can lag)
 - [docs/PUBLISHING.md](https://github.com/kensaurus/skills/blob/main/docs/PUBLISHING.md): Maintainer release guide (GitHub Release → OIDC npm)
 - [docs/PROMOTION.md](https://github.com/kensaurus/skills/blob/main/docs/PROMOTION.md): Listing copy for skills.sh, cursor.directory, marketplace, Claude plugin
 - [Claude Code plugin](https://github.com/kensaurus/skills/blob/main/.claude-plugin/marketplace.json): `/plugin marketplace add kensaurus/skills` (community catalog is a separate submit)
