@@ -45,7 +45,19 @@ EOF
 Creating the release triggers [`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml), which:
 
 1. Validates skills + counts + MCP pins
-2. Publishes to npm with `--provenance` via OIDC
+2. **Stages** the version with `npm stage publish --provenance` via OIDC. The
+   trusted publisher (`kensaurus/skills` · `npm-publish.yml`, set up
+   2026-10-01) allows staging only, so nothing is public yet.
+3. **You approve it**, with 2FA: npmjs.com → `@kensaurus/skills` → staged
+   versions → Approve, or from a terminal (npm ≥ 11.x with `stage`):
+
+   ```bash
+   npm stage list @kensaurus/skills
+   npm stage approve <stage-id>
+   ```
+
+   A release that isn't approved never goes live. Reject a bad one with
+   `npm stage reject <stage-id>`.
 
 ## Verify
 
