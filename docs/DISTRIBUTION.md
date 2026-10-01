@@ -26,7 +26,7 @@ Current npm version: see [npm package page](https://www.npmjs.com/package/@kensa
 | Directory | URL | Status |
 |-----------|-----|--------|
 | **npm** | https://www.npmjs.com/package/@kensaurus/skills | **Live** — 2.0.0 published 2026-10-01 by the maintainer (no provenance for this release; configure the trusted publisher so CI publishes with provenance from 2.0.1) |
-| **npm (old name)** | https://www.npmjs.com/package/@kensaurus/cursor-kenji | **Deprecated** 2026-10-01; final 1.41.0 forwards the `cursor-kenji` command to `kenji` (verified from the registry) |
+| **npm (old name)** | https://www.npmjs.com/package/@kensaurus/cursor-kenji | Versions ≤1.40.1 **deprecated** 2026-10-01. Final 1.41.0 forwards the `cursor-kenji` command to `kenji` (verified from the registry); its own deprecation is pending an owner 2FA run (`npm deprecate @kensaurus/cursor-kenji@1.41.0 … --prefer-online`) |
 | **GitHub** | https://github.com/kensaurus/skills | Source of truth. Renamed from `cursor-kenji` on 2026-10-01; old URLs redirect |
 | **Cursor Marketplace** | https://cursor.com/marketplace | **Not listed.** Publisher application submitted 2026-09-09 (awaiting Cursor review) |
 | **Claude Code plugin (this repo)** | `/plugin marketplace add kensaurus/skills` | Installable from the public GitHub repo. Existing `cursor-kenji` installs migrate through the `renames` map. **Not** in Anthropic’s community catalog until they accept a submit |
@@ -34,7 +34,7 @@ Current npm version: see [npm package page](https://www.npmjs.com/package/@kensa
 | **cursor.directory** | https://cursor.directory/plugins/cursor-kenji | Page exists but **flagged / hidden** (`noindex`). Description updated 2026-09-09; full re-scan hit HTTP 413 |
 | **skills.sh** | https://www.skills.sh/kensaurus/skills | **Live** 2026-10-01 (first install from the new name). Listing merge requested: [vercel-labs/skills#2352](https://github.com/vercel-labs/skills/issues/2352) |
 | **skills.sh (old name)** | https://www.skills.sh/kensaurus/cursor-kenji | Old listing (3.4K installs on 2026-10-01) until #2352 merges it; stale [#1499](https://github.com/vercel-labs/skills/issues/1499) closed |
-| **SkillsMP** | https://skillsmp.com/creators/kensaurus/cursor-kenji | **Live crawl** — pack page (they report 153 skills; our ratchet is 155). No submit form |
+| **SkillsMP** | https://skillsmp.com/creators/kensaurus/cursor-kenji | **Live crawl** under the old slug (the new `/creators/kensaurus/skills` 404s until SkillsMP re-crawls; checked 2026-10-01) — pack page (they report 153 skills; our ratchet is 155). No submit form |
 | **LobeHub** | https://lobehub.com/skills/kensaurus-cursor-kenji-backend-patterns | **Live crawl** of individual skills (no pack page) |
 | **AgenticSkills catalog** | https://agenticskills.io/submit | Form accepted 2026-09-09; **not listed** yet. Review issue URL is not publicly resolvable |
 | **awesome-cursorrules** | https://github.com/PatrickJS/awesome-cursorrules | [PR #320](https://github.com/PatrickJS/awesome-cursorrules/pull/320) **open**; entry updated to kensaurus/skills 2026-10-01 |

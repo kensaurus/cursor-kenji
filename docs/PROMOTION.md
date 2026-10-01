@@ -34,7 +34,7 @@ Full pack (skills + slash commands): `npx @kensaurus/skills --all`. That CLI's `
 
 **Issue opened:** https://github.com/vercel-labs/skills/issues/1499
 
-**Status:** **Live** — https://www.skills.sh/kensaurus/cursor-kenji (verified 2026-09-09: HTTP 200, “2.9K total installs”). Their crawler still shows a higher skill count than this repo’s 155 because it keeps old rename slugs. Issue #1499 is leftover; the repo page is already indexed.
+**Status:** **Live** — https://www.skills.sh/kensaurus/skills (new page, created by a fresh install 2026-10-01). The old https://www.skills.sh/kensaurus/cursor-kenji (3.4K installs) stays until [vercel-labs/skills#2352](https://github.com/vercel-labs/skills/issues/2352) merges the listings and drops the retired skill names. Stale #1499 closed.
 
 ---
 

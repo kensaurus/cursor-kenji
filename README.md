@@ -790,7 +790,7 @@ Yes — [llms.txt](llms.txt) at the repo root.
 
 - [awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) — curated rules collections
 - [skills.sh](https://www.skills.sh/kensaurus/skills) — this pack’s live skills page
-- [SkillsMP](https://skillsmp.com/creators/kensaurus/skills) — aggregator crawl of this repo
+- [SkillsMP](https://skillsmp.com/creators/kensaurus/cursor-kenji) — aggregator crawl of this repo
 - [agentskills.io](https://agentskills.io) — Agent Skills spec (not a skill catalog)
 
 kenji ships executable skills, MCP configs, commands, and subagents in one installable package — not static rules alone. What is actually listed vs submitted → **[docs/DISTRIBUTION.md](docs/DISTRIBUTION.md)**.
