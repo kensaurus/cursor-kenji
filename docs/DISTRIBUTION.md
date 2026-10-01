@@ -25,21 +25,21 @@ Current npm version: see [npm package page](https://www.npmjs.com/package/@kensa
 
 | Directory | URL | Status |
 |-----------|-----|--------|
-| **npm** | https://www.npmjs.com/package/@kensaurus/skills | Live from 2.0.0 — `npm view @kensaurus/skills version` |
-| **npm (old name)** | https://www.npmjs.com/package/@kensaurus/cursor-kenji | Deprecated; 1.41.0 forwards the `cursor-kenji` command to `kenji` |
+| **npm** | https://www.npmjs.com/package/@kensaurus/skills | **Live** — 2.0.0 published 2026-10-01 by the maintainer (no provenance for this release; configure the trusted publisher so CI publishes with provenance from 2.0.1) |
+| **npm (old name)** | https://www.npmjs.com/package/@kensaurus/cursor-kenji | **Deprecated** 2026-10-01; final 1.41.0 forwards the `cursor-kenji` command to `kenji` (verified from the registry) |
 | **GitHub** | https://github.com/kensaurus/skills | Source of truth. Renamed from `cursor-kenji` on 2026-10-01; old URLs redirect |
 | **Cursor Marketplace** | https://cursor.com/marketplace | **Not listed.** Publisher application submitted 2026-09-09 (awaiting Cursor review) |
 | **Claude Code plugin (this repo)** | `/plugin marketplace add kensaurus/skills` | Installable from the public GitHub repo. Existing `cursor-kenji` installs migrate through the `renames` map. **Not** in Anthropic’s community catalog until they accept a submit |
 | **Claude community marketplace** | https://platform.claude.com/plugins/submit | **Not submitted until this commit is on `main`.** Validate locally with `claude plugin validate .` |
 | **cursor.directory** | https://cursor.directory/plugins/cursor-kenji | Page exists but **flagged / hidden** (`noindex`). Description updated 2026-09-09; full re-scan hit HTTP 413 |
-| **skills.sh** | https://www.skills.sh/kensaurus/skills | New page appears after the first install from the new name; migration of the old listing requested on vercel-labs/skills |
-| **skills.sh (old name)** | https://www.skills.sh/kensaurus/cursor-kenji | Old listing (3.4K installs on 2026-10-01) until the migration request is handled |
+| **skills.sh** | https://www.skills.sh/kensaurus/skills | **Live** 2026-10-01 (first install from the new name). Listing merge requested: [vercel-labs/skills#2352](https://github.com/vercel-labs/skills/issues/2352) |
+| **skills.sh (old name)** | https://www.skills.sh/kensaurus/cursor-kenji | Old listing (3.4K installs on 2026-10-01) until #2352 merges it; stale [#1499](https://github.com/vercel-labs/skills/issues/1499) closed |
 | **SkillsMP** | https://skillsmp.com/creators/kensaurus/cursor-kenji | **Live crawl** — pack page (they report 153 skills; our ratchet is 155). No submit form |
 | **LobeHub** | https://lobehub.com/skills/kensaurus-cursor-kenji-backend-patterns | **Live crawl** of individual skills (no pack page) |
 | **AgenticSkills catalog** | https://agenticskills.io/submit | Form accepted 2026-09-09; **not listed** yet. Review issue URL is not publicly resolvable |
-| **awesome-cursorrules** | https://github.com/PatrickJS/awesome-cursorrules | [PR #320](https://github.com/PatrickJS/awesome-cursorrules/pull/320) still **open** |
-| **VoltAgent awesome-agent-skills** | https://github.com/VoltAgent/awesome-agent-skills | [PR #1034](https://github.com/VoltAgent/awesome-agent-skills/pull/1034) **open** |
-| **awesome-cursor-skills** | https://github.com/spencerpauly/awesome-cursor-skills | [PR #72](https://github.com/spencerpauly/awesome-cursor-skills/pull/72) **open** |
+| **awesome-cursorrules** | https://github.com/PatrickJS/awesome-cursorrules | [PR #320](https://github.com/PatrickJS/awesome-cursorrules/pull/320) **open**; entry updated to kensaurus/skills 2026-10-01 |
+| **VoltAgent awesome-agent-skills** | https://github.com/VoltAgent/awesome-agent-skills | Listed via merged [PR #1034](https://github.com/VoltAgent/awesome-agent-skills/pull/1034) (old name); rename update [PR #1133](https://github.com/VoltAgent/awesome-agent-skills/pull/1133) **open** |
+| **awesome-cursor-skills** | https://github.com/spencerpauly/awesome-cursor-skills | [PR #72](https://github.com/spencerpauly/awesome-cursor-skills/pull/72) **open**; entry updated to kensaurus/skills 2026-10-01 |
 | **Agent Skills spec** | https://agentskills.io | Spec + client showcase only — **not a skill catalog**. [Issue #432](https://github.com/agentskills/agentskills/issues/432) closed with no listing |
 | **Official MCP Registry** | https://registry.modelcontextprotocol.io/ | **Do not submit** — this pack ships MCP *templates*, not an MCP server ([registry about](https://modelcontextprotocol.io/registry/about)) |
 | **Skills Directory** | https://www.skillsdirectory.com/submit | Not listed; their GitHub OAuth (Supabase) returned HTTP 402 egress quota 2026-09-09 |

@@ -68,7 +68,7 @@ Full pack (skills + slash commands): `npx @kensaurus/skills --all`. That CLI's `
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/skills
 
-**Status:** Published — `@kensaurus/cursor-kenji@1.40.1` via OIDC run [36521651014](https://github.com/kensaurus/cursor-kenji/actions/runs/36521651014) (the completion gate runs once per host and budgets per conversation). Previous: `1.40.0` via OIDC run [36510742813](https://github.com/kensaurus/cursor-kenji/actions/runs/36510742813).
+**Status:** Published — `@kensaurus/skills@2.0.0` by the maintainer on 2026-10-01 (first publish of the new name, so no OIDC run). Before 2.0.1: npmjs.com → `@kensaurus/skills` → Settings → Trusted publishing → GitHub Actions, repo `kensaurus/skills`, workflow `npm-publish.yml`. Last OIDC publish of the old name: `@kensaurus/cursor-kenji@1.40.1`, run [36521651014](https://github.com/kensaurus/skills/actions/runs/36521651014).
 
 ---
 
