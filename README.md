@@ -6,7 +6,7 @@
 
 **You say the job. The playbook runs.** Agent skills, slash commands, and subagents for **Claude Code, Cursor, Codex CLI, and Gemini CLI**.
 
-158 agent skills · 63 slash commands · 16 MCP servers · 12 Cursor skills · 6 subagents — for React / Next.js / Supabase, usable on almost any stack.
+158 agent skills · 63 slash commands · 15 MCP servers · 12 Cursor skills · 6 subagents — for React / Next.js / Supabase, usable on almost any stack.
 
 <p>
   <a href="https://www.npmjs.com/package/@kensaurus/skills"><img src="https://img.shields.io/npm/v/@kensaurus/skills?style=flat-square&color=cb3837&logo=npm" alt="npm version" /></a>
@@ -30,7 +30,7 @@
 
 **Who it’s for** — People shipping in Cursor, Claude Code, Codex CLI, or Gemini CLI. Tuned for React / Next.js / Supabase. Works on other stacks.
 
-**What it’s not** — A Cursor replacement, a prompt paste-bin, or 157 names to memorize. Install once. Talk like a teammate.
+**What it’s not** — A Cursor replacement, a prompt paste-bin, or 170 names to memorize. Install once. Talk like a teammate.
 
 ## Install (30 seconds)
 
@@ -114,7 +114,7 @@ Four rooms. Same rule: you talk, a named playbook runs.
 | **Rule** | A house rule the AI always obeys | Drop a `.mdc` into your project |
 | **MCP server** | A connection to your database / GitHub / browser | Copy a template + set env vars |
 
-Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **170** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://cloudsecurityalliance.org/blog/product-news/2025/03/06/slopsquatting-ai-code-assistants-and-package-hallucinations).
+Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **170** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://labs.cloudsecurityalliance.org/research/csa-research-note-slopsquatting-ai-supply-chain-20260419-csa/).
 
 ## How it works
 
@@ -147,8 +147,8 @@ The 23 `plan-*` skills audit first and wait for your approval. See [docs/PLAN-LO
 | **Commands** | 63 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
 | **Subagents** | 6 | Background helpers (code-reviewer, debugger, db-migrator…) |
 | **Completion hook** | 1 | Opt-in stop gate: continues only unfinished durable closure state |
-| **MCP Servers** | 16 | Full template: Supabase · GitHub · Playwright · AWS · Slack (essential is 3) |
-| **Project Rules** | 7 | Drop-in `.mdc` for `.cursor/rules/` (plus 5 global, 5 RN bundle optional) |
+| **MCP Servers** | 15 | Full template: Supabase · GitHub · Playwright · AWS · Slack (essential is 3) |
+| **Project Rules** | 7 | Drop-in `.mdc` for `.cursor/rules/` (plus 6 global, 5 RN bundle optional) |
 | **Notepads** | 2 | Context templates (architecture, design tokens) |
 | **Shell Aliases** | 8 | `newskill`, `cursor-sync`, `gc`, `gp` |
 
@@ -654,11 +654,11 @@ Type `/` in chat to see them all.
 
 ---
 
-## MCP servers (16)
+## MCP servers (15)
 
 ```bash
 cp ~/skills/mcp/mcp.json.template ~/.cursor/mcp.json      # essential 3
-cp ~/skills/mcp/mcp-full.json.template ~/.cursor/mcp.json  # all 16
+cp ~/skills/mcp/mcp-full.json.template ~/.cursor/mcp.json  # all 15
 ```
 
 Set `FIRECRAWL_API_KEY`, `CONTEXT7_API_KEY`, `SUPABASE_ACCESS_TOKEN`, and `SUPABASE_PROJECT_REF` in the environment. Slack/Notion in the full template still use `YOUR_*`. Setup → **[mcp/README.md](mcp/README.md)**
